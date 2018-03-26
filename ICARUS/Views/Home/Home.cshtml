@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Icarus Home";
+}
+
+<article>
+    <div class="jumbotron">
+        <h1>ICARUS Web Forms</h1>
+        <p class="lead">Webforms, Reporting and Analysis</p>
+    </div>
+    <h4><a href="#content" data-toggle="collapse">Options for @User.Identity.Name</a></h4>
+    <div id="content" class="body-content collapse">
+        <p>The following options are available to you:</p>
+        <ul class="list-group">
+            <li class="list-group-item">@Html.ActionLink("My Forms", "Index", "Forms")</li>
+            <li class="list-group-item">@Html.ActionLink("My Procedures", "Index", "Procedures")</li>
+            <li class="list-group-item">@Html.ActionLink("My Parameters", "Index", "Params")</li>
+            <li class="list-group-item">@Html.ActionLink("My Reports", "Index", "Reports")</li>
+            <li class="list-group-item">@Html.ActionLink("My Databases", "Index", "Databases")</li>
+        </ul>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Forms</h4>
+                <p>Content will be pushed into these containers using the Icarus.js framework</p>
+                <p><a class="btn btn-default" href="#">Launch Forms &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h4>Procedures</h4>
+                <p>Content will be pushed into these containers using the Icarus.js framework</p>
+                <p><a class="btn btn-default" href="#">Launch Procedures &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h4>Parameters</h4>
+                <p>Content will be pushed into these containers using the Icarus.js framework</p>
+                <p><a class="btn btn-default" href="#">Launch Parameters &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+                <h4>Reports</h4>
+                <p>Content will be pushed into these containers using the Icarus.js framework</p>
+                <p><a class="btn btn-default" href="#">Launch Reports &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+</article>
+@{
+    if (User.IsInRole("Admin")) {
+        <h4>Create Web Forms</h4>
+        <div class="body-content">
+            <p>Follow these steps to create a Web Form</p>
+            <ul class="list-group">
+                <li class="list-group-item"
+                    title="A form group is a container that holds various form elements such as text inputs">
+                    @Html.ActionLink("Create a Form Group", "Create", "FormGroups")
+                </li>
+                <li class="list-group-item">@Html.ActionLink("Add elements to the Form Group", "Create", "FormElements")</li>
+                <li class="list-group-item">@Html.ActionLink("Add options to dropdown lists", "Create", "FormElementOptions")</li>
+                <li class="list-group-item">@Html.ActionLink("Combine several form groups into a single form", "Create", "Forms")</li>
+            </ul>
+        </div>
+    }
+}
+
+
+@*
+    Database objects can be drilled down to perform various tasks directly off of the data
+    - Perform procedures (available to current user)
+*@
+<div id="databases">
+    <h4>Databases</h4>
+    <p>Database Objects will become visible here.  Databases can be configured to perform various tasks</p>
+    <form method="post" id="databasePostRequest">
+        <input type="hidden" name="db" value="db" />
+    </form>
+</div>
+
+@*
+    Sandbox currently performs a post request and retrieves a JSON object that it can manipulate    
+*@
+<div id="sandbox">
+    <h4>Sandbox</h4>
+    <form method="post" id="formPostRequest">
+        <input type="hidden" name="technicians" value="technicians" />
+    </form>
+</div>
+
+
+@section viewInit {
+    <script type="text/javascript">
+
+        var parentEl = document.getElementById('formPostRequest');
+
+        // Serialize the local form id
+        var dataToBeSent = $(parentEl).serialize();
+
+        // Retrieve routes from RouteConfig
+        var route = "@Url.RouteUrl("getOptions")";
+        var postRoute = "@Url.RouteUrl("formPost")";
+        var postGroupRoute = "@Url.RouteUrl("formGroupPost")";
+
+        // Test static value.
+        var parentId = 7;
+
+        $.post(route + '/' + parentId, dataToBeSent,
+            function (optionsList, textStatus) {
+                console.log('Retrieving options list for group '+parentId+'...');
+                // textStatus contains the status: success, error, etc
+                // If server responds with 'success'
+                if (textStatus == "success") {
+                    console.log('Constructing ' + optionsList.length + ' options...');
+
+                    var ul = new EL(parentEl, 'ul');
+                    for (var i = 0; i < optionsList.length; i++) {
+                        var optn = new EL(ul.el, 'li', {}, optionsList[i].label);
+                    }
+
+                    //var formGroup = new IcarusFormGroup(parentEl, optionsList, postRoute);
+
+                } else {
+                    console.log('Failed to retrieve form object from server with status: "' + textStatus + '"');
+                }
+            }, "json"
+        );
+    </script>
+}

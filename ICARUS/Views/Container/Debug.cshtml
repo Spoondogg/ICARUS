@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Container - Debug";
+}
+@section viewInit {
+    @*
+        When the user is authenticated, instantiate the Anti Forgery Token
+        and make it available to the JavaScript App() constructor
+        Performs a GET request of the specified App by id
+    *@
+    @if (Request.IsAuthenticated) {
+        @*Html.AntiForgeryToken()*@
+        <script type="text/javascript">
+            console.log("Authenticated");
+        </script>
+    } else {
+        <script type="text/javascript">
+            console.log("Fail");
+        </script>
+    }
+}

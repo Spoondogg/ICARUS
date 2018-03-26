@@ -1,0 +1,32 @@
+﻿/**
+    Prompts contain a vertical button group
+    .prompt .btn-group.btn-block .btn-block,
+*/
+.prompt .modal-body .well {
+    max-height: 200px;
+    overflow: auto;
+    margin: 0.3em 1em;
+    font-size: smaller;
+}
+
+.prompt .btn-group-vertical.btn-block .btn {
+    background-color: #dee8f5;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 4px solid #b3b3b3;
+    border-bottom: 3px solid grey;
+    height: 3em;
+}
+
+.prompt .btn-group-vertical .btn:first-child {
+    border-top: none;
+}
+
+.prompt .btn-group-vertical .btn:last-child {
+    border-bottom: none;
+}
+
+.prompt .btn-group-vertical.btn-block .btn:hover {
+    background-color: #82a8da;
+}

@@ -1,0 +1,33 @@
+﻿
+
+div.btn-group .btn {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-size: smaller;
+}
+
+.btn.glyphicon .label {
+    top: -3px;
+    color: black;
+    text-transform: uppercase;
+    padding: 0 0 0 4px;
+    font-family: sans-serif;
+}
+
+div.btn-group .btn:hover {
+    background-color: #9db4d9;
+}
+
+.btn-block { /*button*/
+    border-radius: 0;
+    border-top: 1px solid #BEE1EF;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid #c5c5c5;
+}
+
+.btn .glyphicon {
+    font-size: 12px;
+    font-family: inherit;
+}
+

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ICARUS.Models.Procedure>
+
+@{
+    ViewBag.Title = "Procedures Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.authorId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.label)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.parameters)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.authorId)
+        </td>
+        <td>
+            @Html.ActionLink(item.label, "Details", new { id = item.id })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.parameters)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

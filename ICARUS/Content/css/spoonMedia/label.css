@@ -1,0 +1,15 @@
+﻿label {
+    color: #333;
+    text-transform: uppercase;
+    width: 100%;
+    float: left;
+    clear: both;
+    display: block;
+    font-size: smaller;
+    text-align: left;
+    margin: 0.3em 0;
+}
+
+label.invalid {
+    color: red;
+}

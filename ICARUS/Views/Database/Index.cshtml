@@ -1,0 +1,77 @@
+﻿@model IEnumerable<ICARUS.Models.Form>
+@{
+    ViewBag.Title = "Databases";
+}
+<h2>Databases</h2>
+@{
+    if(User.IsInRole("Admin")){
+        <h4><a href="#">Create a new Database</a></h4>
+    }
+}
+<table class="table-fixed">
+    <thead>
+        <tr>
+            <th>Database</th>
+            <th>Author</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        
+            <tr>
+                <td>
+                    0
+                </td>
+                <td>
+                   null
+                </td>
+
+                <td align="right" style="overflow: visible">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                        <button type="button" class="btn btn-default">
+                            button
+                        </button>
+                        <button type="button"
+                                class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            @if (User.IsInRole("Admin")){
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            }
+                        </button>
+                        @if (User.IsInRole("Admin")){
+                            <ul class="dropdown-menu" style="left:-75px">
+                                <li>
+                                    Edit
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    Delete
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </td>
+
+            </tr>
+        
+    </tbody>
+</table>
+
+<h4>@Html.ActionLink("Home", "Index", "Home")</h4>
+
+@section viewInit {
+    <script type="text/javascript">
+        $(".btn-delete").on('click', function (event) {
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            if (confirm('Are you sure you want to do that?\nOnce deleted, this object can not be restored!')) {
+                return true;
+            } else {
+                console.log('Action cancelled');
+                return false;
+            };
+        });
+    </script>
+}

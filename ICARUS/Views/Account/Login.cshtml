@@ -1,0 +1,87 @@
+﻿@using ICARUS.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Icarus Account - Login";
+}
+@section viewInit {
+    @*
+        <script type="text/javascript">
+            console.log('Rendering Account/Login...');
+            console.log("Hello Guest, Please sign in to continue...");
+        </script>
+    *@
+
+    @Html.AntiForgeryToken()
+    @if (!User.Identity.IsAuthenticated) {
+        <script type="text/javascript">
+            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
+            
+            var app = new MAIN(new MODEL().set({
+                'label': 'Log In',
+                'navBar': {
+                    'label': 'Log In'
+                }
+            }), antiForgeryToken.value);
+
+            let prompt = new PROMPT('Log In', 'You must log in to continue');
+
+            prompt.form.setPostUrl('/Account/Login');
+            prompt.form.el.setAttribute('method', 'POST');
+            prompt.form.el.setAttribute('action', '#');
+            
+            prompt.form.fieldset.create('INPUT',
+                new MODEL(
+                    new ATTRIBUTES({
+                        'typeId': IcarusInputType.INPUT,
+                        'type': 'Email',
+                        'name': 'Email'
+                    })
+                ).set({
+                    'label': 'Username',
+                    'showHeader': 0
+                })
+            );
+
+            prompt.form.fieldset.create('INPUT',
+                new MODEL(
+                    new ATTRIBUTES({
+                        'typeId': IcarusInputType.PASSWORD,
+                        'type': 'Password',
+                        'name': 'Password'
+                    })
+                ).set({
+                    'label': 'Password',
+                    'showHeader': 0
+                })
+            );
+
+            prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+            prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
+                prompt.form.el.submit();
+            }
+
+            prompt.show();
+
+            /*
+                TODO:
+                Create INPUT CHECKBOX called 'RememberMe'
+                Create BUTTON to launch 'Register as new User'
+                Create AHREF to 'ForgotPassword'
+            */
+
+        </script>
+    } else {
+        <script type="text/javascript">
+            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
+            var app = new MAIN(new MODEL().set('label', 'Log In'), antiForgeryToken.value);
+            let prompt = new PROMPT('Log In', 'You are already logged in.');
+            prompt.show();
+            setTimeout(function () {
+                location.href = '/'; //https://www.w3schools.com/jsref/met_loc_reload.asp
+            }, 1000);
+        </script>
+    }
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

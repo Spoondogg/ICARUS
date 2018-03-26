@@ -1,0 +1,358 @@
+﻿/*
+    Displays when mobile navbar has been expanded
+*/
+.navbar-collapse.in {
+    -webkit-box-shadow: 0 2px 4px 0 #000000;
+    -moz-box-shadow: 0 2px 4px 0 #000000;
+    box-shadow: 0 2px 4px 0 #000000;
+    border-bottom: 1px solid grey;
+
+}
+
+.navbar-collapse {
+    padding: 0;
+    clear: both;
+}
+
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.navbar-nav {
+    margin: 0;
+    width: 100%;
+}
+
+.navbar-nav-left,
+.navbar-nav-right {
+    border: none;
+    border-bottom: 1px solid grey;
+    width: 50%;
+}
+
+    .navbar-nav-left:hover,
+    .navbar-nav-right:hover {
+        background-color: #353535;
+    }
+    
+    .navbar-header {
+        width: 100%;
+    }
+
+.navbar-header-label {
+    border-radius: 0;
+    line-height: 36px;
+    border: none;
+}
+
+.nav-link {
+    color: white;
+    cursor: pointer;
+}
+
+.nav-item {
+    float: left;
+    clear: both;
+    display: block;
+    width: 100%;
+}
+
+.navbar-brand {
+    background: url(../Images/Logo.png) no-repeat top left;
+    display: block;
+    width: 100px;
+    height: 50px;
+    text-indent: -9999px; /* hides the link text */
+    direction: ltr;
+}
+
+/* Left aligned text inside drop-down menu 
+    .btn-group > ul.dropdown-menu > li, .text-left, .text-left:hover {
+*/
+nav .btn-group > .dropdown-menu > li, .text-left, .text-left:hover {
+    text-align: left;
+    text-decoration: none;
+    color: rgb(109,109,109);
+}
+
+/* HORIZONTAL SCROLLER */
+.scroller {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0;
+    height: 50px;
+    float: left;   
+}
+
+    .scroller ul.scroll {
+        
+        position: absolute;
+        left: 0;
+        top: 0;
+        min-width: 3000px;
+        margin: 0;
+    }
+
+        .scroller ul.scroll li {
+            display: table-cell;
+            position: relative;
+            text-align: center;
+            cursor: grab;
+            cursor: -webkit-grab;
+            color: #efefef;
+            vertical-align: middle;
+        }
+
+
+.scroller-left,
+.scroller-right {
+    height: 49px;
+    width: 12px;
+    line-height: 30px;
+    cursor: pointer;
+    background-color: #333333;
+    border-radius: 0;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                            supported by Chrome and Opera */
+}
+.scroller-left{
+    float:left;
+}
+.scroller-right{
+    float:right;
+}
+
+    .scroller-left span,
+    .scroller-right span {
+        margin: 0 -10px;
+    }
+
+
+    .scroller-left:hover,
+    .scroller-right:hover {
+        background-color: #555;
+        border-radius: 0;
+    }
+
+
+.scroller-left {
+    float: left;
+}
+
+/* DROPDOWN TAB */
+.dropdown-tab {
+    width: 160px;
+}
+
+    .dropdown-tab > a {
+        float: right;
+        display: block;
+    }
+
+    .dropdown-tab > .dropdown-toggle {
+        background-color: #333;
+        border-right: 1px solid #b9b9b9;
+        /*width: 40px;*/
+    }
+
+    .tab-anchor {
+        float: left;        
+        display: block;
+        color: white;
+        padding: 1.2em 0;
+        width: 119px;
+    }
+
+nav header {
+    color: white;
+}
+
+
+.toggle > .toggle-wide { /*a.toggle-wide */
+    color: #000;
+    background-color: #949494;
+    text-align: center;
+    font-size: 8px;
+    height: 12px;
+    border-bottom: thin solid #656161;
+    border-top: thin solid #d0d0d0;
+    line-height: 12px;
+    font-weight: bolder;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+.dropdown-menu ul.navbar-nav {
+    border-bottom: 1px solid white;
+}
+
+@media only screen and (max-width: 767px) { /*768px = standard*/
+
+    .tab-anchor {
+        clear: right !important;
+    }
+
+
+    .scroller {
+        width: 100%; /*!important*/
+        height: auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .scroller ul.scroll {
+            position: initial;
+            min-width: initial;
+        }
+
+        .scroller ul.scroll li {
+            text-align: initial;
+            vertical-align: initial;
+        }
+
+    .scroller-left,
+    .scroller-right {
+        display: none;
+    }
+
+        .scroller-left span,
+        .scroller-right span {
+            margin: initial;
+        }
+
+
+    /* NAV */
+    
+
+        .nav-item.active, .nav-item.open {
+            background-color: black;
+            display: block;
+            border-bottom: 1px solid grey;
+        }
+
+        .nav-item .tab-anchor {
+            float: left;
+            clear: left;
+        }
+
+    .dropdown-menu .nav-item {
+        background-color: rgb(36, 36, 36);
+    }
+
+    .nav-item:hover a {
+        color: #101010;
+    }
+}
+
+.app {
+    display: flex;
+    align-items: stretch;
+}
+
+.app-body {
+    /*display: flex;*/
+    width: 100%;
+}
+
+.navbar-search {
+    padding: 0.3em;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
+.sidebar {
+    width: 250px;
+    -moz-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    height: 100vh;
+    overflow-y: hidden;
+    margin-left: -250px;
+}
+
+    .sidebar.active {
+        margin-left: 0;
+    }
+
+    
+
+    .sidebar .nav-item {
+        width: 100%;
+    }
+
+    .sidebar ul[name=document-map] {
+        border-bottom: 1px solid #004002;
+    }
+
+        .sidebar ul[name=document-map] > li {
+            margin-bottom: 2px;
+            background-color: rgba(91, 179, 11, 0.1);
+            border-bottom: 1px solid #353535;
+            border-top: 1px solid #404040;
+            -webkit-box-shadow: inset 0 3px 3px 0 rgba(1,1,1,.9);
+            -moz-box-shadow: inset 0 3px 3px 0 rgba(1,1,1,0.9);
+            box-shadow: inset 0 3px 3px 0 rgba(1, 1, 1, 0.9);
+        }
+
+.sidebar ul, .sidebar ul li {
+    width: 100%;
+}
+
+/* Each embedded list gets smaller */
+    .sidebar ul li ul {
+        /*margin-left: 0.5em !important;*/
+        font-size: 90%;
+        text-indent: 1em;
+        /*background-color: rgba(0, 10, 3, 0.5);*/
+        -webkit-box-shadow: inset 0 1px 1px 0 rgba(1,1,1,0.2);
+        -moz-box-shadow: inset 0 1px 1px 0 rgba(1,1,1,0.2);
+        box-shadow: inset 0 1px 1px 0 rgba(1,1,1,0.2);
+    }
+
+
+.pane {
+    width: 100%;
+    -moz-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+ul.sidebar.active + .pane {
+    width: calc(100%-250px);
+}
+
+main.icarus-container {
+    background-color: rgba(0,0,0,0.5);
+    border-bottom: 1px solid #46464652;
+    box-shadow: 0 2px 4px rgba(0,0,0,.5);
+}
+
+.icarus-container {    
+    overflow: hidden;
+}
+
+
+
+@media (max-width: 768px) {
+    .sidebar {
+        /*margin-left: -250px;*/
+        
+        margin-left: -186px;
+    }
+
+    .sidebar.active {
+        margin-left: 0;
+    }
+
+    .pane {
+        width: calc(100%-64px);
+    }    
+}

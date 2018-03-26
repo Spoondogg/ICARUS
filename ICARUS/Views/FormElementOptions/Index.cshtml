@@ -1,0 +1,104 @@
+﻿@model IEnumerable<ICARUS.Models.FormElementOption>
+@{
+    ViewBag.Title = "Form Element Options";
+}
+<h2>Form Element Options: Index</h2>
+<h4>
+    @Html.ActionLink("Create a Form Element Option", "Create", "FormElementOptions", new { id = ViewContext.RouteData.Values["id"] }, null) &nbsp;|&nbsp;
+    @Html.ActionLink("Go to Parent Group", "Index", "FormElements", new { id = 0 }, null)
+</h4>
+<table class="table-fixed">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.label)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.categoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.parentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.childGroupId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.label)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.label)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.categoryId)
+                </td>
+                <td>
+                    <a href="@Html.DisplayFor(modelItem => item.parentId)">@Html.DisplayFor(modelItem => item.parentId)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.childGroupId)
+                    @Html.ActionLink("Edit", "Edit", "FormGroups", new { id = item.childGroupId }, null)
+                </td>
+                
+                <td align="right" style="overflow: visible">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                        <button type="button" class="btn btn-default">
+                            @Html.ActionLink("Details", "Details", new { area = "", id = item.id }, new { @class = "text-left" })
+                        </button>
+                        <button type="button"
+                                class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            @if (User.IsInRole("Admin")) {
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            }
+                        </button>
+                        @if (User.IsInRole("Admin")) {
+                            <ul class="dropdown-menu" style="left:-75px">
+                                <li>
+                                    @Html.ActionLink("Edit", "Edit", new { area = "", id = item.id }, new { @class = "text-left" })
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    @Html.ActionLink("Delete", "Delete", new { area = "", id = item.id }, new { @class = "text-left" })
+                                </li>
+                            </ul>
+                        }
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<h4>@Html.ActionLink("Home", "Index", "Home")</h4>
+
+@section viewInit {
+    <script type="text/javascript">
+        $(".btn-delete").on('click', function (event) {
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            if (confirm('Are you sure you want to do that?\nOnce deleted, this object can not be restored!')) {
+                return true;
+            } else {
+                console.log('Action cancelled');
+                return false;
+            };
+        });
+    </script>
+}
