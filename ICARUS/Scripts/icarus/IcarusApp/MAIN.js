@@ -27,7 +27,7 @@ class MAIN extends CONTAINER { //EL {
         console.log("|__ --|  _  |  _  |  _  |     |        |  -__|  _  |  ||  _  |__|  __|  _  |");
         console.log("|_____|   __|_____|_____|__|__|__|__|__|_____|_____|__||___._|__|____|___._|");
         console.log("      |__|                                                                  ");
-        console.log("                                                                            ");
+        console.log("\n\n");
         
         super(document.body, model.element, model);        
 
