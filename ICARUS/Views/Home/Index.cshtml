@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Icarus Home - Index";
+}
+@section viewInit {
+    @*
+        When the user is authenticated, instantiate the Anti Forgery Token
+        and make it available to the JavaScript App() constructor
+        Performs a GET request of the specified App by id
+    *@
+    @if (Request.IsAuthenticated) {
+        @Html.AntiForgeryToken()
+        <script type="text/javascript">
+            let route = "/Main/Get";
+            let id = @ViewBag.id;
+            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
+
+            let loader = new LOADER('Loading', 'Loading', 100);
+            loader.show();
+
+            var app = null;
+
+            console.log('Home/Index: Getting Main(' + id + ') from ' + route + '/' + id);
+            $.getJSON(
+                route + '/' + id, function (data) {
+                    if (data.result === 1) {
+                        try {
+                            app = new MAIN(data.model, antiForgeryToken.value);
+                            loader.hide();
+                        } catch (e) {
+                            console.log('Unable to retrieve Main()');
+                            console.log(e);
+                        }
+                    } else {
+                        alert('woot');
+                        loader.setProgress(100,
+                            'Access Denied.  Failed to retrieve Main(' + id +
+                            ') from server\n' + data.message
+                        );
+
+                        /*
+                        // Log the user out as a precaution
+                        $.post('/Account/LogOff', {
+                            '__RequestVerificationToken': antiForgeryToken.value
+                        }, function (payload, status) {
+                            loader.addText('Status: ' + status);
+                            if (status === "success") {
+                                loader.setProgress(100, 'Post Complete.');
+                                setTimeout(function () {
+                                    loader.hide();
+                                    setTimeout(function () {
+                                        location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
+                                    }, 600);                                    
+                                }, 2000);
+                            } else {
+                                console.log('Failed to POST results to server with status: "' + status + '"');
+                                loader.setProgress(0, 'Something isnt right');
+                                btnReset.el.style.display = 'none;';
+                            }
+                        }.bind(this), "json");
+                        */
+                    }
+                }
+            );
+            @* Remove the element from the DOM and pass value to App *@
+            try {
+                antiForgeryToken.parentNode.removeChild(antiForgeryToken);
+            } catch (e) { console.log(e.toString()); }
+        </script>
+    } else {
+        <script type="text/javascript">
+            console.log("Failed to authenticate user.");
+        </script>
+    }
+}

@@ -1,0 +1,109 @@
+﻿/**
+    Header located at the top of the modal
+    Contains a label and a close button
+*/
+.modal-header {
+    padding: 0.5em 1em;
+    background-color: #383e46;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: white;
+    font-weight: bolder;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(1,1,1,0.3);
+    -moz-box-shadow: 0 1px 1px 0 rgba(1,1,1,0.3);
+    box-shadow: 0 1px 1px 0 rgba(1,1,1,0.3);
+    border-bottom: 1px solid dimgrey;
+}
+
+    .modal-header .close {
+        color: #00dcff;
+    }
+
+.modal-body {
+    padding: 0;
+    /*height: 85vh;*/
+    max-height: 85vh;
+    overflow-y: auto;
+    /*margin-bottom: 1em;*/
+}
+
+.modal-footer {
+    padding: 0;
+}
+
+    .modal-footer, .modal-footer .btn {
+        -webkit-border-bottom-left-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        -moz-border-radius-bottomright: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        -webkit-box-shadow: inset 0 2px 2px 0 rgba(1,1,1,0.3);
+        -moz-box-shadow: inset 0 2px 2px 0 rgba(1,1,1,0.3);
+        box-shadow: inset 0 2px 2px 0 rgba(1,1,1,0.3);
+        border-top: 1px solid #757575;
+        background-color: #d0d0d0;
+        border-color: #d0d0d0;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #525252;
+        text-shadow: 0 -1px 1px rgba(150, 150, 150, 1);
+        cursor: pointer;
+    }
+        .modal-footer .btn:hover {
+            color: #476475;
+            background-color: #a9b9f5;
+            -webkit-transition: color 400ms, background-color 400ms;
+            -moz-transition: color 400ms, background-color 400ms;
+            -o-transition: color 400ms, background-color 400ms;
+            transition: color 400ms, background-color 400ms;
+        }
+
+/* https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window */
+.vertical-alignment-helper {
+    display: table;
+    height: 100%;
+    width: 100%;
+    pointer-events: none; /* This makes sure that we can still click outside of the modal to close it */
+}
+
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width: inherit;
+    max-width: inherit; /* For Bootstrap 4 - to avoid the modal window stretching full width */
+    /*height: inherit;*/
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
+
+.modal .loader {
+    width: 400px;
+    height: 260px;
+    max-height: 260px;
+}
+
+.modal .loader .modal-body {
+    height: 220px;
+}
+
+    .modal .loader .modal-body .well {
+        font-size: smaller;
+        margin: 0;
+    }
+
+.modal .progress {
+    margin: 0;
+    border-bottom: 1px solid #9c9c9c;
+}

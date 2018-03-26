@@ -1,0 +1,88 @@
+﻿article {
+    display: none;
+}
+
+article.active {
+    display: block;
+}
+
+.application-header {
+    /*
+    position: absolute;
+    display: block;
+    top: 50px;
+    z-index: 999;
+    width: 100%;
+    */
+
+    background-color: white;
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+.section-header {
+    background-color: white;
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    border-bottom: 1px solid #c3c3c3;
+}
+    .section-header:hover {
+        background-color: #000000;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .section-header a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+        .section-header a:hover {
+            color: #00aff2;
+        }
+
+        .section-header button {
+            border-radius: 0;
+            border-top: 0;
+            border-bottom: 0;
+        }
+
+
+
+.section-header > .btn-group-left {
+    /*
+    width: 45vw;
+    min-width: 250px;
+    */
+    padding-right: 1em;
+}
+
+    .section-header > .btn-group-left .btn-label {
+        min-width: 196px;
+    }
+
+    .section-header .dropdown-menu {
+        border-top: none;
+        margin-top: 0;
+        border-radius: 0 0 0 4px;
+    }
+
+/**
+Due to implementation of dropdown-group
+*/
+.dropdown-menu li > a,
+.dropdown-group li > a {
+    color: #FFF;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    white-space: nowrap;
+}

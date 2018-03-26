@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ICARUS.Models.Report>
+@{
+    ViewBag.Title = "Reports";
+}
+<h2>Reports</h2>
+@{
+    if(User.IsInRole("Admin")){
+        <h4>@Html.ActionLink("Create New Report", "Create")</h4>
+    }
+}
+<table class="table-fixed">
+    <thead>
+        <tr>
+            <th>Report</th>
+        </tr>
+    </thead>
+    <tbody>
+             <tr>
+                <td>woot
+                    
+                </td>                
+            </tr>
+    </tbody>
+</table>
+
+<h4>@Html.ActionLink("Report", "Index", "Report")</h4>
+
+@section viewInit {
+    <script type="text/javascript">
+        $(".btn-delete").on('click', function (event) {
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            if (confirm('Are you sure you want to do that?\nOnce deleted, this object can not be restored!')) {
+                return true;
+            } else {
+                console.log('Action cancelled');
+                return false;
+            };
+        });
+    </script>
+}

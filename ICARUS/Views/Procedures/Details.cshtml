@@ -1,0 +1,336 @@
+﻿@model ICARUS.Models.Procedure
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.label)</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.name)</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.typeId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.typeId)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.authorId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.authorId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.label)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.label)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.columns)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.columns)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.parameters)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.parameters)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+    </dl>
+
+    <!--
+        CHART ARGUMENTS
+        Contains form elements that manipulate the Chart.
+        Consider moving construction of this element into the Chart javascript
+        Server Side params = id, token
+    -->
+    <form name="arguments" class="arguments row">
+        <input type="hidden" name="id" value="@Html.DisplayFor(model => model.id)" />
+        @Html.AntiForgeryToken()
+        <button id="btn_refreshChart" type="submit" class="btn btn-lg btn-primary btn-block" style="font-size:smaller;" name="save">REFRESH</button>
+    </form>
+
+    <!--
+        SANDBOX
+        Internal Javascript populates the sandbox.  Eventually, this should be offloaded,
+        but for the moment this is a simple approach that can be easily replicated.    
+    -->
+    <div id="sandbox">
+        <h4>Results for @Html.DisplayFor(model => model.label)</h4>
+        <form method="post" id="formPostRequest">
+            <input type="hidden" name="id" value="@Html.DisplayFor(model => model.id)" />
+        </form>
+    </div>
+    
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section viewInit {
+    <script type="text/javascript">
+        /**
+            Sandbox:
+            Retrieves sample values by calling the currently loaded stored procedure
+        */
+        var parentEl = document.getElementById('formPostRequest');
+
+        // Serialize the local form id
+        var dataToBeSent = $(parentEl).serialize();
+
+        // Retrieve routes from RouteConfig
+        var route = "@Url.RouteUrl("callProcedure")";
+
+        // Assign required values from model
+        var parentId = @Html.DisplayFor(model => model.id);
+        var typeId = @Html.DisplayFor(model => model.typeId);
+        var colString = "@Html.DisplayFor(model => model.columns)";
+
+        // Create a progress bar
+        console.log('Creating loader...');
+        var progressVal = 0;
+        var progress = new EL(parentEl, 'div', {
+            'class':'progress progress-striped active',
+            'style':'height:0px;margin-bottom:0;'
+        });
+        var progressBar = new EL(progress.el, 'div', {
+            'class':'progress-bar',
+            'role':'progressbar',
+            'aria-valuenow':progressVal, 'aria-valuemin':0, 'aria-valuemax':100,
+            'style':'width:'+progressVal+'%'
+        },'10%');
+
+        // Reveal progress bar and begin loading
+        $(progress.el).animate({
+            height: '18px'
+        }, 500);
+
+        // On post, perform the given function
+        $.post(route + '/' + parentId, dataToBeSent,
+            function (optionsList, textStatus) {
+
+                // Crude example
+                switch(typeId) {
+                    case 1: 
+                        console.log('Creating table...');
+                        break;
+                    
+                    case 2: 
+                        console.log('Creating bar chart...');
+                        break;
+
+                    default: 
+                        console.log('Creating undefined type');
+                        break;                        
+                }
+
+                // textStatus contains the status: success, error, etc
+                // If server responds with 'success'
+                console.log('Retrieving results for procedure '+parentId+'...');
+                if (textStatus == "success") {
+
+                    // Construct the table's rows based on records returned
+                    console.log('Constructing ' + optionsList.length + ' rows...');
+                    try {
+
+                        var cols = colString.split(",");
+                        var tbl = new TABLE(parentEl,cols);
+
+
+                        var progressIncrement = (1/optionsList.length)*100;
+                        for (var r=0; r<optionsList.length; r++) {
+
+                            // Create header based on table's columns
+                            if(r==0){
+                                tbl.addRow('thead');
+                                for(var c=0;c<cols.length;c++){
+                                    tbl.addColumn('thead',r,{
+                                        'innerHTML': cols[c]
+                                    });
+                                }
+                            }
+
+                            // Create row(s) in the <tbody> group
+                            tbl.addRow('tbody');
+                            for(var opt in optionsList[r]) {
+                                tbl.addColumn('tbody',r,{innerHTML:optionsList[r][opt]});
+                            }
+
+                            // Increment progress for each row
+                            if(r>0){
+                                progressVal += progressIncrement;
+                                if(progressVal>100||r==(optionsList.length-1)){
+                                    progressVal = 100;
+                                }
+                                //console.log('Progress '+r+'/'+optionsList.length+': '+progressVal+'%');
+                                progressBar.el.setAttribute('style','width:'+progressVal+'%');
+                                progressBar.el.innerHTML = progressVal+'%';
+                            } else {
+                                progressVal = 0;
+                            }
+                        }
+
+                        // Shrink away progress bar 1 second after loading completes
+                        progressBar.el.setAttribute('style','width:100%');
+                        progressBar.el.innerHTML = '100%';
+                        setTimeout(
+                            function() {
+                                $(progress.el).animate({
+                                    height: '0px'
+                                }, 500);
+                                setTimeout(
+                                    function() {
+                                        progress.el.parentNode.removeChild(progress.el);
+                                    }, 3000
+                                );
+                            }, 1000
+                        );
+
+                    } catch (e) {
+                        console.log('Failed to retrieve form object from server with status: "' + textStatus + '"');
+                        console.log(e);
+
+                        // Shrink away progress bar 1 second after loading completes
+                        progressBar.el.setAttribute('style','width:100%');
+                        progressBar.el.innerHTML = '100%';
+                        setTimeout(
+                            function() {
+                                $(progress.el).animate({
+                                    height: '0px'
+                                }, 500);
+                                setTimeout(
+                                    function() {
+                                        progress.el.parentNode.removeChild(progress.el);
+                                    }, 3000
+                                );
+                            }, 1000
+                        );
+                    }
+                }
+            }, "json"
+        );
+    </script>
+
+    <!--
+        This script generates argument params for the form 
+    -->
+    <script type="text/javascript">
+		console.log('Retrieving values for:');
+		for(var c=0;c<document.forms['arguments'].length;c++){
+			var argument = document.forms['arguments'][c];
+			console.log('TODO:  Retrieving options for element: '+argument.name+'...');
+			// Pipe in default values from user's profile.  ie: default value for dateStart = DATEDIFF(DD,-1,GETDATE())
+			//$.getJSON('<c:url value="/getarguments?name=${argument.name}&token=${_csrf.token}" />', function(data) {
+
+				//console.log('woot');
+
+			//});
+		}
+    </script>
+
+    <!--
+        This next script populates the chart
+    -->
+    <script type="text/javascript">
+	    // Populate the report and chart from a JSON data source via ajax
+	    $.getJSON('#', function(data) {
+
+		    console.log("Loading argument list...");
+		    var argList = new EL(document.forms['arguments'], 'div', {'class':'argumentList','id':'arguments'});
+		    var chartArguments = data.report.chartArguments;
+
+		    for(var argument in chartArguments){
+			    if(argument!="token"){
+				    console.log("Argument: "+argument);
+				    var groupEl = new EL(argList.el,'div',{'class':'form-group col-sm-3 form-group'});
+				    var groupLbl = new EL(groupEl.el,'label',null,argument);
+
+				    var groupInput = null;
+				    if(chartArguments[argument].argumentOptions.length>0){
+					    groupInput = new EL(groupEl.el,'select',{'class':'form-control','name':argument.substring(1,argument.length)});
+					    for(var opt=0;opt<chartArguments[argument].argumentOptions.length;opt++){
+						    var optn = chartArguments[argument].argumentOptions[opt];
+						    var groupOpt = new EL(groupInput.el,'option',{'value':optn.value},optn.label);
+					    };
+				    } else {
+					    switch(chartArguments[argument].type){
+						    case "nvarchar": {
+							    groupInput = new EL(groupEl.el,'input',{'type':'text','class':'form-control','name':argument.substring(1,argument.length)});
+							    for(var opt=0;opt<chartArguments[argument].argumentOptions.length;opt++){
+								    var optn = chartArguments[argument].argumentOptions[opt];
+								    var groupOpt = new EL(groupInput.el,'option',{'value':optn.value},optn.label);
+							    };
+							    break;
+						    }
+						    case "date": {
+							    groupInput = new EL(groupEl.el,'input',{'type':'date','class':'form-control','name':argument.substring(1,argument.length)});
+							    break;
+						    }
+						    case "datetime": {
+							    groupInput = new EL(groupEl.el,'input',{'type':'datetime','class':'form-control','name':argument.substring(1,argument.length)});
+							    break;
+						    }
+						    case "int": {
+							    groupInput = new EL(groupEl.el,'input',{'type':'number','class':'form-control','name':argument.substring(1,argument.length)});
+							    break;
+						    }
+						    default: {
+							    groupInput = new EL(groupEl.el,'input',{'type':'text','class':'form-control','name':argument.substring(1,argument.length)});
+							    break;
+						    }
+					    }
+				    };
+
+			    }
+		    }
+
+		    console.log("Loading data into chart...");
+		    var chart = new CHART(document.getElementById('chart'), data, '<c:out value="${report.type}" />');
+		    chart.showChartData('<c:out value="${report.type}" />');
+
+		    //console.log("Loading data into table...");
+		    //var report = new REPORT(document.getElementById('report'), data);
+		    //report.showReportData();
+
+	    });
+    </script>
+
+}
