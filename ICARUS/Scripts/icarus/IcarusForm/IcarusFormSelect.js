@@ -1,7 +1,7 @@
 ﻿/**
     Represents a <SELECT> for an Icarus Form    
 */
-class IcarusFormSelect extends EL {
+class IcarusFormSelect extends CONTAINER {
     /**
         An Input/Select OPTION constructor.
         @param {EL} node The parent
@@ -11,8 +11,9 @@ class IcarusFormSelect extends EL {
     constructor(node, model) {
         let element = 'SELECT';
         let name = model.attributes.get('name') || element+'_' + guid();
-        model.name = model.name || element +'_' + guid();
+        model.name = model.name || 'SELECT_' + guid();
         super(node, element, new MODEL(element, new ATTRIBUTES('form-control', friendly(model.name))));
+        this.addClass('form-select');
 
         if (model.readonly) {
             this.el.setAttribute('readonly', 'readonly');
@@ -33,6 +34,19 @@ class IcarusFormSelect extends EL {
             }
         } catch (e) { /* console.log(e) */ }
 
+    }
+
+    /**
+        Adds a Nav Item to this Drop Down Menu Group
+        @param {MODEL} model Nav Item Model
+        @returns {NAVITEM} A nav item
+     */
+    addFormElementOption(model) {
+        model = model || new MODEL(new ATTRIBUTES(), 'IcarusFormOption');
+        this.children.push(
+            new IcarusFormOption(this, model, model.hasDropdown)
+        );
+        return this.children[this.children.length - 1];
     }
 
     /**

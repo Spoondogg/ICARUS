@@ -121,9 +121,9 @@ namespace ICARUS {
 
                 "~/Scripts/icarus/IcarusTextBlock/TEXTBLOCK.js",
 
-                "~/Scripts/icarus/IcarusArticle/SECTION.js",
-                "~/Scripts/icarus/IcarusArticle/IcarusSectionHeader.js",
-                "~/Scripts/icarus/IcarusArticle/ARTICLE.js",
+                "~/Scripts/icarus/IcarusContainer/Containers/SECTION.js",
+                "~/Scripts/icarus/IcarusContainer/Containers/IcarusSectionHeader.js",
+                "~/Scripts/icarus/IcarusContainer/Containers/ARTICLE.js",
                 
                 "~/Scripts/icarus/IcarusFooter/STICKYFOOTER.js",
                 "~/Scripts/icarus/IcarusFooter/SITEMAP.js",

@@ -71,6 +71,15 @@ namespace ICARUS.Controllers {
         public DbSet<FormElement> FormElements { get; set; }
         public object FormElement { get; internal set; }
 
+        public DbSet<FormInput> Inputs { get; set; }
+        public object Input { get; internal set; }
+
+        public DbSet<FormSelect> Selects { get; set; }
+        public object Select { get; internal set; }
+
+        public DbSet<FormTextArea> TextAreas { get; set; }
+        public object TextArea { get; internal set; }
+
         public DbSet<FormElementOption> FormElementOptions { get; set; }
         public object FormElementOption { get; internal set; }
 

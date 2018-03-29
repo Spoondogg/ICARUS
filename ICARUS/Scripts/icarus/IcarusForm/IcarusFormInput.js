@@ -1,22 +1,30 @@
 ﻿/**
     Represents an <INPUT> for an Icarus Form
 */
-class IcarusFormInput extends EL {
+class IcarusFormInput extends CONTAINER {
     /**
         Constructs an INPUT element
         @param {EL} node Parent
         @param {MODEL} model The model
      */
     constructor(node, model) {
-        //let element = 'INPUT';
-        model = model || new MODEL(new ATTRIBUTES({
-            'class': 'form-control',
-            'type': 'TEXT',
-            'list': 'INPUT_' + guid() + '-options',
-            'name': friendly(element + '_' + guid()),
-            'value': '' //model.value
-        }));
-        super(node, 'INPUT', model);
+        super(node, 'DIV', model);
+        this.addClass('form-input');
+
+        // Create the Label
+        let label = model ? model.label : '__NoLabel';
+        this.label = new LABEL(this.body.pane, model ? model.label : '__NoLabel');
+        this.label.el.onclick = this.save.bind(this);
+
+        this.input = new EL(this.body.pane, 'INPUT', new MODEL(
+            new ATTRIBUTES({
+                'class': 'form-control',
+                'type': 'TEXT',
+                'list': 'INPUT_' + guid() + '-options',
+                'name': friendly('INPUT_' + guid()),
+                'value': '' //model.value
+            })
+        ));
         
 
         this.options = [];

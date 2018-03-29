@@ -22,6 +22,5 @@ namespace ICARUS.Models.Icarus.Enums {
             this.Add("UP", "glyphicon-triangle-top");
             this.Add("DOWN", "glyphicon-triangle-bottom");
         }
-
     }
 }
