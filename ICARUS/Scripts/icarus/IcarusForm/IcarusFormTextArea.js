@@ -1,7 +1,7 @@
 ﻿/**
     Represents a <TEXTAREA> for an Icarus Form       
 */
-class IcarusFormTextArea extends EL {
+class IcarusFormTextArea extends CONTAINER {
     /**
         Construct a Text Area
         @param {EL} node The parent object
@@ -9,7 +9,8 @@ class IcarusFormTextArea extends EL {
      */
     constructor(node, model) {
         let element = 'TEXTAREA';
-        model.name = model.name || element+'_' + guid();
+        model.name = model.name || 'TEXTAREA_' + guid();
+
         super(node, element,
             new MODEL(
                 new ATTRIBUTES(
@@ -20,6 +21,8 @@ class IcarusFormTextArea extends EL {
                 )
             )
         );
+        this.addClass('form-textarea');
+
         if (model.readonly) {
             this.el.setAttribute('readonly', 'readonly');
         }

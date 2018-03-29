@@ -299,12 +299,20 @@ class CONTAINER extends EL {
                     obj = new IcarusFormElementGroup(this.body.pane, data.model);
                     break;
 
-                case 'FORMELEMENT':
-                    obj = new IcarusFormElement(this.body.pane, data.model);
+                case 'INPUT':
+                    obj = new IcarusFormInput(this.body.pane, data.model);
+                    break;
+
+                case 'SELECT':
+                    obj = new IcarusFormSelect(this.body.pane, data.model);
+                    break;
+
+                case 'TEXTAREA':
+                    obj = new IcarusFormTextArea(this.body.pane, data.model);
                     break;
 
                 case 'FORMELEMENTOPTION':
-                    obj = new IcarusFormElement(this.body.pane, data.model);
+                    obj = new IcarusFormOption(this.body.pane, data.model);
                     break;
 
             }
@@ -335,17 +343,18 @@ class CONTAINER extends EL {
         and adds respective tabs etc to this container
 
         @param {string} element ie SECTION or FORM
+        @param {boolean} addButton If false, no button is created
     */
-    addContainerCase(element) {
+    addContainerCase(element, addButton) {
         this.addCase(element,
             function (element, model) {
-                return this.getObject(element, model.id);
+                return this.getObject(element, model.id || 0);
             }.bind(this)
         );
-        this.addConstructElementButton(element);
+        if (!addButton) {
+            this.addConstructElementButton(element);
+        }
     }
-
-    
 
     /**
         Overrides EL.open();
@@ -488,7 +497,8 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'Element',
-                    'addTab': false
+                    'addTab': false,
+                    'showHeader': false
                 }),
 
                 new MODEL(new ATTRIBUTES({

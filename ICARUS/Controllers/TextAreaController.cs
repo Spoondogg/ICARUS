@@ -17,9 +17,9 @@ namespace ICARUS.Controllers {
     /// various pages
     /// </summary>
     [Authorize(Roles = "User,Dev,Admin")]
-    public class FormElementController : ContainerController {
+    public class TextAreaController : ContainerController {
 
-        public FormElementController() : base("FORMELEMENT") {
+        public TextAreaController() : base("TEXTAREA") {
 
         }
 
@@ -27,10 +27,10 @@ namespace ICARUS.Controllers {
             // Attempt to create and save to the database
             try {
                 // Save the object
-                FormElement model = new FormElement();
+                FormTextArea model = new FormTextArea();
                 model.setAuthorId(User.Identity.Name);
 
-                getObjectDbContext().FormElements.Add(model);
+                getObjectDbContext().TextAreas.Add(model);
                 int result = getObjectDbContext().SaveChanges();
 
                 // Return the success response along with the email message body
@@ -47,13 +47,13 @@ namespace ICARUS.Controllers {
 
         public override async Task<ActionResult> Create(FormPost formPost) {
             try {
-                FormElement model = new FormElement(formPost);
+                FormTextArea model = new FormTextArea(formPost);
                 model.setAuthorId(User.Identity.Name);
 
-                getObjectDbContext().FormElements.Add(model);
+                getObjectDbContext().TextAreas.Add(model);
                 int results = getObjectDbContext().SaveChanges();
 
-                return Json(new Payload(results, "FORMELEMENT", model, "Successfully created " + className));
+                return Json(new Payload(results, "TEXTAREA", model, "Successfully created " + className));
 
             } catch (Exception e) {
                 return Json(

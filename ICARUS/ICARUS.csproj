@@ -206,6 +206,8 @@
     <Compile Include="Controllers\FormElementOptionController.cs" />
     <Compile Include="Controllers\FormCategoryController.cs" />
     <Compile Include="Controllers\FieldsetController.cs" />
+    <Compile Include="Controllers\TextAreaController.cs" />
+    <Compile Include="Controllers\SelectController.cs" />
     <Compile Include="Controllers\FormPostsController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ContainerController.cs" />
@@ -218,7 +220,7 @@
     <Compile Include="Controllers\SectionController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Controllers\FormElementController.cs" />
+    <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\ProceduresController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -346,6 +348,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
+    <Compile Include="Models\Icarus\Form\TextArea.cs" />
+    <Compile Include="Models\Icarus\Form\Select.cs" />
+    <Compile Include="Models\Icarus\Form\Input.cs" />
     <Compile Include="Models\Icarus\Form\FormElementGroup.cs" />
     <Compile Include="Models\Icarus\Elements\MODEL.cs" />
     <Compile Include="Models\Icarus\Elements\P.cs" />
@@ -495,7 +500,7 @@
     <Content Include="Scripts\icarus\IcarusForm\IcarusFormElement.js" />
     <Content Include="Scripts\icarus\IcarusForm\IcarusFormElementGroup.js" />
     <Content Include="Scripts\icarus\IcarusForm\IcarusFieldSet.js" />
-    <Content Include="Scripts\icarus\IcarusArticle\IcarusSectionHeader.js" />
+    <Content Include="Scripts\icarus\IcarusContainer\Containers\IcarusSectionHeader.js" />
     <Content Include="Scripts\icarus\IcarusForm\IcarusFormInput.js" />
     <Content Include="Scripts\icarus\IcarusForm\IcarusFormOption.js" />
     <Content Include="Scripts\icarus\IcarusForm\IcarusFormSelect.js" />
@@ -506,10 +511,10 @@
     <Content Include="Scripts\icarus\_generic\GROUP.js" />
     <Content Include="Scripts\icarus\_generic\LABEL.js" />
     <Content Include="Scripts\icarus\IcarusModal\PROMPT.js" />
-    <Content Include="Scripts\icarus\IcarusArticle\SECTION.js" />
+    <Content Include="Scripts\icarus\IcarusContainer\Containers\SECTION.js" />
     <Content Include="Scripts\icarus\IcarusTextBlock\TEXTBLOCK.js" />
     <Content Include="Scripts\icarus\IcarusApp\MAIN.js" />
-    <Content Include="Scripts\icarus\IcarusArticle\ARTICLE.js" />
+    <Content Include="Scripts\icarus\IcarusContainer\Containers\ARTICLE.js" />
     <Content Include="Scripts\icarus\CHART.js" />
     <Content Include="Scripts\icarus\EL.js" />
     <Content Include="Scripts\icarus\IcarusFooter\STICKYFOOTER.js" />
@@ -650,7 +655,6 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
-    <Folder Include="Scripts\icarus\IcarusContainer\Containers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

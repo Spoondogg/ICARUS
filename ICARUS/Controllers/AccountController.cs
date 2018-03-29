@@ -246,19 +246,16 @@ namespace ICARUS.Controllers {
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return View(model);
             }
             var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
+            if (user == null) {
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
-            {
+            if (result.Succeeded) {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
@@ -268,8 +265,7 @@ namespace ICARUS.Controllers {
         //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
-        {
+        public ActionResult ResetPasswordConfirmation() {
             return View();
         }
 
@@ -288,8 +284,7 @@ namespace ICARUS.Controllers {
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe) {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
-            {
+            if (userId == null) {
                 return View("Error");
             }
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
@@ -299,17 +294,14 @@ namespace ICARUS.Controllers {
 
         //
         // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> SendCode(SendCodeViewModel model) {
             if (!ModelState.IsValid) {
                 return View();
             }
 
             // Generate the token and send it
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            {
+            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider)) {
                 return View("Error");
             }
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
@@ -346,9 +338,7 @@ namespace ICARUS.Controllers {
 
         //
         // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl) {
             if (User.Identity.IsAuthenticated) {
                 return RedirectToAction("Index", "Manage");
@@ -395,22 +385,18 @@ namespace ICARUS.Controllers {
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
+        public ActionResult ExternalLoginFailure() {
             return View();
         }
 
         protected override void Dispose(bool disposing) {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
+            if (disposing) {
+                if (_userManager != null) {
                     _userManager.Dispose();
                     _userManager = null;
                 }
 
-                if (_signInManager != null)
-                {
+                if (_signInManager != null) {
                     _signInManager.Dispose();
                     _signInManager = null;
                 }

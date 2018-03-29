@@ -15,7 +15,9 @@ class IcarusFormElement extends CONTAINER {
         @param {EL} node The parent
         @param {MODEL} model the data model
      */
-    constructor(node, model) {
+    constructor(node, element, model) {
+        model.hasSidebar = false;
+        model.hasTab = false;
 
         // Instantiate
         super(node, 'DIV', model);
@@ -27,12 +29,22 @@ class IcarusFormElement extends CONTAINER {
         this.label = new LABEL(this.body.pane, label);
         this.label.el.onclick = this.save.bind(this);
 
+        this.addCase('INPUT', function (element, model) {
+            return this.addInput(model);
+        }.bind(this));
+
+        this.addCase('SELECT', function (element, model) {
+            return this.addSelect(model);
+        }.bind(this));
+
+        this.addCase('TEXTAREA', function (element, model) {
+            return this.addTextArea(model);
+        }.bind(this));
+        
         // Create the INPUT, SELECT or TEXTAREA 
         //this.tagId = model.tagId || 1;
-        this.inp = this.create(
-            IcarusFormElementTagId[1], //this.tagId
-            model
-        );
+        console.log('Create ' + element);
+        this.input = this.create(element, model);
 
         // Populate CONTAINER with children 
         try {
@@ -42,6 +54,38 @@ class IcarusFormElement extends CONTAINER {
             console.log('Did you forget to provide a model for this IcarusFormElement?');
         }
     }
+
+    /**
+        Constructs an Input
+        @param {MODEL} model datamodel
+        @returns {IcarusFormInput} An input
+     */
+    addInput(model) {
+        this.children.push(new IcarusFormInput(this.body.pane, model));
+        return this.children[this.children.length - 1];
+    }
+
+    /**
+        Constructs a Select Input
+        @param {MODEL} model datamodel
+        @returns {IcarusFormSelect} A select element
+     */
+    addSelect(model) {
+        this.children.push(new IcarusFormSelect(this.body.pane, model));
+        return this.children[this.children.length - 1];
+    }
+
+    /**
+        Constructs a TextArea
+        @param {MODEL} model datamodel
+        @returns {IcarusFormTextArea} A textarea
+     */
+    addTextArea(model) {
+        this.children.push(new IcarusFormTextArea(this.body.pane, model));
+        return this.children[this.children.length - 1];
+    }
+
+    
 
     /**
         Modify the Icarus Form Element.

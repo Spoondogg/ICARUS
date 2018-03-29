@@ -20,30 +20,41 @@ class PROMPT extends MODAL {
         this.form = new IcarusForm(
             this.body,
             new MODEL().set({
+                'label': 'PROMPT FORM',
                 'collapsed': false,
                 'showHeader': false,
                 'hasTab': false
             })
         );
-        //this.form.header.hide();
+        this.form.create('FIELDSET',
+            new MODEL().set({
+                'label': 'PROMPT FIELDSET',
+                'collapsed': false,
+                'showHeader': false,
+                'hasTab': false
+            })
+        );
 
-        // Add a fieldset
-        this.form.fieldset = new IcarusFieldSet(
-            this.form.body, new MODEL().set({
+        /*
+        
+        this.formElementGroup = this.fieldset.create('FORMELEMENTGROUP',
+            new MODEL().set({
+                'label': 'PROMPT FORMELEMENTGROUP',
                 'collapsed': false,
                 'showHeader': false,
                 'hasTab': false
             })
         );
+        */
 
         // Adjust styling for PROMPT.  TOOD: This should just be css
         //this.form.fieldset.header.hide();
 
-        this.form.fieldset.body.el.style.padding = '1em;';
+        //this.form.fieldset.body.el.style.padding = '1em;';
 
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
-                this.form.fieldset.create('INPUT', inputs[i]); //.header.hide();
+                //this.form.fieldset.formElementGroup.create('INPUT', inputs[i]); //.header.hide();
             }
         }
 
