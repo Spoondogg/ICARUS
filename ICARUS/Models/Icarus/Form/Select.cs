@@ -10,22 +10,23 @@ namespace ICARUS.Models {
     /// <summary>
     /// A Form Element (INPUT, SELECT etc)
     /// </summary>
-    public class FormSelect : Container {
+    public class Select : FormElement {
 
         /// <summary>
         /// Generic FormElement Constructor for Entity
         /// </summary>
-        public FormSelect() : base("SELECT", new MODEL() {
-            label = "SELECT"
-        }) {
-
+        public Select() : base() {
+            this.element = "SELECT";
+            this.label = "SELECT";
+            this.attributes.Add("name", "woot");
+            this.attributes.Add("value", "woot");
         }
 
         /// <summary>
         /// Constructs an FormElement with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public FormSelect(FormPost formPost) : base("SELECT", formPost) {
+        public Select(FormPost formPost) : base(formPost) {
 
         }
     }

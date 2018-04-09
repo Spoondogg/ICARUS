@@ -12,19 +12,22 @@
         <script type="text/javascript">
             let route = "/Main/Get";
             let id = @ViewBag.id;
-            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
 
-            let loader = new LOADER('Loading', 'Loading', 100);
-            loader.show();
-
+            const token = document.getElementsByName('__RequestVerificationToken')[0];
+            var loader = new LOADER('Loading', 'Loading', 100);
+            var factory = new CONTAINERFACTORY();
             var app = null;
 
+            // DEBUG
+            console.log('Token: ' + token.value);
+            
             console.log('Home/Index: Getting Main(' + id + ') from ' + route + '/' + id);
+            loader.show();
             $.getJSON(
                 route + '/' + id, function (data) {
                     if (data.result === 1) {
                         try {
-                            app = new MAIN(data.model, antiForgeryToken.value);
+                            app = new MAIN(data.model);
                             loader.hide();
                         } catch (e) {
                             console.log('Unable to retrieve Main()');
@@ -63,7 +66,7 @@
             );
             @* Remove the element from the DOM and pass value to App *@
             try {
-                antiForgeryToken.parentNode.removeChild(antiForgeryToken);
+                token.parentNode.removeChild(token);
             } catch (e) { console.log(e.toString()); }
         </script>
     } else {

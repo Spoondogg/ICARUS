@@ -27,7 +27,7 @@ namespace ICARUS.Controllers {
             // Attempt to create and save to the database
             try {
                 // Save the object
-                FormSelect model = new FormSelect();
+                Select model = new Select();
                 model.setAuthorId(User.Identity.Name);
 
                 getObjectDbContext().Selects.Add(model);
@@ -47,7 +47,7 @@ namespace ICARUS.Controllers {
 
         public override async Task<ActionResult> Create(FormPost formPost) {
             try {
-                FormSelect model = new FormSelect(formPost);
+                Select model = new Select(formPost);
                 model.setAuthorId(User.Identity.Name);
 
                 getObjectDbContext().Selects.Add(model);

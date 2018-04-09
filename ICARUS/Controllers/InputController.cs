@@ -27,7 +27,7 @@ namespace ICARUS.Controllers {
             // Attempt to create and save to the database
             try {
                 // Save the object
-                FormInput model = new FormInput();
+                Input model = new Input();
                 model.setAuthorId(User.Identity.Name);
 
                 getObjectDbContext().Inputs.Add(model);
@@ -47,7 +47,7 @@ namespace ICARUS.Controllers {
 
         public override async Task<ActionResult> Create(FormPost formPost) {
             try {
-                FormInput model = new FormInput(formPost);
+                Input model = new Input(formPost);
                 model.setAuthorId(User.Identity.Name);
 
                 getObjectDbContext().Inputs.Add(model);

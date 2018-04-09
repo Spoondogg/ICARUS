@@ -202,9 +202,9 @@
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\AbstractController.cs" />
+    <Compile Include="Controllers\FormElementController.cs" />
     <Compile Include="Controllers\FormElementGroupController.cs" />
     <Compile Include="Controllers\FormElementOptionController.cs" />
-    <Compile Include="Controllers\FormCategoryController.cs" />
     <Compile Include="Controllers\FieldsetController.cs" />
     <Compile Include="Controllers\TextAreaController.cs" />
     <Compile Include="Controllers\SelectController.cs" />
@@ -346,6 +346,14 @@
     <Compile Include="Migrations\201803241848394_20180324__001.Designer.cs">
       <DependentUpon>201803241848394_20180324__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804082114537_20180408__001.cs" />
+    <Compile Include="Migrations\201804082114537_20180408__001.Designer.cs">
+      <DependentUpon>201804082114537_20180408__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804090310430_20180408__002.cs" />
+    <Compile Include="Migrations\201804090310430_20180408__002.Designer.cs">
+      <DependentUpon>201804090310430_20180408__002.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
@@ -360,9 +368,7 @@
     <Compile Include="Models\Icarus\Enums\ICON.cs" />
     <Compile Include="Models\Icarus\Enums\STYLE.cs" />
     <Compile Include="Models\MVC\AccountViewModels.cs" />
-    <Compile Include="Models\Icarus\Form\FormCategory.cs" />
     <Compile Include="Models\Icarus\Database\ColumnLists\cl_LOG.cs" />
-    <Compile Include="Models\Icarus\Database\db_CEIA.cs" />
     <Compile Include="Models\Icarus\Database\db_Icarus.cs" />
     <Compile Include="Models\Icarus\Database\IcarusDatabase.cs" />
     <Compile Include="Models\Icarus\Elements\Article.cs" />
@@ -425,6 +431,7 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\spoonMedia\button.css" />
+    <Content Include="Content\css\spoonMedia\container.css" />
     <Content Include="Content\css\spoonMedia\dropdown.css" />
     <Content Include="Content\css\spoonMedia\elementgroup.css" />
     <Content Include="Content\css\spoonMedia\footer.css" />
@@ -433,6 +440,7 @@
     <Content Include="Content\css\spoonMedia\icarus.css" />
     <Content Include="Content\css\spoonMedia\jumbotron.css" />
     <Content Include="Content\css\spoonMedia\label.css" />
+    <Content Include="Content\css\spoonMedia\main.css" />
     <Content Include="Content\css\spoonMedia\mobile.css" />
     <Content Include="Content\css\spoonMedia\modal.css" />
     <Content Include="Content\css\spoonMedia\navbar.css" />
@@ -459,77 +467,74 @@
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
-    <Content Include="Scripts\icarus\IcarusButton\BUTTON.js" />
-    <Content Include="Scripts\icarus\IcarusButton\BUTTONGROUP.js" />
-    <Content Include="Scripts\icarus\IcarusButton\DROPDOWNMENU.js" />
-    <Content Include="Scripts\icarus\IcarusButton\DROPDOWNMENUGROUP.js" />
-    <Content Include="Scripts\icarus\IcarusButton\TOGGLEBUTTON.js" />
-    <Content Include="Scripts\icarus\IcarusContainer\CONTAINERBODY.js" />
-    <Content Include="Scripts\icarus\IcarusFooter\PAGINATION.js" />
-    <Content Include="Scripts\icarus\IcarusFooter\SITEMAP.js" />
-    <Content Include="Scripts\icarus\IcarusApp\IcarusLogoutForm.js" />
-    <Content Include="Scripts\icarus\IcarusModal\LOADER.js" />
-    <Content Include="Scripts\icarus\IcarusModel\ATTRIBUTES.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\CARET.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\DROPDOWN.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormFooter.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormPost.js" />
-    <Content Include="Scripts\icarus\IcarusList\LISTGROUPITEM.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\DROPDOWNTAB.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVBARCOLLAPSE.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVHEADEROPTIONS.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVITEMGROUP.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVHEADER.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVITEM.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVITEMANCHOR.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVITEMTAB.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVSEARCH.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVSEPARATOR.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\OPTIONSDROPDOWN.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAV.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\TAB.js" />
-    <Content Include="Scripts\icarus\IcarusModel\MODEL.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\SIDEBAR.js" />
-    <Content Include="Scripts\icarus\IcarusContainer\CONTAINER.js" />
-    <Content Include="Scripts\icarus\_generic\FOOTER.js" />
-    <Content Include="Scripts\icarus\_generic\FORM.js" />
-    <Content Include="Scripts\icarus\IcarusButton\DROPDOWNHEADER.js" />
-    <Content Include="Scripts\icarus\IcarusButton\GLYPHICON.js" />
-    <Content Include="Scripts\icarus\IcarusForm\AntiForgeryToken.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusEditor.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormElement.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormElementGroup.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFieldSet.js" />
-    <Content Include="Scripts\icarus\IcarusContainer\Containers\IcarusSectionHeader.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormInput.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormOption.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormSelect.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusFormTextArea.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusIndex.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusInputList.js" />
-    <Content Include="Scripts\icarus\_generic\ANCHOR.js" />
-    <Content Include="Scripts\icarus\_generic\GROUP.js" />
-    <Content Include="Scripts\icarus\_generic\LABEL.js" />
-    <Content Include="Scripts\icarus\IcarusModal\PROMPT.js" />
-    <Content Include="Scripts\icarus\IcarusContainer\Containers\SECTION.js" />
-    <Content Include="Scripts\icarus\IcarusTextBlock\TEXTBLOCK.js" />
-    <Content Include="Scripts\icarus\IcarusApp\MAIN.js" />
-    <Content Include="Scripts\icarus\IcarusContainer\Containers\ARTICLE.js" />
-    <Content Include="Scripts\icarus\CHART.js" />
-    <Content Include="Scripts\icarus\EL.js" />
-    <Content Include="Scripts\icarus\IcarusFooter\STICKYFOOTER.js" />
-    <Content Include="Scripts\icarus\_generic\HEADER.js" />
-    <Content Include="Scripts\icarus\IcarusForm\IcarusForm.js" />
-    <Content Include="Scripts\icarus\IcarusJumbotron\JUMBOTRON.js" />
-    <Content Include="Scripts\icarus\IcarusList\BADGE.js" />
-    <Content Include="Scripts\icarus\IcarusList\LISTGROUP.js" />
-    <Content Include="Scripts\icarus\_generic\SVG.js" />
-    <Content Include="Scripts\icarus\IcarusModal\MODAL.js" />
-    <Content Include="Scripts\icarus\IcarusNavBar\NAVBAR.js" />
-    <Content Include="Scripts\icarus\REPORT.js" />
-    <Content Include="Scripts\icarus\_generic\P.js" />
-    <Content Include="Scripts\icarus\_generic\SPAN.js" />
-    <Content Include="Scripts\icarus\_generic\TABLE.js" />
+    <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\dropdownmenu\DROPDOWNMENU.js" />
+    <Content Include="Scripts\icarus\model\el\group\dropdownmenugroup\DROPDOWNMENUGROUP.js" />
+    <Content Include="Scripts\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\CONTAINERBODY.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
+    <Content Include="Scripts\icarus\model\el\container\modal\loader\LOADER.js" />
+    <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\icarus\WATERMARK.js" />
+    <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\DROPDOWN.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\FORMPOST.js" />
+    <Content Include="Scripts\icarus\model\el\group\li\listgroupitem\LISTGROUPITEM.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\dropdowntab\DROPDOWNTAB.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVBARCOLLAPSE.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVHEADEROPTIONS.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVITEMGROUP.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVHEADER.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVITEM.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\NAVITEMTAB.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEARCH.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\dropdowntab\OPTIONSDROPDOWN.js" />
+    <Content Include="Scripts\icarus\model\el\nav\NAV.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\TAB.js" />
+    <Content Include="Scripts\icarus\model\MODEL.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\SIDEBAR.js" />
+    <Content Include="Scripts\icarus\model\el\container\CONTAINER.js" />
+    <Content Include="Scripts\icarus\model\el\text\p\WELL.js" />
+    <Content Include="Scripts\icarus\model\el\footer\FOOTER.js" />
+    <Content Include="Scripts\icarus\model\el\group\li\dropdownheader\DROPDOWNHEADER.js" />
+    <Content Include="Scripts\icarus\model\el\text\span\GLYPHICON.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\TOKEN.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\FORMELEMENT.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\FORMELEMENTGROUP.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\FIELDSET.js" />
+    <Content Include="Scripts\icarus\_deprec\IcarusSectionHeader.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\INPUT.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\select\OPTION.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\select\SELECT.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\textarea\TEXTAREA.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\IcarusInputList.js" />
+    <Content Include="Scripts\icarus\model\el\text\ANCHOR.js" />
+    <Content Include="Scripts\icarus\model\el\group\GROUP.js" />
+    <Content Include="Scripts\icarus\model\el\text\LABEL.js" />
+    <Content Include="Scripts\icarus\model\el\container\modal\prompt\PROMPT.js" />
+    <Content Include="Scripts\icarus\model\el\container\main\article\section\SECTION.js" />
+    <Content Include="Scripts\icarus\model\el\container\textblock\TEXTBLOCK.js" />
+    <Content Include="Scripts\icarus\model\el\container\main\MAIN.js" />
+    <Content Include="Scripts\icarus\model\el\container\main\article\ARTICLE.js" />
+    <Content Include="Scripts\icarus\_deprec\CHART.js" />
+    <Content Include="Scripts\icarus\model\el\EL.js" />
+    <Content Include="Scripts\icarus\model\el\footer\stickyfooter\STICKYFOOTER.js" />
+    <Content Include="Scripts\icarus\model\el\header\HEADER.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\FORM.js" />
+    <Content Include="Scripts\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
+    <Content Include="Scripts\icarus\model\el\text\BADGE.js" />
+    <Content Include="Scripts\icarus\model\el\group\ul\listgroup\LISTGROUP.js" />
+    <Content Include="Scripts\icarus\model\el\graphic\SVG.js" />
+    <Content Include="Scripts\icarus\model\el\container\modal\MODAL.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navbar\NAVBAR.js" />
+    <Content Include="Scripts\icarus\_deprec\REPORT.js" />
+    <Content Include="Scripts\icarus\model\el\text\p\P.js" />
+    <Content Include="Scripts\icarus\model\el\text\span\SPAN.js" />
+    <Content Include="Scripts\icarus\_deprec\table\TABLE.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
@@ -539,8 +544,8 @@
     <None Include="Properties\PublishProfiles\LOCAL.pubxml" />
     <None Include="Properties\PublishProfiles\OBAD266x4.pubxml" />
     <None Include="Scripts\jquery\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\icarus\_generic\LI.js" />
-    <Content Include="Scripts\icarus\_generic\UL.js" />
+    <Content Include="Scripts\icarus\model\el\group\li\LI.js" />
+    <Content Include="Scripts\icarus\model\el\group\ul\UL.js" />
     <Content Include="Scripts\icarus\_Icarus.js" />
     <Content Include="Scripts\jquery\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery\jquery-1.10.2.min.js" />
@@ -552,6 +557,7 @@
     <Content Include="Scripts\modernizr\modernizr-2.6.2.js" />
     <Content Include="Scripts\bootstrap\respond.js" />
     <Content Include="Scripts\bootstrap\respond.min.js" />
+    <Content Include="Scripts\require\require-2.3.5.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -628,11 +634,6 @@
     <Content Include="Views\FormPosts\Edit.cshtml" />
     <Content Include="Views\FormPosts\Index.cshtml" />
     <Content Include="Views\Database\Index.cshtml" />
-    <Content Include="Views\FormCategories\Create.cshtml" />
-    <Content Include="Views\FormCategories\Delete.cshtml" />
-    <Content Include="Views\FormCategories\Details.cshtml" />
-    <Content Include="Views\FormCategories\Edit.cshtml" />
-    <Content Include="Views\FormCategories\Index.cshtml" />
     <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\Forms\Create_ICARUS.cshtml" />
     <Content Include="Views\Section\Create.cshtml" />
@@ -750,6 +751,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803241848394_20180324__001.resx">
       <DependentUpon>201803241848394_20180324__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804082114537_20180408__001.resx">
+      <DependentUpon>201804082114537_20180408__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804090310430_20180408__002.resx">
+      <DependentUpon>201804090310430_20180408__002.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

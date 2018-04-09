@@ -86,3 +86,20 @@ Due to implementation of dropdown-group
     line-height: 1.42857143;
     white-space: nowrap;
 }
+
+.form-element .container-body .pane {
+    padding: 0.4em;
+}
+
+main .container-body .sidebar,
+main .container-body .sidebar-tall .collapse, 
+main .container-body .pane {
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
+
+main .container-body .sidebar::-webkit-scrollbar,
+main .container-body .sidebar-tall .collapse::-webkit-scrollbar,
+main .container-body .pane::-webkit-scrollbar {
+    display: none;
+}
