@@ -51,7 +51,7 @@ namespace ICARUS {
             );
             
             /**
-             * Form data is POSTED via IcarusForm submit();
+             * Form data is POSTED via FORM.submit();
             */
             routes.MapRoute(
                 name: "formPost",

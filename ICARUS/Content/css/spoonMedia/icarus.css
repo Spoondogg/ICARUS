@@ -61,15 +61,7 @@ h2 input[type="number"] {
     padding: 1em;
 }
 
-.icarus-container {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
 
-.icarus-container .panel {
-    background-color: rgba(0, 0, 0, 0.5);
-}
 
 /*
 .childGroup {

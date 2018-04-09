@@ -1,35 +1,28 @@
 ﻿@using ICARUS.Models
 @model LoginViewModel
 @{
-    ViewBag.Title = "Icarus Account - Login";
+    ViewBag.Title = "Login";
 }
 @section viewInit {
-    @*
-        <script type="text/javascript">
-            console.log('Rendering Account/Login...');
-            console.log("Hello Guest, Please sign in to continue...");
-        </script>
-    *@
-
     @Html.AntiForgeryToken()
     @if (!User.Identity.IsAuthenticated) {
         <script type="text/javascript">
-            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
-            
+
+            const token = document.getElementsByName('__RequestVerificationToken')[0];            
             var app = new MAIN(new MODEL().set({
                 'label': 'Log In',
                 'navBar': {
                     'label': 'Log In'
                 }
-            }), antiForgeryToken.value);
+            }));
 
             let prompt = new PROMPT('Log In', 'You must log in to continue');
 
             prompt.form.setPostUrl('/Account/Login');
             prompt.form.el.setAttribute('method', 'POST');
             prompt.form.el.setAttribute('action', '#');
-            
-            prompt.form.fieldset.create('INPUT',
+
+            this.email = new INPUT(prompt.formElementGroup.body.pane,
                 new MODEL(
                     new ATTRIBUTES({
                         'typeId': IcarusInputType.INPUT,
@@ -42,7 +35,8 @@
                 })
             );
 
-            prompt.form.fieldset.create('INPUT',
+            console.log('LOGIN: PASSWORD');
+            this.password = new INPUT(prompt.formElementGroup.body.pane,
                 new MODEL(
                     new ATTRIBUTES({
                         'typeId': IcarusInputType.PASSWORD,
@@ -54,7 +48,7 @@
                     'showHeader': 0
                 })
             );
-
+            
             prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
             prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
                 prompt.form.el.submit();
@@ -72,9 +66,9 @@
         </script>
     } else {
         <script type="text/javascript">
-            let antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
+            var antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
             var app = new MAIN(new MODEL().set('label', 'Log In'), antiForgeryToken.value);
-            let prompt = new PROMPT('Log In', 'You are already logged in.');
+            let prompt = new PROMPT('Log In', 'You are already logged in.\nRedirecting...');
             prompt.show();
             setTimeout(function () {
                 location.href = '/'; //https://www.w3schools.com/jsref/met_loc_reload.asp

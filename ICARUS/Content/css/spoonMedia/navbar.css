@@ -272,9 +272,24 @@ nav header {
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
-    height: 100vh;
     overflow-y: hidden;
     margin-left: -250px;
+}
+
+/* The MAIN sidebar is full height, all others should default to auto */
+.sidebar-tall {
+    height: calc(100vh - 106px);
+    overflow-y: auto;
+}
+
+    .sidebar-tall > .collapse {
+        height: calc(100vh - 160px);
+        overflow-y: auto;
+    }
+
+.pane-tall {
+    height: calc(100vh - 106px);
+    overflow-y: auto;
 }
 
     .sidebar.active {
@@ -287,9 +302,9 @@ nav header {
         width: 100%;
     }
 
-    .sidebar ul[name=document-map] {
-        border-bottom: 1px solid #004002;
-    }
+.sidebar ul[name=document-map] {
+    border-bottom: 3px solid #151515;
+}
 
         .sidebar ul[name=document-map] > li {
             margin-bottom: 2px;

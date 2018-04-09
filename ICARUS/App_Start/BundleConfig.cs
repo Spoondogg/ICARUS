@@ -21,6 +21,10 @@ namespace ICARUS {
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr/modernizr-*"));
 
+            // http://requirejs.org/docs/download.html#latest
+            bundles.Add(new ScriptBundle("~/bundles/require").Include(
+                        "~/Scripts/require/require-*"));
+
             // TODO Automate minified in final build
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap/bootstrap.js",
@@ -34,6 +38,8 @@ namespace ICARUS {
             // Icarus specific styles - Names cannot contain UNDERSCORES
             bundles.Add(new StyleBundle("~/Content/css/icarus").Include(
                 "~/Content/css/spoonMedia/icarus.css",
+                "~/Content/css/spoonMedia/container.css",
+                "~/Content/css/spoonMedia/main.css",
                 "~/Content/css/spoonMedia/label.css",
                 "~/Content/css/spoonMedia/textblock.css",
                 "~/Content/css/spoonMedia/dropdown.css",
@@ -55,105 +61,98 @@ namespace ICARUS {
             // bundles.Add(new ScriptBundle("~/bundles/icarus").IncludeDirectory("~/Scripts/icarus", "*.js", true)); // All objects in folder (alphabetical)
             bundles.Add(new ScriptBundle("~/bundles/icarus").Include(
 
-                "~/Scripts/icarus/IcarusModel/ATTRIBUTES.js",
-                "~/Scripts/icarus/IcarusModel/MODEL.js",
-                "~/Scripts/icarus/EL.js",
+                // Generic
+                "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
+                "~/Scripts/icarus/WATERMARK.js",
+                "~/Scripts/icarus/model/ATTRIBUTES.js",
+                "~/Scripts/icarus/model/MODEL.js",
+                "~/Scripts/icarus/model/el/EL.js",
 
+                // Button
+                "~/Scripts/icarus/model/el/button/BUTTON.js",
+                "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
 
-                "~/Scripts/icarus/_generic/GROUP.js",
-                "~/Scripts/icarus/_generic/SPAN.js",
-                "~/Scripts/icarus/_generic/ANCHOR.js",
-                "~/Scripts/icarus/_generic/P.js",
-                "~/Scripts/icarus/_generic/UL.js",
-                "~/Scripts/icarus/_generic/LI.js",
-                "~/Scripts/icarus/_generic/TABLE.js",
-                "~/Scripts/icarus/_generic/HEADER.js",
-                "~/Scripts/icarus/_generic/FOOTER.js",
-                "~/Scripts/icarus/_generic/LABEL.js",
-                "~/Scripts/icarus/_generic/FORM.js",
-                "~/Scripts/icarus/_generic/SVG.js",
+                // Text
+                "~/Scripts/icarus/model/el/text/ANCHOR.js",
+                "~/Scripts/icarus/model/el/text/BADGE.js",
+                "~/Scripts/icarus/model/el/text/LABEL.js",
+                "~/Scripts/icarus/model/el/text/span/SPAN.js",
+                "~/Scripts/icarus/model/el/text/span/CARET.js",
+                "~/Scripts/icarus/model/el/text/span/GLYPHICON.js",
+                "~/Scripts/icarus/model/el/text/p/P.js",
+                "~/Scripts/icarus/model/el/text/p/WELL.js",
+
+                // Graphic
+                "~/Scripts/icarus/model/el/graphic/SVG.js",
+
+                // Group
+                "~/Scripts/icarus/model/el/group/GROUP.js",
+                "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
+                "~/Scripts/icarus/model/el/group/dropdownmenugroup/DROPDOWNMENUGROUP.js",
+
+                // List Items
+                "~/Scripts/icarus/model/el/group/li/LI.js",
+                "~/Scripts/icarus/model/el/group/li/dropdownheader/DROPDOWNHEADER.js",
+                "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
+
+                // List
+                "~/Scripts/icarus/model/el/group/ul/UL.js",
+                "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
+
+                // Layout and Navigation
+                "~/Scripts/icarus/model/el/nav/NAV.js",
+                "~/Scripts/icarus/model/el/nav/navbar/NAVBAR.js",
+                "~/Scripts/icarus/model/el/header/HEADER.js",
+                "~/Scripts/icarus/model/el/footer/FOOTER.js",
+                "~/Scripts/icarus/model/el/footer/stickyfooter/STICKYFOOTER.js",
                 
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVBARCOLLAPSE.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADER.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADEROPTIONS.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/SIDEBAR.js",
 
-                "~/Scripts/icarus/IcarusButton/GLYPHICON.js",
-                "~/Scripts/icarus/IcarusButton/DROPDOWNHEADER.js",
-                "~/Scripts/icarus/IcarusButton/BUTTONGROUP.js",
-                "~/Scripts/icarus/IcarusButton/BUTTON.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/dropdownmenu/DROPDOWNMENU.js",
 
-                "~/Scripts/icarus/IcarusNavBar/NAV.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVITEMGROUP.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVHEADEROPTIONS.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVHEADER.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVITEM.js",
-                "~/Scripts/icarus/IcarusNavBar/CARET.js",
-                "~/Scripts/icarus/IcarusNavBar/TAB.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVITEMTAB.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVITEMANCHOR.js",
-                "~/Scripts/icarus/IcarusNavBar/DROPDOWN.js",
-                "~/Scripts/icarus/IcarusNavBar/DROPDOWNTAB.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVSEPARATOR.js",
-                "~/Scripts/icarus/IcarusNavBar/OPTIONSDROPDOWN.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
+                "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/OPTIONSDROPDOWN.js",
 
-                "~/Scripts/icarus/IcarusButton/DROPDOWNMENUGROUP.js",
-                "~/Scripts/icarus/IcarusButton/DROPDOWNMENU.js",
-                "~/Scripts/icarus/IcarusButton/TOGGLEBUTTON.js",
+                // Container
+                "~/Scripts/icarus/model/el/container/CONTAINERBODY.js",
+                "~/Scripts/icarus/model/el/container/CONTAINERFACTORY.js",
+                "~/Scripts/icarus/model/el/container/CONTAINER.js",
 
-                
+                    // Modal
+                    "~/Scripts/icarus/model/el/container/modal/MODAL.js",
+                    "~/Scripts/icarus/model/el/container/modal/loader/LOADER.js",
+                    "~/Scripts/icarus/model/el/container/modal/prompt/PROMPT.js",
 
-                "~/Scripts/icarus/IcarusList/BADGE.js",
-                "~/Scripts/icarus/IcarusList/LISTGROUPITEM.js",
-                "~/Scripts/icarus/IcarusList/LISTGROUP.js",
+                // Form
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENTGROUP.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/textarea/TEXTAREA.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/OPTION.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/SELECT.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/INPUT.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/TOKEN.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/FIELDSET.js",
+                "~/Scripts/icarus/model/el/container/form/FORMFOOTER.js",
+                "~/Scripts/icarus/model/el/container/form/FORM.js",
 
-                "~/Scripts/icarus/IcarusModal/MODAL.js",
-                "~/Scripts/icarus/IcarusModal/PROMPT.js",
-                "~/Scripts/icarus/IcarusModal/LOADER.js",
+                // Custom Forms
+                "~/Scripts/icarus/model/el/container/form/forms/LogoutForm.js",
 
-                
-                
-                "~/Scripts/icarus/IcarusNavBar/NAVBARCOLLAPSE.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVBAR.js",
-                "~/Scripts/icarus/IcarusNavBar/NAVSEARCH.js",
-                "~/Scripts/icarus/IcarusNavBar/SIDEBAR.js",
-
-                "~/Scripts/icarus/IcarusJumbotron/JUMBOTRON.js",
-
-                "~/Scripts/icarus/IcarusContainer/CONTAINERBODY.js",
-                "~/Scripts/icarus/IcarusContainer/CONTAINER.js",
-
-                "~/Scripts/icarus/IcarusTextBlock/TEXTBLOCK.js",
-
-                "~/Scripts/icarus/IcarusContainer/Containers/SECTION.js",
-                "~/Scripts/icarus/IcarusContainer/Containers/IcarusSectionHeader.js",
-                "~/Scripts/icarus/IcarusContainer/Containers/ARTICLE.js",
-                
-                "~/Scripts/icarus/IcarusFooter/STICKYFOOTER.js",
-                "~/Scripts/icarus/IcarusFooter/SITEMAP.js",
-                "~/Scripts/icarus/IcarusFooter/PAGINATION.js",
-
-                "~/Scripts/icarus/LOADER.js",
-
-                "~/Scripts/icarus/IcarusForm/AntiForgeryToken.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormPost.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFieldSet.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormElementGroup.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormElement.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormOption.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormInput.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormSelect.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormTextArea.js",
-                "~/Scripts/icarus/IcarusForm/IcarusFormFooter.js",
-                "~/Scripts/icarus/IcarusForm/IcarusForm.js",
-                "~/Scripts/icarus/IcarusForm/IcarusIndex.js",
-                "~/Scripts/icarus/IcarusForm/IcarusInputList.js",
-                "~/Scripts/icarus/IcarusForm/IcarusEditor.js",
-
-                "~/Scripts/icarus/REPORT.js",
-                "~/Scripts/icarus/THUMBNAILS.js",
-
-                "~/Scripts/icarus/IcarusApp/IcarusLogoutForm.js",
-                "~/Scripts/icarus/IcarusApp/MAIN.js",
-                
-
-                "~/Scripts/icarus/_Icarus.js"));
+                // Main
+                "~/Scripts/icarus/model/el/container/main/article/section/SECTION.js",
+                "~/Scripts/icarus/model/el/container/main/article/ARTICLE.js",
+                "~/Scripts/icarus/model/el/container/main/MAIN.js"
+            ));
         }
     }
 }

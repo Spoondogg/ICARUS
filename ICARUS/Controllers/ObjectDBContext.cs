@@ -59,9 +59,6 @@ namespace ICARUS.Controllers {
         public DbSet<Form> Forms { get; set; }
         public object Form { get; internal set; }
 
-        public DbSet<FormCategory> FormCategories { get; set; }
-        public object FormCategory { get; internal set; }
-
         public DbSet<FieldSet> FieldSets { get; set; }
         public object FieldSet { get; internal set; }
 
@@ -71,13 +68,13 @@ namespace ICARUS.Controllers {
         public DbSet<FormElement> FormElements { get; set; }
         public object FormElement { get; internal set; }
 
-        public DbSet<FormInput> Inputs { get; set; }
+        public DbSet<Input> Inputs { get; set; }
         public object Input { get; internal set; }
 
-        public DbSet<FormSelect> Selects { get; set; }
+        public DbSet<Select> Selects { get; set; }
         public object Select { get; internal set; }
 
-        public DbSet<FormTextArea> TextAreas { get; set; }
+        public DbSet<TextArea> TextAreas { get; set; }
         public object TextArea { get; internal set; }
 
         public DbSet<FormElementOption> FormElementOptions { get; set; }
@@ -103,7 +100,6 @@ namespace ICARUS.Controllers {
         /// </summary>
         public ObjectDBContext() : base("DefaultConnection") {
             this.dbSets = new Dictionary<string, DbSet>();
-            //this.dbSets.Add("EL", Els);
             this.dbSets.Add("Main", Mains);
             this.dbSets.Add("Container", Containers);
             this.dbSets.Add("Article", Articles);
@@ -111,6 +107,9 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
             this.dbSets.Add("FormElement", FormElements);
+            this.dbSets.Add("Input", Inputs);
+            this.dbSets.Add("Select", Selects);
+            this.dbSets.Add("TextArea", TextAreas);
             this.dbSets.Add("FormElementOption", FormElementOptions);
             this.dbSets.Add("FormPost", FormPosts);
             this.dbSets.Add("Procedure", Procedures);
