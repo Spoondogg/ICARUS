@@ -26,6 +26,10 @@ namespace ICARUS.Controllers {
 
         }
 
+        /// <summary>
+        /// Generic Constructor
+        /// </summary>
+        /// <param name="className">Case sensitive label used to call constructor.  See ObjectDBContext</param>
         public ContainerController(string className = "DIV") : base(className) {
 
         }
@@ -35,12 +39,17 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        public ActionResult Index() {
+        public virtual async Task<ActionResult> Index() {
             var containers = from s in getObjectDbContext().Containers
-                        where s.getAuthorId() == User.Identity.Name
+                        where (s.authorId == User.Identity.Name) && (s.element == className)
                         orderby s.label
                         select s;
-            return View(containers);
+
+            return Json(new Payload(
+                    1, className, containers.Take(5),
+                    "Index"
+                ), JsonRequestBehavior.AllowGet);
+            
         }
 
         /// <summary>
@@ -161,6 +170,7 @@ namespace ICARUS.Controllers {
             int showHeader = Int32.Parse(formPost.getXml().GetElementsByTagName("showHeader")[0].InnerText);
             int collapsed = Int32.Parse(formPost.getXml().GetElementsByTagName("collapsed")[0].InnerText);
             int hasSidebar = Int32.Parse(formPost.getXml().GetElementsByTagName("hasSidebar")[0].InnerText);
+            int formPostId = Int32.Parse(formPost.getXml().GetElementsByTagName("formPostId")[0].InnerText);
 
             try {
                 ObjectDBContext ctx = getObjectDbContext();
@@ -180,6 +190,7 @@ namespace ICARUS.Controllers {
                         model.showHeader = showHeader;
                         model.hasSidebar = hasSidebar;
                         model.collapsed = collapsed;
+                        model.formPostId = formPostId;
                         model.status = 1;
 
                         // Save the object

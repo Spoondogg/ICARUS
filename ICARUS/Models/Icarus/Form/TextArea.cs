@@ -10,23 +10,22 @@ namespace ICARUS.Models {
     /// <summary>
     /// A Form Element (INPUT, SELECT etc)
     /// </summary>
-    public class TextArea : FormElement {
+    public class TextArea : Container {
 
         /// <summary>
         /// Generic FormElement Constructor for Entity
         /// </summary>
-        public TextArea() : base() { 
-            this.element = "TEXTAREA";
-            this.label = "TEXTAREA";
-            this.attributes.Add("name", "woot");
-            this.attributes.Add("value", "woot");
+        public TextArea() : base("TEXTAREA", new MODEL() {
+            label = "TEXTAREA"
+        }) {
+
         }
 
         /// <summary>
         /// Constructs an FormElement with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public TextArea(FormPost formPost) : base(formPost) {
+        public TextArea(FormPost formPost) : base("TEXTAREA", formPost) {
 
         }
     }

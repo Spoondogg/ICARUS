@@ -10,13 +10,13 @@ namespace ICARUS.Models {
     /// <summary>
     /// An Option that appears in a form element
     /// </summary>
-    public class FormElementOption : Container {
+    public class Option : Container {
 
         /// <summary>
         /// Generic Form Element Option Constructor for Entity
         /// </summary>
-        public FormElementOption() : base("FORMELEMENTOPTION", new MODEL() {
-            label = "FORMELEMENTOPTION"
+        public Option() : base("OPTION", new MODEL() {
+            label = "OPTION"
         }) {
 
         }
@@ -25,7 +25,7 @@ namespace ICARUS.Models {
         /// Constructs a Form Element Option with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public FormElementOption(FormPost formPost) : base("FORMELEMENTOPTION", formPost) {
+        public Option(FormPost formPost) : base("OPTION", formPost) {
 
         }
     }      

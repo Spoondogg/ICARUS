@@ -77,8 +77,8 @@ namespace ICARUS.Controllers {
         public DbSet<TextArea> TextAreas { get; set; }
         public object TextArea { get; internal set; }
 
-        public DbSet<FormElementOption> FormElementOptions { get; set; }
-        public object FormElementOption { get; internal set; }
+        public DbSet<Option> Options { get; set; }
+        public object Option { get; internal set; }
 
         public DbSet<FormPost> FormPosts { get; set; }
         public object FormPost { get; internal set; }
@@ -106,11 +106,12 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Section", Sections);
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
+            this.dbSets.Add("FormElementGroup", FormElementGroups);
             this.dbSets.Add("FormElement", FormElements);
             this.dbSets.Add("Input", Inputs);
             this.dbSets.Add("Select", Selects);
             this.dbSets.Add("TextArea", TextAreas);
-            this.dbSets.Add("FormElementOption", FormElementOptions);
+            this.dbSets.Add("Option", Options);
             this.dbSets.Add("FormPost", FormPosts);
             this.dbSets.Add("Procedure", Procedures);
             this.dbSets.Add("Report", Reports);

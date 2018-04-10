@@ -125,13 +125,13 @@ class CONTAINER extends EL {
         
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('JUMBOTRON', function () {
-            return this.addJumbotron(new MODEL(new ATTRIBUTES(), 'JUMBOTRON'), true);
-        }.bind(this));
+        this.addContainerCase('JUMBOTRON');
+        this.addContainerCase('TEXTBLOCK');
+        this.addContainerCase('FORM');
 
-        this.addCase('TEXTBLOCK', function () {
-            return this.addTextBlock(new MODEL(new ATTRIBUTES(), 'TEXTBLOCK'));
-        }.bind(this));
+        // Additionally...
+        // BUTTONGROUP, LIST/GROUP, GRAPHIC
+        
 
         /* Wrap up construction */
         this.populate(model.children);
@@ -140,6 +140,10 @@ class CONTAINER extends EL {
             this.collapse();
         } else {
             this.expand();
+        }
+
+        if (!model.showHeader) {
+            this.navBar.hide();
         }
 
         if (model.hasTab) {
@@ -403,8 +407,8 @@ class CONTAINER extends EL {
         console.log(this.element + '.save()');
 
         let subsections = [];
-        for (let c = 0; c < this.body.el.children.length; c++) {
-            subsections.push(this.body.el.children[c].id);
+        for (let c = 0; c < this.body.pane.el.children.length; c++) {
+            subsections.push(this.body.pane.el.children[c].id);
         }
         
         this.prompt = new PROMPT(
@@ -415,21 +419,18 @@ class CONTAINER extends EL {
                     'value': this.get('element'),
                     'readonly': 'readonly'
                 })).set({
-                    'id': 2446,
                     'element': 'INPUT',
-                    'label': 'Element',
-                    'addTab': false,
-                    'showHeader': false
+                    'label': 'element'
                 }),
 
                 new MODEL(new ATTRIBUTES({
+                    'id': 0,
                     'name': 'id',
                     'value': this.get('id'),
                     'readonly': 'readonly'
                 })).set({
                     'element': 'INPUT',
-                    'label': 'ID',
-                    'addTab': false
+                    'label': 'ID'
                 }),
 
                 new MODEL(new ATTRIBUTES({
@@ -437,24 +438,22 @@ class CONTAINER extends EL {
                     'value': this.get('label')
                 })).set({
                     'element': 'INPUT',
-                    'label': 'Label',
-                    'addTab': false
+                    'label': 'Label'
                 }),
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'subsections',
-                    'value': subsections.toString() || '0'
+                    'value': subsections.length > 0 ? subsections.toString() : '0'
                 })).set({
                     'element': 'INPUT',
-                    'label': 'SubSections',
-                    'addTab': false
+                    'label': 'SubSections'
                 }),
 
                 // Should be checkbox or dropdown
                 new MODEL(new ATTRIBUTES({
                     'name': 'status',
                     'type': 'NUMBER',
-                    'value': 1
+                    'value': this.get('status')
                 })).set({
                     'element': 'INPUT',
                     'label': 'Status',
@@ -464,7 +463,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'showHeader',
                     'type': 'NUMBER',
-                    'value': 1
+                    'value': this.get('showHeader')
                 })).set({
                     'element': 'INPUT',
                     'label': 'Show Header',
@@ -474,7 +473,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'collapsed',
                     'type': 'NUMBER',
-                    'value': 1
+                    'value': this.get('collapsed')
                 })).set({
                     'element': 'INPUT',
                     'label': 'Collapsed',
@@ -484,25 +483,34 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'hasTab',
                     'type': 'NUMBER',
-                    'value': 1
+                    'value': this.get('hasTab')
                 })).set({
                     'element': 'INPUT',
                     'label': 'Has Tab',
+                    'addTab': false
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'formPostId',
+                    'type': 'NUMBER',
+                    'value': this.get('formPostId')
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'formPostId',
                     'addTab': false
                 })
 
             ]
         );
-
+        
         this.prompt.form.setPostUrl(this.element+'/Set');
         this.prompt.form.afterSuccessfulPost = function () {
             console.log(this.element+': Updating model');
             
-            this.setLabel(this.prompt.form.el.elements['label'].value);
+            //this.setLabel(this.prompt.form.el.elements['label'].value);
             this.subsections = this.prompt.form.el.elements['subsections'].value;
-            //this.collapsed = this.prompt.form.el.elements['collapsed'].value);
-
-            console.log(this.model);
+            this.collapsed = this.prompt.form.el.elements['collapsed'].value;
+            
 
         }.bind(this);
 

@@ -204,7 +204,7 @@
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\FormElementController.cs" />
     <Compile Include="Controllers\FormElementGroupController.cs" />
-    <Compile Include="Controllers\FormElementOptionController.cs" />
+    <Compile Include="Controllers\OptionController.cs" />
     <Compile Include="Controllers\FieldsetController.cs" />
     <Compile Include="Controllers\TextAreaController.cs" />
     <Compile Include="Controllers\SelectController.cs" />
@@ -354,6 +354,14 @@
     <Compile Include="Migrations\201804090310430_20180408__002.Designer.cs">
       <DependentUpon>201804090310430_20180408__002.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804091748391_20180409__001.cs" />
+    <Compile Include="Migrations\201804091748391_20180409__001.Designer.cs">
+      <DependentUpon>201804091748391_20180409__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804091813459_20180409__002.cs" />
+    <Compile Include="Migrations\201804091813459_20180409__002.Designer.cs">
+      <DependentUpon>201804091813459_20180409__002.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
@@ -409,7 +417,7 @@
     <Compile Include="Models\Icarus\Report\ReportSource.cs" />
     <Compile Include="Models\Icarus\Report\Report.cs" />
     <Compile Include="Models\Icarus\Email\Email.cs" />
-    <Compile Include="Models\Icarus\Form\FormElementOption.cs" />
+    <Compile Include="Models\Icarus\Form\Option.cs" />
     <Compile Include="Models\Icarus\Form\FormValue.cs" />
     <Compile Include="Models\Icarus\Form\FormPost.cs" />
     <Compile Include="Models\Icarus\Form\FieldSet.cs" />
@@ -757,6 +765,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804090310430_20180408__002.resx">
       <DependentUpon>201804090310430_20180408__002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091748391_20180409__001.resx">
+      <DependentUpon>201804091748391_20180409__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091813459_20180409__002.resx">
+      <DependentUpon>201804091813459_20180409__002.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

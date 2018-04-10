@@ -20,9 +20,12 @@ class INPUT extends FORMELEMENT {
                 'list': model.attributes.name + '-options',
                 //'name': friendly('INPUT_' + guid()),
                 'name': model.attributes.name,
-                'value': '' //model.value
+                'value': model.attributes.value
             })
         ));   
+        console.log('My Form');
+        console.log(node.node.node.node.node.node.node.node.node);
+
 
         //this.input.el.setAttribute('readonly', 'readonly');
 

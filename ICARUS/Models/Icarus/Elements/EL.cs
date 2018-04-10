@@ -58,6 +58,12 @@ namespace ICARUS.Models.Icarus {
         public string subsections { get; set; }
 
         /// <summary>
+        /// A related form post for element attributes, extensible data etc
+        /// </summary>
+        [Required]
+        public int formPostId { get; set; }
+
+        /// <summary>
         /// Constructs a generic element
         /// </summary>
         /// <param name="element">HTML Element</param>

@@ -19,7 +19,7 @@ namespace ICARUS.Controllers {
     [Authorize(Roles = "User,Dev,Admin")]
     public class SelectController : ContainerController {
 
-        public SelectController() : base("SELECT") {
+        public SelectController() : base("Select") {
 
         }
 

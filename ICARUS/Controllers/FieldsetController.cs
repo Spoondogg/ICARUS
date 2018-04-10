@@ -1,15 +1,12 @@
-﻿using System;
+﻿using ICARUS.Models;
+using ICARUS.Models.Icarus;
+using ICARUS.Models.Icarus.Elements;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ICARUS.Models;
-using ICARUS.Models.Icarus;
-using ICARUS.Models.Icarus.Elements;
 
 namespace ICARUS.Controllers {
 
@@ -19,31 +16,18 @@ namespace ICARUS.Controllers {
     [Authorize(Roles = "User,Dev,Admin")]
     public class FieldsetController : ContainerController {
 
-        public FieldsetController() : base("FIELDSET") {
+        public FieldsetController() : base("FieldSet") {
 
-        }
-
-        /// <summary>
-        /// GET: FormElement
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [Authorize(Roles = "Dev,Admin")]
-        public ActionResult Index(int id = 0) {
-            var groups = from s in getObjectDbContext().FieldSets
-                         where (s.id == id || id == 0) && s.getAuthorId() == User.Identity.Name
-                         orderby s.label
-                         select s;
-            return View(groups);
         }
 
         public override async Task<ActionResult> Create() {
             // Attempt to create and save to the database
             try {
-                // Save the object
+                
                 FieldSet model = new FieldSet();
                 model.setAuthorId(User.Identity.Name);
 
+                // Save the object
                 getObjectDbContext().FieldSets.Add(model);
                 int result = getObjectDbContext().SaveChanges();
 
@@ -59,27 +43,20 @@ namespace ICARUS.Controllers {
             }
         }
 
-        public override async Task<ActionResult> Create(FormPost formPost) {            
+        public override async Task<ActionResult> Create(FormPost formPost) {
+            FieldSet model = null;
             try {
-                FieldSet model = new FieldSet(formPost);
-                model.setAuthorId(User.Identity.Name);
-
-                getObjectDbContext().FieldSets.Add(model);
-                int results = getObjectDbContext().SaveChanges();
-
-                return Json(new Payload(results, "FIELDSET", model, "Successfully created " + className));
-
+                model = new FieldSet(formPost);
+                getObjectDbContext().Containers.Add(model);
+                getObjectDbContext().SaveChanges();
+                return Json(model);
             } catch (Exception e) {
-                return Json(
-                    new Payload(
-                        0,
-                        "Unable to create new instance of " + this.className + "\n"
-                        + e.ToString() + "\n\n" + e.Message.ToString(),
-                        e
-                    ),
-                JsonRequestBehavior.AllowGet);
+                return Json(new Payload(
+                    0,
+                    "Unable to create new instance of " + this.className + "()\n" + e.ToString() + "\n\n" + e.Message.ToString(),
+                    e
+                ), JsonRequestBehavior.AllowGet);
             }
         }
-
     }    
 }

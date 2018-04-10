@@ -8,7 +8,8 @@
     @if (!User.Identity.IsAuthenticated) {
         <script type="text/javascript">
 
-            const token = document.getElementsByName('__RequestVerificationToken')[0];            
+            const token = document.getElementsByName('__RequestVerificationToken')[0];  
+            var factory = new CONTAINERFACTORY();
             var app = new MAIN(new MODEL().set({
                 'label': 'Log In',
                 'navBar': {

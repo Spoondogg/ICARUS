@@ -107,7 +107,7 @@ namespace ICARUS.Controllers {
             if (model.authorId == User.Identity.Name) {
 
                 string message = "Successfully retrieved " + this.className + ", subsections (" +
-                    model.subsections + ")woot";
+                    model.subsections + ")";
 
                 // Parse subsection Id's and Retrieve any relevant children 
                 string[] subsections = model.subsections.Split(',');
@@ -123,6 +123,8 @@ namespace ICARUS.Controllers {
                     }
                 } catch (Exception ex) { /*message += "\n No children exist or " + ex.Message; */ }
                 
+                // Attach formPost (if exists)
+
 
                 // Return the fully constructed model
                 return Json(new Payload(

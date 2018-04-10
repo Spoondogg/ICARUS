@@ -12,14 +12,17 @@ namespace ICARUS.Models {
     /// A Form Element (INPUT, SELECT etc)
     /// </summary>
     public class Input : FormElement {
+
         /// <summary>
         /// Generic FormElement Constructor for Entity
         /// </summary>
         public Input() : base() {
             this.element = "INPUT";
-            this.label = "INPUT";
-            this.attributes.Add("name", "woot");
-            this.attributes.Add("value", "woot");
+            this.hasTab = 0;
+            this.showHeader = 0; // temp
+            //this.label = "INPUT";
+            //this.attributes.Add("name", "woot");
+            //this.attributes.Add("value", "woot");
         }
 
         /// <summary>

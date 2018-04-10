@@ -19,7 +19,7 @@ namespace ICARUS.Controllers {
     [Authorize(Roles = "User,Dev,Admin")]
     public class TextAreaController : ContainerController {
 
-        public TextAreaController() : base("TEXTAREA") {
+        public TextAreaController() : base("TextArea") {
 
         }
 

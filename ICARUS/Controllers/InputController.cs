@@ -19,7 +19,25 @@ namespace ICARUS.Controllers {
     [Authorize(Roles = "User,Dev,Admin")]
     public class InputController : ContainerController {
 
-        public InputController() : base("INPUT") {
+        public InputController() : base("Input") {
+
+        }
+
+        /// <summary>
+        /// Get Request Index page for Forms
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public override async Task<ActionResult> Index() {
+            var models = from s in getObjectDbContext().Inputs
+                             where s.authorId == User.Identity.Name
+                             orderby s.label
+                             select s;
+
+            return Json(new Payload(
+                    1, className, models.Take(5),
+                    "Index"
+                ), JsonRequestBehavior.AllowGet);
 
         }
 

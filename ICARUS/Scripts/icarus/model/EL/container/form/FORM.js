@@ -13,12 +13,17 @@ class FORM extends CONTAINER {
         param {string} antiForgeryToken The token that is provided by the server for POST validation
      */
     constructor(node, model) {
+        console.log('FORM MODEL:');
+        console.log(model);
+
         super(node, 'FORM', model);
         this.tokenInput = new TokenInput(this);
         this.setPostUrl('Form/Submit');
         this.updateUrl = 'Form/Update';
         this.loader = null;
         this.modal = null;
+
+        this.values = model.values;
                 
         this.addContainerCase('FIELDSET');
 
@@ -29,6 +34,11 @@ class FORM extends CONTAINER {
 
         this.populate(model.children);
     }
+
+    setValues(values) {
+        console.log('Setting form values:');
+        console.log(values);
+    };
 
     /**
         Updates the model for this object 
