@@ -7,7 +7,7 @@ class FORMPOST {
         @param {FORM} form The form that generated this FORMPOST
      */
     constructor(form) {
-        this.__RequestVerificationToken = antiForgeryToken.value;
+        this.__RequestVerificationToken = token.value;
         this.id = form.el.getAttribute('id');
         this.label = form.el.getAttribute('name');
 

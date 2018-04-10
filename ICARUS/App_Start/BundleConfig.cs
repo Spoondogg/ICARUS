@@ -143,6 +143,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/TOKEN.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/FIELDSET.js",
                 "~/Scripts/icarus/model/el/container/form/FORMFOOTER.js",
+                "~/Scripts/icarus/model/el/container/form/FORMPOST.js",
                 "~/Scripts/icarus/model/el/container/form/FORM.js",
 
                 // Custom Forms

@@ -10,9 +10,9 @@ using System.Web.Mvc;
 namespace ICARUS.Controllers {
 
     [Authorize(Roles = "User,Dev,Admin")]
-    public class FormElementOptionController : ContainerController {
+    public class OptionController : ContainerController {
 
-        public FormElementOptionController() : base("FORMELEMENTOPTION") {
+        public OptionController() : base("Option") {
 
         }        
 
@@ -20,10 +20,10 @@ namespace ICARUS.Controllers {
             // Attempt to create and save to the database
             try {
                 // Save the object
-                FormElementOption model = new FormElementOption();
+                Option model = new Option();
                 model.setAuthorId(User.Identity.Name);
 
-                getObjectDbContext().FormElementOptions.Add(model);
+                getObjectDbContext().Options.Add(model);
                 int result = getObjectDbContext().SaveChanges();
 
                 // Return the success response along with the email message body
@@ -39,26 +39,19 @@ namespace ICARUS.Controllers {
         }
 
         public override async Task<ActionResult> Create(FormPost formPost) {
+            Option model = null;
             try {
-                FormElementOption model = new FormElementOption(formPost);
-                model.setAuthorId(User.Identity.Name);
-
-                getObjectDbContext().FormElementOptions.Add(model);
-                int results = getObjectDbContext().SaveChanges();
-
-                return Json(new Payload(results, "FORMELEMENTOPTION", model, "Successfully created " + className));
-
+                model = new Option(formPost);
+                getObjectDbContext().Containers.Add(model);
+                getObjectDbContext().SaveChanges();
+                return Json(model);
             } catch (Exception e) {
-                return Json(
-                    new Payload(
-                        0,
-                        "Unable to create new instance of " + this.className + "\n"
-                        + e.ToString() + "\n\n" + e.Message.ToString(),
-                        e
-                    ),
-                JsonRequestBehavior.AllowGet);
+                return Json(new Payload(
+                    0,
+                    "Unable to create new instance of " + this.className + "()\n" + e.ToString() + "\n\n" + e.Message.ToString(),
+                    e
+                ), JsonRequestBehavior.AllowGet);
             }
         }
-
     }
 }

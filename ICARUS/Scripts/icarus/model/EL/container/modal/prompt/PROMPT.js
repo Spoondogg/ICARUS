@@ -18,7 +18,7 @@ class PROMPT extends MODAL {
         this.addClass('prompt');
 
         this.form = new FORM(
-            this.container.body.pane,
+            this.container,
             new MODEL().set({
                 'label': 'PROMPT FORM',
                 'collapsed': false,
@@ -29,25 +29,32 @@ class PROMPT extends MODAL {
         this.fieldset = new FIELDSET(
             this.form.body.pane, new MODEL().set({
                 'label': 'FIELDSET',
-                'collapsed': false,
-                'showHeader': false,
-                'hasTab': false
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
             })
         );
         this.formElementGroup = new FORMELEMENTGROUP(
             this.fieldset.body.pane, new MODEL().set({
                 'label': 'FORMELEMENTGROUP',
-                'collapsed': false,
-                'showHeader': false,
-                'hasTab': false
+                'collapsed': 0,
+                'showHeader': true,
+                'hasTab': 0
             })
         );
 
         // Adjust styling for PROMPT.  TOOD: This should just be css
         //this.form.fieldset.header.hide();
 
+        //this.form.fieldset.body.el.style.padding = '1em;';
+
         if (inputs) {
-            this.formElementGroup.populate(inputs); 
+            for (let i = 0; i < inputs.length; i++) {
+                this.formElementGroup.children.push(
+                    new INPUT(this.formElementGroup.body.pane, inputs[i])
+                );
+                //this.formElementGroup.create('INPUT', inputs[i]); //.header.hide();
+            }
         }
 
         // Add any buttons that were provided

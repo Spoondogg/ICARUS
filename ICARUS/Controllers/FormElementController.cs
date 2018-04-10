@@ -19,7 +19,7 @@ namespace ICARUS.Controllers {
     [Authorize(Roles = "User,Dev,Admin")]
     public class FormElementController : ContainerController {
 
-        public FormElementController() : base("FORMELEMENT") {
+        public FormElementController() : base("FormElement") {
 
         }
 

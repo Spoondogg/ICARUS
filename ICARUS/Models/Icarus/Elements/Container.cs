@@ -55,6 +55,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// </summary>
         [Required]
         public int hasSidebar { get; set; }
+        
 
         /// <summary>
         /// Articles are made up of a collection of SECTIONS
@@ -78,6 +79,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasTab = 1;
             this.hasSidebar = 0;
             this.status = 1;
+            this.formPostId = 0;
         }
 
         /// <summary>
@@ -98,6 +100,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.showHeader = Int32.Parse(formPost.getXml().GetElementsByTagName("showHeader")[0].InnerText);
             this.hasTab = Int32.Parse(formPost.getXml().GetElementsByTagName("hasTab")[0].InnerText);
             this.hasSidebar = Int32.Parse(formPost.getXml().GetElementsByTagName("hasSidebar")[0].InnerText);
+            this.formPostId = Int32.Parse(formPost.getXml().GetElementsByTagName("formPostId")[0].InnerText);
         }
     }
 }

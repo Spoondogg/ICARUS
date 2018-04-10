@@ -48,7 +48,7 @@ class EL extends MODEL {
     create(element, model) {
         model = model || new MODEL();
         console.log(this.element+'.create(' + element + ') MODEL : ' + model);
-        //console.log(model);
+        console.log(model);
         let result = null;
         if (this.callbacks[element]) {
             this.callbacks[element].forEach(function (fn) {
@@ -223,22 +223,19 @@ class EL extends MODEL {
 
     /**
         Create all children elements in the order that
-        they were pushed into this elements children
-        @param {array} children Optional array of children object models to be constructed
+        they were pushed into provided array
+        @param {array} children Array of children object models to be constructed
     */
     populate(children) {
-        console.log(this.element + '.populate('+children+');');
-        console.log(children);
         if (children) {
+            console.log(this.element + '.populate();');
             try {
                 for (let c = 0; c < children.length; c++) {
                     console.log('\tCreating ' + children[c].element);
-                    console.log(children[c].element);
+                    //console.log(children[c].element);
                     this.create(children[c].element, children[c]);
                 }
             } catch (e) { console.log(e); }
-        } else {
-            console.log('\tEL[' + this.element + '].populate() : No children supplied');
         }
     }
 

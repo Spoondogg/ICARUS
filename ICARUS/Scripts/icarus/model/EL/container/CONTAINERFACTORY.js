@@ -53,6 +53,8 @@ class CONTAINERFACTORY {
                     break;
 
                 case 'INPUT':
+                    console.log('inputinput');
+                    console.log(data.model);
                     obj = new INPUT(node, data.model);
                     break;
 

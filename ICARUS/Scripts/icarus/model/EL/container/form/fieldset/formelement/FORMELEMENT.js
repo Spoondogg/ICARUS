@@ -28,6 +28,7 @@ class FORMELEMENT extends CONTAINER {
         // Create the Label
         let label = model ? model.label : '__NoLabel';
         this.label = new LABEL(this.body.pane, label);
-        this.label.el.onclick = this.save.bind(this);
+        //this.label.el.onclick = this.save.bind(this);
+
     }
 }

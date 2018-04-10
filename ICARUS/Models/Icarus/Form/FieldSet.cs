@@ -1,13 +1,8 @@
 ﻿using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements;
-using ICARUS.Models.Icarus.Elements.Attributes;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ICARUS.Models {
@@ -29,7 +24,8 @@ namespace ICARUS.Models {
         /// <summary>
         /// Constructs an empty form group
         /// </summary>
-        public FieldSet(FormPost formPost) : base("FIELDSET", new MODEL()) {
+        /// <param name="formPost"></param>
+        public FieldSet(FormPost formPost) : base("FIELDSET", formPost) {
 
         }
     }
