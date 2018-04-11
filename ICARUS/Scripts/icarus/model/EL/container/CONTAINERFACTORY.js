@@ -23,7 +23,6 @@ class CONTAINERFACTORY {
         $.getJSON('/' + element + '/Get/' + id, function (data) {
             let obj = null;
             switch (element) {
-
                 case 'TEXTBLOCK':
                     obj = new TEXTBLOCK(node, data.model); //this.body.pane
                     break;
@@ -53,8 +52,6 @@ class CONTAINERFACTORY {
                     break;
 
                 case 'INPUT':
-                    console.log('inputinput');
-                    console.log(data.model);
                     obj = new INPUT(node, data.model);
                     break;
 
@@ -66,7 +63,7 @@ class CONTAINERFACTORY {
                     obj = new TEXTAREA(node, data.model);
                     break;
 
-                case 'FORMELEMENTOPTION':
+                case 'OPTION':
                     obj = new OPTION(node, data.model);
                     break;
 

@@ -25,13 +25,7 @@ class MAIN extends CONTAINER {
         this.body.sidebar.addClass('sidebar-tall');
         this.body.pane.addClass('pane-tall');
 
-        // Delimited list of child ids
-        this.subsections = '0';
-        if (model.subsections) {
-            this.subsections = model.subsections.split(',');
-        }
-
-        this.logoutForm = new LogoutForm(this); // Form to log out the user
+        this.logoutForm = new LogoutForm(this); // This should be created on demand
 
         this.addNavOptions();
         
@@ -40,8 +34,6 @@ class MAIN extends CONTAINER {
         this.addContainerCase('ARTICLE');
 
         this.populate(model.children);
-
-        this.toggleSidebar();
     }
 
     /**

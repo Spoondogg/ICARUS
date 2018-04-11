@@ -24,57 +24,29 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Get Request Index page for Forms
+        /// Instantiate a Container using Main defaults
         /// </summary>
         /// <returns></returns>
-        [Authorize]
-        public ActionResult Index() {
-            var forms = from s in getObjectDbContext().Forms
-                        where s.authorId == User.Identity.Name
-                        orderby s.label
-                        select s;
-            return View(forms);
-        }
-        
-        public override async Task<ActionResult> Create(FormPost formPost) {
-            try {
-                Form model = new Form(formPost);
-                model.setAuthorId(User.Identity.Name);
+        public override Container make(FormPost formPost = null) {
+            Form obj = (formPost == null)
+                ? new Form()
+                : new Form(formPost);
 
-                getObjectDbContext().Forms.Add(model);
-                int results = getObjectDbContext().SaveChanges();
-
-                return Json(new Payload(results, "FORM", model, "Successfully created " +className));
-
-            } catch (Exception e) {
-                return Json(
-                    new Payload(
-                        0, 
-                        "Unable to create new instance of "+this.className+"\n" 
-                        + e.ToString() + "\n\n" + e.Message.ToString(),
-                        e
-                    ), 
-                JsonRequestBehavior.AllowGet);
-            }
+            obj.setAuthorId(User.Identity.Name);
+            return obj;
         }
 
-        public override async Task<ActionResult> Create() {
-            try {
-                // Save the object
-                Form model = new Form();
-                model.setAuthorId(User.Identity.Name);
-
-                getObjectDbContext().Forms.Add(model);
-                int result = getObjectDbContext().SaveChanges();
-                return Json(
-                    new Payload(
-                        result, className, model, "Successfully created "+className+"(" + model.id + ")"
-                    ), 
-                JsonRequestBehavior.AllowGet);
-
-            } catch (Exception e) {
-                return Json(new Payload(0, "Failed to create "+className+"\n" + e.Message, e), JsonRequestBehavior.AllowGet);
-            }
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override Container select(ObjectDBContext ctx, int id) {
+            Form model = (Form)ctx.Forms.Single(m =>
+                   m.id == id && m.authorId == User.Identity.Name
+                );
+            return model;
         }
 
         /// <summary>

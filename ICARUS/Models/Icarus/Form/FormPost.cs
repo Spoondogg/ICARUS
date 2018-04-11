@@ -100,7 +100,6 @@ namespace ICARUS.Models.Icarus {
                 xml.LoadXml(this.xmlResults);
                 this.xml = xml;
             }
-
         }
 
         /// <summary>

@@ -23,48 +23,30 @@ namespace ICARUS.Controllers {
 
         }
 
-        public override async Task<ActionResult> Create() {
-            // Attempt to create and save to the database
-            try {
-                // Save the object
-                TextArea model = new TextArea();
-                model.setAuthorId(User.Identity.Name);
+        /// <summary>
+        /// Instantiate a Container using TextArea defaults
+        /// </summary>
+        /// <returns></returns>
+        public override Container make(FormPost formPost = null) {
+            TextArea obj = (formPost == null)
+                ? new TextArea()
+                : new TextArea(formPost);
 
-                getObjectDbContext().TextAreas.Add(model);
-                int result = getObjectDbContext().SaveChanges();
-
-                // Return the success response along with the email message body
-                return Json(
-                    new Payload(
-                        result, className, model, "Successfully created " + className + "(" + model.id + ")"
-                    ),
-                JsonRequestBehavior.AllowGet);
-
-            } catch (Exception e) {
-                return Json(new Payload(0, "Failed to create " + className + "\n" + e.Message, e), JsonRequestBehavior.AllowGet);
-            }
+            obj.setAuthorId(User.Identity.Name);
+            return obj;
         }
 
-        public override async Task<ActionResult> Create(FormPost formPost) {
-            try {
-                TextArea model = new TextArea(formPost);
-                model.setAuthorId(User.Identity.Name);
-
-                getObjectDbContext().TextAreas.Add(model);
-                int results = getObjectDbContext().SaveChanges();
-
-                return Json(new Payload(results, "TEXTAREA", model, "Successfully created " + className));
-
-            } catch (Exception e) {
-                return Json(
-                    new Payload(
-                        0,
-                        "Unable to create new instance of " + this.className + "\n"
-                        + e.ToString() + "\n\n" + e.Message.ToString(),
-                        e
-                    ),
-                JsonRequestBehavior.AllowGet);
-            }
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override Container select(ObjectDBContext ctx, int id) {
+            TextArea model = (TextArea)ctx.TextAreas.Single(m =>
+                   m.id == id && m.authorId == User.Identity.Name
+                );
+            return model;
         }
     }
 }
