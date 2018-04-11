@@ -18,7 +18,7 @@ class PROMPT extends MODAL {
         this.addClass('prompt');
 
         this.form = new FORM(
-            this.container,
+            this.container.body.pane,
             new MODEL().set({
                 'label': 'PROMPT FORM',
                 'collapsed': false,

@@ -29,10 +29,11 @@ namespace ICARUS.Models.Icarus {
         /// Parameterless constructor for Entity
         /// </summary>
         public Main() : base("MAIN", new MODEL(new ATTRIBUTES("app"))) {
-            //this.showHeader = 1;
-            //this.collapsed = 0;
+            this.showHeader = 1;
+            this.collapsed = 0;
             this.hasTab = 0;
             this.hasSidebar = 1;
+            this.formPostId = 0;
 
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);

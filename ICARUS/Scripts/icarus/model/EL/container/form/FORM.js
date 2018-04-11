@@ -10,20 +10,12 @@ class FORM extends CONTAINER {
 
         @param {CONTAINER} node The parent object
         @param {MODEL} model The object model
-        param {string} antiForgeryToken The token that is provided by the server for POST validation
      */
     constructor(node, model) {
-        console.log('FORM MODEL:');
-        console.log(model);
-
         super(node, 'FORM', model);
         this.tokenInput = new TokenInput(this);
         this.setPostUrl('Form/Submit');
         this.updateUrl = 'Form/Update';
-        this.loader = null;
-        this.modal = null;
-
-        this.values = model.values;
                 
         this.addContainerCase('FIELDSET');
 
@@ -34,11 +26,6 @@ class FORM extends CONTAINER {
 
         this.populate(model.children);
     }
-
-    setValues(values) {
-        console.log('Setting form values:');
-        console.log(values);
-    };
 
     /**
         Updates the model for this object 
@@ -257,52 +244,5 @@ class FORM extends CONTAINER {
 
         // Generate a Form Post for this form and Post values
         this.post();
-    }
-
-    /**
-        Updates the state of this Form on the server.
-    */
-    update() { // Forms/UpdateSection 
-
-        try {
-
-            // Create a prompt and populate its form with the required values
-            this.prompt = new PROMPT('Update ' + this.element, 'Update this ' + this.element + ':');
-
-            // TODO: Create a loader that pushes preset forms into this PROMPT
-            this.prompt.form.formGroup.addInput('id', IcarusInputType.NUMBER, this.el.getAttribute('id'));
-            this.prompt.form.formGroup.addInput('label', IcarusInputType.TEXT, this.getLabel()); //this.header.label.icon.label.el.innerHTML
-            this.prompt.form.formGroup.addInput('name', IcarusInputType.TEXT, this.getName());
-            this.prompt.form.formGroup.addInput('element', IcarusInputType.TEXT, this.element);
-            this.prompt.form.formGroup.addInput('subsections', IcarusInputType.TEXT, this.children.length);
-
-            this.prompt.form.setPostUrl('Forms/Update');
-
-            /**
-                @Override
-                Override FORM.submit() so that values are extracted
-                directly from the form instead of posting the form payload
-                to the server
-
-                @param {string} url Target url
-            
-            this.prompt.form.submit = function () {
-                var results = this.prompt.form.getFormPost().getResultsAsObject();
-
-                // Set attributes for this SECTION based on FormPost object
-                this.el.setAttribute('id', results['ID']);
-                this.header.setLabel(results['Label']);
-                this.el.setAttribute('name', friendly(results['Name']));
-
-                // Hide the prompt
-                this.prompt.hide();
-            }.bind(this);
-            */
-
-            this.prompt.show();
-
-        } catch (e) {
-            console.log('Unable to change name for this ' + this.element + '\n' + e);
-        }
     }
 }

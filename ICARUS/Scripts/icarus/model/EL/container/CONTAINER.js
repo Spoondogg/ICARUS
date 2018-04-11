@@ -28,18 +28,15 @@ class CONTAINER extends EL {
         @param {string} element HTML element
         @param {MODEL} model The CONTAINER object retrieved from the server
      */
-    constructor(node, element, model) { //collapsed, showHeader, hasTab
-
-        model = model || new MODEL().set({
-            'element': element,
-            'name': element,
-            'label': element,
-            'hasTab': true,
-            'showHeader': true,
-            'collapsed': false
-        });
-
-        super(node, element || CONTAINERTYPES.DEFAULT, model);
+    constructor(node, element, model = new MODEL().set({
+        'element': element,
+        'name': element,
+        'label': element,
+        'hasTab': 1,
+        'showHeader': 1,
+        'collapsed': 0
+    })) {
+        super(node, element, model);
         this.addClass('icarus-container');
         this.el.setAttribute('id', model.id);
         
@@ -47,12 +44,18 @@ class CONTAINER extends EL {
         this.loader = null;
         this.prompt = null;
         this.modal = null;
-        this.updateUrl = this.element + '/Set';    
-        this.subsections = [];
+        this.updateUrl = this.element + '/Set';  
+        
+        // Delimited list of child ids
+        this.subsections = '0';
+        if (model.subsections) {
+            this.subsections = model.subsections.split(',');
+        }
 
         // HELLO!!!!!!!!!!!!
         // Consider that if model.navBar doesn't exist, it doesn't need to be created
         // navbar is pretty heavy
+        // Create it on demand instead of always being here
         if (model.navBar === undefined) {
             model.navBar = {};
             model.navBar.label = model.label;
@@ -96,11 +99,7 @@ class CONTAINER extends EL {
             new MODEL().set({
                 'label': 'Load'
             })
-        ).el.onclick = function () {
-            this.load(0);
-        }.bind(this);
-
-        
+        ).el.onclick = this.load.bind(this);
         
         // Add items to Options Dropdown Tab
         this.navBar.header.options.tab.menu.addNavItem(
@@ -122,16 +121,6 @@ class CONTAINER extends EL {
                 'label': 'Delete'
             })
         ).el.onclick = this.disable.bind(this);
-        
-
-        /* Add cases for each relevant constructor that inherited class does not have */
-        this.addContainerCase('JUMBOTRON');
-        this.addContainerCase('TEXTBLOCK');
-        this.addContainerCase('FORM');
-
-        // Additionally...
-        // BUTTONGROUP, LIST/GROUP, GRAPHIC
-        
 
         /* Wrap up construction */
         this.populate(model.children);
@@ -410,7 +399,8 @@ class CONTAINER extends EL {
         for (let c = 0; c < this.body.pane.el.children.length; c++) {
             subsections.push(this.body.pane.el.children[c].id);
         }
-        
+
+        console.log('Check the "this.get(attribute)" here');
         this.prompt = new PROMPT(
             'Save ' + this.get('element'), 'Saves the ' + this.get('element'),
             [], [
@@ -457,7 +447,7 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'Status',
-                    'addTab': false
+                    'addTab': 0
                 }),
 
                 new MODEL(new ATTRIBUTES({
@@ -467,8 +457,18 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'Show Header',
-                    'addTab': false
+                    'addTab': 0
                 }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'hasSidebar',
+                    'type': 'NUMBER',
+                    'value': this.get('hasSidebar')
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Show Sidebar',
+                    'addTab': 0
+                }),                
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'collapsed',
@@ -477,7 +477,7 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'Collapsed',
-                    'addTab': false
+                    'addTab': 0
                 }),
 
                 new MODEL(new ATTRIBUTES({
@@ -487,7 +487,7 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'Has Tab',
-                    'addTab': false
+                    'addTab': 0
                 }),
 
                 new MODEL(new ATTRIBUTES({
@@ -497,7 +497,7 @@ class CONTAINER extends EL {
                 })).set({
                     'element': 'INPUT',
                     'label': 'formPostId',
-                    'addTab': false
+                    'addTab': 0
                 })
 
             ]

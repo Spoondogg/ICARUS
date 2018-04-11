@@ -14,45 +14,31 @@ namespace ICARUS.Controllers {
         public SectionController() : base("Section") {
 
         }
-        
-        public override async Task<ActionResult> Create() {
-            // Attempt to create and save to the database
-            try {
 
-                Section model = new Section();
-                model.setAuthorId(User.Identity.Name);
+        /// <summary>
+        /// Instantiate a Container using Section defaults
+        /// </summary>
+        /// <returns></returns>
+        public override Container make(FormPost formPost = null) {
+            Section obj = (formPost == null)
+                ? new Section()
+                : new Section(formPost);
 
-                // Save the object
-                getObjectDbContext().Sections.Add(model);
-                int result = getObjectDbContext().SaveChanges();
-
-                // Return the payload
-                return Json(new Payload(
-                    1, className, model,
-                    "Successfully instantiated " + this.className + "(" + model.id + ")"
-                ), JsonRequestBehavior.AllowGet);
-
-            } catch (Exception e) {
-
-                // Return the formPost for debugging
-                return Json(new Payload(0, "Failed to create " + className + "\n" + e.Message, e), JsonRequestBehavior.AllowGet);
-            }
+            obj.setAuthorId(User.Identity.Name);
+            return obj;
         }
 
-        public override async Task<ActionResult> Create(FormPost formPost) {
-            Section model = null;
-            try {
-                model = new Section(formPost);
-                getObjectDbContext().Containers.Add(model);
-                getObjectDbContext().SaveChanges();
-                return Json(model);
-            } catch (Exception e) {
-                return Json(new Payload(
-                    0,
-                    "Unable to create new instance of "+this.className+"()\n" + e.ToString() + "\n\n" + e.Message.ToString(),
-                    e
-                ), JsonRequestBehavior.AllowGet);
-            }
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override Container select(ObjectDBContext ctx, int id) {
+            Section model = (Section)ctx.Sections.Single(m =>
+                   m.id == id && m.authorId == User.Identity.Name
+                );
+            return model;
         }
     }
 }

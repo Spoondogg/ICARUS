@@ -10,7 +10,7 @@ class EL extends MODEL {
         @param {string} innerHTML This text will be displayed within the HTML element
         @param {array} children An object array of child models
     */
-    constructor(node, element, model, innerHTML, children) { 
+    constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) { 
         model = model || new MODEL(new ATTRIBUTES());
         super(model.attributes);
 
@@ -231,8 +231,6 @@ class EL extends MODEL {
             console.log(this.element + '.populate();');
             try {
                 for (let c = 0; c < children.length; c++) {
-                    console.log('\tCreating ' + children[c].element);
-                    //console.log(children[c].element);
                     this.create(children[c].element, children[c]);
                 }
             } catch (e) { console.log(e); }

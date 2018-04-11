@@ -54,8 +54,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// If set to true, a sidebar will be created for this container
         /// </summary>
         [Required]
-        public int hasSidebar { get; set; }
-        
+        public int hasSidebar { get; set; }        
 
         /// <summary>
         /// Articles are made up of a collection of SECTIONS

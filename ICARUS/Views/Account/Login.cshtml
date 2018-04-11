@@ -67,8 +67,8 @@
         </script>
     } else {
         <script type="text/javascript">
-            var antiForgeryToken = document.getElementsByName('__RequestVerificationToken')[0];
-            var app = new MAIN(new MODEL().set('label', 'Log In'), antiForgeryToken.value);
+            const token = document.getElementsByName('__RequestVerificationToken')[0];
+            var app = new MAIN(new MODEL().set('label', 'Log In'), token.value);
             let prompt = new PROMPT('Log In', 'You are already logged in.\nRedirecting...');
             prompt.show();
             setTimeout(function () {

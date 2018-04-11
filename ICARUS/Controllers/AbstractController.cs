@@ -55,7 +55,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public ObjectDBContext getObjectDbContext() {
             return this.db;
-        }       
+        }
 
         /// <summary>
         /// Asynchrounously create the object on the database and return an instance of
@@ -147,9 +147,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Dev,Admin")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Dev,Admin")]
         public abstract Task<ActionResult> Set(FormPost formPost);
 
         /// <summary>
