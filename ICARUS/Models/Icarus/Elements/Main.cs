@@ -46,8 +46,6 @@ namespace ICARUS.Models.Icarus {
         /// <param name="version"></param>
         /// <param name="name"></param>
         public Main(FormPost formPost) : base("MAIN", formPost) {
-            //formPost.resultsToXml();
-            //string label = formPost.getXml().GetElementsByTagName("label")[0].InnerText;
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);
         }

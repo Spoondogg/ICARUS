@@ -22,16 +22,9 @@ class FORM extends CONTAINER {
         // Add the submit button
         this.footer = new IcarusFormFooter(this, new MODEL());
         this.footer.buttonGroup.addButton('Reset', ICON.RESET).el.onclick = this.reset.bind(this);
-        this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.submit.bind(this);
+        this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.post.bind(this);
 
         this.populate(model.children);
-    }
-
-    /**
-        Updates the model for this object 
-     */
-    afterSuccessfulPost() {
-        console.log('FORM: POST post posting');
     }
 
     /**
@@ -74,8 +67,13 @@ class FORM extends CONTAINER {
         HTML encodes all form element values.  
     */
     htmlEncodeValues() {
-        for (let e = 0; e < this.el.elements.length; e++) {
-            this.el.elements[e].value = htmlEncode(this.el.elements[e].value);
+        try {
+            for (let e = 0; e < this.el.elements.length; e++) {
+                this.el.elements[e].value = htmlEncode(this.el.elements[e].value);
+            }
+        } catch (e) {
+            console.log('FORM.htmlEncodeValues() failed.');
+            console.log(e);
         }
     }
 
@@ -163,13 +161,13 @@ class FORM extends CONTAINER {
     post() {
 
         //let results = {};
+        this.loader = new LOADER('Submitting Form Results', 'Your form is being submitted...');
+        this.loader.show();
 
         // Post results to server
         this.loader.setProgress(10, 'Posting values to server: ' + this.getPostUrl());
-
         let formPost = this.getFormPost();
         console.log(formPost);
-
         this.lock();
 
         /**
@@ -192,19 +190,19 @@ class FORM extends CONTAINER {
                 if (status === "success") {
 
                     this.loader.setProgress(25, 'Posted results to server.');
-
-                    this.loader.setProgress(75, 'The ' + this.element+' "<span style="font-weight:bold">' +
-                        formPost.label + '</span>" (ID: ' + formPost.id+') has been updated.<br><hr/>' +
-                        payload.message + '<br><hr/>');
+                    
+                    this.loader.setProgress(50,
+                        'Updating...<br><hr/>'
+                        + payload.message + '<br><hr/>'
+                    );
 
                     this.unlock();
 
                     this.loader.setProgress(100, 'Post Complete.');
 
-                    // Update the Form with the appropriate ID if needed
-                    //console.log('Updating ' + this.element + ' model...');
-                    //this.updateModel(payload);
+                    //this.loader.hide(400);
 
+                    // Update the Form with the appropriate ID if needed
                     this.afterSuccessfulPost();
 
 
@@ -224,25 +222,5 @@ class FORM extends CONTAINER {
                 }
             }.bind(this), "json"
         );
-    }
-
-    /**
-        Posts the form to the specified url.
-        @param {string} url The url to post to
-    */
-    submit() {
-
-        // TODO: LOADER, NOT PROMPT!
-        console.log('FORM.submit()');
-
-        // First, ensure proper values have been set
-        this.save();
-
-        // Create a prompt to notify the user of the status of their request
-        this.loader = new LOADER('Submitting Form Results', 'Your form is being submitted...');
-        this.loader.show();
-
-        // Generate a Form Post for this form and Post values
-        this.post();
     }
 }

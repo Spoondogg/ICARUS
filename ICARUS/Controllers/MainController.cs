@@ -18,7 +18,7 @@ namespace ICARUS.Controllers {
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
     [Authorize]
-    public class MainController : ContainerController {        
+    public class MainController : ContainerController {
         /// <summary>
         /// Parameterless Constructor for Entity
         /// </summary>
@@ -34,7 +34,7 @@ namespace ICARUS.Controllers {
             Main obj = (formPost == null)
                 ? new Main()
                 : new Main(formPost);
-
+            
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }

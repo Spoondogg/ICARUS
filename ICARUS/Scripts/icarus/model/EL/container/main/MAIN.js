@@ -113,12 +113,13 @@ class MAIN extends CONTAINER {
         let prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
             { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
         ]);
-
+        /*
         prompt.form.submit = function () {
             id = prompt.form.el.elements['id'].value;
             alert('Loading App(' + id + ')');
             window.location.href = id || 0;
         }.bind(this);
+        */
         prompt.show();
     }
 
@@ -170,7 +171,7 @@ class MAIN extends CONTAINER {
     /**
         Sets the label for this app
         @param {string} label Text
-    */
+    
     setLabel(label) {
         this.label = label;
         try {
@@ -179,7 +180,7 @@ class MAIN extends CONTAINER {
             console.log('navBar.header does not exist');
             console.log(e);
         }
-    }
+    }*/
 
     /**
         Logs the current user out

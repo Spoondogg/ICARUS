@@ -105,7 +105,15 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/header/HEADER.js",
                 "~/Scripts/icarus/model/el/footer/FOOTER.js",
                 "~/Scripts/icarus/model/el/footer/stickyfooter/STICKYFOOTER.js",
-                
+
+                "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
+                "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/modaltab/MODALTAB.js",
+
                 "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
                 "~/Scripts/icarus/model/el/nav/navitemgroup/NAVBARCOLLAPSE.js",
                 "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADER.js",
@@ -115,13 +123,8 @@ namespace ICARUS {
 
                 "~/Scripts/icarus/model/el/nav/navitemgroup/dropdownmenu/DROPDOWNMENU.js",
 
-                "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
-                "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
-                "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
-                "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/OPTIONSDROPDOWN.js",
+                
+                
 
                 // Container
                 "~/Scripts/icarus/model/el/container/CONTAINERBODY.js",

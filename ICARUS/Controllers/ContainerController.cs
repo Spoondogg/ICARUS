@@ -53,14 +53,14 @@ namespace ICARUS.Controllers {
         [Authorize]
         public virtual async Task<ActionResult> Index() {
             var containers = from s in getObjectDbContext().Containers
-                        where (s.authorId == User.Identity.Name) && (s.element == className)
-                        orderby s.label
-                        select s;
+                             where (s.authorId == User.Identity.Name) && (s.element == className)
+                             orderby s.label
+                             select s;
 
             return Json(new Payload(
                     1, className, containers.Take(5),
                     "Index"
-                ), JsonRequestBehavior.AllowGet);            
+                ), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -113,14 +113,12 @@ namespace ICARUS.Controllers {
                 // Save the object
                 getObjectDbContext().Containers.Add(model);
                 int result = getObjectDbContext().SaveChanges();
-
-                /*
+                
                 // Return the Payload
                 return Json(new Payload(
                     1, className, model,
                     "Successfully instantiated " + this.className + "(" + model.id + ")"
                 ), JsonRequestBehavior.AllowGet);
-                */
                 return View(model);
 
             } catch (Exception e) {
@@ -166,15 +164,7 @@ namespace ICARUS.Controllers {
 
                 // Extract values from FormPost
                 formPost.resultsToXml();
-                string subsections = formPost.getXml().GetElementsByTagName("subsections")[0].InnerText;
-                if (subsections.Length == 0) { subsections = "0"; }
-                string label = formPost.getXml().GetElementsByTagName("label")[0].InnerText;
-                int id = Int32.Parse(formPost.getXml().GetElementsByTagName("id")[0].InnerText);                
-                int hasTab = Int32.Parse(formPost.getXml().GetElementsByTagName("hasTab")[0].InnerText);
-                int hasSidebar = Int32.Parse(formPost.getXml().GetElementsByTagName("hasSidebar")[0].InnerText);
-                int showHeader = Int32.Parse(formPost.getXml().GetElementsByTagName("showHeader")[0].InnerText);
-                int collapsed = Int32.Parse(formPost.getXml().GetElementsByTagName("collapsed")[0].InnerText);
-                int formPostId = Int32.Parse(formPost.getXml().GetElementsByTagName("formPostId")[0].InnerText);
+                int id = formPost.parseInt("id", -1);
 
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
@@ -184,13 +174,7 @@ namespace ICARUS.Controllers {
                 int result = 0;
                 if (model != null) {
                     model.status = 1;
-                    model.subsections = subsections;
-                    model.label = label;
-                    model.hasTab = hasTab;
-                    model.showHeader = showHeader;
-                    model.collapsed = collapsed;
-                    model.hasSidebar = hasSidebar;                    
-                    model.formPostId = formPostId;
+                    model.updateContainerModel(formPost);
 
                     // Save the object
                     db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
@@ -199,8 +183,8 @@ namespace ICARUS.Controllers {
 
                     // Return the success response along with the message body
                     return Json(new Payload(
-                        1, className, model,
-                        "Successfully set " + this.className + "(" + model.id + " ==> " + id + ")"
+                        1, this.className, model,
+                        "Successfully set " + this.className + " (" + model.id + "," + id + ")"
                     ), JsonRequestBehavior.AllowGet);
 
                 } else {
@@ -210,7 +194,7 @@ namespace ICARUS.Controllers {
                 }
             } catch (Exception e) {
                 return Json(new Payload(
-                    0, e.Message.ToString(), e
+                    0, "Unknown exception for " + this.className + "<br><br>" + e.Message.ToString(), e
                 ), JsonRequestBehavior.AllowGet);
             }
         }

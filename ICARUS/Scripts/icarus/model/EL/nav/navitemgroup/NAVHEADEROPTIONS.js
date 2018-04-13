@@ -11,7 +11,7 @@ class NAVHEADEROPTIONS extends NAVITEMGROUP {
     constructor(node, model) {
         super(node, model);
         this.addClass('navbar-nav-right pull-right');
-
+        
         this.tab = this.addDropDownTab(
             new MODEL(
                 new ATTRIBUTES({
@@ -22,6 +22,7 @@ class NAVHEADEROPTIONS extends NAVITEMGROUP {
                 'label': 'Options'
             })
         );
+        
 
         this.tab.anchor.el.onclick = function () {
             console.log('Toggle Options Menu');

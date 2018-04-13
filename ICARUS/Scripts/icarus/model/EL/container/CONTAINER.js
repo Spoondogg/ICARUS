@@ -199,16 +199,6 @@ class CONTAINER extends EL {
     }
     
     /**
-        
-     @param {any} payload Data returned by server
-     */
-    updateModel(payload) {
-        this.setName(payload.name);
-        this.setLabel(payload.label);
-        this.setSubSections(payload.subsections);
-    }
-
-    /**
         Performs JQuery's ajax method to the given url.
         @param {string} url Target url
         @param {string} type HTTP Method (GET,PUT,POST,DELETE)
@@ -392,15 +382,13 @@ class CONTAINER extends EL {
         Saves the state of this Element
      */
     save() {
-
         console.log(this.element + '.save()');
 
         let subsections = [];
-        for (let c = 0; c < this.body.pane.el.children.length; c++) {
-            subsections.push(this.body.pane.el.children[c].id);
+        for (let c = 0; c < this.body.pane.children.length; c++) {
+            subsections.push(this.body.pane.children[c].id);
         }
 
-        console.log('Check the "this.get(attribute)" here');
         this.prompt = new PROMPT(
             'Save ' + this.get('element'), 'Saves the ' + this.get('element'),
             [], [
@@ -416,7 +404,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'id': 0,
                     'name': 'id',
-                    'value': this.get('id'),
+                    'value': new String(this.get('id')),
                     'readonly': 'readonly'
                 })).set({
                     'element': 'INPUT',
@@ -425,7 +413,7 @@ class CONTAINER extends EL {
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'label',
-                    'value': this.get('label')
+                    'value': new String(this.get('label'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Label'
@@ -433,7 +421,8 @@ class CONTAINER extends EL {
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'subsections',
-                    'value': subsections.length > 0 ? subsections.toString() : '0'
+                    'value': subsections.length > 0 ? subsections.toString() : '0',
+                    'readonly': 'readonly'
                 })).set({
                     'element': 'INPUT',
                     'label': 'SubSections'
@@ -443,7 +432,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'status',
                     'type': 'NUMBER',
-                    'value': this.get('status')
+                    'value': new String(this.get('status'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Status',
@@ -453,7 +442,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'showHeader',
                     'type': 'NUMBER',
-                    'value': this.get('showHeader')
+                    'value': new String(this.get('showHeader'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Show Header',
@@ -463,7 +452,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'hasSidebar',
                     'type': 'NUMBER',
-                    'value': this.get('hasSidebar')
+                    'value': new String(this.get('hasSidebar'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Show Sidebar',
@@ -473,7 +462,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'collapsed',
                     'type': 'NUMBER',
-                    'value': this.get('collapsed')
+                    'value': new String(this.get('collapsed'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Collapsed',
@@ -483,7 +472,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'hasTab',
                     'type': 'NUMBER',
-                    'value': this.get('hasTab')
+                    'value': new String(this.get('hasTab'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'Has Tab',
@@ -493,7 +482,7 @@ class CONTAINER extends EL {
                 new MODEL(new ATTRIBUTES({
                     'name': 'formPostId',
                     'type': 'NUMBER',
-                    'value': this.get('formPostId')
+                    'value': new String(this.get('formPostId'))
                 })).set({
                     'element': 'INPUT',
                     'label': 'formPostId',
@@ -502,19 +491,25 @@ class CONTAINER extends EL {
 
             ]
         );
-        
-        this.prompt.form.setPostUrl(this.element+'/Set');
-        this.prompt.form.afterSuccessfulPost = function () {
-            console.log(this.element+': Updating model');
-            
-            //this.setLabel(this.prompt.form.el.elements['label'].value);
-            this.subsections = this.prompt.form.el.elements['subsections'].value;
-            this.collapsed = this.prompt.form.el.elements['collapsed'].value;
-            
 
-        }.bind(this);
+        // Override form defaults
+        this.prompt.form.setPostUrl(this.element+'/Set');
+        this.prompt.form.afterSuccessfulPost = this.afterSuccessfulPost.bind(this);
 
         this.prompt.show();
+    }
+
+    /**
+        Actions performed after this container is saved
+     */
+    afterSuccessfulPost() {
+        console.log('PROMPT.FORM.afterSuccessfulPost(): Posted Successfully.');
+
+        this.setLabel(this.prompt.form.el.elements['label'].value);
+        //this.subsections = this.prompt.form.el.elements['subsections'].value;
+        //this.collapsed = this.prompt.form.el.elements['collapsed'].value;
+        this.prompt.form.loader.hide(200);
+        this.prompt.close(300);
     }
 
     /**
@@ -530,7 +525,8 @@ class CONTAINER extends EL {
         @param {string} label The name to be set
     */
     setLabel(label) {
-        this.header.setLabel(label);
+        this.navBar.header.tab.anchor.setInnerHTML(label);
+        //this.header.setLabel(label);
         this.label = label;
     }
 
@@ -556,10 +552,10 @@ class CONTAINER extends EL {
      @param {any} payload Data returned by server
      */
     updateModel(payload) {
-        console.log('updatemodel');
-        this.setName(payload.name);
-        this.setLabel(payload.label);
-        this.setSubSections(payload.subsections);
+        //console.log('updatemodel');
+        //this.setName(payload.name);
+        //this.setLabel(payload.label);
+        //this.setSubSections(payload.subsections);
     }
 
     /**
