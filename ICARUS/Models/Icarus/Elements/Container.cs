@@ -91,15 +91,23 @@ namespace ICARUS.Models.Icarus.Elements {
         ) {
             this.dateCreated = DateTime.Now;
             this.dateLastModified = DateTime.Now;
+            this.updateContainerModel(formPost);
+        }
 
-            this.id = Int32.Parse(formPost.getXml().GetElementsByTagName("id")[0].InnerText);
-            this.label = formPost.getXml().GetElementsByTagName("label")[0].InnerText;
-            this.subsections = formPost.getXml().GetElementsByTagName("subsections")[0].InnerText;
-            this.collapsed = Int32.Parse(formPost.getXml().GetElementsByTagName("collapsed")[0].InnerText);
-            this.showHeader = Int32.Parse(formPost.getXml().GetElementsByTagName("showHeader")[0].InnerText);
-            this.hasTab = Int32.Parse(formPost.getXml().GetElementsByTagName("hasTab")[0].InnerText);
-            this.hasSidebar = Int32.Parse(formPost.getXml().GetElementsByTagName("hasSidebar")[0].InnerText);
-            this.formPostId = Int32.Parse(formPost.getXml().GetElementsByTagName("formPostId")[0].InnerText);
+        /// <summary>
+        /// Sets Container Model values based on the given FormPost
+        /// </summary>
+        /// <param name="formPost"></param>
+        public void updateContainerModel(FormPost formPost) {
+            formPost.resultsToXml();
+            this.subsections = formPost.parseString("subsections", "0");
+            this.label = formPost.parseString("label");
+            this.id = formPost.parseInt("id", -1);
+            this.hasTab = formPost.parseInt("hasTab", 1);
+            this.hasSidebar = formPost.parseInt("hasSidebar");
+            this.showHeader = formPost.parseInt("showHeader", 1);
+            this.collapsed = formPost.parseInt("collapsed");
+            this.formPostId = formPost.parseInt("formPostId");
         }
     }
 }

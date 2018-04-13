@@ -47,6 +47,5 @@ namespace ICARUS.Models.Icarus {
             this.type = type;
             this.value = value;
         }
-
     }
 }

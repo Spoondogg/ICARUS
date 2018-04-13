@@ -34,7 +34,7 @@ class NAVHEADER extends NAVITEMGROUP {
                 'name': model.name,
                 'label': model.label
             })
-        ); //.el.onclick = this.toggleCollapse.bind(this);
+        );
 
         // Right aligned group
         this.options = new NAVHEADEROPTIONS(this, new MODEL().set({

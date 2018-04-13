@@ -70,36 +70,37 @@ namespace ICARUS.Models.Icarus {
         /// Construct an XML object and message body based on the set form post results 
         /// </summary>
         public void resultsToXml() {
+            if(this.xml == null) {
+                StringBuilder xmlResults = new StringBuilder();
+                StringBuilder messageBody = new StringBuilder();
+                if (this.results.Count > 0) {
 
-            StringBuilder xmlResults = new StringBuilder();
-            StringBuilder messageBody = new StringBuilder();
-            if (this.results.Count > 0) {
+                    xmlResults.Append("<root ");
+                    xmlResults.Append("id=\"" + this.id.ToString());
+                    //xmlResults.Append("class=\"" + formPost.className.ToString());
+                    //xmlResults.Append("name=\"" + formPost.name.ToString());
+                    xmlResults.Append("\">");
+                    messageBody.Append("<dl>");
 
-                xmlResults.Append("<root ");
-                xmlResults.Append("id=\"" + this.id.ToString());
-                //xmlResults.Append("class=\"" + formPost.className.ToString());
-                //xmlResults.Append("name=\"" + formPost.name.ToString());
-                xmlResults.Append("\">");
-                messageBody.Append("<dl>");
-
-                // Loop through each form value and create an XML node as key/value pairs
-                foreach (FormValue frmVal in this.results) {
-                    if (frmVal.name != "__RequestVerificationToken") {
-                        xmlResults.Append("<" + frmVal.name + ">" + frmVal.value + "</" + frmVal.name + ">");
-                        messageBody.Append("<dt>" + frmVal.name + "</dt><dd>" + frmVal.value + "</dd><br/>");
+                    // Loop through each form value and create an XML node as key/value pairs
+                    foreach (FormValue frmVal in this.results) {
+                        if (frmVal.name != "__RequestVerificationToken") {
+                            xmlResults.Append("<" + frmVal.name + ">" + frmVal.value + "</" + frmVal.name + ">");
+                            messageBody.Append("<dt>" + frmVal.name + "</dt><dd>" + frmVal.value + "</dd><br/>");
+                        }
                     }
+                    xmlResults.Append("</root>");
+                    messageBody.Append("</dl>");
+
+                    this.xmlResults = xmlResults.ToString();
+                    this.message = messageBody.ToString();
+                    this.results = null;
+
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(this.xmlResults);
+                    this.xml = xml;
                 }
-                xmlResults.Append("</root>");
-                messageBody.Append("</dl>");
-
-                this.xmlResults = xmlResults.ToString();
-                this.message = messageBody.ToString();
-                this.results = null;
-
-                XmlDocument xml = new XmlDocument();
-                xml.LoadXml(this.xmlResults);
-                this.xml = xml;
-            }
+            }            
         }
 
         /// <summary>
@@ -126,6 +127,36 @@ namespace ICARUS.Models.Icarus {
                 this.resultsToXml();
             }
             return this.xml;
+        }
+
+        /// <summary>
+        /// Extracts an integer for a formpost xml value
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public int parseInt(string key, int defaultValue = 0) {
+            int i;
+            try {
+                i = Int32.Parse(this.getXml().GetElementsByTagName(key)[0].InnerText);
+            } catch (Exception e) {
+                i = defaultValue;
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// Extracts a string for a formpost xml value
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string parseString(string key, string defaultValue = "") {
+            string i;
+            try {
+                i = this.getXml().GetElementsByTagName(key)[0].InnerText;
+            } catch (Exception e) {
+                i = defaultValue;
+            }
+            return i;
         }
     }
 }

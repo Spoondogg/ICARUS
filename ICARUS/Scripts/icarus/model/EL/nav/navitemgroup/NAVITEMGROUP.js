@@ -44,13 +44,34 @@ class NAVITEMGROUP extends UL {
         try {
             dropDownTab = new DROPDOWNTAB(this, model);
             dropDownTab.anchor.el.onclick = function () {
-                //$('.dropdown-tab').removeClass('active');
                 $(this).toggleClass('active');
             };
         } catch (e) {
             console.log('Unable to create dropdown tab.\n' + e);
+            console.log(e);
         }
         this.children.push(dropDownTab);
+        return this.addGroup(this.children[this.children.length - 1]);
+    }
+
+    /**
+        Adds a drop down tab to the nav-bar that relates to the given article model
+        @param {MODEL} model The article element
+        param {string} label Label visible on this tab
+        @returns {DROPDOWNTAB} A dropdown tab
+    */
+    addModalTab(model) {
+        let modalTab = null;
+        try {
+            modalTab = new MODALTAB(this, model);
+            modalTab.anchor.el.onclick = function () {
+                //$('.dropdown-tab').removeClass('active');
+                $(this).toggleClass('active');
+            };
+        } catch (e) {
+            console.log('Unable to create modal tab.\n' + e);
+        }
+        this.children.push(modalTab);
         return this.addGroup(this.children[this.children.length - 1]);
     }
 

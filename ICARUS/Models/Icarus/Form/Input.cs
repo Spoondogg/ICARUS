@@ -1,6 +1,7 @@
 ﻿using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements;
 using ICARUS.Models.Icarus.Elements.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +22,7 @@ namespace ICARUS.Models {
             this.hasTab = 0;
             this.showHeader = 0; // temp
             //this.label = "INPUT";
-            //this.attributes.Add("name", "woot");
+            this.attributes.Add("name", Guid.NewGuid());
             //this.attributes.Add("value", "woot");
         }
 

@@ -75,7 +75,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="exception"></param>
         public Payload(int result, string message, Exception exception) {
             this.result = result;
-            this.message = message += "DATA:::::  " + exception.Data.ToString(); ;
+            this.message = message += "<br><br><span class='bold'>Exception Details:</span><br>" + exception.Data.ToString(); ;
             this.exception = exception.Message;
             //this.exceptionData = exception.Data;
             try {

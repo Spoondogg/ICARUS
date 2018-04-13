@@ -485,6 +485,7 @@
     <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
     <Content Include="Scripts\icarus\model\el\container\modal\loader\LOADER.js" />
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\modaltab\MODALTAB.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\DROPDOWN.js" />
@@ -500,7 +501,6 @@
     <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\NAVITEMTAB.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEARCH.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\dropdowntab\OPTIONSDROPDOWN.js" />
     <Content Include="Scripts\icarus\model\el\nav\NAV.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\TAB.js" />
     <Content Include="Scripts\icarus\model\MODEL.js" />

@@ -17,13 +17,14 @@ class PROMPT extends MODAL {
         super(label, text, vertical);
         this.addClass('prompt');
 
+        console.log('Creating prompt form...');
         this.form = new FORM(
             this.container.body.pane,
             new MODEL().set({
                 'label': 'PROMPT FORM',
-                'collapsed': false,
-                'showHeader': false,
-                'hasTab': false
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
             })
         );
         this.fieldset = new FIELDSET(
@@ -38,22 +39,16 @@ class PROMPT extends MODAL {
             this.fieldset.body.pane, new MODEL().set({
                 'label': 'FORMELEMENTGROUP',
                 'collapsed': 0,
-                'showHeader': true,
+                'showHeader': 0,
                 'hasTab': 0
             })
         );
-
-        // Adjust styling for PROMPT.  TOOD: This should just be css
-        //this.form.fieldset.header.hide();
-
-        //this.form.fieldset.body.el.style.padding = '1em;';
 
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
                 this.formElementGroup.children.push(
                     new INPUT(this.formElementGroup.body.pane, inputs[i])
                 );
-                //this.formElementGroup.create('INPUT', inputs[i]); //.header.hide();
             }
         }
 
