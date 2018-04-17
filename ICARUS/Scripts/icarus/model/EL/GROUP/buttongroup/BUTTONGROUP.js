@@ -44,9 +44,6 @@ class BUTTONGROUP extends GROUP {
             return false;
         };
 
-        //this.buttons.push(btn);
-        //return btn;
-
         this.children.push(btn);
         return this.children[this.children.length - 1];
     }

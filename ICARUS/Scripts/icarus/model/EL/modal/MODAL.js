@@ -62,7 +62,7 @@ class MODAL extends EL { // ALIGN VERTICALLY??
 
         // Footer : Contains options to save or cancel out of form
         this.footer = new EL(this.content, 'DIV', new MODEL(new ATTRIBUTES('modal-footer' )));
-
+        
         this.footer.btnClose = new EL(this.footer, 'BUTTON', new MODEL(new ATTRIBUTES({
             'class': 'btn btn-default btn-block',
             'data-dismiss': 'modal',

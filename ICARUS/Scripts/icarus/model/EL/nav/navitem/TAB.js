@@ -9,17 +9,9 @@ class TAB extends LI {
         @param {MODEL} model The object attributes
         @param {string} innerHtml The object innerHtml
      */
-    constructor(node, model, innerHtml) {
+    constructor(node, model) {
         super(node, model);
         this.addClass('nav-item');
-        this.anchor = new ANCHOR(this, model, innerHtml);
-    }
-    
-    /**
-        Sets the achor HREF to the given value
-        @param {string} href The url/reference that this anchor points to
-    */
-    setHref(href) {
-        this.anchor.model.href = href;
+        this.anchor = new ANCHOR(this, model.anchor);
     }
 }

@@ -32,7 +32,10 @@ class NAVHEADER extends NAVITEMGROUP {
                 })
             ).set({
                 'name': model.name,
-                'label': model.label
+                //'label': model.label,
+                'anchor': new MODEL().set({
+                    'label': model.label
+                })
             })
         );
 

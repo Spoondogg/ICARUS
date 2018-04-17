@@ -11,7 +11,6 @@ class NAVITEMTAB extends NAVITEM {
      */
     constructor(node, model) {
         super(node, model, true);
-        this.addClass('dropdown-toggle');
-        this.caret = new CARET(this.anchor);
+        this.addClass('tab');
     }
 }

@@ -10,7 +10,8 @@ class DROPDOWNTAB extends NAVITEMTAB {
      */
     constructor(node, model) {
         super(node, model);
-        this.addClass('nav-item dropdown-tab');
+        this.addClass('nav-item dropdown-tab dropdown-toggle');
+        this.caret = new CARET(this.anchor);
 
         // When clicked, toggle active status
         this.el.onclick = this.toggleMenu.bind(this);

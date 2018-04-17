@@ -88,6 +88,10 @@
     pointer-events: all;
 }
 
+.modal-content .well {
+    margin-bottom: 0;
+}
+
 .modal .loader {
     width: 400px;
     height: 260px;

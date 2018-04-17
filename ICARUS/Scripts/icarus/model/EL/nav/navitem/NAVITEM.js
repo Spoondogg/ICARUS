@@ -11,22 +11,13 @@ class NAVITEM extends LI {
     constructor(node, model) {
 
         // Override the LI label and instead pass label to anchor
-        let label = model.label;
-        model.label = null;
+        //let label = model.label;
+        //model.label = null;
 
         super(node, model);
         this.addClass('nav-item');
         
-        this.anchor = new ANCHOR(this,
-            new MODEL(
-                new ATTRIBUTES({
-                    'class': 'nav-link',
-                    'href': model.url
-                })
-            ).set({
-                'label': label
-            })
-        );
+        this.anchor = new ANCHOR(this, model.anchor);
 
         
 
