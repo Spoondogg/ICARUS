@@ -8,6 +8,7 @@ class ANCHOR extends EL {
         @param {MODEL} model The object model
      */
     constructor(node, model) {
+        console.log('ANCHOR: ' + model.label);
         super(node, 'A', model, model.label);
     }
 }

@@ -47,15 +47,17 @@ class EL extends MODEL {
      */
     create(element, model) {
         model = model || new MODEL();
-        console.log(this.element+'.create(' + element + ') MODEL : ' + model);
-        console.log(model);
+        console.log(this.element+'.create(' + element + ')');
+        //console.log(model);
         let result = null;
         if (this.callbacks[element]) {
             this.callbacks[element].forEach(function (fn) {
                 result = fn(element, model);
             }.bind(this));
         } else {
-            console.log(this.element + '.create(): No constructor exists for element "' + element + '"');   
+            console.log(
+                this.element + '.create(): No constructor exists for element "' + element + '"'
+            );
         }
         return result;
     }

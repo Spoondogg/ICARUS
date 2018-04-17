@@ -20,7 +20,9 @@ class SIDEBAR extends NAVITEMGROUP { // NAVBAR
         }.bind(this);
 
         this.toggleButton = new NAVITEM(this, new MODEL(new ATTRIBUTES('toggle')).set({
-            'label':'<span class="caret"></span>'
+            'anchor': new MODEL().set({
+                'label': '<span class="caret"></span>'
+            })
         }));
         this.toggleButton.anchor.addClass('toggle-wide noselect');
 

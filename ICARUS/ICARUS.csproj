@@ -477,13 +477,14 @@
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitemgroup\dropdownmenu\DROPDOWNMENU.js" />
     <Content Include="Scripts\icarus\model\el\group\dropdownmenugroup\DROPDOWNMENUGROUP.js" />
     <Content Include="Scripts\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERBODY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
-    <Content Include="Scripts\icarus\model\el\container\modal\loader\LOADER.js" />
+    <Content Include="Scripts\icarus\model\el\modal\loader\LOADER.js" />
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\modaltab\MODALTAB.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
@@ -523,7 +524,7 @@
     <Content Include="Scripts\icarus\model\el\text\ANCHOR.js" />
     <Content Include="Scripts\icarus\model\el\group\GROUP.js" />
     <Content Include="Scripts\icarus\model\el\text\LABEL.js" />
-    <Content Include="Scripts\icarus\model\el\container\modal\prompt\PROMPT.js" />
+    <Content Include="Scripts\icarus\model\el\modal\prompt\PROMPT.js" />
     <Content Include="Scripts\icarus\model\el\container\main\article\section\SECTION.js" />
     <Content Include="Scripts\icarus\model\el\container\textblock\TEXTBLOCK.js" />
     <Content Include="Scripts\icarus\model\el\container\main\MAIN.js" />
@@ -537,7 +538,7 @@
     <Content Include="Scripts\icarus\model\el\text\BADGE.js" />
     <Content Include="Scripts\icarus\model\el\group\ul\listgroup\LISTGROUP.js" />
     <Content Include="Scripts\icarus\model\el\graphic\SVG.js" />
-    <Content Include="Scripts\icarus\model\el\container\modal\MODAL.js" />
+    <Content Include="Scripts\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\icarus\_deprec\REPORT.js" />
     <Content Include="Scripts\icarus\model\el\text\p\P.js" />

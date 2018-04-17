@@ -22,7 +22,7 @@ const CONTAINERTYPES = {
     A container can be expanded or hidden and
     have elements added to itself.
 */
-class CONTAINER extends EL {
+class CONTAINER extends GROUP { // EL {
     /**
         @param {EL} node The element to contain the section
         @param {string} element HTML element
@@ -74,51 +74,63 @@ class CONTAINER extends EL {
         // ADD OPTIONS
 
         // Toggle Sidebar
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Toggle Sidebar'
+                'anchor': new MODEL().set({
+                    'label': 'Toggle Sidebar'
+                })
             })
         ).el.onclick = this.toggleSidebar.bind(this);
 
         //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'UP'
+                'anchor': new MODEL().set({
+                    'label': 'UP'
+                })
             })
         );
 
         //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'DN'
+                'anchor': new MODEL().set({
+                    'label': 'DN'
+                })
             })
         );
 
         //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Load'
+                'anchor': new MODEL().set({
+                    'label': 'LOAD'
+                })
             })
         ).el.onclick = this.load.bind(this);
         
         // Add items to Options Dropdown Tab
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL(
                 new ATTRIBUTES({
                     'name': 'save'
                 })
             ).set({
-                'label': 'Save'
+                'anchor': new MODEL().set({
+                    'label': 'SAVE'
+                })
             })
         ).el.onclick = this.save.bind(this);
 
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL(
                 new ATTRIBUTES({
                     'name': 'delete'
                 })
             ).set({
-                'label': 'Delete'
+                'anchor': new MODEL().set({
+                    'label': 'DELETE'
+                })
             })
         ).el.onclick = this.disable.bind(this);
 
@@ -160,13 +172,17 @@ class CONTAINER extends EL {
                     new MODEL(new ATTRIBUTES())
                 ).addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
-                        'label': model.label
+                        'anchor': new MODEL().set({
+                            'label': model.label
+                        })
                     })
                 );
             } else {
                 tab = app.body.sidebar.menu.addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
-                        'label': model.label
+                        'anchor': new MODEL().set({
+                            'label': model.label
+                        })
                     })
                 );
             }
@@ -222,9 +238,11 @@ class CONTAINER extends EL {
         @param {EL} element The element who's tab is being added
     */
     addConstructElementButton(element) {
-        this.navBar.header.options.tab.menu.getGroup('ELEMENTS').addNavItem(
+        this.navBar.header.options.menu.getGroup('ELEMENTS').addNavItem(
             new MODEL().set({
-                'label': 'Create ^' + element
+                'anchor': new MODEL().set({
+                    'label': 'Create ^' + element
+                })
             })
         ).el.onclick = function () {
             this.create(element);
@@ -241,7 +259,7 @@ class CONTAINER extends EL {
         @param {string} element ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
     */
-    addContainerCase(element, addButton) {
+    addContainerCase(element, addButton = true) {
         this.addCase(element,
             function (element, model) {
                 return factory.get(this.body.pane, element, model.id || 0);
@@ -526,7 +544,6 @@ class CONTAINER extends EL {
     */
     setLabel(label) {
         this.navBar.header.tab.anchor.setInnerHTML(label);
-        //this.header.setLabel(label);
         this.label = label;
     }
 

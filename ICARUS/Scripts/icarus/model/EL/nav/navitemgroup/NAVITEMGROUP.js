@@ -16,6 +16,10 @@ class NAVITEMGROUP extends UL {
             return this.addDropDownTab(model);
         }.bind(this));
 
+        this.addCase('DROPDOWNMENU', function (element, model) {
+            return this.addDropDownMenu(model);
+        }.bind(this));
+
         this.addCase('NAVITEMGROUP', function (element, model) {
             return this.addNavItemGroup(model);
         }.bind(this));
@@ -82,6 +86,16 @@ class NAVITEMGROUP extends UL {
     */
     addNavItemGroup(model) {
         this.children.push(new NAVITEMGROUP(this, model));
+        return this.addGroup(this.children[this.children.length - 1]);
+    } 
+
+    /**
+        Constructs a Nav Item with an anchor inside
+        @param {MODEL} model Object model
+        @returns {DROPDOWNMENU} Nav Item with Anchor
+    */
+    addDropDownMenu(model) {
+        this.children.push(new DROPDOWNMENU(this, model));
         return this.addGroup(this.children[this.children.length - 1]);
     } 
 

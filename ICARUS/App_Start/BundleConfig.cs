@@ -64,13 +64,11 @@ namespace ICARUS {
                 // Generic
                 "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
                 "~/Scripts/icarus/WATERMARK.js",
+
+                // Model
                 "~/Scripts/icarus/model/ATTRIBUTES.js",
                 "~/Scripts/icarus/model/MODEL.js",
                 "~/Scripts/icarus/model/el/EL.js",
-
-                // Button
-                "~/Scripts/icarus/model/el/button/BUTTON.js",
-                "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
 
                 // Text
                 "~/Scripts/icarus/model/el/text/ANCHOR.js",
@@ -85,19 +83,55 @@ namespace ICARUS {
                 // Graphic
                 "~/Scripts/icarus/model/el/graphic/SVG.js",
 
-                // Group
+                // Group (Generic Data Structure) (LIST?)
                 "~/Scripts/icarus/model/el/group/GROUP.js",
+                "~/Scripts/icarus/model/el/group/li/LI.js",
+                "~/Scripts/icarus/model/el/group/ul/UL.js",
+
+                // Group > List Items
+                "~/Scripts/icarus/model/el/group/li/dropdownheader/DROPDOWNHEADER.js",
+                "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
+                "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
                 "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
                 "~/Scripts/icarus/model/el/group/dropdownmenugroup/DROPDOWNMENUGROUP.js",
 
-                // List Items
-                "~/Scripts/icarus/model/el/group/li/LI.js",
-                "~/Scripts/icarus/model/el/group/li/dropdownheader/DROPDOWNHEADER.js",
-                "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
+                // Container
+                "~/Scripts/icarus/model/el/container/CONTAINERBODY.js",
+                "~/Scripts/icarus/model/el/container/CONTAINERFACTORY.js",
+                "~/Scripts/icarus/model/el/container/CONTAINER.js",
 
-                // List
-                "~/Scripts/icarus/model/el/group/ul/UL.js",
-                "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
+                
+
+                // Button
+                "~/Scripts/icarus/model/el/button/BUTTON.js",
+                "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
+
+                // Modal Dialog
+                "~/Scripts/icarus/model/el/modal/MODAL.js",
+                "~/Scripts/icarus/model/el/modal/loader/LOADER.js",
+                "~/Scripts/icarus/model/el/modal/modalmenu/MODALMENU.js",
+                "~/Scripts/icarus/model/el/modal/prompt/PROMPT.js",
+
+                // Container > NAV
+                "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
+                "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
+                "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
+
+                // Container > NAV > NAVITEMGROUP
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVBARCOLLAPSE.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADER.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADEROPTIONS.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
+                "~/Scripts/icarus/model/el/nav/navitemgroup/SIDEBAR.js",
+
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
+                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/modaltab/MODALTAB.js",
+
+                "~/Scripts/icarus/model/el/nav/navitemgroup/dropdownmenu/DROPDOWNMENU.js",
+                
 
                 // Layout and Navigation
                 "~/Scripts/icarus/model/el/nav/NAV.js",
@@ -106,35 +140,16 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/footer/FOOTER.js",
                 "~/Scripts/icarus/model/el/footer/stickyfooter/STICKYFOOTER.js",
 
-                "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
-                "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
-                "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
-                "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
-                "~/Scripts/icarus/model/el/nav/navitem/navitemtab/modaltab/MODALTAB.js",
 
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVBARCOLLAPSE.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADER.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADEROPTIONS.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/SIDEBAR.js",
 
-                "~/Scripts/icarus/model/el/nav/navitemgroup/dropdownmenu/DROPDOWNMENU.js",
+                
+                
+                
 
                 
                 
 
-                // Container
-                "~/Scripts/icarus/model/el/container/CONTAINERBODY.js",
-                "~/Scripts/icarus/model/el/container/CONTAINERFACTORY.js",
-                "~/Scripts/icarus/model/el/container/CONTAINER.js",
-
-                    // Modal
-                    "~/Scripts/icarus/model/el/container/modal/MODAL.js",
-                    "~/Scripts/icarus/model/el/container/modal/loader/LOADER.js",
-                    "~/Scripts/icarus/model/el/container/modal/prompt/PROMPT.js",
+                
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",

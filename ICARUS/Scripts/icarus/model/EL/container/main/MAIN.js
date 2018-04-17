@@ -40,19 +40,26 @@ class MAIN extends CONTAINER {
         Add items to Options Dropdown Tab
      */
     addNavOptions() {
-        this.navBar.header.options.tab.menu.addNavSeparator();
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavSeparator();
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Log Out',
-                'url': '#?url=logout'
+                //'label': 'Log Out',
+                'anchor': new MODEL().set({
+                    'label': 'Log Out',
+                    'url': '#?url=logout'
+                })
+                //'url': '#?url=logout'
             })
         ).el.onclick = this.logout.bind(this);
 
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL(new ATTRIBUTES({
                 'style': 'color:green;background-color:red;'
             })).set({
-                'label': 'Toggle Options Menu (Main)'
+                'anchor': new MODEL().set({
+                    'label': 'Toggle Options Menu (Main)'
+                })
+                //'label': 'Toggle Options Menu (Main)'
             })
         ).el.onclick = function () {
             console.log('DEV: Create Modal and populate with options');
@@ -67,25 +74,36 @@ class MAIN extends CONTAINER {
         }.bind(this);
 
         // Toggle Sidebar
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Toggle Sidebar (Main)'
+                //'label': 'Toggle Sidebar (Main)'
+                'anchor': new MODEL().set({
+                    'label': 'Toggle Sidebar (Main)'
+                })
             })
         ).el.onclick = this.toggleSidebar.bind(this);
 
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Manage User',
-                'url': 'Manage/Index'
+                'anchor': new MODEL().set({
+                    'label': 'Manage User',
+                    'url': 'Manage/Index'
+                })
+
+                //'label': 'Manage User',
+                //'url': 'Manage/Index'
             })
         );
 
-        this.navBar.header.options.tab.menu.addNavSeparator();
+        this.navBar.header.options.menu.addNavSeparator();
 
         // Button to toggle Headers
-        this.navBar.header.options.tab.menu.addNavItem(
+        this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
-                'label': 'Toggle Headers'
+                //'label': 'Toggle Headers'
+                'anchor': new MODEL().set({
+                    'label': 'Toggle Headers'
+                })
             })
         ).el.onclick = this.toggleHeaders.bind(this);
     }
