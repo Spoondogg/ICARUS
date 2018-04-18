@@ -11,11 +11,11 @@ class UL extends GROUP {
         super(node, 'UL', model);
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('UL', function (element, model) {
+        this.addCase('UL', function (model) {
             return this.addUnorderedList(model);
         }.bind(this));
 
-        this.addCase('LI', function (element, model) {
+        this.addCase('LI', function (model) {
             return this.addListItem(model);
         }.bind(this));
     }

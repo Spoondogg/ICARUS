@@ -25,6 +25,7 @@ namespace ICARUS.Models.Icarus.Elements {
             if (alignRight) {
                 this.attributes.Add("data-align", "right");
             }
+            this.className = "DROPDOWN";
         }
 
         /// <summary>

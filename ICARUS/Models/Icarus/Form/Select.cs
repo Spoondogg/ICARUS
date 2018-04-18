@@ -18,7 +18,7 @@ namespace ICARUS.Models {
         public Select() : base("SELECT", new MODEL() {
             label = "SELECT"
         }) {
-
+            this.className = "SELECT";
         }
 
         /// <summary>

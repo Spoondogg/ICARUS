@@ -17,7 +17,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="attributes"></param>
         /// <param name="label">The text to be displayed within the LI tags</param>
         public LISTITEM(string label = null, MODEL model = null) : base("LI", model) {
-
+            this.className = "LISTITEM";
         }
     }
 }

@@ -19,8 +19,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public ANCHOR(
             MODEL model, string innerHtml
         ) : base("A", model, innerHtml) {
-
+            this.className = "ANCHOR";
         }
-
     }
 }

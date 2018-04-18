@@ -24,7 +24,8 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="label"></param>
         /// <param name="collapsed">If true, the section will initially be collapsed</param>
         public TEXTBLOCK(MODEL model, string label) : base("TEXTBLOCK", model) {
-            this.label = label;     
+            this.label = label;
+            this.className = "TEXTBLOCK";
         }        
     }
 }

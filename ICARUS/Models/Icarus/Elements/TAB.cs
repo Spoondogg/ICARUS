@@ -23,6 +23,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public TAB(string label, int articleId) : base(label, "#") {
             this.attributes.Add("class", "dropdown");
             this.attributes.Add("data-articleId", articleId);
+            this.className = "TAB";
         }
 
         /// <summary>

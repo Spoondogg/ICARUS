@@ -45,7 +45,7 @@ class MODAL extends EL { // ALIGN VERTICALLY??
             'aria-hidden': 'true'
         })), 'x');
 
-        this.header.main = new HEADER(this.header);
+        this.header.main = new HEADER(this.header, new MODEL());
         this.header.main.addClass('modal-title');
 
         this.header.text = new EL(this.header.main, 'DIV', new MODEL(), title);
@@ -56,9 +56,13 @@ class MODAL extends EL { // ALIGN VERTICALLY??
         this.well = new WELL(this.content, new MODEL(), text);
 
         // Body	: Place forms, objects etc inside 'this.modalbody.el'
-        this.container = new CONTAINER(this.content, 'DIV', new MODEL(new ATTRIBUTES('modal-body')).set({
-            'label': 'Modal Body'
-        }));
+        this.container = new CONTAINER(
+            this.content, 'DIV',
+            new MODEL(new ATTRIBUTES('modal-body')).set({
+                'label': 'Modal Body',
+                'showHeader': 1
+            })
+        );
 
         // Footer : Contains options to save or cancel out of form
         this.footer = new EL(this.content, 'DIV', new MODEL(new ATTRIBUTES('modal-footer' )));

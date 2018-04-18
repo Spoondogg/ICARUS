@@ -13,6 +13,7 @@ class NAVBAR extends NAV {
         this.addClass('navbar-nav');
         
         this.header = new NAVHEADER(this, new MODEL().set({
+            'className': 'NAVHEADER',
             'name': 'header',
             'label': node.label
         }));

@@ -4,24 +4,18 @@
 class NAVHEADEROPTIONS extends NAVITEMGROUP {
 
     /**
-     * An Options Tab and its corresponding ModalMenu
-     * @param {EL} node Parent
-     * @param {MODEL} model Object
+        An Options Tab and its corresponding ModalMenu
+        @param {EL} node Parent
+        @param {MODEL} model Object
      */
     constructor(node, model) {
         super(node, model);
         this.addClass('navbar-nav-right pull-right');
 
-        // Modal Dependency Issues
-        //this.modal = new MODALMENU('ModalMenu', 'A Modal Menu');
-
         this.modal = null;
 
         // THIS NEEDS TO BECOME A MODALMENU
-        this.menu = new DROPDOWNMENU(this, new MODEL(
-            new ATTRIBUTES({
-                'style':'display:none;'
-            })).set({
+        this.menu = new DROPDOWNMENU(this, new MODEL().set({
             'name': 'menu'
         }));
 
@@ -33,44 +27,62 @@ class NAVHEADEROPTIONS extends NAVITEMGROUP {
             })
         ).set({
             'anchor': new MODEL().set({
+                'className': 'ANCHOR',
                 'label': 'Options'
             })
         }));
         this.tab.anchor.addClass('pull-right');
+
+        /*
         this.tab.anchor.el.onclick = function () {
             this.tab.toggleClass();
             //$(this).toggleClass('active');
             this.menu.toggleClass();
         }.bind(this);
+        */
 
-        
+            
+
 
         this.tab.anchor.el.onclick = function () {
             console.log('Toggle Options Menu');
+            this.menu.toggle();
 
             let testItems = [
+
                 new MODEL().set({
+                    'className': 'NAVITEM',
                     'element': 'NAVITEM',
-                    'label': 'BUTTON ONE',
+                    'anchor': new MODEL().set({
+                        'className': 'ANCHOR',
+                        'label': 'BUTTON ONE'
+                    }),
                     'icon': ICON.COG
                 }),
 
                 new MODEL().set({
+                    'className': 'NAVITEM',
                     'element': 'NAVITEM',
-                    'label': 'BUTTON TWO',
+                    'anchor': {
+                        'label': 'BUTTON TWO'
+                    },
                     'icon': ICON.COG
                 }),
 
                 new MODEL().set({
+                    'className': 'NAVITEM',
                     'element': 'NAVITEM',
-                    'label': 'BUTTON THREE',
+                    'anchor': {
+                        'label': 'BUTTON THREE'
+                    },
                     'icon': ICON.COG
                 })
             ];
 
             this.modal = new MODALMENU(
                 'Options', 'An Options Menu',
-                this.menu.children, true
+                testItems, //this.menu.children,
+                true
             );
 
             this.modal.show();

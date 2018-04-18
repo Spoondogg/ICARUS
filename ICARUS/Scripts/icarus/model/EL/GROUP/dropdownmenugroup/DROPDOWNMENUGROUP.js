@@ -2,7 +2,7 @@
     A group that contains drop down menu items.
     
  */
-class DROPDOWNMENUGROUP extends GROUP {
+class DROPDOWNMENUGROUP extends CONTAINER { // GROUP {
 
     /**
         Construct a dropdown menu group
@@ -15,13 +15,16 @@ class DROPDOWNMENUGROUP extends GROUP {
 
         this.header = new DROPDOWNHEADER(this, model.label);
 
-        this.addCase('NAVITEM', function (element, model) {
+        /*
+        this.addCase('NAVITEM', function (model) {
             return this.addNavItem(model);
         }.bind(this));
 
-        this.addCase('NAVSEPARATOR', function (element, model) {
+        this.addCase('NAVSEPARATOR', function (model) {
             return this.addNavSeparator();
         }.bind(this));
+        */
+        this.addContainerCase('NAVITEM');
     }
 
     /**
@@ -30,7 +33,7 @@ class DROPDOWNMENUGROUP extends GROUP {
         @returns {NAVITEM} A nav item
      */
     addNavItem(model) {
-        model = model || new MODEL(new ATTRIBUTES(), 'Nav Item');
+        //model = model || new MODEL(new ATTRIBUTES(), 'Nav Item');
         this.children.push(
             new NAVITEM(this, model) //, model.hasDropdown
         );

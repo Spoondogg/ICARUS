@@ -27,7 +27,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="listType"></param>
         /// <param name="model"></param>
         public LIST(string listType, MODEL model) : base("UL", model) {
-            
+            this.className = "LIST";
         }
 
         /// <summary>

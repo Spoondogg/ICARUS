@@ -36,6 +36,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.backgroundUrl = backgroundUrl;
             this.header = header;
             this.text = text;
+            this.className = "JUMBOTRON";
         }
     }
 }

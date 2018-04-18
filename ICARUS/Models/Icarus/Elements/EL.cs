@@ -23,6 +23,12 @@ namespace ICARUS.Models.Icarus {
     public class EL : MODEL {
 
         /// <summary>
+        /// The name of this class that this object is based on
+        /// </summary>
+        [StringLength(64), Required]
+        public string className;
+
+        /// <summary>
         /// The html element that this object is based on
         /// </summary>
         [StringLength(64), Required]
@@ -70,6 +76,7 @@ namespace ICARUS.Models.Icarus {
         /// <param name="model">Object Model</param>
         /// <param name="innerHtml">Optional HTML string to display within this element</param>
         public EL(string element, MODEL model, string innerHtml = "") : base (model.attributes) {
+            this.className = this.GetType().Name;
             this.element = element;
             this.innerHtml = innerHtml;
             this.children = new List<Object>();

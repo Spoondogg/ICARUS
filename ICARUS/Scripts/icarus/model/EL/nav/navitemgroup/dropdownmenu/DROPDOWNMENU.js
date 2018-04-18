@@ -10,10 +10,12 @@ class DROPDOWNMENU extends NAVITEMGROUP { // UL || POSIBLE NAVITEMGROUP
      */
     constructor(node, model) {
         super(node, model);
+        this.className = 'DROPDOWNMENU';
+
         this.addClass('dropdown-menu navbar-inverse');
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('DROPDOWNMENUGROUP', function (element, model) {
+        this.addCase('DROPDOWNMENUGROUP', function (model) {
             return this.addDropDownMenuGroup(model);
         }.bind(this));
     }

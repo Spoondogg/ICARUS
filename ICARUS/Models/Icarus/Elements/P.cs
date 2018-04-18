@@ -33,7 +33,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public P(string className = null, string innerHtml = "") : base(
             "P", new MODEL(new ATTRIBUTES(className)), innerHtml
         ) {
-
+            this.className = "P";
         }
     }
 }

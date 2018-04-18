@@ -19,16 +19,13 @@ class BUTTONGROUP extends GROUP {
         this.addClass('btn-group-' + size ? size : SIZE.EXTRA_SMALL);
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('BUTTON', function (element, model) {
+        this.addCase('BUTTON', function (model) {
             return this.addButton(model.label, model.glyphicon, model.buttonType);
         }.bind(this));
 
-        this.addCase('TOGGLEBUTTON', function (element, model) {
+        this.addCase('TOGGLEBUTTON', function (model) {
             return this.addToggleButton(model.label, model.glyphicon, model.buttonType);
         }.bind(this));
-
-        // Holds a collection of BUTTONS within this group
-        //this.buttons = []; // TODO This should be children[]
     }
     
     /**

@@ -18,7 +18,7 @@ namespace ICARUS.Models {
         public Option() : base("OPTION", new MODEL() {
             label = "OPTION"
         }) {
-
+            this.className = "OPTION";
         }
 
         /// <summary>

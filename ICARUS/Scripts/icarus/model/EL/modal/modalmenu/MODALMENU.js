@@ -12,17 +12,37 @@ class MODALMENU extends MODAL { // CALL ME A MENU!!!!
         @param {boolean} vertical If true, prompt is vertically centered
      */
     constructor(label, text, children, vertical) {
-        console.log('MODALMENU('+label+');');
+        console.log('MODALMENU(' + label + ');');
+        console.log(children);
         super(label, text, vertical);
         this.addClass('prompt');
 
         console.log('Creating Modal Menu...');
-        this.menu = new NAVITEMGROUP(this.container.body.pane, new MODEL(
-            new ATTRIBUTES('nav navbar-nav navbar-inverse')
-        ).set({
-            'name': 'menu'
-            //'children': children
-        }));
+
+        //this.container.addContainerCase('NAVITEMGROUP')
+
+        
+        this.menu = new NAVITEMGROUP(
+            this.container.body.pane,
+            new MODEL(
+                new ATTRIBUTES('navbar-inverse')
+            ).set({
+                'className': 'NAVITEMGROUP',
+                'name': 'menu'
+            })
+        );
+        
+        /* THIS IS WRONG, learn from this
+         * // Why have a method instead of calling the constructor?
+        this.menu = this.container.create(
+
+            new MODEL(
+                new ATTRIBUTES('nav navbar-nav navbar-inverse')
+            ).set({
+                'className'
+                'name': 'menu'
+            })
+        );*/
 
         this.menu.populate(children);
     }    

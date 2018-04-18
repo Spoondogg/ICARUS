@@ -24,6 +24,7 @@ namespace ICARUS.Models {
             //this.label = "INPUT";
             this.attributes.Add("name", Guid.NewGuid());
             //this.attributes.Add("value", "woot");
+            this.className = "INPUT";
         }
 
         /// <summary>
