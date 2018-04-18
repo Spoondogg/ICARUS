@@ -13,7 +13,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// </summary>
         /// <param name="label"></param>
         public FOOTER(string label) : base("FOOTER", new MODEL(new ATTRIBUTES(), label)) {
-
+            this.className = "FOOTER";
         }
     }
 }

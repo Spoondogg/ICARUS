@@ -11,7 +11,7 @@ class LISTGROUP extends UL {
         super(node, new MODEL(new ATTRIBUTES('list-group')));
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('LISTGROUPITEM', function (element, model) {
+        this.addCase('LISTGROUPITEM', function (model) {
             this.children.push(
                 new LISTGROUPITEM(this, model.attributes, model.innerHtml, model.badgeText)
             );

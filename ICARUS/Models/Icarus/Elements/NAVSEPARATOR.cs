@@ -18,6 +18,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public NAVSEPARATOR() : base() {
             this.attributes.Add("role", "separator");
             this.attributes.Add("class", "divider");
+            this.className = "NAVSEPARATOR";
         }
     }
 }

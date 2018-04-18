@@ -18,7 +18,7 @@ namespace ICARUS.Models {
         public FieldSet() : base("FIELDSET", new MODEL() {
             label = "FIELDSET"
         }) {
-
+            this.className = "FIELDSET";
         }
 
         /// <summary>

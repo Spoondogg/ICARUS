@@ -79,6 +79,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasSidebar = 0;
             this.status = 1;
             this.formPostId = 0;
+            this.className = "CONTAINER";
         }
 
         /// <summary>
@@ -92,6 +93,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dateCreated = DateTime.Now;
             this.dateLastModified = DateTime.Now;
             this.updateContainerModel(formPost);
+            this.className = "CONTAINER";
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace ICARUS.Models.Icarus {
         public FormElementGroup() : base("FORMELEMENTGROUP", new MODEL() {
             label = "FORMELEMENTGROUP"
         }) {
-
+            this.className = "FORMELEMENTGROUP";
         }
 
         /// <summary>

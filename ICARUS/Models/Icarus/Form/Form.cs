@@ -24,7 +24,7 @@ namespace ICARUS.Models {
         public Form() : base("FORM", new MODEL() {
             label = "FORM"
         }) {
-
+            this.className = "FORM";
         }
 
         /// <summary>

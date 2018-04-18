@@ -83,34 +83,18 @@ namespace ICARUS {
                 // Graphic
                 "~/Scripts/icarus/model/el/graphic/SVG.js",
 
+
                 // Group (Generic Data Structure) (LIST?)
                 "~/Scripts/icarus/model/el/group/GROUP.js",
-                "~/Scripts/icarus/model/el/group/li/LI.js",
-                "~/Scripts/icarus/model/el/group/ul/UL.js",
 
-                // Group > List Items
-                "~/Scripts/icarus/model/el/group/li/dropdownheader/DROPDOWNHEADER.js",
-                "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
-                "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
-                "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
-                "~/Scripts/icarus/model/el/group/dropdownmenugroup/DROPDOWNMENUGROUP.js",
-
-                // Container
+                // Group > Container
                 "~/Scripts/icarus/model/el/container/CONTAINERBODY.js",
                 "~/Scripts/icarus/model/el/container/CONTAINERFACTORY.js",
                 "~/Scripts/icarus/model/el/container/CONTAINER.js",
 
-                
-
-                // Button
-                "~/Scripts/icarus/model/el/button/BUTTON.js",
-                "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
-
-                // Modal Dialog
-                "~/Scripts/icarus/model/el/modal/MODAL.js",
-                "~/Scripts/icarus/model/el/modal/loader/LOADER.js",
-                "~/Scripts/icarus/model/el/modal/modalmenu/MODALMENU.js",
-                "~/Scripts/icarus/model/el/modal/prompt/PROMPT.js",
+                // Group > List
+                "~/Scripts/icarus/model/el/group/li/LI.js",
+                "~/Scripts/icarus/model/el/group/ul/UL.js",
 
                 // Container > NAV
                 "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
@@ -131,6 +115,29 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/nav/navitem/navitemtab/modaltab/MODALTAB.js",
 
                 "~/Scripts/icarus/model/el/nav/navitemgroup/dropdownmenu/DROPDOWNMENU.js",
+
+                // Group > List Items
+                "~/Scripts/icarus/model/el/group/li/dropdownheader/DROPDOWNHEADER.js",
+                "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
+                "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
+                "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
+                "~/Scripts/icarus/model/el/group/dropdownmenugroup/DROPDOWNMENUGROUP.js",
+
+                
+
+                
+
+                // Button
+                "~/Scripts/icarus/model/el/button/BUTTON.js",
+                "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
+
+                // Modal Dialog
+                "~/Scripts/icarus/model/el/modal/MODAL.js",
+                "~/Scripts/icarus/model/el/modal/loader/LOADER.js",
+                "~/Scripts/icarus/model/el/modal/modalmenu/MODALMENU.js",
+                "~/Scripts/icarus/model/el/modal/prompt/PROMPT.js",
+
+                
                 
 
                 // Layout and Navigation

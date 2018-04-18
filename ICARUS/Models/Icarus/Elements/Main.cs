@@ -37,6 +37,8 @@ namespace ICARUS.Models.Icarus {
 
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);
+
+            this.className = "MAIN";
         }
 
         /// <summary>
@@ -48,6 +50,8 @@ namespace ICARUS.Models.Icarus {
         public Main(FormPost formPost) : base("MAIN", formPost) {
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);
+
+            this.className = "MAIN";
         }
     }
 }

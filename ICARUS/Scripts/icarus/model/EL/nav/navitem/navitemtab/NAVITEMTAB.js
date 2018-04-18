@@ -12,5 +12,6 @@ class NAVITEMTAB extends NAVITEM {
     constructor(node, model) {
         super(node, model, true);
         this.addClass('tab');
+        this.className = 'NAVITEMTAB';
     }
 }

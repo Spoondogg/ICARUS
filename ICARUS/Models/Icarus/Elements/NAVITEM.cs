@@ -23,6 +23,8 @@ namespace ICARUS.Models.Icarus.Elements {
         public NAVITEM(string label = "NAVITEM", string url = "#") : base(label) {
             this.attributes.Add("href", url);
             this.anchor = new ANCHOR(this, label);
+
+            this.className = "NAVITEM";
         }
 
         /// <summary>

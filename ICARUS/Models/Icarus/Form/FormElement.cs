@@ -16,7 +16,7 @@ namespace ICARUS.Models {
         /// Generic FormElement Constructor for Entity
         /// </summary>
         public FormElement() : base("FORMELEMENT", new MODEL()) {
-
+            this.className = "FORMELEMENT";
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace ICARUS.Models {
         public TextArea() : base("TEXTAREA", new MODEL() {
             label = "TEXTAREA"
         }) {
-
+            this.className = "TEXTAREA";
         }
 
         /// <summary>

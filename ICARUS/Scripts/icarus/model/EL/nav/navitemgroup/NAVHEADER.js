@@ -18,7 +18,10 @@ class NAVHEADER extends NAVITEMGROUP {
                     'name': 'tabs',
                     'class': 'navbar-nav-left pull-left'
                 }), 'tabs'
-            ).set('name', 'tabs')
+            ).set({
+                'className': 'NAVITEMGROUP',
+                'name': 'tabs'
+            })
         );
 
         // Add a default tab to show/hide the collapse
@@ -31,9 +34,10 @@ class NAVHEADER extends NAVITEMGROUP {
                     'title': model.element
                 })
             ).set({
+                'className': 'NAVITEM',
                 'name': model.name,
-                //'label': model.label,
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': model.label
                 })
             })
@@ -41,11 +45,13 @@ class NAVHEADER extends NAVITEMGROUP {
 
         // Right aligned group
         this.options = new NAVHEADEROPTIONS(this, new MODEL().set({
+            'className': 'NAVHEADEROPTIONS',
             'name': 'options'
         }));
 
         // A collapseable panel
         this.collapse = new NAVBARCOLLAPSE(this, new MODEL().set({
+            'className': 'NAVBARCOLLAPSE',
             'name': 'collapse'
         }));        
     }

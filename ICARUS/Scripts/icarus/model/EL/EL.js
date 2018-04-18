@@ -11,10 +11,11 @@ class EL extends MODEL {
         @param {array} children An object array of child models
     */
     constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) { 
-        model = model || new MODEL(new ATTRIBUTES());
+        //model = model || new MODEL(new ATTRIBUTES());
         super(model.attributes);
 
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
+        this.className = this.constructor.name;
         this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 
         this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
@@ -41,35 +42,39 @@ class EL extends MODEL {
         whereas an actual SWITCH statement would be overridden on each inheritted class.
         @see https://stackoverflow.com/a/35769291/722785
     
-        @param {string} element Element to construct
+        param {string} className Icarus Class to construct
         @param {MODEL} model The object to be created
         @returns {EL} Constructed Element
      */
-    create(element, model) {
-        model = model || new MODEL();
-        console.log(this.element+'.create(' + element + ')');
+    create(model) {
+        //model = model || new MODEL();
+        console.log(this.className+'.create(' + model.className + ')');
         //console.log(model);
         let result = null;
-        if (this.callbacks[element]) {
-            this.callbacks[element].forEach(function (fn) {
-                result = fn(element, model);
+        try {
+            //if (this.callbacks[model.className]) {
+            this.callbacks[model.className].forEach(function (fn) {
+                result = fn(model);
             }.bind(this));
-        } else {
+            //} else {
+        } catch (e) {
             console.log(
-                this.element + '.create(): No constructor exists for element "' + element + '"'
+                this.className + '.create(): No constructor exists '
+                + 'for className "' + model.className + '"'
             );
+            console.log(e);
         }
         return result;
     }
 
     /**
         Add a case to the creator EL.create();
-        @param {string} element HtmlElement.DIV
+        @param {string} className The Icarus Class name that this callback is meant to construct
         @param {Function} fn Function to call (should accept model)
     */
-    addCase(element, fn) {
-        this.callbacks[element] = this.callbacks[element] || [];
-        this.callbacks[element].push(fn);
+    addCase(className, fn) {
+        this.callbacks[className] = this.callbacks[className] || [];
+        this.callbacks[className].push(fn);
     }
 
     /**
@@ -230,10 +235,11 @@ class EL extends MODEL {
     */
     populate(children) {
         if (children) {
-            console.log(this.element + '.populate();');
+            console.log(this.className + '.populate(' + children.length + ');');
             try {
                 for (let c = 0; c < children.length; c++) {
-                    this.create(children[c].element, children[c]);
+                    //this.create(children[c].className, children[c]);
+                    this.create(children[c]);
                 }
             } catch (e) { console.log(e); }
         }

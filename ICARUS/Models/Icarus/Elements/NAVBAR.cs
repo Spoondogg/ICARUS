@@ -43,6 +43,8 @@ namespace ICARUS.Models.Icarus.Elements {
             //this.label = label;
             this.navLeft = new List<NAVITEM>();
             this.navRight = new List<NAVITEM>();
+
+            this.className = "NAVBAR";
         }
     }
 }

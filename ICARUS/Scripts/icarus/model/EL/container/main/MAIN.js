@@ -45,6 +45,7 @@ class MAIN extends CONTAINER {
             new MODEL().set({
                 //'label': 'Log Out',
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'Log Out',
                     'url': '#?url=logout'
                 })
@@ -57,6 +58,7 @@ class MAIN extends CONTAINER {
                 'style': 'color:green;background-color:red;'
             })).set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'Toggle Options Menu (Main)'
                 })
                 //'label': 'Toggle Options Menu (Main)'
@@ -78,6 +80,7 @@ class MAIN extends CONTAINER {
             new MODEL().set({
                 //'label': 'Toggle Sidebar (Main)'
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'Toggle Sidebar (Main)'
                 })
             })
@@ -86,6 +89,7 @@ class MAIN extends CONTAINER {
         this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'Manage User',
                     'url': 'Manage/Index'
                 })

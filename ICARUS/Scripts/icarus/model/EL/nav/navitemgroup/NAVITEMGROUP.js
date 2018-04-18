@@ -9,30 +9,32 @@ class NAVITEMGROUP extends UL {
      */
     constructor(node, model) {
         super(node, model);
+        this.className = 'NAVITEMGROUP'; 
+
         this.addClass('nav navbar-nav');
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('DROPDOWNTAB', function (element, model) {
+        this.addCase('DROPDOWNTAB', function (model) {
             return this.addDropDownTab(model);
         }.bind(this));
 
-        this.addCase('DROPDOWNMENU', function (element, model) {
+        this.addCase('DROPDOWNMENU', function (model) {
             return this.addDropDownMenu(model);
         }.bind(this));
 
-        this.addCase('NAVITEMGROUP', function (element, model) {
+        this.addCase('NAVITEMGROUP', function (model) {
             return this.addNavItemGroup(model);
         }.bind(this));
 
-        this.addCase('NAVITEM', function (element, model) {
+        this.addCase('NAVITEM', function (model) {
             return this.addNavItem(model);
         }.bind(this));
 
-        this.addCase('NAVSEPARATOR', function (element, model) {
+        this.addCase('NAVSEPARATOR', function (model) {
             return this.addNavSeparator();
         }.bind(this));
 
-        this.addCase('NAVBARCOLLAPSE', function (element, model) {
+        this.addCase('NAVBARCOLLAPSE', function (model) {
             return this.addNavBarCollapse(model);
         }.bind(this));
     }

@@ -9,24 +9,25 @@ class NAVITEM extends LI {
         @param {boolean} hasDropdown If true, a dropdown is created
      */
     constructor(node, model) {
-
         // Override the LI label and instead pass label to anchor
         //let label = model.label;
         //model.label = null;
 
+        console.log('Constructing NAVITEM.\nAnchor Model:');
+        console.log(model.anchor);
+
         super(node, model);
+        this.className = 'NAVITEM';
         this.addClass('nav-item');
         
         this.anchor = new ANCHOR(this, model.anchor);
 
-        
-
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('NAVITEMGROUP', function (element, model) {
+        this.addCase('NAVITEMGROUP', function (model) {
             return this.addNavItemGroup(model);
         }.bind(this));
 
-        this.addCase('DROPDOWNMENU', function (element, model) {
+        this.addCase('DROPDOWNMENU', function (model) {
             return this.addDropDownMenu(model);
         }.bind(this));
 

@@ -17,6 +17,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="copy">Copywrite text</param>
         public STICKYFOOTER(string copy) : base(copy) {
             this.attributes.Add("class", "stickyfooter");
+            this.className = "STICKYFOOTER";
         }
     }
 }

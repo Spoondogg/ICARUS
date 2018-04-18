@@ -77,6 +77,7 @@ class CONTAINER extends GROUP { // EL {
         this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'Toggle Sidebar'
                 })
             })
@@ -86,6 +87,7 @@ class CONTAINER extends GROUP { // EL {
         this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'UP'
                 })
             })
@@ -95,6 +97,7 @@ class CONTAINER extends GROUP { // EL {
         this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'DN'
                 })
             })
@@ -104,6 +107,7 @@ class CONTAINER extends GROUP { // EL {
         this.navBar.header.options.menu.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'LOAD'
                 })
             })
@@ -117,6 +121,7 @@ class CONTAINER extends GROUP { // EL {
                 })
             ).set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'SAVE'
                 })
             })
@@ -129,13 +134,14 @@ class CONTAINER extends GROUP { // EL {
                 })
             ).set({
                 'anchor': new MODEL().set({
+                    'className': 'ANCHOR',
                     'label': 'DELETE'
                 })
             })
         ).el.onclick = this.disable.bind(this);
 
         /* Wrap up construction */
-        this.populate(model.children);
+        // this.populate(model.children); // NOT NEEDED IN THIS / SUPER()
 
         if (this.collapsed) {
             this.collapse();
@@ -173,6 +179,7 @@ class CONTAINER extends GROUP { // EL {
                 ).addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
                         'anchor': new MODEL().set({
+                            'className': 'ANCHOR',
                             'label': model.label
                         })
                     })
@@ -181,6 +188,7 @@ class CONTAINER extends GROUP { // EL {
                 tab = app.body.sidebar.menu.addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
                         'anchor': new MODEL().set({
+                            'className': 'ANCHOR',
                             'label': model.label
                         })
                     })
@@ -235,17 +243,19 @@ class CONTAINER extends GROUP { // EL {
 
     /**
         Adds the Construct 'element' button to the options menu
-        @param {EL} element The element who's tab is being added
+        @param {string} className Element constructor class name
     */
-    addConstructElementButton(element) {
-        this.navBar.header.options.menu.getGroup('ELEMENTS').addNavItem(
+    addConstructElementButton(className) {
+        this.navBar.header.options.menu.getGroup('ELEMENTS').create( //addNavItem(
             new MODEL().set({
+                'className': 'NAVITEM',
+                'element': 'LI',
                 'anchor': new MODEL().set({
-                    'label': 'Create ^' + element
+                    'label': 'Create ^' + className
                 })
             })
         ).el.onclick = function () {
-            this.create(element);
+            this.create(className);
         }.bind(this);
     }
 
@@ -256,17 +266,17 @@ class CONTAINER extends GROUP { // EL {
         Sets the constructor callback for this element
         and adds respective tabs etc to this container
 
-        @param {string} element ie SECTION or FORM
+        @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
     */
-    addContainerCase(element, addButton = true) {
-        this.addCase(element,
-            function (element, model) {
-                return factory.get(this.body.pane, element, model.id || 0);
+    addContainerCase(className, addButton = true) {
+        this.addCase(className,
+            function (model) {
+                return factory.get(this.body.pane, className, model.id || 0);
             }.bind(this)
         );
         if (!addButton) {
-            this.addConstructElementButton(element);
+            this.addConstructElementButton(className);
         }
     }
 
