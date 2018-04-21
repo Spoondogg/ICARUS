@@ -101,7 +101,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private JsonResult getJson(int id) {
+        public virtual JsonResult getJson(int id) {
             
             EL model = (EL)db.dbSets[this.className].Find(id);
             if (model.authorId == User.Identity.Name) {
@@ -124,7 +124,19 @@ namespace ICARUS.Controllers {
                 } catch (Exception ex) { /*message += "\n No children exist or " + ex.Message; */ }
                 
                 // Attach formPost (if exists)
+                if(model.attributesId > 0) {
+                    FormPost attributes = (FormPost)db.dbSets["FormPost"].Find(model.attributesId);
+                    model.attributes.Add("data-woot", "woot"); // <== works                    
+                    /*
+                    foreach (var attr in attributes.results) {
+                        try {
+                            model.attributes.Add(attr.name, attr.value);
+                        } catch (Exception ea) {
 
+                        }                        
+                    } 
+                    */
+                }
 
                 // Return the fully constructed model
                 return Json(new Payload(

@@ -47,9 +47,14 @@ class FORM extends CONTAINER {
         Disables all fieldsets within this form
     */
     lock() {
-        console.log('Locking form...');
-        for (let i = 0; i < this.children.length; i++) {
-            this.children[i].el.disabled = true;
+        try {
+            console.log('Locking form...');
+            for (let i = 0; i < this.children.length; i++) {
+                this.children[i].el.disabled = true;
+            }
+        } catch (e) {
+            console.log('Unable to lock this form');
+            console.log(e);
         }
     }
 

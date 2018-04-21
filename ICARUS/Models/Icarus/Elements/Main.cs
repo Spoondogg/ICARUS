@@ -33,10 +33,10 @@ namespace ICARUS.Models.Icarus {
             this.collapsed = 0;
             this.hasTab = 0;
             this.hasSidebar = 1;
-            this.formPostId = 0;
+            this.attributesId = 0;
 
             this.navBar = new NAVBAR(true, true);
-            this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);
+            this.footer = new STICKYFOOTER(); //"&copy; " + @DateTime.Now.Year
 
             this.className = "MAIN";
         }
@@ -49,7 +49,7 @@ namespace ICARUS.Models.Icarus {
         /// <param name="name"></param>
         public Main(FormPost formPost) : base("MAIN", formPost) {
             this.navBar = new NAVBAR(true, true);
-            this.footer = new STICKYFOOTER("&copy; " + @DateTime.Now.Year);
+            this.footer = new STICKYFOOTER(); //"&copy; " + @DateTime.Now.Year
 
             this.className = "MAIN";
         }

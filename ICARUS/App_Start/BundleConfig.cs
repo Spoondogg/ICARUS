@@ -102,13 +102,10 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
                 "~/Scripts/icarus/model/el/nav/navitem/TAB.js",
 
-                // Container > NAV > NAVITEMGROUP
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVBARCOLLAPSE.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADER.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVHEADEROPTIONS.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/NAVITEMGROUP.js",
-                "~/Scripts/icarus/model/el/nav/navitemgroup/SIDEBAR.js",
+                // Container > NAV > MENU
+                "~/Scripts/icarus/model/el/nav/menu/MENU.js",
+                "~/Scripts/icarus/model/el/nav/menu/NAVHEADER.js",
+                "~/Scripts/icarus/model/el/nav/menu/SIDEBAR.js",
 
                 "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
                 "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
@@ -121,7 +118,6 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/group/li/listgroupitem/LISTGROUPITEM.js",
                 "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
                 "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
-                "~/Scripts/icarus/model/el/group/dropdownmenugroup/DROPDOWNMENUGROUP.js",
 
                 
 
@@ -149,14 +145,16 @@ namespace ICARUS {
 
 
 
-                
-                
-                
 
-                
-                
 
-                
+
+
+                "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
+                "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
+
+                // List
+                "~/Scripts/icarus/model/el/container/list/listitem/LISTITEM.js",
+                "~/Scripts/icarus/model/el/container/list/LIST.js",
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",

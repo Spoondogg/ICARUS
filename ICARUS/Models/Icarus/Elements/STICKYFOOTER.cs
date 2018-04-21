@@ -15,7 +15,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// A footer located at the bottom of a section
         /// </summary>
         /// <param name="copy">Copywrite text</param>
-        public STICKYFOOTER(string copy) : base(copy) {
+        public STICKYFOOTER() : base() {
             this.attributes.Add("class", "stickyfooter");
             this.className = "STICKYFOOTER";
         }

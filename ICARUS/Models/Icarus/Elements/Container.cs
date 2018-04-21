@@ -78,7 +78,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasTab = 1;
             this.hasSidebar = 0;
             this.status = 1;
-            this.formPostId = 0;
+            this.attributesId = 0;
             this.className = "CONTAINER";
         }
 
@@ -102,6 +102,8 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="formPost"></param>
         public void updateContainerModel(FormPost formPost) {
             formPost.resultsToXml();
+
+
             this.subsections = formPost.parseString("subsections", "0");
             this.label = formPost.parseString("label");
             this.id = formPost.parseInt("id", -1);
@@ -109,7 +111,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasSidebar = formPost.parseInt("hasSidebar");
             this.showHeader = formPost.parseInt("showHeader", 1);
             this.collapsed = formPost.parseInt("collapsed");
-            this.formPostId = formPost.parseInt("formPostId");
+            this.attributesId = formPost.parseInt("attributesId");
         }
     }
 }

@@ -8,7 +8,6 @@ class ANCHOR extends EL {
         @param {MODEL} model The object model
      */
     constructor(node, model) {
-        console.log('Anchor Label: ' + model.label);
-        super(node, 'A', model, model.label || '&nbsp;');
+        super(node, 'A', model, model.label);
     }
 }

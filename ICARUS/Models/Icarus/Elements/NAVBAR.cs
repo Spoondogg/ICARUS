@@ -20,12 +20,12 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <summary>
         /// A collection of NAVITEMS that appear from left to right in the navBar
         /// </summary>
-        public List<NAVITEM> navLeft;
+        public List<NavItem> navLeft;
 
         /// <summary>
         /// A collection of NAVITEMS that appear under the OPTIONS panel
         /// </summary>
-        public List<NAVITEM> navRight;
+        public List<NavItem> navRight;
 
         /// <summary>
         /// Constructs a navigation bar
@@ -41,8 +41,8 @@ namespace ICARUS.Models.Icarus.Elements {
             this.attributes.Add("class", className);
 
             //this.label = label;
-            this.navLeft = new List<NAVITEM>();
-            this.navRight = new List<NAVITEM>();
+            this.navLeft = new List<NavItem>();
+            this.navRight = new List<NavItem>();
 
             this.className = "NAVBAR";
         }

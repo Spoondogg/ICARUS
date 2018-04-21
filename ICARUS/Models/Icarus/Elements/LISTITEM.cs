@@ -9,15 +9,25 @@ namespace ICARUS.Models.Icarus.Elements {
     /// <summary>
     /// Represents a generic LI element
     /// </summary>
-    public class LISTITEM : EL {
+    public class ListItem : Container {
 
         /// <summary>
         /// Constructs a list item (LI) to be added to a list (UL > LI)
         /// </summary>
         /// <param name="attributes"></param>
         /// <param name="label">The text to be displayed within the LI tags</param>
-        public LISTITEM(string label = null, MODEL model = null) : base("LI", model) {
+        public ListItem() : base("LI", new MODEL(){
+            label = "LISTITEM"
+        }) {
             this.className = "LISTITEM";
+        }
+
+        /// <summary>
+        /// Constructs an LISTITEM with the given id and label attributes already set
+        /// </summary>
+        /// <param name="formPost"></param>
+        public ListItem(FormPost formPost) : base("LI", formPost) {
+
         }
     }
 }

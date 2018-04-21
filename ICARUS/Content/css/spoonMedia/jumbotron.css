@@ -2,14 +2,15 @@
     The Jumbotron is a top level banner
 */
 .jumbotron {
+    height: 200px;
     padding-top: 0;
     background-color: #00aff2;
     font-family: "Raleway";
     font-weight: 300;
-    color: #FFF; /*!important*/
+    color: #FFF;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.95);
-    border-bottom: 1px solid #b9b9b9; /*!important*/
-    border-top: 2px solid #3ba6e4; /*!important*/
+    border-bottom: 1px solid #b9b9b9;
+    border-top: 2px solid #3ba6e4;
     /* Gradient */
     background-image: -moz-radial-gradient(left center, ellipse farthest-corner, #00AFF2 0%, #006396 100%);
     background-image: -webkit-gradient(radial, left center, 0, left center, 530, color-stop(0, #00AFF2), color-stop(100, #006396));

@@ -56,6 +56,7 @@ namespace ICARUS.Controllers {
         public DbSet<Section> Sections { get; set; }
         public object Section { get; internal set; }
 
+        // FORM
         public DbSet<Form> Forms { get; set; }
         public object Form { get; internal set; }
 
@@ -80,9 +81,26 @@ namespace ICARUS.Controllers {
         public DbSet<Option> Options { get; set; }
         public object Option { get; internal set; }
 
+        // LIST / NAVIGATION
+        public DbSet<ListItem> ListItems { get; set; }
+        public object ListItem { get; internal set; }
+
+        public DbSet<List> Lists { get; set; }
+        public object List { get; internal set; }
+
+        public DbSet<JUMBOTRON> Jumbotrons { get; set; }
+        public object Jumbotron { get; internal set; }
+
+        public DbSet<TEXTBLOCK> TextBlocks { get; set; }
+        public object TextBlock { get; internal set; }
+
+        public DbSet<NavItem> NavItems { get; set; }
+        public object NavItem { get; internal set; }
+
+        // OTHER
         public DbSet<FormPost> FormPosts { get; set; }
         public object FormPost { get; internal set; }
-
+        
         public DbSet<Procedure> Procedures { get; set; }
         public object Procedure { get; internal set; }
 
@@ -112,6 +130,11 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Select", Selects);
             this.dbSets.Add("TextArea", TextAreas);
             this.dbSets.Add("Option", Options);
+            this.dbSets.Add("ListItem", ListItems);
+            this.dbSets.Add("List", Lists);
+            this.dbSets.Add("Jumbotron", Jumbotrons);
+            this.dbSets.Add("TextBlock", TextBlocks);
+            this.dbSets.Add("NavItem", NavItems);
             this.dbSets.Add("FormPost", FormPosts);
             this.dbSets.Add("Procedure", Procedures);
             this.dbSets.Add("Report", Reports);

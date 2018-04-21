@@ -40,71 +40,33 @@ class MAIN extends CONTAINER {
         Add items to Options Dropdown Tab
      */
     addNavOptions() {
-        this.navBar.header.options.menu.addNavSeparator();
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.addNavSeparator();
+        this.navBar.header.menu.addNavItem(
             new MODEL().set({
-                //'label': 'Log Out',
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'Log Out',
                     'url': '#?url=logout'
                 })
-                //'url': '#?url=logout'
             })
         ).el.onclick = this.logout.bind(this);
+        
 
-        this.navBar.header.options.menu.addNavItem(
-            new MODEL(new ATTRIBUTES({
-                'style': 'color:green;background-color:red;'
-            })).set({
-                'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
-                    'label': 'Toggle Options Menu (Main)'
-                })
-                //'label': 'Toggle Options Menu (Main)'
-            })
-        ).el.onclick = function () {
-            console.log('DEV: Create Modal and populate with options');
-            this.modal = new MODAL('Options', model.label + ' options', true);
-
-            let list = new UL(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('test-list')));
-            let item = new LI(list, new MODEL().set({
-                'label': 'item1'
-            }));
-
-            this.modal.show();
-        }.bind(this);
-
-        // Toggle Sidebar
-        this.navBar.header.options.menu.addNavItem(
-            new MODEL().set({
-                //'label': 'Toggle Sidebar (Main)'
-                'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
-                    'label': 'Toggle Sidebar (Main)'
-                })
-            })
-        ).el.onclick = this.toggleSidebar.bind(this);
-
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.getGroup('USER').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'Manage User',
                     'url': 'Manage/Index'
                 })
-
                 //'label': 'Manage User',
                 //'url': 'Manage/Index'
             })
         );
 
-        this.navBar.header.options.menu.addNavSeparator();
+        this.navBar.header.menu.addNavSeparator();
 
         // Button to toggle Headers
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.addNavItem(
             new MODEL().set({
-                //'label': 'Toggle Headers'
                 'anchor': new MODEL().set({
                     'label': 'Toggle Headers'
                 })
@@ -189,20 +151,6 @@ class MAIN extends CONTAINER {
     getId() {
         return this.id;
     }
-
-    /**
-        Sets the label for this app
-        @param {string} label Text
-    
-    setLabel(label) {
-        this.label = label;
-        try {
-            this.navBar.header.setLabel(label);
-        } catch (e) {
-            console.log('navBar.header does not exist');
-            console.log(e);
-        }
-    }*/
 
     /**
         Logs the current user out

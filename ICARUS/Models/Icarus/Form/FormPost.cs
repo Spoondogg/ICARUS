@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Web.Script.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -52,9 +54,15 @@ namespace ICARUS.Models.Icarus {
         /// <summary>
         /// XML form data
         /// </summary>
-        [Required]
-        [Column(TypeName = "xml")]
+        [Required, Column(TypeName = "xml")]
         public string xmlResults { get; set; }
+
+        /// <summary>
+        /// JSON form data
+        /// </summary>
+        //[Required]
+        [StringLength(4000)]
+        public string jsonResults { get; set; }
 
         /// <summary>
         /// A message to be sent back to the client
@@ -93,12 +101,24 @@ namespace ICARUS.Models.Icarus {
                     messageBody.Append("</dl>");
 
                     this.xmlResults = xmlResults.ToString();
+                    //this.jsonResults = "{}";
                     this.message = messageBody.ToString();
-                    this.results = null;
-
+                    
                     XmlDocument xml = new XmlDocument();
                     xml.LoadXml(this.xmlResults);
                     this.xml = xml;
+
+                    JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
+                    this.jsonResults = jsonSerialiser.Serialize(this.results);
+                    if (this.jsonResults == null) {
+                        this.jsonResults = "";
+                    } else {
+                        // Remove the last entry (Should be antiforgerytoken)
+                        JArray json = JArray.Parse(this.jsonResults);
+                        json.Last.Remove();
+                        this.jsonResults = json.ToString(Newtonsoft.Json.Formatting.None);
+                    }
+                    this.results = null;
                 }
             }            
         }

@@ -10,22 +10,25 @@ namespace ICARUS.Models.Icarus.Elements {
     /// A block of text
     /// and a TEXTBLOCK 
     /// </summary>
-    public class TEXTBLOCK : EL {
+    public class TEXTBLOCK : Container {
 
         /// <summary>
-        /// A label that marks the beginning of this text block
+        /// An article is the basic building block for nearly all pages.  
+        /// Articles are made up of a collection of SECTIONS
         /// </summary>
-        public string label;
-
-        /// <summary>
-        /// A block that can contain rich text 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="label"></param>
-        /// <param name="collapsed">If true, the section will initially be collapsed</param>
-        public TEXTBLOCK(MODEL model, string label) : base("TEXTBLOCK", model) {
-            this.label = label;
+        /// <param name="attributes"></param>
+        public TEXTBLOCK() : base("TEXTBLOCK", new MODEL() {
+            label = "TEXTBLOCK"
+        }) {
             this.className = "TEXTBLOCK";
-        }        
+        }
+
+        /// <summary>
+        /// Constructs an ARTICLE with the given id and label attributes already set
+        /// </summary>
+        /// <param name="formPost"></param>
+        public TEXTBLOCK(FormPost formPost) : base("TEXTBLOCK", formPost) {
+
+        }
     }
 }

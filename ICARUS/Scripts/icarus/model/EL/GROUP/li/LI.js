@@ -9,6 +9,5 @@ class LI extends EL {
      */
     constructor(node, model) {
         super(node, 'LI', model, model.label);
-
     }
 }
