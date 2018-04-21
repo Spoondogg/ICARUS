@@ -10,7 +10,6 @@ class ARTICLE extends CONTAINER {
     constructor(node, model) {
         super(node, 'ARTICLE', model);        
         this.addContainerCase('SECTION');
-        this.addContainerCase('FORM');
         this.populate(model.children);
     }
 }

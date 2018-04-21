@@ -19,9 +19,22 @@
     border-radius: 0;
 }
 
+/*
+    Semi opaque background for nav menus looks cool over background image
+*/
+.navbar-inverse {
+    background-color: rgba(34, 34, 34, 0.9);
+}
+
 .navbar-nav {
     margin: 0;
     width: 100%;
+    min-height: 50px;
+}
+
+.navbar-nav.collapse[name="menu"] {
+    max-height: calc(100vh - 97px);
+    overflow-y: auto;
 }
 
 .navbar-nav-left,
@@ -191,44 +204,12 @@ nav header {
 .dropdown-menu ul.navbar-nav {
     border-bottom: 1px solid white;
 }
-
-@media only screen and (max-width: 767px) { /*768px = standard*/
+/*
+@media only screen and (max-width: 767px) { 
 
     .tab-anchor {
         clear: right !important;
     }
-
-
-    .scroller {
-        width: 100%; /*!important*/
-        height: auto;
-        position: relative;
-        overflow: hidden;
-    }
-
-        .scroller ul.scroll {
-            position: initial;
-            min-width: initial;
-        }
-
-        .scroller ul.scroll li {
-            text-align: initial;
-            vertical-align: initial;
-        }
-
-    .scroller-left,
-    .scroller-right {
-        display: none;
-    }
-
-        .scroller-left span,
-        .scroller-right span {
-            margin: initial;
-        }
-
-
-    /* NAV */
-    
 
         .nav-item.active, .nav-item.open {
             background-color: black;
@@ -249,7 +230,7 @@ nav header {
         color: #101010;
     }
 }
-
+*/
 .app {
     display: flex;
     align-items: stretch;
@@ -278,17 +259,17 @@ nav header {
 
 /* The MAIN sidebar is full height, all others should default to auto */
 .sidebar-tall {
-    height: calc(100vh - 106px);
+    height: calc(100vh - 97px);
     overflow-y: auto;
 }
 
     .sidebar-tall > .collapse {
-        height: calc(100vh - 160px);
+        height: calc(100vh - 97px);
         overflow-y: auto;
     }
 
 .pane-tall {
-    height: calc(100vh - 106px);
+    height: calc(100vh - 97px);
     overflow-y: auto;
 }
 
@@ -352,22 +333,4 @@ main.icarus-container {
 
 .icarus-container {    
     overflow: hidden;
-}
-
-
-
-@media (max-width: 768px) {
-    .sidebar {
-        /*margin-left: -250px;*/
-        
-        margin-left: -186px;
-    }
-
-    .sidebar.active {
-        margin-left: 0;
-    }
-
-    .pane {
-        width: calc(100%-64px);
-    }    
 }

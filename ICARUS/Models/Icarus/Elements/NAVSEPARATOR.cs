@@ -8,7 +8,7 @@ namespace ICARUS.Models.Icarus.Elements {
     /// <summary>
     /// Represents a horizontal line that seperates groupings inside of a dropdown menu
     /// </summary>
-    public class NAVSEPARATOR : NAVITEM {
+    public class NAVSEPARATOR : NavItem {
 
         /// <summary>
         /// Constructs a list item (LI) to be added to a list (UL > LI)

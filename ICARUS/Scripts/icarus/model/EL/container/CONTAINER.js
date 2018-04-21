@@ -39,7 +39,7 @@ class CONTAINER extends GROUP { // EL {
         super(node, element, model);
         this.addClass('icarus-container');
         this.el.setAttribute('id', model.id);
-        
+
         // Container Properties
         this.loader = null;
         this.prompt = null;
@@ -74,73 +74,70 @@ class CONTAINER extends GROUP { // EL {
         // ADD OPTIONS
 
         // Toggle Sidebar
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'Toggle Sidebar'
                 })
             })
-        ).el.onclick = this.toggleSidebar.bind(this);
+        ).el.onclick = function () {
+            this.navBar.header.toggleCollapse();
+            setTimeout(function () {
+                this.toggleSidebar();
+            }.bind(this), 500);
+        }.bind(this);
 
-        //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'UP'
                 })
             })
         );
 
         //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'DN'
                 })
             })
         );
 
         //this.body.sidebar.menu.getGroup('DOM').addNavItem(
-        this.navBar.header.options.menu.addNavItem(
+        this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'LOAD'
                 })
             })
         ).el.onclick = this.load.bind(this);
         
         // Add items to Options Dropdown Tab
-        this.navBar.header.options.menu.addNavItem(
-            new MODEL(
-                new ATTRIBUTES({
-                    'name': 'save'
-                })
-            ).set({
+        this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'SAVE'
                 })
             })
         ).el.onclick = this.save.bind(this);
 
-        this.navBar.header.options.menu.addNavItem(
-            new MODEL(
-                new ATTRIBUTES({
-                    'name': 'delete'
-                })
-            ).set({
+        this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            new MODEL().set({
                 'anchor': new MODEL().set({
-                    'className': 'ANCHOR',
                     'label': 'DELETE'
                 })
             })
         ).el.onclick = this.disable.bind(this);
 
         /* Wrap up construction */
+
+        // Add cases
+        this.addContainerCase('FORM');
+        this.addContainerCase('LIST');
+        this.addContainerCase('JUMBOTRON');
+        this.addContainerCase('TEXTBLOCK');
+
         // this.populate(model.children); // NOT NEEDED IN THIS / SUPER()
 
         if (this.collapsed) {
@@ -165,21 +162,14 @@ class CONTAINER extends GROUP { // EL {
         @returns {NAVITEMLINK} A tab (navitemlink)
     */
     createTab(model) {
-        console.log('Creating tab...');
-        console.log(model);
         try {
             let tab = null;
             let container = model.node.node.node;
 
-            //.sidebar.menu.getGroup(model.node.id).addNavItem(
-
             if (container.tab) {
-                tab = container.tab.addNavItemGroup(
-                    new MODEL(new ATTRIBUTES())
-                ).addNavItem(
+                tab = container.tab.addMenu(new MODEL()).addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
                         'anchor': new MODEL().set({
-                            'className': 'ANCHOR',
                             'label': model.label
                         })
                     })
@@ -188,14 +178,11 @@ class CONTAINER extends GROUP { // EL {
                 tab = app.body.sidebar.menu.addNavItem(
                     new MODEL(new ATTRIBUTES()).set({
                         'anchor': new MODEL().set({
-                            'className': 'ANCHOR',
                             'label': model.label
                         })
                     })
                 );
             }
-
-            
 
             tab.el.onclick = function (e) {
 
@@ -246,16 +233,17 @@ class CONTAINER extends GROUP { // EL {
         @param {string} className Element constructor class name
     */
     addConstructElementButton(className) {
-        this.navBar.header.options.menu.getGroup('ELEMENTS').create( //addNavItem(
+        this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
             new MODEL().set({
-                'className': 'NAVITEM',
-                'element': 'LI',
                 'anchor': new MODEL().set({
                     'label': 'Create ^' + className
                 })
             })
         ).el.onclick = function () {
-            this.create(className);
+            this.navBar.header.toggleCollapse();
+            this.create(new MODEL().set({
+                'className': className
+            }));
         }.bind(this);
     }
 
@@ -270,12 +258,13 @@ class CONTAINER extends GROUP { // EL {
         @param {boolean} addButton If false, no button is created
     */
     addContainerCase(className, addButton = true) {
+        console.log(this.className + '.addContainerCase(' + className + ')');
         this.addCase(className,
             function (model) {
                 return factory.get(this.body.pane, className, model.id || 0);
             }.bind(this)
         );
-        if (!addButton) {
+        if (addButton) {
             this.addConstructElementButton(className);
         }
     }
@@ -396,6 +385,9 @@ class CONTAINER extends GROUP { // EL {
      */
     toggleSidebar() {
         this.body.sidebar.toggle('active');
+        setTimeout(function () {
+            $(this.body.sidebar.el).collapse('toggle');
+        }.bind(this), 600);
     }
 
     /**
@@ -521,7 +513,8 @@ class CONTAINER extends GROUP { // EL {
         );
 
         // Override form defaults
-        this.prompt.form.setPostUrl(this.element+'/Set');
+        //this.prompt.form.setPostUrl(this.element+'/Set');
+        this.prompt.form.setPostUrl(this.className + '/Set');
         this.prompt.form.afterSuccessfulPost = this.afterSuccessfulPost.bind(this);
 
         this.prompt.show();
@@ -611,6 +604,5 @@ class CONTAINER extends GROUP { // EL {
         } catch (e) {
             console.log('Unable to disable this '+this.element+'\n' + e);
         }
-    }
-    
+    }    
 }

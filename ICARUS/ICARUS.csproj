@@ -204,11 +204,16 @@
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\FormElementController.cs" />
     <Compile Include="Controllers\FormElementGroupController.cs" />
+    <Compile Include="Controllers\TextBlockController.cs" />
+    <Compile Include="Controllers\JumbotronController.cs" />
+    <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="Controllers\NavItemController.cs" />
     <Compile Include="Controllers\OptionController.cs" />
     <Compile Include="Controllers\FieldsetController.cs" />
+    <Compile Include="Controllers\ListItemController.cs" />
     <Compile Include="Controllers\TextAreaController.cs" />
     <Compile Include="Controllers\SelectController.cs" />
-    <Compile Include="Controllers\FormPostsController.cs" />
+    <Compile Include="Controllers\FormPostController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ContainerController.cs" />
     <Compile Include="Controllers\LogsController.cs" />
@@ -362,6 +367,50 @@
     <Compile Include="Migrations\201804091813459_20180409__002.Designer.cs">
       <DependentUpon>201804091813459_20180409__002.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804181534000_20180418__001.cs" />
+    <Compile Include="Migrations\201804181534000_20180418__001.Designer.cs">
+      <DependentUpon>201804181534000_20180418__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804181634542_20180418__002.cs" />
+    <Compile Include="Migrations\201804181634542_20180418__002.Designer.cs">
+      <DependentUpon>201804181634542_20180418__002.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804200351558_20180419__001.cs" />
+    <Compile Include="Migrations\201804200351558_20180419__001.Designer.cs">
+      <DependentUpon>201804200351558_20180419__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804202151076_20180420__001.cs" />
+    <Compile Include="Migrations\201804202151076_20180420__001.Designer.cs">
+      <DependentUpon>201804202151076_20180420__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210054078_20180420__002.cs" />
+    <Compile Include="Migrations\201804210054078_20180420__002.Designer.cs">
+      <DependentUpon>201804210054078_20180420__002.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210100263_20180420__003.cs" />
+    <Compile Include="Migrations\201804210100263_20180420__003.Designer.cs">
+      <DependentUpon>201804210100263_20180420__003.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210138283_20180420__004.cs" />
+    <Compile Include="Migrations\201804210138283_20180420__004.Designer.cs">
+      <DependentUpon>201804210138283_20180420__004.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210215343_20180420__005.cs" />
+    <Compile Include="Migrations\201804210215343_20180420__005.Designer.cs">
+      <DependentUpon>201804210215343_20180420__005.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210218068_20180420__006.cs" />
+    <Compile Include="Migrations\201804210218068_20180420__006.Designer.cs">
+      <DependentUpon>201804210218068_20180420__006.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210221127_20180420__007.cs" />
+    <Compile Include="Migrations\201804210221127_20180420__007.Designer.cs">
+      <DependentUpon>201804210221127_20180420__007.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804210234100_20180420__008.cs" />
+    <Compile Include="Migrations\201804210234100_20180420__008.Designer.cs">
+      <DependentUpon>201804210234100_20180420__008.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
@@ -372,7 +421,6 @@
     <Compile Include="Models\Icarus\Elements\P.cs" />
     <Compile Include="Models\Icarus\Elements\Payload.cs" />
     <Compile Include="Models\Icarus\Elements\TEXTBLOCK.cs" />
-    <Compile Include="Models\Icarus\Elements\TAB.cs" />
     <Compile Include="Models\Icarus\Enums\ICON.cs" />
     <Compile Include="Models\Icarus\Enums\STYLE.cs" />
     <Compile Include="Models\MVC\AccountViewModels.cs" />
@@ -405,12 +453,12 @@
     <Compile Include="Models\Icarus\Database\Tables\tbl_LOG.cs" />
     <Compile Include="Models\Icarus\Elements\STICKYFOOTER.cs" />
     <Compile Include="Models\Icarus\Elements\JUMBOTRON.cs" />
-    <Compile Include="Models\Icarus\Elements\LIST.cs" />
+    <Compile Include="Models\Icarus\Elements\List.cs" />
     <Compile Include="Models\Icarus\Elements\DROPDOWN.cs" />
     <Compile Include="Models\Icarus\Elements\ANCHOR.cs" />
     <Compile Include="Models\Icarus\Elements\NAVSEPARATOR.cs" />
-    <Compile Include="Models\Icarus\Elements\NAVITEM.cs" />
-    <Compile Include="Models\Icarus\Elements\LISTITEM.cs" />
+    <Compile Include="Models\Icarus\Elements\NavItem.cs" />
+    <Compile Include="Models\Icarus\Elements\ListItem.cs" />
     <Compile Include="Models\Icarus\Elements\NAVBAR.cs" />
     <Compile Include="Models\Icarus\Elements\FOOTER.cs" />
     <Compile Include="Models\Icarus\Elements\Section.cs" />
@@ -472,44 +520,36 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
+    <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
     <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\dropdownmenu\DROPDOWNMENU.js" />
-    <Content Include="Scripts\icarus\model\el\group\dropdownmenugroup\DROPDOWNMENUGROUP.js" />
     <Content Include="Scripts\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERBODY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
     <Content Include="Scripts\icarus\model\el\modal\loader\LOADER.js" />
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\modaltab\MODALTAB.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\DROPDOWN.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMPOST.js" />
-    <Content Include="Scripts\icarus\model\el\group\li\listgroupitem\LISTGROUPITEM.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\dropdowntab\DROPDOWNTAB.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVBARCOLLAPSE.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVHEADEROPTIONS.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVITEMGROUP.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\NAVHEADER.js" />
+    <Content Include="Scripts\icarus\model\el\nav\menu\MENU.js" />
+    <Content Include="Scripts\icarus\model\el\nav\menu\NAVHEADER.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\NAVITEM.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\navitemtab\NAVITEMTAB.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEARCH.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
     <Content Include="Scripts\icarus\model\el\nav\NAV.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\TAB.js" />
     <Content Include="Scripts\icarus\model\MODEL.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemgroup\SIDEBAR.js" />
+    <Content Include="Scripts\icarus\model\el\nav\menu\SIDEBAR.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINER.js" />
     <Content Include="Scripts\icarus\model\el\text\p\WELL.js" />
     <Content Include="Scripts\icarus\model\el\footer\FOOTER.js" />
-    <Content Include="Scripts\icarus\model\el\group\li\dropdownheader\DROPDOWNHEADER.js" />
     <Content Include="Scripts\icarus\model\el\text\span\GLYPHICON.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\TOKEN.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\FORMELEMENT.js" />
@@ -536,7 +576,6 @@
     <Content Include="Scripts\icarus\model\el\container\form\FORM.js" />
     <Content Include="Scripts\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
     <Content Include="Scripts\icarus\model\el\text\BADGE.js" />
-    <Content Include="Scripts\icarus\model\el\group\ul\listgroup\LISTGROUP.js" />
     <Content Include="Scripts\icarus\model\el\graphic\SVG.js" />
     <Content Include="Scripts\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\icarus\model\el\nav\navbar\NAVBAR.js" />
@@ -772,6 +811,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804091813459_20180409__002.resx">
       <DependentUpon>201804091813459_20180409__002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804181534000_20180418__001.resx">
+      <DependentUpon>201804181534000_20180418__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804181634542_20180418__002.resx">
+      <DependentUpon>201804181634542_20180418__002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804200351558_20180419__001.resx">
+      <DependentUpon>201804200351558_20180419__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804202151076_20180420__001.resx">
+      <DependentUpon>201804202151076_20180420__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210054078_20180420__002.resx">
+      <DependentUpon>201804210054078_20180420__002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210100263_20180420__003.resx">
+      <DependentUpon>201804210100263_20180420__003.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210138283_20180420__004.resx">
+      <DependentUpon>201804210138283_20180420__004.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210215343_20180420__005.resx">
+      <DependentUpon>201804210215343_20180420__005.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210218068_20180420__006.resx">
+      <DependentUpon>201804210218068_20180420__006.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210221127_20180420__007.resx">
+      <DependentUpon>201804210221127_20180420__007.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804210234100_20180420__008.resx">
+      <DependentUpon>201804210234100_20180420__008.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

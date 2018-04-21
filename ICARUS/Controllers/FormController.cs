@@ -66,7 +66,7 @@ namespace ICARUS.Controllers {
             formPost.authorId = User.Identity.Name;
             formPost.version = 20180104.001;
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
-            formPost.timestamp = DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);            
+            formPost.timestamp = DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
             formPost.resultsToXml();
 
             // Attempt to save the form to the database
@@ -107,7 +107,7 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(1, "FORMPOST", formPost, formPost.getMessage()));
 
             } catch (Exception e)  {
-                return Json(new Payload(0, "FormController.submit() Unknown Exception<br><br>" + e.Message, e));
+                return Json(new Payload(0, "FormController.submit() Unknown Exception<br><br><h5>FormPost</h5>"+formPost.ToString()+"<br><br>" + e.Message, e));
             }
         }        
     }

@@ -7,36 +7,26 @@ using System.Web;
 namespace ICARUS.Models.Icarus.Elements {
 
     /// <summary>
-    /// A series of html 5 compatible list types
-    /// </summary>
-    enum ListTypes { UL, OL };
-
-    /// <summary>
     /// A generic List element object
     /// </summary>
-    public class LIST : EL {
+    public class List : Container {
 
         /// <summary>
-        /// Lists can be Unorganized (UL) or Organized (OL)
+        /// A Collection of List Items
         /// </summary>
-        private string type;
-
-        /// <summary>
-        /// Construct a generic list element
-        /// </summary>
-        /// <param name="listType"></param>
-        /// <param name="model"></param>
-        public LIST(string listType, MODEL model) : base("UL", model) {
+        /// <param name="attributes"></param>
+        public List() : base("UL", new MODEL() {
+            label = "LIST"
+        }) {
             this.className = "LIST";
         }
 
         /// <summary>
-        /// Adds a List Item to the list
+        /// Constructs a LIST with the given id and label attributes already set
         /// </summary>
-        /// <param name="child"></param>
-        public void addListItem(LISTITEM child) {
-            this.children.Add(child);
-        }
+        /// <param name="formPost"></param>
+        public List(FormPost formPost) : base("UL", formPost) {
 
+        }
     }
 }

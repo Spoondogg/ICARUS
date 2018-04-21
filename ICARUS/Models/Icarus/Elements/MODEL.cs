@@ -36,9 +36,9 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a generic MODEL
         /// </summary>
         /// <param name="attributes"></param>
-        public MODEL(ATTRIBUTES attributes = null, string label = null) {
+        public MODEL(ATTRIBUTES attributes = null) { //, string label = null
             this.attributes = attributes == null ? new ATTRIBUTES() : attributes;
-            this.label = label == null ? "__NOLABEL" : label;
+            //this.label = label == null ? "__NOLABEL" : label;
         }
 
         /// <summary>

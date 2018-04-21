@@ -10,8 +10,8 @@ class CONTAINERBODY extends EL {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.addClass('container-body collapse');
-
-        // Optional SIDEBAR (NAVITEMGROUP)
+        
+        // Optional SIDEBAR
         this.sidebar = new SIDEBAR(this,
             new MODEL(new ATTRIBUTES('pull-left')).set({
                 'name': 'sidebar',
@@ -20,6 +20,7 @@ class CONTAINERBODY extends EL {
         );
         if (model.hasSidebar) {
             this.sidebar.addClass('active');
+            this.sidebar.addClass('in');
         }
 
         // The pane is the main viewing area of a Container.  

@@ -26,6 +26,9 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #94ef42;
+
+    background: url(../Images/background.jpg) no-repeat top left;
+
     overflow-y: hidden; /* prevent y-scrollbar from appearing */
 }
 h1, h2, h3, h4, h5, h6 {

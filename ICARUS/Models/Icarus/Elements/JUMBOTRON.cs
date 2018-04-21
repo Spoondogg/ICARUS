@@ -10,7 +10,7 @@ namespace ICARUS.Models.Icarus.Elements {
     /// A Bootstrap Jumbotron is a large banner style element, typically 
     /// located at the top of the page.
     /// </summary>
-    public class JUMBOTRON : EL {
+    public class JUMBOTRON : Container {
 
         /// <summary>
         /// If specified, this element will use the following Url for its background image
@@ -28,15 +28,22 @@ namespace ICARUS.Models.Icarus.Elements {
         public string text;
 
         /// <summary>
-        /// A large banner element
+        /// An article is the basic building block for nearly all pages.  
+        /// Articles are made up of a collection of SECTIONS
         /// </summary>
-        /// <param name="header"></param>
-        /// <param name="text"></param>
-        public JUMBOTRON(string header, string text, string backgroundUrl = null) : base("JUMBOTRON", new MODEL(new ATTRIBUTES("jumbotron"))) {
-            this.backgroundUrl = backgroundUrl;
-            this.header = header;
-            this.text = text;
+        /// <param name="attributes"></param>
+        public JUMBOTRON() : base("JUMBOTRON", new MODEL(new ATTRIBUTES("jumbotron")) {
+            label = "JUMBOTRON"
+        }) {
             this.className = "JUMBOTRON";
+        }
+
+        /// <summary>
+        /// Constructs an ARTICLE with the given id and label attributes already set
+        /// </summary>
+        /// <param name="formPost"></param>
+        public JUMBOTRON(FormPost formPost) : base("JUMBOTRON", formPost) {
+
         }
     }
 }

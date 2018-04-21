@@ -12,7 +12,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// A footer located at the bottom of a section
         /// </summary>
         /// <param name="label"></param>
-        public FOOTER(string label) : base("FOOTER", new MODEL(new ATTRIBUTES(), label)) {
+        public FOOTER() : base("FOOTER", new MODEL(new ATTRIBUTES())) { //, label //string label
             this.className = "FOOTER";
         }
     }

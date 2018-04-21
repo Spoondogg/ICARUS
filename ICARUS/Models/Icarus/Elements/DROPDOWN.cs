@@ -8,13 +8,33 @@ namespace ICARUS.Models.Icarus.Elements {
     /// <summary>
     /// A dropdown type data structure
     /// </summary>
-    public class DROPDOWN : NAVITEM {
+    public class DROPDOWN : NavItem {
 
         /// <summary>
         /// A list of items in this dropdown menu
         /// </summary>
-        public LIST menu;
-        
+        public List menu;
+
+        /// <summary>
+        /// Constructs a list item to be added to a list
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="label">The text to be displayed within the LI tags</param>
+        public DROPDOWN() : base() {
+            this.className = "DROPDOWN";
+            this.attributes.Add("class", "dropdown");            
+        }
+
+        /// <summary>
+        /// Constructs a list item to be added to a list
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="label">The text to be displayed within the LI tags</param>
+        public DROPDOWN(FormPost formPost) : base(formPost) {
+            this.className = "DROPDOWN";
+            this.attributes.Add("class", "dropdown");
+        }
+
         /// <summary>
         /// Constructs a list item to be added to a list
         /// </summary>

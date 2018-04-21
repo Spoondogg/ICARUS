@@ -31,16 +31,16 @@ class CONTAINERFACTORY {
                     obj = new UL(node, data.model);
                     break;
 
-                case 'DROPDOWNMENUGROUP':
-                    obj = new DROPDOWNMENUGROUP(node, data.model);
+                case 'LISTITEM':
+                    obj = new LISTITEM(node, data.model);
                     break;
 
-                case 'DROPDOWNMENU':
-                    obj = new DROPDOWNMENU(node, data.model);
+                case 'LIST':
+                    obj = new LIST(node, data.model);
                     break;
 
-                case 'NAVITEMGROUP':
-                    obj = new NAVITEMGROUP(node, data.model);
+                case 'MENU':
+                    obj = new MENU(node, data.model);
                     break;
 
                 case 'NAVITEM':
@@ -49,10 +49,6 @@ class CONTAINERFACTORY {
 
                 case 'NAVSEPARATOR':
                     obj = new NAVSEPARATOR(node, data.model);
-                    break;
-
-                case 'NAVBARCOLLAPSE':
-                    obj = new NAVBARCOLLAPSE(node, data.model);
                     break;
 
                 case 'TEXTBLOCK':

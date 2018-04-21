@@ -16,6 +16,6 @@ class TOGGLEBUTTON extends BUTTON {
         this.el.setAttribute('aria-haspopup', 'true');
         this.el.setAttribute('aria-expanded', 'false');
 
-        this.menu = new DROPDOWNMENU(node, new MODEL().set('name',friendly(label)));
+        this.menu = new MENU(node, new MODEL().set('name',friendly(label)));
     }
 }

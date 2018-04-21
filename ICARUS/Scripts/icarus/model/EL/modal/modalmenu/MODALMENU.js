@@ -19,15 +19,15 @@ class MODALMENU extends MODAL { // CALL ME A MENU!!!!
 
         console.log('Creating Modal Menu...');
 
-        //this.container.addContainerCase('NAVITEMGROUP')
+        this.container.addContainerCase('MENU');
 
         
-        this.menu = new NAVITEMGROUP(
+        this.menu = new MENU(
             this.container.body.pane,
             new MODEL(
                 new ATTRIBUTES('navbar-inverse')
             ).set({
-                'className': 'NAVITEMGROUP',
+                'className': 'MENU',
                 'name': 'menu'
             })
         );

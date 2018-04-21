@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 namespace ICARUS.Models {
@@ -18,12 +19,12 @@ namespace ICARUS.Models {
         /// Generic FormElement Constructor for Entity
         /// </summary>
         public Input() : base() {
+            var guid = "INPUT_" + Guid.NewGuid();
             this.element = "INPUT";
             this.hasTab = 0;
             this.showHeader = 0; // temp
-            //this.label = "INPUT";
-            this.attributes.Add("name", Guid.NewGuid());
-            //this.attributes.Add("value", "woot");
+            this.label = guid;
+            this.attributes.Add("name", guid);
             this.className = "INPUT";
         }
 

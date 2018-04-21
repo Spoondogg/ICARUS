@@ -67,7 +67,7 @@ namespace ICARUS.Models.Icarus {
         /// A related form post for element attributes, extensible data etc
         /// </summary>
         [Required]
-        public int formPostId { get; set; }
+        public int attributesId { get; set; }
 
         /// <summary>
         /// Constructs a generic element

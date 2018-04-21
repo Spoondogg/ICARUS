@@ -17,9 +17,9 @@ class GROUP extends EL {
     }
 
     /**
-        Retrieves the Drop Down Menu Group
+        Retrieves the specified group
         @param {string} name Name of group
-        @returns {DROPDOWNMENUGROUP} A menu group
+        @returns {GROUP} A group
      */
     getGroup(name) {
         return this.groups[name];
