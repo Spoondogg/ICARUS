@@ -49,7 +49,6 @@ namespace ICARUS.Models.Icarus.Elements {
             foreach (string key in obj.Keys) {
                 //this.Add(key, obj[key]);
             }
-        }
-        
+        }        
     }
 }

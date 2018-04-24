@@ -24,15 +24,15 @@ namespace ICARUS.Models {
         public Form() : base("FORM", new MODEL() {
             label = "FORM"
         }) {
-            this.className = "FORM";
+
         }
 
         /// <summary>
         /// Generic Form Constructor
         /// </summary>
         public Form(FormPost formPost) : base("FORM", formPost) {
-            this.label = formPost.getXml().GetElementsByTagName("Label")[0].InnerText;
-            this.subsections = formPost.getXml().GetElementsByTagName("SubSections")[0].InnerText;
+            //this.label = formPost.getXml().GetElementsByTagName("Label")[0].InnerText;
+            //this.subsections = formPost.getXml().GetElementsByTagName("SubSections")[0].InnerText;
         }
 
         /// <summary>

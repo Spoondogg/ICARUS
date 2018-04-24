@@ -34,6 +34,7 @@ class MAIN extends CONTAINER {
         this.addContainerCase('ARTICLE');
 
         this.populate(model.children);
+
     }
 
     /**

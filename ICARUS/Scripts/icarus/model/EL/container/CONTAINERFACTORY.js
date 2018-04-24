@@ -59,6 +59,10 @@ class CONTAINERFACTORY {
                     obj = new JUMBOTRON(node, data.model);
                     break;
 
+                case 'HEADERWRAP':
+                    obj = new HEADERWRAP(node, data.model);
+                    break;
+
                 case 'ARTICLE':
                     obj = new ARTICLE(node, data.model);
                     break;

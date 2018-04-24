@@ -39,7 +39,8 @@ class NAVHEADER extends MENU {
         this.toggle = this.options.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL('pull-right').set({
-                    'label': 'Options',
+                    'icon': ICON.COG,
+                    'label': '', //Options
                     'url': '#'
                 })
             })

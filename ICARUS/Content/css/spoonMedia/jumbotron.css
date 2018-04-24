@@ -2,7 +2,7 @@
     The Jumbotron is a top level banner
 */
 .jumbotron {
-    height: 200px;
+    height: 256px;
     padding-top: 0;
     background-color: #00aff2;
     font-family: "Raleway";

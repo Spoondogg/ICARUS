@@ -149,7 +149,12 @@ namespace ICARUS {
 
 
 
+
+
+                // Jumbotrons
                 "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
+                "~/Scripts/icarus/model/el/container/jumbotron/headerwrap/HEADERWRAP.js",
+
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 
                 // List

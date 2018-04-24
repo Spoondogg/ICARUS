@@ -14,7 +14,7 @@ namespace ICARUS.Models.Icarus {
     /// A collection of html elements that are supported
     /// </summary>
     public enum ELEMENTS {
-        DIV, A, UL, LI, SPAN, FORM, INPUT, SELECT, TEXTAREA, TABLE, THEAD, TBODY, TFOOT, TR, TD, HEADER, FOOTER
+        DIV, A, UL, LI, SPAN, FORM, INPUT, SELECT, TEXTAREA, TABLE, THEAD, TBODY, TFOOT, TR, TD, HEADER, FOOTER, ARTICLE, SECTION, BUTTON, NAV
     }
 
     /// <summary>

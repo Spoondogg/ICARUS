@@ -204,6 +204,7 @@
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\FormElementController.cs" />
     <Compile Include="Controllers\FormElementGroupController.cs" />
+    <Compile Include="Controllers\HeaderWrapController.cs" />
     <Compile Include="Controllers\TextBlockController.cs" />
     <Compile Include="Controllers\JumbotronController.cs" />
     <Compile Include="Controllers\ListController.cs" />
@@ -413,6 +414,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
+    <Compile Include="Models\Icarus\Elements\HEADERWRAP.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
     <Compile Include="Models\Icarus\Form\Input.cs" />
@@ -526,6 +528,7 @@
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
     <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />

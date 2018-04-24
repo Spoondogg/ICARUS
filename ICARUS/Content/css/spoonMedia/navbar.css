@@ -69,6 +69,7 @@
     clear: both;
     display: block;
     width: 100%;
+    min-height: 50px;
 }
 
 .navbar-brand {

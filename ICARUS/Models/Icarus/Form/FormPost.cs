@@ -112,8 +112,7 @@ namespace ICARUS.Models.Icarus {
                     this.jsonResults = jsonSerialiser.Serialize(this.results);
                     if (this.jsonResults == null) {
                         this.jsonResults = "";
-                    } else {
-                        // Remove the last entry (Should be antiforgerytoken)
+                    } else { // Remove the last entry (Should be antiforgerytoken)
                         JArray json = JArray.Parse(this.jsonResults);
                         json.Last.Remove();
                         this.jsonResults = json.ToString(Newtonsoft.Json.Formatting.None);

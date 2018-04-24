@@ -152,6 +152,14 @@ class EL extends MODEL {
             setTimeout(function () {
                 this.node.el.removeChild(this.el);            
             }.bind(this), delay);
+
+            try {
+                let i = this.node.children.indexOf(this);
+                this.node.children.splice(i, 1);
+            } catch (ee) {
+                console.log('Unable to remove ' + this.element + ' from node.children');
+            }
+
         } catch (e) {
             console.log('Unable to destroy this ' + this.element);
             console.log(e);

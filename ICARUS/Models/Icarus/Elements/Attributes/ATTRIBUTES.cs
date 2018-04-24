@@ -15,8 +15,10 @@ namespace ICARUS.Models.Icarus.Elements.Attributes {
         /// </summary>
         /// <param name="className"></param>
         public ATTRIBUTES(
-            string className = null, string name = null, 
-            string type = null, string value = null
+            string className = null 
+            //string name = null, 
+            //string type = null,
+            //string value = null
         ) {
             if (className != null) { this.Add("class", className); }
         }

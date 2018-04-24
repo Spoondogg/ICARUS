@@ -60,7 +60,9 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Articles are made up of a collection of SECTIONS
         /// </summary>
         /// <param name="attributes"></param>
-        public Container() : base("DIV", new MODEL()) {
+        public Container() : base("DIV", new MODEL() {
+            label = "CONTAINER"
+        }) {
 
         }
 
@@ -79,7 +81,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasSidebar = 0;
             this.status = 1;
             this.attributesId = 0;
-            this.className = "CONTAINER";
+            //this.className = "CONTAINER";
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dateCreated = DateTime.Now;
             this.dateLastModified = DateTime.Now;
             this.updateContainerModel(formPost);
-            this.className = "CONTAINER";
+            //this.className = "CONTAINER";
         }
 
         /// <summary>
@@ -102,8 +104,6 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="formPost"></param>
         public void updateContainerModel(FormPost formPost) {
             formPost.resultsToXml();
-
-
             this.subsections = formPost.parseString("subsections", "0");
             this.label = formPost.parseString("label");
             this.id = formPost.parseInt("id", -1);
