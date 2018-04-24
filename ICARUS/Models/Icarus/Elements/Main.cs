@@ -29,6 +29,7 @@ namespace ICARUS.Models.Icarus {
         /// Parameterless constructor for Entity
         /// </summary>
         public Main() : base("MAIN", new MODEL(new ATTRIBUTES("app"))) {
+            this.label = "MAIN";
             this.showHeader = 1;
             this.collapsed = 0;
             this.hasTab = 0;
@@ -37,8 +38,6 @@ namespace ICARUS.Models.Icarus {
 
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER(); //"&copy; " + @DateTime.Now.Year
-
-            this.className = "MAIN";
         }
 
         /// <summary>
@@ -50,8 +49,6 @@ namespace ICARUS.Models.Icarus {
         public Main(FormPost formPost) : base("MAIN", formPost) {
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER(); //"&copy; " + @DateTime.Now.Year
-
-            this.className = "MAIN";
         }
     }
 }

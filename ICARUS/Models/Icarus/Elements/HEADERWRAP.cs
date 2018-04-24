@@ -10,22 +10,22 @@ namespace ICARUS.Models.Icarus.Elements {
     /// A Bootstrap Jumbotron is a large banner style element, typically 
     /// located at the top of the page.
     /// </summary>
-    public class JUMBOTRON : Container {
+    public class HEADERWRAP : JUMBOTRON {
+
         /// <summary>
-        /// A wide header that often contains a background image and heading
+        /// Jumbotron with image and header
         /// </summary>
         /// <param name="attributes"></param>
-        public JUMBOTRON() : base("DIV", new MODEL(new ATTRIBUTES("jumbotron")) {
-            label = "JUMBOTRON"
-        }) {
-
-        } 
+        public HEADERWRAP() : base() {
+            this.label = "HEADERWRAP";
+            this.attributes["class"] += " headerwrap";
+        }
 
         /// <summary>
         /// Constructs an ARTICLE with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public JUMBOTRON(FormPost formPost) : base("JUMBOTRON", formPost) {
+        public HEADERWRAP(FormPost formPost) : base(formPost) {
 
         }
     }

@@ -20,7 +20,7 @@ class FORM extends CONTAINER {
         this.addContainerCase('FIELDSET');
 
         // Add the submit button
-        this.footer = new IcarusFormFooter(this, new MODEL());
+        this.footer = new IcarusFormFooter(this.body, new MODEL());
         this.footer.buttonGroup.addButton('Reset', ICON.RESET).el.onclick = this.reset.bind(this);
         this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.post.bind(this);
 

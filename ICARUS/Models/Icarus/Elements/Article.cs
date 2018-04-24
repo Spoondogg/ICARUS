@@ -21,7 +21,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public Article() : base("ARTICLE", new MODEL(){
             label = "ARTICLE"
         }) {
-            this.className = "ARTICLE";
+
         }
         
         /// <summary>

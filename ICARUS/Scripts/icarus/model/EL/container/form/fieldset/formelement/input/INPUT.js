@@ -9,17 +9,12 @@ class INPUT extends FORMELEMENT {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        //console.log('\t\t\tINPUT VALUE: ' + model.attributes.value);
-        //console.log(model);
-        //let name = friendly(model.label);
+
         this.input = new EL(this.body.pane, 'INPUT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
                 'type': model.attributes.type || 'TEXT',
-                //'list': 'INPUT_' + guid() + '-options',
                 'list': model.attributes.name + '-options',
-                //'name': friendly('INPUT_' + guid()),
-                //'name': name,    //  The name attribute currently doesn't exist in newly created elements
                 'name': model.attributes.name,
                 'value': model.attributes.value
             })
@@ -27,17 +22,10 @@ class INPUT extends FORMELEMENT {
         if (model.attributes.readonly) {
             this.input.el.setAttribute('readonly', 'readonly');
         }
-        //this.input.el.setAttribute('value', model.attributes.value);
-        //console.log('My Form');
-        //console.log(node.node.node.node.node.node.node.node.node);
-
-
-        //this.input.el.setAttribute('readonly', 'readonly');
 
         this.options = [];
         this.datalist = new EL(node, 'DATALIST', new MODEL(
             new ATTRIBUTES({
-                //'id': this.attributes.name + '-options'
                 'id': model.attributes.name + '-options'
             })
         ));

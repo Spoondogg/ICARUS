@@ -71,21 +71,47 @@ class CONTAINER extends GROUP { // EL {
 
         this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
 
-        // ADD OPTIONS
+        this.addNavBarDefaults();
 
-        // Toggle Sidebar
-        this.navBar.header.menu.getGroup('DOM').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'Toggle Sidebar'
+        this.addContainerCase('FORM');
+        this.addContainerCase('LIST');
+        this.addContainerCase('JUMBOTRON');
+        this.addContainerCase('HEADERWRAP');
+        this.addContainerCase('TEXTBLOCK');
+
+        if (this.collapsed) {
+            this.collapse();
+        } else {
+            this.expand();
+        }
+
+        if (!model.showHeader) {
+            this.navBar.hide();
+        }
+
+        if (model.hasTab) {
+            this.tab = this.createTab(this);
+        }        
+    }
+
+    /**
+        Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
+     */
+    addNavBarDefaults() {
+        if (this.hasSidebar) {
+            this.navBar.header.menu.getGroup('DOM').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Toggle Sidebar'
+                    })
                 })
-            })
-        ).el.onclick = function () {
-            this.navBar.header.toggleCollapse();
-            setTimeout(function () {
-                this.toggleSidebar();
-            }.bind(this), 500);
-        }.bind(this);
+            ).el.onclick = function () {
+                this.navBar.header.toggleCollapse();
+                setTimeout(function () {
+                    this.toggleSidebar();
+                }.bind(this), 500);
+            }.bind(this);
+        }
 
         this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
@@ -94,8 +120,7 @@ class CONTAINER extends GROUP { // EL {
                 })
             })
         );
-
-        //this.body.sidebar.menu.getGroup('DOM').addNavItem(
+        
         this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
@@ -103,8 +128,7 @@ class CONTAINER extends GROUP { // EL {
                 })
             })
         );
-
-        //this.body.sidebar.menu.getGroup('DOM').addNavItem(
+        
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
@@ -112,7 +136,7 @@ class CONTAINER extends GROUP { // EL {
                 })
             })
         ).el.onclick = this.load.bind(this);
-        
+
         // Add items to Options Dropdown Tab
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
@@ -129,30 +153,6 @@ class CONTAINER extends GROUP { // EL {
                 })
             })
         ).el.onclick = this.disable.bind(this);
-
-        /* Wrap up construction */
-
-        // Add cases
-        this.addContainerCase('FORM');
-        this.addContainerCase('LIST');
-        this.addContainerCase('JUMBOTRON');
-        this.addContainerCase('TEXTBLOCK');
-
-        // this.populate(model.children); // NOT NEEDED IN THIS / SUPER()
-
-        if (this.collapsed) {
-            this.collapse();
-        } else {
-            this.expand();
-        }
-
-        if (!model.showHeader) {
-            this.navBar.hide();
-        }
-
-        if (model.hasTab) {
-            this.tab = this.createTab(this);
-        }        
     }
 
     /**

@@ -24,6 +24,7 @@ class SIDEBAR extends MENU { // NAVBAR
                 'label': '<span class="caret"></span>'
             })
         }));
+        this.toggleButton.el.style.display = 'none'; // TODO: Search isn't necessary just yet
         this.toggleButton.anchor.addClass('toggle-wide noselect');
 
         this.toggleButton.el.onclick = this.toggleDocumentMap.bind(this);

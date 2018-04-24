@@ -21,7 +21,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public Section() : base("SECTION", new MODEL() {
             label = "SECTION"
         }) {
-            this.className = "SECTION";
+
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// </summary>
         /// <param name="formPost"></param>
         public Section(FormPost formPost) : base("SECTION", formPost) {
-            this.className = "SECTION";
+
         }
     }
 }

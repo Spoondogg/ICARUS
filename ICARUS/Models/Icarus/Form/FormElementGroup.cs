@@ -21,9 +21,9 @@ namespace ICARUS.Models.Icarus {
         /// Generic Fieldset Constructor for Entity
         /// </summary>
         public FormElementGroup() : base("FORMELEMENTGROUP", new MODEL() {
-            label = "FORMELEMENTGROUP"
+            label = "ARTICLE"
         }) {
-            this.className = "FORMELEMENTGROUP";
+
         }
 
         /// <summary>
