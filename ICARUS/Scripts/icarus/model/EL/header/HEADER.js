@@ -12,7 +12,8 @@ class HEADER extends EL {
         super(
             node,
             depth ? 'H' + depth : 'HEADER',
-            model
+            model,
+            model.label || ''
         );
         this.depth = depth || 0;
     }

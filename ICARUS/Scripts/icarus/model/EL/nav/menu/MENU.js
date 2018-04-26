@@ -12,6 +12,12 @@ class MENU extends UL {
         //this.className = 'MENU'; 
         this.addClass('nav navbar-nav');
 
+        if (model.showHeader) {
+            this.header = new HEADER(this, new MODEL().set({
+                'label': model.name
+            }));
+        }
+
         this.addCase('MENU', function (model) {
             return this.addMenu(model);
         }.bind(this));

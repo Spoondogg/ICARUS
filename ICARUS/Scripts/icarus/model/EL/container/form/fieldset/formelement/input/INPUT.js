@@ -22,6 +22,10 @@ class INPUT extends FORMELEMENT {
         if (model.attributes.readonly) {
             this.input.el.setAttribute('readonly', 'readonly');
         }
+        
+        this.label.el.onclick = function () {
+            this.setLabel('woot');
+        }.bind(this);
 
         this.options = [];
         this.datalist = new EL(node, 'DATALIST', new MODEL(
@@ -34,7 +38,17 @@ class INPUT extends FORMELEMENT {
                 this.addOption(model.options[o].value);
             }
         }
-    }    
+    }
+
+    /**
+        Sets the label of this element to the given value.
+        @param {string} label The name to be set
+    */
+    setLabel(label) {
+        this.navBar.header.tab.anchor.setInnerHTML(label);
+        this.label.setInnerHTML(label);
+        this.input.el.setAttribute('name', label);
+    }
 
     /**
         // TODO: Consider how to share these lists with the entire application rather than

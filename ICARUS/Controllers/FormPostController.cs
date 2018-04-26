@@ -10,6 +10,7 @@ using ICARUS.Models.Icarus;
 using System.Threading.Tasks;
 using ICARUS.Models.Icarus.Elements;
 using System.Threading;
+using System.Xml;
 
 namespace ICARUS.Controllers {
     public class FormPostController : AbstractController {
@@ -122,7 +123,7 @@ namespace ICARUS.Controllers {
             FormPost model = (FormPost) db.dbSets[this.className].Find(id);
             if (model.authorId == User.Identity.Name) {
 
-                string message = "Successfully retrieved " + this.className + ")";
+                string message = "Successfully retrieved " + this.className;
 
                 // Return the fully constructed FormPost
                 return Json(new Payload(
@@ -139,8 +140,49 @@ namespace ICARUS.Controllers {
 
         }
 
-        public override async Task<ActionResult> Set(FormPost model) {
-            throw new NotImplementedException();
-        }        
+        /// <summary>
+        /// Sets the value of the target object based on the given formPost values
+        /// </summary>
+        /// <param name="formPost"></param>
+        /// <returns></returns>
+        public override async Task<ActionResult> Set(FormPost formPost) {
+            try {
+
+                // Extract values from FormPost
+                formPost.resultsToXml();
+                int id = formPost.parseInt("id", -1);
+
+                // Retrieve the record from the database
+                ObjectDBContext ctx = getObjectDbContext();
+                FormPost model = ctx.FormPosts.Single(m =>
+                   m.id == id && m.authorId == User.Identity.Name
+                );
+
+                formPost.setXml();
+                formPost.resultsToXml();
+
+                // Set new values
+                int result = 0;
+                model.xmlResults = formPost.xmlResults;
+                model.jsonResults = formPost.jsonResults;
+                model.formId = id;
+
+                // Save the object
+                ctx.FormPosts.Add(model);
+                ctx.Entry(model).State = System.Data.Entity.EntityState.Modified; // Critical
+                result = ctx.SaveChanges();
+
+                // Return the success response along with the message body
+                return Json(new Payload(
+                    1, "FORMPOST", model,
+                    "Successfully set FORMPOST (" + model.id + "," + id + ")"
+                ), JsonRequestBehavior.AllowGet);
+
+            } catch (Exception e) {
+                return Json(new Payload(
+                    0, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString(), e
+                ), JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

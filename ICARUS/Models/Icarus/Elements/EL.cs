@@ -64,6 +64,12 @@ namespace ICARUS.Models.Icarus {
         public string subsections { get; set; }
 
         /// <summary>
+        /// A related form post for generic data key/values
+        /// </summary>
+        [Required]
+        public int dataId { get; set; }
+
+        /// <summary>
         /// A related form post for element attributes, extensible data etc
         /// </summary>
         [Required]

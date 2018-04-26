@@ -20,6 +20,8 @@ class CONTAINERFACTORY {
     */
     get(node, className, id) {
         console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
+        node.children.push(id); // Reserve the slot in the array
+        let index = node.children.length - 1; // Reference for where to insert object
         $.getJSON('/' + className + '/Get/' + id, function (data) {
             let obj = null;
             switch (className) {
@@ -100,8 +102,10 @@ class CONTAINERFACTORY {
                     break;
 
             }
-            node.children.push(obj);
+            //node.children.push(obj);
+            node.children[index] = obj;
         });
-        return node.children[node.children.length - 1];
+        //return node.children[node.children.length - 1];
+        return node.children[index];
     }
 }

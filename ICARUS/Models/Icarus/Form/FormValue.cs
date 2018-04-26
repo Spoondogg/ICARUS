@@ -32,7 +32,7 @@ namespace ICARUS.Models.Icarus {
         /// <param name="value"></param>
         public FormValue(string name, string value) {
             this.name = name;
-            this.type = type;
+            this.type = "TEXT";
             this.value = value;            
         }
 

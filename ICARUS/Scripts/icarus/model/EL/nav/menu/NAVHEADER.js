@@ -50,12 +50,13 @@ class NAVHEADER extends MENU {
             'name': 'menu'            
         })); 
 
-        // Add Default OPTIONS groupings
+        // Add Default OPTIONS groupings as HORIZONTAL menus
         let optionGroups = ['ELEMENTS', 'CRUD', 'USER', 'DOM'];
         for (let oG = 0; oG < optionGroups.length; oG++) {
             this.menu.addMenu(
-                new MODEL().set({
-                    'name': optionGroups[oG]
+                new MODEL(new ATTRIBUTES('horizontal')).set({
+                    'name': optionGroups[oG],
+                    'showHeader': 1
                 })
             );
         }

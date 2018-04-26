@@ -14,6 +14,11 @@ class LISTITEM extends CONTAINER {
     constructor(node, model) {
         super(node, 'LI', model);
         //this.addContainerCase('LIST');
+
+        if (model.dataId > 0) {
+            this.text = new P(this.body.pane, model.data, model.data.label);
+        }
+
         this.populate(model.children);
     }
 }

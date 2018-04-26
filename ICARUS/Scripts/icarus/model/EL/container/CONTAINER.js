@@ -22,7 +22,7 @@ const CONTAINERTYPES = {
     A container can be expanded or hidden and
     have elements added to itself.
 */
-class CONTAINER extends GROUP { // EL {
+class CONTAINER extends GROUP {
     /**
         @param {EL} node The element to contain the section
         @param {string} element HTML element
@@ -44,7 +44,7 @@ class CONTAINER extends GROUP { // EL {
         this.loader = null;
         this.prompt = null;
         this.modal = null;
-        this.updateUrl = this.element + '/Set';  
+        this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?
         
         // Delimited list of child ids
         this.subsections = '0';
@@ -144,7 +144,10 @@ class CONTAINER extends GROUP { // EL {
                     'label': 'SAVE'
                 })
             })
-        ).el.onclick = this.save.bind(this);
+        ).el.onclick = function () {
+            this.save(); //.bind(this);
+            this.navBar.header.toggleCollapse();
+        }.bind(this)
 
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
@@ -500,15 +503,26 @@ class CONTAINER extends GROUP { // EL {
                 }),
 
                 new MODEL(new ATTRIBUTES({
-                    'name': 'formPostId',
+                    'name': 'dataId',
                     'type': 'NUMBER',
-                    'value': new String(this.get('formPostId'))
+                    'value': new String(this.get('dataId'))
                 })).set({
-                    'element': 'INPUT',
-                    'label': 'formPostId',
+                    'element': 'BUTTON',
+                    'label': 'dataId',
+                    'type': 'FORMPOSTINPUT',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'attributesId',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('attributesId'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'attributesId',
+                    'type': 'FORMPOSTINPUT',
                     'addTab': 0
                 })
-
             ]
         );
 
@@ -525,12 +539,15 @@ class CONTAINER extends GROUP { // EL {
      */
     afterSuccessfulPost() {
         console.log('PROMPT.FORM.afterSuccessfulPost(): Posted Successfully.');
-
-        this.setLabel(this.prompt.form.el.elements['label'].value);
-        //this.subsections = this.prompt.form.el.elements['subsections'].value;
-        //this.collapsed = this.prompt.form.el.elements['collapsed'].value;
-        this.prompt.form.loader.hide(200);
-        this.prompt.close(300);
+        try {
+            this.setLabel(this.prompt.form.el.elements['label'].value);
+            //this.subsections = this.prompt.form.el.elements['subsections'].value;
+            //this.collapsed = this.prompt.form.el.elements['collapsed'].value;
+            this.prompt.form.loader.hide(200);
+            this.prompt.close(300);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     /**
@@ -565,6 +582,13 @@ class CONTAINER extends GROUP { // EL {
     */
     setSubSections(subsections) {
         this.model.subsections = subsections;
+    }
+
+    /**
+        Toggles visibility of any child Container Headers
+     */
+    toggleHeaders() {
+        $(this.el).find('.icarus-container nav.navbar-nav').toggle();
     }
 
     /**

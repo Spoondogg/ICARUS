@@ -47,16 +47,13 @@ class EL extends MODEL {
         @returns {EL} Constructed Element
      */
     create(model) {
-        //model = model || new MODEL();
         console.log(this.className+'.create(' + model.className + ')');
         //console.log(model);
         let result = null;
         try {
-            //if (this.callbacks[model.className]) {
             this.callbacks[model.className].forEach(function (fn) {
                 result = fn(model);
             }.bind(this));
-            //} else {
         } catch (e) {
             console.log(
                 this.className + '.create(): No constructor exists '

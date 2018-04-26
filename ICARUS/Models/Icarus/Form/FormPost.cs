@@ -72,7 +72,7 @@ namespace ICARUS.Models.Icarus {
         /// <summary>
         /// The results variable is converted to xml
         /// </summary>
-        private XmlDocument xml { get; set; }
+        private XmlDocument xml = null; //{ get; set; }
         
         /// <summary>
         /// Construct an XML object and message body based on the set form post results 
@@ -85,8 +85,6 @@ namespace ICARUS.Models.Icarus {
 
                     xmlResults.Append("<root ");
                     xmlResults.Append("id=\"" + this.id.ToString());
-                    //xmlResults.Append("class=\"" + formPost.className.ToString());
-                    //xmlResults.Append("name=\"" + formPost.name.ToString());
                     xmlResults.Append("\">");
                     messageBody.Append("<dl>");
 
@@ -101,7 +99,7 @@ namespace ICARUS.Models.Icarus {
                     messageBody.Append("</dl>");
 
                     this.xmlResults = xmlResults.ToString();
-                    //this.jsonResults = "{}";
+
                     this.message = messageBody.ToString();
                     
                     XmlDocument xml = new XmlDocument();
@@ -111,7 +109,7 @@ namespace ICARUS.Models.Icarus {
                     JavaScriptSerializer jsonSerialiser = new JavaScriptSerializer();
                     this.jsonResults = jsonSerialiser.Serialize(this.results);
                     if (this.jsonResults == null) {
-                        this.jsonResults = "";
+                        this.jsonResults = "[]";
                     } else { // Remove the last entry (Should be antiforgerytoken)
                         JArray json = JArray.Parse(this.jsonResults);
                         json.Last.Remove();
@@ -161,6 +159,12 @@ namespace ICARUS.Models.Icarus {
                 i = defaultValue;
             }
             return i;
+        }
+
+        public void setXml() {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(this.xmlResults);
+            this.xml = xml;
         }
 
         /// <summary>

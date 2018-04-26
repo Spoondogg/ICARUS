@@ -10,4 +10,12 @@ class LABEL extends EL {
     constructor(node, label) {
         super(node, 'LABEL', new MODEL(new ATTRIBUTES('control-label')), label || 'My Label');
     }
+
+    /**
+        Sets the value of this label
+        @param {string} name
+     */
+    rename(name) {
+        this.setInnerHTML(name);
+    }
 }

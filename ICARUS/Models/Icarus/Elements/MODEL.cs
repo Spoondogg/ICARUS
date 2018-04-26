@@ -21,6 +21,12 @@ namespace ICARUS.Models.Icarus.Elements {
         public int id { get; set; }
 
         /// <summary>
+        /// A collection of values specific to this element 
+        /// </summary>
+        [NotMapped]
+        public ATTRIBUTES data;
+
+        /// <summary>
         /// A collection of Attributes 
         /// </summary>
         [NotMapped]
@@ -36,9 +42,9 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a generic MODEL
         /// </summary>
         /// <param name="attributes"></param>
-        public MODEL(ATTRIBUTES attributes = null) { //, string label = null
+        public MODEL(ATTRIBUTES attributes = null, ATTRIBUTES data = null) { //, string label = null
             this.attributes = attributes == null ? new ATTRIBUTES() : attributes;
-            //this.label = label == null ? "__NOLABEL" : label;
+            this.data = data == null ? new ATTRIBUTES() : data;
         }
 
         /// <summary>
