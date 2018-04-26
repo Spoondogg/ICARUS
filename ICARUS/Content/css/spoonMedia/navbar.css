@@ -72,13 +72,29 @@
     min-height: 50px;
 }
 
-.navbar-brand {
-    background: url(../Images/Logo.png) no-repeat top left;
+/*
+    Horizontal nav-bars should scroll horizontally in order to avoid cases
+    where the menu gets lost inside the container
+*/
+.navbar-nav.horizontal > .nav-item {
+    clear: none;
+    width: auto;
+}
+
+/*
+    A header contained inside a GROUP > MENU
+*/
+.navbar-nav > header {
+    border-bottom: 1px solid #3c3c3c;
+    border-top: 1px solid #3c3c3c;
+    width: 100%;
+    float: left;
+    clear: both;
     display: block;
-    width: 100px;
-    height: 50px;
-    text-indent: -9999px; /* hides the link text */
-    direction: ltr;
+    background-color: #101010;
+    color: white;
+    font-size: 8pt;
+    padding: 3px;
 }
 
 /* Left aligned text inside drop-down menu 

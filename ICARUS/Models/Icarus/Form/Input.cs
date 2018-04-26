@@ -22,7 +22,7 @@ namespace ICARUS.Models {
             var guid = "INPUT_" + Guid.NewGuid();
             this.element = "INPUT";
             this.hasTab = 0;
-            this.showHeader = 0; // temp
+            //this.showHeader = 0; // temp
             this.label = guid;
             this.attributes.Add("name", guid);
             this.className = "INPUT";

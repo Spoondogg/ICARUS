@@ -9,6 +9,7 @@ using System.Data.Entity.Core.Objects.DataClasses;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Xml;
 
 namespace ICARUS.Controllers {
 
@@ -122,20 +123,31 @@ namespace ICARUS.Controllers {
                         }
                     }
                 } catch (Exception ex) { /*message += "\n No children exist or " + ex.Message; */ }
-                
-                // Attach formPost (if exists)
-                if(model.attributesId > 0) {
-                    FormPost attributes = (FormPost)db.dbSets["FormPost"].Find(model.attributesId);
-                    model.attributes.Add("data-woot", "woot"); // <== works                    
-                    /*
-                    foreach (var attr in attributes.results) {
-                        try {
-                            model.attributes.Add(attr.name, attr.value);
-                        } catch (Exception ea) {
 
-                        }                        
-                    } 
-                    */
+                // Attach formPost (if exists)
+                if (model.dataId > 0) {
+                    FormPost data = (FormPost)db.dbSets["FormPost"].Find(model.dataId);
+
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(data.xmlResults);
+
+                    XmlNodeList node = xml.SelectNodes("/root/*");
+                    foreach (XmlNode xn in node) {
+                        model.data.Add(xn.Name, xn.InnerText);
+                    }
+                }
+
+                // Attach formPost (if exists)
+                if (model.attributesId > 0) {
+                    FormPost attributes = (FormPost)db.dbSets["FormPost"].Find(model.attributesId);
+
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(attributes.xmlResults);
+                    
+                    XmlNodeList node = xml.SelectNodes("/root/*");
+                    foreach (XmlNode xn in node) {
+                        model.attributes.Add(xn.Name, xn.InnerText);
+                    }
                 }
 
                 // Return the fully constructed model

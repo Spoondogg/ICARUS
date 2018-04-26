@@ -10,6 +10,8 @@ class FORMPOST {
         this.__RequestVerificationToken = token.value;
         this.id = form.el.getAttribute('id');
         this.label = form.el.getAttribute('name');
+        //this.id = 0;
+        //this.label = 'none';
 
         // An ordered array of key/value pairs as they appear in the FORM
         this.results = form.getResultsAsArray();

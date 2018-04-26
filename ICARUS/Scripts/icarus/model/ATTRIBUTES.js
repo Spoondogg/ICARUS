@@ -56,4 +56,35 @@ class ATTRIBUTES extends Object {
         }
         return this;
     }
+
+    /**
+        Saves the state of this Element
+     
+    save() {
+        console.log('ATTRIBUTES.save()');
+        let prompt = new PROMPT(
+            'Save ATTRIBUTES()', 'Saves the ATTRIBUTES()',
+            [], [
+                new MODEL(new ATTRIBUTES({
+                    'name': 'formPostId',
+                    'value': this.get('attributesId'),
+                    'readonly': 'readonly'
+                })).set({
+                    'element': 'INPUT',
+                    'type': 'FORMPOST',
+                    'label': 'element'
+                })
+            ]
+        );
+        console.log('ATTRIBUTES.FORMELEMENTGROUP');
+        console.log(prompt.container.children[0].children[0].children[0]);
+
+        // Override form defaults
+        //this.prompt.form.setPostUrl(this.element+'/Set');
+        //this.prompt.form.setPostUrl(this.className + '/Set');
+        //this.prompt.form.afterSuccessfulPost = this.afterSuccessfulPost.bind(this);
+
+        prompt.show();
+    }
+    */
 }

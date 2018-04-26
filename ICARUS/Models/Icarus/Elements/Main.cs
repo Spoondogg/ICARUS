@@ -35,6 +35,7 @@ namespace ICARUS.Models.Icarus {
             this.hasTab = 0;
             this.hasSidebar = 1;
             this.attributesId = 0;
+            this.dataId = 0;
 
             this.navBar = new NAVBAR(true, true);
             this.footer = new STICKYFOOTER(); //"&copy; " + @DateTime.Now.Year

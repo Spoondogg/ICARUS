@@ -5,12 +5,15 @@ class MODEL {
     /**
         Constructs a generic MODEL
         @param {ATTRIBUTES} attributes A collection of attributes
+        @param {ATTRIBUTES} data A collection of data attributes
     */
-    constructor(attributes) {
+    constructor(attributes, data) {
         this.attributes =
             typeof attributes === 'string'
                 ? new ATTRIBUTES(attributes)
                 : attributes || new ATTRIBUTES();
+
+        this.data = data || new ATTRIBUTES();
     }
 
     /**

@@ -14,26 +14,9 @@ class TEXTBLOCK extends CONTAINER {
         super(node, 'DIV', model);
         this.addClass('textblock');
 
-        this.depth = depth;
-
-        //this.header.options.list.emptyGroup('ELEMENTS');
-        this.header.options.list.groups['ELEMENTS'].empty();
-        this.header.options.list.groups['ELEMENTS'].addNavItem(
-            new MODEL(new ATTRIBUTES(), 'Textblock-woot')
-        ).el.onclick = this.expand.bind(this); // this.create.bind(this);
-
-
-        this.header.options.list.groups['ELEMENTS'].addNavItem(
-            new MODEL(new ATTRIBUTES(), 'Paragraph-woot')
-        ).el.onclick = function () {
-            alert('TODO: Create Paragraph');
-        };
-
-        this.header.options.list.groups['ELEMENTS'].addNavItem(
-            new MODEL(new ATTRIBUTES(), 'Image-woot')
-        ).el.onclick = function () {
-            alert('TODO: Create Image');
-        };
+        if (model.dataId > 0) {
+            this.text = new P(this.body.pane, model.data, model.data.text);
+        }
         
         this.populate(model.children);
     }

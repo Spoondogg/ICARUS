@@ -73,7 +73,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="element"></param>
         public Container(string element, MODEL model) : base(element, model) {
             this.id = id;
-            this.label = model.label; //label + "__X"
+            this.label = model.label;
             this.subsections = "0";
             this.collapsed = 0;
             this.showHeader = 1;
@@ -81,7 +81,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasSidebar = 0;
             this.status = 1;
             this.attributesId = 0;
-            //this.className = "CONTAINER";
+            this.dataId = 0;
         }
 
         /// <summary>
@@ -95,7 +95,6 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dateCreated = DateTime.Now;
             this.dateLastModified = DateTime.Now;
             this.updateContainerModel(formPost);
-            //this.className = "CONTAINER";
         }
 
         /// <summary>
@@ -112,6 +111,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.showHeader = formPost.parseInt("showHeader", 1);
             this.collapsed = formPost.parseInt("collapsed");
             this.attributesId = formPost.parseInt("attributesId");
+            this.dataId = formPost.parseInt("dataId");
         }
     }
 }

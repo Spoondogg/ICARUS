@@ -27,6 +27,7 @@ class PROMPT extends MODAL {
                 'hasTab': 0
             })
         );
+        this.form.prompt = this;
         this.fieldset = new FIELDSET(
             this.form.body.pane, new MODEL().set({
                 'label': 'FIELDSET',
@@ -44,13 +45,22 @@ class PROMPT extends MODAL {
             })
         );
 
+        // TODO: Fix this up
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
-                this.formElementGroup.children.push(
-                    new INPUT(this.formElementGroup.body.pane, inputs[i])
-                );
+                console.log('inputs[' + i + ']: ' + inputs[i].type);
+                let inp = null;
+                if (inputs[i].type === 'FORMPOSTINPUT') {
+                    console.log('FORMPOSTINPUT');
+                    new FORMPOSTINPUT(this.formElementGroup.body.pane, inputs[i]);
+                } else {
+                    new INPUT(this.formElementGroup.body.pane, inputs[i]);
+                }
+
+                this.formElementGroup.children.push(inp);
             }
         }
+        
 
         // Add any buttons that were provided
         if (buttons) {

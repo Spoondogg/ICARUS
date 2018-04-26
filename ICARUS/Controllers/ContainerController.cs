@@ -83,7 +83,6 @@ namespace ICARUS.Controllers {
                     "Successfully instantiated " + this.className + "(" + model.id + ")"
                 ), JsonRequestBehavior.AllowGet);
 
-
             } catch (Exception e) {
 
                 // Return the formPost for debugging

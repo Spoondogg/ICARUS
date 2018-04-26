@@ -16,6 +16,11 @@ class JUMBOTRON extends CONTAINER {
                 'background: url(../Content/Images/' + model.backgroundUrl + ') no-repeat center center fixed;'
             );
         }
+
+        if (model.dataId > 0) {
+            this.header = new HEADER(this.body.pane, model.data);
+        }
+
         this.populate(model.children);
     }
 }

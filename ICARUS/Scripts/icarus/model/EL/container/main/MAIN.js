@@ -75,12 +75,7 @@ class MAIN extends CONTAINER {
         ).el.onclick = this.toggleHeaders.bind(this);
     }
 
-    /**
-        Toggles visibility of any child Container Headers
-     */
-    toggleHeaders() {
-        $(this.el).find('.icarus-container nav.navbar-nav').toggle();
-    }
+    
 
     /**
         Override Container.createTab()

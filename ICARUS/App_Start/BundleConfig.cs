@@ -163,12 +163,15 @@ namespace ICARUS {
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",
-                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENTGROUP.js",
+                
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/textarea/TEXTAREA.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/OPTION.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/SELECT.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/INPUT.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/TOKEN.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/formpostinput/FORMPOSTINPUT.js",
+
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENTGROUP.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/FIELDSET.js",
                 "~/Scripts/icarus/model/el/container/form/FORMFOOTER.js",
                 "~/Scripts/icarus/model/el/container/form/FORMPOST.js",

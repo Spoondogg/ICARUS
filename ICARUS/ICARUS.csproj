@@ -412,6 +412,10 @@
     <Compile Include="Migrations\201804210234100_20180420__008.Designer.cs">
       <DependentUpon>201804210234100_20180420__008.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804252131396_20180425__001.cs" />
+    <Compile Include="Migrations\201804252131396_20180425__001.Designer.cs">
+      <DependentUpon>201804252131396_20180425__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\HEADERWRAP.cs" />
@@ -528,6 +532,7 @@
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
@@ -847,6 +852,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804210234100_20180420__008.resx">
       <DependentUpon>201804210234100_20180420__008.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804252131396_20180425__001.resx">
+      <DependentUpon>201804252131396_20180425__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
