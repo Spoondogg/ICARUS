@@ -9,9 +9,9 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
     
-    public class GreyWrapController : ContainerController {
+    public class BannerController : ContainerController {
 
-        public GreyWrapController() : base("GreyWrap") {
+        public BannerController() : base("Banner") {
 
         }
 
@@ -20,9 +20,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            GREYWRAP obj = (formPost == null)
-                ? new GREYWRAP()
-                : new GREYWRAP(formPost);
+            BANNER obj = (formPost == null)
+                ? new BANNER()
+                : new BANNER(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -35,7 +35,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            GREYWRAP model = (GREYWRAP)ctx.GreyWraps.Single(m =>
+            BANNER model = (BANNER)ctx.Banners.Single(m =>
                    m.id == id && m.authorId == User.Identity.Name
                 );
             return model;

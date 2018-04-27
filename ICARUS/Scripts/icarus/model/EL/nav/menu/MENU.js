@@ -49,7 +49,17 @@ class MENU extends UL {
     addNavItem(model) {
         this.children.push(new NAVITEM(this, model)); //model.url, model.label
         return this.addGroup(this.children[this.children.length - 1]);
-    } 
+    }
+
+    /**
+        Adds an array of Nav Items
+        @param {Array} navItems An array of NAVITEM
+     */
+    addNavItems(navItems) {
+        for (let i = 0; i < navItems.length; i++) {
+            this.addNavItem(navItems[i]);
+        }
+    }
 
     /**
         Adds a Separator (UI Only)        

@@ -9,10 +9,9 @@ class CALLOUT extends CONTAINER {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        //this.addClass('callout');
-        //this.addClass('col-lg-4');
-        this.setClass('col-lg-4');
-        this.addClass('callout');
+        this.setClass('col-lg-4'); // Override icarus-container 
+
+        this.body.pane.addClass('callout');
 
 
         this.icon = new GLYPHICON(this.body.pane, '', ICON.LOCK);

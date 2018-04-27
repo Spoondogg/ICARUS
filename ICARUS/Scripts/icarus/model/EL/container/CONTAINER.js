@@ -76,9 +76,10 @@ class CONTAINER extends GROUP {
         this.addContainerCase('FORM');
         this.addContainerCase('LIST');
         this.addContainerCase('JUMBOTRON');
-        this.addContainerCase('HEADERWRAP');
-        this.addContainerCase('GREYWRAP');
+        this.addContainerCase('BANNER');
         this.addContainerCase('TEXTBLOCK');
+        this.addContainerCase('HEADER');
+        this.addContainerCase('PARAGRAPH');
 
         if (this.collapsed) {
             this.collapse();
@@ -148,7 +149,7 @@ class CONTAINER extends GROUP {
         ).el.onclick = function () {
             this.save(); //.bind(this);
             this.navBar.header.toggleCollapse();
-        }.bind(this)
+        }.bind(this);
 
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
@@ -241,7 +242,7 @@ class CONTAINER extends GROUP {
         this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'label': 'Create ^' + className
+                    'label': className //'Create ^'
                 })
             })
         ).el.onclick = function () {

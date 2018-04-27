@@ -48,6 +48,7 @@ namespace ICARUS {
                 "~/Content/css/spoonMedia/navbar.css",
                 "~/Content/css/spoonMedia/prompt.css",
                 "~/Content/css/spoonMedia/modal.css",
+                "~/Content/css/spoonMedia/banner.css",
                 "~/Content/css/spoonMedia/jumbotron.css",
                 "~/Content/css/spoonMedia/section.css",
                 "~/Content/css/spoonMedia/form.css",
@@ -154,8 +155,8 @@ namespace ICARUS {
                 // Jumbotrons and Banners
                 "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
                 "~/Scripts/icarus/model/el/container/callout/CALLOUT.js",
-                "~/Scripts/icarus/model/el/container/greywrap/GREYWRAP.js",
-
+                "~/Scripts/icarus/model/el/container/banner/BANNER.js",
+                "~/Scripts/icarus/model/el/container/paragraph/PARAGRAPH.js",
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 
                 // List

@@ -9,10 +9,12 @@ class JUMBOTRON extends CONTAINER {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        this.addClass('noselect');
+
+        this.body.pane.addClass('jumbotron');
+        this.body.pane.addClass('noselect');
 
         if (model.backgroundUrl) {
-            this.el.setAttribute('style',
+            this.body.pane.el.setAttribute('style',
                 'background: url(../Content/Images/' + model.backgroundUrl + ') no-repeat center center fixed;'
             );
         }

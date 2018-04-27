@@ -91,11 +91,11 @@ namespace ICARUS.Controllers {
         public DbSet<JUMBOTRON> Jumbotrons { get; set; }
         public object Jumbotron { get; internal set; }
 
-        public DbSet<HEADERWRAP> HeaderWraps { get; set; }
-        public object HeaderWrap { get; internal set; }
+        public DbSet<PARAGRAPH> Paragraphs { get; set; }
+        public object Paragraph { get; internal set; }
 
-        public DbSet<GREYWRAP> GreyWraps { get; set; }
-        public object GreyWrap { get; internal set; }
+        public DbSet<BANNER> Banners { get; set; }
+        public object Banner { get; internal set; }
 
         public DbSet<CALLOUT> Callouts { get; set; }
         public object Callout { get; internal set; }
@@ -142,8 +142,8 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("ListItem", ListItems);
             this.dbSets.Add("List", Lists);
             this.dbSets.Add("Jumbotron", Jumbotrons);
-            this.dbSets.Add("HeaderWrap", HeaderWraps);
-            this.dbSets.Add("GreyWrap", GreyWraps);
+            this.dbSets.Add("Banner", Banners);
+            this.dbSets.Add("Paragraph", Paragraphs);
             this.dbSets.Add("Callout", Callouts);
             this.dbSets.Add("TextBlock", TextBlocks);
             this.dbSets.Add("NavItem", NavItems);

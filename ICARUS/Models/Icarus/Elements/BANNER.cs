@@ -10,21 +10,21 @@ namespace ICARUS.Models.Icarus.Elements {
     /// A Bootstrap Greywrap is a large banner style element, typically 
     /// located at the top of the page that contains a series of callouts
     /// </summary>
-    public class GREYWRAP : Container {
+    public class BANNER : Container {
 
         /// <summary>
         /// Jumbotron with image and header
         /// </summary>
         /// <param name="attributes"></param>
-        public GREYWRAP() : base("DIV", new MODEL(new ATTRIBUTES("greywrap"))) {
-            this.label = "GREYWRAP";
+        public BANNER() : base("DIV", new MODEL()) {
+            this.label = "BANNER";
         }
 
         /// <summary>
         /// Constructs an ARTICLE with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public GREYWRAP(FormPost formPost) : base("DIV", formPost) {
+        public BANNER(FormPost formPost) : base("DIV", formPost) {
 
         }
     }
