@@ -1,7 +1,7 @@
 ﻿/**
-    Jumbotron with centered icon and text
+    A banner that can be populated with CallOuts
 */
-class GREYWRAP extends CONTAINER {
+class BANNER extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
@@ -9,7 +9,7 @@ class GREYWRAP extends CONTAINER {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        this.addClass('greywrap');
+        this.addClass('banner');
         this.addContainerCase('CALLOUT');
         this.populate(model.children);
     }

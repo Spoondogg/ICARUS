@@ -9,9 +9,9 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
     
-    public class HeaderWrapController : JumbotronController {
+    public class ParagraphController : ContainerController {
 
-        public HeaderWrapController() : base() {
+        public ParagraphController() : base("Paragraph") {
 
         }
 
@@ -20,9 +20,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            HEADERWRAP obj = (formPost == null)
-                ? new HEADERWRAP()
-                : new HEADERWRAP(formPost);
+            PARAGRAPH obj = (formPost == null)
+                ? new PARAGRAPH()
+                : new PARAGRAPH(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -35,7 +35,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            HEADERWRAP model = (HEADERWRAP)ctx.HeaderWraps.Single(m =>
+            PARAGRAPH model = (PARAGRAPH)ctx.Paragraphs.Single(m =>
                    m.id == id && m.authorId == User.Identity.Name
                 );
             return model;

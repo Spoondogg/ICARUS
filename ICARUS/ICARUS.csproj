@@ -205,8 +205,8 @@
     <Compile Include="Controllers\FormElementController.cs" />
     <Compile Include="Controllers\FormElementGroupController.cs" />
     <Compile Include="Controllers\CalloutController.cs" />
-    <Compile Include="Controllers\HeaderWrapController.cs" />
-    <Compile Include="Controllers\GreyWrapController.cs" />
+    <Compile Include="Controllers\ParagraphController.cs" />
+    <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\TextBlockController.cs" />
     <Compile Include="Controllers\JumbotronController.cs" />
     <Compile Include="Controllers\ListController.cs" />
@@ -418,17 +418,25 @@
     <Compile Include="Migrations\201804252131396_20180425__001.Designer.cs">
       <DependentUpon>201804252131396_20180425__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804271751413_20180427__001.cs" />
+    <Compile Include="Migrations\201804271751413_20180427__001.Designer.cs">
+      <DependentUpon>201804271751413_20180427__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804271752146_20180427__002.cs" />
+    <Compile Include="Migrations\201804271752146_20180427__002.Designer.cs">
+      <DependentUpon>201804271752146_20180427__002.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
-    <Compile Include="Models\Icarus\Elements\GREYWRAP.cs" />
-    <Compile Include="Models\Icarus\Elements\HEADERWRAP.cs" />
+    <Compile Include="Models\Icarus\Elements\BANNER.cs" />
+    <Compile Include="Models\Icarus\Elements\HEADER.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
     <Compile Include="Models\Icarus\Form\Input.cs" />
     <Compile Include="Models\Icarus\Form\FormElementGroup.cs" />
     <Compile Include="Models\Icarus\Elements\MODEL.cs" />
-    <Compile Include="Models\Icarus\Elements\P.cs" />
+    <Compile Include="Models\Icarus\Elements\PARAGRAPH.cs" />
     <Compile Include="Models\Icarus\Elements\Payload.cs" />
     <Compile Include="Models\Icarus\Elements\TEXTBLOCK.cs" />
     <Compile Include="Models\Icarus\Enums\ICON.cs" />
@@ -496,6 +504,7 @@
   <ItemGroup>
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\spoonMedia\banner.css" />
     <Content Include="Content\css\spoonMedia\button.css" />
     <Content Include="Content\css\spoonMedia\container.css" />
     <Content Include="Content\css\spoonMedia\dropdown.css" />
@@ -535,10 +544,11 @@
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />
     <Content Include="Scripts\icarus\model\el\container\callout\CALLOUT.js" />
-    <Content Include="Scripts\icarus\model\el\container\greywrap\GREYWRAP.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\BANNER.js" />
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
@@ -861,6 +871,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804252131396_20180425__001.resx">
       <DependentUpon>201804252131396_20180425__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804271751413_20180427__001.resx">
+      <DependentUpon>201804271751413_20180427__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804271752146_20180427__002.resx">
+      <DependentUpon>201804271752146_20180427__002.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

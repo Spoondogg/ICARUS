@@ -41,41 +41,38 @@ class MAIN extends CONTAINER {
         Add items to Options Dropdown Tab
      */
     addNavOptions() {
-        this.navBar.header.menu.addNavSeparator();
-        this.navBar.header.menu.addNavItem(
+        this.navBar.header.menu.getGroup('USER').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
                     'label': 'Log Out',
                     'url': '#?url=logout'
                 })
             })
-        ).el.onclick = this.logout.bind(this);
-        
+        ).el.onclick = function () {
+            this.navBar.header.toggleCollapse();
+            this.logout.bind(this);
+        };        
 
         this.navBar.header.menu.getGroup('USER').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
-                    'label': 'Manage User',
+                    'label': 'Manage',
                     'url': 'Manage/Index'
                 })
-                //'label': 'Manage User',
-                //'url': 'Manage/Index'
             })
         );
-
-        this.navBar.header.menu.addNavSeparator();
-
-        // Button to toggle Headers
-        this.navBar.header.menu.addNavItem(
+        
+        this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
                     'label': 'Toggle Headers'
                 })
             })
-        ).el.onclick = this.toggleHeaders.bind(this);
+        ).el.onclick = function () {
+            this.toggleHeaders();
+            this.navBar.header.toggleCollapse();            
+        }.bind(this);
     }
-
-    
 
     /**
         Override Container.createTab()

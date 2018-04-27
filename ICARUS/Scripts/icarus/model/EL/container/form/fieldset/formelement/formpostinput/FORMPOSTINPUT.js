@@ -32,7 +32,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
     /**
      * Sets the id of the original FormPostInput to the given value
-     * @param {number} id
+     * @param {number} id Id to set
      */
     updateInput(id) {
         this.input.el.value = id;

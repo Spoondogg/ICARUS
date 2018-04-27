@@ -15,7 +15,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// A wide header that often contains a background image and heading
         /// </summary>
         /// <param name="attributes"></param>
-        public JUMBOTRON() : base("DIV", new MODEL(new ATTRIBUTES("jumbotron")) {
+        public JUMBOTRON() : base("DIV", new MODEL() {
             label = "JUMBOTRON"
         }) {
 

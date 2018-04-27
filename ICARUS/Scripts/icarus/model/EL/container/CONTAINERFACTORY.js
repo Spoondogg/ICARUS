@@ -64,12 +64,16 @@ class CONTAINERFACTORY {
                     obj = new JUMBOTRON(node, result.model);
                     break;
 
-                case 'HEADERWRAP':
-                    obj = new HEADERWRAP(node, result.model);
+                case 'HEADER':
+                    obj = new HEADER(node, result.model);
                     break;
 
-                case 'GREYWRAP':
-                    obj = new GREYWRAP(node, result.model);
+                case 'PARAGRAPH':
+                    obj = new PARAGRAPH(node, result.model);
+                    break;
+
+                case 'BANNER':
+                    obj = new BANNER(node, result.model);
                     break;
 
                 case 'CALLOUT':
