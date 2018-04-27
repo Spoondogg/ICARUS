@@ -151,9 +151,10 @@ namespace ICARUS {
 
 
 
-                // Jumbotrons
+                // Jumbotrons and Banners
                 "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
-                "~/Scripts/icarus/model/el/container/jumbotron/headerwrap/HEADERWRAP.js",
+                "~/Scripts/icarus/model/el/container/callout/CALLOUT.js",
+                "~/Scripts/icarus/model/el/container/greywrap/GREYWRAP.js",
 
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 

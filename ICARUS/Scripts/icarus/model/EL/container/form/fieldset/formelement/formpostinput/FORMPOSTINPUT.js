@@ -21,11 +21,13 @@ class FORMPOSTINPUT extends FORMELEMENT {
             })
         ));
 
-        this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT');
-        this.btnEdit.el.onclick = this.editAttributes.bind(this);
-
-        this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW');
-        this.btnNew.el.onclick = this.newAttributes.bind(this);
+        if (model.attributes.value > 0) {
+            this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT');
+            this.btnEdit.el.onclick = this.editAttributes.bind(this);
+        } else {
+            this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW');
+            this.btnNew.el.onclick = this.newAttributes.bind(this);
+        }
     } 
 
     /**

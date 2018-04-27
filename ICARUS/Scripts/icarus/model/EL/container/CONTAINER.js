@@ -77,6 +77,7 @@ class CONTAINER extends GROUP {
         this.addContainerCase('LIST');
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('HEADERWRAP');
+        this.addContainerCase('GREYWRAP');
         this.addContainerCase('TEXTBLOCK');
 
         if (this.collapsed) {
@@ -224,6 +225,7 @@ class CONTAINER extends GROUP {
         return $.ajax({
             url: url,
             type: type, //ie: POST
+            async: true, 
             data: formPost,
             success: function (result) {
                 // Do something with the result
@@ -409,7 +411,9 @@ class CONTAINER extends GROUP {
 
         let subsections = [];
         for (let c = 0; c < this.body.pane.children.length; c++) {
-            subsections.push(this.body.pane.children[c].id);
+            if (this.body.pane.children[c] !== null) {
+                subsections.push(this.body.pane.children[c].id);
+            }
         }
 
         this.prompt = new PROMPT(
