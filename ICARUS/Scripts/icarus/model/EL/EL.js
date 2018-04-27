@@ -48,7 +48,6 @@ class EL extends MODEL {
      */
     create(model) {
         console.log(this.className+'.create(' + model.className + ')');
-        //console.log(model);
         let result = null;
         try {
             this.callbacks[model.className].forEach(function (fn) {

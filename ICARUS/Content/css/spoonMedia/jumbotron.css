@@ -32,3 +32,12 @@
         font-weight: normal;
         padding: 0 6px;
     }
+
+.greywrap {
+    border-bottom: 1px solid #ddd;
+}
+
+.callout {
+    text-align: center;
+    padding: 0;
+}
