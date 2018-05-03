@@ -56,23 +56,33 @@ class CONTAINER extends GROUP {
         // Consider that if model.navBar doesn't exist, it doesn't need to be created
         // navbar is pretty heavy
         // Create it on demand instead of always being here
+        
         if (model.navBar === undefined) {
             model.navBar = {};
             model.navBar.label = model.label;
             model.navBar.brand = this.element;
         }
-
+        /*
         this.navBar = new NAVBAR(this, model.navBar);
         if (model.showHeader) {
             this.navBar.addClass('active');
         }
+        */
+        if (model.navBar) {
+            this.navBar = new NAVBAR(this, model.navBar);
+            if (model.showHeader) {
+                this.navBar.addClass('active');
+            }
+        }
 
         this.body = new CONTAINERBODY(this, model);
 
-        this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
+        if (model.navBar) {
+            this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
+            this.addNavBarDefaults();
+        }
 
-        this.addNavBarDefaults();
-
+        this.addContainerCase('IFRAME');
         this.addContainerCase('FORM');
         this.addContainerCase('LIST');
         this.addContainerCase('JUMBOTRON');
@@ -87,13 +97,62 @@ class CONTAINER extends GROUP {
             this.expand();
         }
 
-        if (!model.showHeader) {
-            this.navBar.hide();
+        if (model.navBar) {
+            if (!model.showHeader) {
+                this.navBar.hide();
+            }
         }
 
         if (model.hasTab) {
             this.tab = this.createTab(this);
         }        
+    }
+
+    /**
+     * Moves this element UP one slot
+     */
+    moveUp() {
+        console.log('Move Up');
+        let node = $(this.el);
+        //let node = $(this.node.el);
+        //let container = this.node.node.el;
+        if (node.prev().length > 0) {
+            node.animate({ height: 'toggle' }, 300);
+            setTimeout(function () {
+                node
+                    .prev()
+                    .animate({ height: 'toggle' }, 300)
+                    .insertAfter(node)
+                    .animate({ height: 'toggle' }, 300);
+            }, 0);
+            setTimeout(function () {
+                node.animate({ height: 'toggle' }, 300).delay(300);
+            }, 300);
+        }
+    }
+
+    /**
+     * Moves this element DOWN one slot
+     */
+    moveDown() {
+        console.log('Move Down');
+        let node = $(this.el);
+        //let node = $(this.node.el);
+        //let container = this.node.node.el;
+        if (node.next().length > 0) {
+            node.animate({ height: 'toggle' }, 300);
+            setTimeout(function () {
+                node
+                    .next()
+                    .animate({ height: 'toggle' }, 300)
+                    .insertBefore(node)
+                    .animate({ height: 'toggle' }, 300)
+                    .delay(300);
+            }, 0);
+            setTimeout(function () {
+                node.animate({ height: 'toggle' }, 300);
+            }, 300);
+        }
     }
 
     /**
@@ -121,7 +180,10 @@ class CONTAINER extends GROUP {
                     'label': 'UP'
                 })
             })
-        );
+        ).el.onclick = function () {            
+            this.navBar.header.toggleCollapse();       
+            this.moveUp();
+        }.bind(this);
         
         this.navBar.header.menu.getGroup('DOM').addNavItem(
             new MODEL().set({
@@ -129,7 +191,10 @@ class CONTAINER extends GROUP {
                     'label': 'DN'
                 })
             })
-        );
+        ).el.onclick = function () {
+            this.navBar.header.toggleCollapse();
+            this.moveDown();
+        }.bind(this);
         
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
@@ -140,15 +205,25 @@ class CONTAINER extends GROUP {
         ).el.onclick = this.load.bind(this);
 
         // Add items to Options Dropdown Tab
-        this.navBar.header.menu.getGroup('CRUD').addNavItem(
+        let btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
                     'label': 'SAVE'
                 })
             })
-        ).el.onclick = function () {
-            this.save(); //.bind(this);
-            this.navBar.header.toggleCollapse();
+        );
+        btnSave.el.onclick = function () {
+            btnSave.toggle('active');
+            //this.navBar.header.menu.scrollTo();
+            if ($(btnSave.el).hasClass('active')) {
+                this.save(this.navBar.header.menu.getGroup('CRUD').collapse); //.bind(this);
+            } else {                
+                $(this.navBar.header.menu.getGroup('CRUD').collapse.el).collapse('hide');
+                setTimeout(function () {
+                    this.navBar.header.menu.getGroup('CRUD').collapse.empty();
+                }.bind(this), 1000);
+            }
+            //this.navBar.header.toggleCollapse();
         }.bind(this);
 
         this.navBar.header.menu.getGroup('CRUD').addNavItem(
@@ -159,7 +234,7 @@ class CONTAINER extends GROUP {
             })
         ).el.onclick = this.disable.bind(this);
     }
-
+    
     /**
         Creates a TAB that represents this container
         @param {MODEL} model Object Model
@@ -239,18 +314,23 @@ class CONTAINER extends GROUP {
         @param {string} className Element constructor class name
     */
     addConstructElementButton(className) {
-        this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': className //'Create ^'
+        try {
+            this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': className //'Create ^'
+                    })
                 })
-            })
-        ).el.onclick = function () {
-            this.navBar.header.toggleCollapse();
-            this.create(new MODEL().set({
-                'className': className
-            }));
-        }.bind(this);
+            ).el.onclick = function () {
+                this.navBar.header.toggleCollapse();
+                this.create(new MODEL().set({
+                    'className': className
+                }));
+            }.bind(this);
+        } catch (e) {
+            console.log('Unable to add Construct Element Button for "' + className + '"');
+            console.log(e);
+        }
     }
 
     /**
@@ -264,7 +344,7 @@ class CONTAINER extends GROUP {
         @param {boolean} addButton If false, no button is created
     */
     addContainerCase(className, addButton = true) {
-        console.log(this.className + '.addContainerCase(' + className + ')');
+        //console.log(this.className + '.addContainerCase(' + className + ')');
         this.addCase(className,
             function (model) {
                 return factory.get(this.body.pane, className, model.id || 0);
@@ -406,17 +486,218 @@ class CONTAINER extends GROUP {
 
     /**
         Saves the state of this Element
+        @param {EL} node The parent container for save menu
      */
-    save() {
+    save(node) {
         console.log(this.element + '.save()');
 
         let subsections = [];
-        for (let c = 0; c < this.body.pane.children.length; c++) {
-            if (this.body.pane.children[c] !== null) {
-                subsections.push(this.body.pane.children[c].id);
+        let id = null;
+        for (let c = 0; c < this.body.pane.el.children.length; c++) {
+            id = parseInt(this.body.pane.el.children[c].id);
+            if (!isNaN(id)) {
+                subsections.push(id);
             }
         }
 
+        console.log('Creating prompt form...');        
+        node.empty();
+        //node.hide();
+        
+        let form = new FORM(
+            node,
+            new MODEL(new ATTRIBUTES({
+                'style':'background-color:white;'
+            })).set({
+                'label': 'PROMPT FORM',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+        let fieldset = new FIELDSET(
+            form.body.pane, new MODEL().set({
+                'label': 'FIELDSET',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+        let formElementGroup = new FORMELEMENTGROUP(
+            fieldset.body.pane, new MODEL(
+                new ATTRIBUTES({
+                    'style':'max-height:40vh;overflow-y:auto;'
+                })
+            ).set({
+                'label': 'FORMELEMENTGROUP',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+
+        console.log('INPUTS!');
+
+
+        let inputs = [
+            new MODEL(new ATTRIBUTES({
+                'name': 'element',
+                'value': this.get('element'),
+                'readonly': 'readonly'
+            })).set({
+                'element': 'INPUT',
+                'label': 'element'
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'id': 0,
+                'name': 'id',
+                'value': new String(this.get('id')),
+                'readonly': 'readonly'
+            })).set({
+                'element': 'INPUT',
+                'label': 'ID'
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'label',
+                'value': typeof this.get('label') === 'object' ? new String(this.get('label').el.innerHTML) : new String(this.get('label'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Label'
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'subsections',
+                'value': subsections.length > 0 ? subsections.toString() : '0',
+                'readonly': 'readonly'
+            })).set({
+                'element': 'INPUT',
+                'label': 'SubSections'
+            }),
+
+            // Should be checkbox or dropdown
+            new MODEL(new ATTRIBUTES({
+                'name': 'status',
+                'type': 'NUMBER',
+                'value': new String(this.get('status'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Status',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'showHeader',
+                'type': 'NUMBER',
+                'value': new String(this.get('showHeader'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Show Header',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'hasSidebar',
+                'type': 'NUMBER',
+                'value': new String(this.get('hasSidebar'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Show Sidebar',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'collapsed',
+                'type': 'NUMBER',
+                'value': new String(this.get('collapsed'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Collapsed',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'hasTab',
+                'type': 'NUMBER',
+                'value': new String(this.get('hasTab'))
+            })).set({
+                'element': 'INPUT',
+                'label': 'Has Tab',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'dataId',
+                'type': 'NUMBER',
+                'value': new String(this.get('dataId'))
+            })).set({
+                'element': 'BUTTON',
+                'label': 'dataId',
+                'type': 'FORMPOSTINPUT',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'attributesId',
+                'type': 'NUMBER',
+                'value': new String(this.get('attributesId'))
+            })).set({
+                'element': 'BUTTON',
+                'label': 'attributesId',
+                'type': 'FORMPOSTINPUT',
+                'addTab': 0
+            }),
+
+            new MODEL(new ATTRIBUTES({
+                'name': 'shared',
+                'type': 'NUMBER',
+                'value': new String(this.get('shared'))
+            })).set({
+                'element': 'BUTTON',
+                'label': 'shared',
+                'type': 'FORMPOSTINPUT',
+                'addTab': 0
+            })
+        ];
+
+        // TODO: Fix this up
+        if (inputs) {
+            for (let i = 0; i < inputs.length; i++) {
+                console.log('inputs[' + i + ']: ' + inputs[i].type);
+                let inp = null;
+                if (inputs[i].type === 'FORMPOSTINPUT') {
+                    console.log('FORMPOSTINPUT');
+                    new FORMPOSTINPUT(formElementGroup.body.pane, inputs[i]);
+                } else {
+                    new INPUT(formElementGroup.body.pane, inputs[i]);
+                }
+                formElementGroup.children.push(inp);
+            }
+        }
+
+        /*
+        // Add any buttons that were provided
+        let buttons = [];
+        if (buttons) {
+            for (let b = 0; b < buttons.length; b++) {
+                form.footer.buttonGroup.addButton(buttons[b][0], buttons[b][1], buttons[b][2]);
+            }
+        }
+        */
+
+        form.setPostUrl(this.className + '/Set');
+
+        form.afterSuccessfulPost = function () {
+            node.hide();
+            node.empty();
+            this.navBar.header.toggleHeaders(); //.toggleHeaders();
+            this.setLabel(form.el.elements['label'].value);
+        }.bind(this);
+
+        node.show();
+
+        /*
         this.prompt = new PROMPT(
             'Save ' + this.get('element'), 'Saves the ' + this.get('element'),
             [], [
@@ -527,9 +808,21 @@ class CONTAINER extends GROUP {
                     'label': 'attributesId',
                     'type': 'FORMPOSTINPUT',
                     'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'shared',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('shared'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'shared',
+                    'type': 'FORMPOSTINPUT',
+                    'addTab': 0
                 })
             ]
         );
+
 
         // Override form defaults
         //this.prompt.form.setPostUrl(this.element+'/Set');
@@ -537,19 +830,20 @@ class CONTAINER extends GROUP {
         this.prompt.form.afterSuccessfulPost = this.afterSuccessfulPost.bind(this);
 
         this.prompt.show();
+        */
     }
 
     /**
         Actions performed after this container is saved
      */
     afterSuccessfulPost() {
-        console.log('PROMPT.FORM.afterSuccessfulPost(): Posted Successfully.');
+        console.log('CONTAINER.FORM.afterSuccessfulPost(): Posted Successfully.');
         try {
-            this.setLabel(this.prompt.form.el.elements['label'].value);
+            //this.setLabel(this.el.elements['label'].value);
             //this.subsections = this.prompt.form.el.elements['subsections'].value;
             //this.collapsed = this.prompt.form.el.elements['collapsed'].value;
-            this.prompt.form.loader.hide(200);
-            this.prompt.close(300);
+            //this.loader.hide(200);
+            //this.prompt.close(300);
         } catch (e) {
             console.log(e);
         }

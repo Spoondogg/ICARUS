@@ -28,9 +28,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            Form obj = (formPost == null)
-                ? new Form()
-                : new Form(formPost);
+            FORM obj = (formPost == null)
+                ? new FORM()
+                : new FORM(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -43,7 +43,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            Form model = (Form)ctx.Forms.Single(m =>
+            FORM model = (FORM)ctx.Forms.Single(m =>
                    m.id == id && m.authorId == User.Identity.Name
                 );
             return model;

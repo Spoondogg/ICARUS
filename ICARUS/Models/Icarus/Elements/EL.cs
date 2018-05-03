@@ -48,6 +48,13 @@ namespace ICARUS.Models.Icarus {
         public int status { get; set; }
 
         /// <summary>
+        /// Indicates if the object is active/inactive on the database, 
+        /// or any other states that might be needed
+        /// </summary>
+        [Required]
+        public int shared { get; set; }
+
+        /// <summary>
         /// An HTML string that will be added to this node/element
         /// </summary>
         private string innerHtml { get; set; }
@@ -87,6 +94,7 @@ namespace ICARUS.Models.Icarus {
             this.innerHtml = innerHtml;
             this.children = new List<Object>();
             this.status = 1;
+            this.shared = 0;
         }
 
         /// <summary>

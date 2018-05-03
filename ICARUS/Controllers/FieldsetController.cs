@@ -25,9 +25,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            FieldSet obj = (formPost == null)
-                ? new FieldSet()
-                : new FieldSet(formPost);
+            FIELDSET obj = (formPost == null)
+                ? new FIELDSET()
+                : new FIELDSET(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -40,7 +40,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            FieldSet model = (FieldSet)ctx.FieldSets.Single(m =>
+            FIELDSET model = (FIELDSET)ctx.FieldSets.Single(m =>
                    m.id == id && m.authorId == User.Identity.Name
                 );
             return model;

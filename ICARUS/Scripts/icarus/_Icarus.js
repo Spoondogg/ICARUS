@@ -4,7 +4,7 @@
 
     This document contains what essentially acts as the MAIN method for the application
 
-    @version 3.1.20180107
+    @version 0.4.0.20180428
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
 
@@ -294,7 +294,8 @@ const ICON = {
     RESET: 'glyphicon-refresh',
     REFRESH: 'glyphicon-refresh',
     REMOVE: 'glyphicon-remove-circle',
-    LIST: 'glyphicon glyphicon-th-list'
+    LIST: 'glyphicon-th-list',
+    CERTIFICATE: 'glyphicon-certificate'
 };
 
 /**

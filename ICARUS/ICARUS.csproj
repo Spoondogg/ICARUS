@@ -199,7 +199,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\AbstractController.cs" />
     <Compile Include="Controllers\FormElementController.cs" />
@@ -426,7 +428,13 @@
     <Compile Include="Migrations\201804271752146_20180427__002.Designer.cs">
       <DependentUpon>201804271752146_20180427__002.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805021810405_20180502__001.cs" />
+    <Compile Include="Migrations\201805021810405_20180502__001.Designer.cs">
+      <DependentUpon>201805021810405_20180502__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
+    <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
     <Compile Include="Models\Icarus\Elements\BANNER.cs" />
@@ -434,7 +442,7 @@
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
     <Compile Include="Models\Icarus\Form\Input.cs" />
-    <Compile Include="Models\Icarus\Form\FormElementGroup.cs" />
+    <Compile Include="Models\Icarus\Form\FORMELEMENTGROUP.cs" />
     <Compile Include="Models\Icarus\Elements\MODEL.cs" />
     <Compile Include="Models\Icarus\Elements\PARAGRAPH.cs" />
     <Compile Include="Models\Icarus\Elements\Payload.cs" />
@@ -486,7 +494,7 @@
     <Compile Include="Models\Icarus\Form\Option.cs" />
     <Compile Include="Models\Icarus\Form\FormValue.cs" />
     <Compile Include="Models\Icarus\Form\FormPost.cs" />
-    <Compile Include="Models\Icarus\Form\FieldSet.cs" />
+    <Compile Include="Models\Icarus\Form\FIELDSET.cs" />
     <Compile Include="Models\Icarus\Database\Procedures\IcarusProcedure.cs" />
     <Compile Include="Models\Icarus\Log\Log.cs" />
     <Compile Include="Models\Icarus\Database\Procedures\ProcedureTypeList.cs" />
@@ -495,8 +503,8 @@
     <Compile Include="Models\Icarus\Database\Param.cs" />
     <Compile Include="Models\MVC\IdentityModels.cs" />
     <Compile Include="Models\MVC\ManageViewModels.cs" />
-    <Compile Include="Models\Icarus\Form\Form.cs" />
-    <Compile Include="Models\Icarus\Form\FormElement.cs" />
+    <Compile Include="Models\Icarus\Form\FORM.cs" />
+    <Compile Include="Models\Icarus\Form\FORMELEMENT.cs" />
     <Compile Include="Models\Icarus\Database\Schemas\IcarusSchema.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -504,6 +512,8 @@
   <ItemGroup>
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\icomoon.css" />
+    <Content Include="Content\css\icomoon\icomoon.svg" />
     <Content Include="Content\css\spoonMedia\banner.css" />
     <Content Include="Content\css\spoonMedia\button.css" />
     <Content Include="Content\css\spoonMedia\container.css" />
@@ -513,6 +523,7 @@
     <Content Include="Content\css\spoonMedia\form.css" />
     <Content Include="Content\css\spoonMedia\glyphicon.css" />
     <Content Include="Content\css\spoonMedia\icarus.css" />
+    <Content Include="Content\css\spoonMedia\icon.css" />
     <Content Include="Content\css\spoonMedia\jumbotron.css" />
     <Content Include="Content\css\spoonMedia\label.css" />
     <Content Include="Content\css\spoonMedia\main.css" />
@@ -523,6 +534,7 @@
     <Content Include="Content\css\spoonMedia\section.css" />
     <Content Include="Content\css\spoonMedia\table.css" />
     <Content Include="Content\css\spoonMedia\textblock.css" />
+    <Content Include="Content\css\spoonMedia\thumbnail.css" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -540,14 +552,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\jac\cover_about.jpg" />
+    <Content Include="Content\Images\jac\customerfirst\JT_CustomerFirst.jpg" />
+    <Content Include="Content\Images\jac\main\JT_Main.jpg" />
+    <Content Include="Content\Images\jac\proudlyindependent\JT_ProudlyIndependent.jpg" />
+    <Content Include="Content\Images\jac\services\JT_OurServices.jpg" />
+    <Content Include="Content\Images\jac\services\svc_oilchange.jpg" />
+    <Content Include="Content\Images\jac\services\svc_suspension.jpg" />
+    <Content Include="Content\Images\jac\services\svc_tires.jpg" />
+    <Content Include="Content\Images\jac\services\svc_transmission.jpg" />
+    <Content Include="Content\Images\jac\services\svc_tuneups.jpg" />
+    <Content Include="Content\Images\jac\services\svc_general.jpg" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
+    <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />
-    <Content Include="Scripts\icarus\model\el\container\callout\CALLOUT.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\callout\CALLOUT.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\BANNER.js" />
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
@@ -613,6 +638,11 @@
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\css\icomoon\.DS_Store" />
+    <Content Include="Content\css\icomoon\icomoon-.eot" />
+    <Content Include="Content\css\icomoon\icomoon.eot" />
+    <Content Include="Content\css\icomoon\icomoon.ttf" />
+    <Content Include="Content\css\icomoon\icomoon.woff" />
     <None Include="Properties\PublishProfiles\LOCAL.pubxml" />
     <None Include="Properties\PublishProfiles\OBAD266x4.pubxml" />
     <None Include="Scripts\jquery\jquery-1.10.2.intellisense.js" />
@@ -877,6 +907,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804271752146_20180427__002.resx">
       <DependentUpon>201804271752146_20180427__002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805021810405_20180502__001.resx">
+      <DependentUpon>201805021810405_20180502__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

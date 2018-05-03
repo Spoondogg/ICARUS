@@ -11,6 +11,7 @@ class BANNER extends CONTAINER {
         super(node, 'DIV', model);
         this.addClass('banner');
         this.addContainerCase('CALLOUT');
+        this.addContainerCase('THUMBNAIL');
         this.populate(model.children);
     }
 }

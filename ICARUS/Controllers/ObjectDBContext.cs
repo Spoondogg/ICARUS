@@ -50,6 +50,9 @@ namespace ICARUS.Controllers {
         public DbSet<Container> Containers { get; set; }
         public object Container { get; internal set; }
 
+        public DbSet<IFRAME> IFrames { get; set; }
+        public object IFrame { get; internal set; }
+
         public DbSet<Article> Articles { get; set; }
         public object Article { get; internal set; }
 
@@ -57,13 +60,13 @@ namespace ICARUS.Controllers {
         public object Section { get; internal set; }
 
         // FORM
-        public DbSet<Form> Forms { get; set; }
+        public DbSet<FORM> Forms { get; set; }
         public object Form { get; internal set; }
 
-        public DbSet<FieldSet> FieldSets { get; set; }
+        public DbSet<FIELDSET> FieldSets { get; set; }
         public object FieldSet { get; internal set; }
 
-        public DbSet<FormElementGroup> FormElementGroups { get; set; }
+        public DbSet<FORMELEMENTGROUP> FormElementGroups { get; set; }
         public object FormElementGroup { get; internal set; }
 
         public DbSet<FormElement> FormElements { get; set; }
@@ -100,6 +103,9 @@ namespace ICARUS.Controllers {
         public DbSet<CALLOUT> Callouts { get; set; }
         public object Callout { get; internal set; }
 
+        public DbSet<THUMBNAIL> Thumbnails { get; set; }
+        public object Thumbnail { get; internal set; }
+
         public DbSet<TEXTBLOCK> TextBlocks { get; set; }
         public object TextBlock { get; internal set; }
 
@@ -129,6 +135,7 @@ namespace ICARUS.Controllers {
             this.dbSets = new Dictionary<string, DbSet>();
             this.dbSets.Add("Main", Mains);
             this.dbSets.Add("Container", Containers);
+            this.dbSets.Add("IFrame", IFrames);
             this.dbSets.Add("Article", Articles);
             this.dbSets.Add("Section", Sections);
             this.dbSets.Add("Form", Forms);
@@ -145,6 +152,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Banner", Banners);
             this.dbSets.Add("Paragraph", Paragraphs);
             this.dbSets.Add("Callout", Callouts);
+            this.dbSets.Add("Thumbnail", Thumbnails);
             this.dbSets.Add("TextBlock", TextBlocks);
             this.dbSets.Add("NavItem", NavItems);
             this.dbSets.Add("FormPost", FormPosts);

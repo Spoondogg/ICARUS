@@ -15,8 +15,11 @@ class MENU extends UL {
         if (model.showHeader) {
             this.header = new HEADER(this, new MODEL().set({
                 'label': model.name
-            }));
+            })).el.onclick = this.toggleCollapse.bind(this);
         }
+        this.collapse = new EL(node, 'DIV', new MODEL(
+            new ATTRIBUTES('container-body collapse')
+        ));
 
         this.addCase('MENU', function (model) {
             return this.addMenu(model);
@@ -29,6 +32,38 @@ class MENU extends UL {
         this.addCase('NAVSEPARATOR', function (model) {
             return this.addNavSeparator();
         }.bind(this));
+    }
+
+    /**
+        Toggles the collapsed state of the 'COLLAPSE'
+     */
+    toggleCollapse() {
+        $(this.collapse.el).collapse('toggle');
+    }
+
+    /**
+        Collapses the container's body
+        @returns {boolean} true if hidden
+    */
+    hide() {
+        try {
+            $(this.collapse.el).collapse('hide');
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
+        Expands the container's body
+    */
+    show() {
+        try {
+            $(this.collapse.el).collapse('show');
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     /**

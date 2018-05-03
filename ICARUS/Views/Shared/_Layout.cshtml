@@ -10,14 +10,16 @@
     <meta name="author" content="Ryan Dunphy" />
     <title>@ViewBag.Title - ICARUS 0.2.2018.02.11</title>
     @* Preload these scripts *@
-    @Styles.Render("~/Content/css/bootstrap")
-    @Styles.Render("~/Content/css/icarus")
-    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/icarus")
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
+    <link rel="stylesheet" href="Content/css/icomoon.css">
+    @Styles.Render("~/Content/css/bootstrap")
+    @* Styles.Render("~/Content/css/icomoon") *@
+    @Styles.Render("~/Content/css/icarus")
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />

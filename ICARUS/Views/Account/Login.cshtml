@@ -17,13 +17,13 @@
                 }
             }));
 
-            let prompt = new PROMPT('Log In', 'You must log in to continue');
+            app.prompt = new PROMPT('Log In', 'You must log in to continue');
 
-            prompt.form.setPostUrl('/Account/Login');
-            prompt.form.el.setAttribute('method', 'POST');
-            prompt.form.el.setAttribute('action', '#');
+            app.prompt.form.setPostUrl('/Account/Login');
+            app.prompt.form.el.setAttribute('method', 'POST');
+            app.prompt.form.el.setAttribute('action', '#');
 
-            this.email = new INPUT(prompt.formElementGroup.body.pane,
+            this.email = new INPUT(app.prompt.formElementGroup.body.pane,
                 new MODEL(
                     new ATTRIBUTES({
                         'typeId': IcarusInputType.INPUT,
@@ -37,7 +37,7 @@
             );
 
             console.log('LOGIN: PASSWORD');
-            this.password = new INPUT(prompt.formElementGroup.body.pane,
+            this.password = new INPUT(app.prompt.formElementGroup.body.pane,
                 new MODEL(
                     new ATTRIBUTES({
                         'typeId': IcarusInputType.PASSWORD,
@@ -50,12 +50,12 @@
                 })
             );
             
-            prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
-            prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
+            app.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+            app.prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
                 prompt.form.el.submit();
             }
 
-            prompt.show();
+            app.prompt.show();
 
             /*
                 TODO:
@@ -69,8 +69,8 @@
         <script type="text/javascript">
             const token = document.getElementsByName('__RequestVerificationToken')[0];
             var app = new MAIN(new MODEL().set('label', 'Log In'), token.value);
-            let prompt = new PROMPT('Log In', 'You are already logged in.\nRedirecting...');
-            prompt.show();
+            app.prompt = new PROMPT('Log In', 'You are already logged in.\nRedirecting...');
+            app.prompt.show();
             setTimeout(function () {
                 location.href = '/'; //https://www.w3schools.com/jsref/met_loc_reload.asp
             }, 1000);

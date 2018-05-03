@@ -11,14 +11,13 @@ class CONTAINERBODY extends EL {
         super(node, 'DIV', model);
         this.addClass('container-body collapse');
         
-        // Optional SIDEBAR
-        this.sidebar = new SIDEBAR(this,
-            new MODEL(new ATTRIBUTES('pull-left')).set({
-                'name': 'sidebar',
-                'label': 'SideBar'
-            })
-        );
         if (model.hasSidebar) {
+            this.sidebar = new SIDEBAR(this,
+                new MODEL(new ATTRIBUTES('pull-left')).set({
+                    'name': 'sidebar',
+                    'label': 'SideBar'
+                })
+            );        
             this.sidebar.addClass('active');
             this.sidebar.addClass('in');
         }

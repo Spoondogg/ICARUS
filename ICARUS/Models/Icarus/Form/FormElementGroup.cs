@@ -9,7 +9,7 @@ namespace ICARUS.Models.Icarus {
     /// <summary>
     /// An Icarus Form Group Object 
     /// </summary>
-    public class FormElementGroup : Container {
+    public class FORMELEMENTGROUP : Container {
 
         /// <summary>
         /// A list of Form Elements contained within this form-group (ie: input > type:list)
@@ -20,8 +20,8 @@ namespace ICARUS.Models.Icarus {
         /// <summary>
         /// Generic Fieldset Constructor for Entity
         /// </summary>
-        public FormElementGroup() : base("FORMELEMENTGROUP", new MODEL() {
-            label = "ARTICLE"
+        public FORMELEMENTGROUP() : base("FORMELEMENTGROUP", new MODEL() {
+            label = "FORMELEMENTGROUP"
         }) {
 
         }
@@ -30,7 +30,7 @@ namespace ICARUS.Models.Icarus {
         /// Constructs an ARTICLE with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public FormElementGroup(FormPost formPost) : base("FORMELEMENTGROUP", formPost) {
+        public FORMELEMENTGROUP(FormPost formPost) : base("FORMELEMENTGROUP", formPost) {
 
         }
     }

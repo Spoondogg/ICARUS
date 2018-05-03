@@ -5,9 +5,6 @@
     for INPUT, SELECT or TEXTAREA items. This object is
     generally passed into the Input, Select
     or TextArea to set its values.
-
-    @class
-    @see IcarusFieldSet
 */
 class FORMELEMENT extends CONTAINER {
     /**

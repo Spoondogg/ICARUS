@@ -12,6 +12,11 @@ class PARAGRAPH extends CONTAINER {
 
         this.body.pane.addClass('paragraph');
 
+        if (model.dataId > 0) {
+            if (model.data.text) {
+                this.body.pane.setInnerHTML(model.data.text);
+            }
+        }
 
         this.addContainerCase('IMAGE');
         this.populate(model.children);

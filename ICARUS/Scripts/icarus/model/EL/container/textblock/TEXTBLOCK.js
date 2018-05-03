@@ -14,8 +14,13 @@ class TEXTBLOCK extends CONTAINER {
         super(node, 'DIV', model);
         this.addClass('textblock');
 
+        this.body.pane.addClass('container'); // col-lg-offset-2 col-lg-8
+
+        this.row = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('row')));
+        this.col = new EL(this.row, 'DIV', new MODEL(new ATTRIBUTES('col-lg-offset-2 col-lg-8')));
+
         if (model.dataId > 0) {
-            this.text = new P(this.body.pane, model.data, model.data.text);
+            this.text = new P(this.col, model.data, model.data.text);
         }
         
         this.populate(model.children);

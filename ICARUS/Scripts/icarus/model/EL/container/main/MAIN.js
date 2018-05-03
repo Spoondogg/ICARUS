@@ -1,14 +1,5 @@
 ﻿/**
-    A top level application object represents the complete client object
-
-    Storing the state of this object would allow the user to pick up
-    exactly where they left off.
-
-    Technically, this object could begin to establish a profile for the
-    user, storing preferences and any user specific settings, tags etc.
-
-    In future versions, consider adding a LOADER to inform the user when
-    content is being constructed
+    A top level application object
 */
 class MAIN extends CONTAINER {
     /**
@@ -18,11 +9,17 @@ class MAIN extends CONTAINER {
      */
     constructor(model) {
         console.log(model);
-        document.title = 'spoonMEDIA: MAIN' + model.label;
+        document.title = model.label; //'spoonMEDIA: MAIN' + 
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, new CONTAINERFACTORY());        
-        this.body.sidebar.addClass('sidebar-tall');
+        super(document.body, 'MAIN', model, new CONTAINERFACTORY());  
+
+        try {
+            this.body.sidebar.addClass('sidebar-tall');
+        } catch (e) {
+            console.log('Sidebar does not exist.');
+        }
+
         this.body.pane.addClass('pane-tall');
 
         this.logoutForm = new LogoutForm(this); // This should be created on demand
@@ -34,7 +31,6 @@ class MAIN extends CONTAINER {
         this.addContainerCase('ARTICLE');
 
         this.populate(model.children);
-
     }
 
     /**
@@ -48,10 +44,10 @@ class MAIN extends CONTAINER {
                     'url': '#?url=logout'
                 })
             })
-        ).el.onclick = function () {
+        ).el.onclick = function () {            
             this.navBar.header.toggleCollapse();
-            this.logout.bind(this);
-        };        
+            this.logout();
+        }.bind(this);        
 
         this.navBar.header.menu.getGroup('USER').addNavItem(
             new MODEL().set({
@@ -87,7 +83,7 @@ class MAIN extends CONTAINER {
         @param {number} id App Id to load
     */
     load(id) {
-        let prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
+        this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
             { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
         ]);
         /*
@@ -97,7 +93,7 @@ class MAIN extends CONTAINER {
             window.location.href = id || 0;
         }.bind(this);
         */
-        prompt.show();
+        this.prompt.show();
     }
 
     /**
