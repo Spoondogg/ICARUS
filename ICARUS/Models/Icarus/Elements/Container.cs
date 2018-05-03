@@ -57,7 +57,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public int hasSidebar { get; set; }        
 
         /// <summary>
-        /// Articles are made up of a collection of SECTIONS
+        /// Construct Container as a DIV
         /// </summary>
         /// <param name="attributes"></param>
         public Container() : base("DIV", new MODEL() {
@@ -67,7 +67,7 @@ namespace ICARUS.Models.Icarus.Elements {
         }
 
         /// <summary>
-        /// An article is the basic building block for nearly all pages.  
+        /// A generic Container 
         /// Articles are made up of a collection of SECTIONS
         /// </summary>
         /// <param name="element"></param>
@@ -82,6 +82,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.status = 1;
             this.attributesId = 0;
             this.dataId = 0;
+            this.shared = 0;
         }
 
         /// <summary>
@@ -112,6 +113,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.collapsed = formPost.parseInt("collapsed");
             this.attributesId = formPost.parseInt("attributesId");
             this.dataId = formPost.parseInt("dataId");
+            this.shared = formPost.parseInt("shared");
         }
     }
 }

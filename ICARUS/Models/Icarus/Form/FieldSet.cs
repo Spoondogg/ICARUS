@@ -10,12 +10,12 @@ namespace ICARUS.Models {
     /// <summary>
     /// A fieldset is made up of form elements
     /// </summary>
-    public class FieldSet : Container {
+    public class FIELDSET : Container {
 
         /// <summary>
         /// Constructs an empty form group
         /// </summary>
-        public FieldSet() : base("FIELDSET", new MODEL() {
+        public FIELDSET() : base("FIELDSET", new MODEL() {
             label = "FIELDSET"
         }) {
             
@@ -25,7 +25,7 @@ namespace ICARUS.Models {
         /// Constructs an empty form group
         /// </summary>
         /// <param name="formPost"></param>
-        public FieldSet(FormPost formPost) : base("FIELDSET", formPost) {
+        public FIELDSET(FormPost formPost) : base("FIELDSET", formPost) {
 
         }
     }

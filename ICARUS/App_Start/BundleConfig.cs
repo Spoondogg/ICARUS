@@ -35,9 +35,20 @@ namespace ICARUS {
                 "~/Content/css/bootstrap.css" //,new CssRewriteUrlTransform()
             ));
 
+            // IcoMoon Styles
+            bundles.Add(new StyleBundle("~/Content/css/icomoon").Include(
+                "~/Content/css/icomoon.css",
+                "~/Content/css/icomoon.eot",
+                "~/Content/css/icomoon.woff",
+                "~/Content/css/icomoon.ttf",
+                "~/Content/css/icomoon.svg.txt#icomoon"
+            ));
+
             // Icarus specific styles - Names cannot contain UNDERSCORES
             bundles.Add(new StyleBundle("~/Content/css/icarus").Include(
                 "~/Content/css/spoonMedia/icarus.css",
+                "~/Content/css/spoonMedia/icon.css",
+                "~/Content/css/spoonMedia/thumbnail.css",
                 "~/Content/css/spoonMedia/container.css",
                 "~/Content/css/spoonMedia/main.css",
                 "~/Content/css/spoonMedia/label.css",
@@ -149,12 +160,13 @@ namespace ICARUS {
 
 
 
-
-
+                // Container Generics
+                "~/Scripts/icarus/model/el/container/iframe/IFRAME.js",
 
                 // Jumbotrons and Banners
                 "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
-                "~/Scripts/icarus/model/el/container/callout/CALLOUT.js",
+                "~/Scripts/icarus/model/el/container/banner/thumbnail/THUMBNAIL.js",
+                "~/Scripts/icarus/model/el/container/banner/callout/CALLOUT.js",
                 "~/Scripts/icarus/model/el/container/banner/BANNER.js",
                 "~/Scripts/icarus/model/el/container/paragraph/PARAGRAPH.js",
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",

@@ -28,9 +28,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            FormElementGroup obj = (formPost == null)
-                ? new FormElementGroup()
-                : new FormElementGroup(formPost);
+            FORMELEMENTGROUP obj = (formPost == null)
+                ? new FORMELEMENTGROUP()
+                : new FORMELEMENTGROUP(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -43,7 +43,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            FormElementGroup model = (FormElementGroup)ctx.FormElementGroups.Single(m =>
+            FORMELEMENTGROUP model = (FORMELEMENTGROUP)ctx.FormElementGroups.Single(m =>
                    m.id == id && m.authorId == User.Identity.Name
                 );
             return model;

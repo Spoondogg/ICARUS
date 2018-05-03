@@ -23,97 +23,107 @@ class CONTAINERFACTORY {
     */
     get(node, className, id) {
         console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
-        let index = node.children.push(null); // Reserve the slot in the array
+
         let span = new SPAN(node, new MODEL());
+        let index = node.children.push(span); // Reserve the slot in the array
+        
         return $.getJSON('/' + className + '/Get/' + id, function (result) {
             let obj = null;
             switch (className) {
                 case 'LI':
-                    obj = new LI(node, result.model);
+                    obj = new LI(span, result.model);
                     break;
 
                 case 'UL':
-                    obj = new UL(node, result.model);
+                    obj = new UL(span, result.model);
                     break;
 
                 case 'LISTITEM':
-                    obj = new LISTITEM(node, result.model);
+                    obj = new LISTITEM(span, result.model);
                     break;
 
                 case 'LIST':
-                    obj = new LIST(node, result.model);
+                    obj = new LIST(span, result.model);
                     break;
 
                 case 'MENU':
-                    obj = new MENU(node, result.model);
+                    obj = new MENU(span, result.model);
                     break;
 
                 case 'NAVITEM':
-                    obj = new NAVITEM(node, result.model);
+                    obj = new NAVITEM(span, result.model);
                     break;
 
                 case 'NAVSEPARATOR':
-                    obj = new NAVSEPARATOR(node, result.model);
+                    obj = new NAVSEPARATOR(span, result.model);
                     break;
 
                 case 'TEXTBLOCK':
-                    obj = new TEXTBLOCK(node, result.model);
+                    obj = new TEXTBLOCK(span, result.model);
                     break;
 
                 case 'JUMBOTRON':
-                    obj = new JUMBOTRON(node, result.model);
+                    obj = new JUMBOTRON(span, result.model);
                     break;
 
                 case 'HEADER':
-                    obj = new HEADER(node, result.model);
+                    obj = new HEADER(span, result.model);
                     break;
 
                 case 'PARAGRAPH':
-                    obj = new PARAGRAPH(node, result.model);
+                    obj = new PARAGRAPH(span, result.model);
                     break;
 
                 case 'BANNER':
-                    obj = new BANNER(node, result.model);
+                    obj = new BANNER(span, result.model);
                     break;
 
                 case 'CALLOUT':
-                    obj = new CALLOUT(node, result.model);
+                    obj = new CALLOUT(span, result.model);
+                    break;
+
+                case 'THUMBNAIL':
+                    obj = new THUMBNAIL(span, result.model);
+                    break;
+
+                case 'IFRAME':
+                    obj = new IFRAME(span, result.model);
                     break;
 
                 case 'ARTICLE':
-                    obj = new ARTICLE(node, result.model);
+                    obj = new ARTICLE(span, result.model);
                     break;
 
                 case 'SECTION':
-                    obj = new SECTION(node, result.model);
+                    obj = new SECTION(span, result.model);
                     break;
 
                 case 'FORM':
-                    obj = new FORM(node, result.model);
+                    obj = new FORM(span, result.model);
                     break;
 
                 case 'FIELDSET':
-                    obj = new FIELDSET(node, result.model);
+                    obj = new FIELDSET(span, result.model);
                     break;
 
                 case 'FORMELEMENTGROUP':
-                    obj = new FORMELEMENTGROUP(node, result.model);
+                    obj = new FORMELEMENTGROUP(span, result.model);
                     break;
 
                 case 'INPUT':
-                    obj = new INPUT(node, result.model);
+                    obj = new INPUT(span, result.model);
                     break;
 
                 case 'SELECT':
-                    obj = new SELECT(node, result.model);
+                    obj = new SELECT(span, result.model);
                     break;
 
                 case 'TEXTAREA':
-                    obj = new TEXTAREA(node, result.model);
+                    obj = new TEXTAREA(span, result.model);
                     break;
 
                 case 'OPTION':
-                    obj = new OPTION(node, result.model);
+                    obj = new OPTION(span, result.model);
                     break;
             }
             node.children[index] = obj;

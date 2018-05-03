@@ -64,7 +64,13 @@ class FORM extends CONTAINER {
     unlock() {
         console.log('Unlocking form...');
         for (let i = 0; i < this.children.length; i++) {
-            this.children[i].el.disabled = false;
+            try {
+                this.children[i].el.disabled = false;
+            } catch (e) {
+                console.log(
+                    e instanceof TypeError ? 'Unable to lock "' + this.children[i].element + '"' : e
+                );
+            }
         }
     }
     
@@ -205,7 +211,7 @@ class FORM extends CONTAINER {
 
                     this.loader.setProgress(100, 'Post Complete.');
 
-                    //this.loader.hide(400);
+                    this.loader.hide(400);
 
                     // Update the Form with the appropriate ID if needed
                     this.afterSuccessfulPost();

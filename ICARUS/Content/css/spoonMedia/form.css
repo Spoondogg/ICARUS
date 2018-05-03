@@ -1,9 +1,10 @@
 ﻿form {
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
+    padding-bottom: 0.5em !important;
+    margin-bottom: 0.5em !important;
+    margin-top: 0.5em !important;
+    border-top: 1px solid rgba(119, 119, 119, 0.17);
+    border-bottom: 1px solid rgba(119, 119, 119, 0.17);
 }
-
-
 
 .childGroup .form-group {
     padding: 0;
@@ -52,9 +53,9 @@ input[type="submit"]:disabled, button:disabled {
 
 
 .form-footer {
-    background-color: #005879;
-    padding: 0;
+    background-color: transparent;
 }
+/*
 
     .form-footer .btn-group .btn, 
     .form-footer .btn-group-vertical .btn {
@@ -85,3 +86,4 @@ input[type="submit"]:disabled, button:disabled {
         .form-footer .btn span {
             font-size: small;
         }
+    */

@@ -66,6 +66,7 @@ class IcarusSectionHeader extends HEADER {
      * Moves this element UP one slot
      */
     moveUp() {
+        console.log('Move Up');
         let node = $(this.node.el);
         let container = this.node.node.el;
         if (node.prev().length > 0) {
@@ -87,6 +88,7 @@ class IcarusSectionHeader extends HEADER {
      * Moves this element DOWN one slot
      */
     moveDown() {
+        console.log('Move Down');
         let node = $(this.node.el);
         let container = this.node.node.el;
         if (node.next().length > 0) {

@@ -23,6 +23,11 @@
 }
 
 body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    color: #555;
+
     padding-top: 50px;
     padding-bottom: 20px;
     background-color: #fff;
@@ -31,9 +36,11 @@ body {
     background: url(../Images/background.jpg) no-repeat top left;
     */
     overflow-y: hidden; /* prevent y-scrollbar from appearing */
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
 }
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Raleway";
+    font-family: 'Raleway', sans-serif;
     font-weight: 300;
     color: #333;
 }

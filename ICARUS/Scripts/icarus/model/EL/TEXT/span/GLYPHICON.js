@@ -10,12 +10,12 @@ class GLYPHICON extends SPAN {
      */
     constructor(node, label, glyphicon) {
         super(node, new MODEL(new ATTRIBUTES(glyphicon ? glyphicon : '')));
-        this.addClass('glyphicon');
+        this.addClass('icon glyphicon');
         this.label = new SPAN(this, new MODEL(new ATTRIBUTES('label')), label);
     }
 
     /**
-        Sets the ICON class to the given glypicon
+        Sets the ICON class to the given glyphicon
         @param {string} glyphicon The glyphicon name
      */
     setIcon(glyphicon) {

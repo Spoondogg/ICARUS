@@ -23,17 +23,24 @@ class EL extends MODEL {
         this.children = children ? children : []; // Contains an array of child element models
         this.callbacks = {}; // Contains a series of Constructor functions that this element can use
 
-        // Append the element to its parent and set its inner HTML (when available)
-        if (node === document.body) {
-            console.log('BODY.create(' + element + ')');
-            this.el = node.appendChild(document.createElement(element));
-            node = this;
-        } else {
-            this.el = node.el.appendChild(document.createElement(element));
-        }        
+        this.make(node);
 
         this.merge(model);
         this.setInnerHTML(innerHTML);
+    }
+
+    /**
+        Create the HTML element in the DOM, appended to the given node
+        // Append the element to its parent and set its inner HTML (when available)
+     */
+    make(node) {        
+        if (node === document.body) {
+            console.log('BODY.create(' + this.element + ')');
+            this.el = node.appendChild(document.createElement(this.element));
+            node = this;
+        } else {
+            this.el = node.el.appendChild(document.createElement(this.element));
+        }        
     }
 
     /**
@@ -42,8 +49,8 @@ class EL extends MODEL {
         whereas an actual SWITCH statement would be overridden on each inheritted class.
         @see https://stackoverflow.com/a/35769291/722785
     
-        param {string} className Icarus Class to construct
-        @param {MODEL} model The object to be created
+        param {string} className HTML Element and Javascript Class to construct
+        @param {MODEL} model The object model for the element to be created
         @returns {EL} Constructed Element
      */
     create(model) {
@@ -146,7 +153,8 @@ class EL extends MODEL {
         delay = delay ? delay : 300;
         try {
             setTimeout(function () {
-                this.node.el.removeChild(this.el);            
+                //this.node.el.removeChild(this.el);            
+                this.el.parentNode.removeChild(this.el);
             }.bind(this), delay);
 
             try {
@@ -252,10 +260,10 @@ class EL extends MODEL {
     /**
         Modifies the element
         @param {string} name The name to be assigned to this element
-    */
+    
     save(name) {
         this.el.setAttribute('name', name);
-    }
+    }*/
 
     /**
         Sets the inner HTML of this element
@@ -264,5 +272,16 @@ class EL extends MODEL {
     setInnerHTML(innerHTML) {
         //this.el.innerHTML = innerHTML ? innerHTML : '';
         this.el.innerHTML = innerHTML || '';
+    }
+
+    /**
+        Scrolls page to the top of this element
+     * @param {any} speed
+     */
+    scrollTo(speed = 1000) {
+        console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
+        $(this.node.el).animate({
+            scrollTop: parseInt($(this.el).offset().top)
+        }, speed);
     }
 }

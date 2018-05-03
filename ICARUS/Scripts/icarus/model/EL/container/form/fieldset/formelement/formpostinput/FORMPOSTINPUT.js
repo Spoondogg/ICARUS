@@ -42,7 +42,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
         Opens a Modal Form populated with an open version of the FormPost
      */
     newAttributes() {
-        let prompt = null;
+        this.prompt = null;
         let inputs = [];
 
         // Generate new FormPost
@@ -52,7 +52,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 console.log(data.model);
 
                 // NOW, MAKE A PROMPT for this ATTRIBUTES FORMPOST using the given FormPostId/AttributesId
-                prompt = new PROMPT(
+                this.prompt = new PROMPT(
                     'FORMPOSTINPUT: Save ATTRIBUTES()', 'Saves the ATTRIBUTES() via FORMPOSTINPUT', [],
                     [
                         new MODEL(new ATTRIBUTES({
@@ -65,17 +65,17 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     ]
                 );
 
-                prompt.formElementGroup.toggleHeaders();
+                this.prompt.formElementGroup.toggleHeaders();
 
-                prompt.form.setPostUrl('FormPost/Set');
-                prompt.form.afterSuccessfulPost = function () { 
+                this.prompt.form.setPostUrl('FormPost/Set');
+                this.prompt.form.afterSuccessfulPost = function () { 
                     console.log('success');
                     this.updateInput(data.model.id);
-                    prompt.form.loader.hide(200);
-                    prompt.close(300);
+                    this.prompt.form.loader.hide(200);
+                    this.prompt.close(300);
                 }.bind(this);
 
-                prompt.show();
+                this.prompt.show();
 
             }.bind(this));
         } catch (e) {
@@ -88,7 +88,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
         Opens a Modal Form populated with an open version of the FormPost
      */
     editAttributes() {
-        let prompt = null;
+        this.prompt = null;
         let inputs = [];
 
         inputs.push(
@@ -126,21 +126,21 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 }
 
                 // NOW, MAKE A PROMPT for this ATTRIBUTES FORMPOST using the given FormPostId/AttributesId
-                prompt = new PROMPT(
+                this.prompt = new PROMPT(
                     'FORMPOSTINPUT: Save ATTRIBUTES()', 'Saves the ATTRIBUTES() via FORMPOSTINPUT',
                     [], inputs
                 );
 
-                prompt.formElementGroup.toggleHeaders();
+                this.prompt.formElementGroup.toggleHeaders();
 
-                prompt.form.setPostUrl('FormPost/Set');
-                prompt.form.afterSuccessfulPost = function () { 
+                this.prompt.form.setPostUrl('FormPost/Set');
+                this.prompt.form.afterSuccessfulPost = function () { 
                     console.log('success');
                     this.updateInput(data.model.id);
-                    prompt.form.loader.hide(200);
-                    prompt.close(300);
+                    this.prompt.form.loader.hide(200);
+                    this.prompt.close(300);
                 }.bind(this);
-                prompt.show();
+                this.prompt.show();
 
             }.bind(this));
         } catch (e) {
