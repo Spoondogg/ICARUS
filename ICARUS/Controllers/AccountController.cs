@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ICARUS.Models;
+using ICARUS.Models.Icarus.Elements;
 
 namespace ICARUS.Controllers {
     //[Authorize] // Disable on initial build so that an admin can be created
@@ -73,7 +74,8 @@ namespace ICARUS.Controllers {
 
             switch (result) {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl);
+                    return Json(new Payload(1, "Successfully logged in"));
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

@@ -16,7 +16,6 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    [Authorize]
     public class ArticleController : ContainerController {
 
         public ArticleController() : base("Article") {
@@ -44,7 +43,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             Article model = (Article)ctx.Articles.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

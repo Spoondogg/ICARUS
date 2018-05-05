@@ -32,6 +32,7 @@ class EL extends MODEL {
     /**
         Create the HTML element in the DOM, appended to the given node
         // Append the element to its parent and set its inner HTML (when available)
+        @param {EL} node Parent node to append to
      */
     make(node) {        
         if (node === document.body) {
@@ -276,7 +277,7 @@ class EL extends MODEL {
 
     /**
         Scrolls page to the top of this element
-     * @param {any} speed
+     * @param {any} speed Millisecond duration
      */
     scrollTo(speed = 1000) {
         console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));

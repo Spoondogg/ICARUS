@@ -30,15 +30,6 @@ namespace ICARUS.Controllers {
             posts = posts.OrderBy(p => p.formId).ThenByDescending(p => p.timestamp);
             return Json(posts.ToList());
         }
-
-        /*
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                getObjectDbContext().Dispose();
-            }
-            base.Dispose(disposing);
-        }
-        */
         
         public override async Task<ActionResult> Create() {
             try {
@@ -66,7 +57,6 @@ namespace ICARUS.Controllers {
                     1, className, model,
                     "Successfully instantiated " + this.className + "(" + model.id + ")"
                 ), JsonRequestBehavior.AllowGet);
-
 
             } catch (Exception e) {
                 return Json(new Payload(
@@ -119,25 +109,21 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override JsonResult getJson(int id) {
-
             FormPost model = (FormPost) db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name) {
+            if (model.authorId == User.Identity.Name || model.shared == 1) {
 
                 string message = "Successfully retrieved " + this.className;
-
-                // Return the fully constructed FormPost
                 return Json(new Payload(
                     1, this.className, model,
                     message
                 ), JsonRequestBehavior.AllowGet);
 
             } else {
-                string message = User.Identity.Name + ", You do not have permission to access this " + this.className;
+                string message = "You do not have permission to access this " + this.className;
                 return Json(new Payload(
                     0, message, new Exception(message)
                 ), JsonRequestBehavior.AllowGet);
             }
-
         }
 
         /// <summary>
@@ -151,11 +137,12 @@ namespace ICARUS.Controllers {
                 // Extract values from FormPost
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
+                int shared = formPost.parseInt("shared", 0);
 
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
                 FormPost model = ctx.FormPosts.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
 
                 formPost.setXml();
@@ -166,6 +153,7 @@ namespace ICARUS.Controllers {
                 model.xmlResults = formPost.xmlResults;
                 model.jsonResults = formPost.jsonResults;
                 model.formId = id;
+                model.shared = shared;
 
                 // Save the object
                 ctx.FormPosts.Add(model);

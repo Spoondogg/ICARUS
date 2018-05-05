@@ -16,16 +16,20 @@ class INPUT extends FORMELEMENT {
                 'type': model.attributes.type || 'TEXT',
                 'list': model.attributes.name + '-options',
                 'name': model.attributes.name,
-                'value': model.attributes.value
+                'value': model.attributes.value || ''
             })
         )); 
+        /*
         if (model.attributes.readonly) {
             this.input.el.setAttribute('readonly', 'readonly');
         }
-        
+        */
+
+        /*
         this.label.el.onclick = function () {
             this.setLabel('woot');
         }.bind(this);
+        */
 
         this.options = [];
         this.datalist = new EL(node, 'DATALIST', new MODEL(

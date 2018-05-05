@@ -13,7 +13,6 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    [Authorize(Roles = "User,Dev,Admin")]
     public class FieldsetController : ContainerController {
 
         public FieldsetController() : base("FieldSet") {
@@ -41,7 +40,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             FIELDSET model = (FIELDSET)ctx.FieldSets.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

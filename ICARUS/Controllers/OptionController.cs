@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
-
-    [Authorize(Roles = "User,Dev,Admin")]
+    
     public class OptionController : ContainerController {
 
         public OptionController() : base("Option") {
@@ -37,7 +36,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             Option model = (Option)ctx.Options.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

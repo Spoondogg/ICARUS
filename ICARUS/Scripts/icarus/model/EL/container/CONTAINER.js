@@ -215,13 +215,17 @@ class CONTAINER extends GROUP {
         btnSave.el.onclick = function () {
             btnSave.toggle('active');
             //this.navBar.header.menu.scrollTo();
+            let node = this.navBar.header.menu.getGroup('CRUD').collapse;
             if ($(btnSave.el).hasClass('active')) {
-                this.save(this.navBar.header.menu.getGroup('CRUD').collapse); //.bind(this);
+                this.save(node, btnSave); //.bind(this);
             } else {                
-                $(this.navBar.header.menu.getGroup('CRUD').collapse.el).collapse('hide');
+                //$(node.el).collapse('hide');
+                //node.hide();
+                $(node.el).collapse('toggle');
                 setTimeout(function () {
-                    this.navBar.header.menu.getGroup('CRUD').collapse.empty();
+                    node.empty();
                 }.bind(this), 1000);
+                //setTimeout(node.empty.bind(this), 1000);
             }
             //this.navBar.header.toggleCollapse();
         }.bind(this);
@@ -487,8 +491,9 @@ class CONTAINER extends GROUP {
     /**
         Saves the state of this Element
         @param {EL} node The parent container for save menu
+        @param {EL} caller The element (typically a button) that called the save method
      */
-    save(node) {
+    save(node, caller) {
         console.log(this.element + '.save()');
 
         let subsections = [];
@@ -526,7 +531,7 @@ class CONTAINER extends GROUP {
         let formElementGroup = new FORMELEMENTGROUP(
             fieldset.body.pane, new MODEL(
                 new ATTRIBUTES({
-                    'style':'max-height:40vh;overflow-y:auto;'
+                    //'style':'max-height:40vh;overflow-y:auto;'
                 })
             ).set({
                 'label': 'FORMELEMENTGROUP',
@@ -535,9 +540,6 @@ class CONTAINER extends GROUP {
                 'hasTab': 0
             })
         );
-
-        console.log('INPUTS!');
-
 
         let inputs = [
             new MODEL(new ATTRIBUTES({
@@ -656,7 +658,6 @@ class CONTAINER extends GROUP {
             })).set({
                 'element': 'BUTTON',
                 'label': 'shared',
-                'type': 'FORMPOSTINPUT',
                 'addTab': 0
             })
         ];
@@ -689,148 +690,21 @@ class CONTAINER extends GROUP {
         form.setPostUrl(this.className + '/Set');
 
         form.afterSuccessfulPost = function () {
-            node.hide();
+            //node.hide();
+            $(node.el).collapse("toggle");
             node.empty();
-            this.navBar.header.toggleHeaders(); //.toggleHeaders();
+            //node.node.navBar.toggleHeaders();
             this.setLabel(form.el.elements['label'].value);
+            if (caller) {
+                caller.toggle('active');
+                console.log(caller);
+                caller.node.node.toggleCollapse();
+            }
         }.bind(this);
-
-        node.show();
-
-        /*
-        this.prompt = new PROMPT(
-            'Save ' + this.get('element'), 'Saves the ' + this.get('element'),
-            [], [
-                new MODEL(new ATTRIBUTES({
-                    'name': 'element',
-                    'value': this.get('element'),
-                    'readonly': 'readonly'
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'element'
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'id': 0,
-                    'name': 'id',
-                    'value': new String(this.get('id')),
-                    'readonly': 'readonly'
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'ID'
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'label',
-                    'value': new String(this.get('label'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Label'
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'subsections',
-                    'value': subsections.length > 0 ? subsections.toString() : '0',
-                    'readonly': 'readonly'
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'SubSections'
-                }),
-
-                // Should be checkbox or dropdown
-                new MODEL(new ATTRIBUTES({
-                    'name': 'status',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('status'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Status',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'showHeader',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('showHeader'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Show Header',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'hasSidebar',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('hasSidebar'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Show Sidebar',
-                    'addTab': 0
-                }),                
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'collapsed',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('collapsed'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Collapsed',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'hasTab',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('hasTab'))
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'Has Tab',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'dataId',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('dataId'))
-                })).set({
-                    'element': 'BUTTON',
-                    'label': 'dataId',
-                    'type': 'FORMPOSTINPUT',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'attributesId',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('attributesId'))
-                })).set({
-                    'element': 'BUTTON',
-                    'label': 'attributesId',
-                    'type': 'FORMPOSTINPUT',
-                    'addTab': 0
-                }),
-
-                new MODEL(new ATTRIBUTES({
-                    'name': 'shared',
-                    'type': 'NUMBER',
-                    'value': new String(this.get('shared'))
-                })).set({
-                    'element': 'BUTTON',
-                    'label': 'shared',
-                    'type': 'FORMPOSTINPUT',
-                    'addTab': 0
-                })
-            ]
-        );
+        //node.show(); 
 
 
-        // Override form defaults
-        //this.prompt.form.setPostUrl(this.element+'/Set');
-        this.prompt.form.setPostUrl(this.className + '/Set');
-        this.prompt.form.afterSuccessfulPost = this.afterSuccessfulPost.bind(this);
-
-        this.prompt.show();
-        */
+        $(node.el).collapse("show");
     }
 
     /**

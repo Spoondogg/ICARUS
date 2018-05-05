@@ -1,4 +1,5 @@
-﻿using ICARUS.Models;
+﻿using ICARUS.Helpers;
+using ICARUS.Models;
 using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements;
 using ICARUS.Models.Icarus.Elements.Attributes;
@@ -33,7 +34,7 @@ namespace ICARUS.Controllers {
     /// 
     /// </summary>
     /// <see cref="http://searchmicroservices.techtarget.com/definition/RESTful-API"/>
-    [Authorize(Roles = "User,Dev,Admin")]
+    //[Authorize(Roles = "User,Dev,Admin")]
     public abstract class AbstractController : Controller {
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet, Authorize(Roles = "Dev,Admin")]
+        [HttpGet] //Authorize(Roles = "Dev,Admin")
         public virtual async Task<ActionResult> Get(int id = 0) {
             if (id == 0) {
                 return await this.Create();
@@ -102,10 +103,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual JsonResult getJson(int id) {
-            
+        public virtual JsonResult getJson(int id) {            
             EL model = (EL)db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name) {
+            if (model.authorId == User.Identity.Name || model.shared == 1) {
 
                 string message = "Successfully retrieved " + this.className + ", subsections (" +
                     model.subsections + ")";
@@ -115,10 +115,9 @@ namespace ICARUS.Controllers {
                 try {
                     // Append all children (that extend from Container)
                     for (int s = 0; s < subsections.Length; s++) {
-                        //var child = db.dbSets[this.className].Find(Int32.Parse(subsections[s]));
                         var child = db.dbSets["Container"].Find(Int32.Parse(subsections[s]));
                         EL ch = (EL)child;
-                        if (ch.getAuthorId() == User.Identity.Name) {
+                        if (ch.getAuthorId() == User.Identity.Name || ch.shared == 1) {
                             model.addChild(child);
                         }
                     }
@@ -128,12 +127,14 @@ namespace ICARUS.Controllers {
                 if (model.dataId > 0) {
                     FormPost data = (FormPost)db.dbSets["FormPost"].Find(model.dataId);
 
-                    XmlDocument xml = new XmlDocument();
-                    xml.LoadXml(data.xmlResults);
+                    if (data.authorId == User.Identity.Name || data.shared == 1) {
+                        XmlDocument xml = new XmlDocument();
+                        xml.LoadXml(data.xmlResults);
 
-                    XmlNodeList node = xml.SelectNodes("/root/*");
-                    foreach (XmlNode xn in node) {
-                        model.data.Add(xn.Name, xn.InnerText);
+                        XmlNodeList node = xml.SelectNodes("/root/*");
+                        foreach (XmlNode xn in node) {
+                            model.data.Add(xn.Name, xn.InnerText);
+                        }
                     }
                 }
 
@@ -141,13 +142,15 @@ namespace ICARUS.Controllers {
                 if (model.attributesId > 0) {
                     FormPost attributes = (FormPost)db.dbSets["FormPost"].Find(model.attributesId);
 
-                    XmlDocument xml = new XmlDocument();
-                    xml.LoadXml(attributes.xmlResults);
-                    
-                    XmlNodeList node = xml.SelectNodes("/root/*");
-                    foreach (XmlNode xn in node) {
-                        model.attributes.Add(xn.Name, xn.InnerText);
-                    }
+                    if(attributes.authorId == User.Identity.Name || attributes.shared == 1) {
+                        XmlDocument xml = new XmlDocument();
+                        xml.LoadXml(attributes.xmlResults);
+
+                        XmlNodeList node = xml.SelectNodes("/root/*");
+                        foreach (XmlNode xn in node) {
+                            model.attributes.Add(xn.Name, xn.InnerText);
+                        }
+                    }                    
                 }
 
                 // Return the fully constructed model
@@ -162,7 +165,6 @@ namespace ICARUS.Controllers {
                     0, message, new Exception(message)
                 ), JsonRequestBehavior.AllowGet);
             }
-
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Dev,Admin")]
+        [HttpPost, ValidateAntiForgeryToken, Security] //Authorize
         public abstract Task<ActionResult> Set(FormPost formPost);
 
         /// <summary>
@@ -183,20 +185,17 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]  // TODO: Secure as HttpPost 
-        [Authorize(Roles = "Dev,Admin")]
+        //[HttpGet]  // TODO: Secure as HttpPost 
+        [HttpPost, ValidateAntiForgeryToken, Security] //Authorize
         public virtual async Task<ActionResult> Delete(int id) {
-
             string message = "";
             try {
-
                 // Retrieve the existing object and a temporary object
                 var mdl = db.dbSets[this.className].Find(id);
                 var model = (EL)mdl;
 
                 // Verify ownership and process deletion
                 if (model.getAuthorId() == User.Identity.Name) {
-
                     db.dbSets[className].Attach(mdl);
                     db.dbSets[className].Remove(mdl);
                     getObjectDbContext().SaveChanges();
@@ -207,9 +206,7 @@ namespace ICARUS.Controllers {
                         Int32.Parse(GetResults.Success.ToString()), 
                         message
                     ), JsonRequestBehavior.AllowGet);
-
                 } else {
-
                     message = "Failed to delete " + this.className + "(" + id
                     + ")\nYou do not have permissions to modify this " + this.className;
 
@@ -217,11 +214,8 @@ namespace ICARUS.Controllers {
                         Int32.Parse(GetResults.Fail.ToString()),
                         message
                     ), JsonRequestBehavior.AllowGet);
-
                 }
-
             } catch (Exception e) {
-
                 return Json(new Payload(
                     Int32.Parse(GetResults.Fail.ToString()), e.Message, e), JsonRequestBehavior.AllowGet
                 );

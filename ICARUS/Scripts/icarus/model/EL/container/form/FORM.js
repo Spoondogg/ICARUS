@@ -89,6 +89,17 @@ class FORM extends CONTAINER {
     }
 
     /**
+     * Flags the given element as invalid 
+     * @param {any} element The form element
+     */
+    setInvalid(element) {
+        this.payload.isValid = false;
+        element.focus();
+        element.setAttribute('data-valid', this.payload.isValid);
+        $(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
+    }
+
+    /**
         Validate the current form and return true if form is valid
         Note that this is a simple form of validation that occurs on the
         client side and should not be used as a substitution for
@@ -96,6 +107,7 @@ class FORM extends CONTAINER {
         @returns {object} The validation payload
     */
     validate() {
+        console.log('Validating...');
 
         this.htmlEncodeValues();
 
@@ -105,30 +117,40 @@ class FORM extends CONTAINER {
         };
 
         for (let e = 0; e < this.el.elements.length; e++) {
+            console.log('Element: ' + this.el.elements[e].name);
             switch (this.el.elements[e].type) {
                 case 'input':
-                    if (this.el.elements[e].value === '') {
-                        this.payload.isValid = false;
-                        this.el.elements[e].focus();
-                        this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
-                        $(this.el.elements[e].previousSibling).addClass('invalid');
+                case 'text':
+                case 'email':
+                case 'tel':
+                case 'password':
+                    console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
+                    if (this.el.elements[e].checkValidity()) { // HTML5 Validation
+                        if (this.el.elements[e].value === '') {
+                            this.setInvalid(this.el.elements[e]);
+                        } else {
+                            $(this.el.elements[e]).removeClass('invalid');
+                            //this.el.elements[e].focus();
+                            this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
+                            //$(this.el.elements[e].previousSibling).addClass('invalid');
+                        }
+                        break;
                     } else {
-                        $(this.el.elements[e]).removeClass('invalid');
+                        this.setInvalid(this.el.elements[e]);
+                        break;
                     }
-                    break;
 
                 case 'select-one':
                     if (this.el.elements[e].selectedIndex === 0) {
-                        this.payload.isValid = false;
-                        this.el.elements[e].focus();
-                        this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
-                        $(this.el.elements[e].previousSibling).addClass('invalid');
+                        this.setInvalid(this.el.elements[e]);
                     } else {
                         $(this.el.elements[e]).removeClass('invalid');
+                        this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
                     }
                     break;
             }
         }
+        console.log('Result: '+this.payload.isValid);
         return this.payload;
     }
 
@@ -154,11 +176,11 @@ class FORM extends CONTAINER {
     }
 
     /**
-        Returns a FormPost based on values in this form
+        If valid, Returns a FormPost based on values in this form
         @returns {FormPost} A FormPost Object
     */
     getFormPost() {
-        return this.validate() ? new FORMPOST(this) : null;
+        return this.validate().isValid ? new FORMPOST(this) : null;
     }
 
     /**
@@ -171,6 +193,8 @@ class FORM extends CONTAINER {
     */
     post() {
 
+        console.log('Posting values to server...');
+
         //let results = {};
         this.loader = new LOADER('Submitting Form Results', 'Your form is being submitted...');
         this.loader.show();
@@ -178,30 +202,56 @@ class FORM extends CONTAINER {
         // Post results to server
         this.loader.setProgress(10, 'Posting values to server: ' + this.getPostUrl());
         let formPost = this.getFormPost();
+        console.log('FORMPOST: ');
         console.log(formPost);
-        this.lock();
 
-        /**
-            JQuery POST
-        */
-        $.post(this.postUrl, formPost,
+        if (formPost) {
+
+            this.lock();
+
             /**
-                Submit the payload and retrieves the status from the server
-                @param {object} payload Data
-                @param {string} status Response
+                JQuery POST
             */
-            function (payload, status) { // response from server
+            console.log('Posting to: ' + this.postUrl);
+            console.log(formPost);
+            
+            $.ajax({
+                url: this.postUrl, 
+                type: "POST",
+                data: formPost,
+                error: function (xhr, statusText, errorThrown) {
+                    alert(xhr.status);
+                    alert('Ajax Error');
+                    this.loader.setProgress(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
+                    //console.log(errorThrown);
+                }.bind(this),
+                statusCode: {
+                    200: function (response) {
+                        alert('200');
+                        console.log(response);
+                    },
+                    201: function (response) {
+                        alert('201');
+                        console.log(response);
 
-                this.loader.addText('Status: ' + status);
-                console.log('Payload:');
-                console.log(payload);
-
-                // textStatus contains the status: success, error, etc
-                // If server responds with 'success'            
-                if (status === "success") {
-
+                    },
+                    400: function (response) {
+                        alert('400');
+                        console.log(response);
+                    },
+                    400: function (response) {
+                        alert('403-woot');
+                        console.log(response);
+                        this.loader.setProgress(100, 'Access Denied: ' + response);
+                    },
+                    404: function (response) {
+                        alert('404');
+                        console.log(response);
+                    }
+                }, success: function (payload) {
+                    alert('Success');
                     this.loader.setProgress(25, 'Posted results to server.');
-                    
+
                     this.loader.setProgress(50,
                         'Updating...<br><hr/>'
                         + payload.message + '<br><hr/>'
@@ -215,23 +265,16 @@ class FORM extends CONTAINER {
 
                     // Update the Form with the appropriate ID if needed
                     this.afterSuccessfulPost();
-
-
-                } else {
-                    console.log('Failed to POST results to server with status: "' + status + '"');
-                    this.loader.setProgress(0, 'The form "<span style="font-weight:bold">' +
-                        formPost.label + '</span>" was not saved.<br>' +
-                        payload.message + '<br><hr/>'
-                    );
-
-                    console.log('Failed to submit form.\nPayload:\n');
-                    console.log(payload);
-
-                    btnReset.el.style.display = 'none;';
-
-                    this.unlock();                    
-                }
-            }.bind(this), "json"
-        );
+                }.bind(this),
+            });
+            
+        } else {
+            console.log('FormPost is invalid');
+            this.loader.setProgress(50,
+                'Failed to submit...<br><hr/>Values are invalid<br><hr/>'
+            );            
+            this.loader.setProgress(100, 'Post Failed.');
+            this.loader.hide(400);
+        }
     }
 }

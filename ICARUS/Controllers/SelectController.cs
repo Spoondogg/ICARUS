@@ -16,7 +16,6 @@ namespace ICARUS.Controllers {
     /// Controller for Form Elements, performs basic CRUD actions as well as
     /// various pages
     /// </summary>
-    [Authorize(Roles = "User,Dev,Admin")]
     public class SelectController : ContainerController {
 
         public SelectController() : base("Select") {
@@ -44,7 +43,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             Select model = (Select)ctx.Selects.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

@@ -16,7 +16,6 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    // [Authorize]
     public class IFrameController : ContainerController {
 
         public IFrameController() : base("IFrame") {
@@ -27,7 +26,6 @@ namespace ICARUS.Controllers {
         /// Instantiate a Container using Article defaults
         /// </summary>
         /// <returns></returns>
-        [Authorize]
         public override Container make(FormPost formPost = null) {
             IFRAME obj = (formPost == null)
                 ? new IFRAME()
@@ -43,10 +41,9 @@ namespace ICARUS.Controllers {
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Authorize]
         public override Container select(ObjectDBContext ctx, int id) {
             IFRAME model = (IFRAME)ctx.IFrames.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }
