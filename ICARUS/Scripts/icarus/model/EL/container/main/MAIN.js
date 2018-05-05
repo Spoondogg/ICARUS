@@ -40,6 +40,18 @@ class MAIN extends CONTAINER {
         this.navBar.header.menu.getGroup('USER').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
+                    'label': 'Log In',
+                    'url': '#?url=login'
+                })
+            })
+        ).el.onclick = function () {
+            this.navBar.header.toggleCollapse();
+            this.login();
+        }.bind(this);        
+
+        this.navBar.header.menu.getGroup('USER').addNavItem(
+            new MODEL().set({
+                'anchor': new MODEL().set({
                     'label': 'Log Out',
                     'url': '#?url=logout'
                 })
@@ -139,6 +151,93 @@ class MAIN extends CONTAINER {
     */
     getId() {
         return this.id;
+    }
+
+    /**
+     * Log into the application using the given credentials
+     * @param {string} email Username / Email 
+     * @param {string} password Account Password
+     */
+    login(email, password) {
+        console.log('Log In');
+        // TODO Handle supplied arguments... Or don't... Not sure yet.
+
+        this.prompt = new PROMPT('Log In', 'Sign into your Account');
+
+        this.prompt.form.setPostUrl('/Account/Login');
+        this.prompt.form.el.setAttribute('method', 'POST');
+        this.prompt.form.el.setAttribute('action', '#');
+
+        this.email = new INPUT(this.prompt.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.INPUT,
+                    'type': 'Email',
+                    'name': 'Email'
+                })
+            ).set({
+                'label': 'Username',
+                'showHeader': 0
+            })
+        );
+        
+        this.password = new INPUT(this.prompt.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.PASSWORD,
+                    'type': 'Password',
+                    'name': 'Password'
+                })
+            ).set({
+                'label': 'Password',
+                'showHeader': 0
+            })
+        );
+
+        this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+        this.prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
+
+            console.log('Logging in...');
+            this.loader = new LOADER('Log In', 'Logging in...');
+            this.loader.show();            
+
+            // Post the form to the Login url and return results into the loader
+            $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
+                function (payload, status) {
+                    console.log(payload);
+                    console.log(status);
+
+                    // textStatus contains the status: success, error, etc
+                    // If server responds with 'success'            
+                    if (status === "success") {
+                        this.loader.setProgress(100, 'Post Complete.');
+                        console.log('Successfully logged in.');
+
+                        setTimeout(function () {
+                            this.loader.hide();
+                            setTimeout(function () {
+                                location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
+                            }.bind(this), 600);
+                        }.bind(this), 2000);
+
+                    } else {
+                        console.log('Failed to POST results to server with status: "' + status + '"');
+                        this.loader.setProgress(0, 'The form did not post.<br>' +
+                            payload.message + '<br><hr/>'
+                        );
+                        console.log('Failed to submit form.\nPayload:\n');
+                        console.log(payload);
+                    }
+                }.bind(this));
+        }.bind(this);
+        this.prompt.show();
+
+        /*
+            TODO:
+            Create INPUT CHECKBOX called 'RememberMe'
+            Create BUTTON to launch 'Register as new User'
+            Create AHREF to 'ForgotPassword'
+        */
     }
 
     /**

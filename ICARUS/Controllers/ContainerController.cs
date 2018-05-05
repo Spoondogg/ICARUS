@@ -16,13 +16,13 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    [Authorize]
     public abstract class ContainerController : AbstractController {
 
         /// <summary>
         /// Creates a new instance of this element's class
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         public abstract Container make(FormPost formPost = null);
 
         /// <summary>
@@ -70,22 +70,14 @@ namespace ICARUS.Controllers {
         [Authorize]
         public override async Task<ActionResult> Create() {
             try {
-
                 var model = make();
-
-                // Save the object
                 db.dbSets[this.className].Add(model);
                 int result = getObjectDbContext().SaveChanges();
-
-                // Return the Payload
                 return Json(new Payload(
                     1, className, model,
                     "Successfully instantiated " + this.className + "(" + model.id + ")"
                 ), JsonRequestBehavior.AllowGet);
-
             } catch (Exception e) {
-
-                // Return the formPost for debugging
                 return Json(new Payload(
                         0,
                         "Unable to create new instance of " +
@@ -101,11 +93,9 @@ namespace ICARUS.Controllers {
         /// Create an instance of a Container on the database
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        [Authorize(Roles = "Dev,Admin")]
         public ActionResult Debug() {
-
             try {
-
                 Container model = new Container();
                 model.setAuthorId(User.Identity.Name);
 
@@ -121,10 +111,8 @@ namespace ICARUS.Controllers {
                 return View(model);
 
             } catch (Exception e) {
-
                 return View();
             }
-
         }
 
         /// <summary>
@@ -134,12 +122,10 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override async Task<ActionResult> Create(FormPost formPost) {
             try {
-                // Save the object
                 var model = make();
                 db.dbSets[this.className].Add(model);
                 int result = getObjectDbContext().SaveChanges();
                 return Json(model);
-
             } catch (Exception e) {
                 return Json(
                     new Payload(

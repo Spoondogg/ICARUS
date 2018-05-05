@@ -235,7 +235,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CustomUnauthorizedException.cs" />
     <Compile Include="Helpers\MyConfigurationExtension.cs" />
+    <Compile Include="Helpers\SecurityAttribute.cs" />
     <Compile Include="Migrations\201801240358189_Initial.cs" />
     <Compile Include="Migrations\201801240358189_Initial.Designer.cs">
       <DependentUpon>201801240358189_Initial.cs</DependentUpon>
@@ -431,6 +433,10 @@
     <Compile Include="Migrations\201805021810405_20180502__001.cs" />
     <Compile Include="Migrations\201805021810405_20180502__001.Designer.cs">
       <DependentUpon>201805021810405_20180502__001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805041744025_20180504__001.cs" />
+    <Compile Include="Migrations\201805041744025_20180504__001.Designer.cs">
+      <DependentUpon>201805041744025_20180504__001.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
@@ -694,55 +700,27 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\FormElements\Index.cshtml" />
-    <Content Include="Views\FormElements\Edit.cshtml" />
     <Content Include="Views\Forms\Index.cshtml" />
-    <Content Include="Views\FormElements\Details.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Roles\Create.cshtml" />
-    <Content Include="Views\Forms\Create.cshtml" />
-    <Content Include="Views\FormGroups\Create.cshtml" />
-    <Content Include="Views\FormGroups\Delete.cshtml" />
-    <Content Include="Views\FormGroups\Details.cshtml" />
-    <Content Include="Views\FormGroups\Edit.cshtml" />
     <Content Include="Views\FormGroups\Index.cshtml" />
-    <Content Include="Views\Forms\Edit.cshtml" />
-    <Content Include="Views\Forms\Details.cshtml" />
-    <Content Include="Views\Forms\Form.cshtml" />
     <Content Include="Views\FormElementOptions\Index.cshtml" />
-    <Content Include="Views\FormElementOptions\Edit.cshtml" />
-    <Content Include="Views\FormElementOptions\Create.cshtml" />
-    <Content Include="Views\FormElementOptions\Delete.cshtml" />
-    <Content Include="Views\FormElementOptions\Details.cshtml" />
     <Content Include="Views\Home\Sent.cshtml" />
     <Content Include="Views\Procedures\Create.cshtml" />
     <Content Include="Views\Procedures\Delete.cshtml" />
     <Content Include="Views\Procedures\Details.cshtml" />
     <Content Include="Views\Procedures\Edit.cshtml" />
     <Content Include="Views\Procedures\Index.cshtml" />
-    <Content Include="Views\IcarusLogs\Create.cshtml" />
-    <Content Include="Views\IcarusLogs\Delete.cshtml" />
-    <Content Include="Views\IcarusLogs\Details.cshtml" />
-    <Content Include="Views\IcarusLogs\Edit.cshtml" />
-    <Content Include="Views\IcarusLogs\Index.cshtml" />
+    <Content Include="Views\Logs\Index.cshtml" />
     <Content Include="Views\Params\Create.cshtml" />
     <Content Include="Views\Params\Delete.cshtml" />
     <Content Include="Views\Params\Details.cshtml" />
     <Content Include="Views\Params\Edit.cshtml" />
     <Content Include="Views\Params\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
-    <Content Include="Views\FormPosts\Create.cshtml" />
-    <Content Include="Views\FormPosts\Delete.cshtml" />
-    <Content Include="Views\FormPosts\Details.cshtml" />
-    <Content Include="Views\FormPosts\Edit.cshtml" />
     <Content Include="Views\FormPosts\Index.cshtml" />
     <Content Include="Views\Database\Index.cshtml" />
     <Content Include="Views\Home\Home.cshtml" />
-    <Content Include="Views\Forms\Create_ICARUS.cshtml" />
-    <Content Include="Views\Section\Create.cshtml" />
-    <Content Include="Views\Section\Create_ICARUS.cshtml" />
-    <Content Include="Views\Section\Details.cshtml" />
-    <Content Include="Views\Section\Edit.cshtml" />
-    <Content Include="Views\Section\Form.cshtml" />
     <Content Include="Views\Section\Index.cshtml" />
     <Content Include="Views\Container\Debug.cshtml" />
     <None Include="Web.Debug.config">
@@ -910,6 +888,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805021810405_20180502__001.resx">
       <DependentUpon>201805021810405_20180502__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805041744025_20180504__001.resx">
+      <DependentUpon>201805041744025_20180504__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,11 +17,8 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    [Authorize]
     public class MainController : ContainerController {
-        /// <summary>
-        /// Parameterless Constructor for Entity
-        /// </summary>
+
         public MainController() : base("Main") {
 
         }
@@ -47,7 +44,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             Main model = (Main)ctx.Mains.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

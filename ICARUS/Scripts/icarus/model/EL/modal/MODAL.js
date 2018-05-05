@@ -54,7 +54,7 @@ class MODAL extends EL { // ALIGN VERTICALLY??
 
         // A well containing various alerts
         this.well = new WELL(this.content, new MODEL(), text);
-        this.well.el.style.display = 'none'; // TODO
+        //this.well.el.style.display = 'none'; // TODO
 
         // Body	: Place forms, objects etc inside 'this.modalbody.el'
         this.container = new CONTAINER(

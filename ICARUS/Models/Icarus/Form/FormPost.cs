@@ -44,7 +44,14 @@ namespace ICARUS.Models.Icarus {
         /// </summary>
         [StringLength(128), Required]
         public string authorId { get; set; }
-        
+
+        /// <summary>
+        /// Indicates if the object is active/inactive on the database, 
+        /// or any other states that might be needed
+        /// </summary>
+        [Required]
+        public int shared { get; set; }
+
         /// <summary>
         /// Initial results passed by form. (Eventually parsed into XML)
         /// The contents of this list are stored in [ICARUS].[FormValues]
@@ -73,7 +80,7 @@ namespace ICARUS.Models.Icarus {
         /// The results variable is converted to xml
         /// </summary>
         private XmlDocument xml = null; //{ get; set; }
-        
+
         /// <summary>
         /// Construct an XML object and message body based on the set form post results 
         /// </summary>

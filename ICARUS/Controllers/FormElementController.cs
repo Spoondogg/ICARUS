@@ -16,7 +16,6 @@ namespace ICARUS.Controllers {
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    [Authorize(Roles = "User,Dev,Admin")]
     public class FormElementController : ContainerController {
 
         public FormElementController() : base("FormElement") {
@@ -44,7 +43,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
             FormElement model = (FormElement)ctx.FormElements.Single(m =>
-                   m.id == id && m.authorId == User.Identity.Name
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }

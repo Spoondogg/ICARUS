@@ -15,8 +15,7 @@ namespace ICARUS.Controllers {
 
     /// <summary>
     /// Controller for HOME pages, services etc
-    /// </summary>
-    [Authorize]
+    /// </summary>=
     public class HomeController : AbstractController {
 
         public HomeController() : base("Home") {
@@ -26,8 +25,7 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// The default page
         /// </summary>
-        /// <returns></returns>
-        [Authorize]
+        /// <returns></returns>=
         public ActionResult Index(int id = 1) { // 0 creates a new APP instance, 1 should be the initial page
             ViewBag.id = id;
             ViewBag.Title = "Icarus";
