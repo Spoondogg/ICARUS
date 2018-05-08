@@ -10,8 +10,7 @@ class EL extends MODEL {
         @param {string} innerHTML This text will be displayed within the HTML element
         @param {array} children An object array of child models
     */
-    constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) { 
-        //model = model || new MODEL(new ATTRIBUTES());
+    constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) {
         super(model.attributes);
 
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
@@ -41,7 +40,8 @@ class EL extends MODEL {
             node = this;
         } else {
             this.el = node.el.appendChild(document.createElement(this.element));
-        }        
+        }
+        return this;
     }
 
     /**
@@ -77,7 +77,8 @@ class EL extends MODEL {
         @param {Function} fn Function to call (should accept model)
     */
     addCase(className, fn) {
-        this.callbacks[className] = this.callbacks[className] || [];
+        //this.callbacks[className] = this.callbacks[className] || [];
+        this.callbacks[className] = [];
         this.callbacks[className].push(fn);
     }
 

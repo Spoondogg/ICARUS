@@ -22,7 +22,7 @@ class MAIN extends CONTAINER {
 
         this.body.pane.addClass('pane-tall');
 
-        this.logoutForm = new LogoutForm(this); // This should be created on demand
+        //this.logoutForm = new LogoutForm(this); // This should be created on demand
 
         this.addNavOptions();
         

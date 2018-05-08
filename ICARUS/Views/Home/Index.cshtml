@@ -2,82 +2,66 @@
     ViewBag.Title = "Icarus Home - Index";
 }
 @section viewInit {
-    @*
-        When the user is authenticated, instantiate the Anti Forgery Token
-        and make it available to the JavaScript App() constructor
-        Performs a GET request of the specified App by id
-    *@
-    @*
-    if (Request.IsAuthenticated) {
-    *@
     @Html.AntiForgeryToken()
     <script type="text/javascript">
-            let route = "/Main/Get";
-            let id = @ViewBag.id;
+        const token = document.getElementsByName('__RequestVerificationToken')[0];        
+        const factory = new CONTAINERFACTORY();        
+        const user = '@User.Identity.Name';
+        const dev = '@User.IsInRole("Dev")' === 'True' || '@User.IsInRole("Admin")' === 'True' ? true : false
+        const app = new MAIN(new MODEL().set({
+            'id': @ViewBag.id,
+            //'label': 'John\'s Auto Care',
+            'showHeader': 1,
+            'hasTab': 0,
+            //'hasSidebar': 0,
+            'element': 'MAIN',
+            'children': [],
+            //'dataId': 0,
+            //'attributesId': 0,
+            //'subsections': '0',
 
-            const token = document.getElementsByName('__RequestVerificationToken')[0];
-            var loader = new LOADER('Loading', 'Loading', 100);
-            var factory = new CONTAINERFACTORY();
-            var app = null;
-
-            console.log('User: @User.Identity.Name');
-
-            // DEBUG
-            console.log('Token: ' + token.value);
-
-            console.log('Home/Index: Getting Main(' + id + ') from ' + route + '/' + id);
-            loader.show();
-            $.getJSON(
-                route + '/' + id, function (data) {
-                    if (data.result === 1) {
-                        try {
-                            app = new MAIN(data.model);
-                            loader.hide();
-                        } catch (e) {
-                            console.log('Unable to retrieve Main()');
-                            console.log(e);
-                        }
-                    } else {
-                        alert('Access Denied.  Failed to retrieve Main(' + id + ') from server');
-                        loader.setProgress(100,
-                            'Access Denied.  Failed to retrieve Main(' + id +
-                            ') from server\n' + data.message
-                        );
-
-                        /*
-                        // Log the user out as a precaution
-                        $.post('/Account/LogOff', {
-                            '__RequestVerificationToken': antiForgeryToken.value
-                        }, function (payload, status) {
-                            loader.addText('Status: ' + status);
-                            if (status === "success") {
-                                loader.setProgress(100, 'Post Complete.');
-                                setTimeout(function () {
-                                    loader.hide();
-                                    setTimeout(function () {
-                                        location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
-                                    }, 600);
-                                }, 2000);
-                            } else {
-                                console.log('Failed to POST results to server with status: "' + status + '"');
-                                loader.setProgress(0, 'Something isnt right');
-                                btnReset.el.style.display = 'none;';
-                            }
-                        }.bind(this), "json");
-                        */
-                    }
-                }
-            );
-            @* Remove the element from the DOM and pass value to App *@
-            try {
-                token.parentNode.removeChild(token);
-            } catch (e) { console.log(e.toString()); }
+            'navBar': {
+                'navLeft': [],
+                'navRight': [],
+                'className': 'NAVBAR',
+                'data': {},
+                'attributes': {
+                    'class': 'navbar navbar-fixed-top navbar-inverse'
+                },
+                'element': 'NAV',
+                //"authorId": null,
+                //"status": 1,
+                //"shared": 0,
+                'children': []
+                //"subsections": null,
+                //"dataId": 0,
+                //"attributesId": 0,
+                //"id": 0,
+                //"label": null
+            },
+            'footer': {
+                'className': 'STICKYFOOTER',
+                'data': {},
+                'attributes': {
+                    'class': 'stickyfooter'
+                },
+                'element': 'FOOTER'
+                //"authorId": null,
+                //"status": 1,
+                //"shared": 0,
+                //"children": [],
+                //"subsections": null,
+                //"dataId": 0,
+                //"attributesId": 0,
+                //"id": 0,
+                //"label": null
+            },
+            'className': 'Main',
+            'data': {},
+            'attributes': {
+                'class': 'app'
+            }
+        }));
+        main(@ViewBag.id);
     </script>
-    @*
-    } else {
-        <script type="text/javascript">
-            console.log("Failed to authenticate user.");
-        </script>
-    }
-    *@
 }

@@ -102,6 +102,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         'hasTab': 0
                     })
                 );
+                //this.form.fieldset.formElementGroup.addContainerCase('ARTICLE');
 
                 // TODO: Fix this up
                 if (inputs) {
@@ -223,6 +224,13 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         })
                     );
 
+                    // Empty out and populate with Form Elements only                    
+                    this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();                    
+                    this.form.fieldset.formElementGroup.addContainerCase('INPUT');
+                    this.form.fieldset.formElementGroup.addContainerCase('SELECT');
+                    this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
+                    
+
                     // TODO: Fix this up
                     if (inputs) {
                         for (let i = 0; i < inputs.length; i++) {
@@ -260,6 +268,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 } else {
                     this.prompt = new MODAL('Exception', data.message);
                     this.prompt.show();
+
+                    app.login();
                 }
 
             }.bind(this));

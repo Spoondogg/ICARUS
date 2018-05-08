@@ -1,19 +1,17 @@
 ﻿/**
     Icarus Web Engine
-    A series of object constructors that assist in generating objects within the DOM
-
-    This document contains what essentially acts as the MAIN method for the application
-
+    Dynamically load objects into Containers 
+    @language Typescript ES6
+    
+    @description Requires Typescript ES6
     @version 0.4.0.20180428
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
 
-"use strict";
+//"use strict";
 
 /**
     If true, tests are ran and results are shown in the console.
-
-    @global
 */
 const TESTING = false;
 
@@ -21,14 +19,14 @@ const TESTING = false;
     Convert an array of Form Element Options into a Hash Table.
     @param {object} arr A collection of arguments
     @returns {object} A hashmap
- */
+ 
 function formElementOptionsToHash(arr) {
     var hash = {};
     for (let i = 0; i < arr.length; i++) {
         hash[arr[i].label] = arr[i].value;
     }
     return hash;
-}
+}*/
 
 /**
     HTML Encode the given value.
@@ -37,30 +35,30 @@ function formElementOptionsToHash(arr) {
     then grab the encoded contents back out.  The div never exists on the page.
     @param {any} value The string to be html encoded
     @returns {text} An html encoded string
- */
+
 function htmlEncode(value) {
     return $('<div/>').text(value).html();
-}
+} */
 
 /**
     Decodes an HTML encoded value back into HTML string
     @param {any} value An html encoded string
     @returns {string} A string that was previously html encoded
- */
+
 function htmlDecode(value) {
     return $('<div/>').html(value).text();
-}
+} */
 
 /**
     Returns only alphanumeric characters
     @param {any} str String to convert
     @returns {string} A string of only alphanumeric characters
- */
+
 function alphaNumeric(str) {
     str = str === undefined ? '' : str.toString().replace(/^[a-zA-Z0-9-_]+$/, '');    
     // /^[a-zA-Z0-9-_]+$/
     return str === null || str === undefined ? '' : str.toString().replace(/[\[\]']/g, '');
-}
+} */
 
 /**
     Sorts an object array by the specified property.
@@ -183,7 +181,7 @@ const IcarusInputType = {
 
 /**
  * Enumerated list of Input Types
- */
+
 const IcarusInputTypeId = {
     1: "text",
     2: "number",
@@ -191,27 +189,27 @@ const IcarusInputTypeId = {
     4: "datetime-local",
     5: "hidden",
     6: "password"
-};
+}; */
 
 /**
     Enumerated list of Form Element Types
- */
+
 const IcarusFormElementTagId = {
     0: "DIV",
     1: "INPUT",
     2: "SELECT",
     3: "TEXTAREA"
-};
+}; */
 
 /**
  * Form Elment HTML option-list
- */
+
 const IcarusFormElementHtmlTag = {
     DIV: 0,
     INPUT: 1,
     SELECT: 2,
     TEXTAREA: 3
-};
+}; */
 
 /**
  * Supported HTML 5 Elements
@@ -309,17 +307,6 @@ const METHOD = {
 };
 
 /**
- * CSS Style options
- */
-const STYLE = {
-    DISPLAY: {
-        DEFAULT: 'block',
-        BLOCK: 'block',
-        NONE: 'none'
-    }
-};
-
-/**
  * Element status for any state changes
  */
 const STATUS = {
@@ -327,16 +314,6 @@ const STATUS = {
     OPEN: 1,
     CLOSED: 0,
     LOCKED: 0
-};
-
-/**
- * An enumerated list of html element types that are supported
- */
-const SECTIONTYPE = {
-    DEFAULT: 'SECTION',
-    SECTION: 'SECTION',
-    FORM: 'FORM',
-    DIV: 'DIV'
 };
 
 /**
@@ -393,4 +370,63 @@ function handleTouchMove(evt) {
     /* reset values */
     xDown = null;
     yDown = null;
+}
+
+/**
+ * Main method that launches the application
+ * @param {number} id Application Id
+ * param {string} user User identifier
+ * param {boolean} dev Dev Mode
+ * param {HTMLInputElement} token Token Element
+ * 
+ */
+function main(id) {
+
+    //const user = '@User.Identity.Name';
+    //const dev = '@User.IsInRole("Dev")' === 'True' ? true : false
+    //const token = document.getElementsByName('__RequestVerificationToken')[0];
+    //const factory = new CONTAINERFACTORY();
+
+    // DEBUG
+    console.log('Launching Main(' + id + ')...');
+    console.log('User: ' + user);
+    console.log('Dev: ' + dev);
+    console.log('Token: ' + token.value);
+    
+        
+    console.log('App instantiated');
+
+    const loader = new LOADER('Loading', 'Loading', 100);
+    loader.show();
+
+    $.getJSON(
+        'Main/Get/' + id, function (data) {
+            if (data.result === 1) {
+                data.model.user = user;
+                data.model.dev = dev;
+                try {
+                    //const app = new MAIN(data.model);
+                    //app.addNavBarDefaults();
+                    app.setLabel(data.model.label);
+                    //app.merge(data.model);
+                    app.populate(data.model.children);
+                    loader.hide();
+                } catch (e) {
+                    console.log('Unable to construct Main('+id+')');
+                    console.log(e);
+                }
+            } else {
+                loader.setProgress(100,
+                    'Access Denied.  Failed to retrieve Main(' + id +
+                    ') from server\n' + data.message
+                );
+            }
+        }
+    );
+    try {
+        token.parentNode.removeChild(token);
+    } catch (e) {
+        console.log('Failed to remove TOKEN from BODY');
+        console.log(e);
+    }
 }

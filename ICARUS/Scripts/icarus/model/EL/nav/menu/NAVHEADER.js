@@ -35,7 +35,7 @@ class NAVHEADER extends MENU {
             })
         );
 
-        // Add a default tab to show/hide the collapse
+        // Add a default tab to show/hide the Options Menu
         this.toggle = this.options.addNavItem(
             new MODEL().set({
                 'anchor': new MODEL('pull-right').set({
