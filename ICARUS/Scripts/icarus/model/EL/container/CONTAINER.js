@@ -1,7 +1,7 @@
 ﻿/**
  * An enumerated list of supported container html element types
  */
-const CONTAINERTYPES = {
+var CONTAINERTYPES = {
     DEFAULT: 'DIV',
     MAIN: 'MAIN',
     ARTICLE: 'ARTICLE',
@@ -62,18 +62,25 @@ class CONTAINER extends GROUP {
             model.navBar.label = model.label;
             model.navBar.brand = this.element;
         }
-        /*
-        this.navBar = new NAVBAR(this, model.navBar);
-        if (model.showHeader) {
-            this.navBar.addClass('active');
-        }
-        */
+        
         if (model.navBar) {
             this.navBar = new NAVBAR(this, model.navBar);
-            if (model.showHeader) {
-                this.navBar.addClass('active');
+            if (model.element !== 'MAIN') {
+                if (model.showHeader && dev) {
+                    this.navBar.addClass('active');
+                } else {
+                    this.navBar.el.style.display = 'none';
+                }
             }
+
+            if (model.shared) {
+                let icon = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.PLUS);
+                icon.el.setAttribute('style','padding-right:0.5em;float:left;');
+            }
+
         }
+
+        
 
         this.body = new CONTAINERBODY(this, model);
 
@@ -205,19 +212,19 @@ class CONTAINER extends GROUP {
         ).el.onclick = this.load.bind(this);
 
         // Add items to Options Dropdown Tab
-        let btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
+        this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
             new MODEL().set({
                 'anchor': new MODEL().set({
                     'label': 'SAVE'
                 })
             })
         );
-        btnSave.el.onclick = function () {
-            btnSave.toggle('active');
+        this.btnSave.el.onclick = function () {
+            this.btnSave.toggle('active');
             //this.navBar.header.menu.scrollTo();
             let node = this.navBar.header.menu.getGroup('CRUD').collapse;
-            if ($(btnSave.el).hasClass('active')) {
-                this.save(node, btnSave); //.bind(this);
+            if ($(this.btnSave.el).hasClass('active')) {
+                this.save(node, this.btnSave); //.bind(this);
             } else {                
                 //$(node.el).collapse('hide');
                 //node.hide();
@@ -259,32 +266,35 @@ class CONTAINER extends GROUP {
                     })
                 );
             } else {
-                tab = app.body.sidebar.menu.addNavItem(
-                    new MODEL(new ATTRIBUTES()).set({
-                        'anchor': new MODEL().set({
-                            'label': model.label
+                if (typeof app !== 'undefined') {
+                    tab = app.body.sidebar.menu.addNavItem(
+                        new MODEL(new ATTRIBUTES()).set({
+                            'anchor': new MODEL().set({
+                                'label': model.label
+                            })
                         })
-                    })
-                );
+                    );
+                }
             }
 
-            tab.el.onclick = function (e) {
+            if (tab !== null) {
+                tab.el.onclick = function (e) {
+                    // Activate parent(s)
+                    app.setArticle(model);
+                    let parentNode = model.node.node.node;
+                    while (parentNode.node.node) { // 
+                        try {
+                            parentNode.tab.activate();
+                            parentNode.show();
+                        } catch (ee) { /*console.log(ee)*/ }
+                        parentNode = parentNode.node.node.node;
+                    }
 
-                // Activate parent(s)
-                app.setArticle(model);
-                let parentNode = model.node.node.node;
-                while (parentNode.node.node) { // 
-                    try {
-                        parentNode.tab.activate();
-                        parentNode.show();
-                    } catch (ee) { /*console.log(ee)*/ }
-                    parentNode = parentNode.node.node.node;
-                }
+                    // Prevent parent click()
+                    e.stopPropagation();
 
-                // Prevent parent click()
-                e.stopPropagation();
-
-            }.bind(this);
+                }.bind(this);
+            }
             return tab;
         } catch (e) {
             console.log(this.element+' has not been instantiated.  Unable to create tab.');
@@ -318,14 +328,18 @@ class CONTAINER extends GROUP {
         @param {string} className Element constructor class name
     */
     addConstructElementButton(className) {
+        let btn = null;
         try {
-            this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+            btn = this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'label': className //'Create ^'
                     })
                 })
-            ).el.onclick = function () {
+            );
+            
+            btn.el.onclick = function () {
+                console.log('click: ' + className);
                 this.navBar.header.toggleCollapse();
                 this.create(new MODEL().set({
                     'className': className
@@ -335,6 +349,7 @@ class CONTAINER extends GROUP {
             console.log('Unable to add Construct Element Button for "' + className + '"');
             console.log(e);
         }
+        return btn;
     }
 
     /**

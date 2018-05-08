@@ -11,8 +11,7 @@
                 'id': 'logoutForm',
                 'name': 'logoutForm', 
                 'method': 'POST',
-                'action': '/Account/LogOff',
-                'style': 'display:none;'
+                'action': '/Account/LogOff'
             })
         ).set({
             'id': 'logoutForm',

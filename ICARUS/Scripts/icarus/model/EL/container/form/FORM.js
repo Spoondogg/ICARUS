@@ -73,6 +73,27 @@ class FORM extends CONTAINER {
             }
         }
     }
+
+    /**
+    HTML Encode the given value.
+
+    Create a in-memory div, set it's inner text(which jQuery automatically encodes
+    then grab the encoded contents back out.  The div never exists on the page.
+    @param {any} value The string to be html encoded
+    @returns {text} An html encoded string
+     */
+    htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    /**
+        Decodes an HTML encoded value back into HTML string
+        @param {any} value An html encoded string
+        @returns {string} A string that was previously html encoded
+     */
+    htmlDecode(value) {
+        return $('<div/>').html(value).text();
+    }
     
     /**
         HTML encodes all form element values.  
@@ -80,12 +101,24 @@ class FORM extends CONTAINER {
     htmlEncodeValues() {
         try {
             for (let e = 0; e < this.el.elements.length; e++) {
-                this.el.elements[e].value = htmlEncode(this.el.elements[e].value);
+                this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
+                
             }
         } catch (e) {
             console.log('FORM.htmlEncodeValues() failed.');
             console.log(e);
         }
+    }
+
+    /**
+        Returns only alphanumeric characters
+        @param {any} str String to convert
+        @returns {string} A string of only alphanumeric characters
+     */
+    alphaNumeric(str) {
+        str = str === undefined ? '' : str.toString().replace(/^[a-zA-Z0-9-_]+$/, '');
+        // /^[a-zA-Z0-9-_]+$/
+        return str === null || str === undefined ? '' : str.toString().replace(/[\[\]']/g, '');
     }
 
     /**
@@ -220,36 +253,37 @@ class FORM extends CONTAINER {
                 type: "POST",
                 data: formPost,
                 error: function (xhr, statusText, errorThrown) {
-                    alert(xhr.status);
-                    alert('Ajax Error');
+                    //alert(xhr.status);
+                    //alert('Ajax Error');
                     this.loader.setProgress(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
                     //console.log(errorThrown);
                 }.bind(this),
                 statusCode: {
                     200: function (response) {
-                        alert('200');
+                        console.log('StatusCode: 200');
                         console.log(response);
                     },
                     201: function (response) {
-                        alert('201');
+                        console.log('StatusCode: 201');
                         console.log(response);
 
                     },
                     400: function (response) {
-                        alert('400');
+                        console.log('StatusCode: 400');
                         console.log(response);
                     },
-                    400: function (response) {
-                        alert('403-woot');
+                    403: function (response) {
+                        console.log('StatusCode: 403');
                         console.log(response);
                         this.loader.setProgress(100, 'Access Denied: ' + response);
+                        app.login();
                     },
                     404: function (response) {
-                        alert('404');
+                        console.log('StatusCode: 404');
                         console.log(response);
                     }
                 }, success: function (payload) {
-                    alert('Success');
+                    console.log('Success');
                     this.loader.setProgress(25, 'Posted results to server.');
 
                     this.loader.setProgress(50,
@@ -258,14 +292,10 @@ class FORM extends CONTAINER {
                     );
 
                     this.unlock();
-
                     this.loader.setProgress(100, 'Post Complete.');
-
                     this.loader.hide(400);
-
-                    // Update the Form with the appropriate ID if needed
                     this.afterSuccessfulPost();
-                }.bind(this),
+                }.bind(this)
             });
             
         } else {

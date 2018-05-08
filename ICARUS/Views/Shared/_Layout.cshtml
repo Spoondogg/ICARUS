@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="spoonMEDIA">
     <meta name="description" content="Icarus Web Engine by spoonMedia" />
     <meta name="author" content="Ryan Dunphy" />
-    <title>@ViewBag.Title - ICARUS 0.2.2018.02.11</title>
+    <title>@ViewBag.Title - ICARUS 0.2.2018.05.07</title>
     @* Preload these scripts *@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
@@ -25,9 +25,6 @@
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
 </head>
 <body>
-    <script type="text/javascript">
-        console.log("Hello, @User.Identity.Name");
-    </script>
     @RenderBody()
     <noscript>
         <a href="/noScript">JavaScript must be enabled for this page to function.  Click here for details</a>
