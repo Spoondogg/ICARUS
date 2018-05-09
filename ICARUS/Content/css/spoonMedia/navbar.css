@@ -29,7 +29,7 @@
 .navbar-nav {
     margin: 0;
     width: 100%;
-    min-height: 50px;
+    /*min-height: 50px;*/
 }
 
 .navbar-nav.collapse[name="menu"] {
@@ -73,6 +73,7 @@
     cursor: pointer;
 }
 
+
 /*
     Horizontal nav-bars should scroll horizontally in order to avoid cases
     where the menu gets lost inside the container
@@ -94,7 +95,7 @@
     display: block;
     background-color: #101010;
     color: white;
-    font-size: 8pt;
+    font-size: 12pt;
     padding: 3px;
 }
 
@@ -201,7 +202,10 @@ nav .btn-group > .dropdown-menu > li, .text-left, .text-left:hover {
     }
 
 nav header {
-    color: white;
+    padding: 0 0.2em;
+    border-bottom: 1px solid #232323;
+    background-color: #404040;
+    color: #c7c7c7;
 }
 
 

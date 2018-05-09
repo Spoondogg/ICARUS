@@ -293,7 +293,9 @@ const ICON = {
     REFRESH: 'glyphicon-refresh',
     REMOVE: 'glyphicon-remove-circle',
     LIST: 'glyphicon-th-list',
-    CERTIFICATE: 'glyphicon-certificate'
+    CERTIFICATE: 'glyphicon-certificate',
+    USER: 'glyphicon-user',
+    EXCLAMATION: 'glyphicon-exclamation-sign'
 };
 
 /**
@@ -324,6 +326,19 @@ const guid = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
 };
+
+/**
+ * If application is set to debug mode, debug details
+ * are logged to the console.
+ * 
+ * @param {string} output A string or an exception
+ */
+function debug(output) {
+    if (DEBUGMODE) {
+        console.log(output);
+    }
+}
+const DEBUGMODE = false;
 
 /////////////////////////////
 // https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
@@ -381,20 +396,11 @@ function handleTouchMove(evt) {
  * 
  */
 function main(id) {
-
-    //const user = '@User.Identity.Name';
-    //const dev = '@User.IsInRole("Dev")' === 'True' ? true : false
-    //const token = document.getElementsByName('__RequestVerificationToken')[0];
-    //const factory = new CONTAINERFACTORY();
-
-    // DEBUG
     console.log('Launching Main(' + id + ')...');
     console.log('User: ' + user);
     console.log('Dev: ' + dev);
     console.log('Token: ' + token.value);
-    
-        
-    console.log('App instantiated');
+    console.log('DebugMode: ' + DEBUGMODE);
 
     const loader = new LOADER('Loading', 'Loading', 100);
     loader.show();
@@ -402,11 +408,12 @@ function main(id) {
     $.getJSON(
         'Main/Get/' + id, function (data) {
             if (data.result === 1) {
-                data.model.user = user;
-                data.model.dev = dev;
+                //data.model.user = user;
+                //data.model.dev = dev;
                 try {
                     //const app = new MAIN(data.model);
                     //app.addNavBarDefaults();
+                    app.setId(id);
                     app.setLabel(data.model.label);
                     //app.merge(data.model);
                     app.populate(data.model.children);

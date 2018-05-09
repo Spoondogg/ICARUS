@@ -8,21 +8,39 @@ class MAIN extends CONTAINER {
         param {string} antiForgeryToken An authentication token
      */
     constructor(model) {
-        console.log(model);
-        document.title = model.label; //'spoonMEDIA: MAIN' + 
+        model = model || new MODEL().set({
+            'showHeader': 1,
+            'element': 'MAIN',
+            'navBar': {
+                'className': 'NAVBAR',
+                'attributes': {
+                    'class': 'navbar navbar-fixed-top navbar-inverse'
+                },
+                'element': 'NAV'
+            },
+            'footer': {
+                'className': 'STICKYFOOTER',
+                'attributes': {
+                    'class': 'stickyfooter'
+                },
+                'element': 'FOOTER'
+            },
+            'className': 'Main',
+            'attributes': {
+                'class': 'app'
+            }
+        });
+
+        document.title = model.label;
         new WATERMARK();
         
         super(document.body, 'MAIN', model, new CONTAINERFACTORY());  
 
-        try {
+        if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
-        } catch (e) {
-            console.log('Sidebar does not exist.');
         }
 
         this.body.pane.addClass('pane-tall');
-
-        //this.logoutForm = new LogoutForm(this); // This should be created on demand
 
         this.addNavOptions();
         
@@ -37,49 +55,54 @@ class MAIN extends CONTAINER {
         Add items to Options Dropdown Tab
      */
     addNavOptions() {
-        this.navBar.header.menu.getGroup('USER').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'Log In',
-                    'url': '#?url=login'
-                })
-            })
-        ).el.onclick = function () {
-            this.navBar.header.toggleCollapse();
-            this.login();
-        }.bind(this);        
+        if (this.navBar.header.menu) {
 
-        this.navBar.header.menu.getGroup('USER').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'Log Out',
-                    'url': '#?url=logout'
+            /*
+            this.navBar.header.menu.getGroup('USER').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Log In',
+                        'url': '#?url=login'
+                    })
                 })
-            })
-        ).el.onclick = function () {            
-            this.navBar.header.toggleCollapse();
-            this.logout();
-        }.bind(this);        
+            ).el.onclick = function () {
+                this.navBar.header.toggleCollapse();
+                this.login();
+            }.bind(this);
+            */
 
-        this.navBar.header.menu.getGroup('USER').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'Manage',
-                    'url': 'Manage/Index'
+            this.navBar.header.menu.getGroup('USER').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Log Out',
+                        'url': '#?url=logout'
+                    })
                 })
-            })
-        );
-        
-        this.navBar.header.menu.getGroup('DOM').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'Toggle Headers'
+            ).el.onclick = function () {
+                this.navBar.header.toggleCollapse();
+                this.logout();
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('USER').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Manage',
+                        'url': 'Manage/Index'
+                    })
                 })
-            })
-        ).el.onclick = function () {
-            this.toggleHeaders();
-            this.navBar.header.toggleCollapse();            
-        }.bind(this);
+            );
+
+            this.navBar.header.menu.getGroup('DOM').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Toggle Headers'
+                    })
+                })
+            ).el.onclick = function () {
+                this.toggleHeaders();
+                this.navBar.header.toggleCollapse();
+            }.bind(this);
+        }
     }
 
     /**

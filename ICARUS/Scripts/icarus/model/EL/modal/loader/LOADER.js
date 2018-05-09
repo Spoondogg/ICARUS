@@ -18,7 +18,7 @@ class LOADER extends MODAL {
         //this.footer.el.style.display = 'none';
 
         this.progress = new EL(this, 'DIV', new MODEL(new ATTRIBUTES('progress')));
-        $(this.progress.el).insertBefore(this.container.el);
+        $(this.progress.el).insertBefore(this.well.el);
 
         this.progressBar = new EL(this.progress, 'DIV', new MODEL(new ATTRIBUTES({
             'class': 'progress-bar progress-bar-info progress-bar-striped active',

@@ -34,31 +34,68 @@ class NAVHEADER extends MENU {
                 'name': 'options'
             })
         );
-
-        // Add a default tab to show/hide the Options Menu
-        this.toggle = this.options.addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL('pull-right').set({
-                    'icon': ICON.COG,
-                    'label': '', //Options
-                    'url': '#'
+        
+        if (user === 'Guest') {
+            this.btnLogin = this.options.addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL('pull-right').set({
+                        'icon': ICON.USER,
+                        'label': '',
+                        'url': '#'
+                    })
                 })
-            })
-        ).el.onclick = this.toggleCollapse.bind(this);
+            ).el.onclick = function () {
+                app.login();
+            };
+        }
 
-        this.menu = new MENU(this, new MODEL('collapse').set({
-            'name': 'menu'            
-        })); 
+        /**
+         * Anything that references navHeader.menu will now require try/catch
+         */
+        if (dev) {
 
-        // Add Default OPTIONS groupings as HORIZONTAL menus
-        let optionGroups = ['ELEMENTS', 'CRUD', 'USER', 'DOM'];
-        for (let oG = 0; oG < optionGroups.length; oG++) {
-            this.menu.addMenu(
-                new MODEL(new ATTRIBUTES('horizontal')).set({
-                    'name': optionGroups[oG],
-                    'showHeader': 1
+            /*
+            this.btnLogout = this.options.addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL('pull-right').set({
+                        'icon': ICON.USER,
+                        'label': '',
+                        'url': '#'
+                    })
                 })
-            );
+            ).el.onclick = function () {
+                app.logout();
+            };
+            */
+
+            // Add a default tab to show/hide the Options Menu
+            this.toggle = this.options.addNavItem(
+                new MODEL(new ATTRIBUTES({
+                    'style': 'width:100%;'
+                })).set({
+                    'anchor': new MODEL('pull-right').set({
+                        'icon': ICON.COG,
+                        'label': '', //Options
+                        'url': '#'
+                    })
+                })
+            ).el.onclick = this.toggleCollapse.bind(this);
+
+            this.menu = new MENU(this, new MODEL('collapse').set({
+                'name': 'menu'
+            }));
+
+            // Add Default OPTIONS groupings as HORIZONTAL menus
+            let optionGroups = ['ELEMENTS', 'CRUD', 'USER', 'DOM'];
+            for (let oG = 0; oG < optionGroups.length; oG++) {
+                this.menu.addMenu(
+                    new MODEL(new ATTRIBUTES('horizontal collapse')).set({
+                        'name': optionGroups[oG],
+                        'showHeader': 1,
+                        'collapsed': 1
+                    })
+                );
+            }
         }
     }
 

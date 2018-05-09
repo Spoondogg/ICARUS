@@ -41,7 +41,7 @@ class CONTAINERBODY extends EL {
                 //save(node);
                 // Prevent parent double click()
                 e.stopPropagation();
-            }
+            };
         }
     }
 

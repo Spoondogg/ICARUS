@@ -66,7 +66,7 @@ class CONTAINER extends GROUP {
         if (model.navBar) {
             this.navBar = new NAVBAR(this, model.navBar);
             if (model.element !== 'MAIN') {
-                if (model.showHeader && dev) {
+                if (model.showHeader && dev === true) {
                     this.navBar.addClass('active');
                 } else {
                     this.navBar.el.style.display = 'none';
@@ -95,7 +95,6 @@ class CONTAINER extends GROUP {
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('BANNER');
         this.addContainerCase('TEXTBLOCK');
-        this.addContainerCase('HEADER');
         this.addContainerCase('PARAGRAPH');
 
         if (this.collapsed) {
@@ -166,84 +165,95 @@ class CONTAINER extends GROUP {
         Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
      */
     addNavBarDefaults() {
-        if (this.hasSidebar) {
+        if (this.navBar.header.menu) {
+
+            if (this.hasSidebar) {                
+                this.navBar.header.menu.getGroup('DOM').addNavItem(
+                    new MODEL().set({
+                        'anchor': new MODEL().set({
+                            'label': 'Toggle Sidebar'
+                        })
+                    })
+                ).el.onclick = function () {
+                    this.navBar.header.toggleCollapse();
+                    setTimeout(function () {
+                        this.toggleSidebar();
+                    }.bind(this), 500);
+                }.bind(this);                
+            }
+            
             this.navBar.header.menu.getGroup('DOM').addNavItem(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'label': 'Toggle Sidebar'
+                        'label': 'UP'
                     })
                 })
             ).el.onclick = function () {
                 this.navBar.header.toggleCollapse();
-                setTimeout(function () {
-                    this.toggleSidebar();
-                }.bind(this), 500);
+                this.moveUp();
             }.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'DN'
+                    })
+                })
+            ).el.onclick = function () {
+                this.navBar.header.toggleCollapse();
+                this.moveDown();
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('CRUD').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'LOAD'
+                    })
+                })
+            ).el.onclick = this.load.bind(this);
+
+            // Add items to Options Dropdown Tab
+            this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'SAVE'
+                    })
+                })
+            );
+            this.btnSave.el.onclick = function () {
+                this.btnSave.toggle('active');
+                //this.navBar.header.menu.scrollTo();
+
+                // CREATE A TEMPORARY  to hold the SAVE FORM
+                if ($(this.btnSave.el).hasClass('active')) {
+                    let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
+                    this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
+                    this.save(this.btnSave.wrapper, this.btnSave); //.bind(this);
+                } else {
+                    console.log('closing save form');
+                    let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
+                    
+                    try {
+                        $(wrp).collapse('toggle');
+                        setTimeout(function () {          
+                            wrp.parentNode.removeChild(wrp);
+                        }.bind(this), 2000);
+
+                    } catch (e) {
+                        console.log('Unable to destroy this ');
+                        console.log(e);
+                    }
+                }
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('CRUD').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'DELETE'
+                    })
+                })
+            ).el.onclick = this.disable.bind(this);
         }
-
-        this.navBar.header.menu.getGroup('DOM').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'UP'
-                })
-            })
-        ).el.onclick = function () {            
-            this.navBar.header.toggleCollapse();       
-            this.moveUp();
-        }.bind(this);
-        
-        this.navBar.header.menu.getGroup('DOM').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'DN'
-                })
-            })
-        ).el.onclick = function () {
-            this.navBar.header.toggleCollapse();
-            this.moveDown();
-        }.bind(this);
-        
-        this.navBar.header.menu.getGroup('CRUD').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'LOAD'
-                })
-            })
-        ).el.onclick = this.load.bind(this);
-
-        // Add items to Options Dropdown Tab
-        this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'SAVE'
-                })
-            })
-        );
-        this.btnSave.el.onclick = function () {
-            this.btnSave.toggle('active');
-            //this.navBar.header.menu.scrollTo();
-            let node = this.navBar.header.menu.getGroup('CRUD').collapse;
-            if ($(this.btnSave.el).hasClass('active')) {
-                this.save(node, this.btnSave); //.bind(this);
-            } else {                
-                //$(node.el).collapse('hide');
-                //node.hide();
-                $(node.el).collapse('toggle');
-                setTimeout(function () {
-                    node.empty();
-                }.bind(this), 1000);
-                //setTimeout(node.empty.bind(this), 1000);
-            }
-            //this.navBar.header.toggleCollapse();
-        }.bind(this);
-
-        this.navBar.header.menu.getGroup('CRUD').addNavItem(
-            new MODEL().set({
-                'anchor': new MODEL().set({
-                    'label': 'DELETE'
-                })
-            })
-        ).el.onclick = this.disable.bind(this);
     }
     
     /**
@@ -266,7 +276,7 @@ class CONTAINER extends GROUP {
                     })
                 );
             } else {
-                if (typeof app !== 'undefined') {
+                if (typeof app !== 'undefined' && app.body.sidebar) {
                     tab = app.body.sidebar.menu.addNavItem(
                         new MODEL(new ATTRIBUTES()).set({
                             'anchor': new MODEL().set({
@@ -328,28 +338,23 @@ class CONTAINER extends GROUP {
         @param {string} className Element constructor class name
     */
     addConstructElementButton(className) {
-        let btn = null;
-        try {
-            btn = this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+        if (this.navBar.header.menu) {
+
+            this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'label': className //'Create ^'
                     })
                 })
-            );
-            
-            btn.el.onclick = function () {
-                console.log('click: ' + className);
+            ).el.onclick = function () {
                 this.navBar.header.toggleCollapse();
                 this.create(new MODEL().set({
                     'className': className
                 }));
+                this.navBar.header.tab.iconSave = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.EXCLAMATION);
+                this.navBar.header.tab.iconSave.el.setAttribute('style', 'padding-right:0.5em;float:left;');
             }.bind(this);
-        } catch (e) {
-            console.log('Unable to add Construct Element Button for "' + className + '"');
-            console.log(e);
         }
-        return btn;
     }
 
     /**
@@ -433,7 +438,7 @@ class CONTAINER extends GROUP {
     */
     setId(id) {
         this.el.setAttribute('id', id);
-        this.model.id = id;
+        this.data.id = id;
     }
 
     /**
@@ -505,7 +510,7 @@ class CONTAINER extends GROUP {
 
     /**
         Saves the state of this Element
-        @param {EL} node The parent container for save menu
+        @param {EL} node The parent container to hold the save menu
         @param {EL} caller The element (typically a button) that called the save method
      */
     save(node, caller) {
@@ -520,8 +525,8 @@ class CONTAINER extends GROUP {
             }
         }
 
-        console.log('Creating prompt form...');        
-        node.empty();
+        console.log('Creating save form...');        
+        //node.empty();
         //node.hide();
         
         let form = new FORM(
@@ -529,7 +534,7 @@ class CONTAINER extends GROUP {
             new MODEL(new ATTRIBUTES({
                 'style':'background-color:white;'
             })).set({
-                'label': 'PROMPT FORM',
+                'label': 'SAVE FORM',
                 'collapsed': 0,
                 'showHeader': 0,
                 'hasTab': 0
@@ -704,6 +709,8 @@ class CONTAINER extends GROUP {
 
         form.setPostUrl(this.className + '/Set');
 
+        // THIS IS THE PART THAT USES NODE/CALLER
+        // THIS SHOULD BE ITS OWN FUNCTION
         form.afterSuccessfulPost = function () {
             //node.hide();
             $(node.el).collapse("toggle");
@@ -715,9 +722,12 @@ class CONTAINER extends GROUP {
                 console.log(caller);
                 caller.node.node.toggleCollapse();
             }
+
+            // Remove EXCLAMATION icon if present
+            this.navBar.header.tab.iconSave.destroy();
+
         }.bind(this);
         //node.show(); 
-
 
         $(node.el).collapse("show");
     }

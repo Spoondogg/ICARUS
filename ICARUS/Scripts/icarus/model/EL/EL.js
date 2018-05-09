@@ -32,10 +32,11 @@ class EL extends MODEL {
         Create the HTML element in the DOM, appended to the given node
         // Append the element to its parent and set its inner HTML (when available)
         @param {EL} node Parent node to append to
+        @returns {EL} This element
      */
     make(node) {        
         if (node === document.body) {
-            console.log('BODY.create(' + this.element + ')');
+            debug('BODY.create(' + this.element + ')');
             this.el = node.appendChild(document.createElement(this.element));
             node = this;
         } else {
@@ -55,7 +56,7 @@ class EL extends MODEL {
         @returns {EL} Constructed Element
      */
     create(model) {
-        console.log(this.className+'.create(' + model.className + ')');
+        debug(this.className+'.create(' + model.className + ')');
         let result = null;
         try {
             this.callbacks[model.className].forEach(function (fn) {
@@ -249,10 +250,9 @@ class EL extends MODEL {
     */
     populate(children) {
         if (children) {
-            console.log(this.className + '.populate(' + children.length + ');');
+            debug(this.className + '.populate(' + children.length + ');');
             try {
                 for (let c = 0; c < children.length; c++) {
-                    //this.create(children[c].className, children[c]);
                     this.create(children[c]);
                 }
             } catch (e) { console.log(e); }
