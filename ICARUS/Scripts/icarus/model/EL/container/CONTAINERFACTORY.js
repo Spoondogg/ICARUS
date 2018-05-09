@@ -22,7 +22,7 @@ class CONTAINERFACTORY {
         @returns {CONTAINER} A newly constructed container
     */
     get(node, className, id) {
-        console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
+        debug('CONTAINERFACTORY.get(' + className + ',' + id + ');');
 
         let span = new SPAN(node, new MODEL());
         let index = node.children.push(span); // Reserve the slot in the array
@@ -66,9 +66,11 @@ class CONTAINERFACTORY {
                     obj = new JUMBOTRON(span, result.model);
                     break;
 
+                /*
                 case 'HEADER':
                     obj = new HEADER(span, result.model);
                     break;
+                */
 
                 case 'PARAGRAPH':
                     obj = new PARAGRAPH(span, result.model);

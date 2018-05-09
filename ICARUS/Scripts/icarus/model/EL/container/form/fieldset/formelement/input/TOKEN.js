@@ -7,14 +7,11 @@ class TokenInput extends EL {
         @param {EL} node The parent object
      */
     constructor(node) {
-        console.log('Constructing Token Input');
         super(node,
             'INPUT',
             new MODEL(
                 new ATTRIBUTES('', '__RequestVerificationToken', 'HIDDEN', token.value)
             )
         );
-        console.log('Token: ' + token.value);
-        console.log(this);
     }
 }

@@ -9,17 +9,35 @@ class MENU extends UL {
      */
     constructor(node, model) {
         super(node, model);
-        //this.className = 'MENU'; 
         this.addClass('nav navbar-nav');
 
+        this.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('wrapper')));
+
         if (model.showHeader) {
-            this.header = new HEADER(this, new MODEL().set({
+            this.header = new HEADER(this.wrapper, new MODEL().set({
                 'label': model.name
-            })).el.onclick = this.toggleCollapse.bind(this);
+            }));
+            /*
+            if (model.collapsed) {
+                $(this.header.el).insertBefore(this.el);
+            }
+            */
         }
+
+        $(this.el).appendTo(this.wrapper.el);
+
+        /*
         this.collapse = new EL(node, 'DIV', new MODEL(
             new ATTRIBUTES('container-body collapse')
         ));
+        */
+
+        if (model.showHeader) {
+            this.header.el.onclick = function () {
+                $(this.el).collapse('toggle');
+            }.bind(this);
+        }
+
 
         this.addCase('MENU', function (model) {
             return this.addMenu(model);

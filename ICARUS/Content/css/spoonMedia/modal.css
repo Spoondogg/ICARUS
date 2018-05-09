@@ -98,9 +98,11 @@
     max-height: 260px;
 }
 
+    /*
 .modal .loader .modal-body {
     height: 220px;
 }
+    */
 
     .modal .loader .modal-body .well {
         font-size: smaller;

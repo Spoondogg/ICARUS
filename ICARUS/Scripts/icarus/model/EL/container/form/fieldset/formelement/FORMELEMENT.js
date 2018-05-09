@@ -14,19 +14,10 @@ class FORMELEMENT extends CONTAINER {
         @param {MODEL} model the data model
      */
     constructor(node, element, model) {
-        model.hasSidebar = 0;
-
-        console.log('FORMELEMENT[' + element + ']');        
+        model.hasSidebar = 0;     
         super(node, 'DIV', model);
         this.addClass('form-element');
 
         this.label = new LABEL(this.body.pane, model ? model.label : '__NoLabel');        
     }
-    /*
-    setLabel(label) {
-        this.navBar.header.tab.anchor.setInnerHTML(label);
-        this.label.setInnerHTML(label);
-        this.label.el.setAttribute('name', label);
-    }
-    */
 }
