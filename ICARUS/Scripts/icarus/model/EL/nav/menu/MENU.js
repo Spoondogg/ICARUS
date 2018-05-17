@@ -17,27 +17,15 @@ class MENU extends UL {
             this.header = new HEADER(this.wrapper, new MODEL().set({
                 'label': model.name
             }));
-            /*
-            if (model.collapsed) {
-                $(this.header.el).insertBefore(this.el);
-            }
-            */
         }
 
         $(this.el).appendTo(this.wrapper.el);
-
-        /*
-        this.collapse = new EL(node, 'DIV', new MODEL(
-            new ATTRIBUTES('container-body collapse')
-        ));
-        */
 
         if (model.showHeader) {
             this.header.el.onclick = function () {
                 $(this.el).collapse('toggle');
             }.bind(this);
         }
-
 
         this.addCase('MENU', function (model) {
             return this.addMenu(model);
@@ -56,7 +44,7 @@ class MENU extends UL {
         Toggles the collapsed state of the 'COLLAPSE'
      */
     toggleCollapse() {
-        $(this.collapse.el).collapse('toggle');
+        $(this.el).collapse('toggle');
     }
 
     /**

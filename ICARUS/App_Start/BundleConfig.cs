@@ -44,11 +44,18 @@ namespace ICARUS {
                 "~/Content/css/icomoon.svg.txt#icomoon"
             ));
 
+            // Animate.css Styles
+            bundles.Add(new StyleBundle("~/Content/css/animate").Include(
+                "~/Content/css/animate.css"
+            ));
+
             // Icarus specific styles - Names cannot contain UNDERSCORES
             bundles.Add(new StyleBundle("~/Content/css/icarus").Include(
                 "~/Content/css/spoonMedia/icarus.css",
                 "~/Content/css/spoonMedia/icon.css",
                 "~/Content/css/spoonMedia/thumbnail.css",
+                "~/Content/css/spoonMedia/console.css",
+                "~/Content/css/spoonMedia/loader.css",
                 "~/Content/css/spoonMedia/container.css",
                 "~/Content/css/spoonMedia/main.css",
                 "~/Content/css/spoonMedia/label.css",
@@ -107,6 +114,7 @@ namespace ICARUS {
                 // Group > List
                 "~/Scripts/icarus/model/el/group/li/LI.js",
                 "~/Scripts/icarus/model/el/group/ul/UL.js",
+                "~/Scripts/icarus/model/el/group/ul/console/CONSOLE.js",
 
                 // Container > NAV
                 "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",

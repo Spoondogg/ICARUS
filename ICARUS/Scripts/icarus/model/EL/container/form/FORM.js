@@ -226,17 +226,11 @@ class FORM extends CONTAINER {
     */
     post() {
 
-        console.log('Posting values to server...');
-
-        //let results = {};
-        this.loader = new LOADER('Submitting Form Results', 'Your form is being submitted...');
-        this.loader.show();
-
         // Post results to server
-        this.loader.setProgress(10, 'Posting values to server: ' + this.getPostUrl());
+        app.loader.log(10, 'Posting values to server: ' + this.getPostUrl());
         let formPost = this.getFormPost();
-        console.log('FORMPOST: ');
-        console.log(formPost);
+        debug('FORMPOST: ');
+        debug(formPost);
 
         if (formPost) {
 
@@ -253,10 +247,7 @@ class FORM extends CONTAINER {
                 type: "POST",
                 data: formPost,
                 error: function (xhr, statusText, errorThrown) {
-                    //alert(xhr.status);
-                    //alert('Ajax Error');
-                    this.loader.setProgress(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
-                    //console.log(errorThrown);
+                    app.loader.log(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
                 }.bind(this),
                 statusCode: {
                     200: function (response) {
@@ -275,7 +266,7 @@ class FORM extends CONTAINER {
                     403: function (response) {
                         console.log('StatusCode: 403');
                         console.log(response);
-                        this.loader.setProgress(100, 'Access Denied: ' + response);
+                        app.loader.log(100, 'Access Denied: ' + response);
                         app.login();
                     },
                     404: function (response) {
@@ -284,27 +275,26 @@ class FORM extends CONTAINER {
                     }
                 }, success: function (payload) {
                     console.log('Success');
-                    this.loader.setProgress(25, 'Posted results to server.');
+                    app.loader.log(25, 'Posted results to server.');
 
-                    this.loader.setProgress(50,
+                    app.loader.log(50,
                         'Updating...<br><hr/>'
                         + payload.message + '<br><hr/>'
                     );
 
                     this.unlock();
-                    this.loader.setProgress(100, 'Post Complete.');
-                    this.loader.hide(400);
+                    app.loader.log(100, 'Form Submitted');
                     this.afterSuccessfulPost();
                 }.bind(this)
             });
             
         } else {
             console.log('FormPost is invalid');
-            this.loader.setProgress(50,
+            app.loader.log(50,
                 'Failed to submit...<br><hr/>Values are invalid<br><hr/>'
             );            
-            this.loader.setProgress(100, 'Post Failed.');
-            this.loader.hide(400);
+            app.loader.log(100, 'Post Failed.');
+            $(app.loader.console.el).collapse('show');
         }
     }
 }

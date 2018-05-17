@@ -52,9 +52,10 @@ class MODAL extends EL { // ALIGN VERTICALLY??
 
         this.header.btnClose.el.onclick = this.close.bind(this);
 
-        // A well containing various alerts
-        this.well = new WELL(this.content, new MODEL(), text);
-        //this.well.el.style.display = 'none'; // TODO
+        // A well containing various alerts        
+        if (text) {
+            this.well = new WELL(this.content, new MODEL(), text);
+        }
 
         // Body	: Place forms, objects etc inside 'this.modalbody.el'
         this.container = new CONTAINER(
@@ -87,30 +88,31 @@ class MODAL extends EL { // ALIGN VERTICALLY??
         Reveal the modal
     */
     show() {
-        $(this.el).modal('show', function () {
-            alert("The paragraph is now shown");
-            //this.modal.el.scrollTop = 0;
-        });
+        if ($(this.el).hasClass('in')) {
+            $(this.el).modal('show');
+        } /*else {
+            console.log('modal already shown');
+        }*/
     }
 
     /**
         Hide the modal and remove from DOM
         @param {number} delay Millisecond delay
     */
-    hide(delay) {
-        delay = delay === undefined ? 100 : delay;
+    hide(delay = 1000) {
         setTimeout(function () {
             $(this.el).modal('hide');
+            $('.modal-backdrop').animate({ opacity: 'toggle' }, 300).remove();
         }.bind(this), delay);
     }
 
     /**
         Convenience method for hide();  Should get ride of this
         @param {number} delay Millisecond delay
-    */
+    
     close(delay) {
         this.hide(delay);
-    }
+    }*/
 
     /**
         Sets the text to prompt well
@@ -125,10 +127,10 @@ class MODAL extends EL { // ALIGN VERTICALLY??
     /**
         Adds text to the prompt's well
         @param {string} text The text to be added
-    */
+    
     addText(text) {
-        if (text) {
+        if (this.well) {
             this.well.el.innerHTML += '<br>' + text;
         }
-    }
+    }*/
 }

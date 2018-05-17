@@ -13,12 +13,8 @@ class TEXTAREA extends FORMELEMENT {
         this.input = new EL(this.body.pane, 'TEXTAREA', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
-                'name': friendly('TEXTAREA_' + guid())
+                'name': model.attributes.name                
             })
-        ));
-
-        if (model.readonly) {
-            this.input.el.setAttribute('readonly', 'readonly');
-        }
+        ), model.attributes.value || '');
     }
 }

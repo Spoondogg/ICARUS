@@ -16,51 +16,6 @@
 const TESTING = false;
 
 /**
-    Convert an array of Form Element Options into a Hash Table.
-    @param {object} arr A collection of arguments
-    @returns {object} A hashmap
- 
-function formElementOptionsToHash(arr) {
-    var hash = {};
-    for (let i = 0; i < arr.length; i++) {
-        hash[arr[i].label] = arr[i].value;
-    }
-    return hash;
-}*/
-
-/**
-    HTML Encode the given value.
-
-    Create a in-memory div, set it's inner text(which jQuery automatically encodes
-    then grab the encoded contents back out.  The div never exists on the page.
-    @param {any} value The string to be html encoded
-    @returns {text} An html encoded string
-
-function htmlEncode(value) {
-    return $('<div/>').text(value).html();
-} */
-
-/**
-    Decodes an HTML encoded value back into HTML string
-    @param {any} value An html encoded string
-    @returns {string} A string that was previously html encoded
-
-function htmlDecode(value) {
-    return $('<div/>').html(value).text();
-} */
-
-/**
-    Returns only alphanumeric characters
-    @param {any} str String to convert
-    @returns {string} A string of only alphanumeric characters
-
-function alphaNumeric(str) {
-    str = str === undefined ? '' : str.toString().replace(/^[a-zA-Z0-9-_]+$/, '');    
-    // /^[a-zA-Z0-9-_]+$/
-    return str === null || str === undefined ? '' : str.toString().replace(/[\[\]']/g, '');
-} */
-
-/**
     Sorts an object array by the specified property.
     @see https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
     @param {string} property Name of property to sort by
@@ -180,38 +135,6 @@ const IcarusInputType = {
 };
 
 /**
- * Enumerated list of Input Types
-
-const IcarusInputTypeId = {
-    1: "text",
-    2: "number",
-    3: "date",
-    4: "datetime-local",
-    5: "hidden",
-    6: "password"
-}; */
-
-/**
-    Enumerated list of Form Element Types
-
-const IcarusFormElementTagId = {
-    0: "DIV",
-    1: "INPUT",
-    2: "SELECT",
-    3: "TEXTAREA"
-}; */
-
-/**
- * Form Elment HTML option-list
-
-const IcarusFormElementHtmlTag = {
-    DIV: 0,
-    INPUT: 1,
-    SELECT: 2,
-    TEXTAREA: 3
-}; */
-
-/**
  * Supported HTML 5 Elements
  */
 const HtmlElement = {
@@ -295,7 +218,9 @@ const ICON = {
     LIST: 'glyphicon-th-list',
     CERTIFICATE: 'glyphicon-certificate',
     USER: 'glyphicon-user',
-    EXCLAMATION: 'glyphicon-exclamation-sign'
+    EXCLAMATION: 'glyphicon-exclamation-sign',
+    PUBLIC: 'glyphicon glyphicon-eye-open',
+    PRIVATE: 'glyphicon glyphicon-eye-close'
 };
 
 /**
@@ -327,18 +252,7 @@ const guid = () => {
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
 };
 
-/**
- * If application is set to debug mode, debug details
- * are logged to the console.
- * 
- * @param {string} output A string or an exception
- */
-function debug(output) {
-    if (DEBUGMODE) {
-        console.log(output);
-    }
-}
-const DEBUGMODE = false;
+
 
 /////////////////////////////
 // https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
@@ -387,6 +301,20 @@ function handleTouchMove(evt) {
     yDown = null;
 }
 
+
+/**
+ * If application is set to debug mode, debug details
+ * are logged to the console.
+ * 
+ * @param {string} output A string or an exception
+ */
+function debug(output) {
+    if (DEBUGMODE) {
+        console.log(output);
+    }
+}
+const DEBUGMODE = false;
+
 /**
  * Main method that launches the application
  * @param {number} id Application Id
@@ -396,44 +324,50 @@ function handleTouchMove(evt) {
  * 
  */
 function main(id) {
-    console.log('Launching Main(' + id + ')...');
-    console.log('User: ' + user);
-    console.log('Dev: ' + dev);
-    console.log('Token: ' + token.value);
-    console.log('DebugMode: ' + DEBUGMODE);
+    document.title = 'Loading...';
+    debug('Launching Main(' + id + ')...');
+    debug('User: ' + user);
+    debug('Dev: ' + dev);
+    debug('Token: ' + token.value);
+    debug('DebugMode: ' + DEBUGMODE);
 
-    const loader = new LOADER('Loading', 'Loading', 100);
-    loader.show();
+    // Modal animation
+    $('.modal').on('show.bs.modal', function (e) {
+        $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
 
+    });
+    $('.modal').on('hide.bs.modal', function (e) {
+        $('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
+    });
+
+    // Retrieve object model
     $.getJSON(
         'Main/Get/' + id, function (data) {
             if (data.result === 1) {
-                //data.model.user = user;
-                //data.model.dev = dev;
                 try {
-                    //const app = new MAIN(data.model);
-                    //app.addNavBarDefaults();
+                    if (data.model.label) {
+                        document.title = data.model.label;
+                    }
                     app.setId(id);
                     app.setLabel(data.model.label);
-                    //app.merge(data.model);
                     app.populate(data.model.children);
-                    loader.hide();
                 } catch (e) {
-                    console.log('Unable to construct Main('+id+')');
-                    console.log(e);
+                    app.loader.log(0, 'Unable to construct Main('+id+')');
+                    debug(e);
                 }
             } else {
-                loader.setProgress(100,
-                    'Access Denied.  Failed to retrieve Main(' + id +
+                app.loader.log(100, 'Failed to retrieve Main(' + id +
                     ') from server\n' + data.message
                 );
+                app.loader.log(100, 'Access Denied');
+                $(app.loader.console.el).collapse('show');
             }
         }
     );
     try {
         token.parentNode.removeChild(token);
     } catch (e) {
-        console.log('Failed to remove TOKEN from BODY');
-        console.log(e);
+        debug('Failed to remove TOKEN from BODY');
+        debug(e);
     }
 }

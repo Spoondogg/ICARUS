@@ -23,7 +23,8 @@ class NAVHEADER extends MENU {
             new MODEL().set({
                 'anchor': new MODEL().set({
                     'label': model.label,
-                    'url': '#'
+                    'url': '#',
+                    'icon': ICON.PLUS
                 })
             })
         );
@@ -38,6 +39,7 @@ class NAVHEADER extends MENU {
         if (user === 'Guest') {
             this.btnLogin = this.options.addNavItem(
                 new MODEL().set({
+                    'icon': ICON.USER,
                     'anchor': new MODEL('pull-right').set({
                         'icon': ICON.USER,
                         'label': '',

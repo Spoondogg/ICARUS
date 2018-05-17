@@ -46,6 +46,33 @@ class EL extends MODEL {
     }
 
     /**
+     * Creates an input and populates with this element's contents
+     */
+    edit() {
+        $(this.el).addClass('edit');
+        this.editor = new TEXTAREA(this, new MODEL(
+            new ATTRIBUTES({
+                'value': this.el.innerHTML
+            })
+        ).set({
+            'label': '<' + this.element + '>'
+        }));
+        $(this.editor.el).insertAfter(this.el);
+
+        this.editor.input.el.onkeyup = function () {
+            this.el.innerHTML = this.editor.input.el.value;
+        }.bind(this);
+
+        this.editor.input.el.onblur = function () {
+            this.editor.destroy();
+            $(this.el).removeClass('edit');
+        }.bind(this);
+
+        this.editor.input.el.focus();
+        event.stopPropagation();
+    }
+
+    /**
         Acts like a switch statement, performing actions from the given list of callbacks.
         This is used because constructor functions persist across the inheritance chain,
         whereas an actual SWITCH statement would be overridden on each inheritted class.
@@ -63,11 +90,11 @@ class EL extends MODEL {
                 result = fn(model);
             }.bind(this));
         } catch (e) {
-            console.log(
+            app.loader.log(0,
                 this.className + '.create(): No constructor exists '
                 + 'for className "' + model.className + '"'
             );
-            console.log(e);
+            debug(e);
         }
         return result;
     }
@@ -250,12 +277,22 @@ class EL extends MODEL {
     */
     populate(children) {
         if (children) {
-            debug(this.className + '.populate(' + children.length + ');');
+
+            let denom = children.length;
+            let progress = 0; // 0 to 100
+            
+            app.loader.log(this.className + '.populate(' + children.length + ');');
             try {
                 for (let c = 0; c < children.length; c++) {
+                    progress = Math.round((c+1) / denom * 100);
+                    app.loader.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
                     this.create(children[c]);
                 }
             } catch (e) { console.log(e); }
+            app.loader.log(100, 'Success');
+            if (!DEBUGMODE) {
+                app.loader.hide();
+            }
         }
     }
 

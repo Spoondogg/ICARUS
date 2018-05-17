@@ -41,6 +41,30 @@ class FORMPOSTINPUT extends FORMELEMENT {
     }
 
     /**
+     * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
+     * @param {number} id Container Id
+     */
+    getContainer(id, attributeName, node = this.node, attempt = 0) {
+        attempt++;
+        console.log('Searching for '+attributeName+': ' + id + '(' + attempt + ')');
+        console.log(node);
+        if (attempt < 20) {
+            try {
+                console.log('id: ' + node.id);
+                if (node[attributeName] == id) {
+                    return node;
+                } else {
+                    return this.getContainer(id, attributeName, node.node, attempt++);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        } else {
+            console.log('Too many attempts (' + attempt + ')');
+        }
+    }
+
+    /**
         Opens a Modal Form populated with an open version of the FormPost
      */
     newAttributes() {
@@ -128,24 +152,20 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     }
                 }
                 */
-
-                //this.prompt.formElementGroup.toggleHeaders();
+                
                 this.form.fieldset.formElementGroup.toggleHeaders();
 
                 this.form.setPostUrl('FormPost/Set');
                 this.form.afterSuccessfulPost = function () { 
-                    console.log('success');
+                    app.loader.log(100, 'Success');                    
                     this.updateInput(data.model.id);
-                    this.form.loader.hide(200);
-                    //this.prompt.close(300);
+                    app.loader.hide();
                 }.bind(this);
-
-                //this.prompt.show();
 
             }.bind(this));
         } catch (e) {
-            console.log('Unable to retrieve FormPost.');
-            console.log(e);
+            app.loader.log(0, 'Unable to retrieve FormPost.');
+            debug(e);
         }
     }
 
@@ -154,10 +174,11 @@ class FORMPOSTINPUT extends FORMELEMENT {
      */
     editAttributes() {
         //this.prompt = null;
+        let id = parseInt(this.input.attributes.value);
         let inputs = [
             new MODEL(new ATTRIBUTES({
                 'name': 'id',
-                'value': this.input.attributes.value
+                'value': id
             })).set({
                 'element': 'INPUT',
                 'type': 'FORMPOST',
@@ -167,22 +188,55 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
         // Test to see if the formpost can be retrieved
         try {
-            $.getJSON('/FORMPOST/Get/' + this.input.attributes.value, function (data) {
+            $.getJSON('/FORMPOST/Get/' + id, function (data) {
 
                 // If access granted...
                 if (data.model) {
-                    console.log('Retrieved form post: ' + this.input.attributes.value);
+                    app.loader.log(80, 'Retrieved Post: ' + id);
+                    console.log('Data Model:');
                     console.log(data.model);
-                    console.log('Parsed...');
                     let parsed = JSON.parse(data.model.jsonResults);
-                    console.log(parsed);
+                    debug(parsed);
+
+                    console.log('Creating elements for ' + this.node.element);
+                    console.log(this.node);
+                    console.log('getContainer(' + data.model.id + ');');
+                    console.log(this.getContainer(id, 'dataId', this.node));
+
+                    let container = this.getContainer(id, 'dataId', this.node);
 
                     for (let i = 0; i < parsed.length; i++) {
                         if (parsed[i].name !== 'id') {
+
+                            /*
+                            for (let key in this.data) {
+                                console.log('Adding data attributes');
+                                inputs.push(
+                                    new MODEL(new ATTRIBUTES({
+                                        'name': key,
+                                        'value': this[key] ? this[key].el ? this[key].el.innerHTML : this.data[key] : this.data[key]
+                                    })).set({
+                                        'element': 'INPUT',
+                                        'label': key,
+                                        'addTab': 0
+                                    })
+                                );
+                            } 
+                            */
+
+                            let value = null;
+                            if (container[parsed[i].name]) {
+                                if (container[parsed[i].name].el) {
+                                    value = container[parsed[i].name].el.innerHTML;
+                                }
+                            } else {
+                                value = parsed[i].value;
+                            }
+
                             inputs.push(
                                 new MODEL(new ATTRIBUTES({
                                     'name': parsed[i].name,
-                                    'value': parsed[i].value
+                                    'value': value //parsed[i].value
                                 })).set({
                                     'element': 'INPUT',
                                     'label': parsed[i].name
@@ -191,16 +245,16 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         }
                     }
 
-                    console.log('Creating prompt form...');
+                    app.loader.log(90, 'Creating Form');
                     try {
                         this.form.destroy();
                     } catch (e) {
-                        console.log(e);
+                        debug(e);
                     }
                     this.form = new FORM(
                         this.body.pane,
                         new MODEL().set({
-                            'label': 'PROMPT FORM',
+                            'label': 'Modify',
                             'collapsed': 0,
                             'showHeader': 0,
                             'hasTab': 0
@@ -231,51 +285,42 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
                     
 
-                    // TODO: Fix this up
+                    // TODO: Include other inputs such as SELECT and TEXTAREA
                     if (inputs) {
+                        app.loader.log(75, 'Loading Attributes');
                         for (let i = 0; i < inputs.length; i++) {
-                            console.log('inputs[' + i + ']: ' + inputs[i].type);
                             let inp = null;
                             if (inputs[i].type === 'FORMPOSTINPUT') {
-                                console.log('FORMPOSTINPUT');
                                 new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
                             } else {
                                 new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
                             }
-
                             this.form.fieldset.formElementGroup.children.push(inp);
                         }
                     }
 
-
-                    /*
-                    // NOW, MAKE A PROMPT for this ATTRIBUTES FORMPOST using the given FormPostId/AttributesId
-                    this.prompt = new PROMPT(
-                        'FORMPOSTINPUT: Save ATTRIBUTES()', 'Saves the ATTRIBUTES() via FORMPOSTINPUT',
-                        [], inputs
-                    );
-                    */
+                    // Show headers so that inputs can be modified
                     this.form.fieldset.formElementGroup.toggleHeaders();
 
                     this.form.setPostUrl('FormPost/Set');
                     this.form.afterSuccessfulPost = function () {
-                        console.log('success');
+                        app.loader.log(100, 'Updated Attributes');
                         this.updateInput(data.model.id);
-                        this.form.loader.hide(200);
-                        //this.prompt.close(300);
-                    }.bind(this);                    
+                        app.loader.hide();
+                    }.bind(this);   
+
+                    app.loader.hide();
 
                 } else {
-                    this.prompt = new MODAL('Exception', data.message);
-                    this.prompt.show();
-
+                    app.loader.log(0, data.message);
+                    app.loader.log(0, 'An Exception Occurred');
                     app.login();
                 }
 
             }.bind(this));
         } catch (e) {
-            console.log('Unable to retrieve FormPost.');
-            console.log(e);
+            app.loader.log(0,'Unable to retrieve FormPost.');
+            debug(e);
         }
     }
 }

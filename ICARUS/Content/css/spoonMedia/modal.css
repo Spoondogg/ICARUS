@@ -92,24 +92,21 @@
     margin-bottom: 0;
 }
 
-.modal .loader {
-    width: 400px;
-    height: 260px;
-    max-height: 260px;
+/**
+    Animate CSS specific code
+*/
+
+.modal.fade .modal-dialog {
+    -webkit-transform: translate(0);
+    -moz-transform: translate(0);
+    -o-transform: translate(0);
+    -ms-transform: translate(0);
+    transform: translate(0);
 }
-
-    /*
-.modal .loader .modal-body {
-    height: 220px;
-}
-    */
-
-    .modal .loader .modal-body .well {
-        font-size: smaller;
-        margin: 0;
-    }
-
-.modal .progress {
-    margin: 0;
-    border-bottom: 1px solid #9c9c9c;
+.modal.fade .modal-dialog {
+    -webkit-transform: translate(0);
+    -moz-transform: translate(0);
+    -o-transform: translate(0);
+    -ms-transform: translate(0);
+    transform: translate(0);
 }

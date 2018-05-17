@@ -1,19 +1,4 @@
-﻿article {
-    display: none;
-}
-
-article.active {
-    display: block;
-}
-
-.application-header {
-    /*
-    position: absolute;
-    display: block;
-    top: 50px;
-    z-index: 999;
-    width: 100%;
-    */
+﻿.application-header {
 
     background-color: white;
     background-color: rgba(0, 0, 0, 0.45);
@@ -23,7 +8,7 @@ article.active {
     font-size: small;
     border-bottom: 1px solid #c3c3c3;
 }
-
+/*
 .section-header {
     background-color: white;
     background-color: rgba(0, 0, 0, 0.45);
@@ -54,12 +39,7 @@ article.active {
         }
 
 
-
 .section-header > .btn-group-left {
-    /*
-    width: 45vw;
-    min-width: 250px;
-    */
     padding-right: 1em;
 }
 
@@ -72,6 +52,8 @@ article.active {
         margin-top: 0;
         border-radius: 0 0 0 4px;
     }
+
+*/
 
 /**
 Due to implementation of dropdown-group
@@ -92,10 +74,12 @@ Due to implementation of dropdown-group
 }
 
 main .container-body .sidebar,
-main .container-body .sidebar-tall .collapse, 
+main .container-body .sidebar-tall .collapse,
 main .container-body .pane {
+    /*
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
+        */
 }
 
 main .container-body .sidebar::-webkit-scrollbar,

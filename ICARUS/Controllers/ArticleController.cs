@@ -18,7 +18,7 @@ namespace ICARUS.Controllers {
     /// </summary>
     public class ArticleController : ContainerController {
 
-        public ArticleController() : base("Article") {
+        public ArticleController() : base("ARTICLE") {
 
         }
 
@@ -27,9 +27,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            Article obj = (formPost == null)
-                ? new Article()
-                : new Article(formPost);
+            ARTICLE obj = (formPost == null)
+                ? new ARTICLE()
+                : new ARTICLE(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -42,7 +42,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            Article model = (Article)ctx.Articles.Single(m =>
+            ARTICLE model = (ARTICLE)ctx.Articles.Single(m =>
                    m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;

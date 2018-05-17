@@ -53,7 +53,7 @@ namespace ICARUS.Controllers {
         public DbSet<IFRAME> IFrames { get; set; }
         public object IFrame { get; internal set; }
 
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<ARTICLE> Articles { get; set; }
         public object Article { get; internal set; }
 
         public DbSet<Section> Sections { get; set; }
@@ -136,7 +136,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Main", Mains);
             this.dbSets.Add("Container", Containers);
             this.dbSets.Add("IFrame", IFrames);
-            this.dbSets.Add("Article", Articles);
+            this.dbSets.Add("ARTICLE", Articles);
             this.dbSets.Add("Section", Sections);
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);

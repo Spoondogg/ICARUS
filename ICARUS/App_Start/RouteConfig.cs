@@ -14,6 +14,7 @@ namespace ICARUS {
 
         public static void RegisterRoutes(RouteCollection routes) {
 
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("favicon.ico");
 
@@ -25,6 +26,8 @@ namespace ICARUS {
                 url: "{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+
 
             /**
                 Default URL pattern
@@ -115,21 +118,6 @@ namespace ICARUS {
                 url: "Form/GetOptions",
                 defaults: new { controller = "Form", action = "GetOptions", id = UrlParameter.Optional }
             );
-
-            /*
-            // Returns a NavBar object
-            routes.MapRoute(
-                name: "getNavBar",
-                url: "Home/NavBar",
-                defaults: new { controller = "Home", action = "NavBar", id = UrlParameter.Optional }
-            );
-
-            routes.MapRoute(
-                name: "getApp",
-                url: "Home/App",
-                defaults: new { controller = "Home", action = "App", id = UrlParameter.Optional }
-            );
-            */
 
             routes.MapRoute(
                 name: "callProcedure",
