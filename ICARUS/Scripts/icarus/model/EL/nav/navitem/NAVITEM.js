@@ -13,7 +13,7 @@ class NAVITEM extends LI {
         super(node, model);
         this.className = 'NAVITEM';
         this.addClass('nav-item');
-        
+
         this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
         
         /* Add cases for each relevant constructor that inherited class does not have */

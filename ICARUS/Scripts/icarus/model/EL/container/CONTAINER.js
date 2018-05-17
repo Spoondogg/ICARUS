@@ -41,9 +41,9 @@ class CONTAINER extends GROUP {
         this.el.setAttribute('id', model.id);
 
         // Container Properties
-        this.loader = null;
+        //this.loader = null;
         this.prompt = null;
-        this.modal = null;
+        //this.modal = null;
         this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?
         
         // Delimited list of child ids
@@ -74,8 +74,9 @@ class CONTAINER extends GROUP {
             }
 
             if (model.shared) {
-                let icon = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.PLUS);
-                icon.el.setAttribute('style','padding-right:0.5em;float:left;');
+                //let icon = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.PLUS);
+                this.navBar.header.tab.anchor.icon.el.className = ICON.PUBLIC;
+                //icon.el.setAttribute('style','padding-right:0.5em;float:left;');
             }
 
         }
@@ -351,8 +352,11 @@ class CONTAINER extends GROUP {
                 this.create(new MODEL().set({
                     'className': className
                 }));
-                this.navBar.header.tab.iconSave = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.EXCLAMATION);
-                this.navBar.header.tab.iconSave.el.setAttribute('style', 'padding-right:0.5em;float:left;');
+                try {
+                    this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICON.EXCLAMATION);
+                } catch (e) {
+                    console.log(e);
+                }
             }.bind(this);
         }
     }
@@ -437,8 +441,10 @@ class CONTAINER extends GROUP {
         @param {number} id Section database Id
     */
     setId(id) {
+        this.id = id;
         this.el.setAttribute('id', id);
         this.data.id = id;
+        this.attributes.id = id;
     }
 
     /**
@@ -515,7 +521,14 @@ class CONTAINER extends GROUP {
      */
     save(node, caller) {
         console.log(this.element + '.save()');
+        console.log('Node:');
+        console.log(node);
+        console.log('Caller:');
+        console.log(caller);
+        console.log('This:');
+        console.log(this);
 
+        // Populate subsections with elements in this body
         let subsections = [];
         let id = null;
         for (let c = 0; c < this.body.pane.el.children.length; c++) {
@@ -525,10 +538,7 @@ class CONTAINER extends GROUP {
             }
         }
 
-        console.log('Creating save form...');        
-        //node.empty();
-        //node.hide();
-        
+        debug('Creating save form...');        
         let form = new FORM(
             node,
             new MODEL(new ATTRIBUTES({
@@ -682,13 +692,32 @@ class CONTAINER extends GROUP {
             })
         ];
 
+        /**
+         * If dataId or attributesId exists, extract the appropriate values
+         
+        if (this.dataId > 0) {
+            for (let key in this.data) {
+                console.log('Adding data attributes');
+                inputs.push(
+                    new MODEL(new ATTRIBUTES({
+                        'name': key,
+                        'value': this[key] ? this[key].el ? this[key].el.innerHTML : this.data[key] : this.data[key]
+                    })).set({
+                        'element': 'INPUT',
+                        'label': key,
+                        'addTab': 0
+                    })
+                );
+            }            
+        }*/
+
+
         // TODO: Fix this up
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
-                console.log('inputs[' + i + ']: ' + inputs[i].type);
+                debug('inputs[' + i + ']: ' + inputs[i].type);
                 let inp = null;
                 if (inputs[i].type === 'FORMPOSTINPUT') {
-                    console.log('FORMPOSTINPUT');
                     new FORMPOSTINPUT(formElementGroup.body.pane, inputs[i]);
                 } else {
                     new INPUT(formElementGroup.body.pane, inputs[i]);
@@ -709,25 +738,20 @@ class CONTAINER extends GROUP {
 
         form.setPostUrl(this.className + '/Set');
 
+        /*
         // THIS IS THE PART THAT USES NODE/CALLER
-        // THIS SHOULD BE ITS OWN FUNCTION
+        */
         form.afterSuccessfulPost = function () {
-            //node.hide();
-            $(node.el).collapse("toggle");
+            $(node.el).collapse('toggle');
             node.empty();
-            //node.node.navBar.toggleHeaders();
             this.setLabel(form.el.elements['label'].value);
             if (caller) {
                 caller.toggle('active');
                 console.log(caller);
                 caller.node.node.toggleCollapse();
             }
-
-            // Remove EXCLAMATION icon if present
-            this.navBar.header.tab.iconSave.destroy();
-
+            app.loader.hide();
         }.bind(this);
-        //node.show(); 
 
         $(node.el).collapse("show");
     }
@@ -735,17 +759,9 @@ class CONTAINER extends GROUP {
     /**
         Actions performed after this container is saved
      */
-    afterSuccessfulPost() {
-        console.log('CONTAINER.FORM.afterSuccessfulPost(): Posted Successfully.');
-        try {
-            //this.setLabel(this.el.elements['label'].value);
-            //this.subsections = this.prompt.form.el.elements['subsections'].value;
-            //this.collapsed = this.prompt.form.el.elements['collapsed'].value;
-            //this.loader.hide(200);
-            //this.prompt.close(300);
-        } catch (e) {
-            console.log(e);
-        }
+    afterSuccessfulPost(node, caller) {
+        app.loader.log(100, 'Success');
+        app.loader.hide();
     }
 
     /**

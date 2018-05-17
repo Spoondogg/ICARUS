@@ -10,5 +10,8 @@ class P extends EL {
      */
     constructor(node, model, innerHtml){
         super(node, 'P', model, model.innerHtml || innerHtml);
+        if (dev) {
+            this.el.ondblclick = this.edit.bind(this);
+        }
     }
 }

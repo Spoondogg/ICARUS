@@ -9,7 +9,14 @@ class MAIN extends CONTAINER {
      */
     constructor(model) {
         model = model || new MODEL().set({
+            'id': 0,
             'showHeader': 1,
+            'hasSidebar': 0,
+            'collapsed': 0,
+            'hasTab': 0,
+            'dataId': 0,
+            'attributesId': 0,
+            'shared': 0,
             'element': 'MAIN',
             'navBar': {
                 'className': 'NAVBAR',
@@ -34,7 +41,13 @@ class MAIN extends CONTAINER {
         document.title = model.label;
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, new CONTAINERFACTORY());  
+        super(document.body, 'MAIN', model, new CONTAINERFACTORY());
+
+        this.loader = new LOADER('Loading', 'Loading', 100);
+        this.loader.log(100, 'Loading');
+        if (DEBUGMODE) {
+            $(this.loader.console.el).collapse('show');
+        }
 
         if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
@@ -56,20 +69,6 @@ class MAIN extends CONTAINER {
      */
     addNavOptions() {
         if (this.navBar.header.menu) {
-
-            /*
-            this.navBar.header.menu.getGroup('USER').addNavItem(
-                new MODEL().set({
-                    'anchor': new MODEL().set({
-                        'label': 'Log In',
-                        'url': '#?url=login'
-                    })
-                })
-            ).el.onclick = function () {
-                this.navBar.header.toggleCollapse();
-                this.login();
-            }.bind(this);
-            */
 
             this.navBar.header.menu.getGroup('USER').addNavItem(
                 new MODEL().set({
@@ -102,6 +101,30 @@ class MAIN extends CONTAINER {
                 this.toggleHeaders();
                 this.navBar.header.toggleCollapse();
             }.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Toggle Console'
+                    })
+                })
+            ).el.onclick = function () {
+                app.loader.show();
+                $(app.loader.console.el).collapse('show');
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'Reload'
+                    })
+                })
+            ).el.onclick = function () {
+                app.loader.log(100, 'Reloading');
+                setTimeout(function () {
+                    location.reload(true);
+                }.bind(this), 1000);
+            }.bind(this);
         }
     }
 
@@ -110,7 +133,7 @@ class MAIN extends CONTAINER {
         @param {MODEL} model Object model
      */
     createTab(model) {
-        console.log('\tMAIN.createTab();');
+        debug('\tMAIN.createTab();');
     }    
 
     /**
@@ -156,7 +179,7 @@ class MAIN extends CONTAINER {
         @param {ARTICLE} article The article to set
     */
     setArticle(article) {
-        console.log('APP.setArticle(' + article.getId() + ')');
+        debug('APP.setArticle(' + article.getId() + ')');
         $('ul[name=document-map] .nav-item').removeClass('active');
         $('article').hide();
         article.activate();
@@ -164,7 +187,7 @@ class MAIN extends CONTAINER {
         try {
             article.tab.activate();
         } catch (e) {
-            console.log('Article does not have a tab.');
+            debug('Article does not have a tab.');
         }
     }
 
@@ -185,9 +208,10 @@ class MAIN extends CONTAINER {
         console.log('Log In');
         // TODO Handle supplied arguments... Or don't... Not sure yet.
 
-        this.prompt = new PROMPT('Log In', 'Sign into your Account');
+        this.prompt = new PROMPT('Log In');
 
         this.prompt.form.setPostUrl('/Account/Login');
+        this.prompt.form.el.setAttribute('class', 'login');
         this.prompt.form.el.setAttribute('method', 'POST');
         this.prompt.form.el.setAttribute('action', '#');
 
@@ -219,37 +243,21 @@ class MAIN extends CONTAINER {
 
         this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
         this.prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
-
-            console.log('Logging in...');
-            this.loader = new LOADER('Log In', 'Logging in...');
-            this.loader.show();            
-
-            // Post the form to the Login url and return results into the loader
+            this.loader.log(100, 'Logging In');
             $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
-                function (payload, status) {
-                    console.log(payload);
-                    console.log(status);
-
-                    // textStatus contains the status: success, error, etc
-                    // If server responds with 'success'            
+                function (payload, status) {           
                     if (status === "success") {
-                        this.loader.setProgress(100, 'Post Complete.');
-                        console.log('Successfully logged in.');
-
+                        this.loader.log(100, 'Success');
                         setTimeout(function () {
-                            this.loader.hide();
-                            setTimeout(function () {
-                                location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
-                            }.bind(this), 600);
-                        }.bind(this), 2000);
-
+                            location.reload(true);
+                        }.bind(this), 1000);
                     } else {
-                        console.log('Failed to POST results to server with status: "' + status + '"');
-                        this.loader.setProgress(0, 'The form did not post.<br>' +
-                            payload.message + '<br><hr/>'
+                        this.loader.log(0, 'Login failed. (err_'+status+').<br>' +
+                            payload.message
                         );
-                        console.log('Failed to submit form.\nPayload:\n');
-                        console.log(payload);
+                        debug('Failed to POST results to server with status: "' + status + '"');
+                        debug('Payload:\n');
+                        debug(payload);
                     }
                 }.bind(this));
         }.bind(this);
@@ -267,42 +275,30 @@ class MAIN extends CONTAINER {
         Logs the current user out
     */
     logout() {
-        console.log('Logging out...');
-        this.loader = new LOADER('Log Out', 'Logging out...');
-        this.loader.show();
-
-        console.log('Logging out');
-        console.log('Token: ' + token);
-
-        // Post the token to the LogOff url and return results into the loader
+        debug('Logging out');
         $.post('/Account/LogOff', {
             '__RequestVerificationToken': token.value
         }, function (payload, status) {
-            this.loader.addText('Status: ' + status);
-            console.log('Payload:');
-            console.log(payload);
+            this.loader.log(50, 'Status: ' + status);
+            debug('Payload:');
+            debug(payload);
 
             // textStatus contains the status: success, error, etc
             // If server responds with 'success'            
             if (status === "success") {
-                this.loader.setProgress(100, 'Post Complete.');
-                console.log('Successfully logged out.');
-
+                app.loader.log(100, 'Logging Out...');
                 setTimeout(function () {
-                    this.loader.hide();
-                    setTimeout(function () {
-                        location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
-                    }.bind(this), 600);
-                }.bind(this), 2000);
+                    location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
+                }.bind(this), 1000);
 
             } else {
-                console.log('Failed to POST results to server with status: "' + status + '"');
-                this.loader.setProgress(0, 'The form did not post.<br>' +
+                debug('Failed to POST results to server with status: "' + status + '"');
+                app.loader.log(0, 'Failed to send<br>' +
                     payload.message + '<br><hr/>'
                 );
-                console.log('Failed to submit form.\nPayload:\n');
-                console.log(payload);
-                btnReset.el.style.display = 'none;';
+                $(app.loader.console.el).collapse('show');
+                debug('Payload:\n');
+                debug(payload);
             }
         }.bind(this), "json");
     }

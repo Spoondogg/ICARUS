@@ -73,6 +73,10 @@
     cursor: pointer;
 }
 
+    .nav-item a .glyphicon {
+        padding-right: 0.5em;
+        float: left;
+    }
 
 /*
     Horizontal nav-bars should scroll horizontally in order to avoid cases

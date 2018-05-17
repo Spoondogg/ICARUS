@@ -9,10 +9,9 @@ class ANCHOR extends EL {
      */
     constructor(node, model) {
         super(node, 'A', model);
+        this.setInnerHTML(this.el.innerHTML += model.label); 
         if (model.icon) {
-            this.icon = new GLYPHICON(this, model.label, model.icon);
-        } else {
-            this.setInnerHTML(model.label);
-        }
+            this.icon = new GLYPHICON(this, '', model.icon);
+        }               
     }
 }

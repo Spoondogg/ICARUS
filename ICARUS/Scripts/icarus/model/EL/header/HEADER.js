@@ -16,6 +16,10 @@ class HEADER extends EL {
             model.label || ''
         );
         this.depth = depth || 0;
+
+        if (dev) {
+            this.el.ondblclick = this.edit.bind(this);
+        }
     }
 
     /**

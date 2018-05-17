@@ -24,7 +24,7 @@ namespace ICARUS.Helpers {
             if (filterContext.HttpContext.Request.IsAjaxRequest()) {
                 filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 filterContext.Result = new JsonResult {
-                    Data = "snoot",
+                    //Data = "snoot",
                     ContentEncoding = System.Text.Encoding.UTF8,
                     ContentType = "application/json",
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet

@@ -459,7 +459,7 @@
     <Compile Include="Models\Icarus\Database\ColumnLists\cl_LOG.cs" />
     <Compile Include="Models\Icarus\Database\db_Icarus.cs" />
     <Compile Include="Models\Icarus\Database\IcarusDatabase.cs" />
-    <Compile Include="Models\Icarus\Elements\Article.cs" />
+    <Compile Include="Models\Icarus\Elements\ARTICLE.cs" />
     <Compile Include="Models\Icarus\Elements\Main.cs" />
     <Compile Include="Models\Icarus\Elements\Attributes\ATTRIBUTES.cs" />
     <Compile Include="Models\Icarus\Elements\EL.cs" />
@@ -516,12 +516,15 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\animate.css" />
+    <Content Include="Content\css\animate.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />
     <Content Include="Content\css\spoonMedia\banner.css" />
     <Content Include="Content\css\spoonMedia\button.css" />
+    <Content Include="Content\css\spoonMedia\console.css" />
     <Content Include="Content\css\spoonMedia\container.css" />
     <Content Include="Content\css\spoonMedia\dropdown.css" />
     <Content Include="Content\css\spoonMedia\elementgroup.css" />
@@ -532,6 +535,7 @@
     <Content Include="Content\css\spoonMedia\icon.css" />
     <Content Include="Content\css\spoonMedia\jumbotron.css" />
     <Content Include="Content\css\spoonMedia\label.css" />
+    <Content Include="Content\css\spoonMedia\loader.css" />
     <Content Include="Content\css\spoonMedia\main.css" />
     <Content Include="Content\css\spoonMedia\mobile.css" />
     <Content Include="Content\css\spoonMedia\modal.css" />
@@ -583,6 +587,7 @@
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
+    <Content Include="Scripts\icarus\model\el\group\ul\console\CONSOLE.js" />
     <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
     <Content Include="Scripts\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
@@ -649,6 +654,7 @@
     <Content Include="Content\css\icomoon\icomoon.eot" />
     <Content Include="Content\css\icomoon\icomoon.ttf" />
     <Content Include="Content\css\icomoon\icomoon.woff" />
+    <None Include="Properties\PublishProfiles\JAC.pubxml" />
     <None Include="Properties\PublishProfiles\LOCAL.pubxml" />
     <None Include="Properties\PublishProfiles\OBAD266x4.pubxml" />
     <None Include="Scripts\jquery\jquery-1.10.2.intellisense.js" />

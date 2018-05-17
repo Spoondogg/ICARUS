@@ -92,9 +92,6 @@ h2 input[type="number"] {
     background-color: #f3f7f7;
 }
 
-.progress {
-    border-radius: 0;
-}
 
 .control-label:hover { /*label*/
     text-decoration: underline;
@@ -121,4 +118,9 @@ h2 input[type="number"] {
 
 .text-left {
     text-align: left;
+}
+
+
+form.login label, form.login input {
+    text-align: center;
 }
