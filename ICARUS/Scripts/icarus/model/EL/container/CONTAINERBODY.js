@@ -34,10 +34,10 @@ class CONTAINERBODY extends EL {
         if (dev) {
             this.pane.el.ondblclick = function (e) {
                 //node.toggleSidebar();
-                console.log('Launch Editor for ' + node.className + '(' + node.id + ')');
+                app.loader.log('Launch Editor for ' + node.className + '(' + node.id + ')');
                 $(node.navBar.header.menu.el).collapse('show');
                 node.btnSave.el.click();
-                console.log('TODO: Focus Label');
+                debug('TODO: Focus Label');
                 //save(node);
                 // Prevent parent double click()
                 e.stopPropagation();
