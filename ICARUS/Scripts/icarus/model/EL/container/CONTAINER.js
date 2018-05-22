@@ -247,6 +247,15 @@ class CONTAINER extends GROUP {
                 }
             }.bind(this);
 
+            this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': 'QUICKSAVE'
+                    })
+                })
+            );
+            this.btnQuickSave.el.onclick = this.quickSave.bind(this);
+
             this.navBar.header.menu.getGroup('CRUD').addNavItem(
                 new MODEL().set({
                     'anchor': new MODEL().set({
@@ -529,14 +538,7 @@ class CONTAINER extends GROUP {
         console.log(this);
 
         // Populate subsections with elements in this body
-        let subsections = [];
-        let id = null;
-        for (let c = 0; c < this.body.pane.el.children.length; c++) {
-            id = parseInt(this.body.pane.el.children[c].id);
-            if (!isNaN(id)) {
-                subsections.push(id);
-            }
-        }
+        let subsections = this.getSubSections();
 
         debug('Creating save form...');        
         let form = new FORM(
@@ -659,6 +661,7 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             }),
 
+            // FORMPOSTINPUT
             new MODEL(new ATTRIBUTES({
                 'name': 'dataId',
                 'type': 'NUMBER',
@@ -670,6 +673,7 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             }),
 
+            // FORMPOSTINPUT
             new MODEL(new ATTRIBUTES({
                 'name': 'attributesId',
                 'type': 'NUMBER',
@@ -684,7 +688,7 @@ class CONTAINER extends GROUP {
             new MODEL(new ATTRIBUTES({
                 'name': 'shared',
                 'type': 'NUMBER',
-                'value': new String(this.get('shared'))
+                'value': new String(this.get('shared')) || '0'
             })).set({
                 'element': 'BUTTON',
                 'label': 'shared',
@@ -713,6 +717,7 @@ class CONTAINER extends GROUP {
 
 
         // TODO: Fix this up
+        // Process the inputs into the formElementGroup
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
                 debug('inputs[' + i + ']: ' + inputs[i].type);
@@ -725,16 +730,6 @@ class CONTAINER extends GROUP {
                 formElementGroup.children.push(inp);
             }
         }
-
-        /*
-        // Add any buttons that were provided
-        let buttons = [];
-        if (buttons) {
-            for (let b = 0; b < buttons.length; b++) {
-                form.footer.buttonGroup.addButton(buttons[b][0], buttons[b][1], buttons[b][2]);
-            }
-        }
-        */
 
         form.setPostUrl(this.className + '/Set');
 
@@ -754,6 +749,260 @@ class CONTAINER extends GROUP {
         }.bind(this);
 
         $(node.el).collapse("show");
+    }
+
+    /**
+     * Generates an array of subsection Ids for this Container
+     */
+    getSubSections() {
+        let id = null;
+        let subsections = [];
+        for (let c = 0; c < this.body.pane.el.children.length; c++) {
+            id = parseInt(this.body.pane.el.children[c].id);
+            if (!isNaN(id)) {
+                subsections.push(id);
+            }
+        }
+        return subsections;
+    }
+
+    /**
+     * Creates an empty form with a single fieldset and formelementgroup
+     * @param {EL} node Parent node
+     * @param {boolean} hidden If true, form is hidden
+     */
+    createEmptyForm(node, hidden) {
+        let form = new FORM(
+            node,
+            new MODEL(new ATTRIBUTES({
+                'style': hidden ? 'display:none;' : ''
+            })).set({
+                'label': 'FORM',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+        form.fieldset = new FIELDSET(
+            form.body.pane, new MODEL().set({
+                'label': 'FIELDSET',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+        form.fieldset.formElementGroup = new FORMELEMENTGROUP(
+            form.fieldset.body.pane, new MODEL().set({
+                'label': 'FORMELEMENTGROUP',
+                'collapsed': 0,
+                'showHeader': 0,
+                'hasTab': 0
+            })
+        );
+        return form;
+    }
+
+    /**
+     * If dataId or attributesId exists, extract the appropriate values
+     * @param {any} modelId
+     * @param {any} data
+     */
+    quickSaveFormPost(modelId, data) {
+        if (modelId > 0) {
+            app.loader.log('Saving FormPost: ' + modelId);
+            let form = this.createEmptyForm(this, true);
+            let inputs = [];
+            for (let key in data) {
+                console.log('Adding data attributes');
+                inputs.push(
+                    new MODEL(new ATTRIBUTES({
+                        'name': key,
+                        'value': this[key] ? this[key].el ? this[key].el.innerHTML : data[key] : data[key]
+                    })).set({
+                        'element': 'INPUT',
+                        'label': key,
+                        'addTab': 0
+                    })
+                );
+            }
+
+            form.fieldset.formElementGroup.addInputElements(inputs);
+            form.setPostUrl('FormPost/Set');
+            form.post();
+            form.afterSuccessfulPost = function () {
+                form.destroy();
+                console.log('FormPost: ' + modelId + ' has been quicksaved');
+            }.bind(this);
+
+        } else {
+            console.log('No modelId provided');
+        }
+    }
+
+    /**
+        Displays a prompt that performs a save of the container, it's 
+        attributes and any data objects associated with it.
+     */
+    quickSave() {
+
+        if (confirm('Quick Save?')) {
+            app.loader.log(20, 'Quick Save');
+
+            console.log(this.element + '.save()');
+            console.log('This:');
+            console.log(this);
+
+            // Populate subsections with elements in this body
+            let subsections = this.getSubSections();
+
+            debug('Creating save form...');
+            let form = this.createEmptyForm(this, true);
+            form.fieldset.formElementGroup.addInputElements([
+                new MODEL(new ATTRIBUTES({
+                    'name': 'element',
+                    'value': this.get('element'),
+                    'readonly': 'readonly'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'element'
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'id': 0,
+                    'name': 'id',
+                    'value': new String(this.get('id')),
+                    'readonly': 'readonly'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'ID'
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'label',
+                    'value': typeof this.get('label') === 'object' ? new String(this.get('label').el.innerHTML) : new String(this.get('label'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Label'
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'subsections',
+                    'value': subsections.length > 0 ? subsections.toString() : '0',
+                    'readonly': 'readonly'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'SubSections'
+                }),
+
+                // Should be checkbox or dropdown
+                new MODEL(new ATTRIBUTES({
+                    'name': 'status',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('status'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Status',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'showHeader',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('showHeader'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Show Header',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'hasSidebar',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('hasSidebar'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Show Sidebar',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'collapsed',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('collapsed'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Collapsed',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'hasTab',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('hasTab'))
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'Has Tab',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'dataId',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('dataId'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'dataId',
+                    'type': 'FORMPOSTINPUT',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'attributesId',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('attributesId'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'attributesId',
+                    'type': 'FORMPOSTINPUT',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'shared',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('shared'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'shared',
+                    'addTab': 0
+                })
+            ]);
+
+            form.setPostUrl(this.className + '/Set');
+            form.post();
+            form.afterSuccessfulPost = function () {
+                this.setLabel(form.el.elements['label'].value);
+                form.destroy();
+
+                this.quickSaveFormPost(this.dataId, this.data);
+
+                //this.quickSaveFormPost(this.attributesId, this.data);
+
+                app.loader.hide();
+
+
+
+            }.bind(this);
+
+
+
+            app.loader.log(100, 'Quick Save Complete');
+            app.loader.hide();
+        } else {
+            console.log('Quick Save Cancelled');
+        };
+
+        
     }
 
     /**

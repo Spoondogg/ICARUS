@@ -57,6 +57,7 @@ class EL extends MODEL {
         ).set({
             'label': '<' + this.element + '>'
         }));
+
         $(this.editor.el).insertAfter(this.el);
 
         this.editor.input.el.onkeyup = function () {

@@ -17,4 +17,21 @@ class FORMELEMENTGROUP extends CONTAINER {
         
         this.populate(model.children);
     }
+
+    /**
+     * Adds the array of input elements to this form element group
+     * @param {any} inputs
+     */
+    addInputElements(inputs) {
+        for (let i = 0; i < inputs.length; i++) {
+            debug('inputs[' + i + ']: ' + inputs[i].type);
+            let inp = null;
+            if (inputs[i].type === 'FORMPOSTINPUT') {
+                new FORMPOSTINPUT(this.body.pane, inputs[i]);
+            } else {
+                new INPUT(this.body.pane, inputs[i]);
+            }
+            this.children.push(inp);
+        }
+    }
 }
