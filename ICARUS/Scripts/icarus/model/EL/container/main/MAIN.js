@@ -241,8 +241,8 @@ class MAIN extends CONTAINER {
             })
         );
 
-        this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
-        this.prompt.form.footer.buttonGroup.children[1].el.onclick = function () {
+        //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+        this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
             this.loader.log(100, 'Logging In');
             $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
                 function (payload, status) {           

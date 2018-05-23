@@ -30,7 +30,7 @@ class CONTAINER extends GROUP {
      */
     constructor(node, element, model = new MODEL().set({
         'element': element,
-        'name': element,
+        'name': element || '',
         'label': element,
         'hasTab': 1,
         'showHeader': 1,
@@ -38,12 +38,13 @@ class CONTAINER extends GROUP {
     })) {
         super(node, element, model);
         this.addClass('icarus-container');
-        this.el.setAttribute('id', model.id);
+
+        if (model.id) {
+            this.el.setAttribute('id', model.id);
+        }
 
         // Container Properties
-        //this.loader = null;
         this.prompt = null;
-        //this.modal = null;
         this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?
         
         // Delimited list of child ids
@@ -56,6 +57,8 @@ class CONTAINER extends GROUP {
         // Consider that if model.navBar doesn't exist, it doesn't need to be created
         // navbar is pretty heavy
         // Create it on demand instead of always being here
+        // Use el.make() as required
+        // Implement el.make() as an argument of new EL();
         
         if (model.navBar === undefined) {
             model.navBar = {};
@@ -113,6 +116,27 @@ class CONTAINER extends GROUP {
         if (model.hasTab) {
             this.tab = this.createTab(this);
         }        
+    }
+
+    /**
+        HTML Encode the given value.
+
+        Create a in-memory div, set it's inner text(which jQuery automatically encodes
+        then grab the encoded contents back out.  The div never exists on the page.
+        @param {any} value The string to be html encoded
+        @returns {text} An html encoded string
+     */
+    htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    /**
+        Decodes an HTML encoded value back into HTML string
+        @param {any} value An html encoded string
+        @returns {string} A string that was previously html encoded
+     */
+    htmlDecode(value) {
+        return $('<div/>').html(value).text();
     }
 
     /**
@@ -695,27 +719,7 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             })
         ];
-
-        /**
-         * If dataId or attributesId exists, extract the appropriate values
-         
-        if (this.dataId > 0) {
-            for (let key in this.data) {
-                console.log('Adding data attributes');
-                inputs.push(
-                    new MODEL(new ATTRIBUTES({
-                        'name': key,
-                        'value': this[key] ? this[key].el ? this[key].el.innerHTML : this.data[key] : this.data[key]
-                    })).set({
-                        'element': 'INPUT',
-                        'label': key,
-                        'addTab': 0
-                    })
-                );
-            }            
-        }*/
-
-
+        
         // TODO: Fix this up
         // Process the inputs into the formElementGroup
         if (inputs) {
@@ -753,6 +757,7 @@ class CONTAINER extends GROUP {
 
     /**
      * Generates an array of subsection Ids for this Container
+     * @returns {array} A collection of subsection ids
      */
     getSubSections() {
         let id = null;
@@ -770,6 +775,7 @@ class CONTAINER extends GROUP {
      * Creates an empty form with a single fieldset and formelementgroup
      * @param {EL} node Parent node
      * @param {boolean} hidden If true, form is hidden
+     * @returns {FORM} An empty form container
      */
     createEmptyForm(node, hidden) {
         let form = new FORM(
@@ -804,8 +810,8 @@ class CONTAINER extends GROUP {
 
     /**
      * If dataId or attributesId exists, extract the appropriate values
-     * @param {any} modelId
-     * @param {any} data
+     * @param {number} modelId The object's unique identifier
+     * @param {object} data The object to be saved
      */
     quickSaveFormPost(modelId, data) {
         if (modelId > 0) {
@@ -813,7 +819,7 @@ class CONTAINER extends GROUP {
             let form = this.createEmptyForm(this, true);
             let inputs = [];
             for (let key in data) {
-                console.log('Adding data attributes');
+                debug('Adding data attributes');
                 inputs.push(
                     new MODEL(new ATTRIBUTES({
                         'name': key,
@@ -831,11 +837,11 @@ class CONTAINER extends GROUP {
             form.post();
             form.afterSuccessfulPost = function () {
                 form.destroy();
-                console.log('FormPost: ' + modelId + ' has been quicksaved');
+                debug('FormPost: ' + modelId + ' has been quicksaved');
             }.bind(this);
 
         } else {
-            console.log('No modelId provided');
+            debug('No modelId provided');
         }
     }
 
@@ -843,14 +849,13 @@ class CONTAINER extends GROUP {
         Displays a prompt that performs a save of the container, it's 
         attributes and any data objects associated with it.
      */
-    quickSave() {
+    quickSave(noPrompt = false) {
 
-        if (confirm('Quick Save?')) {
+        if (noPrompt || confirm('Quick Save?')) {
             app.loader.log(20, 'Quick Save');
 
-            console.log(this.element + '.save()');
-            console.log('This:');
-            console.log(this);
+            debug(this.element + '.save()');
+            debug(this);
 
             // Populate subsections with elements in this body
             let subsections = this.getSubSections();
@@ -985,8 +990,7 @@ class CONTAINER extends GROUP {
                 form.destroy();
 
                 this.quickSaveFormPost(this.dataId, this.data);
-
-                //this.quickSaveFormPost(this.attributesId, this.data);
+                this.quickSaveFormPost(this.attributesId, this.attributes);
 
                 app.loader.hide();
 
@@ -1000,13 +1004,15 @@ class CONTAINER extends GROUP {
             app.loader.hide();
         } else {
             console.log('Quick Save Cancelled');
-        };
+        }
 
         
     }
 
     /**
         Actions performed after this container is saved
+        @param {EL} node Parent node
+        @param {EL} caller This
      */
     afterSuccessfulPost(node, caller) {
         app.loader.log(100, 'Success');

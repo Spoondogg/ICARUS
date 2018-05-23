@@ -42,25 +42,31 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
     /**
      * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
-     * @param {number} id Container Id
+     * @param {any} key The object key to search within
+     * @param {any} value The value to search for within this key
+     * @param {any} node Entry point to traversing the chain
+     * @param {any} attempt Recursion loop
+     * @returns {CONTAINER} The parent container
      */
-    getContainer(id, attributeName, node = this.node, attempt = 0) {
+    getContainer(key, value, node = this.node, attempt = 0) {
         attempt++;
-        console.log('Searching for '+attributeName+': ' + id + '(' + attempt + ')');
-        console.log(node);
-        if (attempt < 20) {
+
+        debug('Searching for ' + key + ': ' + value + '(' + attempt + ')');
+        debug(node);
+
+        if (attempt < 100) {
             try {
-                console.log('id: ' + node.id);
-                if (node[attributeName] == id) {
+                debug('id: ' + node.id);
+                if (node[key] === value.toString()) {
                     return node;
                 } else {
-                    return this.getContainer(id, attributeName, node.node, attempt++);
+                    return this.getContainer(key, value, node.node, attempt++);
                 }
             } catch (e) {
-                console.log(e);
+                debug(e);
             }
         } else {
-            console.log('Too many attempts (' + attempt + ')');
+            debug('getContainer(): Too many attempts (' + attempt + ')');
         }
     }
 
@@ -201,9 +207,9 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     console.log('Creating elements for ' + this.node.element);
                     console.log(this.node);
                     console.log('getContainer(' + data.model.id + ');');
-                    console.log(this.getContainer(id, 'dataId', this.node));
+                    console.log(this.getContainer('dataId', id, this.node));
 
-                    let container = this.getContainer(id, 'dataId', this.node);
+                    let container = this.getContainer('dataId', id, this.node);
 
                     for (let i = 0; i < parsed.length; i++) {
                         if (parsed[i].name !== 'id') {

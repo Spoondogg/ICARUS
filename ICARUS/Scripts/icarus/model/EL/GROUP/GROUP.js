@@ -11,8 +11,10 @@ class GROUP extends EL {
      */
     constructor(node, element, model) {
         super(node, element, model);
-        this.name = model.name; // Required
-        this.el.setAttribute('name', model.name);
+        if (model.name) {
+            this.name = model.name; // Required
+            this.el.setAttribute('name', model.name);
+        }
         this.groups = {};
     }
 
