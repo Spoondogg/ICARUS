@@ -9,7 +9,7 @@ class CONTAINERBODY extends EL {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        this.addClass('container-body collapse');
+        this.setClass('container-body collapse');
         
         if (model.hasSidebar) {
             this.sidebar = new SIDEBAR(this,

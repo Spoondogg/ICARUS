@@ -4,11 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="spoonMEDIA">
-    <meta name="description" content="Icarus Web Engine by spoonMedia" />
+    <meta name="apple-mobile-web-app-title" content="@ViewBag.Title">
+    <meta name="description" content="@ViewBag.Description" />
     <meta name="author" content="Ryan Dunphy" />
-    <title>@ViewBag.Title - ICARUS 0.2.2018.05.07</title>
+    <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts *@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
@@ -16,6 +18,19 @@
     @Scripts.Render("~/bundles/icarus")
     <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
     <!--<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>-->
+
+    @{ // Google Adsense - https://www.google.com/adsense/new/u/0/pub-0892818773427301/myads/auto-ads/onboarding
+        //if (ViewBag.showAds) {
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "ca-pub-0892818773427301",
+                enable_page_level_ads: true
+            });
+        </script>
+        //}
+    }
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     <link rel="stylesheet" href="Content/css/icomoon.css">
     @Styles.Render("~/Content/css/bootstrap")
@@ -24,6 +39,9 @@
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
+
+
+
 </head>
 <body>
     @RenderBody()

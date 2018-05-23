@@ -23,12 +23,25 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// The default page
+        /// The default page.  Certain id's are hardcoded based on domain
+        /// TODO: These values should be retrieved from an external source if possible
         /// </summary>
         /// <returns></returns>=
         public ActionResult Index(int id = 1) { // 0 creates a new APP instance, 1 should be the initial page
-            ViewBag.id = id;
-            ViewBag.Title = "Icarus";
+
+            ViewBag.Version = "0.2.2018.05.22";
+
+            if (Request.Url.Authority.Contains("johnsautocare")) {
+                id = 2819;
+                ViewBag.id = id;
+                ViewBag.Title = "Johns Auto Care";
+                ViewBag.Description = "John's Auto Care, 1584 Main Street West, Hamilton ON, Automotive Care";
+            } else {
+                ViewBag.id = id;
+                ViewBag.Title = "Index";
+                ViewBag.Description = "Ryan Dunphy, spoonMEDIA, Web Application Developer";
+            }            
+
             return View();
         }
 

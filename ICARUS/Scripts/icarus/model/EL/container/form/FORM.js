@@ -21,7 +21,7 @@ class FORM extends CONTAINER {
 
         // Add the submit button
         this.footer = new IcarusFormFooter(this.body, new MODEL());
-        this.footer.buttonGroup.addButton('Reset', ICON.RESET).el.onclick = this.reset.bind(this);
+        //this.footer.buttonGroup.addButton('Reset', ICON.RESET).el.onclick = this.reset.bind(this);
         this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.post.bind(this);
 
         this.populate(model.children);
@@ -73,27 +73,6 @@ class FORM extends CONTAINER {
             }
         }
     }
-
-    /**
-    HTML Encode the given value.
-
-    Create a in-memory div, set it's inner text(which jQuery automatically encodes
-    then grab the encoded contents back out.  The div never exists on the page.
-    @param {any} value The string to be html encoded
-    @returns {text} An html encoded string
-     */
-    htmlEncode(value) {
-        return $('<div/>').text(value).html();
-    }
-
-    /**
-        Decodes an HTML encoded value back into HTML string
-        @param {any} value An html encoded string
-        @returns {string} A string that was previously html encoded
-     */
-    htmlDecode(value) {
-        return $('<div/>').html(value).text();
-    }
     
     /**
         HTML encodes all form element values.  
@@ -140,7 +119,7 @@ class FORM extends CONTAINER {
         @returns {object} The validation payload
     */
     validate() {
-        console.log('Validating...');
+        debug('Validating...');
 
         this.htmlEncodeValues();
 
@@ -150,14 +129,14 @@ class FORM extends CONTAINER {
         };
 
         for (let e = 0; e < this.el.elements.length; e++) {
-            console.log('Element: ' + this.el.elements[e].name);
+            debug('Element: ' + this.el.elements[e].name);
             switch (this.el.elements[e].type) {
                 case 'input':
                 case 'text':
                 case 'email':
                 case 'tel':
                 case 'password':
-                    console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
+                    debug(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
                     if (this.el.elements[e].checkValidity()) { // HTML5 Validation
                         if (this.el.elements[e].value === '') {
                             this.setInvalid(this.el.elements[e]);
@@ -239,8 +218,8 @@ class FORM extends CONTAINER {
             /**
                 JQuery POST
             */
-            console.log('Posting to: ' + this.postUrl);
-            console.log(formPost);
+            debug('Posting to: ' + this.postUrl);
+            debug(formPost);
             
             $.ajax({
                 url: this.postUrl, 
@@ -251,30 +230,30 @@ class FORM extends CONTAINER {
                 }.bind(this),
                 statusCode: {
                     200: function (response) {
-                        console.log('StatusCode: 200');
-                        console.log(response);
+                        debug('StatusCode: 200');
+                        debug(response);
                     },
                     201: function (response) {
-                        console.log('StatusCode: 201');
-                        console.log(response);
+                        debug('StatusCode: 201');
+                        debug(response);
 
                     },
                     400: function (response) {
-                        console.log('StatusCode: 400');
-                        console.log(response);
+                        debug('StatusCode: 400');
+                        debug(response);
                     },
                     403: function (response) {
-                        console.log('StatusCode: 403');
-                        console.log(response);
+                        debug('StatusCode: 403');
+                        debug(response);
                         app.loader.log(100, 'Access Denied: ' + response);
                         app.login();
                     },
                     404: function (response) {
-                        console.log('StatusCode: 404');
-                        console.log(response);
+                        debug('StatusCode: 404');
+                        debug(response);
                     }
                 }, success: function (payload) {
-                    console.log('Success');
+                    debug('Success');
                     app.loader.log(25, 'Posted results to server.');
 
                     app.loader.log(50,
@@ -289,7 +268,7 @@ class FORM extends CONTAINER {
             });
             
         } else {
-            console.log('FormPost is invalid');
+            debug('FormPost is invalid');
             app.loader.log(50,
                 'Failed to submit...<br><hr/>Values are invalid<br><hr/>'
             );            

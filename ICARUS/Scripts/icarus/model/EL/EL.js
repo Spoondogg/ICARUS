@@ -67,6 +67,13 @@ class EL extends MODEL {
         this.editor.input.el.onblur = function () {
             this.editor.destroy();
             $(this.el).removeClass('edit');
+            debug('QuickSave');
+            try {
+                //this.getContainer('class', 'icarus-container')
+                this.node.node.node.quickSave(true);
+            } catch (e) {
+                debug(e);
+            }
         }.bind(this);
 
         this.editor.input.el.focus();

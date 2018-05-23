@@ -1,9 +1,10 @@
 ﻿
 
 .modal .loader {
-    /*width: 400px;*/
     height: 260px;
     max-height: 260px;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 
@@ -22,7 +23,8 @@
 }
 
 .modal .loader .modal-header,
-.modal .loader .modal-footer {
+.modal .loader .modal-footer,
+.modal .prompt .modal-footer {
     display: none; 
 }
 
