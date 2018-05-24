@@ -16,8 +16,7 @@ class PROMPT extends MODAL {
         debug('PROMPT('+label+');');
         super(label, text, vertical);
         this.addClass('prompt');
-
-        //console.log('Creating prompt form...');
+        
         this.form = new FORM(
             this.container.body.pane,
             new MODEL().set({
@@ -48,15 +47,14 @@ class PROMPT extends MODAL {
         // TODO: Fix this up
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
-                debug('inputs[' + i + ']: ' + inputs[i].type);
+                //debug('inputs[' + i + ']: ' + inputs[i].type);
                 let inp = null;
                 if (inputs[i].type === 'FORMPOSTINPUT') {
-                    debug('FORMPOSTINPUT');
+                    //debug('FORMPOSTINPUT');
                     new FORMPOSTINPUT(this.formElementGroup.body.pane, inputs[i]);
                 } else {
                     new INPUT(this.formElementGroup.body.pane, inputs[i]);
                 }
-
                 this.formElementGroup.children.push(inp);
             }
         }        

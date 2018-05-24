@@ -15,7 +15,7 @@ class CALLOUT extends CONTAINER {
 
         if (model.dataId > 0) {            
             if (model.data.icon) {
-                this.icon = new GLYPHICON(this.body.pane, '', this.htmlDecode(model.data.icon));
+                this.icon = new GLYPHICON(this.body.pane, '', model.data.icon);
             }
             if (model.data.header) {
                 this.header = new HEADER(this.body.pane, new MODEL().set({

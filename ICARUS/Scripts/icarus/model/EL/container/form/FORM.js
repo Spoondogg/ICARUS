@@ -129,14 +129,13 @@ class FORM extends CONTAINER {
         };
 
         for (let e = 0; e < this.el.elements.length; e++) {
-            debug('Element: ' + this.el.elements[e].name);
+            //debug('Element: ' + this.el.elements[e].name);
             switch (this.el.elements[e].type) {
                 case 'input':
                 case 'text':
                 case 'email':
                 case 'tel':
                 case 'password':
-                    debug(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
                     if (this.el.elements[e].checkValidity()) { // HTML5 Validation
                         if (this.el.elements[e].value === '') {
                             this.setInvalid(this.el.elements[e]);
@@ -148,6 +147,7 @@ class FORM extends CONTAINER {
                         }
                         break;
                     } else {
+                        debug(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
                         this.setInvalid(this.el.elements[e]);
                         break;
                     }

@@ -13,6 +13,8 @@ class THUMBNAIL extends CONTAINER {
 
         this.body.pane.addClass('thumbnail');
 
+
+
         if (model.dataId > 0) {
             if (model.data.img) {
                 this.image = new EL(this.body.pane, 'IMG', new MODEL(new ATTRIBUTES({
@@ -22,8 +24,33 @@ class THUMBNAIL extends CONTAINER {
             this.header = new HEADER(this.body.pane, new MODEL().set({
                 'label': model.data.header
             }));
-            this.text = new P(this.body.pane, new MODEL(), model.data.text);
+            this.text = new P(this.body.pane, new MODEL(), truncate(model.data.text, 128));
             //this.footer = new FOOTER(this.body.pane, new MODEL());
+            this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
+            this.button = this.buttonGroup.addButton('', ICON.CHEVRON_RIGHT);
+            this.button.addClass('btn-block');
+            this.button.el.onclick = function () {
+                console.log('Launch Modal');
+
+                let modal = new MODAL(model.data.header);
+                modal.container.body.pane.addClass('thumbnail');
+                modal.container.image = new EL(modal.container.body.pane, 'IMG', new MODEL(new ATTRIBUTES({
+                    'src': model.data.img
+                })));
+                modal.container.header = new HEADER(modal.container.body.pane, new MODEL().set({
+                    'label': model.data.header
+                }));
+                modal.container.text = new P(modal.container.body.pane, new MODEL(new ATTRIBUTES({
+                    'style':'height:auto;'
+                })), model.data.text);
+
+                /*
+                let jumbotron = new JUMBOTRON(modal.container.body.pane, new MODEL());
+                jumbotron.body.pane.el.setAttribute('style', 'background: url(../'+model.data.img+');');
+                */
+
+                modal.show();
+            }
         }
 
         this.populate(model.children);
