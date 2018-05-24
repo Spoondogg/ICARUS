@@ -108,6 +108,20 @@ function camelCase(str) {
 }
 
 /**
+ * Trims the given string to the specified length and applies the given ending
+ * @param {string} str Text to truncate
+ * @param {number} length Length to trim string
+ * @param {string} ending String to append
+ */
+function truncate(str, length = 100, ending = '...') {
+    if (str.length > length) {
+        return str.substring(0, length - ending.length) + ending;
+    } else {
+        return str;
+    }
+}
+
+/**
     Pad with zeroes
     @param {number} num The original number to be padded
     @param {number} size The number of zeros to pad with

@@ -14,7 +14,7 @@ class PARAGRAPH extends CONTAINER {
 
         if (model.dataId > 0) {
             if (model.data.text) {
-                this.p = new P(this.body.pane, new MODEL(), model.data.text);
+                this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(model.data.text));
                 //this.body.pane.setInnerHTML(model.data.text);
             }
         }

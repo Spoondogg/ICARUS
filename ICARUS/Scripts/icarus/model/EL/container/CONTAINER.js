@@ -724,7 +724,7 @@ class CONTAINER extends GROUP {
         // Process the inputs into the formElementGroup
         if (inputs) {
             for (let i = 0; i < inputs.length; i++) {
-                debug('inputs[' + i + ']: ' + inputs[i].type);
+                //debug('inputs[' + i + ']: ' + inputs[i].type);
                 let inp = null;
                 if (inputs[i].type === 'FORMPOSTINPUT') {
                     new FORMPOSTINPUT(formElementGroup.body.pane, inputs[i]);
