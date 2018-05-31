@@ -24,7 +24,8 @@ class FORMELEMENTGROUP extends CONTAINER {
      */
     addInputElements(inputs) {
         for (let i = 0; i < inputs.length; i++) {
-            debug('inputs[' + i + ']: ' + inputs[i].type);
+            debug('inputs[' + i + ']:');
+            debug(inputs[i]);
             let inp = null;
             if (inputs[i].type === 'FORMPOSTINPUT') {
                 new FORMPOSTINPUT(this.body.pane, inputs[i]);

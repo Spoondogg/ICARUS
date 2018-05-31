@@ -92,6 +92,7 @@ namespace ICARUS {
                 // Text
                 "~/Scripts/icarus/model/el/text/ANCHOR.js",
                 "~/Scripts/icarus/model/el/text/BADGE.js",
+                "~/Scripts/icarus/model/el/text/HR.js",
                 "~/Scripts/icarus/model/el/text/LABEL.js",
                 "~/Scripts/icarus/model/el/text/span/SPAN.js",
                 "~/Scripts/icarus/model/el/text/span/CARET.js",

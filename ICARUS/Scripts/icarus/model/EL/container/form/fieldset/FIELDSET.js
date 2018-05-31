@@ -14,9 +14,9 @@ class FIELDSET extends CONTAINER {
         this.body.addClass('form-group'); // The expandable portion of the section
         this.addContainerCase('FORMELEMENTGROUP');
 
-        if (model.dataId > 0) {
-            if (model.data.legend) {
-                this.legend = new EL(this.body.pane, 'LEGEND', new MODEL(), model.data.legend);
+        if (this.dataId > 0) {
+            if (this.data.legend) {
+                this.legend = new EL(this.body.pane, 'LEGEND', new MODEL(), this.data.legend);
             }
         }
 

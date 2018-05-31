@@ -11,6 +11,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace ICARUS {
+
     public class MvcApplication : System.Web.HttpApplication {
 
         /// <summary>

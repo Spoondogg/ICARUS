@@ -8,52 +8,6 @@
     font-size: small;
     border-bottom: 1px solid #c3c3c3;
 }
-/*
-.section-header {
-    background-color: white;
-    background-color: rgba(0, 0, 0, 0.45);
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    font-size: small;
-    border-bottom: 1px solid #c3c3c3;
-}
-    .section-header:hover {
-        background-color: #000000;
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    .section-header a {
-        color: #fff;
-        text-decoration: underline;
-    }
-
-        .section-header a:hover {
-            color: #00aff2;
-        }
-
-        .section-header button {
-            border-radius: 0;
-            border-top: 0;
-            border-bottom: 0;
-        }
-
-
-.section-header > .btn-group-left {
-    padding-right: 1em;
-}
-
-    .section-header > .btn-group-left .btn-label {
-        min-width: 196px;
-    }
-
-    .section-header .dropdown-menu {
-        border-top: none;
-        margin-top: 0;
-        border-radius: 0 0 0 4px;
-    }
-
-*/
 
 /**
 Due to implementation of dropdown-group
@@ -71,15 +25,6 @@ Due to implementation of dropdown-group
 
 .form-element .container-body .pane {
     padding: 0.4em;
-}
-
-main .container-body .sidebar,
-main .container-body .sidebar-tall .collapse,
-main .container-body .pane {
-    /*
-    -ms-overflow-style: none;
-    overflow: -moz-scrollbars-none;
-        */
 }
 
 main .container-body .sidebar::-webkit-scrollbar,

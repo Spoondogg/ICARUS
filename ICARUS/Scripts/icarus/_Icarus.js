@@ -11,11 +11,6 @@
 //"use strict";
 
 /**
-    If true, tests are ran and results are shown in the console.
-*/
-const TESTING = false;
-
-/**
     Sorts an object array by the specified property.
     @see https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
     @param {string} property Name of property to sort by
@@ -112,6 +107,7 @@ function camelCase(str) {
  * @param {string} str Text to truncate
  * @param {number} length Length to trim string
  * @param {string} ending String to append
+ * @returns {string} A string truncated to the given length
  */
 function truncate(str, length = 100, ending = '...') {
     if (str.length > length) {
@@ -327,8 +323,8 @@ function debug(output) {
         console.log(output);
     }
 }
-const DEBUGMODE = false;
-
+const DEBUGMODE = true; // If true, debug outputs are shown
+const TESTING = false; // If true, tests are ran and results are shown in the console.
 /**
  * Main method that launches the application
  * @param {number} id Application Id

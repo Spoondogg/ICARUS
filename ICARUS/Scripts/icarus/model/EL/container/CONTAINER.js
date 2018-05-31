@@ -34,14 +34,19 @@ class CONTAINER extends GROUP {
         'label': element,
         'hasTab': 1,
         'showHeader': 1,
-        'collapsed': 0
+        'collapsed': 0,
+        'shared': 1
     })) {
         super(node, element, model);
         this.addClass('icarus-container');
 
+        this.dataElements = []; // Data elements contain a list of arguments for a data object
+
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
+
+        this.shared = this.shared ? this.shared : 1;
 
         // Container Properties
         this.prompt = null;
@@ -83,8 +88,6 @@ class CONTAINER extends GROUP {
             }
 
         }
-
-        
 
         this.body = new CONTAINERBODY(this, model);
 
@@ -249,7 +252,7 @@ class CONTAINER extends GROUP {
                 this.btnSave.toggle('active');
                 //this.navBar.header.menu.scrollTo();
 
-                // CREATE A TEMPORARY  to hold the SAVE FORM
+                // CREATE A TEMPORARY wrapper to hold the SAVE FORM
                 if ($(this.btnSave.el).hasClass('active')) {
                     let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
                     this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
@@ -565,37 +568,8 @@ class CONTAINER extends GROUP {
         let subsections = this.getSubSections();
 
         debug('Creating save form...');        
-        let form = new FORM(
-            node,
-            new MODEL(new ATTRIBUTES({
-                'style':'background-color:white;'
-            })).set({
-                'label': 'SAVE FORM',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        let fieldset = new FIELDSET(
-            form.body.pane, new MODEL().set({
-                'label': 'FIELDSET',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        let formElementGroup = new FORMELEMENTGROUP(
-            fieldset.body.pane, new MODEL(
-                new ATTRIBUTES({
-                    //'style':'max-height:40vh;overflow-y:auto;'
-                })
-            ).set({
-                'label': 'FORMELEMENTGROUP',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
+        let form = this.createEmptyForm(node, false);
+        form.el.setAttribute('style', 'background-color:white;');
 
         let inputs = [
             new MODEL(new ATTRIBUTES({
@@ -719,22 +693,9 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             })
         ];
-        
-        // TODO: Fix this up
-        // Process the inputs into the formElementGroup
-        if (inputs) {
-            for (let i = 0; i < inputs.length; i++) {
-                //debug('inputs[' + i + ']: ' + inputs[i].type);
-                let inp = null;
-                if (inputs[i].type === 'FORMPOSTINPUT') {
-                    new FORMPOSTINPUT(formElementGroup.body.pane, inputs[i]);
-                } else {
-                    new INPUT(formElementGroup.body.pane, inputs[i]);
-                }
-                formElementGroup.children.push(inp);
-            }
-        }
 
+        form.fieldset.formElementGroup.addInputElements(inputs);
+        
         form.setPostUrl(this.className + '/Set');
 
         /*
@@ -777,7 +738,7 @@ class CONTAINER extends GROUP {
      * @param {boolean} hidden If true, form is hidden
      * @returns {FORM} An empty form container
      */
-    createEmptyForm(node, hidden) {
+    createEmptyForm(node, hidden = false) {
         let form = new FORM(
             node,
             new MODEL(new ATTRIBUTES({
@@ -814,16 +775,25 @@ class CONTAINER extends GROUP {
      * @param {object} data The object to be saved
      */
     quickSaveFormPost(modelId, data) {
+        console.log('QuickSaveFormPost:'+modelId);
+        console.log(data);
         if (modelId > 0) {
             app.loader.log('Saving FormPost: ' + modelId);
             let form = this.createEmptyForm(this, true);
             let inputs = [];
             for (let key in data) {
                 debug('Adding data attributes');
+
+                //let value = this.data[key] ? this.data[key] : data[key];
+                console.log('Key: ' + key);
+                console.log('Value:');
+                console.log(this.htmlEncode(data[key]));
+
                 inputs.push(
                     new MODEL(new ATTRIBUTES({
                         'name': key,
-                        'value': this[key] ? this[key].el ? this[key].el.innerHTML : data[key] : data[key]
+                        //'value': this[key] ? this[key].el ? this[key].el.innerHTML : data[key] : data[key]
+                        'value': this.htmlEncode(data[key]) //value
                     })).set({
                         'element': 'INPUT',
                         'label': key,
@@ -993,20 +963,13 @@ class CONTAINER extends GROUP {
                 this.quickSaveFormPost(this.attributesId, this.attributes);
 
                 app.loader.hide();
-
-
-
             }.bind(this);
-
-
 
             app.loader.log(100, 'Quick Save Complete');
             app.loader.hide();
         } else {
             console.log('Quick Save Cancelled');
         }
-
-        
     }
 
     /**

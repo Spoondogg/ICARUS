@@ -5,7 +5,7 @@
 class OPTION extends EL {
     /**
         A form option
-        @param {EL} node The parent
+        @param {SELECT} node The parent
         @param {string} label The element label
         @param {string} value The element value
     */
