@@ -8,6 +8,7 @@ using Owin;
 using ICARUS.Models;
 
 namespace ICARUS {
+
     public partial class Startup {
 
         /// <summary>

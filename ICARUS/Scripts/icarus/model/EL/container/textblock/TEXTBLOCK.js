@@ -16,6 +16,8 @@ class TEXTBLOCK extends CONTAINER {
 
         this.body.pane.addClass('container'); // col-lg-offset-2 col-lg-8
 
+        this.dataElements = ['text'];
+
         this.row = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('row')));
         this.col = new EL(this.row, 'DIV', new MODEL(new ATTRIBUTES('col-lg-offset-2 col-lg-8')));
 

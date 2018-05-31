@@ -13,22 +13,24 @@ class CALLOUT extends CONTAINER {
 
         this.body.pane.addClass('callout');
 
-        if (model.dataId > 0) {            
-            if (model.data.icon) {
-                this.icon = new GLYPHICON(this.body.pane, '', model.data.icon);
+        this.dataElements = ['icon', 'header', 'p'];
+
+        if (this.dataId > 0) {            
+            if (this.data.icon) {
+                this.icon = new GLYPHICON(this.body.pane, '', this.data.icon);
             }
-            if (model.data.header) {
+            if (this.data.header) {
                 this.header = new HEADER(this.body.pane, new MODEL().set({
-                    'label': model.data.header
+                    'label': this.data.header
                 }), 3);
 
-                if (model.data.align) {
-                    this.header.el.setAttribute('style', 'text-align:' + model.data.align+';');
+                if (this.data.align) {
+                    this.header.el.setAttribute('style', 'text-align:' + this.data.align+';');
                 }
-
             }
-            if (model.data.p) {
-                this.p = new P(this.body.pane, new MODEL(), model.data.p);
+            if (this.data.p) {
+                //this.hr = new HR(this.body.pane, new MODEL());
+                this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
             }
         }
         this.populate(model.children);

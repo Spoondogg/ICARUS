@@ -1,5 +1,6 @@
 ﻿.textblock {
-    font-family: 'Raleway'
+    font-family: 'Raleway';
+    background-color: #efefef;
 }
 .textblock h1 {
     border-bottom: 1px solid dimgrey;
@@ -7,7 +8,10 @@
     margin: 4px 0 8px;
 }
 
-.textblock p {
-    line-height: 28px;
-    margin-bottom: 25px;
-}
+    .textblock p, .form-element-group {
+        max-width: 900px;
+        padding: 0 1.8em;
+        line-height: 1.8em;
+        margin: 0.5em auto 2em;
+        text-align: justify;
+    }

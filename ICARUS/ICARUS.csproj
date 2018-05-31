@@ -595,6 +595,7 @@
     <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
     <Content Include="Scripts\icarus\model\el\modal\loader\LOADER.js" />
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\icarus\model\el\text\HR.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />

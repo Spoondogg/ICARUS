@@ -46,7 +46,7 @@ class EL extends MODEL {
     }
 
     /**
-     * Creates an input and populates with this element's contents
+     * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
         $(this.el).addClass('edit');
@@ -65,6 +65,20 @@ class EL extends MODEL {
         }.bind(this);
 
         this.editor.input.el.onblur = function () {
+
+            try {
+                console.log('Editing ' + this.className + ' inside ' + this.node.className);
+                let val = this.editor.input.el.value;
+                console.log('Value: ' + val);
+                this.node.node.node.data[this.className.toLowerCase()] = val;
+
+                console.log('THIS.NODE.NODE (Container) ELEMENT DATA:');
+                console.log(this.node.node.node);
+
+            } catch (e) {
+                console.log(e);
+            }
+
             this.editor.destroy();
             $(this.el).removeClass('edit');
             debug('QuickSave');

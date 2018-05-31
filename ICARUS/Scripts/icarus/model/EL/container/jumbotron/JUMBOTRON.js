@@ -13,23 +13,30 @@ class JUMBOTRON extends CONTAINER {
         this.body.pane.addClass('jumbotron');
         this.body.pane.addClass('noselect');
 
-        if (model.dataId > 0) {
+        this.dataElements = ['header', 'p', 'bgImage'];
+
+        // Data Attributes
+        if (this.dataId > 0) {
             this.header = new HEADER(this.body.pane, new MODEL().set({
-                'label': model.data.header
+                'label': this.data.header
             }), 1);
 
-            if (model.data.text) {
-                this.hr = new EL(this.body.pane, 'HR', new MODEL());
-                this.text = new P(this.body.pane, new MODEL(), model.data.text);
+            if (this.data.p) {
+                if (this.data.p.length > 0) {
+                    this.hr = new HR(this.body.pane, new MODEL());
+                    this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
+                }
             }
             
-            if (model.data.bgImage) {
+            if (this.data.bgimage) {
                 this.body.pane.el.setAttribute('style',
-                    'background: url(../Content/Images/' + model.data.bgImage + ');' //no-repeat center center
+                    'background: url(../Content/Images/' + this.data.bgimage + ');'
                 );
-                // no-repeat center center fixed
             }
         }
+
+        console.log('JUMBOTRON: ');
+        console.log(this);
 
         this.populate(model.children);
     }
