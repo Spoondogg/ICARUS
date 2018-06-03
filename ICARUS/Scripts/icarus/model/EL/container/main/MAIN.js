@@ -70,9 +70,10 @@ class MAIN extends CONTAINER {
     addNavOptions() {
         if (this.navBar.header.menu) {
 
-            this.navBar.header.menu.getGroup('USER').addNavItem(
+            this.navBar.header.menu.getGroup('USER').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.USER,
                         'label': 'Log Out',
                         'url': '#?url=logout'
                     })
@@ -82,19 +83,21 @@ class MAIN extends CONTAINER {
                 this.logout();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('USER').addNavItem(
+            this.navBar.header.menu.getGroup('USER').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.OPTIONS,
                         'label': 'Manage',
                         'url': 'Manage/Index'
                     })
                 })
             );
 
-            this.navBar.header.menu.getGroup('DOM').addNavItem(
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'label': 'Toggle Headers'
+                        'icon': ICON.TOGGLE,
+                        'label': 'Headers'
                     })
                 })
             ).el.onclick = function () {
@@ -102,10 +105,11 @@ class MAIN extends CONTAINER {
                 this.navBar.header.toggleCollapse();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItem(
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'label': 'Toggle Console'
+                        'icon': ICON.CONSOLE,
+                        'label': 'Console'
                     })
                 })
             ).el.onclick = function () {
@@ -113,9 +117,10 @@ class MAIN extends CONTAINER {
                 $(app.loader.console.el).collapse('show');
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItem(
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.REFRESH,
                         'label': 'Reload'
                     })
                 })

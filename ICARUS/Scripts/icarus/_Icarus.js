@@ -230,7 +230,24 @@ const ICON = {
     USER: 'glyphicon-user',
     EXCLAMATION: 'glyphicon-exclamation-sign',
     PUBLIC: 'glyphicon glyphicon-eye-open',
-    PRIVATE: 'glyphicon glyphicon-eye-close'
+    PRIVATE: 'glyphicon glyphicon-eye-close',
+    IFRAME: 'glyphicon glyphicon-new-window',
+    CONSOLE: 'glyphicon glyphicon-new-window',
+    FORM: 'glyphicon glyphicon-list-alt',
+    LIST: 'glyphicon glyphicon-th-list',
+    JUMBOTRON: 'glyphicon glyphicon-blackboard',
+    BANNER: 'glyphicon glyphicon-th-large',
+    PARAGRAPH: 'glyphicon glyphicon-text-background',
+    FIELDSET: 'glyphicon glyphicon-folder-close',
+    ARTICLE: 'glyphicon glyphicon-file',
+    SECTION: 'glyphicon glyphicon-indent-left',
+    FORMELEMENTGROUP: 'glyphicon glyphicon-tasks',
+    INPUT: 'glyphicon glyphicon-log-in',
+    SELECT: 'glyphicon glyphicon-tasks',
+    TEXTAREA: 'glyphicon glyphicon-text-background',
+    CALLOUT: 'glyphicon glyphicon-comment',
+    THUMBNAIL: 'glyphicon glyphicon-credit-card',
+    TOGGLE: 'glyphicon glyphicon-check'
 };
 
 /**
@@ -251,6 +268,181 @@ const STATUS = {
     OPEN: 1,
     CLOSED: 0,
     LOCKED: 0
+};
+
+/**
+ * Stores the default DATA ELEMENTS collections for each Class
+ * This belongs on the database or within a config
+ */
+const DATAELEMENTS = {
+    CALLOUT: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'icon',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'icon'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'header',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'header'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        })
+    ],
+
+    INPUT: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'type',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'type'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'name',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'name'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'value',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'value'
+        })
+    ],
+
+    THUMBNAIL: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'img',
+            'type': 'NUMBER'
+        })).set({
+            'element': 'BUTTON',
+            'label': 'img',
+            'type': 'FORMPOSTINPUT', //'FORMPOSTINPUT', // New type: FORMPOSTIMAGE
+            'inputs': [
+                new MODEL(new ATTRIBUTES({
+                    'name': 'file',
+                    'type': 'file'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'file'
+                })
+            ]
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'header',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'header'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'bgImage',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'bgImage'
+        })
+    ],
+
+    JUMBOTRON: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'header',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'header'
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        }),
+
+        /*
+        new MODEL(new ATTRIBUTES({
+            'name': 'bgimage',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'bgimage'
+        }),
+        */
+        new MODEL(new ATTRIBUTES({
+            'name': 'bgimage',
+            'type': 'NUMBER'
+        })).set({
+            'element': 'BUTTON',
+            'label': 'bgimage',
+            'type': 'FORMPOSTINPUT',
+            'inputs': [
+                new MODEL(new ATTRIBUTES({
+                    'name': 'file',
+                    'type': 'file'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'file'
+                })
+            ]
+        }),
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'bgcolor',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'bgcolor'
+        })
+    ],
+
+    PARAGRAPH: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        })
+    ],
+
+    TEXTBLOCK: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'text'
+        })
+    ]
 };
 
 /**

@@ -13,12 +13,12 @@ class PARAGRAPH extends CONTAINER {
 
         this.body.pane.addClass('paragraph');
 
-        this.dataElements = ['p'];
+        //this.dataElements = ['p'];
+        this.dataElements = DATAELEMENTS.PARAGRAPH;
 
         if (this.dataId > 0) {
             if (this.data.p) {
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
-                //this.body.pane.setInnerHTML(model.data.text);
             }
         }
 

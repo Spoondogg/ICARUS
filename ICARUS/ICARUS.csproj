@@ -438,6 +438,10 @@
     <Compile Include="Migrations\201805041744025_20180504__001.Designer.cs">
       <DependentUpon>201805041744025_20180504__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806012145119_20180601__001.cs" />
+    <Compile Include="Migrations\201806012145119_20180601__001.Designer.cs">
+      <DependentUpon>201806012145119_20180601__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
     <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
@@ -578,6 +582,7 @@
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
+    <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
     <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
@@ -587,6 +592,7 @@
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
+    <Content Include="Scripts\icarus\model\el\graphic\IMG.js" />
     <Content Include="Scripts\icarus\model\el\group\ul\console\CONSOLE.js" />
     <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
@@ -595,6 +601,7 @@
     <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
     <Content Include="Scripts\icarus\model\el\modal\loader\LOADER.js" />
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\icarus\model\el\text\HR.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
@@ -898,6 +905,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805041744025_20180504__001.resx">
       <DependentUpon>201805041744025_20180504__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806012145119_20180601__001.resx">
+      <DependentUpon>201806012145119_20180601__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -10,15 +10,98 @@ class INPUT extends FORMELEMENT {
     constructor(node, model) {
         super(node, 'DIV', model);
 
+        //this.dataElements = ['type', 'name', 'value'];
+        this.dataElements = DATAELEMENTS.INPUT;
+
+        let nm = model.attributes.name || model.data.name;
+        let val = model.attributes.value || model.data.value;
         this.input = new EL(this.body.pane, 'INPUT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
-                'type': model.attributes.type || 'TEXT',
-                'list': model.attributes.name + '-options',
-                'name': model.attributes.name,
-                'value': model.attributes.value || ''
+                'type': model.attributes.type || model.data.type || 'TEXT',
+                'list': nm + '-options',
+                'name': nm,
+                'value': val || ''
             })
         ));
+
+        // file, text, number, email, phone (html5 inputs)
+        if (model.data.type === 'file' || model.attributes.type === 'file') {
+
+            // Create an empty subform, similar to a data/attributes object to save the image by FormPostId
+
+            this.img = new EL(this.body.pane, 'IMG', new MODEL(new ATTRIBUTES({
+                'style':'min-height:64px;min-width:64px;max-width:120px;height:auto;border:4px solid white;background-color:grey;margin:1em;padding:0.3em;border-radius:0.3em;'
+            })));
+
+            this.img.el.onclick = function () {
+                this.input.el.click();
+            }.bind(this);
+
+            this.img.el.onload = function () {
+                this.dimX.input.el.setAttribute('value', this.img.el.naturalWidth);
+                this.dimY.input.el.setAttribute('value', this.img.el.naturalHeight);
+            }.bind(this);
+
+            this.base64 = new TEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'base64',
+                'label': 'base64'
+            }).set({
+                'name': 'base64',
+                'label': 'base64'
+            })));
+
+            this.fileName = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'filename',
+                'label': 'base64'
+            }).set({
+                'name': 'filename',
+                'label': 'filename'
+            })));
+
+            this.fileType = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'fileType',
+                'label': 'base64'
+            }).set({
+                'name': 'fileType',
+                'label': 'fileType'
+            })));
+
+            this.fileSize = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'fileSize'
+            }).set({
+                'name': 'fileSize',
+                'label': 'fileSize'
+            })));
+
+            this.dimX = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'dimX'
+            }).set({
+                'name': 'dimX',
+                'label': 'dimX'
+            })));
+
+            this.dimY = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+                'name': 'dimY'
+            }).set({
+                'name': 'dimY',
+                'label': 'dimY'
+            })));
+
+            /*
+            this.dataElements.push(
+                new MODEL(new ATTRIBUTES({
+                    'name': 'accept',
+                    'type': 'text'
+                })).set({
+                    'element': 'INPUT',
+                    'label': 'accept'
+                })
+            );
+            */
+
+            this.input.el.onchange = this.readURL.bind(this);
+        }
 
         this.options = [];
         this.datalist = new EL(node, 'DATALIST', new MODEL(
@@ -31,6 +114,38 @@ class INPUT extends FORMELEMENT {
                 this.addOption(model.options[o].value);
             }
         }
+    }
+
+    /**
+     * Reads the contents of this FILE INPUT and extracts the base64 values
+     * and metadata
+     * 
+     * See https://gist.github.com/batuhangoksu/06bc056399d87b09243d
+     */
+    readURL() {
+        console.log('readUrl():  Reading an Image');
+        app.loader.log(10, 'Loading...');
+        // TODO:  This should detect file types and limit accordingly
+        try {
+            /* Use FileReader to extract base64 and attributes */
+            if (this.input.el.files && this.input.el.files[0]) {
+
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $(this.input.el).attr('src', e.target.result);
+                    this.img.el.src = e.target.result;
+                    this.base64.input.el.innerHTML = e.target.result;
+                    this.fileName.input.el.value = this.input.el.files[0].name;
+                    this.fileType.input.el.value = this.input.el.files[0].type;
+                    this.fileSize.input.el.value = Math.ceil(this.input.el.files[0].size/1000);
+                }.bind(this);
+
+                // Load file
+                reader.readAsDataURL(this.input.el.files[0]);
+            }
+        } catch (e) {
+            console.log(e);
+        } 
     }
 
     /**
@@ -56,7 +171,7 @@ class INPUT extends FORMELEMENT {
                 this.prompt = new PROMPT('Add Option', 'Add an option to this select input:');
 
                 this.prompt.formGroup.addInput('label', IcarusInputType.TEXT, '');
-                this.prompt.formGroup.addInput('lalue', IcarusInputType.TEXT, '');
+                this.prompt.formGroup.addInput('value', IcarusInputType.TEXT, '');
 
                 this.prompt.buttonGroup.addButton('Add Option').el.onclick = function () {
                     this.options.push(

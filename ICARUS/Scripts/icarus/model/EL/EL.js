@@ -34,13 +34,17 @@ class EL extends MODEL {
         @param {EL} node Parent node to append to
         @returns {EL} This element
      */
-    make(node) {        
-        if (node === document.body) {
-            debug('BODY.create(' + this.element + ')');
-            this.el = node.appendChild(document.createElement(this.element));
-            node = this;
-        } else {
-            this.el = node.el.appendChild(document.createElement(this.element));
+    make(node) {
+        try {
+            if (node === document.body) {
+                debug('BODY.create(' + this.element + ')');
+                this.el = node.appendChild(document.createElement(this.element));
+                node = this;
+            } else {
+                this.el = node.el.appendChild(document.createElement(this.element));
+            }
+        } catch (e) {
+            console.log(e);
         }
         return this;
     }

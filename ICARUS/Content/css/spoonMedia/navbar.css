@@ -78,6 +78,39 @@
         float: left;
     }
 
+.nav-item-icon {
+    background-color: #292929;
+    text-align: center;
+    width: 64px;
+    height: 64px;
+    border: thin solid #2d2d2d;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 4px 4px 2em;
+    border-radius: 0.6em;
+    float: left;
+}
+
+.nav-item-icon > a {
+    padding: 0 !important;
+}
+    .nav-item-icon > a > .icon {
+        line-height: 62px;
+        font-size: 28px;
+    }
+        .nav-item-icon > a > .icon > .icon-label {
+            line-height: 20px;
+            font-size: 10px;
+            float: none;
+            clear: both;
+            display: block;
+            width: 64px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+        }
+
 /*
     Horizontal nav-bars should scroll horizontally in order to avoid cases
     where the menu gets lost inside the container

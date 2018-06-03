@@ -93,6 +93,16 @@ class MENU extends UL {
     }
 
     /**
+        Constructs a Nav Item with an anchor inside
+        @param {MODEL} model Object model
+        @returns {NAVITEM} Nav Item with Anchor
+    */
+    addNavItemIcon(model) {
+        this.children.push(new NAVITEMICON(this, model)); //model.url, model.label
+        return this.addGroup(this.children[this.children.length - 1]);
+    }
+
+    /**
         Adds an array of Nav Items
         @param {Array} navItems An array of NAVITEM
      */

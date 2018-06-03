@@ -68,7 +68,7 @@ namespace ICARUS.Models.Icarus {
         /// JSON form data
         /// </summary>
         //[Required]
-        [StringLength(4000)]
+        //[StringLength(4000)]
         public string jsonResults { get; set; }
 
         /// <summary>
