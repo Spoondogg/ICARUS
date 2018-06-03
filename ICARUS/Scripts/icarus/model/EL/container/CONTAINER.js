@@ -82,9 +82,7 @@ class CONTAINER extends GROUP {
             }
 
             if (model.shared) {
-                //let icon = new GLYPHICON(this.navBar.header.tab.anchor, '', ICON.PLUS);
                 this.navBar.header.tab.anchor.icon.el.className = ICON.PUBLIC;
-                //icon.el.setAttribute('style','padding-right:0.5em;float:left;');
             }
 
         }
@@ -101,7 +99,7 @@ class CONTAINER extends GROUP {
         this.addContainerCase('LIST');
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('BANNER');
-        this.addContainerCase('TEXTBLOCK');
+        //this.addContainerCase('TEXTBLOCK'); // Replaced by PARAGRAPH
         this.addContainerCase('PARAGRAPH');
 
         if (this.collapsed) {
@@ -210,9 +208,10 @@ class CONTAINER extends GROUP {
                 }.bind(this);                
             }
             
-            this.navBar.header.menu.getGroup('DOM').addNavItem(
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.UP,
                         'label': 'UP'
                     })
                 })
@@ -221,10 +220,11 @@ class CONTAINER extends GROUP {
                 this.moveUp();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItem(
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'label': 'DN'
+                        'icon': ICON.DOWN,
+                        'label': 'DOWN'
                     })
                 })
             ).el.onclick = function () {
@@ -232,18 +232,20 @@ class CONTAINER extends GROUP {
                 this.moveDown();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'label': 'LOAD'
+                        'icon': ICON.LOAD,
+                        'label': 'Load'
                     })
                 })
             ).el.onclick = this.load.bind(this);
 
             // Add items to Options Dropdown Tab
-            this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.SAVE,
                         'label': 'SAVE'
                     })
                 })
@@ -274,18 +276,20 @@ class CONTAINER extends GROUP {
                 }
             }.bind(this);
 
-            this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.SAVE,
                         'label': 'QUICKSAVE'
                     })
                 })
             );
             this.btnQuickSave.el.onclick = this.quickSave.bind(this);
 
-            this.navBar.header.menu.getGroup('CRUD').addNavItem(
+            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON.DELETE,
                         'label': 'DELETE'
                     })
                 })
@@ -377,9 +381,11 @@ class CONTAINER extends GROUP {
     addConstructElementButton(className) {
         if (this.navBar.header.menu) {
 
-            this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+            //this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+            this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICON[className],
                         'label': className //'Create ^'
                     })
                 })

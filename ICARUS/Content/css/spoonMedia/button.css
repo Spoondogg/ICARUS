@@ -1,5 +1,5 @@
 ﻿button {
-
+    
 }
 
 /*
@@ -9,10 +9,13 @@ div.btn-group .btn {
     font-size: smaller;
 }
     */
+button.btn > .icon {
+    color: black;
+}
 
-.btn.glyphicon .label {
+.btn.glyphicon .icon-label {
     top: -3px;
-    /*color: black;*/
+    color: black;
     text-transform: uppercase;
     padding: 0 0 0 4px;
     font-family: sans-serif;
@@ -29,11 +32,3 @@ div.btn-group .btn:hover {
     border-right: none;
     border-bottom: 2px solid #c5c5c5;
 }
-
-/*
-.btn .glyphicon {
-    font-size: 12px;
-    font-family: inherit;
-}
-    */
-

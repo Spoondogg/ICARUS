@@ -11,16 +11,23 @@
     .modal .loader .progress {
         text-decoration: none;
         text-transform: uppercase;
-        margin: 0;
+        margin: 0 0.5em;
     }
         .modal .loader .progress .progress-bar {
             text-shadow: 0 1px 4px rgb(41, 41, 41);
+        }
+
+        .modal .loader .console {
+            margin-left: 0.5em;
+            margin-right: 0.5em;
         }
 
 .modal .loader .modal-body .well {
     font-size: smaller;
     margin: 0;
 }
+
+
 
 .modal .loader .modal-header,
 .modal .loader .modal-footer,

@@ -13,7 +13,8 @@ class JUMBOTRON extends CONTAINER {
         this.body.pane.addClass('jumbotron');
         this.body.pane.addClass('noselect');
 
-        this.dataElements = ['header', 'p', 'bgImage'];
+        //this.dataElements = ['header', 'p', 'bgimage', 'bgcolor'];
+        this.dataElements = DATAELEMENTS.JUMBOTRON;
 
         // Data Attributes
         if (this.dataId > 0) {
@@ -27,11 +28,40 @@ class JUMBOTRON extends CONTAINER {
                     this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
                 }
             }
+
+            // Test to see if the formpost can be retrieved
             
-            if (this.data.bgimage) {
-                this.body.pane.el.setAttribute('style',
-                    'background: url(../Content/Images/' + this.data.bgimage + ');'
-                );
+            if (this.data.bgimage && this.data.bgimage !== '.') {
+                console.log('JUMBOTRON');
+                try {
+                    $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
+
+                        // If access granted...
+                        if (data.model) {
+                            //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
+                            //console.log(data.model);
+                            //console.log('Parsed...');
+                            let parsed = JSON.parse(data.model.jsonResults);
+                            //console.log(parsed);
+
+                            // Extract the base64 values and create an image
+                            for (let p = 0; p < parsed.length; p++) {
+                                if (parsed[p].name === 'base64') {
+                                    this.body.pane.el.setAttribute('style',
+                                        'background: url(' + parsed[p].value + ');'
+                                    );
+                                }
+                            }
+                        }
+                    }.bind(this));
+                } catch (e) {
+                    console.log('Unable to retrieve FormPost.');
+                    console.log(e);
+                }
+            }
+
+            if (this.data.bgcolor && this.data.bgcolor !== '.') {
+                this.body.pane.el.style.backgroundColor = this.data.bgcolor;
             }
         }
 

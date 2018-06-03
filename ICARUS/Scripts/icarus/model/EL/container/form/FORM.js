@@ -80,8 +80,10 @@ class FORM extends CONTAINER {
     htmlEncodeValues() {
         try {
             for (let e = 0; e < this.el.elements.length; e++) {
-                this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
-                
+                console.log('Encode type: ' + this.el.elements[e].type);
+                if (this.el.elements[e].type === 'text' || this.el.elements[e].type === 'textarea') {
+                    this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
+                }                
             }
         } catch (e) {
             console.log('FORM.htmlEncodeValues() failed.');

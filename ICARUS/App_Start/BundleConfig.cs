@@ -80,14 +80,18 @@ namespace ICARUS {
             // bundles.Add(new ScriptBundle("~/bundles/icarus").IncludeDirectory("~/Scripts/icarus", "*.js", true)); // All objects in folder (alphabetical)
             bundles.Add(new ScriptBundle("~/bundles/icarus").Include(
 
-                // Generic
-                "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
-                "~/Scripts/icarus/WATERMARK.js",
-
                 // Model
                 "~/Scripts/icarus/model/ATTRIBUTES.js",
                 "~/Scripts/icarus/model/MODEL.js",
                 "~/Scripts/icarus/model/el/EL.js",
+
+                // Generic
+                "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
+                "~/Scripts/icarus/WATERMARK.js",
+
+                // Graphic
+                "~/Scripts/icarus/model/el/graphic/SVG.js",
+                "~/Scripts/icarus/model/el/graphic/IMG.js",
 
                 // Text
                 "~/Scripts/icarus/model/el/text/ANCHOR.js",
@@ -100,8 +104,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/text/p/P.js",
                 "~/Scripts/icarus/model/el/text/p/WELL.js",
 
-                // Graphic
-                "~/Scripts/icarus/model/el/graphic/SVG.js",
+                
 
 
                 // Group (Generic Data Structure) (LIST?)
@@ -118,6 +121,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/group/ul/console/CONSOLE.js",
 
                 // Container > NAV
+                "~/Scripts/icarus/model/el/nav/navitemicon/NAVITEMICON.js",
                 "~/Scripts/icarus/model/el/nav/navitem/NAVITEM.js",
                 "~/Scripts/icarus/model/el/nav/navitem/NAVSEARCH.js",
                 "~/Scripts/icarus/model/el/nav/navitem/NAVSEPARATOR.js",
@@ -191,6 +195,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/OPTION.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/SELECT.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/INPUT.js",
+                "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/file/FILE.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/input/TOKEN.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/formpostinput/FORMPOSTINPUT.js",
 

@@ -8,7 +8,7 @@
     margin: 4px 0 8px;
 }
 
-    .textblock p, .form-element-group {
+    .textblock p {
         max-width: 900px;
         padding: 0 1.8em;
         line-height: 1.8em;

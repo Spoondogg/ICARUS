@@ -12,27 +12,36 @@ class FORMPOSTINPUT extends FORMELEMENT {
     constructor(node, model) {
         super(node, 'DIV', model);
 
+        console.log('FORMPOSTINPUT class');
+        console.log(model);
+
         this.inputGroup = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('input-group')));
         
         this.input = new EL(this.inputGroup, 'INPUT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
                 'name': model.attributes.name,
-                'value': model.attributes.value
+                'value': model.attributes.value,
+                'type': model.attributes.type || 'text'
             })
         ));
 
         this.form = null;
 
-        if (model.attributes.value > 0) {
+        console.log('Val:' + model.attributes.value);
+        console.log(model);
+
+        if (model.attributes.value > 0 || model.value > 0) {
+            console.log('btnEdit');
             this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT1');
             this.btnEdit.el.onclick = this.editFormPost.bind(this);
         } else {
+            console.log('btnNew');
             this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
             this.btnNew.el.onclick = function () {
                 // TODO:  PLEASE, fix this.  This is ugly
                 let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
-                this.newAttributes(container, model.attributes.name);
+                this.newAttributes(container, model.attributes.name, model);
             }.bind(this);
         }
     } 
@@ -80,13 +89,13 @@ class FORMPOSTINPUT extends FORMELEMENT {
         @param container {CONTAINER} The container that this belongs to
         @param dataIdLabel {string} The key (dataId or attributesId) to add object to
      */
-    newAttributes(container, dataIdLabel) {
+    newAttributes(container, dataIdLabel, model) {
         let inputs = [];
 
         // Generate new FormPost
         try {
             $.getJSON('/FORMPOST/Get/0', function (data) {
-                console.log('Created new Form Post / Attributes');
+                console.log('Created new Form Post / Attributes / Image');
                 console.log(data.model);
 
                 // Id and Shared are hardcoded
@@ -108,6 +117,22 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     })
                 ];
 
+                console.log('dataIdLabel: ' + dataIdLabel);
+                console.log('container:');
+                console.log(container);
+
+                // Append any model inputs if they exist
+                try {
+                    for (let m = 0; m < model.inputs.length; m++) {
+                        inputs.push(model.inputs[m]);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+
+                
+
+
                 // Set values in MODEL and DOM
                 this.input.el.setAttribute('value', data.model.id);
                 container[dataIdLabel] = data.model.id; 
@@ -115,40 +140,26 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 // Append additional dataElements
                 if (container.dataElements.length > 0) {
                     for (let i = 0; i < container.dataElements.length; i++) {
-                        inputs.push(
-                            new MODEL(new ATTRIBUTES({
-                                'name': container.dataElements[i],
-                                'value': ''
-                            })).set({
-                                'element': 'INPUT',
-                                'label': container.dataElements[i]
-                            })
-                        );
+                        inputs.push(container.dataElements[i]);
                     }
                 }
-
-                /*
-                // I think this can go now.
-                try {
-                    this.form.destroy();
-                } catch (e) {
-                    console.log(e);
-                }
-                */
-
+                
                 // Construct empty form
                 this.form = container.createEmptyForm(this.body.pane);
                 this.form.prompt = this;
 
-                //this.form.fieldset.formElementGroup.addContainerCase('ARTICLE');
-
                 // TODO: Fix this up
                 if (inputs) {
+                    console.log('inputs:');
+                    console.log(inputs);
                     for (let i = 0; i < inputs.length; i++) {
                         let inp = null;
-                        if (inputs[i].type === 'FORMPOSTINPUT') {
+                        if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].data.type === 'FORMPOSTINPUT' || inputs[i].attributes.type === 'FORMPOSTINPUT') {
+                            console.log('WOOT');
+                            console.log('FORMPOSTINPUT');
                             new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
                         } else {
+                            console.log('BLERT');
                             new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
                         }
                         this.form.fieldset.formElementGroup.children.push(inp);
@@ -195,6 +206,10 @@ class FORMPOSTINPUT extends FORMELEMENT {
             })
         ];
 
+        //for (let de = 0; de < DATAELEMENTS.THUMBNAIL.length; de++) {
+        //    inputs.push(DATAELEMENTS.THUMBNAIL[de]);
+        //}
+
         // Test to see if the formpost can be retrieved
         try {
             $.getJSON('/FORMPOST/Get/' + this.input.attributes.value, function (data) {
@@ -207,53 +222,32 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     let parsed = JSON.parse(data.model.jsonResults);
                     console.log(parsed);
 
+                    
                     // If retrieved, push each node as an attribute/data value from jsonResults
                     for (let i = 0; i < parsed.length; i++) {
                         if (parsed[i].name !== 'id') {
+                            console.log('parsed[' + i + ']:');
+                            console.log(parsed[i]);
+                            console.log('inputs[]:');
+                            console.log(inputs);
+                            
                             inputs.push(
                                 new MODEL(new ATTRIBUTES({
                                     'name': parsed[i].name,
-                                    'value': this.htmlDecode(parsed[i].value)
+                                    'value': this.htmlDecode(parsed[i].value) || ''
                                 })).set({
                                     'element': 'INPUT',
                                     'label': parsed[i].name
                                 })
                             );
+                            //inputs[i].attributes.value = this.htmlDecode(parsed[i].value) || '';
+
                         }
                     }
 
-                    console.log('Creating prompt form...');
-                    try {
-                        this.form.destroy();
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    this.form = new FORM(
-                        this.body.pane,
-                        new MODEL().set({
-                            'label': 'PROMPT FORM',
-                            'collapsed': 0,
-                            'showHeader': 0,
-                            'hasTab': 0
-                        })
-                    );
-                    this.form.prompt = this;
-                    this.form.fieldset = new FIELDSET(
-                        this.form.body.pane, new MODEL().set({
-                            'label': 'FIELDSET',
-                            'collapsed': 0,
-                            'showHeader': 0,
-                            'hasTab': 0
-                        })
-                    );
-                    this.form.fieldset.formElementGroup = new FORMELEMENTGROUP(
-                        this.form.fieldset.body.pane, new MODEL().set({
-                            'label': 'Attributes',
-                            'collapsed': 0,
-                            'showHeader': 1,
-                            'hasTab': 0
-                        })
-                    );
+                    // Instead, set values of preset (based on DATAELEMENTS) inputs
+
+                    this.form = this.createEmptyForm(this.body.pane);
 
                     // Empty out and populate with Form Elements only                    
                     this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
@@ -267,7 +261,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         for (let i = 0; i < inputs.length; i++) {
                             console.log('inputs[' + i + ']: ' + inputs[i].type);
                             let inp = null;
-                            if (inputs[i].type === 'FORMPOSTINPUT') {
+                            if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].data.type === 'FORMPOSTINPUT') {
                                 console.log('FORMPOSTINPUT');
                                 new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
                             } else {

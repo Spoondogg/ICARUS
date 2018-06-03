@@ -13,7 +13,8 @@ class CALLOUT extends CONTAINER {
 
         this.body.pane.addClass('callout');
 
-        this.dataElements = ['icon', 'header', 'p'];
+        //this.dataElements = ['icon', 'header', 'p'];
+        this.dataElements = DATAELEMENTS.CALLOUT;
 
         if (this.dataId > 0) {            
             if (this.data.icon) {
