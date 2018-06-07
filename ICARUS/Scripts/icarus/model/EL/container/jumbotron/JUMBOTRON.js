@@ -17,6 +17,18 @@ class JUMBOTRON extends CONTAINER {
         this.dataElements = DATAELEMENTS.JUMBOTRON;
 
         // Data Attributes
+        this.construct();
+
+        console.log('JUMBOTRON: ');
+        console.log(this);
+
+        this.populate(model.children);
+    }
+
+    /**
+     * Override abstract method
+     */
+    construct() {
         if (this.dataId > 0) {
             this.header = new HEADER(this.body.pane, new MODEL().set({
                 'label': this.data.header
@@ -29,8 +41,7 @@ class JUMBOTRON extends CONTAINER {
                 }
             }
 
-            // Test to see if the formpost can be retrieved
-            
+            // Test to see if the formpost can be retrieved            
             if (this.data.bgimage && this.data.bgimage !== '.') {
                 console.log('JUMBOTRON');
                 try {
@@ -40,9 +51,9 @@ class JUMBOTRON extends CONTAINER {
                         if (data.model) {
                             //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
                             //console.log(data.model);
-                            //console.log('Parsed...');
+                            console.log('Parsed...');
                             let parsed = JSON.parse(data.model.jsonResults);
-                            //console.log(parsed);
+                            console.log(parsed);
 
                             // Extract the base64 values and create an image
                             for (let p = 0; p < parsed.length; p++) {
@@ -64,10 +75,6 @@ class JUMBOTRON extends CONTAINER {
                 this.body.pane.el.style.backgroundColor = this.data.bgcolor;
             }
         }
-
-        console.log('JUMBOTRON: ');
-        console.log(this);
-
-        this.populate(model.children);
     }
+
 }

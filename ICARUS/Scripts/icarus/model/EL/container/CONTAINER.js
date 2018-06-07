@@ -41,6 +41,7 @@ class CONTAINER extends GROUP {
         this.addClass('icarus-container');
 
         this.dataElements = []; // Data elements contain a list of arguments for a data object
+        this.attrEelements = []; // Attribute elements contain a list of attributes that apply for this object
 
         if (model.id) {
             this.el.setAttribute('id', model.id);
@@ -117,6 +118,13 @@ class CONTAINER extends GROUP {
         if (model.hasTab) {
             this.tab = this.createTab(this);
         }        
+    }
+
+    /**
+        Abstract construct method
+     */
+    construct() {
+        debug('CONTAINER.construct();');
     }
 
     /**
@@ -230,6 +238,69 @@ class CONTAINER extends GROUP {
             ).el.onclick = function () {
                 this.navBar.header.toggleCollapse();
                 this.moveDown();
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICON.REFRESH,
+                        'label': 'REFRESH'
+                    })
+                })
+            ).el.onclick = function () {
+                console.log('TODO: Refresh CONTAINER{' + this.className + '}[' + this.id + ']');
+                console.log(this);
+
+                app.loader.log(20, 'Emptying body.pane');
+                app.loader.show();
+
+                this.body.pane.empty();
+
+                console.log('Rebuilding children...');
+
+                // This needs to handle the Container constructor
+                // Does this mean that I CALL the constructor?
+                // ie:  CONTAINER.call(
+                //let newContainer = new this.__proto__.constructor(this.node, this);
+
+                // Reconstruct from model
+                this.construct();
+
+                // Populate based on children
+                this.populate(this.body.pane.children);
+                
+
+
+                // Retrieve the object from the server? Or use local model.
+                // TRY to use local first.
+                /*
+                try {
+                    $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
+
+                        // If access granted...
+                        if (data.model) {
+                            //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
+                            //console.log(data.model);
+                            console.log('Parsed...');
+                            let parsed = JSON.parse(data.model.jsonResults);
+                            console.log(parsed);
+
+                            // Extract the base64 values and create an image
+                            for (let p = 0; p < parsed.length; p++) {
+                                if (parsed[p].name === 'base64') {
+                                    this.body.pane.el.setAttribute('style',
+                                        'background: url(' + parsed[p].value + ');'
+                                    );
+                                }
+                            }
+                        }
+                    }.bind(this));
+                } catch (e) {
+                    console.log('Unable to retrieve FormPost.');
+                    console.log(e);
+                }
+                */
+
             }.bind(this);
 
             this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
@@ -784,7 +855,7 @@ class CONTAINER extends GROUP {
         console.log('QuickSaveFormPost:'+modelId);
         console.log(data);
         if (modelId > 0) {
-            app.loader.log('Saving FormPost: ' + modelId);
+            app.loader.log(50, 'Saving FormPost: ' + modelId);
             let form = this.createEmptyForm(this, true);
             let inputs = [];
             for (let key in data) {
