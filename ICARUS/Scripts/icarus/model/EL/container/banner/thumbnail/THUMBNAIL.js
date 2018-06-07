@@ -18,6 +18,12 @@ class THUMBNAIL extends CONTAINER {
 
         this.image = new IMG(this.body.pane, new MODEL());
 
+        this.construct();
+
+        this.populate(model.children);
+    }
+
+    construct() {
         if (this.dataId > 0) {
 
             let parsed = null;
@@ -44,7 +50,7 @@ class THUMBNAIL extends CONTAINER {
                                     if (parsed[p].name === 'base64') {
                                         this.image.el.src = parsed[p].value;
                                     }
-                                }                                
+                                }
                             }
                         }.bind(this));
                     } catch (e) {
@@ -70,15 +76,16 @@ class THUMBNAIL extends CONTAINER {
             this.button.el.onclick = function () {
                 console.log('Launch Modal');
 
-                let modal = new MODAL(model.data.header);
+                let modal = new MODAL(this.data.header);
                 modal.container.body.pane.addClass('thumbnail');
                 modal.container.image = new IMG(modal.container.body.pane, new MODEL());
+                modal.container.image.el.src = this.image.el.src; //parsed[p].value;
 
-                for (let p = 0; p < parsed.length; p++) {
-                    if (parsed[p].name === 'base64') {
-                        modal.container.image.el.src = parsed[p].value;
-                    }
-                }
+                //for (let p = 0; p < parsed.length; p++) {
+                    //if (parsed[p].name === 'base64') {
+                        //modal.container.image.el.src = parsed[p].value;
+                    //}
+                //}
 
                 modal.container.header = new HEADER(modal.container.body.pane, new MODEL().set({
                     'label': this.data.header
@@ -90,7 +97,5 @@ class THUMBNAIL extends CONTAINER {
                 modal.show();
             }.bind(this);
         }
-
-        this.populate(model.children);
     }
 }

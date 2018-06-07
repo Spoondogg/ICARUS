@@ -22,31 +22,38 @@ class EL extends MODEL {
         this.children = children ? children : []; // Contains an array of child element models
         this.callbacks = {}; // Contains a series of Constructor functions that this element can use
 
-        this.make(node);
+        this.make(node, model, innerHTML);
 
-        this.merge(model);
-        this.setInnerHTML(innerHTML);
+        //this.merge(model);
+        //this.setInnerHTML(innerHTML);
     }
 
     /**
         Create the HTML element in the DOM, appended to the given node
         // Append the element to its parent and set its inner HTML (when available)
         @param {EL} node Parent node to append to
+        @param {MODEL} model A set of key/value pairs for this element's model
+        @param {string} innerHTML This text will be displayed within the HTML element
         @returns {EL} This element
      */
-    make(node) {
+    make(node, model, innerHTML) {
         try {
             if (node === document.body) {
-                debug('BODY.create(' + this.element + ')');
+                console.log('BODY.create(' + this.element + ')');
+
                 this.el = node.appendChild(document.createElement(this.element));
                 node = this;
             } else {
                 this.el = node.el.appendChild(document.createElement(this.element));
             }
+
+            this.merge(model);
+            this.setInnerHTML(innerHTML);
+
         } catch (e) {
             console.log(e);
         }
-        return this;
+        return this.el;
     }
 
     /**

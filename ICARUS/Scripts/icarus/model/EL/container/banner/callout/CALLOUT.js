@@ -16,7 +16,13 @@ class CALLOUT extends CONTAINER {
         //this.dataElements = ['icon', 'header', 'p'];
         this.dataElements = DATAELEMENTS.CALLOUT;
 
-        if (this.dataId > 0) {            
+        this.construct();
+
+        this.populate(model.children);
+    }
+
+    construct() {
+        if (this.dataId > 0) {
             if (this.data.icon) {
                 this.icon = new GLYPHICON(this.body.pane, '', this.data.icon);
             }
@@ -26,7 +32,7 @@ class CALLOUT extends CONTAINER {
                 }), 3);
 
                 if (this.data.align) {
-                    this.header.el.setAttribute('style', 'text-align:' + this.data.align+';');
+                    this.header.el.setAttribute('style', 'text-align:' + this.data.align + ';');
                 }
             }
             if (this.data.p) {
@@ -34,6 +40,5 @@ class CALLOUT extends CONTAINER {
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
             }
         }
-        this.populate(model.children);
     }
 }

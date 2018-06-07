@@ -13,12 +13,17 @@ class INPUT extends FORMELEMENT {
         //this.dataElements = ['type', 'name', 'value'];
         this.dataElements = DATAELEMENTS.INPUT;
 
-        let nm = model.attributes.name || model.data.name;
-        let val = model.attributes.value || model.data.value;
+        this.construct(); 
+        
+    }
+
+    construct() {
+        let nm = this.attributes.name || this.data.name;
+        let val = this.attributes.value || this.data.value;
         this.input = new EL(this.body.pane, 'INPUT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
-                'type': model.attributes.type || model.data.type || 'TEXT',
+                'type': this.attributes.type || this.data.type || 'TEXT',
                 'list': nm + '-options',
                 'name': nm,
                 'value': val || ''
@@ -26,12 +31,12 @@ class INPUT extends FORMELEMENT {
         ));
 
         // file, text, number, email, phone (html5 inputs)
-        if (model.data.type === 'file' || model.attributes.type === 'file') {
+        // this should use a factory constructor pattern to create specific input types
+        if (this.data.type === 'file' || this.attributes.type === 'image' || this.attributes.type === 'file') {
 
             // Create an empty subform, similar to a data/attributes object to save the image by FormPostId
-
             this.img = new EL(this.body.pane, 'IMG', new MODEL(new ATTRIBUTES({
-                'style':'min-height:64px;min-width:64px;max-width:120px;height:auto;border:4px solid white;background-color:grey;margin:1em;padding:0.3em;border-radius:0.3em;'
+                'style': 'min-height:64px;min-width:64px;max-width:120px;height:auto;border:4px solid white;background-color:grey;margin:1em;padding:0.3em;border-radius:0.3em;'
             })));
 
             this.img.el.onclick = function () {
@@ -88,30 +93,22 @@ class INPUT extends FORMELEMENT {
                 'label': 'dimY'
             })));
 
-            /*
-            this.dataElements.push(
-                new MODEL(new ATTRIBUTES({
-                    'name': 'accept',
-                    'type': 'text'
-                })).set({
-                    'element': 'INPUT',
-                    'label': 'accept'
-                })
-            );
-            */
-
+            // When the input is set (selected from explorer)
+            // extract its data into the appropriate inputs (above)
             this.input.el.onchange = this.readURL.bind(this);
-        }
 
-        this.options = [];
-        this.datalist = new EL(node, 'DATALIST', new MODEL(
-            new ATTRIBUTES({
-                'id': model.attributes.name + '-options'
-            })
-        ));
-        if (Array.isArray(model.options)) {
-            for (let o = 0; o < model.options.length; o++) {
-                this.addOption(model.options[o].value);
+        } else {
+            // Add any preset options to the datalist
+            this.options = [];
+            this.datalist = new EL(this.node, 'DATALIST', new MODEL(
+                new ATTRIBUTES({
+                    'id': this.attributes.name + '-options'
+                })
+            ));
+            if (Array.isArray(this.options)) {
+                for (let o = 0; o < this.options.length; o++) {
+                    this.addOption(this.options[o].value);
+                }
             }
         }
     }
