@@ -27,6 +27,7 @@ class CONTAINER extends GROUP {
         @param {EL} node The element to contain the section
         @param {string} element HTML element
         @param {MODEL} model The CONTAINER object retrieved from the server
+        @param {array} containerList An array of strings representing child Containers that this Container can create
      */
     constructor(node, element, model = new MODEL().set({
         'element': element,
@@ -36,11 +37,13 @@ class CONTAINER extends GROUP {
         'showHeader': 1,
         'collapsed': 0,
         'shared': 1
-    })) {
+    }), containerList = []) {
         super(node, element, model);
         this.addClass('icarus-container');
 
-        this.dataElements = []; // Data elements contain a list of arguments for a data object
+        //this.dataElements = []; // Data elements contain a list of arguments for a data object
+        this.dataElements = DATAELEMENTS[this.className];
+
         this.attrEelements = []; // Attribute elements contain a list of attributes that apply for this object
 
         if (model.id) {
@@ -95,36 +98,59 @@ class CONTAINER extends GROUP {
             this.addNavBarDefaults();
         }
 
+        // Default permitted child containers
         this.addContainerCase('IFRAME');
         this.addContainerCase('FORM');
         this.addContainerCase('LIST');
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('BANNER');
-        //this.addContainerCase('TEXTBLOCK'); // Replaced by PARAGRAPH
         this.addContainerCase('PARAGRAPH');
 
+        // Add any additional containers from containerList
+        for (let c = 0; c < containerList.length; c++) {
+            this.addContainerCase(containerList[c]);
+        }
+
+        // Collapse or Expand Body Pane
         if (this.collapsed) {
             this.collapse();
         } else {
             this.expand();
         }
 
+        // Show or Hide the NavBar
         if (model.navBar) {
             if (!model.showHeader) {
                 this.navBar.hide();
             }
         }
 
+        // Adds a Tab to the SideBar (where applicable)
         if (model.hasTab) {
             this.tab = this.createTab(this);
-        }        
+        }
+
+        // These methods may need to be migrated within the extended objects
+        if (this.className !== 'CONTAINER') {
+            this.construct();
+        } else {
+            this.populate(model.children);
+        }
+
+        /*
+        // Load any children that were provided in the model
+        if (this.className === 'CONTAINER') {
+            this.populate(model.children);
+        }
+        */
     }
 
-    /**
-        Abstract construct method
-     */
+    /** Abstract construct method throws an error if not declared */
     construct() {
         debug('CONTAINER.construct();');
+        if (this.className !== 'CONTAINER') {
+            throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
+        }
     }
 
     /**
@@ -132,6 +158,9 @@ class CONTAINER extends GROUP {
 
         Create a in-memory div, set it's inner text(which jQuery automatically encodes
         then grab the encoded contents back out.  The div never exists on the page.
+
+        TODO: This really should just be an extention of the String class
+
         @param {any} value The string to be html encoded
         @returns {text} An html encoded string
      */
@@ -141,6 +170,9 @@ class CONTAINER extends GROUP {
 
     /**
         Decodes an HTML encoded value back into HTML string
+
+        TODO: This really should just be an extention of the String class
+
         @param {any} value An html encoded string
         @returns {string} A string that was previously html encoded
      */
@@ -1116,26 +1148,19 @@ class CONTAINER extends GROUP {
         Optionally, this should also delete the object from the database
     */
     disable() {
+        let label = 'Disable ' + this.className + '{'+ this.element + '}['+this.id+']';
+        let text = 'Remove ' + this.className + ' from ' + this.node.node.node.className + '?';
         try {
-            this.prompt = new PROMPT('Disable ' + this.element, 'Disable this '+this.element);
-
-            //this.prompt.form.footer.buttonGroup.empty();
-
-            /**
-                Modify prompt buttons
-            */
+            this.prompt = new PROMPT(label, text, [], [], true);
             this.prompt.form.footer.buttonGroup.children[0].setLabel('Remove', ICON.REMOVE);
             this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
                 this.destroy();
                 this.prompt.hide();
-            }.bind(this);
-
-            this.prompt.form.footer.buttonGroup.children[1].destroy();
-            
+            }.bind(this);            
             this.prompt.show();
-
         } catch (e) {
-            console.log('Unable to disable this '+this.element+'\n' + e);
+            debug('Unable to disable this ' + this.element);
+            debug(e);
         }
     }    
 }

@@ -247,7 +247,8 @@ const ICON = {
     TEXTAREA: 'glyphicon glyphicon-text-background',
     CALLOUT: 'glyphicon glyphicon-comment',
     THUMBNAIL: 'glyphicon glyphicon-credit-card',
-    TOGGLE: 'glyphicon glyphicon-check'
+    TOGGLE: 'glyphicon glyphicon-check',
+    IMAGE: 'glyphicon glyphicon-picture'
 };
 
 /**
@@ -275,6 +276,15 @@ const STATUS = {
  * This belongs on the database or within a config
  */
 const DATAELEMENTS = {
+
+    CONTAINER: [],
+    MAIN: [],
+
+    FORM: [],
+    FIELDSET: [],
+    FORMELEMENTGROUP: [],
+    FORMELEMENT: [],
+
     CALLOUT: [
         new MODEL(new ATTRIBUTES({
             'name': 'icon',
@@ -414,6 +424,17 @@ const DATAELEMENTS = {
                 })
             ]
         }),
+
+
+        new MODEL(new ATTRIBUTES({
+            'name': 'screencolor',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'screencolor'
+        }),
+
+
 
         new MODEL(new ATTRIBUTES({
             'name': 'bgcolor',

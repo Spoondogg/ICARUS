@@ -12,39 +12,44 @@ class FORMPOSTINPUT extends FORMELEMENT {
     constructor(node, model) {
         super(node, 'DIV', model);
 
-        console.log('FORMPOSTINPUT class');
-        console.log(model);
+        this.createInput();
+
+        this.populate(model.children);
+    }
+
+    createInput() {
+        //console.log('FORMPOSTINPUT class');
+        //console.log(model);
 
         this.inputGroup = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('input-group')));
-        
         this.input = new EL(this.inputGroup, 'INPUT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
-                'name': model.attributes.name,
-                'value': model.attributes.value,
-                'type': model.attributes.type || 'text'
+                'name': this.attributes.name,
+                'value': this.attributes.value,
+                'type': this.attributes.type || 'text'
             })
         ));
 
         this.form = null;
 
-        console.log('Val:' + model.attributes.value);
-        console.log(model);
+        //console.log('Val:' + model.attributes.value);
+        //console.log(model);
 
-        if (model.attributes.value > 0 || model.value > 0) {
-            console.log('btnEdit');
+        if (this.attributes.value > 0 || this.value > 0) {
+            //console.log('btnEdit');
             this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT1');
             this.btnEdit.el.onclick = this.editFormPost.bind(this);
-        } else {
-            console.log('btnNew');
+        } //else {
+            //console.log('btnNew');
             this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
             this.btnNew.el.onclick = function () {
                 // TODO:  PLEASE, fix this.  This is ugly
                 let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
-                this.newAttributes(container, model.attributes.name, model);
+                this.newAttributes(container, this.attributes.name, this);
             }.bind(this);
-        }
-    } 
+        //}
+    }
 
     /**
      * Sets the id of the original FormPostInput to the given value
@@ -286,7 +291,9 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     this.form.afterSuccessfulPost = function () {
                         console.log('success');
                         this.updateInput(data.model.id);
-                        this.form.loader.hide(200);
+
+                        //this.form.loader.hide(200);
+                        app.loader.hide();
                         //this.prompt.close(300);
                     }.bind(this);
 

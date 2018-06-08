@@ -315,6 +315,7 @@ class EL extends MODEL {
             let progress = 0; // 0 to 100
             
             app.loader.log(this.className + '.populate(' + children.length + ');');
+            app.loader.show();
             try {
                 for (let c = 0; c < children.length; c++) {
                     progress = Math.round((c+1) / denom * 100);

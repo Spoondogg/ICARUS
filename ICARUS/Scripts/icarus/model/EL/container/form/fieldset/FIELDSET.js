@@ -13,13 +13,15 @@ class FIELDSET extends CONTAINER {
         this.addClass('form-group-container');
         this.body.addClass('form-group'); // The expandable portion of the section
         this.addContainerCase('FORMELEMENTGROUP');
+        //this.construct();
+        this.populate(model.children);
+    }
 
+    construct() {
         if (this.dataId > 0) {
             if (this.data.legend) {
                 this.legend = new EL(this.body.pane, 'LEGEND', new MODEL(), this.data.legend);
             }
         }
-
-        this.populate(model.children);
     }
 }

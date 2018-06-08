@@ -16,9 +16,11 @@ class FORMELEMENT extends CONTAINER {
     constructor(node, element, model) {
         model.hasSidebar = 0;     
         super(node, 'DIV', model);
-        this.addClass('form-element');
+        this.addClass('form-element');        
+    }
 
-        let labelText = model ? model.label ? model.label : model.attributes.name ? model.attributes.name : '__NoLabel' : '__NoLabel';
+    construct() {
+        let labelText = this.label ? this.label : this.attributes.name ? this.attributes.name : '__NoLabel';
         this.label = new LABEL(this.body.pane, labelText);        
     }
 }

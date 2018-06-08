@@ -6,25 +6,23 @@
 */
 class FORM extends CONTAINER {
     /**
-        Constructs an Icarus Form.
+        Constructs a Form for collecting and posting
 
         @param {CONTAINER} node The parent object
         @param {MODEL} model The object model
      */
     constructor(node, model) {
-        super(node, 'FORM', model);
+        super(node, 'FORM', model, ['FIELDSET']);
         this.tokenInput = new TokenInput(this);
         this.setPostUrl('Form/Submit');
         this.updateUrl = 'Form/Update';
-                
-        this.addContainerCase('FIELDSET');
-
-        // Add the submit button
         this.footer = new IcarusFormFooter(this.body, new MODEL());
-        //this.footer.buttonGroup.addButton('Reset', ICON.RESET).el.onclick = this.reset.bind(this);
         this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.post.bind(this);
-
         this.populate(model.children);
+    }
+
+    construct() {
+
     }
 
     /**
