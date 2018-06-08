@@ -10,7 +10,11 @@ class SELECT extends FORMELEMENT {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
+        this.dataElements = ['options'];
+        this.createSelect();
+    }
 
+    createSelect() {
         this.input = new EL(this.body.pane, 'SELECT', new MODEL(
             new ATTRIBUTES({
                 'class': 'form-control',
@@ -18,19 +22,11 @@ class SELECT extends FORMELEMENT {
             })
         ));
 
-        //this.input.el.setAttribute('readonly', 'readonly');
-
-        this.dataElements = ['options'];
-
-        console.log('Select Options');
-        // Construct each select option based on this.data.options
         if (this.dataId > 0) {
             let options = this.data.options.split(',');
             try {
                 for (let o = 0; o < options.length; o++) {
                     console.log('Option[' + o + ']: ' + options[o]);
-                    //this.addOption(options[o].label, options[o].value, value === options[o].value);
-                    //this.addOption(options[o], options[o]);
                     new OPTION(this.input, options[o], options[o]);
                 }
             } catch (e) {

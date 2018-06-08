@@ -41,7 +41,8 @@ class MAIN extends CONTAINER {
         document.title = model.label;
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, new CONTAINERFACTORY());
+        super(document.body, 'MAIN', model, ['ARTICLE']);
+        this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);
         this.loader.log(100, 'Loading');
@@ -51,17 +52,19 @@ class MAIN extends CONTAINER {
 
         if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
-        }
-
-        this.body.pane.addClass('pane-tall');
+        }        
 
         this.addNavOptions();
         
         this.stickyFooter = new STICKYFOOTER(this, new MODEL());
         
-        this.addContainerCase('ARTICLE');
+        //this.addContainerCase('ARTICLE');
 
         this.populate(model.children);
+    }
+
+    construct() {
+
     }
 
     /**

@@ -11,8 +11,12 @@ class SECTION extends CONTAINER {
         @param {MODEL} model The SECTION object retrieves from the server
      */
     constructor(node, model) {
-        super(node, 'SECTION', model);
-        this.addContainerCase('FORM');
-        this.populate(model.children);
+        super(node, 'SECTION', model, ['FORM']);
+        //this.addContainerCase('FORM');
+        //this.populate(model.children);
+    }
+
+    construct() {
+
     }
 }

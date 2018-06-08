@@ -10,19 +10,18 @@ class PARAGRAPH extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.addClass('textblock');
-
         this.body.pane.addClass('paragraph');
+        //this.dataElements = DATAELEMENTS.PARAGRAPH;
+        this.addContainerCase('IMAGE');
+        //this.construct();
+        this.populate(model.children);
+    }
 
-        //this.dataElements = ['p'];
-        this.dataElements = DATAELEMENTS.PARAGRAPH;
-
+    construct() {
         if (this.dataId > 0) {
             if (this.data.p) {
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
             }
         }
-
-        this.addContainerCase('IMAGE');
-        this.populate(model.children);
     }
 }

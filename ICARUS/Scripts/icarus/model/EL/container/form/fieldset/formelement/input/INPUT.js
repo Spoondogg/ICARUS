@@ -8,16 +8,16 @@ class INPUT extends FORMELEMENT {
         @param {MODEL} model The model
      */
     constructor(node, model) {
-        super(node, 'DIV', model);
-
-        //this.dataElements = ['type', 'name', 'value'];
-        this.dataElements = DATAELEMENTS.INPUT;
-
-        this.construct(); 
-        
+        super(node, 'DIV', model);        
+        //this.dataElements = DATAELEMENTS.INPUT;
+        this.createInput();        
     }
 
-    construct() {
+    /**
+     * TODO:
+     * This should use a factory constructor pattern to create specific input types 
+     */
+    createInput() {
         let nm = this.attributes.name || this.data.name;
         let val = this.attributes.value || this.data.value;
         this.input = new EL(this.body.pane, 'INPUT', new MODEL(

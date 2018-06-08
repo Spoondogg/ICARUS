@@ -16,5 +16,11 @@ class TEXTAREA extends FORMELEMENT {
                 'name': model.attributes.name                
             })
         ), model.attributes.value || '');
+
+        //this.construct();
+    }
+
+    construct() {
+
     }
 }

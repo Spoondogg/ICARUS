@@ -8,8 +8,12 @@ class ARTICLE extends CONTAINER {
         @param {MODEL} model The text that is displayed within the footer
      */
     constructor(node, model) {
-        super(node, 'ARTICLE', model);    
-        this.addContainerCase('SECTION');
+        super(node, 'ARTICLE', model, ['SECTION']);    
+        //this.addContainerCase('SECTION');
         this.populate(model.children);
+    }
+
+    construct() {
+
     }
 }

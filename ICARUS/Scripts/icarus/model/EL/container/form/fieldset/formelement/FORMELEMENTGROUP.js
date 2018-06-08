@@ -10,12 +10,15 @@ class FORMELEMENTGROUP extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.addClass('form-element-group');
-
         this.addContainerCase('INPUT');
         this.addContainerCase('SELECT');
         this.addContainerCase('TEXTAREA');
-        
+        //this.construct();
         this.populate(model.children);
+    }
+
+    construct() {
+
     }
 
     /**
