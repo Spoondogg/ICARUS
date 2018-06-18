@@ -3,6 +3,7 @@
     //ViewBag.Description = "";
     //ViewBag.Version = "0.2.2018.05.07";
 }
+
 @section viewInit {
     @Html.AntiForgeryToken()
     <script type="text/javascript">
@@ -12,5 +13,13 @@
         const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
         const app = new MAIN();
         main(@ViewBag.id);
+
+        let url = new URL(window.location.href);
+        let isLogin = url.searchParams.get('login');
+        if (isLogin) {
+            if (user === 'Guest') {
+                app.login();
+            }            
+        }
     </script>
 }

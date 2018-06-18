@@ -41,7 +41,7 @@ class MAIN extends CONTAINER {
         document.title = model.label;
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, ['ARTICLE']);
+        super(document.body, 'MAIN', model, ['ARTICLE','INDEX']);
         this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);
@@ -59,12 +59,26 @@ class MAIN extends CONTAINER {
         this.stickyFooter = new STICKYFOOTER(this, new MODEL());
         
         //this.addContainerCase('ARTICLE');
+        //this.addContainerCase('INDEX');
 
         this.populate(model.children);
     }
 
     construct() {
 
+    }
+
+    /**
+     * Return the user or Guest if doesn't exist
+     */
+    getUser() {
+        let userVar;
+        try {
+            userVar = user;
+        } catch (e) {
+            userVar = 'Guest';
+        }
+        return userVar;
     }
 
     /**
@@ -116,6 +130,7 @@ class MAIN extends CONTAINER {
                     })
                 })
             ).el.onclick = function () {
+                console.log('Showing Console');
                 app.loader.show();
                 $(app.loader.console.el).collapse('show');
             }.bind(this);
@@ -257,7 +272,20 @@ class MAIN extends CONTAINER {
                     if (status === "success") {
                         this.loader.log(100, 'Success');
                         setTimeout(function () {
-                            location.reload(true);
+
+                            let url = new URL(window.location.href);
+                            let returnUrl = url.searchParams.get('ReturnUrl');
+
+                            if (returnUrl) {
+                                console.log(url);
+                                returnUrl = url.origin + returnUrl;
+                                console.log('Returning to Url: ' + returnUrl);
+                                document.location.href = returnUrl;
+                            } else {
+                                location.reload(true);
+                            }
+
+                            
                         }.bind(this), 1000);
                     } else {
                         this.loader.log(0, 'Login failed. (err_'+status+').<br>' +

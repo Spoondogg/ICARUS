@@ -11,8 +11,10 @@ class LOADER extends MODAL {
     constructor(label, text, value) {
         label = label ? label : '';
         value = value ? value : 0;
-
+        
         super(label, null, true);
+        //this.el.setAttribute('data-backdrop', 'static');
+        //this.el.setAttribute('data-keyboard', false);
 
         this.dialog.addClass('loader');
         //this.footer.el.style.display = 'none';
@@ -37,6 +39,10 @@ class LOADER extends MODAL {
 
         this.progressBar.el.onclick = function () {
             $(this.console.el).collapse('toggle');
+            setTimeout(function () {
+                this.hide();
+                
+            }.bind(this), 300);
         }.bind(this);
 
         if (this.well) {
@@ -53,15 +59,21 @@ class LOADER extends MODAL {
         @param {number} value Percentage as integer (ie: 50 means 50%).
         @param {string} text Text displayed inside progress bar.  
     */
-    log(value, text) {
-        this.show();
-        this.progressBar.el.style.width = value + '%';
-        this.progressBar.el.setAttribute('aria-valuenow', value);
-        if (text) {
-            let txt = text.substr(0, 32) + '...';
-            this.progressBar.setInnerHTML(txt);
-            this.console.addEntry(text);
-            debug(text);
+    log(value, text, show = false) {
+        if (this.el) {
+            this.progressBar.el.style.width = value + '%';
+            this.progressBar.el.setAttribute('aria-valuenow', value);
+            if (text) {
+                let txt = text.substr(0, 32) + '...';
+                this.progressBar.setInnerHTML(txt);
+                this.console.addEntry(text);
+                debug(text);
+            }
+            if (show) {
+                this.show();
+            }
+        } else {
+            console.log('Unable to find loader');
         }
     }
 }

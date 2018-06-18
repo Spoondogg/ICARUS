@@ -32,21 +32,21 @@ namespace ICARUS {
             
             // Bootstrap Styles
             bundles.Add(new StyleBundle("~/Content/css/bootstrap").Include(
-                "~/Content/css/bootstrap.css" //,new CssRewriteUrlTransform()
+                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
             ));
 
             // IcoMoon Styles
             bundles.Add(new StyleBundle("~/Content/css/icomoon").Include(
-                "~/Content/css/icomoon.css",
-                "~/Content/css/icomoon.eot",
-                "~/Content/css/icomoon.woff",
-                "~/Content/css/icomoon.ttf",
-                "~/Content/css/icomoon.svg.txt#icomoon"
+                "~/Content/css/icomoon/icomoon.css",
+                "~/Content/css/icomoon/icomoon.eot",
+                "~/Content/css/icomoon/icomoon.woff",
+                "~/Content/css/icomoon/icomoon.ttf",
+                "~/Content/css/icomoon/icomoon.svg.txt#icomoon"
             ));
 
             // Animate.css Styles
             bundles.Add(new StyleBundle("~/Content/css/animate").Include(
-                "~/Content/css/animate.css"
+                "~/Content/css/animate/animate.css"
             ));
 
             // Icarus specific styles - Names cannot contain UNDERSCORES
@@ -187,6 +187,9 @@ namespace ICARUS {
                 // List
                 "~/Scripts/icarus/model/el/container/list/listitem/LISTITEM.js",
                 "~/Scripts/icarus/model/el/container/list/LIST.js",
+
+                // Index
+                "~/Scripts/icarus/model/el/container/main/index/INDEX.js",
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",

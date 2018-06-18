@@ -201,6 +201,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\AbstractController.cs" />
@@ -444,6 +445,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
+    <Compile Include="Models\Icarus\Elements\INDEX.cs" />
     <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
@@ -520,11 +522,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\animate.css" />
-    <Content Include="Content\css\animate.min.css" />
-    <Content Include="Content\css\bootstrap.css" />
-    <Content Include="Content\css\bootstrap.min.css" />
-    <Content Include="Content\css\icomoon.css" />
+    <Content Include="Content\css\animate\animate.css" />
+    <Content Include="Content\css\animate\animate.min.css" />
+    <Content Include="Content\css\bootstrap\bootstrap.css" />
+    <Content Include="Content\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\css\icomoon\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />
     <Content Include="Content\css\spoonMedia\banner.css" />
     <Content Include="Content\css\spoonMedia\button.css" />
@@ -584,6 +586,7 @@
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
     <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
+    <Content Include="Scripts\icarus\model\el\container\main\index\INDEX.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />
@@ -653,8 +656,8 @@
     <Content Include="Scripts\icarus\_deprec\table\TABLE.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\ai.0.22.9-build00167.js" />
-    <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="Scripts\applicationinsights\ai.0.22.9-build00167.js" />
+    <Content Include="Scripts\applicationinsights\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Content\css\icomoon\.DS_Store" />
@@ -677,8 +680,8 @@
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr\modernizr-2.6.2.js" />
-    <Content Include="Scripts\bootstrap\respond.js" />
-    <Content Include="Scripts\bootstrap\respond.min.js" />
+    <Content Include="Scripts\respond\respond.js" />
+    <Content Include="Scripts\respond\respond.min.js" />
     <Content Include="Scripts\require\require-2.3.5.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -690,8 +693,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -713,13 +714,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\FormElements\Index.cshtml" />
-    <Content Include="Views\Forms\Index.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Roles\Create.cshtml" />
-    <Content Include="Views\FormGroups\Index.cshtml" />
-    <Content Include="Views\FormElementOptions\Index.cshtml" />
-    <Content Include="Views\Home\Sent.cshtml" />
     <Content Include="Views\Procedures\Create.cshtml" />
     <Content Include="Views\Procedures\Delete.cshtml" />
     <Content Include="Views\Procedures\Details.cshtml" />
@@ -732,9 +728,7 @@
     <Content Include="Views\Params\Edit.cshtml" />
     <Content Include="Views\Params\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
-    <Content Include="Views\FormPosts\Index.cshtml" />
     <Content Include="Views\Database\Index.cshtml" />
-    <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\Section\Index.cshtml" />
     <Content Include="Views\Container\Debug.cshtml" />
     <None Include="Web.Debug.config">
@@ -750,6 +744,11 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
+    <Folder Include="Views\FormElementOptions\" />
+    <Folder Include="Views\FormElements\" />
+    <Folder Include="Views\FormGroups\" />
+    <Folder Include="Views\FormPosts\" />
+    <Folder Include="Views\Forms\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

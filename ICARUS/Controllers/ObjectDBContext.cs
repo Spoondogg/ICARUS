@@ -91,6 +91,9 @@ namespace ICARUS.Controllers {
         public DbSet<List> Lists { get; set; }
         public object List { get; internal set; }
 
+        public DbSet<INDEX> Indexes { get; set; }
+        public object Index { get; internal set; }
+
         public DbSet<JUMBOTRON> Jumbotrons { get; set; }
         public object Jumbotron { get; internal set; }
 
@@ -148,6 +151,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Option", Options);
             this.dbSets.Add("ListItem", ListItems);
             this.dbSets.Add("List", Lists);
+            this.dbSets.Add("Index", Indexes);
             this.dbSets.Add("Jumbotron", Jumbotrons);
             this.dbSets.Add("Banner", Banners);
             this.dbSets.Add("Paragraph", Paragraphs);

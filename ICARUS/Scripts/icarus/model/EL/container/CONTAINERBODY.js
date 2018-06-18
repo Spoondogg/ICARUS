@@ -37,10 +37,7 @@ class CONTAINERBODY extends EL {
                 app.loader.log('Launch Editor for ' + node.className + '(' + node.id + ')');
                 $(node.navBar.header.menu.el).collapse('show');
                 node.btnSave.el.click();
-                debug('TODO: Focus Label');
-                //save(node);
-                // Prevent parent double click()
-                e.stopPropagation();
+                e.stopPropagation(); // Prevent parent double click()
             };
         }
     }

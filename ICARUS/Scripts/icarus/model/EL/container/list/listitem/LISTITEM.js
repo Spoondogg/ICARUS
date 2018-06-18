@@ -12,13 +12,16 @@ class LISTITEM extends CONTAINER {
         @param {MODEL} model Object MODEL
      */
     constructor(node, model) {
-        super(node, 'LI', model);
-        //this.addContainerCase('LIST');
-
-        if (model.dataId > 0) {
-            this.text = new P(this.body.pane, model.data, model.data.label);
-        }
-
+        super(node, 'LI', model, ['LIST']);
         this.populate(model.children);
+    }
+
+    construct() {
+        if (model.dataId > 0) {
+            //this.text = new P(this.body.pane, model.data, model.data.label); // 2018-06-13: swap for text
+            if (this.data.p) {
+                this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
+            }
+        }
     }
 }

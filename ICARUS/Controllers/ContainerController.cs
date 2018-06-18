@@ -63,6 +63,32 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
+        public virtual async Task<ActionResult> Count() {
+            //return Json(1);
+            /*
+            var count = (from s in getObjectDbContext().Containers
+                         where (s.authorId == User.Identity.Name) && (s.element == className)
+                         orderby s.label
+                         select s).Count();
+            */
+            IQueryable<Container> records = getObjectDbContext().Containers.Where(
+                r => (r.authorId == User.Identity.Name) && (r.element == className)
+            );
+            var count = records.Count();
+
+            /*
+            var posts = from p in getObjectDbContext().Containers
+                        where p.authorId == User.Identity.Name
+                        select p;
+            posts = posts.OrderByDescending(p => p.id); //.ThenByDescending(p => p.timestamp);
+            */
+
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            result.Add(className, count);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Create an instance of a Container on the database
         /// </summary>

@@ -66,6 +66,10 @@ class CONTAINERFACTORY {
                     obj = new JUMBOTRON(span, result.model);
                     break;
 
+                case 'INDEX':
+                    obj = new INDEX(span, result.model);
+                    break;
+
                 /*
                 case 'HEADER':
                     obj = new HEADER(span, result.model);

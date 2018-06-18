@@ -96,13 +96,17 @@ class MODAL extends EL { // ALIGN VERTICALLY??
     }
 
     /**
-        Hide the modal and remove from DOM
+        Hide the modal // and remove from DOM
         @param {number} delay Millisecond delay
+        @param {boolean} destroy If true, this modal is destroyed
     */
-    hide(delay = 1000) {
+    hide(delay = 1000, destroy = false) {
         setTimeout(function () {
             $(this.el).modal('hide');
             $('.modal-backdrop').animate({ opacity: 'toggle' }, 300).remove();
+            if (destroy) {
+                this.destroy(delay);
+            }
         }.bind(this), delay);
     }
 
