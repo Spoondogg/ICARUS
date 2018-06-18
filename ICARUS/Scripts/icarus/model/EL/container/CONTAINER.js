@@ -13,7 +13,8 @@ var CONTAINERTYPES = {
     INPUT: 'INPUT',
     SELECT: 'SELECT',
     TEXTAREA: 'TEXTAREA',
-    DIV: 'DIV'
+    DIV: 'DIV',
+    INDEX: 'INDEX'
 };
 
 /**
@@ -377,6 +378,9 @@ class CONTAINER extends GROUP {
                         console.log(e);
                     }
                 }
+
+                this.navBar.header.toggleCollapse();
+
             }.bind(this);
 
             this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
@@ -842,6 +846,38 @@ class CONTAINER extends GROUP {
     }
 
     /**
+     * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
+     * @param {any} key The object key to search within
+     * @param {any} value The value to search for within this key
+     * @param {any} node Entry point to traversing the chain
+     * @param {any} attempt Recursion loop
+     * @returns {CONTAINER} The parent container
+     */
+    getContainer(key, value, node = this.node, attempt = 0) {
+        attempt++;
+
+        debug('Searching for ' + key + ': ' + value + '(' + attempt + ')');
+        debug(node);
+
+        if (attempt < 100) {
+            try {
+                debug('id: ' + node.id);
+                if (node[key] === value.toString()) {
+                    return node;
+                } else {
+                    return this.getContainer(key, value, node.node, attempt++);
+                }
+            } catch (e) {
+                debug(e);
+            }
+        } else {
+            debug('getContainer(): Too many attempts (' + attempt + ')');
+        }
+    }
+
+    
+
+    /**
      * Creates an empty form with a single fieldset and formelementgroup
      * @param {EL} node Parent node
      * @param {boolean} hidden If true, form is hidden
@@ -1071,14 +1107,16 @@ class CONTAINER extends GROUP {
                 this.quickSaveFormPost(this.dataId, this.data);
                 this.quickSaveFormPost(this.attributesId, this.attributes);
 
-                app.loader.hide();
+                //app.loader.hide();
             }.bind(this);
 
             app.loader.log(100, 'Quick Save Complete');
-            app.loader.hide();
+            //app.loader.hide();
         } else {
             console.log('Quick Save Cancelled');
         }
+
+        this.navBar.header.toggleCollapse();
     }
 
     /**
@@ -1088,7 +1126,7 @@ class CONTAINER extends GROUP {
      */
     afterSuccessfulPost(node, caller) {
         app.loader.log(100, 'Success');
-        app.loader.hide();
+        //app.loader.hide();
     }
 
     /**

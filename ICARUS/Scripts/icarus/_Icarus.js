@@ -229,26 +229,25 @@ const ICON = {
     CERTIFICATE: 'glyphicon-certificate',
     USER: 'glyphicon-user',
     EXCLAMATION: 'glyphicon-exclamation-sign',
-    PUBLIC: 'glyphicon glyphicon-eye-open',
-    PRIVATE: 'glyphicon glyphicon-eye-close',
-    IFRAME: 'glyphicon glyphicon-new-window',
-    CONSOLE: 'glyphicon glyphicon-new-window',
-    FORM: 'glyphicon glyphicon-list-alt',
-    LIST: 'glyphicon glyphicon-th-list',
-    JUMBOTRON: 'glyphicon glyphicon-blackboard',
-    BANNER: 'glyphicon glyphicon-th-large',
-    PARAGRAPH: 'glyphicon glyphicon-text-background',
-    FIELDSET: 'glyphicon glyphicon-folder-close',
-    ARTICLE: 'glyphicon glyphicon-file',
-    SECTION: 'glyphicon glyphicon-indent-left',
-    FORMELEMENTGROUP: 'glyphicon glyphicon-tasks',
-    INPUT: 'glyphicon glyphicon-log-in',
-    SELECT: 'glyphicon glyphicon-tasks',
-    TEXTAREA: 'glyphicon glyphicon-text-background',
-    CALLOUT: 'glyphicon glyphicon-comment',
-    THUMBNAIL: 'glyphicon glyphicon-credit-card',
-    TOGGLE: 'glyphicon glyphicon-check',
-    IMAGE: 'glyphicon glyphicon-picture'
+    PUBLIC: 'glyphicon-eye-open',
+    PRIVATE: 'glyphicon-eye-close',
+    IFRAME: 'glyphicon-new-window',
+    CONSOLE: 'glyphicon-new-window',
+    FORM: 'glyphicon-list-alt',
+    JUMBOTRON: 'glyphicon-blackboard',
+    BANNER: 'glyphicon-th-large',
+    PARAGRAPH: 'glyphicon-text-background',
+    FIELDSET: 'glyphicon-folder-close',
+    ARTICLE: 'glyphicon-file',
+    SECTION: 'glyphicon-indent-left',
+    FORMELEMENTGROUP: 'glyphicon-tasks',
+    INPUT: 'glyphicon-log-in',
+    SELECT: 'glyphicon-tasks',
+    TEXTAREA: 'glyphicon-text-background',
+    CALLOUT: 'glyphicon-comment',
+    THUMBNAIL: 'glyphicon-credit-card',
+    TOGGLE: 'glyphicon-check',
+    IMAGE: 'glyphicon-picture'
 };
 
 /**
@@ -277,7 +276,21 @@ const STATUS = {
  */
 const DATAELEMENTS = {
 
+    LIST: [],
+    LISTITEM: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        })
+    ],
+
     CONTAINER: [],
+
+
+
     MAIN: [],
 
     FORM: [],

@@ -57,6 +57,48 @@ class EL extends MODEL {
     }
 
     /**
+     * Recursively iterates through parent nodes until an object with the given prototype
+     * @param {any} key The object key to search within
+     * @param {any} value The value to search for within this key
+     * @param {any} node Entry point to traversing the chain
+     * @param {any} attempt Recursion loop
+     * @returns {CONTAINER} The parent container
+     */
+    getProtoTypeByClass(value, node = this.node, attempt = 0) {
+        attempt++;
+        try {
+            debug('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')');
+            debug(node);
+
+            if (attempt < 100) {
+                try {
+                    debug('id: ' + node.id);
+                    debug('super class: ');
+                    debug(node.__proto__);
+                    if (node.__proto__.__proto__.constructor.name === value.toString()) {
+                        return node;
+                    } else {
+                        return this.getProtoTypeByClass(value, node.node, attempt++);
+                    }
+                } catch (e) {
+                    debug(e);
+                }
+            } else {
+                debug('getProtoTypeByClass(): Too many attempts (' + attempt + ')');
+            }
+        } catch (e) {
+            //TypeError: this.getProtoTypeByClass is not a function
+            if (e.name === 'TypeError') {
+                console.log('Error Caught: ' + e.message);
+
+            } else {
+                console.log('Error not caught.');
+            }
+            console.log(e);
+        }
+    }
+
+    /**
      * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
@@ -93,12 +135,19 @@ class EL extends MODEL {
             this.editor.destroy();
             $(this.el).removeClass('edit');
             debug('QuickSave');
+            this.getProtoTypeByClass('CONTAINER').quickSave(true);
+            /*
             try {
-                //this.getContainer('class', 'icarus-container')
-                this.node.node.node.quickSave(true);
+               
+                this.getProtoTypeByClass('CONTAINER').quickSave(true);
+                //this.node.node.node.quickSave(true);
+
             } catch (e) {
+                this.node.getProtoTypeByClass('CONTAINER').quickSave(true);
+
                 debug(e);
             }
+            */
         }.bind(this);
 
         this.editor.input.el.focus();

@@ -34,8 +34,8 @@ class NAVHEADER extends MENU {
             new MODEL('navbar-nav-right pull-right').set({
                 'name': 'options'
             })
-        );
-        
+        );        
+
         if (user === 'Guest') {
             this.btnLogin = this.options.addNavItem(
                 new MODEL().set({

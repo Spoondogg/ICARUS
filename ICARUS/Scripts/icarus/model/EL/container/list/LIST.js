@@ -12,10 +12,13 @@ class LIST extends CONTAINER {
         @param {MODEL} model Object MODEL
      */
     constructor(node, model) {
-        super(node, 'UL', model);
+        super(node, 'UL', model, ['LISTITEM']);
         this.addClass('list');
-        //this.addContainerCase('LIST');
-        this.addContainerCase('LISTITEM');
         this.populate(model.children);
     }
+
+    construct() {
+
+    }
+
 }

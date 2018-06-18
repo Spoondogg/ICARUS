@@ -39,7 +39,11 @@ class FORMPOSTINPUT extends FORMELEMENT {
         if (this.attributes.value > 0 || this.value > 0) {
             //console.log('btnEdit');
             this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT1');
-            this.btnEdit.el.onclick = this.editFormPost.bind(this);
+            this.btnEdit.el.onclick = function () {
+                console.log('Editing FormPost: ' + this.label);
+                console.log(this);
+                this.editFormPost();
+            }.bind(this);
         } //else {
             //console.log('btnNew');
             this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
@@ -57,36 +61,6 @@ class FORMPOSTINPUT extends FORMELEMENT {
      */
     updateInput(id) {
         this.input.el.value = id;
-    }
-
-    /**
-     * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
-     * @param {any} key The object key to search within
-     * @param {any} value The value to search for within this key
-     * @param {any} node Entry point to traversing the chain
-     * @param {any} attempt Recursion loop
-     * @returns {CONTAINER} The parent container
-     */
-    getContainer(key, value, node = this.node, attempt = 0) {
-        attempt++;
-
-        debug('Searching for ' + key + ': ' + value + '(' + attempt + ')');
-        debug(node);
-
-        if (attempt < 100) {
-            try {
-                debug('id: ' + node.id);
-                if (node[key] === value.toString()) {
-                    return node;
-                } else {
-                    return this.getContainer(key, value, node.node, attempt++);
-                }
-            } catch (e) {
-                debug(e);
-            }
-        } else {
-            debug('getContainer(): Too many attempts (' + attempt + ')');
-        }
     }
 
     /**
@@ -181,7 +155,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     // TODO: Iterate though input values
                     console.log('TODO: Iterate through inputs and update values in model');
 
-                    app.loader.hide();
+                    //app.loader.hide();
                 }.bind(this);
 
             }.bind(this));
@@ -196,7 +170,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
         Opens a Modal Form populated with an open version of the FormPost
 
      */
-    editFormPost() {
+    editFormPost(inputArray) {
 
         // If given value is an integer, assume this is the FormPostId, 
         // otherwise, retrieve the formpost
@@ -293,7 +267,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         this.updateInput(data.model.id);
 
                         //this.form.loader.hide(200);
-                        app.loader.hide();
+                        //app.loader.hide();
                         //this.prompt.close(300);
                     }.bind(this);
 
@@ -379,6 +353,11 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         } catch (e) {
                             debug(e);
                         }
+
+                        this.form = this.createEmptyForm();
+                        this.form.label = 'Modify';
+                        this.form.fieldset.formElementGroup.label = 'Attributes';
+                        /*
                         this.form = new FORM(
                             this.body.pane,
                             new MODEL().set({
@@ -405,6 +384,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                                 'hasTab': 0
                             })
                         );
+                        */
 
                         // Empty out and populate with Form Elements only                    
                         this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
@@ -434,10 +414,10 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         this.form.afterSuccessfulPost = function () {
                             app.loader.log(100, 'Updated Attributes');
                             this.updateInput(data.model.id);
-                            app.loader.hide();
+                            //app.loader.hide();
                         }.bind(this);
 
-                        app.loader.hide();
+                        //app.loader.hide();
 
                     } else {
                         app.loader.log('Unable to retrieve parent container');
