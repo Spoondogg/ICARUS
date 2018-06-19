@@ -19,7 +19,8 @@ class THUMBNAIL extends CONTAINER {
 
     construct() {
         this.image = new IMG(this.body.pane, new MODEL());
-        if (this.dataId > 0) {
+        console.log('dataId:' + this.dataId);
+        if (this.dataId > 0 || this.dataId === -1) {
 
             let parsed = null;
 
@@ -34,11 +35,7 @@ class THUMBNAIL extends CONTAINER {
 
                             // If access granted...
                             if (data.model) {
-                                //console.log('Retrieved image id: ' + parseInt(this.data.img));
-                                //console.log(data.model);
-                                //console.log('Parsed...');
                                 parsed = JSON.parse(data.model.jsonResults);
-                                //console.log(parsed);
 
                                 // Extract the base64 values and create an image
                                 for (let p = 0; p < parsed.length; p++) {
@@ -47,11 +44,13 @@ class THUMBNAIL extends CONTAINER {
                                     }
                                 }
                             }
+
                         }.bind(this));
                     } catch (e) {
                         console.log('Unable to retrieve FormPost.');
                         console.log(e);
                     }
+
                 } else {
                     this.image = new EL(this.body.pane, 'IMG', new MODEL(new ATTRIBUTES({
                         'src': this.data.img
@@ -63,34 +62,38 @@ class THUMBNAIL extends CONTAINER {
                 'label': this.data.header
             }));
             this.p = new P(this.body.pane, new MODEL(), truncate(this.data.p, 128));
-            //this.footer = new FOOTER(this.body.pane, new MODEL());
+
             this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
             this.button = this.buttonGroup.addButton('', ICON.CHEVRON_RIGHT);
             this.button.addClass('btn-block');
 
             this.button.el.onclick = function () {
-                console.log('Launch Modal');
-
-                let modal = new MODAL(this.data.header);
-                modal.container.body.pane.addClass('thumbnail');
-                modal.container.image = new IMG(modal.container.body.pane, new MODEL());
-                modal.container.image.el.src = this.image.el.src; //parsed[p].value;
-
-                //for (let p = 0; p < parsed.length; p++) {
-                    //if (parsed[p].name === 'base64') {
-                        //modal.container.image.el.src = parsed[p].value;
-                    //}
-                //}
-
-                modal.container.header = new HEADER(modal.container.body.pane, new MODEL().set({
-                    'label': this.data.header
-                }));
-                modal.container.p = new P(modal.container.body.pane, new MODEL(new ATTRIBUTES({
-                    'style': 'height:auto;'
-                })), this.data.p);
-
-                modal.show();
+                this.launchModal();
             }.bind(this);
         }
     }
+
+    /**
+     * Launches a modal that contains the detailed view of the given article
+     */
+    launchModal() {
+        console.log('Launch Modal');
+
+        let modal = new MODAL(this.data.header);
+        modal.container.body.pane.addClass('thumbnail');
+
+        modal.container.image = new IMG(modal.container.body.pane, new MODEL());
+        modal.container.image.el.src = this.image.el.src;
+
+        modal.container.header = new HEADER(modal.container.body.pane, new MODEL().set({
+            'label': this.data.header
+        }));
+
+        modal.container.p = new P(modal.container.body.pane, new MODEL(new ATTRIBUTES({
+            'style': 'height:auto;'
+        })), this.data.p);
+
+        modal.show();
+    }
+
 }

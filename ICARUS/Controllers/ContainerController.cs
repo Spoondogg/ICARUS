@@ -63,29 +63,43 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Returns a count of all matching containers that belong to this user
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         public virtual async Task<ActionResult> Count() {
-            //return Json(1);
-            /*
-            var count = (from s in getObjectDbContext().Containers
-                         where (s.authorId == User.Identity.Name) && (s.element == className)
-                         orderby s.label
-                         select s).Count();
-            */
             IQueryable<Container> records = getObjectDbContext().Containers.Where(
                 r => (r.authorId == User.Identity.Name) && (r.element == className)
             );
             var count = records.Count();
 
-            /*
-            var posts = from p in getObjectDbContext().Containers
-                        where p.authorId == User.Identity.Name
-                        select p;
-            posts = posts.OrderByDescending(p => p.id); //.ThenByDescending(p => p.timestamp);
-            */
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("count", count);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
-            Dictionary<string, int> result = new Dictionary<string, int>();
-            result.Add(className, count);
+        /// <summary>
+        /// Returns a list of Container Ids that belong to this user
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public virtual async Task<ActionResult> List() {
+            var list = from s in getObjectDbContext().Containers
+                        where (s.authorId == User.Identity.Name) && (s.element == className)
+                        select s;
+            list = list.OrderByDescending(s => s.id);
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+
+            List<int> listArray = new List<int>();
+            foreach(var li in list) {
+                listArray.Add(li.id);
+            }
+
+            result.Add("list", listArray);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

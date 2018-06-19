@@ -5,7 +5,6 @@ class MAIN extends CONTAINER {
     /**
         Constructs an APP
         @param {MODEL} model APP model
-        param {string} antiForgeryToken An authentication token
      */
     constructor(model) {
         model = model || new MODEL().set({
@@ -57,9 +56,6 @@ class MAIN extends CONTAINER {
         this.addNavOptions();
         
         this.stickyFooter = new STICKYFOOTER(this, new MODEL());
-        
-        //this.addContainerCase('ARTICLE');
-        //this.addContainerCase('INDEX');
 
         this.populate(model.children);
     }
@@ -275,17 +271,13 @@ class MAIN extends CONTAINER {
 
                             let url = new URL(window.location.href);
                             let returnUrl = url.searchParams.get('ReturnUrl');
-
                             if (returnUrl) {
-                                console.log(url);
                                 returnUrl = url.origin + returnUrl;
-                                console.log('Returning to Url: ' + returnUrl);
-                                document.location.href = returnUrl;
+                                location.href = returnUrl;
                             } else {
                                 location.reload(true);
                             }
 
-                            
                         }.bind(this), 1000);
                     } else {
                         this.loader.log(0, 'Login failed. (err_'+status+').<br>' +
@@ -295,7 +287,8 @@ class MAIN extends CONTAINER {
                         debug('Payload:\n');
                         debug(payload);
                     }
-                }.bind(this));
+                }.bind(this)
+            );
         }.bind(this);
         this.prompt.show();
 

@@ -179,17 +179,16 @@ namespace ICARUS {
                 // Jumbotrons and Banners
                 "~/Scripts/icarus/model/el/container/jumbotron/JUMBOTRON.js",
                 "~/Scripts/icarus/model/el/container/banner/thumbnail/THUMBNAIL.js",
+                "~/Scripts/icarus/model/el/container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js",
                 "~/Scripts/icarus/model/el/container/banner/callout/CALLOUT.js",
                 "~/Scripts/icarus/model/el/container/banner/BANNER.js",
+                "~/Scripts/icarus/model/el/container/banner/index/INDEX.js",
                 "~/Scripts/icarus/model/el/container/paragraph/PARAGRAPH.js",
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 
                 // List
                 "~/Scripts/icarus/model/el/container/list/listitem/LISTITEM.js",
                 "~/Scripts/icarus/model/el/container/list/LIST.js",
-
-                // Index
-                "~/Scripts/icarus/model/el/container/main/index/INDEX.js",
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",
