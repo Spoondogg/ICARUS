@@ -583,10 +583,11 @@
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
     <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
-    <Content Include="Scripts\icarus\model\el\container\main\index\INDEX.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\index\INDEX.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />

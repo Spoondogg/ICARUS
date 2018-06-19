@@ -8,11 +8,11 @@ class BANNER extends CONTAINER {
         @param {MODEL} model Object Model
      */
     constructor(node, model) {
-        super(node, 'DIV', model);
+        super(node, 'DIV', model, ['CALLOUT','THUMBNAIL']);
         this.body.pane.addClass('banner');
         this.body.pane.addClass('noselect');
-        this.addContainerCase('CALLOUT');
-        this.addContainerCase('THUMBNAIL');
+        //this.addContainerCase('CALLOUT');
+        //this.addContainerCase('THUMBNAIL');
         this.populate(model.children);
     }
 

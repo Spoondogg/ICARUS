@@ -75,7 +75,8 @@ namespace ICARUS.Controllers {
             switch (result) {
                 case SignInStatus.Success:
                     //return RedirectToLocal(returnUrl);
-                    return Json(new Payload(1, "Successfully logged in"));
+                    //int result, string className, object model, string message
+                    return Json(new Payload(1, "MODEL", result, "Successfully logged in"));
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
