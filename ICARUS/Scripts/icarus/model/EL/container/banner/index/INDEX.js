@@ -13,7 +13,7 @@ class INDEX extends BANNER {
     }
 
     construct() {
-        let elementList = ['Main', 'Article', 'Form'];
+        let elementList = ['Article', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL']; //'Main',
 
         //this.list = new LIST(this.body.pane, new MODEL());
 

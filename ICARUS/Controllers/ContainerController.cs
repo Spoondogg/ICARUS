@@ -94,9 +94,16 @@ namespace ICARUS.Controllers {
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("className", className);
 
-            List<int> listArray = new List<int>();
-            foreach(var li in list) {
-                listArray.Add(li.id);
+            List<Dictionary<string, object>> listArray = new List<Dictionary<string, object>>();
+            //List<Container> listArray = new List<Container>();
+            foreach (var li in list) {
+                
+                Dictionary<string, object> attribs = new Dictionary<string, object>();
+                attribs.Add("id", li.id);
+                attribs.Add("label", li.label);
+                listArray.Add(attribs);
+                
+                //listArray.Add(li);
             }
 
             result.Add("list", listArray);
