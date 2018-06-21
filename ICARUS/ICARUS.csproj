@@ -202,6 +202,7 @@
     <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\MenuListController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\AbstractController.cs" />
@@ -446,6 +447,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
     <Compile Include="Models\Icarus\Elements\INDEX.cs" />
+    <Compile Include="Models\Icarus\Elements\MenuList.cs" />
     <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
@@ -589,6 +591,7 @@
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
     <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\index\INDEX.js" />
+    <Content Include="Scripts\icarus\model\el\container\menulist\MENULIST.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\formpostinput\FORMPOSTINPUT.js" />
