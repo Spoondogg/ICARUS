@@ -73,9 +73,26 @@
     cursor: pointer;
 }
 
+
+
     .nav-item a .glyphicon {
         padding-right: 0.5em;
         float: left;
+    }
+
+/*Nav Item within a MenuList */
+.menulist .container-body ul.nav .nav-item {
+    border-top: 1px solid #545454;
+    border-bottom: 1px solid #252525;
+    line-height: 3em;
+    background-color: #3c3c3c;
+    padding: 0 1em;
+    color: #d4d4d4;
+}
+
+    .menulist .container-body ul.nav .nav-item:hover {
+        color: #eee;
+        background-color: #313131;
     }
 
 .nav-item-icon {

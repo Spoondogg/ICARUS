@@ -46,6 +46,10 @@ class CONTAINERFACTORY {
                     obj = new LIST(span, result.model);
                     break;
 
+                case 'MENULIST':
+                    obj = new MENULIST(span, result.model);
+                    break;
+
                 case 'MENU':
                     obj = new MENU(span, result.model);
                     break;

@@ -141,10 +141,6 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/group/ul/listgroup/LISTGROUP.js",
                 "~/Scripts/icarus/model/el/group/buttongroup/BUTTONGROUP.js",
 
-                
-
-                
-
                 // Button
                 "~/Scripts/icarus/model/el/button/BUTTON.js",
                 "~/Scripts/icarus/model/el/button/togglebutton/TOGGLEBUTTON.js",
@@ -155,19 +151,12 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/modal/modalmenu/MODALMENU.js",
                 "~/Scripts/icarus/model/el/modal/prompt/PROMPT.js",
 
-                
-                
-
                 // Layout and Navigation
                 "~/Scripts/icarus/model/el/nav/NAV.js",
                 "~/Scripts/icarus/model/el/nav/navbar/NAVBAR.js",
                 "~/Scripts/icarus/model/el/header/HEADER.js",
                 "~/Scripts/icarus/model/el/footer/FOOTER.js",
                 "~/Scripts/icarus/model/el/footer/stickyfooter/STICKYFOOTER.js",
-
-
-
-
 
 
                 // Container Generics
@@ -186,6 +175,7 @@ namespace ICARUS {
                 // List
                 "~/Scripts/icarus/model/el/container/list/listitem/LISTITEM.js",
                 "~/Scripts/icarus/model/el/container/list/LIST.js",
+                "~/Scripts/icarus/model/el/container/menulist/MENULIST.js",
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",

@@ -45,7 +45,7 @@ class CONTAINER extends GROUP {
         // Data elements contain a list of arguments for a data object
         this.dataElements = DATAELEMENTS[this.className];
 
-        this.attrEelements = []; // Attribute elements contain a list of attributes that apply for this object
+        this.attrElements = []; // Attribute elements contain a list of attributes that apply for this object
 
         if (model.id) {
             this.el.setAttribute('id', model.id);
@@ -103,6 +103,7 @@ class CONTAINER extends GROUP {
         this.addContainerCase('IFRAME');
         this.addContainerCase('FORM');
         this.addContainerCase('LIST');
+        this.addContainerCase('MENULIST');
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('BANNER');
         this.addContainerCase('PARAGRAPH');

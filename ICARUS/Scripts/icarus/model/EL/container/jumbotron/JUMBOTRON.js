@@ -42,7 +42,7 @@ class JUMBOTRON extends CONTAINER {
             }
 
             // Test to see if the formpost can be retrieved            
-            if (this.data.bgimage && this.data.bgimage !== '.') {
+            if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
                 //console.log('JUMBOTRON');
                 try {
                     $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
