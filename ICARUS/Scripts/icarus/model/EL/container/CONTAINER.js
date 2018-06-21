@@ -42,7 +42,7 @@ class CONTAINER extends GROUP {
         super(node, element, model);
         this.addClass('icarus-container');
 
-        //this.dataElements = []; // Data elements contain a list of arguments for a data object
+        // Data elements contain a list of arguments for a data object
         this.dataElements = DATAELEMENTS[this.className];
 
         this.attrEelements = []; // Attribute elements contain a list of attributes that apply for this object

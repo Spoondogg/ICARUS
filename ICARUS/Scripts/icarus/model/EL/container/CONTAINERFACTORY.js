@@ -92,6 +92,10 @@ class CONTAINERFACTORY {
                     obj = new THUMBNAIL(span, result.model);
                     break;
 
+                case 'INDEXTHUMBNAIL':
+                    obj = new INDEXTHUMBNAIL(span, result.model);
+                    break;
+
                 case 'IFRAME':
                     obj = new IFRAME(span, result.model);
                     break;

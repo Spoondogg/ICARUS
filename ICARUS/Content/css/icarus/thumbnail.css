@@ -11,7 +11,7 @@
         background-color: grey;
     }
 
-    .thumbnail header {
+    .thumbnail > header {
         font-weight: bold;
         margin: 0 0 .6em;
         padding: 0.6em 0.6em;

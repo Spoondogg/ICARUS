@@ -10,38 +10,34 @@ namespace ICARUS {
     public class BundleConfig {
         
         public static void RegisterBundles(BundleCollection bundles) {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/jquery.js").Include(
+                "~/Scripts/jquery/jquery-{version}.js"
+            ));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery/jquery.validate*"));
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval.js").Include(
+                "~/Scripts/jquery/jquery.validate*"
+            ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr/modernizr-*"));
-
-            // http://requirejs.org/docs/download.html#latest
-            bundles.Add(new ScriptBundle("~/bundles/require").Include(
-                        "~/Scripts/require/require-*"));
-
-            // TODO Automate minified in final build
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap/bootstrap.js",
-                      "~/Scripts/bootstrap/respond.js"));
-            
-            // Bootstrap Styles
-            bundles.Add(new StyleBundle("~/Content/css/bootstrap").Include(
-                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
+            bundles.Add(new ScriptBundle("~/bundles/modernizr.js").Include(
+                "~/Scripts/modernizr/modernizr-*"
             ));
 
-            // IcoMoon Styles
-            bundles.Add(new StyleBundle("~/Content/css/icomoon").Include(
-                "~/Content/css/icomoon/icomoon.css",
-                "~/Content/css/icomoon/icomoon.eot",
-                "~/Content/css/icomoon/icomoon.woff",
-                "~/Content/css/icomoon/icomoon.ttf",
-                "~/Content/css/icomoon/icomoon.svg.txt#icomoon"
+            // http://requirejs.org/docs/download.html#latest
+            bundles.Add(new ScriptBundle("~/bundles/require.js").Include(
+                "~/Scripts/require/require-*"
+            ));
+
+            // TODO Automate minified in final build
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap.js").Include(
+                "~/Scripts/bootstrap/bootstrap.js",
+                "~/Scripts/bootstrap/respond.js"
+            ));
+            
+            // Bootstrap Styles
+            bundles.Add(new StyleBundle("~/Content/css/bootstrap.css").Include(
+                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
             ));
 
             // Animate.css Styles
@@ -50,35 +46,36 @@ namespace ICARUS {
             ));
 
             // Icarus specific styles - Names cannot contain UNDERSCORES
-            bundles.Add(new StyleBundle("~/Content/css/icarus").Include(
-                "~/Content/css/spoonMedia/icarus.css",
-                "~/Content/css/spoonMedia/icon.css",
-                "~/Content/css/spoonMedia/thumbnail.css",
-                "~/Content/css/spoonMedia/console.css",
-                "~/Content/css/spoonMedia/loader.css",
-                "~/Content/css/spoonMedia/container.css",
-                "~/Content/css/spoonMedia/main.css",
-                "~/Content/css/spoonMedia/label.css",
-                "~/Content/css/spoonMedia/textblock.css",
-                "~/Content/css/spoonMedia/dropdown.css",
-                "~/Content/css/spoonMedia/button.css",
-                "~/Content/css/spoonMedia/glyphicon.css",
-                "~/Content/css/spoonMedia/navbar.css",
-                "~/Content/css/spoonMedia/prompt.css",
-                "~/Content/css/spoonMedia/modal.css",
-                "~/Content/css/spoonMedia/banner.css",
-                "~/Content/css/spoonMedia/jumbotron.css",
-                "~/Content/css/spoonMedia/section.css",
-                "~/Content/css/spoonMedia/form.css",
-                "~/Content/css/spoonMedia/elementgroup.css",
-                "~/Content/css/spoonMedia/footer.css",
-                "~/Content/css/spoonMedia/table.css",
-                "~/Content/css/spoonMedia/mobile.css"
+            bundles.Add(new StyleBundle("~/Content/css/icarus.css").Include(
+                "~/Content/css/icarus/icarus.css",
+                "~/Content/css/icarus/icon.css",
+                "~/Content/css/icarus/thumbnail.css",
+                "~/Content/css/icarus/console.css",
+                "~/Content/css/icarus/loader.css",
+                "~/Content/css/icarus/container.css",
+                "~/Content/css/icarus/main.css",
+                "~/Content/css/icarus/label.css",
+                "~/Content/css/icarus/textblock.css",
+                "~/Content/css/icarus/dropdown.css",
+                "~/Content/css/icarus/button.css",
+                "~/Content/css/icarus/glyphicon.css",
+                "~/Content/css/icarus/navbar.css",
+                "~/Content/css/icarus/prompt.css",
+                "~/Content/css/icarus/preview.css",
+                "~/Content/css/icarus/modal.css",
+                "~/Content/css/icarus/banner.css",
+                "~/Content/css/icarus/jumbotron.css",
+                "~/Content/css/icarus/section.css",
+                "~/Content/css/icarus/form.css",
+                "~/Content/css/icarus/elementgroup.css",
+                "~/Content/css/icarus/footer.css",
+                "~/Content/css/icarus/table.css",
+                "~/Content/css/icarus/mobile.css"
             ));
 
             // Custom Javascript objects from the Icarus.js library (Ordered by Dependency)
             // bundles.Add(new ScriptBundle("~/bundles/icarus").IncludeDirectory("~/Scripts/icarus", "*.js", true)); // All objects in folder (alphabetical)
-            bundles.Add(new ScriptBundle("~/bundles/icarus").Include(
+            bundles.Add(new ScriptBundle("~/bundles/icarus.js").Include(
 
                 // Model
                 "~/Scripts/icarus/model/ATTRIBUTES.js",
