@@ -23,7 +23,7 @@ class FORMELEMENTGROUP extends CONTAINER {
 
     /**
      * Adds the array of input elements to this form element group
-     * @param {any} inputs
+     * @param {any} inputs A list of inputs
      */
     addInputElements(inputs) {
         for (let i = 0; i < inputs.length; i++) {

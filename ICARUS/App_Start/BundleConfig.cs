@@ -59,6 +59,7 @@ namespace ICARUS {
                 "~/Content/css/icarus/dropdown.css",
                 "~/Content/css/icarus/button.css",
                 "~/Content/css/icarus/glyphicon.css",
+                "~/Content/css/icarus/menulist.css",
                 "~/Content/css/icarus/navbar.css",
                 "~/Content/css/icarus/prompt.css",
                 "~/Content/css/icarus/preview.css",

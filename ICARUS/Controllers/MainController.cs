@@ -28,7 +28,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            Main obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new Main()
                 : new Main(formPost);
             
@@ -43,10 +43,22 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            Main model = (Main)ctx.Mains.Single(m =>
+            var model = ctx.Mains.Single(m =>
                    m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
+        }
+
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.Mains.Where(m =>
+                (m.authorId == User.Identity.Name)
+            );
         }
     }
 }

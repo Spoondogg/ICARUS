@@ -35,10 +35,26 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            BANNER model = (BANNER)ctx.Banners.Single(m =>
+            //var model // DOES MODEL NEED TO BE EXPLICIT?
+            //BANNER model = (BANNER)ctx.Banners.Single(m =>
+            var model = ctx.Banners.Single(m =>
                    m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
         }
+
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.Banners.Where(m =>
+                (m.authorId == User.Identity.Name)
+            );
+        }
+
+
     }
 }

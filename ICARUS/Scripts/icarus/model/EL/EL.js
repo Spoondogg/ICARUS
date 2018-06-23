@@ -58,7 +58,6 @@ class EL extends MODEL {
 
     /**
      * Recursively iterates through parent nodes until an object with the given prototype
-     * @param {any} key The object key to search within
      * @param {any} value The value to search for within this key
      * @param {any} node Entry point to traversing the chain
      * @param {any} attempt Recursion loop

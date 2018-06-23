@@ -64,9 +64,10 @@ class FORMPOSTINPUT extends FORMELEMENT {
     }
 
     /**
-        Opens a Modal Form populated with an open version of the FormPost
-        @param container {CONTAINER} The container that this belongs to
-        @param dataIdLabel {string} The key (dataId or attributesId) to add object to
+     * Opens a Modal Form populated with an open version of the FormPost
+     * @param {CONTAINER} container The container that this belongs to
+     * @param {string} dataIdLabel The key (dataId or attributesId) to add object to
+     * @param {MODEL} model Model
      */
     newAttributes(container, dataIdLabel, model) {
         let inputs = [];
@@ -168,7 +169,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
     /**
         Opens a Modal Form populated with an open version of the FormPost
-
+        @param {ARRAY} inputArray Array of inputs
      */
     editFormPost(inputArray) {
 

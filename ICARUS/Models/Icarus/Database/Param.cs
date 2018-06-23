@@ -12,25 +12,37 @@ namespace ICARUS.Models {
     /// </summary>
     public class Param {
 
-        public int id { get; set; }
+        //public int id { get; set; }
 
-        [Range(0, int.MaxValue)]
-        public int type { get; set; }
+        //[Range(0, int.MaxValue)]
+        public int type; // { get; set; }
 
-        [StringLength(128, MinimumLength = 3), Required]
-        public string name { get; set; }
+        //[StringLength(128, MinimumLength = 3), Required]
+        public string name; // { get; set; }
 
-        [StringLength(128)]
-        public string value { get; set; }
+        //[StringLength(128)]
+        public object value; // { get; set; }
 
-        [Range(0, int.MaxValue)]
-        public int procedureId { get; set; }
+        //[Range(0, int.MaxValue)]
+        //public int procedureId { get; set; }
 
-        [NotMapped]
-        public IEnumerable<SelectListItem> types { get; set; }
+        //[NotMapped]
+        //public IEnumerable<SelectListItem> types { get; set; }
 
-        [NotMapped]
-        public IEnumerable<SelectListItem> procedures { get; set; }        
+        //[NotMapped]
+        //public IEnumerable<SelectListItem> procedures { get; set; }        
+
+        public Param () {
+            this.type = 0;
+            this.name = "";
+            this.value = "";
+        }
+
+        public Param (int type, string name, object value) {
+            this.type = type;
+            this.name = name;
+            this.value = value;
+        }
 
     }
 }

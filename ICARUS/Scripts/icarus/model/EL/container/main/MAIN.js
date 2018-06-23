@@ -66,6 +66,7 @@ class MAIN extends CONTAINER {
 
     /**
      * Return the user or Guest if doesn't exist
+     * @returns {string} User string
      */
     getUser() {
         let userVar;

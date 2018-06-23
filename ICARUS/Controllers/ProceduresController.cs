@@ -116,7 +116,7 @@ namespace ICARUS.Controllers
             base.Dispose(disposing);
         }
 
-
+        /*
         /// <summary>
         /// Calls a stored procedure from the server
         /// http://stackoverflow.com/questions/39587606/how-to-call-and-execute-stored-procedures-in-asp-net-mvcc
@@ -140,8 +140,8 @@ namespace ICARUS.Controllers
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = procedure.name;
 
-            //add any parameters the stored procedure might require
-            
+            // Add basic parameters as required
+            cmd.Parameters.AddWithValue("authorId", User.Identity.Name);
 
             cnn.Open();
 
@@ -167,6 +167,7 @@ namespace ICARUS.Controllers
             return Json(records);
 
         }
+        */
 
     }
 }

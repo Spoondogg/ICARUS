@@ -128,8 +128,8 @@ namespace ICARUS.Controllers {
         public DbSet<Report> Reports { get; set; }
         public object Report { get; internal set; }
 
-        public DbSet<Param> Params { get; set; }
-        public object Param { get; internal set; }
+        //public DbSet<Param> Params { get; set; }
+        //public object Param { get; internal set; }
 
         public DbSet<Log> Logs { get; set; }
         public object Log { get; internal set; }        
@@ -166,7 +166,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("FormPost", FormPosts);
             this.dbSets.Add("Procedure", Procedures);
             this.dbSets.Add("Report", Reports);
-            this.dbSets.Add("Param", Params);
+            //this.dbSets.Add("Param", Params);
             this.dbSets.Add("Log", Logs);
         }
     }

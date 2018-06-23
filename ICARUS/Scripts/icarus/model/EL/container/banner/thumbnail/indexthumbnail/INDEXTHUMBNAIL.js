@@ -36,10 +36,10 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
             'style': 'height:auto;'
         })), this.data.p);
 
-        this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('preview')), [this.data.listClass]);
+        this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('preview')), [this.data.listClass.toUpperCase()]);
         this.modal.container.preview.el.setAttribute('style', 'height:400px;max-height:400px;overflow-y:auto;');
 
-        this.modal.container.menu = new MENU(
+        this.modal.container.menulist = new MENULIST(
             this.modal.container.body.pane,
             new MODEL(
                 new ATTRIBUTES({
@@ -49,36 +49,15 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
             'name': 'preview-list',
             'label': this.data.listClass + '(s)'
         }));
-        
 
-        this.modal.container.list = new LIST(this.modal.container.body.pane, new MODEL());
-        this.modal.container.list.addClass('preview-list');
-        this.modal.container.list.el.setAttribute('style', 'max-height:200px;overflow-y:auto;');
 
         for (let li = 0; li < this.data.list.length; li++) {
 
             let title = this.data.list[li].label + ' (' + this.data.listClass + '[' + this.data.list[li].id + '])';
-
-            let l = new LI(this.modal.container.list, new MODEL());
-            l.a = new ANCHOR(l, new MODEL().set({
+            
+            this.modal.container.menulist.menu.addNavItem(new MODEL().set({
                 'label': title
-            }));            
-
-            l.a.el.onclick = function () {
-                this.modal.container.preview.body.pane.empty();                
-                this.launchPreview(
-                    500, title,
-                    this.modal.container.preview.body.pane,
-                    this.data.listClass,
-                    this.data.list[li].id
-                );
-            }.bind(this);
-
-            /////////////////
-            let navItem = this.modal.container.menu.addNavItem(new MODEL().set({
-                'label': title
-            }));
-            navItem.el.onclick = function () {
+            })).el.onclick = function () {
                 this.modal.container.preview.body.pane.empty();
                 this.launchPreview(
                     500, title,
@@ -88,16 +67,17 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
                 );
             }.bind(this);
 
-
-
         }
         this.modal.show();
     }
 
     /**
-     * Creates a modal and loads the specified container 
-     * @param {any} delay
-     * @param {any} title
+     * Creates a modal and loads the specified container
+     * @param {any} delay Delay in milliseconds
+     * @param {any} title Modal Title
+     * @param {any} node Modal node
+     * @param {any} className Object class name
+     * @param {any} id Object id
      */
     launchPreview(delay = 500, title = 'Preview', node, className, id) {
         setTimeout(function () {
@@ -107,5 +87,13 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
                 this.modal.container.preview.create(result.model);
             }.bind(this));
         }.bind(this), delay);
+
+        setTimeout(function () {
+            $.getJSON('/' + className + '/GetContainerParents/' + id, function (result) {
+                console.log(className + ' Parents:');
+                console.log(result);                
+            }.bind(this));
+        }.bind(this), delay);
+
     }
 }

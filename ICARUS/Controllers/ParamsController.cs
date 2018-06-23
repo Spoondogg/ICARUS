@@ -14,6 +14,7 @@ namespace ICARUS.Controllers {
 
         private ObjectDBContext db = new ObjectDBContext();
 
+        /*
         /// <summary>
         /// GET: Params
         /// </summary>
@@ -21,7 +22,9 @@ namespace ICARUS.Controllers {
         public ActionResult Index() {
             return View(db.Params.ToList());
         }
+        */
 
+        /*
         // GET: Params/Details/5
         public ActionResult Details(int? id){
             if (id == null){
@@ -33,7 +36,9 @@ namespace ICARUS.Controllers {
             }
             return View(param);
         }
+        */
 
+        /*
         /// <summary>
         /// GET: Params/Create
         /// </summary>
@@ -64,7 +69,9 @@ namespace ICARUS.Controllers {
             
             return View(model);
         }
+        */
 
+        /*
         /// <summary>
         /// POST: Params/Create
         /// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -84,7 +91,9 @@ namespace ICARUS.Controllers {
 
             return View(param);
         }
+        */
 
+            /*
         /// <summary>
         /// GET: Params/Edit/5
         /// </summary>
@@ -100,7 +109,9 @@ namespace ICARUS.Controllers {
             }
             return View(param);
         }
+        */
 
+            /*
         /// <summary>
         /// POST: Params/Edit/5
         /// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -118,7 +129,9 @@ namespace ICARUS.Controllers {
             }
             return View(param);
         }
+        */
 
+        /*
         /// <summary>
         /// GET: Params/Delete/5
         /// </summary>
@@ -134,7 +147,9 @@ namespace ICARUS.Controllers {
             }
             return View(param);
         }
+        */
 
+        /*
         /// <summary>
         /// POST: Params/Delete/5
         /// </summary>
@@ -148,7 +163,9 @@ namespace ICARUS.Controllers {
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        */
 
+        /*
         /// <summary>
         /// Dispose method
         /// </summary>
@@ -159,5 +176,6 @@ namespace ICARUS.Controllers {
             }
             base.Dispose(disposing);
         }
+        */
     }
 }

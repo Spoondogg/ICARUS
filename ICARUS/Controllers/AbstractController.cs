@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects.DataClasses;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -220,6 +221,59 @@ namespace ICARUS.Controllers {
                     Int32.Parse(GetResults.Fail.ToString()), e.Message, e), JsonRequestBehavior.AllowGet
                 );
             }
+        }
+
+        /// <summary>
+        /// Calls a stored procedure from the server
+        /// http://stackoverflow.com/questions/39587606/how-to-call-and-execute-stored-procedures-in-asp-net-mvcc
+        /// for the current user
+        /// </summary>
+        /// <returns></returns>
+        //[HttpPost] // TODO: Restore POST??
+        [Authorize]
+        public List<Dictionary<string, string>> Call(Procedure procedure) {
+
+            procedure.authorId = User.Identity.Name;
+
+            string cnnString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+            SqlConnection cnn = new SqlConnection(cnnString);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cnn;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = procedure.name;
+
+            // Add basic parameters as required. 
+            // All Procedures should start with authorId as the default param
+            cmd.Parameters.AddWithValue("authorId", User.Identity.Name);
+            foreach(var param in procedure.parameters) {
+                cmd.Parameters.AddWithValue(param.name, param.value);
+            }
+
+            cnn.Open();
+
+
+            List<Dictionary<string, string>> records = new List<Dictionary<string, string>>();
+
+            try {
+                SqlDataReader reader = cmd.ExecuteReader();
+                var cols = procedure.columns;
+                while (reader.Read()) {
+                    var row = new Dictionary<string, string>();
+                    foreach (var col in cols) {
+                        var key = col;
+                        row.Add(key, reader[key].ToString());
+                    }
+                    records.Add(row);
+                }
+            } catch (Exception e) {
+                var row = new Dictionary<string, string>();
+                row.Add("Exception", e.Message);
+            }            
+
+            cnn.Close();
+
+            return records;
         }
     }
 }
