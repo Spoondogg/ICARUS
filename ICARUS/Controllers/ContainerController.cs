@@ -10,6 +10,7 @@ using System.Threading;
 using System.Text;
 using System.Xml;
 using ICARUS.Models.Icarus.Elements;
+using System.Data.Entity;
 
 namespace ICARUS.Controllers {
 
@@ -30,6 +31,15 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public abstract Container select(ObjectDBContext ctx, int id);
+
+        /// <summary>
+        /// Select A
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        public abstract IEnumerable<Container> selectAll(ObjectDBContext ctx);
+
+        
 
         /// <summary>
         /// Parameterless Constructor
@@ -69,10 +79,18 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         [Authorize]
         public virtual async Task<ActionResult> Count() {
+            /*
+            IQueryable<Container> records = getObjectDbContext().dbSets[this.className].Cast<Container>().Where(
+                r => (r.authorId == User.Identity.Name)
+            );
+            */
+
+            /*
             IQueryable<Container> records = getObjectDbContext().Containers.Where(
                 r => (r.authorId == User.Identity.Name) && (r.element == className)
             );
-            var count = records.Count();
+            */
+            var count = selectAll(getObjectDbContext()).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("className", className);
@@ -86,9 +104,15 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         [Authorize]
         public virtual async Task<ActionResult> List() {
+            /*
             var list = from s in getObjectDbContext().Containers
                         where (s.authorId == User.Identity.Name) && (s.element == className)
                         select s;
+            */
+            var list = from s in selectAll(getObjectDbContext())
+                       where s.authorId == User.Identity.Name
+                       select s;
+
             list = list.OrderByDescending(s => s.id);
 
             Dictionary<string, object> result = new Dictionary<string, object>();
@@ -108,6 +132,27 @@ namespace ICARUS.Controllers {
 
             result.Add("list", listArray);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Container Ids that contain this container
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public virtual async Task<ActionResult> GetContainerParents(int id = -1) {
+            List<string> columns = new List<string>();
+            columns.Add("id");
+            columns.Add("className");
+            columns.Add("label");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "id", id));
+
+            Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
+
+            //List<Dictionary<string, string>> records = this.Call(procedure);
+
+            return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

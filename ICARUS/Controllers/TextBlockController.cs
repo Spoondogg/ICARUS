@@ -20,7 +20,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            TEXTBLOCK obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new TEXTBLOCK()
                 : new TEXTBLOCK(formPost);
 
@@ -35,10 +35,22 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            TEXTBLOCK model = (TEXTBLOCK)ctx.TextBlocks.Single(m =>
+            var model = ctx.TextBlocks.Single(m =>
                    m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
+        }
+
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.TextBlocks.Where(m =>
+                (m.authorId == User.Identity.Name)
+            );
         }
     }
 }

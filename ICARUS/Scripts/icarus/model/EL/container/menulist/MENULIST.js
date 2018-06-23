@@ -1,6 +1,7 @@
 ﻿/**
     MenuList Constructor
     A MENULIST is essentially a UL that is designed to contain List Items (LI)
+    Unlike most containers
 
     @param {EL} node The object to contain this element
     @param {MODEL} model The textblock
@@ -18,18 +19,8 @@ class MENULIST extends CONTAINER {
     }
 
     construct() {
-        this.menu = new MENU(this.body.pane, new MODEL().set({
+        this.menu = new MENU(this.body.pane, new MODEL('menulist-menu').set({
             'label':this.label
         }));
-
-        for (let i = 0; i < 10; i++) {
-            this.menu.addNavItem(new MODEL().set({
-                'label': 'NavItem[' + i + ']'
-            })).el.onclick = function () {
-                console.log('Clicked Nav Item ' + i);
-            };
-        }
-
-
     }
 }

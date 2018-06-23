@@ -42,10 +42,22 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            ARTICLE model = (ARTICLE)ctx.Articles.Single(m =>
+            var model = ctx.Articles.Single(m =>
                    m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
                 );
             return model;
+        }
+
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.Articles.Where(m =>
+                (m.authorId == User.Identity.Name)
+            );
         }
     }
 }

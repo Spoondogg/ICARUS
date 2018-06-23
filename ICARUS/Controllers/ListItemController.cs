@@ -40,5 +40,17 @@ namespace ICARUS.Controllers {
                 );
             return model;
         }
+
+        /// <summary>
+        /// Select a single Main element
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.ListItems.Where(m =>
+                (m.authorId == User.Identity.Name)
+            );
+        }
     }
 }

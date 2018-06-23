@@ -444,6 +444,10 @@
     <Compile Include="Migrations\201806012145119_20180601__001.Designer.cs">
       <DependentUpon>201806012145119_20180601__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806230203251_20180622__001.cs" />
+    <Compile Include="Migrations\201806230203251_20180622__001.Designer.cs">
+      <DependentUpon>201806230203251_20180622__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
     <Compile Include="Models\Icarus\Elements\INDEX.cs" />
@@ -528,6 +532,7 @@
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\css\icarus\menulist.css" />
     <Content Include="Content\css\icomoon\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />
     <Content Include="Content\css\icarus\banner.css" />
@@ -912,6 +917,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806012145119_20180601__001.resx">
       <DependentUpon>201806012145119_20180601__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806230203251_20180622__001.resx">
+      <DependentUpon>201806230203251_20180622__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

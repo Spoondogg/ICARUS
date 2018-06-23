@@ -45,17 +45,25 @@ namespace ICARUS.Models {
         [StringLength(128, MinimumLength = 3), Required]
         public string name { get; set; }
 
+        /*
         /// <summary>
         /// A comma delimited string of column names returned by this procedure
         /// </summary>
         [StringLength(512, MinimumLength = 1), Required]
         public string columns { get; set; }
+        */
+        public List<string> columns;
 
+        /*
         /// <summary>
         /// Delimited list of parameter Ids from dbo.Params
         /// </summary>
         [StringLength(512, MinimumLength = 1), Required]
         public string parameters { get; set; }
+        */
+        public List<Param> parameters;
+
+
 
         /// <summary>
         /// Constructs a default procedure, using the TABLE type
@@ -70,6 +78,13 @@ namespace ICARUS.Models {
         /// <param name="typeId"></param>
         public Procedure(int typeId) {
             this.typeId = typeId;
+        }
+
+        public Procedure (string name, List<string> columns, List<Param> parameters) {
+            this.id = 0;
+            this.name = name;
+            this.columns = columns;
+            this.parameters = parameters;
         }
 
     }
