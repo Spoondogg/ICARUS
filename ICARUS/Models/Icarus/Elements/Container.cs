@@ -54,7 +54,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// If set to true, a sidebar will be created for this container
         /// </summary>
         [Required]
-        public int hasSidebar { get; set; }        
+        public int hasSidebar { get; set; }
 
         /// <summary>
         /// Construct Container as a DIV
@@ -82,6 +82,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.status = 1;
             this.attributesId = 0;
             this.dataId = 0;
+            this.descriptionId = 0;
             this.shared = 0;
         }
 
@@ -113,6 +114,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.collapsed = formPost.parseInt("collapsed");
             this.attributesId = formPost.parseInt("attributesId");
             this.dataId = formPost.parseInt("dataId");
+            this.descriptionId = formPost.parseInt("descriptionId");
             this.shared = formPost.parseInt("shared");
         }
     }

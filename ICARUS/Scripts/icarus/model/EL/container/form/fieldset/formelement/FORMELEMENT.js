@@ -17,6 +17,7 @@ class FORMELEMENT extends CONTAINER {
         model.hasSidebar = 0;     
         super(node, 'DIV', model);
         this.addClass('form-element');        
+        //this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0');
     }
 
     construct() {

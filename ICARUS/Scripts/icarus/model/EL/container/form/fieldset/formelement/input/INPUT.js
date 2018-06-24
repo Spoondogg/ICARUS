@@ -8,8 +8,7 @@ class INPUT extends FORMELEMENT {
         @param {MODEL} model The model
      */
     constructor(node, model) {
-        super(node, 'DIV', model);        
-        //this.dataElements = DATAELEMENTS.INPUT;
+        super(node, 'DIV', model);
         this.createInput();        
     }
 

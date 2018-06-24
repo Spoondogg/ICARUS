@@ -201,6 +201,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\IndexMainController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\MenuListController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
@@ -448,8 +449,13 @@
     <Compile Include="Migrations\201806230203251_20180622__001.Designer.cs">
       <DependentUpon>201806230203251_20180622__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806240341208_20180623__001.cs" />
+    <Compile Include="Migrations\201806240341208_20180623__001.Designer.cs">
+      <DependentUpon>201806240341208_20180623__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
+    <Compile Include="Models\Icarus\Elements\INDEXMAIN.cs" />
     <Compile Include="Models\Icarus\Elements\INDEX.cs" />
     <Compile Include="Models\Icarus\Elements\MenuList.cs" />
     <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
@@ -591,6 +597,7 @@
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
@@ -920,6 +927,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806230203251_20180622__001.resx">
       <DependentUpon>201806230203251_20180622__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806240341208_20180623__001.resx">
+      <DependentUpon>201806240341208_20180623__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

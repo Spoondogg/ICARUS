@@ -47,6 +47,8 @@ class CONTAINER extends GROUP {
 
         this.attrElements = []; // Attribute elements contain a list of attributes that apply for this object
 
+        
+
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
@@ -797,6 +799,18 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             }),
 
+            // FORMPOSTINPUT
+            new MODEL(new ATTRIBUTES({
+                'name': 'descriptionId',
+                'type': 'NUMBER',
+                'value': new String(this.get('descriptionId'))
+            })).set({
+                'element': 'BUTTON',
+                'label': 'descriptionId',
+                'type': 'FORMPOSTINPUT',
+                'addTab': 0
+            }),
+
             new MODEL(new ATTRIBUTES({
                 'name': 'shared',
                 'type': 'NUMBER',
@@ -1084,6 +1098,17 @@ class CONTAINER extends GROUP {
                 })).set({
                     'element': 'BUTTON',
                     'label': 'attributesId',
+                    'type': 'FORMPOSTINPUT',
+                    'addTab': 0
+                }),
+
+                new MODEL(new ATTRIBUTES({
+                    'name': 'descriptionId',
+                    'type': 'NUMBER',
+                    'value': new String(this.get('descriptionId'))
+                })).set({
+                    'element': 'BUTTON',
+                    'label': 'descriptionId',
                     'type': 'FORMPOSTINPUT',
                     'addTab': 0
                 }),

@@ -10,8 +10,7 @@ class THUMBNAIL extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0'); // Override icarus-container 
-        this.body.pane.addClass('thumbnail');        
-        //this.dataElements = DATAELEMENTS.THUMBNAIL;
+        this.body.pane.addClass('thumbnail');
         //this.image = new IMG(this.body.pane, new MODEL());
         //this.construct();
         //this.populate(model.children);

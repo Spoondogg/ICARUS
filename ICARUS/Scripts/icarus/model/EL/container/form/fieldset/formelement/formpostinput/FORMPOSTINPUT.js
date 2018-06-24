@@ -75,7 +75,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
         // Generate new FormPost
         try {
             $.getJSON('/FORMPOST/Get/0', function (data) {
-                console.log('Created new Form Post / Attributes / Image');
+                console.log('Created new Form Post / Attributes / Image / Description');
                 console.log(data.model);
 
                 // Id and Shared are hardcoded
@@ -117,11 +117,25 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 this.input.el.setAttribute('value', data.model.id);
                 container[dataIdLabel] = data.model.id; 
 
-                // Append additional dataElements
-                if (container.dataElements.length > 0) {
-                    for (let i = 0; i < container.dataElements.length; i++) {
-                        inputs.push(container.dataElements[i]);
+                if (dataIdLabel === 'dataId') {
+                    // Append additional dataElements
+                    if (container.dataElements.length > 0) {
+                        for (let i = 0; i < container.dataElements.length; i++) {
+                            inputs.push(container.dataElements[i]);
+                        }
                     }
+                } 
+
+                if (dataIdLabel === 'descriptionId') {
+                    inputs.push(
+                        new MODEL(new ATTRIBUTES({
+                            'name': 'description',
+                            'type': 'text'
+                        })).set({
+                            'element': 'TEXTAREA',
+                            'label': 'description'
+                        })
+                    );
                 }
                 
                 // Construct empty form

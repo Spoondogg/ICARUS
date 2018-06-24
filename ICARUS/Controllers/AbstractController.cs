@@ -154,6 +154,21 @@ namespace ICARUS.Controllers {
                     }                    
                 }
 
+                // Attach formPost (if exists)
+                if (model.descriptionId > 0) {
+                    FormPost description = (FormPost)db.dbSets["FormPost"].Find(model.descriptionId);
+
+                    if (description.authorId == User.Identity.Name || description.shared == 1) {
+                        XmlDocument xml = new XmlDocument();
+                        xml.LoadXml(description.xmlResults);
+
+                        XmlNodeList node = xml.SelectNodes("/root/*");
+                        foreach (XmlNode xn in node) {
+                            model.attributes.Add(xn.Name, xn.InnerText);
+                        }
+                    }
+                }
+
                 // Return the fully constructed model
                 return Json(new Payload(
                     1, this.className, model,
