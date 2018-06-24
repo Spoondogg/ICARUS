@@ -170,6 +170,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/banner/callout/CALLOUT.js",
                 "~/Scripts/icarus/model/el/container/banner/BANNER.js",
                 "~/Scripts/icarus/model/el/container/banner/index/INDEX.js",
+                "~/Scripts/icarus/model/el/container/banner/indexmain/INDEXMAIN.js",
                 "~/Scripts/icarus/model/el/container/paragraph/PARAGRAPH.js",
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 

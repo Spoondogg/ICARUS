@@ -9,7 +9,7 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
      */
     constructor(node, model) {
         super(node, model);
-        this.setClass('col-xs-4 col-sm-4 col-md-4 col-lg-offset-0');
+        this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
         //this.construct();
         //this.populate(model.children);
     }
@@ -19,7 +19,7 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
      * TODO: Consider paging these results
      */
     launchModal() {
-        console.log('Launch Index Thumbnail Modal');
+        debug('Launch Index Thumbnail Modal');
 
         this.modal = new MODAL(this.data.header);
         this.modal.container.body.pane.addClass('thumbnail');

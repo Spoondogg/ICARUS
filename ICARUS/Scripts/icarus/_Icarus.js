@@ -291,7 +291,15 @@ const DATAELEMENTS = {
 
 
 
-    MAIN: [],
+    MAIN: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
+        })
+    ],
 
     FORM: [],
     FIELDSET: [],

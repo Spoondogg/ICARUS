@@ -15,6 +15,7 @@ class MAIN extends CONTAINER {
             'hasTab': 0,
             'dataId': 0,
             'attributesId': 0,
+            'descriptionId': 0,
             'shared': 0,
             'element': 'MAIN',
             'navBar': {
@@ -40,7 +41,7 @@ class MAIN extends CONTAINER {
         document.title = model.label;
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, ['ARTICLE','INDEX']);
+        super(document.body, 'MAIN', model, ['ARTICLE','INDEX','INDEXMAIN']);
         this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);
