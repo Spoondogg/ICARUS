@@ -28,7 +28,7 @@ namespace ICARUS.Controllers {
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }
-
+        
         /// <summary>
         /// Select a single Main element
         /// </summary>
@@ -51,11 +51,11 @@ namespace ICARUS.Controllers {
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
             return ctx.Jumbotrons.Where(m =>
             //return getDbSet(ctx).Cast<Container>().Where(m =>
-                (m.authorId == User.Identity.Name)
+                (m.authorId == User.Identity.Name || m.shared == 1)
             );
         }
 
-        public DbSet getDbSet(ObjectDBContext ctx) {
+        public override DbSet getDbSet(ObjectDBContext ctx) {
             return ctx.Jumbotrons;
         }
 

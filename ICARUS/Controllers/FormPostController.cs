@@ -70,6 +70,7 @@ namespace ICARUS.Controllers {
             }
         }
 
+
         public override async Task<ActionResult> Create(FormPost formPost) {
             // TODO: Determine if form is new or update 
             // (Are we editing an existing post or creating a new one?)

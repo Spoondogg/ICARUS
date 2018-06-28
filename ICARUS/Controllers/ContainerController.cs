@@ -30,16 +30,35 @@ namespace ICARUS.Controllers {
         /// Selects a single Container element
         /// </summary>
         /// <returns></returns>
-        public abstract Container select(ObjectDBContext ctx, int id);
+        //public abstract Container select(ObjectDBContext ctx, int id);
+        public virtual Container select(ObjectDBContext ctx, int id) {
+            var model = ctx.Containers.Single(m =>
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
+                );
+            return model;
+        }
 
         /// <summary>
         /// Select A
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public abstract IEnumerable<Container> selectAll(ObjectDBContext ctx);
+        //public abstract IEnumerable<Container> selectAll(ObjectDBContext ctx);
+        public virtual IEnumerable<Container> selectAll(ObjectDBContext ctx) {
+            return ctx.Containers.Where(m =>
+                (m.authorId == User.Identity.Name || m.shared == 1)
+            );
+        }
 
-        
+        /// <summary>
+        /// Returns the DbSet for THIS class (Must be manually specified)
+        /// ie: return ctx.Jumbotrons;
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        public virtual DbSet getDbSet(ObjectDBContext ctx) {
+            return ctx.Containers;
+        }
 
         /// <summary>
         /// Parameterless Constructor
@@ -60,10 +79,11 @@ namespace ICARUS.Controllers {
         /// Get Request Index page for Forms
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        //[Authorize]
         public virtual async Task<ActionResult> Index() {
             var containers = from s in getObjectDbContext().Containers
-                             where (s.authorId == User.Identity.Name) && (s.element == className)
+                             where (s.authorId == User.Identity.Name || s.shared == 1)
+                             && s.element == className
                              orderby s.label
                              select s;
 
@@ -77,20 +97,11 @@ namespace ICARUS.Controllers {
         /// Returns a count of all matching containers that belong to this user
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        //[Authorize]
         public virtual async Task<ActionResult> Count() {
-            /*
-            IQueryable<Container> records = getObjectDbContext().dbSets[this.className].Cast<Container>().Where(
-                r => (r.authorId == User.Identity.Name)
-            );
-            */
-
-            /*
-            IQueryable<Container> records = getObjectDbContext().Containers.Where(
-                r => (r.authorId == User.Identity.Name) && (r.element == className)
-            );
-            */
-            var count = selectAll(getObjectDbContext()).Count();
+            var count = selectAll(getObjectDbContext()).Where(
+                m => m.authorId == User.Identity.Name || m.shared == 1
+            ).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("className", className);
@@ -102,15 +113,10 @@ namespace ICARUS.Controllers {
         /// Returns a list of Container Ids that belong to this user
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        //[Authorize]
         public virtual async Task<ActionResult> List() {
-            /*
-            var list = from s in getObjectDbContext().Containers
-                        where (s.authorId == User.Identity.Name) && (s.element == className)
-                        select s;
-            */
             var list = from s in selectAll(getObjectDbContext())
-                       where s.authorId == User.Identity.Name
+                       where s.authorId == User.Identity.Name || s.shared == 1
                        select s;
 
             list = list.OrderByDescending(s => s.id);
@@ -119,18 +125,91 @@ namespace ICARUS.Controllers {
             result.Add("className", className);
 
             List<Dictionary<string, object>> listArray = new List<Dictionary<string, object>>();
-            //List<Container> listArray = new List<Container>();
             foreach (var li in list) {
                 
                 Dictionary<string, object> attribs = new Dictionary<string, object>();
                 attribs.Add("id", li.id);
                 attribs.Add("label", li.label);
                 listArray.Add(attribs);
-                
-                //listArray.Add(li);
             }
 
             result.Add("list", listArray);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Container Ids that contain this container
+        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize]
+        public virtual async Task<ActionResult> Page(string page = "0", string pageLength = "10") {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("subsections");
+            columns.Add("element");
+            columns.Add("className");
+            columns.Add("authorId");
+            columns.Add("status");
+            columns.Add("showHeader");
+            columns.Add("label");
+            columns.Add("collapsed");
+            columns.Add("hasTab");
+            columns.Add("dateCreated");
+            columns.Add("dateLastModified");
+            columns.Add("hasSidebar");
+            columns.Add("attributesId");
+            columns.Add("dataId");
+            columns.Add("shared");
+            columns.Add("descriptionId");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "pageLength", pageLen));
+            parameters.Add(new Param(3, "page", page));
+
+            Procedure procedure = new Procedure("ICARUS.GetPaginatedList", columns, parameters);
+
+            return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Container Ids that contain this container
+        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize]
+        public virtual async Task<ActionResult> PageList(string page = "0", string pageLength = "10") {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("label");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "pageLength", pageLen));
+            parameters.Add(new Param(3, "page", page));
+
+            Procedure procedure = new Procedure("ICARUS.GetPaginatedList", columns, parameters);
+
+            int total = selectAll(getObjectDbContext()).Where(
+                m => m.authorId == User.Identity.Name || m.shared == 1
+            ).Count();
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("total", total);
+            result.Add("list", this.Call(procedure));
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

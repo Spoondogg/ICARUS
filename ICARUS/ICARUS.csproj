@@ -538,6 +538,7 @@
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\css\icarus\index.css" />
     <Content Include="Content\css\icarus\menulist.css" />
     <Content Include="Content\css\icomoon\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />

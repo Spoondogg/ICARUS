@@ -10,6 +10,7 @@ using System.Threading;
 using System.Text;
 using System.Xml;
 using ICARUS.Models.Icarus.Elements;
+using System.Data.Entity;
 
 namespace ICARUS.Controllers {
 
@@ -34,7 +35,7 @@ namespace ICARUS.Controllers {
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }
-
+        
         /// <summary>
         /// Select a single Main element
         /// </summary>
@@ -56,8 +57,12 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
             return ctx.Forms.Where(m =>
-                (m.authorId == User.Identity.Name)
+                (m.authorId == User.Identity.Name || m.shared == 1)
             );
+        }
+
+        public override DbSet getDbSet(ObjectDBContext ctx) {
+            return ctx.Forms;
         }
 
         /// <summary>
@@ -120,6 +125,9 @@ namespace ICARUS.Controllers {
             } catch (Exception e)  {
                 return Json(new Payload(0, "FormController.submit() Unknown Exception<br><br><h5>FormPost</h5>"+formPost.ToString()+"<br><br>" + e.Message, e));
             }
-        }        
+        }
+
+        
+
     }
 }

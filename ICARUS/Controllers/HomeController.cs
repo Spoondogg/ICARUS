@@ -10,6 +10,7 @@ using System.Web.Helpers;
 using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements.Attributes;
 using System.Linq;
+using System.Data.Entity;
 
 namespace ICARUS.Controllers {
 
