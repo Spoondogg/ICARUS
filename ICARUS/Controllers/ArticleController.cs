@@ -10,6 +10,7 @@ using System.Threading;
 using System.Text;
 using System.Xml;
 using ICARUS.Models.Icarus.Elements;
+using System.Data.Entity;
 
 namespace ICARUS.Controllers {
 
@@ -56,8 +57,12 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
             return ctx.Articles.Where(m =>
-                (m.authorId == User.Identity.Name)
+                (m.authorId == User.Identity.Name || m.shared == 1)
             );
+        }
+
+        public override DbSet getDbSet(ObjectDBContext ctx) {
+            return ctx.Articles;
         }
     }
 }

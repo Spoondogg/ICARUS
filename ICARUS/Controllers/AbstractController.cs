@@ -59,7 +59,7 @@ namespace ICARUS.Controllers {
         public ObjectDBContext getObjectDbContext() {
             return this.db;
         }
-
+        
         /// <summary>
         /// Asynchrounously create the object on the database and return an instance of
         /// it to the user as a JSON object model
@@ -246,7 +246,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         //[HttpPost] // TODO: Restore POST??
         [Authorize]
-        public List<Dictionary<string, string>> Call(Procedure procedure) {
+        public List<Dictionary<string, object>> Call(Procedure procedure) {
 
             procedure.authorId = User.Identity.Name;
 
@@ -268,21 +268,22 @@ namespace ICARUS.Controllers {
             cnn.Open();
 
 
-            List<Dictionary<string, string>> records = new List<Dictionary<string, string>>();
+            List<Dictionary<string, object>> records = new List<Dictionary<string, object>>();
 
             try {
                 SqlDataReader reader = cmd.ExecuteReader();
                 var cols = procedure.columns;
                 while (reader.Read()) {
-                    var row = new Dictionary<string, string>();
+                    var row = new Dictionary<string, object>();
                     foreach (var col in cols) {
                         var key = col;
-                        row.Add(key, reader[key].ToString());
+                        //row.Add(key, reader[key].ToString());
+                        row.Add(key, reader[key]);
                     }
                     records.Add(row);
                 }
             } catch (Exception e) {
-                var row = new Dictionary<string, string>();
+                var row = new Dictionary<string, object>();
                 row.Add("Exception", e.Message);
             }            
 

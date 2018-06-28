@@ -557,7 +557,7 @@ function debug(output) {
         console.log(output);
     }
 }
-const DEBUGMODE = false; // If true, debug outputs are shown
+const DEBUGMODE = true; // If true, debug outputs are shown
 const TESTING = false; // If true, tests are ran and results are shown in the console.
 /**
  * Main method that launches the application
