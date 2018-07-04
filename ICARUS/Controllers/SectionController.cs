@@ -12,7 +12,7 @@ namespace ICARUS.Controllers {
     
     public class SectionController : ContainerController {
 
-        public SectionController() : base("Section") {
+        public SectionController() : base("SECTION") {
 
         }
 
@@ -21,42 +21,31 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            Section obj = (formPost == null)
-                ? new Section()
-                : new Section(formPost);
+            var obj = (formPost == null)
+                ? new SECTION()
+                : new SECTION(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            Section model = (Section)ctx.Sections.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.Sections.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select all elements
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Sections.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
+            return ctx.Sections.Where(FilterAllowed());
         }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Sections;
-        }
-
     }
 }

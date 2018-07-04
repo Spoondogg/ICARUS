@@ -28,7 +28,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            TextArea obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new TextArea()
                 : new TextArea(formPost);
 
@@ -37,32 +37,22 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            TextArea model = (TextArea)ctx.TextAreas.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.TextAreas.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.TextAreas.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.TextAreas;
+            return ctx.TextAreas.Where(FilterAllowed());
         }
     }
 }

@@ -65,12 +65,14 @@ namespace ICARUS {
                 "~/Content/css/icarus/preview.css",
                 "~/Content/css/icarus/modal.css",
                 "~/Content/css/icarus/banner.css",
+                "~/Content/css/icarus/classview.css",
                 "~/Content/css/icarus/index.css",
                 "~/Content/css/icarus/jumbotron.css",
                 "~/Content/css/icarus/section.css",
                 "~/Content/css/icarus/form.css",
                 "~/Content/css/icarus/elementgroup.css",
                 "~/Content/css/icarus/footer.css",
+                "~/Content/css/icarus/chat.css",
                 "~/Content/css/icarus/table.css",
                 "~/Content/css/icarus/mobile.css"
             ));
@@ -172,6 +174,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/banner/BANNER.js",
                 "~/Scripts/icarus/model/el/container/banner/index/INDEX.js",
                 "~/Scripts/icarus/model/el/container/banner/indexmain/INDEXMAIN.js",
+                "~/Scripts/icarus/model/el/container/banner/classviewer/CLASSVIEWER.js",
                 "~/Scripts/icarus/model/el/container/paragraph/PARAGRAPH.js",
                 "~/Scripts/icarus/model/el/container/textblock/TEXTBLOCK.js",
 
@@ -201,6 +204,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/form/forms/LogoutForm.js",
 
                 // Main
+                "~/Scripts/icarus/model/el/container/main/chat/CHAT.js",
                 "~/Scripts/icarus/model/el/container/main/article/section/SECTION.js",
                 "~/Scripts/icarus/model/el/container/main/article/ARTICLE.js",
                 "~/Scripts/icarus/model/el/container/main/MAIN.js"

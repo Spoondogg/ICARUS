@@ -12,6 +12,7 @@ using System.Xml;
 using ICARUS.Models.Icarus.Elements;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq.Expressions;
 
 namespace ICARUS.Controllers {
     /// <summary>
@@ -20,8 +21,10 @@ namespace ICARUS.Controllers {
     public class MainController : ContainerController {
 
         public MainController() : base("Main") {
-
+            
         }
+
+
 
         /// <summary>
         /// Instantiate a Container using Main defaults
@@ -35,34 +38,24 @@ namespace ICARUS.Controllers {
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }
-
+        
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            var model = ctx.Mains.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.Mains.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Mains.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Mains;
+            return ctx.Mains.Where(FilterAllowed());
         }
     }
 }

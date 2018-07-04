@@ -17,7 +17,7 @@ class LISTITEM extends CONTAINER {
     }
 
     construct() {
-        if (this.dataId > 0) {
+        if (this.dataId > 0 || this.dataId === -1) {
             //this.text = new P(this.body.pane, model.data, model.data.label); // 2018-06-13: swap for text
             if (this.data.p) {
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));

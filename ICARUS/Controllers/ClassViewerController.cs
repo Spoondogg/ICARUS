@@ -10,9 +10,9 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
     
-    public class ThumbnailController : ContainerController {
+    public class ClassViewerController : ContainerController {
 
-        public ThumbnailController() : base("Thumbnail") {
+        public ClassViewerController() : base("CLASSVIEWER") {
 
         }
 
@@ -22,8 +22,8 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new THUMBNAIL()
-                : new THUMBNAIL(formPost);
+                ? new CLASSVIEWER()
+                : new CLASSVIEWER(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
@@ -36,16 +36,20 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            return ctx.Thumbnails.AsQueryable().Single(FilterById(id));
+            return ctx.ClassViewers.AsQueryable().Single(FilterById(id));
+
         }
+
+        
 
         /// <summary>
         /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Thumbnails.Where(FilterAllowed());
+            return ctx.ClassViewers.Where(FilterAllowed());
         }
     }
 }

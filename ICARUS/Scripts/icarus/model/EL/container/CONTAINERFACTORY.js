@@ -70,6 +70,10 @@ class CONTAINERFACTORY {
                     obj = new JUMBOTRON(span, result.model);
                     break;
 
+                case 'CLASSVIEWER':
+                    obj = new CLASSVIEWER(span, result.model);
+                    break;
+
                 case 'INDEX':
                     obj = new INDEX(span, result.model);
                     break;
@@ -116,6 +120,10 @@ class CONTAINERFACTORY {
                     obj = new SECTION(span, result.model);
                     break;
 
+                case 'CHAT':
+                    obj = new CHAT(span, result.model);
+                    break;
+
                 case 'FORM':
                     obj = new FORM(span, result.model);
                     break;
@@ -126,6 +134,10 @@ class CONTAINERFACTORY {
 
                 case 'FORMELEMENTGROUP':
                     obj = new FORMELEMENTGROUP(span, result.model);
+                    break;
+
+                case 'FORMPOSTINPUT':
+                    obj = new FORMPOSTINPUT(span, result.model);
                     break;
 
                 case 'INPUT':

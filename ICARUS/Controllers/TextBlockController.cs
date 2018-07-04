@@ -30,33 +30,22 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            var model = ctx.TextBlocks.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.TextBlocks.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.TextBlocks.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
+            return ctx.TextBlocks.Where(FilterAllowed());
         }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.TextBlocks;
-        }
-
     }
 }

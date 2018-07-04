@@ -11,6 +11,8 @@ using System.Text;
 using System.Xml;
 using ICARUS.Models.Icarus.Elements;
 using System.Data.Entity;
+using System.Linq.Expressions;
+using System.Security.Permissions;
 
 namespace ICARUS.Controllers {
 
@@ -18,6 +20,7 @@ namespace ICARUS.Controllers {
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
     public abstract class ContainerController : AbstractController {
+        
 
         /// <summary>
         /// Creates a new instance of this element's class
@@ -30,35 +33,14 @@ namespace ICARUS.Controllers {
         /// Selects a single Container element
         /// </summary>
         /// <returns></returns>
-        //public abstract Container select(ObjectDBContext ctx, int id);
-        public virtual Container select(ObjectDBContext ctx, int id) {
-            var model = ctx.Containers.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
-        }
+        public abstract Container select(ObjectDBContext ctx, int id);
 
         /// <summary>
-        /// Select A
+        /// Selects all records that are available to this user
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        //public abstract IEnumerable<Container> selectAll(ObjectDBContext ctx);
-        public virtual IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Containers.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        /// <summary>
-        /// Returns the DbSet for THIS class (Must be manually specified)
-        /// ie: return ctx.Jumbotrons;
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <returns></returns>
-        public virtual DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Containers;
-        }
+        public abstract IEnumerable<Container> selectAll(ObjectDBContext ctx);
 
         /// <summary>
         /// Parameterless Constructor
@@ -76,17 +58,50 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
+        /// Generates a Where clause for Entity to filter by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Expression<Func<Container, bool>> FilterById(int id) {
+            return m => (
+                m.id == id && m.status != -1
+                && (
+                    m.authorId == User.Identity.Name
+                    || m.shared == 1
+                )
+            );
+        }
+
+        /// <summary>
+        /// Generates a Where clause for Entity to filter to records that the user is allowed
+        /// to access
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Expression<Func<Container, bool>> FilterAllowed() {
+            return m => (
+                m.status != -1
+                && (
+                    m.authorId == User.Identity.Name
+                    || m.shared == 1
+                )
+            );
+        }
+
+        /// <summary>
         /// Get Request Index page for Forms
         /// </summary>
         /// <returns></returns>
         //[Authorize]
         public virtual async Task<ActionResult> Index() {
+            /*
             var containers = from s in getObjectDbContext().Containers
                              where (s.authorId == User.Identity.Name || s.shared == 1)
                              && s.element == className
                              orderby s.label
                              select s;
-
+            */
+            var containers = selectAll(getObjectDbContext()).OrderBy(m => m.label);
             return Json(new Payload(
                     1, className, containers.Take(5),
                     "Index"
@@ -99,9 +114,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         //[Authorize]
         public virtual async Task<ActionResult> Count() {
-            var count = selectAll(getObjectDbContext()).Where(
-                m => m.authorId == User.Identity.Name || m.shared == 1
-            ).Count();
+            var count = selectAll(getObjectDbContext()).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             result.Add("className", className);
@@ -115,10 +128,12 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         //[Authorize]
         public virtual async Task<ActionResult> List() {
+            /*
             var list = from s in selectAll(getObjectDbContext())
                        where s.authorId == User.Identity.Name || s.shared == 1
                        select s;
-
+            */
+            var list = selectAll(getObjectDbContext());
             list = list.OrderByDescending(s => s.id);
 
             Dictionary<string, object> result = new Dictionary<string, object>();
@@ -354,5 +369,88 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        /// <summary>
+        /// Asynchrounously set the given object's active state to false if the user is the 
+        /// author of this object.
+        /// 
+        /// Be sure to update any dependant objects as well, or prevent the change
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        //[HttpGet]  // TODO: Secure as HttpPost 
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Dev,Admin")] //Authorize
+        public virtual async Task<ActionResult> Disable(int id) {
+            string message = "";
+            try {
+                // Retrieve the record from the database
+                ObjectDBContext ctx = getObjectDbContext();
+                var model = select(ctx, id);
+
+                
+
+                // Verify ownership and process deletion
+                if (model.getAuthorId() == User.Identity.Name) {
+
+                    List<string> columns = new List<string>();
+                    columns.Add("id");
+                    columns.Add("className");
+                    columns.Add("label");
+
+                    List<Param> parameters = new List<Param>();
+                    parameters.Add(new Param(1, "id", id));
+
+                    Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
+
+                    List<Dictionary<string, object>> records = this.Call(procedure);
+                    if(records.Count == 1) { // Should only exist in 
+                        // Set new values
+                        int result = 0;
+                        if (model != null) {
+                            model.status = -1;
+                            //model.updateContainerModel(formPost);
+
+                            // Save the object
+                            db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
+                            ctx.Entry(model).State = System.Data.Entity.EntityState.Modified; // Critical
+                            result = ctx.SaveChanges();
+
+                            // Return the success response along with the message body
+                            return Json(new Payload(
+                                1, this.className, model,
+                                "Successfully disabled " + this.className + " (" + model.id + "," + id + ")"
+                            ), JsonRequestBehavior.AllowGet);
+
+                        } else {
+                            return Json(new Payload(
+                                0, "Failed to disable " + this.className + "(" + id + ").  The request returned null."
+                            ), JsonRequestBehavior.AllowGet);
+                        }
+                    } else {
+                        return Json(new Payload(
+                            0, "Failed to disable " + this.className + "(" + id + ").  This Container is still in use."
+                        ), JsonRequestBehavior.AllowGet);
+                    }
+
+
+
+                } else {
+                    message = "Failed to disable " + this.className + "(" + id
+                    + ")\nYou do not have permissions to modify this " + this.className;
+
+                    return Json(new Payload(
+                        Int32.Parse(GetResults.Fail.ToString()),
+                        message
+                    ), JsonRequestBehavior.AllowGet);
+                }
+            } catch (Exception e) {
+                return Json(new Payload(
+                    Int32.Parse(GetResults.Fail.ToString()), e.Message, e), JsonRequestBehavior.AllowGet
+                );
+            }
+        }
+
     }
 }

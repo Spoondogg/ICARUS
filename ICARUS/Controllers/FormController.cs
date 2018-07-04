@@ -37,32 +37,22 @@ namespace ICARUS.Controllers {
         }
         
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            var model = ctx.Forms.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.Forms.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Forms.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Forms;
+            return ctx.Forms.Where(FilterAllowed());
         }
 
         /// <summary>
@@ -126,8 +116,6 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(0, "FormController.submit() Unknown Exception<br><br><h5>FormPost</h5>"+formPost.ToString()+"<br><br>" + e.Message, e));
             }
         }
-
-        
 
     }
 }

@@ -263,7 +263,7 @@ class FORM extends CONTAINER {
 
                     this.unlock();
                     app.loader.log(100, 'Form Submitted');
-                    this.afterSuccessfulPost();
+                    this.afterSuccessfulPost(payload);
                 }.bind(this)
             });
             

@@ -39,6 +39,8 @@ namespace ICARUS.Controllers {
         /// </summary>
         public Dictionary<string, DbSet> dbSets;
 
+        public Dictionary<string, DbSet<Container>> dbContainerSets;
+
         // Populate with relevant objects
 
         public DbSet<Main> Mains { get; set; }
@@ -47,13 +49,16 @@ namespace ICARUS.Controllers {
         public DbSet<Container> Containers { get; set; }
         public object Container { get; internal set; }
 
+        public DbSet<CLASSVIEWER> ClassViewers { get; set; }
+        public object ClassViewer { get; internal set; }
+
         public DbSet<IFRAME> IFrames { get; set; }
         public object IFrame { get; internal set; }
 
         public DbSet<ARTICLE> Articles { get; set; }
         public object Article { get; internal set; }
 
-        public DbSet<Section> Sections { get; set; }
+        public DbSet<SECTION> Sections { get; set; }
         public object Section { get; internal set; }
 
         // FORM
@@ -96,6 +101,9 @@ namespace ICARUS.Controllers {
 
         public DbSet<INDEXMAIN> IndexMains { get; set; }
         public object IndexMain { get; internal set; }
+
+        public DbSet<CHAT> Chats { get; set; }
+        public object Chat { get; internal set; }
 
         public DbSet<JUMBOTRON> Jumbotrons { get; set; }
         public object Jumbotron { get; internal set; }
@@ -141,9 +149,11 @@ namespace ICARUS.Controllers {
             this.dbSets = new Dictionary<string, DbSet>();
             this.dbSets.Add("Main", Mains);
             this.dbSets.Add("Container", Containers);
+            this.dbSets.Add("CLASSVIEWER", ClassViewers);
+            this.dbSets.Add("CHAT", Chats);
             this.dbSets.Add("IFrame", IFrames);
             this.dbSets.Add("ARTICLE", Articles);
-            this.dbSets.Add("Section", Sections);
+            this.dbSets.Add("SECTION", Sections);
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
             this.dbSets.Add("FormElementGroup", FormElementGroups);

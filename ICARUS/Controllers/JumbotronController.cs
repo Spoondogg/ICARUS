@@ -36,10 +36,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            var model = ctx.Jumbotrons.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.Jumbotrons.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
@@ -49,15 +46,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Jumbotrons.Where(m =>
-            //return getDbSet(ctx).Cast<Container>().Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
+            return ctx.Jumbotrons.Where(FilterAllowed());
         }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Jumbotrons;
-        }
-
     }
 }
