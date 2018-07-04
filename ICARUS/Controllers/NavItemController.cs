@@ -17,11 +17,11 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Instantiate a Container using Section defaults
+        /// Instantiate a Container using defaults
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            ListItem obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new NavItem()
                 : new NavItem(formPost);
 
@@ -30,32 +30,22 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            NavItem model = (NavItem)ctx.NavItems.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.NavItems.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single Main element
+        /// Select a single element
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.NavItems.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.NavItems;
+            return ctx.NavItems.Where(FilterAllowed());
         }
     }
 }

@@ -8,11 +8,11 @@ class FORMELEMENTGROUP extends CONTAINER {
         @param {MODEL} model datamodel
      */
     constructor(node, model) {
-        super(node, 'DIV', model);
+        super(node, 'DIV', model, ['INPUT', 'SELECT', 'TEXTAREA']);
         this.addClass('form-element-group');
-        this.addContainerCase('INPUT');
-        this.addContainerCase('SELECT');
-        this.addContainerCase('TEXTAREA');
+        //this.addContainerCase('INPUT');
+        //this.addContainerCase('SELECT');
+        //this.addContainerCase('TEXTAREA');
         //this.construct();
         this.populate(model.children);
     }
@@ -31,9 +31,13 @@ class FORMELEMENTGROUP extends CONTAINER {
             debug(inputs[i]);
             let inp = null;
             if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].attributes.type === 'FORMPOSTINPUT') {
-                new FORMPOSTINPUT(this.body.pane, inputs[i]);
+                inp = new FORMPOSTINPUT(this.body.pane, inputs[i]);
             } else {
-                new INPUT(this.body.pane, inputs[i]);
+                if (inputs[i].element === 'TEXTAREA') {
+                    inp = new TEXTAREA(this.body.pane, inputs[i]);
+                } else {
+                    inp = new INPUT(this.body.pane, inputs[i]);
+                }
             }
             this.children.push(inp);
         }

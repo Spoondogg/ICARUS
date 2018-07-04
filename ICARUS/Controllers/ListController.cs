@@ -21,7 +21,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            List obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new List()
                 : new List(formPost);
 
@@ -36,10 +36,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            List model = (List)ctx.Lists.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.Lists.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
@@ -49,13 +46,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.Lists.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.Lists;
+            return ctx.Lists.Where(FilterAllowed());
         }
     }
 }

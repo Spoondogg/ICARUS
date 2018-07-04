@@ -1,0 +1,135 @@
+﻿/**
+    A Chat Window
+*/
+class CHAT extends CONTAINER {
+    /**
+        Constructs a SECTION Container Element
+        @param {CONTAINER} node The ARTICLE to contain the section
+        @param {MODEL} model The SECTION object retrieves from the server
+     */
+    constructor(node, model) {
+        super(node, 'DIV', model, []);
+        this.addClass('chat');
+
+        //this.conversation = new EL(this.body.pane, 'DIV', new MODEL('conversation'));
+
+        
+
+        this.form = this.createEmptyForm(this.body.pane);
+        this.form.el.style = 'height:68px;background-color:#5a5a5a;';
+        $(this.form.el).insertAfter(this.body.pane.el);
+
+        let inputs = [
+            new MODEL(new ATTRIBUTES({
+                'name': 'statement',
+                'type': 'TEXTAREA',
+                'value': ''
+            })).set({
+                'element': 'TEXTAREA',
+                'label': 'element'
+            })
+        ];
+
+        this.form.fieldset.formElementGroup.addInputElements(inputs);
+
+        this.form.setPostUrl('CHAT/Talk');
+
+        /*
+        // THIS IS THE PART THAT USES NODE/CALLER
+        */
+        this.form.afterSuccessfulPost = function (payload) {
+
+            //console.log('I AM DONE NOW!!!');
+            //console.log(payload);
+            setTimeout(function () {
+                this.addStatement('ICARUS', payload.message);
+            }.bind(this), 1000);
+
+            /*
+            $(node.el).collapse('toggle');
+            node.empty();
+            this.setLabel(form.el.elements['label'].value);
+            if (caller) {
+                caller.toggle('active');
+                console.log(caller);
+                caller.node.node.toggleCollapse();
+            }
+            app.loader.hide();
+            */
+        }.bind(this);
+
+        /*
+        this.footer = new FOOTER(this.body.pane, new MODEL());
+        $(this.footer.el).insertAfter(this.body.pane.el);
+
+        this.footer.textarea = new EL(this.footer, 'TEXTAREA', new MODEL());
+        this.footer.textarea.el.onkeypress = this.onTestChange.bind(this);
+        */
+        
+        this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
+        console.log('Chat Input');
+        console.log(this.chatInput);
+        this.chatInput.el.onkeypress = this.postStatement.bind(this);
+
+    }
+
+    /**
+     * Posts the chat statement to the server and handles any responses
+     * @returns {Boolean} True if succeeds
+     */
+    postStatement() {
+        //let key = window.event.keyCode;
+
+        // If the user has pressed enter
+        if (window.event.keyCode === 13) {
+            this.addStatement(app.getUser(), this.chatInput.el.value);
+            this.form.post();
+            this.chatInput.el.value = '';
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Adds a statement to the conversation window
+     * @param {string} username User name
+     * @param {string} string Statement
+     */
+    addStatement(username, string) {
+        let statement = new EL(this.body.pane, 'DIV', new MODEL('statement'));
+        statement.el.style.display = "none";
+
+        statement.thumb = new EL(statement, 'DIV', new MODEL(new ATTRIBUTES({
+            'class': 'thumb'
+        })));
+        statement.thumb.img = new EL(statement.thumb, 'IMG', new MODEL(new ATTRIBUTES({
+            'class': 'user-photo',
+            'src': 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'
+        })));
+
+        statement.bubble = new EL(statement, 'DIV', new MODEL(new ATTRIBUTES({
+            'class': 'bubble'
+        })));
+        statement.bubble.panel = new EL(statement.bubble, 'DIV', new MODEL('panel panel-default'));
+
+        statement.bubble.panel.heading = new EL(statement.bubble.panel, 'DIV', new MODEL('panel-heading'));
+        statement.bubble.panel.heading.strong = new EL(statement.bubble.panel.heading, 'STRONG', new MODEL(), username);
+        statement.bubble.panel.heading.cite = new EL(statement.bubble.panel.heading, 'CITE', new MODEL(), 'commented X mins ago');
+
+        statement.bubble.panel.body = new EL(statement.bubble.panel, 'DIV', new MODEL('panel-body'), string);
+
+        $(statement.el).fadeIn(500);
+        $(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
+
+
+
+        return statement;
+    }
+
+    construct() {
+        setTimeout(function () {
+            this.addStatement('ICARUS', 'Hello ' + app.getUser());
+        }.bind(this), 2000);
+    }
+}

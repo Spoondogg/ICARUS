@@ -13,19 +13,9 @@ class INDEX extends BANNER {
     }
 
     construct() {
-        let elementList = ['Article', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL']; //'Main',
-
-        //this.list = new LIST(this.body.pane, new MODEL());
-
-        //let list = 0;
+        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT']; //'Main',
+        
         for (let l = 0; l < elementList.length; l++) {
-
-            /*
-            let group = new GROUP(this.list, 'LI', new MODEL().set({
-                'name': elementList[l]
-            }));
-            this.list.addGroup(group);
-            */
             let thumb = new INDEXTHUMBNAIL(this.body.pane, new MODEL().set({
                 'label': elementList[l],
                 'dataId': -1,
@@ -49,6 +39,5 @@ class INDEX extends BANNER {
                 }.bind(this)
             );
         }
-        //this.preview
     }
 }

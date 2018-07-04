@@ -109,6 +109,7 @@ class CONTAINER extends GROUP {
         this.addContainerCase('JUMBOTRON');
         this.addContainerCase('BANNER');
         this.addContainerCase('PARAGRAPH');
+        this.addContainerCase('CHAT');
 
         // Add any additional containers from containerList
         for (let c = 0; c < containerList.length; c++) {
@@ -400,10 +401,20 @@ class CONTAINER extends GROUP {
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICON.DELETE,
+                        'label': 'REMOVE'
+                    })
+                })
+            ).el.onclick = this.remove.bind(this);
+
+            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICON.EXCLAMATION,
                         'label': 'DELETE'
                     })
                 })
             ).el.onclick = this.disable.bind(this);
+
         }
     }
     
@@ -582,7 +593,7 @@ class CONTAINER extends GROUP {
 
     /**
         Returns the CONTAINER's name attribute
-        @returns {string} Section name
+        @returns {string} Container name
     */
     getId() {
         return this.el.getAttribute('id');
@@ -590,7 +601,7 @@ class CONTAINER extends GROUP {
 
     /**
         Sets the CONTAINER's ID
-        @param {number} id Section database Id
+        @param {number} id Container database Id
     */
     setId(id) {
         this.id = id;
@@ -601,7 +612,7 @@ class CONTAINER extends GROUP {
 
     /**
         Returns the CONTAINER's name attribute
-        @returns {string} Section name
+        @returns {string} Container name
     */
     getName() {
         return this.el.getAttribute('name');
@@ -1211,8 +1222,8 @@ class CONTAINER extends GROUP {
         Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
     */
-    disable() {
-        let label = 'Disable ' + this.className + '{'+ this.element + '}['+this.id+']';
+    remove() {
+        let label = 'Remove ' + this.className + '{'+ this.element + '}['+this.id+']';
         let text = 'Remove ' + this.className + ' from ' + this.node.node.node.className + '?';
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
@@ -1226,5 +1237,62 @@ class CONTAINER extends GROUP {
             debug('Unable to disable this ' + this.element);
             debug(e);
         }
-    }    
+    }
+
+    /**
+        Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
+        Optionally, this should also delete the object from the database
+    */
+    disable() {
+        let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
+        let text = 'Disable ' + this.className + 'j['+this.id+'] in the Database?<br>This '+this.className+' will be permenantly deleted from database in X days!!!';
+        try {
+            this.prompt = new PROMPT(label, text, [], [], true);
+            this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICON.REMOVE);
+            this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
+                this.destroy();
+                this.prompt.hide();
+                console.log('TODO: Disable method on Container controller.');
+                app.loader.log(100, 'Disabling '+this.className);
+                $.post('/' + this.className + '/Disable/' + this.id, {
+                    '__RequestVerificationToken': token.value
+                },
+                    function (payload, status) {
+                        if (payload.result !== 0) {
+                            app.loader.log(100, 'Success');
+                            setTimeout(function () {
+
+                                let url = new URL(window.location.href);
+                                let returnUrl = url.searchParams.get('ReturnUrl');
+                                if (returnUrl) {
+                                    returnUrl = url.origin + returnUrl;
+                                    location.href = returnUrl;
+                                } else {
+                                    location.reload(true);
+                                }
+
+                            }.bind(this), 1000);
+                        } else {
+                            app.loader.log(0, 'Login failed. (err_' + status + ').<br>' +
+                                payload.message
+                            );
+                            debug('Failed to POST results to server with status: "' + status + '"');
+                            debug('Payload:\n');
+                            debug(payload);
+                        }
+                    }.bind(this)
+                );
+
+                app.loader.log(100, 'Disable Complete');
+
+
+
+
+            }.bind(this);
+            this.prompt.show();
+        } catch (e) {
+            debug('Unable to disable this ' + this.element);
+            debug(e);
+        }
+    } 
 }

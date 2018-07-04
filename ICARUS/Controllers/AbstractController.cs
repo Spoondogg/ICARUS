@@ -106,7 +106,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public virtual JsonResult getJson(int id) {            
             EL model = (EL)db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name || model.shared == 1) {
+            if (model.status != -1 && (model.authorId == User.Identity.Name || model.shared == 1)) {
 
                 string message = "Successfully retrieved " + this.className + ", subsections (" +
                     model.subsections + ")";

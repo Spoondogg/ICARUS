@@ -28,7 +28,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
-            IFRAME obj = (formPost == null)
+            var obj = (formPost == null)
                 ? new IFRAME()
                 : new IFRAME(formPost);
 
@@ -43,10 +43,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            IFRAME model = (IFRAME)ctx.IFrames.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
-                );
-            return model;
+            return ctx.IFrames.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
@@ -56,13 +53,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.IFrames.Where(m =>
-                (m.authorId == User.Identity.Name || m.shared == 1)
-            );
-        }
-
-        public override DbSet getDbSet(ObjectDBContext ctx) {
-            return ctx.IFrames;
+            return ctx.IFrames.Where(FilterAllowed());
         }
     }
 }

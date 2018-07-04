@@ -21,4 +21,12 @@ class LIST extends CONTAINER {
 
     }
 
+    /**
+     * Adds a List Item (LI) to this LIST
+     * @param {any} model
+     */
+    addListItem(model) {
+        this.children.push(new LISTITEM(this, model)); //model.url, model.label
+        return this.addGroup(this.children[this.children.length - 1]);
+    }
 }

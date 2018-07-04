@@ -199,10 +199,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\IndexMainController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\ClassViewerController.cs" />
     <Compile Include="Controllers\MenuListController.cs" />
     <Compile Include="Controllers\ThumbnailController.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
@@ -457,7 +459,9 @@
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
     <Compile Include="Models\Icarus\Elements\INDEXMAIN.cs" />
     <Compile Include="Models\Icarus\Elements\INDEX.cs" />
+    <Compile Include="Models\Icarus\Elements\CLASSVIEWER.cs" />
     <Compile Include="Models\Icarus\Elements\MenuList.cs" />
+    <Compile Include="Models\Icarus\Elements\CHAT.cs" />
     <Compile Include="Models\Icarus\Elements\Thumbnail.cs" />
     <Compile Include="Models\Icarus\Elements\Container.cs" />
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
@@ -511,7 +515,7 @@
     <Compile Include="Models\Icarus\Elements\ListItem.cs" />
     <Compile Include="Models\Icarus\Elements\NAVBAR.cs" />
     <Compile Include="Models\Icarus\Elements\FOOTER.cs" />
-    <Compile Include="Models\Icarus\Elements\Section.cs" />
+    <Compile Include="Models\Icarus\Elements\SECTION.cs" />
     <Compile Include="Models\Icarus\Report\ReportSource.cs" />
     <Compile Include="Models\Icarus\Report\Report.cs" />
     <Compile Include="Models\Icarus\Email\Email.cs" />
@@ -538,6 +542,8 @@
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\css\icarus\chat.css" />
+    <Content Include="Content\css\icarus\classviewer.css" />
     <Content Include="Content\css\icarus\index.css" />
     <Content Include="Content\css\icarus\menulist.css" />
     <Content Include="Content\css\icomoon\icomoon.css" />
@@ -598,12 +604,14 @@
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\file\FILE.js" />
     <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\index\INDEX.js" />
+    <Content Include="Scripts\icarus\model\el\container\main\chat\CHAT.js" />
     <Content Include="Scripts\icarus\model\el\container\menulist\MENULIST.js" />
     <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />

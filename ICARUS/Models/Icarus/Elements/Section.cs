@@ -11,14 +11,14 @@ namespace ICARUS.Models.Icarus.Elements {
     /// A SECTION of an ARTICLE, each SECTION has a collapsable HEADER
     /// and a TEXTBLOCK 
     /// </summary>
-    public class Section : Container {
+    public class SECTION : Container {
 
         /// <summary>
         /// An article is the basic building block for nearly all pages.  
         /// Articles are made up of a collection of SECTIONS
         /// </summary>
         /// <param name="attributes"></param>
-        public Section() : base("SECTION", new MODEL() {
+        public SECTION() : base("SECTION", new MODEL() {
             label = "SECTION"
         }) {
 
@@ -28,7 +28,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a SECTION based on the provided Form Post
         /// </summary>
         /// <param name="formPost"></param>
-        public Section(FormPost formPost) : base("SECTION", formPost) {
+        public SECTION(FormPost formPost) : base("SECTION", formPost) {
 
         }
     }
