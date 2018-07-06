@@ -20,8 +20,5 @@ namespace ICARUS.Models.Icarus.ColumnLists {
             this.Add(new IcarusTableColumn("step", DataTypes.String.ToString()));
             this.Add(new IcarusTableColumn("comment", DataTypes.String.ToString()));
         }
-
-        
-
     }
 }

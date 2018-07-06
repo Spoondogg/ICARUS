@@ -12,6 +12,7 @@ using System.Xml;
 using ICARUS.Models.Icarus.Elements;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
+using ICARUS.Models.Icarus.Dictionary;
 
 namespace ICARUS.Controllers {
 
@@ -84,7 +85,10 @@ namespace ICARUS.Controllers {
 
                 
                 message.Append("Summary:<br>");
+                message.Append("<cite>Statement has " + statementArray.Count() + " words</cite>");
                 message.Append("<ul>");
+
+                List<FormValue> uniqueWords = new List<FormValue>();
 
                 /*
                  * Map-Reduce
@@ -99,8 +103,6 @@ namespace ICARUS.Controllers {
                         where wrd.ToLower() == word.ToLower()
                         select wrd.ToLower();
 
-                    FormValue formValue = new FormValue(word.ToLower(), words.Count().ToString());
-
                     // Loop through and check if exists
                     var hasWord = false;
                     for (var w = 0; w < formPost.results.Count; w++) {
@@ -110,22 +112,35 @@ namespace ICARUS.Controllers {
                         }
                     }
                     if (hasWord == false) {
-                        formPost.results.Add(formValue);
-                        message.Append(
-                            "<li>"
-                            + "<a href=\"http://www.dictionary.com/browse/"+formValue.name+ "?s=t\"  target=\"_blank\">" + formValue.name + "[0]</a>:" 
-                            + formValue.value 
-                            + "<br>"
-                            + "<cite style=\"font-size:small;\">"
-                            + "<a href=\"https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + formValue.name + "?key=7f0d3743-cd0f-4c39-a11e-429184a376d1\" target=\"_blank\">Dictionary</a>"
-                            + "&nbsp;|&nbsp;"
-                            + "<a href=\"https://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + formValue.name + "?key=7f1eee46a-0757-408b-a42e-7da3dcaf394a\" target=\"_blank\">Thesaurus</a>"
-                            + "</cite>"
-                            + "</li>");
+                        uniqueWords.Add(
+                           new FormValue(word.ToLower(), words.Count().ToString())
+                        );
                     }
                 }
 
+                for(var uw = 0; uw < uniqueWords.Count(); uw++) {
+                    message.Append(
+                        "<li>"
+                        + "<a href=\"http://www.dictionary.com/browse/" + uniqueWords[uw].name + "?s=t\" target=\"_blank\">" + uniqueWords[uw].name + "[0]</a>:"
+                        + uniqueWords[uw].value
+                        + "<br>"
+                        + "<cite style=\"font-size:small;\">"
+                        + "<a href=\"https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + uniqueWords[uw].name + "?key=7f0d3743-cd0f-4c39-a11e-429184a376d1\" target=\"_blank\">Dictionary</a>"
+                        + "&nbsp;|&nbsp;"
+                        + "<a href=\"https://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + uniqueWords[uw].name + "?key=7f1eee46a-0757-408b-a42e-7da3dcaf394a\" target=\"_blank\">Thesaurus</a>"
+                        + "</cite>"
+                        + "</li>");
+                }
                 message.Append("</ul>");
+
+                // Check if word exists in the dictionary and add it if it does not
+                // TODO: Call stored procedure outside of this ...???
+                // This will get called redundantly
+                for (var uw = 0; uw < uniqueWords.Count(); uw++) {
+                    if (this.updateDictionary(uniqueWords[uw].name) == 1) {
+                        message.Append("<cite>Added '" + uniqueWords[uw].name + "' to the dictionary</cite>");
+                    }
+                }
 
                 // This will cause an exception if given values are not XML friendly
                 formPost.resultsToXml(); 
@@ -157,5 +172,63 @@ namespace ICARUS.Controllers {
                 )); //formPost.getMessage(), formPost = formPost
             }
         }
+
+
+        /// <summary>
+        /// Checks if given word exists in dictionary and updates if able to
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize]
+        public int updateDictionary(string word) {
+            /*
+            List<string> columns = new List<string>();
+            columns.Add("result");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "word", word));
+
+            Procedure procedure = new Procedure("ICARUS.UpdateDictionary", columns, parameters);
+            
+            //return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
+            return (this.Call(procedure)[0]["result"] == "1") ? true : false;
+            */
+
+
+            int result = 0;
+
+            try {
+
+                var model = new WORD();
+
+                // Retrieve the record from the database
+                ObjectDBContext ctx = getObjectDbContext();
+                
+                // Save the object
+                db.dbSets["WORD"].Add(model);
+                ctx.Entry(model).State = System.Data.Entity.EntityState.Modified; // Critical
+                result = ctx.SaveChanges();
+
+                /*
+                // Return the success response along with the message body
+                return Json(new Payload(
+                    1, "WORD", model,
+                    "Successfully set WORD (" + model.id + "," + word + ")"
+                ), JsonRequestBehavior.AllowGet);
+                */
+
+            } catch (Exception e) {
+                /*
+                return Json(new Payload(
+                    0, "Unknown exception for " + this.className + "<br><br>" + e.Message.ToString(), e
+                ), JsonRequestBehavior.AllowGet);
+                */
+            }
+
+
+
+            return result;
+        }
+
+        
     }
 }

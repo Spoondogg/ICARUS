@@ -35,36 +35,14 @@ class CHAT extends CONTAINER {
         this.form.setPostUrl('CHAT/Talk');
 
         /*
-        // THIS IS THE PART THAT USES NODE/CALLER
+            Show the Payload response
         */
         this.form.afterSuccessfulPost = function (payload) {
-
-            //console.log('I AM DONE NOW!!!');
             //console.log(payload);
             setTimeout(function () {
                 this.addStatement('ICARUS', payload.message);
             }.bind(this), 1000);
-
-            /*
-            $(node.el).collapse('toggle');
-            node.empty();
-            this.setLabel(form.el.elements['label'].value);
-            if (caller) {
-                caller.toggle('active');
-                console.log(caller);
-                caller.node.node.toggleCollapse();
-            }
-            app.loader.hide();
-            */
         }.bind(this);
-
-        /*
-        this.footer = new FOOTER(this.body.pane, new MODEL());
-        $(this.footer.el).insertAfter(this.body.pane.el);
-
-        this.footer.textarea = new EL(this.footer, 'TEXTAREA', new MODEL());
-        this.footer.textarea.el.onkeypress = this.onTestChange.bind(this);
-        */
         
         this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
         console.log('Chat Input');
@@ -75,12 +53,10 @@ class CHAT extends CONTAINER {
 
     /**
      * Posts the chat statement to the server and handles any responses
+     * when the user presses ENTER 
      * @returns {Boolean} True if succeeds
      */
     postStatement() {
-        //let key = window.event.keyCode;
-
-        // If the user has pressed enter
         if (window.event.keyCode === 13) {
             this.addStatement(app.getUser(), this.chatInput.el.value);
             this.form.post();
