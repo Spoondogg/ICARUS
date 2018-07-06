@@ -75,10 +75,10 @@ namespace ICARUS.Models.Icarus.Elements {
             this.id = id;
             this.label = model.label;
             this.subsections = "0";
-            this.collapsed = 0;
-            this.showHeader = 1;
-            this.hasTab = 1;
-            this.hasSidebar = 0;
+            this.collapsed = 0; // TODO: This should be migrated out of here and into attributes
+            this.showHeader = 1; // TODO: This should be migrated out of here and into attributes
+            this.hasTab = 1; // TODO: This should be migrated out of here and into attributes
+            this.hasSidebar = 0; // TODO: This should be migrated out of here and into attributes
             this.status = 1;
             this.attributesId = 0;
             this.dataId = 0;
