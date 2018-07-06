@@ -1,5 +1,6 @@
 ﻿using ICARUS.Models;
 using ICARUS.Models.Icarus;
+using ICARUS.Models.Icarus.Dictionary;
 using ICARUS.Models.Icarus.Elements;
 using System;
 using System.Collections;
@@ -136,6 +137,16 @@ namespace ICARUS.Controllers {
         public DbSet<Report> Reports { get; set; }
         public object Report { get; internal set; }
 
+        // DICTIONARY
+        //public DbSet<DICTIONARY> Dictionaries { get; set; }
+        //public object Dictionary { get; internal set; }
+
+        //public DbSet<SENTENCE> Sentences { get; set; }
+        //public object Sentence { get; internal set; }
+
+        public DbSet<WORD> Words { get; set; }
+        public object Word { get; internal set; }
+
         //public DbSet<Param> Params { get; set; }
         //public object Param { get; internal set; }
 
@@ -178,6 +189,9 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Procedure", Procedures);
             this.dbSets.Add("Report", Reports);
             //this.dbSets.Add("Param", Params);
+            this.dbSets.Add("DICTIONARY", Dictionaries);
+            this.dbSets.Add("SENTENCE", Sentences);
+            this.dbSets.Add("WORD", Words);
             this.dbSets.Add("Log", Logs);
         }
     }

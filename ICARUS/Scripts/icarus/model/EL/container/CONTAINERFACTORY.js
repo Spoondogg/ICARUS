@@ -92,6 +92,10 @@ class CONTAINERFACTORY {
                     obj = new PARAGRAPH(span, result.model);
                     break;
 
+                case 'WORD':
+                    obj = new WORD(span, result.model);
+                    break;
+
                 case 'BANNER':
                     obj = new BANNER(span, result.model);
                     break;

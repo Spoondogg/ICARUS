@@ -14,12 +14,6 @@ namespace ICARUS.Models {
             this.Add(new SelectListItem { Value = "4", Text = "DateTime" });
             this.Add(new SelectListItem { Value = "5", Text = "Float" });
             this.Add(new SelectListItem { Value = "6", Text = "Function" });
-
         }
-
-
-
     }
-
-
 }
