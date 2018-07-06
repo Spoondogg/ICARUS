@@ -88,6 +88,10 @@ class CONTAINERFACTORY {
                     break;
                 */
 
+                case 'DICTIONARY':
+                    obj = new DICTIONARY(span, result.model);
+                    break;
+
                 case 'PARAGRAPH':
                     obj = new PARAGRAPH(span, result.model);
                     break;

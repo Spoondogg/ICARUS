@@ -405,7 +405,7 @@ namespace ICARUS.Controllers {
                     Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
 
                     List<Dictionary<string, object>> records = this.Call(procedure);
-                    if(records.Count == 1) { // Should only exist in 
+                    if(records.Count <= 1) { // Should only exist in MAIN or nowhere
                         // Set new values
                         int result = 0;
                         if (model != null) {

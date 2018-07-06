@@ -138,8 +138,8 @@ namespace ICARUS.Controllers {
         public object Report { get; internal set; }
 
         // DICTIONARY
-        //public DbSet<DICTIONARY> Dictionaries { get; set; }
-        //public object Dictionary { get; internal set; }
+        public DbSet<DICTIONARY> Dictionaries { get; set; }
+        public object Dictionary { get; internal set; }
 
         //public DbSet<SENTENCE> Sentences { get; set; }
         //public object Sentence { get; internal set; }
@@ -190,7 +190,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Report", Reports);
             //this.dbSets.Add("Param", Params);
             this.dbSets.Add("DICTIONARY", Dictionaries);
-            this.dbSets.Add("SENTENCE", Sentences);
+            //this.dbSets.Add("SENTENCE", Sentences);
             this.dbSets.Add("WORD", Words);
             this.dbSets.Add("Log", Logs);
         }

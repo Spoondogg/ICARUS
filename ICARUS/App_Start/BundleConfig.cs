@@ -53,6 +53,8 @@ namespace ICARUS {
                 "~/Content/css/icarus/console.css",
                 "~/Content/css/icarus/loader.css",
                 "~/Content/css/icarus/container.css",
+                "~/Content/css/icarus/dictionary.css",
+                "~/Content/css/icarus/word.css",
                 "~/Content/css/icarus/main.css",
                 "~/Content/css/icarus/label.css",
                 "~/Content/css/icarus/textblock.css",
@@ -87,6 +89,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/EL.js",
 
                 // Generic
+                "~/Scripts/icarus/DATAELEMENTS.js",
                 "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
                 "~/Scripts/icarus/WATERMARK.js",
 
@@ -204,6 +207,8 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/form/forms/LogoutForm.js",
 
                 // Main
+                "~/Scripts/icarus/model/el/container/main/dictionary/DICTIONARY.js",
+                "~/Scripts/icarus/model/el/container/main/dictionary/word/WORD.js",
                 "~/Scripts/icarus/model/el/container/main/chat/CHAT.js",
                 "~/Scripts/icarus/model/el/container/main/article/section/SECTION.js",
                 "~/Scripts/icarus/model/el/container/main/article/ARTICLE.js",

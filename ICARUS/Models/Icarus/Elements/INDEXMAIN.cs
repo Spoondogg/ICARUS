@@ -12,10 +12,7 @@ namespace ICARUS.Models.Icarus.Elements {
     public class INDEXMAIN : Container {
 
         public Dictionary<string, int> containers { get; set; }
-
-        // A list of container names
-        //public List<string> containers;
-
+        
         /// <summary>
         /// A wide header that often contains a background image and heading
         /// </summary>

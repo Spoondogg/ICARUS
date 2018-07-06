@@ -13,7 +13,7 @@ class INDEX extends BANNER {
     }
 
     construct() {
-        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT']; //'Main',
+        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD']; //'Main',
         
         for (let l = 0; l < elementList.length; l++) {
             let thumb = new INDEXTHUMBNAIL(this.body.pane, new MODEL().set({
