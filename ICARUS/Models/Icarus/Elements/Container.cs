@@ -16,13 +16,15 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <summary>
         /// The DateTime that this element was created
         /// </summary>
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Required]
         public DateTime dateCreated { get; set; }
 
         /// <summary>
         /// The DateTime that this element was last modified
         /// </summary>
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        //[Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Required]
         public DateTime dateLastModified { get; set; }
 
         /// <summary>
@@ -63,7 +65,8 @@ namespace ICARUS.Models.Icarus.Elements {
         public Container() : base("DIV", new MODEL() {
             label = "CONTAINER"
         }) {
-
+            this.dateCreated = DateTime.UtcNow;
+            this.dateLastModified = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -84,6 +87,8 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dataId = 0;
             this.descriptionId = 0;
             this.shared = 0;
+            this.dateCreated = DateTime.UtcNow;
+            this.dateLastModified = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -94,8 +99,8 @@ namespace ICARUS.Models.Icarus.Elements {
         public Container(string element, FormPost formPost) : base(
             element, new MODEL()
         ) {
-            this.dateCreated = DateTime.Now;
-            this.dateLastModified = DateTime.Now;
+            this.dateCreated = DateTime.UtcNow;
+            this.dateLastModified = DateTime.UtcNow;
             this.updateContainerModel(formPost);
         }
 
@@ -116,6 +121,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dataId = formPost.parseInt("dataId");
             this.descriptionId = formPost.parseInt("descriptionId");
             this.shared = formPost.parseInt("shared");
+            this.dateLastModified = DateTime.UtcNow;
         }
     }
 }

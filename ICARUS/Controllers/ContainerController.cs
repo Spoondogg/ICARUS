@@ -345,7 +345,9 @@ namespace ICARUS.Controllers {
                 int result = 0;
                 if (model != null) {
                     model.status = 1;
+                    
                     model.updateContainerModel(formPost);
+                    model.dateLastModified = DateTime.UtcNow;
 
                     // Save the object
                     db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
@@ -410,6 +412,7 @@ namespace ICARUS.Controllers {
                         int result = 0;
                         if (model != null) {
                             model.status = -1;
+                            model.dateLastModified = DateTime.UtcNow;
                             //model.updateContainerModel(formPost);
 
                             // Save the object

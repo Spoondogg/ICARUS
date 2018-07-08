@@ -32,7 +32,9 @@ namespace ICARUS.Models.Icarus {
         /// Time that form was created
         /// </summary>
         /// //[Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public string timestamp { get; set; }
+        //public string timestamp { get; set; }
+        [Required]
+        public DateTime dateCreated { get; set; }
 
         /// <summary>
         /// The Form Version Number 
@@ -44,6 +46,13 @@ namespace ICARUS.Models.Icarus {
         /// </summary>
         [StringLength(128), Required]
         public string authorId { get; set; }
+
+        /// <summary>
+        /// Indicates if the object is active/inactive on the database, 
+        /// or any other states that might be needed
+        /// </summary>
+        [Required]
+        public int status { get; set; }
 
         /// <summary>
         /// Indicates if the object is active/inactive on the database, 
@@ -139,7 +148,7 @@ namespace ICARUS.Models.Icarus {
         /// Construct a generic form post
         /// </summary>
         public FormPost() {
-
+            this.status = 1;
         }
 
         /// <summary>
