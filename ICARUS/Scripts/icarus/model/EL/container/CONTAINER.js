@@ -46,9 +46,7 @@ class CONTAINER extends GROUP {
         this.dataElements = DATAELEMENTS[this.className];
 
         this.attrElements = []; // Attribute elements contain a list of attributes that apply for this object
-
         
-
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
@@ -91,7 +89,6 @@ class CONTAINER extends GROUP {
             if (model.shared) {
                 this.navBar.header.tab.anchor.icon.el.className = ICON.PUBLIC;
             }
-
         }
 
         this.body = new CONTAINERBODY(this, model);

@@ -72,8 +72,7 @@ namespace ICARUS.Controllers {
             formPost.authorId = User.Identity.Name;
             formPost.version = 20180104.001;
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
-            formPost.timestamp = DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            formPost.resultsToXml();
+            formPost.dateCreated = DateTime.UtcNow;
 
             // Attempt to save the form to the database
             try {

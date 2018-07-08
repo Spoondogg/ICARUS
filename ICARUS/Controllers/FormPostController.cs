@@ -27,26 +27,34 @@ namespace ICARUS.Controllers {
             var posts = from p in getObjectDbContext().FormPosts
                         where p.authorId == User.Identity.Name
                         select p;
-            posts = posts.OrderBy(p => p.formId).ThenByDescending(p => p.timestamp);
+            posts = posts.OrderBy(p => p.formId).ThenByDescending(p => p.dateCreated);
             return Json(posts.ToList());
+        }
+
+        /// <summary>
+        /// Creates an Empty Formpost and returns the model
+        /// </summary>
+        /// <returns></returns>
+        public FormPost createEmptyFormPost() {
+            FormPost formPost = new FormPost();
+            formPost.id = 0;
+            formPost.formId = 0;
+            formPost.authorId = User.Identity.Name;
+            formPost.version = 20180104.001;
+            formPost.status = 1;
+            formPost.dateCreated = DateTime.UtcNow;
+            formPost.results = new List<FormValue>();
+            formPost.xmlResults = "<root></root>";
+            formPost.resultsToXml();
+            formPost.jsonResults = "";
+
+            return formPost;
         }
         
         public override async Task<ActionResult> Create() {
             try {
 
-                var model = new FormPost();
-                model.id = 0;
-                model.formId = 0;
-                model.authorId = User.Identity.Name;
-                model.version = 20180104.001;
-                model.timestamp = DateTime.UtcNow.ToString(
-                    "s", 
-                    System.Globalization.CultureInfo.InvariantCulture
-                );
-                model.results = new List<FormValue>();
-                model.xmlResults = "<root></root>";
-                model.resultsToXml();
-                model.jsonResults = "";
+                var model = createEmptyFormPost();
 
                 // Save the object
                 db.dbSets[this.className].Add(model);
@@ -80,7 +88,7 @@ namespace ICARUS.Controllers {
             formPost.authorId = User.Identity.Name;
             formPost.version = 20180104.001;
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
-            formPost.timestamp = DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            formPost.dateCreated = DateTime.UtcNow;
             formPost.resultsToXml();
             formPost.jsonResults = "";
 

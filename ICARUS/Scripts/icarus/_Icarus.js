@@ -247,7 +247,10 @@ const ICON = {
     CALLOUT: 'glyphicon-comment',
     THUMBNAIL: 'glyphicon-credit-card',
     TOGGLE: 'glyphicon-check',
-    IMAGE: 'glyphicon-picture'
+    IMAGE: 'glyphicon-picture',
+    CHAT: 'glyphicon-comment',
+    MENULIST: 'glyphicon-menu-hamburger',
+    WORD: 'glyphicon-tags'
 };
 
 /**

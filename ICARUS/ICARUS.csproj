@@ -489,6 +489,22 @@
     <Compile Include="Migrations\201807060622561_20180705_008.Designer.cs">
       <DependentUpon>201807060622561_20180705_008.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807071845039_20180707_001.cs" />
+    <Compile Include="Migrations\201807071845039_20180707_001.Designer.cs">
+      <DependentUpon>201807071845039_20180707_001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807081657358_20180708_001.cs" />
+    <Compile Include="Migrations\201807081657358_20180708_001.Designer.cs">
+      <DependentUpon>201807081657358_20180708_001.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807081745018_20180708_002.cs" />
+    <Compile Include="Migrations\201807081745018_20180708_002.Designer.cs">
+      <DependentUpon>201807081745018_20180708_002.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807081751576_20180708_003.cs" />
+    <Compile Include="Migrations\201807081751576_20180708_003.Designer.cs">
+      <DependentUpon>201807081751576_20180708_003.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -1000,6 +1016,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807060622561_20180705_008.resx">
       <DependentUpon>201807060622561_20180705_008.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807071845039_20180707_001.resx">
+      <DependentUpon>201807071845039_20180707_001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807081657358_20180708_001.resx">
+      <DependentUpon>201807081657358_20180708_001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807081745018_20180708_002.resx">
+      <DependentUpon>201807081745018_20180708_002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807081751576_20180708_003.resx">
+      <DependentUpon>201807081751576_20180708_003.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
