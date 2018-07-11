@@ -74,7 +74,6 @@ namespace ICARUS.Controllers {
 
             // Lets add some metadata to the post
             var message = new StringBuilder();
-            var response = new StringBuilder();
 
             try {
                 Regex rgx = new Regex("[^a-zA-Z -]");
@@ -84,31 +83,24 @@ namespace ICARUS.Controllers {
                 var statementArray = statement.Split(' ');
 
                 // Get word id and map/reduce
-
-
                 formPost.results.Add(new FormValue("statement-array", "ARRAY", string.Join(",", statementArray)));
-
                 formPost.results.Add(new FormValue("Count", statementArray.Count().ToString()));
-
                 
-                message.Append("Summary:<br>");
-                message.Append("<cite>Statement has " + statementArray.Count() + " words</cite>");
-                message.Append("<ul>");
-
-                response.Append("<h5>Response</h5>");
-                response.Append("<ul>");
+                
 
                 List<FormValue> uniqueWords = new List<FormValue>();
 
                 /*
                  * Map-Reduce
                  * 
-                 * Technically, each word should also be reduced down to its associated
-                 * wordId.
+                 * Each word is reduced down to its associated wordId.
+                 * The question is how this will scale on the database.
+                 * I may need to create some sort of cache for the dictionary
                  * 
                  */
                 foreach (var word in statementArray) {
 
+                    // Generate a query to find this word
                     var words = from wrd in statementArray
                         where wrd.ToLower() == word.ToLower()
                         select wrd.ToLower();
@@ -130,35 +122,39 @@ namespace ICARUS.Controllers {
                     }
                 }
 
-                // Iterate over unique words
-                for(var uw = 0; uw < uniqueWords.Count(); uw++) {
+                /**
+                 * Now that an array of unique words exists,
+                 * iterate over each unique word and perform
+                 * any required tasks
+                */
+                message.Append(
+                    "<h2>Summary</h2>"
+                    + "<cite>Statement has " + statementArray.Count() + " words and "
+                    + uniqueWords.Count() + " unique words</cite>"
+                    + "<ul class=\"nav-pills dropup\">"
+                );
+
+                // Get or Set each word on the database and update message accordingly
+                for (var uw = 0; uw < uniqueWords.Count(); uw++) {
+                    Payload results = this.updateDictionary(uniqueWords[uw].name);
+                    uniqueWords[uw].value = results.result.ToString();
                     message.Append(
                         "<li>"
-                        + "<a href=\"http://www.dictionary.com/browse/" + uniqueWords[uw].name + "?s=t\" target=\"_blank\">" + uniqueWords[uw].name + "[0]</a>:"
-                        + uniqueWords[uw].value
-                        + "<br>"
-                        + "<cite style=\"font-size:small;\">"
-                        + "<a href=\"https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + uniqueWords[uw].name + "?key=7f0d3743-cd0f-4c39-a11e-429184a376d1\" target=\"_blank\">Dictionary</a>"
-                        + "&nbsp;|&nbsp;"
-                        + "<a href=\"https://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + uniqueWords[uw].name + "?key=7f1eee46a-0757-408b-a42e-7da3dcaf394a\" target=\"_blank\">Thesaurus</a>"
-                        + "</cite>"
-                        + "</li>");
-
-                    // Check if word exists in the dictionary and add it if it does not
-                    // TODO: Call stored procedure outside of this ...???
-                    // This will get called redundantly
-                    
-                    Payload results = this.updateDictionary(uniqueWords[uw].name);
-                    //if (results.result > 0) {
-                        message.Append(
-                            "<li>" + results.message + "</li>"
-                        );
-                    //}
-
+                        + "<a class=\"dropdown toggle\" data-toggle=\"dropdown\" href=\"#\">" + uniqueWords[uw].name + "</a>"
+                        + "<ul class=\"dropdown-menu word-summary\">"
+                            + "<li><a href=\"http://www.dictionary.com/browse/" + uniqueWords[uw].name 
+                            + "?s=t\" target=\"_blank\">" + uniqueWords[uw].name + "["+ results.result+"]</a>"
+                            + "</li>"
+                            //+ "<cite style=\"font-size:small;\">"
+                            + "<li><a href=\"https://www.dictionaryapi.com/api/v1/references/collegiate/xml/" + uniqueWords[uw].name + "?key=7f0d3743-cd0f-4c39-a11e-429184a376d1\" target=\"_blank\">Dictionary</a></li>"
+                            //+ "&nbsp;|&nbsp;"
+                            + "<li><a href=\"https://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + uniqueWords[uw].name + "?key=7f1eee46a-0757-408b-a42e-7da3dcaf394a\" target=\"_blank\">Thesaurus</a></li>"
+                            //+ "</cite>"
+                        +"</ul>"
+                        + "</li>"
+                    );
                 }
-
                 message.Append("</ul>");
-                response.Append("</ul>");                
 
                 // This will cause an exception if given values are not XML friendly
                 formPost.resultsToXml(); 
@@ -166,134 +162,92 @@ namespace ICARUS.Controllers {
 
                 // Attempt to save the form to the database
                 try {
-
-                    // Save the object
                     getObjectDbContext().FormPosts.Add(formPost);
                     int success = getObjectDbContext().SaveChanges();
-
-                    // Return the success response along with the email message body
                     return Json(new {
-                        text = "success: " + success,
-                        message = message.ToString() + response.ToString(), //formPost.getMessage(),
+                        text = "Successfully added the FormPost (FormId: "
+                            + formPost.formId+") with a response of " + success,
+                        message = message.ToString(),
                         formPost = formPost
                     });
 
                 } catch (Exception e) {
-                    // Return the form for debugging
-                    return Json(new { text = "fail", message = e.Message, form = formPost, exception = e.ToString() });
+                    return Json(new {
+                        text = "Failed to add the FormPost.  Returning Form object for debugging.",
+                        message = e.Message, form = formPost, exception = e.ToString()
+                    });
                 }
 
             } catch (Exception ee) {
                 return Json(new Payload(1,
                     "I'm sorry, but I don't understand. :(",
                     ee
-                )); //formPost.getMessage(), formPost = formPost
+                ));
             }
         }
 
 
         /// <summary>
-        /// Checks if given word exists in dictionary and updates if able to
+        /// Checks if given word exists in dictionary.  
+        /// If it does not, the word is added.
+        /// 
+        /// TODO:  
+        /// Add additional validation to ensure that 
+        /// garbage words do not make their way into the dictionary.
         /// </summary>
-        /// <returns></returns>
-        //[Authorize]
+        /// <returns>A payload containing details of the attempt to update the Dictionary.  Payload.result represent the word's unique Id.</returns>
+        [Authorize]
         public Payload updateDictionary(string word) {
-            
-            List<string> columns = new List<string>();
-            columns.Add("id");
-            columns.Add("word");
-
-            List<Param> parameters = new List<Param>();
-            parameters.Add(new Param(1, "word", word));
-
-            Procedure procedure = new Procedure("LINGU.GetWordId", columns, parameters);
-            List<Dictionary<string,object>> callWordId = this.Call(procedure);
-
-            Payload results;
-            int wordId = 0;
-
-            // Try to extract result
             try {
-                results = new Payload(1, "WordId:'" + callWordId[0]["id"].ToString() + "'");
+                List<string> columns = new List<string>();
+                columns.Add("id");
+                columns.Add("word");
+
+                List<Param> parameters = new List<Param>();
+                parameters.Add(new Param(1, "word", word));
+
+                Procedure procedure = new Procedure("LINGU.GetWordId", columns, parameters);
+                List<Dictionary<string, object>> callWordId = this.Call(procedure);
+
+                int wordId = (int) callWordId[0]["id"];
+                return new Payload(wordId, "WordId:'" + wordId + "'");
 
             // If unable to get result, it must not exist
             } catch(Exception wid) {
-                //results = new Payload(0, "WordId: NULL", wid);
-
-                // Try to ADD the word to the list
-                try {
-
-                    FormPost formPost = new FormPost();
-                    formPost.id = 2; //
-                    formPost.formId = 2;
-                    formPost.authorId = User.Identity.Name;
-                    formPost.version = 20180104.001;
-                    formPost.status = 1;
-                    formPost.dateCreated = DateTime.UtcNow;
-                    formPost.results = new List<FormValue>();
-                    formPost.xmlResults = "<root></root>";
-                    formPost.resultsToXml();
-                    formPost.jsonResults = "";
-
-                    formPost.results.Add(new FormValue("value", word));
-                    formPost.resultsToXml();
-
-                    getObjectDbContext().FormPosts.Add(formPost);
-                    int success = getObjectDbContext().SaveChanges();
-
-                    results = new Payload(1, "Added Word '" + word + "' as a FormPost (FormId:2)", wid);
-
-                } catch (Exception e) {
-                    results = new Payload(
-                        0, "Unknown exception for Word '" + word + "'<br><br>" + e.Message.ToString(), e
-                    );
-                }
-
-
+                return addWordFormPost(word);         
             }
+        }
 
-            
-            /*            
-            if (wordId[0]["id"] == "") {
-                try {
+        /// <summary>
+        /// Attempt to add the given Word to the Dictionary via FormPost
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns>A Payload containing server response</returns>
+        private Payload addWordFormPost(string word) {
+            try {
 
-                    FormPost formPost = new FormPost();
-                    formPost.id = 2; //
-                    formPost.formId = 2;
-                    formPost.authorId = User.Identity.Name;
-                    formPost.version = 20180104.001;
-                    formPost.status = 1;
-                    formPost.timestamp = DateTime.UtcNow.ToString(
-                        "s",
-                        System.Globalization.CultureInfo.InvariantCulture
-                    );
-                    formPost.results = new List<FormValue>();
-                    formPost.xmlResults = "<root></root>";
-                    formPost.resultsToXml();
-                    formPost.jsonResults = "";
+                FormPost formPost = new FormPost();
+                formPost.id = 2; //
+                formPost.formId = 2;
+                formPost.authorId = User.Identity.Name;
+                formPost.version = 20180104.001;
+                formPost.status = 1;
+                formPost.dateCreated = DateTime.UtcNow;
+                formPost.results = new List<FormValue>();
+                formPost.results.Add(new FormValue("value", word));
+                formPost.resultsToXml();
 
-                    formPost.results.Add(new FormValue("value", word));
-                    formPost.resultsToXml();
+                getObjectDbContext().FormPosts.Add(formPost);
+                int success = getObjectDbContext().SaveChanges();
 
-                    getObjectDbContext().FormPosts.Add(formPost);
-                    int success = getObjectDbContext().SaveChanges();
-                    
-                    results = new Payload(1, "Added Word '" + word + "'{"+ wordId[0]["wordId"]+"} as a FormPost (FormId:2)");
+                return new Payload(formPost.id, "Successfully added Word '" + word + "' as a FormPost (FormId:2, new WordId: " + formPost.id + ")");
 
-                } catch (Exception e) {
-                    results = new Payload(
-                        0, "Unknown exception for Word '" + word + "'<br><br>" + e.Message.ToString(), e
-                    );
-                }
-            } else {
-                results = new Payload(
-                    0, "LINGU.GetWordId return the following: '" + word + "'{" + wordId[0]["wordId"] + "}"
+            } catch (Exception e) {
+                return new Payload(
+                    0, "Unknown exception for Word '" + word + "'<br><br>" + e.Message.ToString(), e
                 );
-
             }
-            */
-
-            return results;
         }
     }
 }
+ 

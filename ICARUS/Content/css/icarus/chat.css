@@ -102,3 +102,13 @@
                 font-size: 18px;
                 font-weight: bold;
             }
+
+    .chat .nav-pills > li {
+        display: block;
+        float: left;
+        list-style: none;
+    }
+
+            .chat .word-summary > li > a {
+                color: blue;
+            }
