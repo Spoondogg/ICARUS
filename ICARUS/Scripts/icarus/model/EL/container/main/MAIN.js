@@ -41,7 +41,7 @@ class MAIN extends CONTAINER {
         document.title = model.label;
         new WATERMARK();
         
-        super(document.body, 'MAIN', model, ['ARTICLE','INDEX','INDEXMAIN','CLASSVIEWER','DICTIONARY','WORD']);
+        super(document.body, 'MAIN', model, ['ARTICLE','INDEX','INDEXMAIN','CLASSVIEWER','IMAGEGALLERY','DICTIONARY','WORD']);
         this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);

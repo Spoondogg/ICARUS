@@ -9,6 +9,7 @@ class FORMPOST {
     constructor(form) {
         this.__RequestVerificationToken = token.value;
         this.id = form.el.getAttribute('id');
+        this.formId = form.el.getAttribute('id');
         this.label = form.el.getAttribute('name');
 
         // An ordered array of key/value pairs as they appear in the FORM

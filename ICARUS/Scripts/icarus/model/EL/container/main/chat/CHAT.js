@@ -71,6 +71,7 @@ class CHAT extends CONTAINER {
      * Adds a statement to the conversation window
      * @param {string} username User name
      * @param {string} string Statement
+     * @returns {EL} The statement object
      */
     addStatement(username, string) {
         let statement = new EL(this.body.pane, 'DIV', new MODEL('statement'));

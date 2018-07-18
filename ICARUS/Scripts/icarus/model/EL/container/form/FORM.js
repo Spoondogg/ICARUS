@@ -208,8 +208,8 @@ class FORM extends CONTAINER {
         // Post results to server
         app.loader.log(10, 'Posting values to server: ' + this.getPostUrl());
         let formPost = this.getFormPost();
-        debug('FORMPOST: ');
-        debug(formPost);
+        console.log('FORMPOST: ');
+        console.log(formPost);
 
         if (formPost) {
 
@@ -218,8 +218,8 @@ class FORM extends CONTAINER {
             /**
                 JQuery POST
             */
-            debug('Posting to: ' + this.postUrl);
-            debug(formPost);
+            console.log('Posting to: ' + this.postUrl);
+            console.log(formPost);
             
             $.ajax({
                 url: this.postUrl, 

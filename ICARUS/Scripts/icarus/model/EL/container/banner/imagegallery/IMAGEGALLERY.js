@@ -1,7 +1,7 @@
 ﻿/**
     Contains a high level view of all objects owned by this user
 */
-class INDEX extends BANNER {
+class IMAGEGALLERY extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node
@@ -9,11 +9,17 @@ class INDEX extends BANNER {
      */
     constructor(node, model) {
         super(node, model);
+        console.log('imagegallery');
+        
         //this.populate(model.children);
     }
 
     construct() {
-        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY']; //'Main',
+        this.woot = new HEADER(this.body.pane, new MODEL().set({
+            'label': 'Image Gallery'
+        }), 1);
+        /*
+        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD']; //'Main',
         
         for (let l = 0; l < elementList.length; l++) {
             let thumb = new INDEXTHUMBNAIL(this.body.pane, new MODEL().set({
@@ -39,5 +45,6 @@ class INDEX extends BANNER {
                 }.bind(this)
             );
         }
+        */
     }
 }
