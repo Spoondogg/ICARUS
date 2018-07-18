@@ -380,7 +380,7 @@ class CONTAINER extends GROUP {
                     }
                 }
 
-                this.navBar.header.toggleCollapse();
+                //this.navBar.header.toggleCollapse();
 
             }.bind(this);
 

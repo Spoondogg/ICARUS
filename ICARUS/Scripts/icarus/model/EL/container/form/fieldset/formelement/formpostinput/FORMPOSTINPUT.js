@@ -115,7 +115,9 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                 // Set values in MODEL and DOM
                 this.input.el.setAttribute('value', data.model.id);
+                //container['formId'] = 3;
                 container[dataIdLabel] = data.model.id; 
+                //container['id'] = 3;
 
                 if (dataIdLabel === 'dataId') {
                     // Append additional dataElements
@@ -140,6 +142,11 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 
                 // Construct empty form
                 this.form = container.createEmptyForm(this.body.pane);
+                console.log('formpostinput: 3');
+                //this.form.formId = 3;
+                this.form.id = 3;
+                this.form.el.setAttribute('id', 3);
+
                 this.form.prompt = this;
 
                 // TODO: Fix this up
@@ -242,6 +249,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     // Instead, set values of preset (based on DATAELEMENTS) inputs
 
                     this.form = this.createEmptyForm(this.body.pane);
+                    alert('formpostinput: 3');
+                    this.form.setAttribute('id', 3);
 
                     // Empty out and populate with Form Elements only                    
                     this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();

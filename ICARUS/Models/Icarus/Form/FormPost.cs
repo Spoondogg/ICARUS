@@ -100,7 +100,11 @@ namespace ICARUS.Models.Icarus {
                 if (this.results.Count > 0) {
 
                     xmlResults.Append("<root ");
-                    xmlResults.Append("id=\"" + this.id.ToString());
+                    if (this.formId > 0) {
+                        xmlResults.Append("id=\"" + this.formId.ToString());
+                    } else {
+                        xmlResults.Append("id=\"" + this.id.ToString());
+                    }
                     xmlResults.Append("\">");
                     messageBody.Append("<dl>");
 

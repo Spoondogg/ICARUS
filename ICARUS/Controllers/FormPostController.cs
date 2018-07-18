@@ -161,7 +161,7 @@ namespace ICARUS.Controllers {
                 int result = 0;
                 model.xmlResults = formPost.xmlResults;
                 model.jsonResults = formPost.jsonResults;
-                model.formId = id;
+                model.formId = formPost.formId; // id;
                 model.shared = shared;
 
                 // Save the object
