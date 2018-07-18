@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Web Application Engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("spoonMEDIA")]
-[assembly: AssemblyProduct("ICARUS")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("JAC")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
