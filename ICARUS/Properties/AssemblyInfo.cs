@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Web Application Engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("spoonMEDIA")]
-[assembly: AssemblyProduct("JAC")]
+[assembly: AssemblyProduct("ICARUS")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
