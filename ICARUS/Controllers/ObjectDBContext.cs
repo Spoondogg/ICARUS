@@ -150,8 +150,8 @@ namespace ICARUS.Controllers {
         //public DbSet<Param> Params { get; set; }
         //public object Param { get; internal set; }
 
-        public DbSet<Log> Logs { get; set; }
-        public object Log { get; internal set; }        
+        //public DbSet<Log> Logs { get; set; }
+        //public object Log { get; internal set; }        
 
         /// <summary>
         /// Construct the Object Database Context
@@ -192,7 +192,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("DICTIONARY", Dictionaries);
             //this.dbSets.Add("SENTENCE", Sentences);
             this.dbSets.Add("WORD", Words);
-            this.dbSets.Add("Log", Logs);
+            //this.dbSets.Add("Log", Logs);
         }
     }
 }
