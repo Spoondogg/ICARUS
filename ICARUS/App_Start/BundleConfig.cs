@@ -67,6 +67,7 @@ namespace ICARUS {
                 "~/Content/css/icarus/preview.css",
                 "~/Content/css/icarus/modal.css",
                 "~/Content/css/icarus/banner.css",
+                "~/Content/css/icarus/imagegallery.css",
                 "~/Content/css/icarus/classview.css",
                 "~/Content/css/icarus/index.css",
                 "~/Content/css/icarus/jumbotron.css",

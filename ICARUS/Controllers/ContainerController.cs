@@ -406,6 +406,7 @@ namespace ICARUS.Controllers {
                     List<Param> parameters = new List<Param>();
                     parameters.Add(new Param(1, "id", id));
 
+                    // Only delete if this Container does not have parents
                     Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
 
                     List<Dictionary<string, object>> records = this.Call(procedure);
@@ -445,15 +446,10 @@ namespace ICARUS.Controllers {
                     message = "Failed to disable " + this.className + "(" + id
                     + ")\nYou do not have permissions to modify this " + this.className;
 
-                    return Json(new Payload(
-                        Int32.Parse(GetResults.Fail.ToString()),
-                        message
-                    ), JsonRequestBehavior.AllowGet);
+                    return Json(new Payload(0, message), JsonRequestBehavior.AllowGet);
                 }
             } catch (Exception e) {
-                return Json(new Payload(
-                    Int32.Parse(GetResults.Fail.ToString()), e.Message, e), JsonRequestBehavior.AllowGet
-                );
+                return Json(new Payload(0, e.Message, e), JsonRequestBehavior.AllowGet);
             }
         }
 

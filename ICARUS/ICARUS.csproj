@@ -625,6 +625,7 @@
     <Content Include="Content\css\icarus\chat.css" />
     <Content Include="Content\css\icarus\classviewer.css" />
     <Content Include="Content\css\icarus\dictionary.css" />
+    <Content Include="Content\css\icarus\imagegallery.css" />
     <Content Include="Content\css\icarus\index.css" />
     <Content Include="Content\css\icarus\menulist.css" />
     <Content Include="Content\css\icarus\word.css" />
