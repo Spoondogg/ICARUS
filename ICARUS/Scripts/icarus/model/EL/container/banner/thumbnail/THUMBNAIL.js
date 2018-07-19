@@ -34,13 +34,17 @@ class THUMBNAIL extends CONTAINER {
 
                             // If access granted...
                             if (data.model) {
-                                parsed = JSON.parse(data.model.jsonResults);
+                                if (data.model.jsonResults) {
+                                    parsed = JSON.parse(data.model.jsonResults);
 
-                                // Extract the base64 values and create an image
-                                for (let p = 0; p < parsed.length; p++) {
-                                    if (parsed[p].name === 'base64') {
-                                        this.image.el.src = parsed[p].value;
+                                    // Extract the base64 values and create an image
+                                    for (let p = 0; p < parsed.length; p++) {
+                                        if (parsed[p].name === 'base64') {
+                                            this.image.el.src = parsed[p].value;
+                                        }
                                     }
+                                } else {
+                                    console.log('Json Results empty');
                                 }
                             }
 

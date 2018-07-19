@@ -70,7 +70,7 @@ namespace ICARUS.Controllers {
             // Set formPost attributes where applicable
             formPost.formId = formPost.id;
             formPost.authorId = User.Identity.Name;
-            formPost.version = 20180104.001;
+            //formPost.label = "FormPost";
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
             formPost.dateCreated = DateTime.UtcNow;
 

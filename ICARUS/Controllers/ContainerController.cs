@@ -158,7 +158,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         //[Authorize]
-        public virtual async Task<ActionResult> Page(string page = "0", string pageLength = "10") {
+        public virtual async Task<ActionResult> Page(
+            string page = "0", string pageLength = "10"
+        ) {
 
             int pageLen = Int32.Parse(pageLength);
             pageLen = (pageLen > 50) ? 50 : pageLen;
@@ -188,7 +190,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(2, "pageLength", pageLen));
             parameters.Add(new Param(3, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetPaginatedList", columns, parameters);
+            Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
 
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
@@ -199,7 +201,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         //[Authorize]
-        public virtual async Task<ActionResult> PageList(string page = "0", string pageLength = "10") {
+        public virtual async Task<ActionResult> PageIndex(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);
             pageLen = (pageLen > 50) ? 50 : pageLen;
@@ -214,7 +216,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(2, "pageLength", pageLen));
             parameters.Add(new Param(3, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetPaginatedList", columns, parameters);
+            Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
                 m => m.authorId == User.Identity.Name || m.shared == 1

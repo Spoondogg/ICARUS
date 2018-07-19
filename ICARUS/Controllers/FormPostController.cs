@@ -40,13 +40,14 @@ namespace ICARUS.Controllers {
             formPost.id = 0;
             formPost.formId = 0;
             formPost.authorId = User.Identity.Name;
-            formPost.version = 20180104.001;
+            //formPost.label = "FormPost";
             formPost.status = 1;
             formPost.dateCreated = DateTime.UtcNow;
+            formPost.dateLastModified = DateTime.UtcNow;
             formPost.results = new List<FormValue>();
             formPost.xmlResults = "<root></root>";
             formPost.resultsToXml();
-            formPost.jsonResults = "";
+            //formPost.jsonResults = "";
 
             return formPost;
         }
@@ -86,11 +87,12 @@ namespace ICARUS.Controllers {
             // Set formPost attributes where applicable
             formPost.formId = formPost.id;
             formPost.authorId = User.Identity.Name;
-            formPost.version = 20180104.001;
+            //formPost.label = "FormPost";
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
             formPost.dateCreated = DateTime.UtcNow;
+            formPost.dateLastModified = DateTime.UtcNow;
             formPost.resultsToXml();
-            formPost.jsonResults = "";
+            //formPost.jsonResults = "";
 
             // Attempt to save the form to the database
             try {
@@ -147,6 +149,8 @@ namespace ICARUS.Controllers {
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
                 int shared = formPost.parseInt("shared", 0);
+                //string label = formPost.label;
+
 
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
@@ -162,6 +166,7 @@ namespace ICARUS.Controllers {
                 model.xmlResults = formPost.xmlResults;
                 model.jsonResults = formPost.jsonResults;
                 model.formId = formPost.formId; // id;
+                //model.label = label;
                 model.shared = shared;
 
                 // Save the object

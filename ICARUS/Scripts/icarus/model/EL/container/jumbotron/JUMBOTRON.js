@@ -48,19 +48,23 @@ class JUMBOTRON extends CONTAINER {
 
                         // If access granted...
                         if (data.model) {
-                            //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
-                            //console.log(data.model);
-                            console.log('Parsed...');
-                            let parsed = JSON.parse(data.model.jsonResults);
-                            console.log(parsed);
+                            if (data.model.jsonResults) {
+                                //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
+                                //console.log(data.model);
+                                console.log('Parsed...');
+                                let parsed = JSON.parse(data.model.jsonResults);
+                                console.log(parsed);
 
-                            // Extract the base64 values and create an image
-                            for (let p = 0; p < parsed.length; p++) {
-                                if (parsed[p].name === 'base64') {
-                                    this.body.pane.el.setAttribute('style',
-                                        'background: url(' + parsed[p].value + ');'
-                                    );
+                                // Extract the base64 values and create an image
+                                for (let p = 0; p < parsed.length; p++) {
+                                    if (parsed[p].name === 'base64') {
+                                        this.body.pane.el.setAttribute('style',
+                                            'background: url(' + parsed[p].value + ');'
+                                        );
+                                    }
                                 }
+                            } else {
+                                console.log('Json Results are empty');
                             }
                         }
                     }.bind(this));

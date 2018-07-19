@@ -60,7 +60,7 @@ class CLASSVIEWER extends BANNER {
                 'label': this.data.listClass + '(s)'
             }));
 
-        let methods = ['Index', 'List', 'Count', 'Page', 'PageList', 'GetContainerParents'];
+        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
         for (let m = 0; m < methods.length; m++) {
             this.menulist.menu.addNavItem(new MODEL().set({
                 'label': this.classType + '.'+methods[m]+'()'
@@ -86,7 +86,7 @@ class CLASSVIEWER extends BANNER {
 
 
         /*
-        $.post('/Main/PageList?page=' + this.page + '&pageLength=' + this.pageLength, {
+        $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
             '__RequestVerificationToken': token.value
         },
             function (payload, status) {
