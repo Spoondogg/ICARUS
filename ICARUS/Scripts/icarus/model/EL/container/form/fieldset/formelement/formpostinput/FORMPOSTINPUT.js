@@ -78,7 +78,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 console.log('Created new Form Post / Attributes / Image / Description');
                 console.log(data.model);
 
-                // Id and Shared are hardcoded
+                // Id, label and Shared are hardcoded
                 inputs = [
                     new MODEL(new ATTRIBUTES({
                         'name': 'shared',
@@ -94,7 +94,17 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     })).set({
                         'element': 'INPUT',
                         'label': 'id'
+                    }), 
+
+                    /*
+                    new MODEL(new ATTRIBUTES({
+                        'name': 'label',
+                        'value': data.model.label
+                    })).set({
+                        'element': 'INPUT',
+                        'label': 'label'
                     })
+                    */
                 ];
 
                 console.log('dataIdLabel: ' + dataIdLabel);
@@ -207,93 +217,93 @@ class FORMPOSTINPUT extends FORMELEMENT {
             })
         ];
 
-        //for (let de = 0; de < DATAELEMENTS.THUMBNAIL.length; de++) {
-        //    inputs.push(DATAELEMENTS.THUMBNAIL[de]);
-        //}
-
         // Test to see if the formpost can be retrieved
         try {
             $.getJSON('/FORMPOST/Get/' + this.input.attributes.value, function (data) {
 
                 // If access granted...
                 if (data.model) {
-                    console.log('Retrieved form post: ' + this.input.attributes.value);
-                    console.log(data.model);
-                    console.log('Parsed...');
-                    let parsed = JSON.parse(data.model.jsonResults);
-                    console.log(parsed);
-
-                    
-                    // If retrieved, push each node as an attribute/data value from jsonResults
-                    for (let i = 0; i < parsed.length; i++) {
-                        if (parsed[i].name !== 'id') {
-                            console.log('parsed[' + i + ']:');
-                            console.log(parsed[i]);
-                            console.log('inputs[]:');
-                            console.log(inputs);
-                            
-                            inputs.push(
-                                new MODEL(new ATTRIBUTES({
-                                    'name': parsed[i].name,
-                                    'value': this.htmlDecode(parsed[i].value) || ''
-                                })).set({
-                                    'element': 'INPUT',
-                                    'label': parsed[i].name
-                                })
-                            );
-                            //inputs[i].attributes.value = this.htmlDecode(parsed[i].value) || '';
-
-                        }
-                    }
-
-                    // Instead, set values of preset (based on DATAELEMENTS) inputs
-
-                    this.form = this.createEmptyForm(this.body.pane);
-                    alert('formpostinput: 3');
-                    this.form.setAttribute('id', 3);
-
-                    // Empty out and populate with Form Elements only                    
-                    this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
-                    this.form.fieldset.formElementGroup.addContainerCase('INPUT');
-                    this.form.fieldset.formElementGroup.addContainerCase('SELECT');
-                    this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
+                    if (data.model.jsonResults) {
+                        console.log('Retrieved form post: ' + this.input.attributes.value);
+                        console.log(data.model);
+                        console.log('Parsed...');
+                        let parsed = JSON.parse(data.model.jsonResults);
+                        console.log(parsed);
 
 
-                    // TODO: Fix this up
-                    if (inputs) {
-                        for (let i = 0; i < inputs.length; i++) {
-                            console.log('inputs[' + i + ']: ' + inputs[i].type);
-                            let inp = null;
-                            if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].data.type === 'FORMPOSTINPUT') {
-                                console.log('FORMPOSTINPUT');
-                                new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
-                            } else {
-                                new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                        // If retrieved, push each node as an attribute/data value from jsonResults
+                        for (let i = 0; i < parsed.length; i++) {
+                            if (parsed[i].name !== 'id') {
+                                console.log('parsed[' + i + ']:');
+                                console.log(parsed[i]);
+                                console.log('inputs[]:');
+                                console.log(inputs);
+
+                                inputs.push(
+                                    new MODEL(new ATTRIBUTES({
+                                        'name': parsed[i].name,
+                                        'value': this.htmlDecode(parsed[i].value) || ''
+                                    })).set({
+                                        'element': 'INPUT',
+                                        'label': parsed[i].name
+                                    })
+                                );
+                                //inputs[i].attributes.value = this.htmlDecode(parsed[i].value) || '';
+
                             }
-
-                            this.form.fieldset.formElementGroup.children.push(inp);
                         }
+
+                        // Instead, set values of preset (based on DATAELEMENTS) inputs
+
+                        this.form = this.createEmptyForm(this.body.pane);
+                        console.log('formpostinput: 3');
+                        this.form.id = 3;
+
+                        // Empty out and populate with Form Elements only                    
+                        this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
+                        this.form.fieldset.formElementGroup.addContainerCase('INPUT');
+                        this.form.fieldset.formElementGroup.addContainerCase('SELECT');
+                        this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
+
+
+                        // TODO: Fix this up
+                        if (inputs) {
+                            for (let i = 0; i < inputs.length; i++) {
+                                console.log('inputs[' + i + ']: ' + inputs[i].type);
+                                let inp = null;
+                                if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].data.type === 'FORMPOSTINPUT') {
+                                    console.log('FORMPOSTINPUT');
+                                    new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                                } else {
+                                    new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                                }
+
+                                this.form.fieldset.formElementGroup.children.push(inp);
+                            }
+                        }
+
+
+                        /*
+                        // NOW, MAKE A PROMPT for this ATTRIBUTES FORMPOST using the given FormPostId/AttributesId
+                        this.prompt = new PROMPT(
+                            'FORMPOSTINPUT: Save ATTRIBUTES()', 'Saves the ATTRIBUTES() via FORMPOSTINPUT',
+                            [], inputs
+                        );
+                        */
+                        this.form.fieldset.formElementGroup.toggleHeaders();
+
+                        this.form.setPostUrl('FormPost/Set');
+                        this.form.afterSuccessfulPost = function () {
+                            console.log('success');
+                            this.updateInput(data.model.id);
+
+                            //this.form.loader.hide(200);
+                            //app.loader.hide();
+                            //this.prompt.close(300);
+                        }.bind(this);
+                    } else {
+                        console.log('Json Results empty');
                     }
-
-
-                    /*
-                    // NOW, MAKE A PROMPT for this ATTRIBUTES FORMPOST using the given FormPostId/AttributesId
-                    this.prompt = new PROMPT(
-                        'FORMPOSTINPUT: Save ATTRIBUTES()', 'Saves the ATTRIBUTES() via FORMPOSTINPUT',
-                        [], inputs
-                    );
-                    */
-                    this.form.fieldset.formElementGroup.toggleHeaders();
-
-                    this.form.setPostUrl('FormPost/Set');
-                    this.form.afterSuccessfulPost = function () {
-                        console.log('success');
-                        this.updateInput(data.model.id);
-
-                        //this.form.loader.hide(200);
-                        //app.loader.hide();
-                        //this.prompt.close(300);
-                    }.bind(this);
 
                 } else {
                     this.prompt = new MODAL('Exception', data.message);
@@ -333,119 +343,95 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                 // If access granted...
                 if (data.model) {
-                    app.loader.log(80, 'Retrieved Post: ' + id);
-                    console.log('Data Model:');
-                    console.log(data.model);
-                    let parsed = JSON.parse(data.model.jsonResults);
-                    debug(parsed);
+                    if (data.model.jsonResults) {
+                        app.loader.log(80, 'Retrieved Post: ' + id);
+                        console.log('Data Model:');
+                        console.log(data.model);
+                        let parsed = JSON.parse(data.model.jsonResults);
+                        debug(parsed);
 
-                    console.log('Creating elements for ' + this.node.className);
-                    console.log(this.node);
-                    
-                    let container = this.getContainer('dataId', id, this.node);
-                    console.log('getContainer(' + data.model.id + ');');
-                    //console.log(container);
-                    if (container !== undefined) {
+                        console.log('Creating elements for ' + this.node.className);
+                        console.log(this.node);
 
-                        for (let i = 0; i < parsed.length; i++) {
-                            if (parsed[i].name !== 'id') {
+                        let container = this.getContainer('dataId', id, this.node);
+                        console.log('getContainer(' + data.model.id + ');');
+                        //console.log(container);
+                        if (container !== undefined) {
 
-                                let value = null;
-                                if (container[parsed[i].name]) {
-                                    if (container[parsed[i].name].el) {
-                                        value = container[parsed[i].name].el.innerHTML;
+                            for (let i = 0; i < parsed.length; i++) {
+                                if (parsed[i].name !== 'id') {
+
+                                    let value = null;
+                                    if (container[parsed[i].name]) {
+                                        if (container[parsed[i].name].el) {
+                                            value = container[parsed[i].name].el.innerHTML;
+                                        }
+                                    } else {
+                                        value = parsed[i].value;
                                     }
-                                } else {
-                                    value = parsed[i].value;
+
+                                    inputs.push(
+                                        new MODEL(new ATTRIBUTES({
+                                            'name': parsed[i].name,
+                                            'value': value //parsed[i].value
+                                        })).set({
+                                            'element': 'INPUT',
+                                            'label': parsed[i].name
+                                        })
+                                    );
                                 }
-
-                                inputs.push(
-                                    new MODEL(new ATTRIBUTES({
-                                        'name': parsed[i].name,
-                                        'value': value //parsed[i].value
-                                    })).set({
-                                        'element': 'INPUT',
-                                        'label': parsed[i].name
-                                    })
-                                );
                             }
-                        }
 
-                        app.loader.log(90, 'Creating Form');
-                        try {
-                            this.form.destroy();
-                        } catch (e) {
-                            debug(e);
-                        }
+                            app.loader.log(90, 'Creating Form');
+                            try {
+                                this.form.destroy();
+                            } catch (e) {
+                                debug(e);
+                            }
 
-                        this.form = this.createEmptyForm();
-                        this.form.label = 'Modify';
-                        this.form.fieldset.formElementGroup.label = 'Attributes';
-                        /*
-                        this.form = new FORM(
-                            this.body.pane,
-                            new MODEL().set({
-                                'label': 'Modify',
-                                'collapsed': 0,
-                                'showHeader': 0,
-                                'hasTab': 0
-                            })
-                        );
-                        this.form.prompt = this;
-                        this.form.fieldset = new FIELDSET(
-                            this.form.body.pane, new MODEL().set({
-                                'label': 'FIELDSET',
-                                'collapsed': 0,
-                                'showHeader': 0,
-                                'hasTab': 0
-                            })
-                        );
-                        this.form.fieldset.formElementGroup = new FORMELEMENTGROUP(
-                            this.form.fieldset.body.pane, new MODEL().set({
-                                'label': 'Attributes',
-                                'collapsed': 0,
-                                'showHeader': 0,
-                                'hasTab': 0
-                            })
-                        );
-                        */
+                            this.form = this.createEmptyForm();
+                            this.form.label = 'Modify';
+                            this.form.fieldset.formElementGroup.label = 'Attributes';
 
-                        // Empty out and populate with Form Elements only                    
-                        this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
-                        this.form.fieldset.formElementGroup.addContainerCase('INPUT');
-                        this.form.fieldset.formElementGroup.addContainerCase('SELECT');
-                        this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
+                            // Empty out and populate with Form Elements only                    
+                            this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
+                            this.form.fieldset.formElementGroup.addContainerCase('INPUT');
+                            this.form.fieldset.formElementGroup.addContainerCase('SELECT');
+                            this.form.fieldset.formElementGroup.addContainerCase('TEXTAREA');
 
 
-                        // TODO: Include other inputs such as SELECT and TEXTAREA
-                        if (inputs) {
-                            app.loader.log(75, 'Loading Attributes');
-                            for (let i = 0; i < inputs.length; i++) {
-                                let inp = null;
-                                if (inputs[i].type === 'FORMPOSTINPUT') {
-                                    new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
-                                } else {
-                                    new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                            // TODO: Include other inputs such as SELECT and TEXTAREA
+                            if (inputs) {
+                                app.loader.log(75, 'Loading Attributes');
+                                for (let i = 0; i < inputs.length; i++) {
+                                    let inp = null;
+                                    if (inputs[i].type === 'FORMPOSTINPUT') {
+                                        new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                                    } else {
+                                        new INPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                                    }
+                                    this.form.fieldset.formElementGroup.children.push(inp);
                                 }
-                                this.form.fieldset.formElementGroup.children.push(inp);
                             }
-                        }
 
-                        // Show headers so that inputs can be modified
-                        this.form.fieldset.formElementGroup.toggleHeaders();
+                            // Show headers so that inputs can be modified
+                            this.form.fieldset.formElementGroup.toggleHeaders();
 
-                        this.form.setPostUrl('FormPost/Set');
-                        this.form.afterSuccessfulPost = function () {
-                            app.loader.log(100, 'Updated Attributes');
-                            this.updateInput(data.model.id);
+                            this.form.setPostUrl('FormPost/Set');
+                            this.form.afterSuccessfulPost = function () {
+                                app.loader.log(100, 'Updated Attributes');
+                                this.updateInput(data.model.id);
+                                //app.loader.hide();
+                            }.bind(this);
+
                             //app.loader.hide();
-                        }.bind(this);
 
-                        //app.loader.hide();
+                        } else {
+                            app.loader.log('Unable to retrieve parent container');
 
+                        }
                     } else {
-                        app.loader.log('Unable to retrieve parent container');
-
+                        console.log('Json Results empty');
                     }
 
                 } else {

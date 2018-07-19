@@ -514,6 +514,22 @@
     <Compile Include="Migrations\201807180514034_20180718__002-ImageGallery.Designer.cs">
       <DependentUpon>201807180514034_20180718__002-ImageGallery.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807190041035_20180718__003-FormPost-Label.cs" />
+    <Compile Include="Migrations\201807190041035_20180718__003-FormPost-Label.Designer.cs">
+      <DependentUpon>201807190041035_20180718__003-FormPost-Label.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807190042211_20180718__004-FormPost-Label.cs" />
+    <Compile Include="Migrations\201807190042211_20180718__004-FormPost-Label.Designer.cs">
+      <DependentUpon>201807190042211_20180718__004-FormPost-Label.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807190047101_20180718__005-FormPost-DateLastModified.cs" />
+    <Compile Include="Migrations\201807190047101_20180718__005-FormPost-DateLastModified.Designer.cs">
+      <DependentUpon>201807190047101_20180718__005-FormPost-DateLastModified.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807190346536_20180718__006-FormPost-DateLastModified.cs" />
+    <Compile Include="Migrations\201807190346536_20180718__006-FormPost-DateLastModified.Designer.cs">
+      <DependentUpon>201807190346536_20180718__006-FormPost-DateLastModified.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -1045,6 +1061,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807180514034_20180718__002-ImageGallery.resx">
       <DependentUpon>201807180514034_20180718__002-ImageGallery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190041035_20180718__003-FormPost-Label.resx">
+      <DependentUpon>201807190041035_20180718__003-FormPost-Label.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190042211_20180718__004-FormPost-Label.resx">
+      <DependentUpon>201807190042211_20180718__004-FormPost-Label.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190047101_20180718__005-FormPost-DateLastModified.resx">
+      <DependentUpon>201807190047101_20180718__005-FormPost-DateLastModified.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190346536_20180718__006-FormPost-DateLastModified.resx">
+      <DependentUpon>201807190346536_20180718__006-FormPost-DateLastModified.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

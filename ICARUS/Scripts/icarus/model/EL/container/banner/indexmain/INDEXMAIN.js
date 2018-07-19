@@ -50,7 +50,7 @@ class INDEXMAIN extends BANNER {
     }
 
     construct() {
-        $.post('/Main/PageList?page='+this.page+'&pageLength='+this.pageLength, {
+        $.post('/Main/PageIndex?page='+this.page+'&pageLength='+this.pageLength, {
             '__RequestVerificationToken': token.value
         },
             function (payload, status) {

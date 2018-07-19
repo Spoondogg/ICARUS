@@ -162,7 +162,7 @@ class FORM extends CONTAINER {
                     break;
             }
         }
-        console.log('Result: '+this.payload.isValid);
+        console.log('Validation Result: '+this.payload.isValid);
         return this.payload;
     }
 

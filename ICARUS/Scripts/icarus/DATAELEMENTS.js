@@ -8,17 +8,8 @@
  * 
  */
 const DATAELEMENTS = {
-
-    LIST: [],
-    LISTITEM: [
-        new MODEL(new ATTRIBUTES({
-            'name': 'p',
-            'type': 'text'
-        })).set({
-            'element': 'INPUT',
-            'label': 'p'
-        })
-    ],
+    ARTICLE: [],
+    SECTION: [],
 
     CONTAINER: [],
     
@@ -29,6 +20,17 @@ const DATAELEMENTS = {
         })).set({
             'element': 'INPUT',
             'label': 'language'
+        })
+    ],
+
+    LIST: [],
+    LISTITEM: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'p',
+            'type': 'text'
+        })).set({
+            'element': 'INPUT',
+            'label': 'p'
         })
     ],
 
@@ -81,6 +83,8 @@ const DATAELEMENTS = {
     FORMELEMENTGROUP: [],
     FORMELEMENT: [],
 
+    FORMPOST: [],
+
     CALLOUT: [
         new MODEL(new ATTRIBUTES({
             'name': 'icon',
@@ -132,7 +136,7 @@ const DATAELEMENTS = {
             'label': 'value'
         })
     ],
-
+    FORMPOSTINPUT: [],
     THUMBNAIL: [
         new MODEL(new ATTRIBUTES({
             'name': 'img',

@@ -27,19 +27,24 @@ namespace ICARUS.Models.Icarus {
         /// </summary>
         [Range(0, int.MaxValue)]
         public int formId { get; set; }
-
+        
         /// <summary>
-        /// Time that form was created
+        /// The DateTime that this element was created
         /// </summary>
-        /// //[Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        //public string timestamp { get; set; }
         [Required]
         public DateTime dateCreated { get; set; }
 
         /// <summary>
-        /// The Form Version Number 
+        /// The DateTime that this element was last modified
         /// </summary>
-        public double version { get; set; }
+        [Required]
+        public DateTime dateLastModified { get; set; }
+
+        /// <summary>
+        /// A simple identifier
+        /// </summary>
+        //[StringLength(128), Required]
+        //public string label { get; set; }
 
         /// <summary>
         /// Unique Id of author
@@ -94,6 +99,9 @@ namespace ICARUS.Models.Icarus {
         /// Construct an XML object and message body based on the set form post results 
         /// </summary>
         public void resultsToXml() {
+
+            
+
             if(this.xml == null) {
                 StringBuilder xmlResults = new StringBuilder();
                 StringBuilder messageBody = new StringBuilder();
@@ -131,9 +139,13 @@ namespace ICARUS.Models.Icarus {
                     if (this.jsonResults == null) {
                         this.jsonResults = "[]";
                     } else { // Remove the last entry (Should be antiforgerytoken)
-                        JArray json = JArray.Parse(this.jsonResults);
-                        json.Last.Remove();
-                        this.jsonResults = json.ToString(Newtonsoft.Json.Formatting.None);
+                        try {
+                            JArray json = JArray.Parse(this.jsonResults);
+                            json.Last.Remove();
+                            this.jsonResults = json.ToString(Newtonsoft.Json.Formatting.None);
+                        } catch (Exception e) {
+                            this.jsonResults = "[]";
+                        }                        
                     }
                     this.results = null;
                 }

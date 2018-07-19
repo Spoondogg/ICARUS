@@ -68,9 +68,10 @@ namespace ICARUS.Controllers {
             // Set formPost attributes where applicable
             formPost.formId = 1; // Unique to Chat - Represents a sentence
             formPost.authorId = User.Identity.Name;
-            formPost.version = 20180104.001;
+            //formPost.label = "Sentence";
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
             formPost.dateCreated = DateTime.UtcNow;
+            formPost.dateLastModified = DateTime.UtcNow;
 
             // Lets add some metadata to the post
             var message = new StringBuilder();
@@ -230,9 +231,10 @@ namespace ICARUS.Controllers {
                 formPost.id = 2; //
                 formPost.formId = 2;
                 formPost.authorId = User.Identity.Name;
-                formPost.version = 20180104.001;
+                //formPost.label = "Word";
                 formPost.status = 1;
                 formPost.dateCreated = DateTime.UtcNow;
+                formPost.dateLastModified = DateTime.UtcNow;
                 formPost.results = new List<FormValue>();
                 formPost.results.Add(new FormValue("value", word));
                 formPost.resultsToXml();
