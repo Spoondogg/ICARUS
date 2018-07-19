@@ -52,24 +52,37 @@ class IMAGEGALLERY extends BANNER {
     }
 
     construct() {
-        $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
+        let postUrl = '/ImageGallery/ImageIndex';
+        if (this.page) {
+            postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;
+        }
+        $.post(postUrl, {
             '__RequestVerificationToken': token.value
         },
             function (payload, status) {
                 if (status === 'success') {
 
+                    console.log('IMAGEGALLERY PAYLOAD:');
+                    console.log(payload);
+
                     this.pageTotal = payload.total;
                     for (let l = 0; l < payload.list.length; l++) {
+                        //console.log(payload.list[l]);
                         let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
                             'label': payload.list[l].label,
                             'dataId': -1,
                             'data': {
                                 'header': payload.list[l].label,
                                 'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>'
-                                    + payload.className + '[' + payload.list[l].index + ']'
+                                    + payload.className + '[' + payload.list[l].index + ']',
+                                'img': payload.list[l].id,
+                                'showImageDetails': true
                             }
                         }));
-                        thumb.image.el.setAttribute('style', 'display:none;');
+
+                        if (payload.list[l].id === 0) {
+                            thumb.image.el.setAttribute('style', 'display:none;');
+                        }
 
                         thumb.button.el.onclick = function () {
                             this.launchMain(payload.list[l].id);
@@ -143,10 +156,10 @@ class IMAGEGALLERY extends BANNER {
 
 
     /**
-     * Opens the given Main Id in a new window
+     * Opens the given Image FormPost in a new window
      * @param {number} id Main Container Id
      */
     launchMain(id) {
-        window.open(new URL(window.location.href).origin + '/' + id);
+        window.open(new URL(window.location.href).origin + '/FormPost/Get/' + id);
     }
 }

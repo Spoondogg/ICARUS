@@ -18,6 +18,16 @@ class THUMBNAIL extends CONTAINER {
 
     construct() {
         this.image = new IMG(this.body.pane, new MODEL());
+
+        this.header = new HEADER(this.body.pane, new MODEL().set({
+            'label': this.data.header
+        }));
+        this.p = new P(this.body.pane, new MODEL(), truncate(this.data.p, 128));
+
+        this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
+        this.button = this.buttonGroup.addButton('', ICON.CHEVRON_RIGHT);
+        this.button.addClass('btn-block');
+
         console.log('dataId:' + this.dataId);
         if (this.dataId > 0 || this.dataId === -1) {
 
@@ -38,11 +48,35 @@ class THUMBNAIL extends CONTAINER {
                                     parsed = JSON.parse(data.model.jsonResults);
 
                                     // Extract the base64 values and create an image
+                                    let img = {};
                                     for (let p = 0; p < parsed.length; p++) {
-                                        if (parsed[p].name === 'base64') {
-                                            this.image.el.src = parsed[p].value;
+                                        img[parsed[p].name] = parsed[p].value;
+                                    }
+
+                                    try {
+                                        this.image.el.src = img['base64'];
+                                    } catch (ee) {
+                                        console.log('Unable to set Thumbnail image');
+                                        console.log(img);
+                                    }
+
+
+                                    // Set text in Thumbnail when required (see ImageGallery.js)
+                                    if (this.data.showImageDetails) {
+                                        try {
+                                            //this.image.el.src = img['base64'];
+                                            this.header.el.innerHTML = img['filename'];
+                                            this.p.el.innerHTML =
+                                                'Id: ' + img['id'] + '<br>'
+                                                + 'Filesize: ' + img['fileSize'] + 'kb ('
+                                                + img['dimX'] + ' x ' + img['dimY'] + ')<br>'
+                                                + img['fileType'];
+                                        } catch (ee) {
+                                            console.log('Unable to set Thumbnail attributes');
+                                            console.log(img);
                                         }
                                     }
+
                                 } else {
                                     console.log('Json Results empty');
                                 }
@@ -61,14 +95,7 @@ class THUMBNAIL extends CONTAINER {
                 }
             }
 
-            this.header = new HEADER(this.body.pane, new MODEL().set({
-                'label': this.data.header
-            }));
-            this.p = new P(this.body.pane, new MODEL(), truncate(this.data.p, 128));
-
-            this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
-            this.button = this.buttonGroup.addButton('', ICON.CHEVRON_RIGHT);
-            this.button.addClass('btn-block');
+            
 
             this.button.el.onclick = function () {
                 this.launchModal();
