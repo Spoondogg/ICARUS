@@ -1,5 +1,6 @@
 ﻿/**
-    Jumbotron with centered icon and text
+    A thumbnail with a preview window and a list of Containers
+    that can be loaded into the preview
 */
 class INDEXTHUMBNAIL extends THUMBNAIL {
     /**
@@ -10,6 +11,8 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
     constructor(node, model) {
         super(node, model);
         this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
+        
+
         //this.construct();
         //this.populate(model.children);
     }
@@ -22,7 +25,7 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
         debug('Launch Index Thumbnail Modal');
 
         this.modal = new MODAL(this.data.header);
-        this.modal.container.body.pane.addClass('thumbnail');
+        this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
         
 
         this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL());
@@ -35,6 +38,10 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
         this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
             'style': 'height:auto;'
         })), this.data.p);
+
+        this.modal.container.previewNotes = new EL(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES({
+            'class': 'preview-notes'
+        })), '');
 
         this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('preview')), [this.data.listClass.toUpperCase()]);
         this.modal.container.preview.el.setAttribute('style', 'height:400px;max-height:400px;overflow-y:auto;');
@@ -59,6 +66,9 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
                 'label': title
             })).el.onclick = function () {
                 this.modal.container.preview.body.pane.empty();
+
+
+
                 this.launchPreview(
                     500, title,
                     this.modal.container.preview.body.pane,
@@ -73,11 +83,11 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
 
     /**
      * Creates a modal and loads the specified container
-     * @param {any} delay Delay in milliseconds
-     * @param {any} title Modal Title
-     * @param {any} node Modal node
-     * @param {any} className Object class name
-     * @param {any} id Object id
+     * @param {number} delay Delay in milliseconds
+     * @param {string} title Modal Title
+     * @param {EL} node Modal node to append to
+     * @param {string} className Object class name
+     * @param {number} id Object id
      */
     launchPreview(delay = 500, title = 'Preview', node, className, id) {
         setTimeout(function () {
@@ -88,10 +98,15 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
             }.bind(this));
         }.bind(this), delay);
 
+        // Get a list of Parents for this Container
+        // TODO: Do something with this, please!
         setTimeout(function () {
             $.getJSON('/' + className + '/GetContainerParents/' + id, function (result) {
                 console.log(className + ' Parents:');
-                console.log(result);                
+                console.log(result); 
+                console.log(result.length + ' parent Containers');
+                //this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
+                this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
             }.bind(this));
         }.bind(this), delay);
 
