@@ -452,6 +452,5 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(0, e.Message, e), JsonRequestBehavior.AllowGet);
             }
         }
-
     }
 }

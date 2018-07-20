@@ -31,8 +31,9 @@ class INDEX extends BANNER {
             },
                 function (payload, status) {
                     if (status === 'success') {
-                        thumb.data.p = 'There are ' + payload.list.length + ' instances of ' + payload.className;
-                        thumb.p.setInnerHTML(thumb.data.p);                   
+                        thumb.data.p = 'There are ' + payload.list.length
+                            + ' instances of ' + payload.className;
+                        thumb.p.setInnerHTML(thumb.data.p);     
                         thumb.data.listClass = payload.className;
                         thumb.data.list = payload.list;
                     }                    

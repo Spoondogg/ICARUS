@@ -25,3 +25,7 @@
         overflow-y: auto;
         font-size: smaller;
     }
+
+.index-thumbnail {
+    margin-bottom: 0;
+}
