@@ -88,7 +88,7 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('USER').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.USER,
+                        'icon': ICONS.USER,
                         'label': 'Log Out',
                         'url': '#?url=logout'
                     })
@@ -101,7 +101,7 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('USER').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.OPTIONS,
+                        'icon': ICONS.OPTIONS,
                         'label': 'Manage',
                         'url': 'Manage/Index'
                     })
@@ -111,7 +111,7 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.TOGGLE,
+                        'icon': ICONS.TOGGLE,
                         'label': 'Headers'
                     })
                 })
@@ -123,7 +123,7 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.CONSOLE,
+                        'icon': ICONS.CONSOLE,
                         'label': 'Console'
                     })
                 })
@@ -136,7 +136,7 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.REFRESH,
+                        'icon': ICONS.REFRESH,
                         'label': 'Reload'
                     })
                 })
@@ -229,14 +229,16 @@ class MAIN extends CONTAINER {
         console.log('Log In');
         // TODO Handle supplied arguments... Or don't... Not sure yet.
 
-        this.prompt = new PROMPT('Log In');
+        this.prompt = new PROMPT('Log In', '', [], [], true);
+        this.prompt.addClass('prompt');
 
         this.prompt.form.setPostUrl('/Account/Login');
         this.prompt.form.el.setAttribute('class', 'login');
         this.prompt.form.el.setAttribute('method', 'POST');
         this.prompt.form.el.setAttribute('action', '#');
 
-        this.email = new INPUT(this.prompt.formElementGroup.body.pane,
+        //this.email = new INPUT(this.prompt.formElementGroup.body.pane,
+        this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
             new MODEL(
                 new ATTRIBUTES({
                     'typeId': IcarusInputType.INPUT,
@@ -249,7 +251,7 @@ class MAIN extends CONTAINER {
             })
         );
         
-        this.password = new INPUT(this.prompt.formElementGroup.body.pane,
+        this.password = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
             new MODEL(
                 new ATTRIBUTES({
                     'typeId': IcarusInputType.PASSWORD,

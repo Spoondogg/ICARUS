@@ -687,6 +687,7 @@
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
+    <Content Include="Scripts\icarus\ICONS.js" />
     <Content Include="Scripts\icarus\DATAELEMENTS.js" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />

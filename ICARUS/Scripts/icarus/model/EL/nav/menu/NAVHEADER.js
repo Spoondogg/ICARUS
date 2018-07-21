@@ -24,7 +24,7 @@ class NAVHEADER extends MENU {
                 'anchor': new MODEL().set({
                     'label': model.label,
                     'url': '#',
-                    'icon': ICON.PLUS
+                    'icon': ICONS.PLUS
                 })
             })
         );
@@ -39,9 +39,9 @@ class NAVHEADER extends MENU {
         if (user === 'Guest') {
             this.btnLogin = this.options.addNavItem(
                 new MODEL().set({
-                    'icon': ICON.USER,
+                    'icon': ICONS.USER,
                     'anchor': new MODEL('pull-right').set({
-                        'icon': ICON.USER,
+                        'icon': ICONS.USER,
                         'label': '',
                         'url': '#'
                     })
@@ -76,7 +76,7 @@ class NAVHEADER extends MENU {
                     'style': 'width:100%;'
                 })).set({
                     'anchor': new MODEL('pull-right').set({
-                        'icon': ICON.COG,
+                        'icon': ICONS.COG,
                         'label': '', //Options
                         'url': '#'
                     })

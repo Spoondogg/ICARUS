@@ -144,7 +144,7 @@ const DATAELEMENTS = {
         })).set({
             'element': 'BUTTON',
             'label': 'img',
-            'type': 'FORMPOSTINPUT', //'FORMPOSTINPUT', // New type: FORMPOSTIMAGE
+            'type': 'FORMPOSTINPUT',
             'inputs': [
                 new MODEL(new ATTRIBUTES({
                     'name': 'file',

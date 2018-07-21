@@ -26,3 +26,21 @@
     overflow: hidden;
     padding: 0 1em;
 }
+
+.index {
+    
+}
+
+    .index .container-body > .banner > header {
+        border-bottom: 1px solid #5a5a5a;
+        color: #9d9d9d;
+        padding: 0 0.5em;
+        background-color: #00000012;
+    }
+        
+        .index > .container-body > .pane {
+            background-color: #404040;
+            border-bottom: 1px solid #a7a7a7;
+            border-top: 2px solid #353535;
+            padding: 0;
+        }
