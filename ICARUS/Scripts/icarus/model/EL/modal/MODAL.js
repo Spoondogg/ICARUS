@@ -101,7 +101,7 @@ class MODAL extends EL { // ALIGN VERTICALLY??
     hide(delay = 1000, destroy = false) {
         setTimeout(function () {
             $(this.el).modal('hide');
-            $('.modal-backdrop').animate({ opacity: 'toggle' }, 300).remove();
+            $('.modal-backdrop').animate({ opacity: 'toggle' }, 0).remove();
             if (destroy) {
                 this.destroy(delay);
             }

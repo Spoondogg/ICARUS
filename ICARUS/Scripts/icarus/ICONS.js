@@ -52,5 +52,6 @@ const ICONS = {
     IMAGEGALLERY: 'glyphicon-picture',
     CLASSVIEWER: 'glyphicon-list-alt',
     INDEX: 'glyphicon-th',
-    INDEXMAIN: 'glyphicon-th-large'
+    INDEXMAIN: 'glyphicon-th-large',
+    HOME: 'glyphicon-home'
 };
