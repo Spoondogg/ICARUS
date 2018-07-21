@@ -70,7 +70,7 @@ class INDEXMAIN extends BANNER {
                         thumb.image.el.setAttribute('style', 'display:none;');
 
                         thumb.button.el.onclick = function() {
-                            this.launchMain(payload.list[l].id);
+                            this.launchMain(payload.list[l].id, payload.list[l].label);
                         }.bind(this);
                     }
 
@@ -139,8 +139,45 @@ class INDEXMAIN extends BANNER {
     /**
      * Opens the given Main Id in a new window
      * @param {number} id Main Container Id
+     * @param {string} label Main Container Label
      */
-    launchMain(id) {
-        window.open(new URL(window.location.href).origin + '/' + id);
+    launchMain(id, label) {
+        //window.open(new URL(window.location.href).origin + '/' + id);
+
+        // Try opening an IFRAME Modal instead
+        debug('Launch Index IFrame Modal');
+
+        this.modal = new MODAL(label);
+        this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
+            'label': 'iframe',
+            'dataId': -1,
+            'data': {
+                'src': url.origin + '/' + id
+            }
+        }));
+        this.iframe.frame.el.setAttribute('src', url.origin + '/' + id);
+
+        this.modal.show();
     }
+
+
+
+
+    /**
+     * Creates the Modal that contains an iFrame with the given page loaded
+     * TODO: Consider paging these results
+     */
+    launchModal() {
+        debug('Launch Index IFrame Modal');
+
+        this.modal = new MODAL(this.data.header);
+        this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
+            'label':'iframe'
+        }));
+
+
+        this.modal.show();
+    }
+
+
 }

@@ -1,11 +1,11 @@
 ﻿/**
-    Jumbotron / Hero unit Constructor
+    Inline Frame
 */
 class IFRAME extends CONTAINER {
     /**
-        Constructs a Bootstrap Jumbotron.
+        Constructs an iframe
         @param {CONTAINER} node The model
-         @param {MODEL} model Object Model
+        @param {MODEL} model Object Model
      */
     constructor(node, model) {
         super(node, 'DIV', model);
@@ -13,21 +13,23 @@ class IFRAME extends CONTAINER {
         //this.body.pane.el.setAttribute('style', 'width:100%;height:300px;border:0;');
         //this.body.pane.el.setAttribute('frameborder', 0);
 
-        this.frame = new EL(this, 'IFRAME', new MODEL(
+        this.frame = new EL(this.body.pane, 'IFRAME', new MODEL(
             new ATTRIBUTES({
                 'width': '100%',
-                'height': 300,
                 'border': 0,
-                'frameborder': 0
+                'frameborder': 0,
+                'style': 'height:calc(100vh - 142px);'
             })
         ));
 
-        if (model.dataId > 0) {
-            if (model.data.src) {
-                this.frame.el.setAttribute('src', model.data.src);
-            }
-        }
+        
 
-        this.populate(model.children);
+        //this.populate(model.children);
+    }
+
+    construct() {
+        if (this.data.src) {
+            //this.frame.el.setAttribute('src', this.data.src);
+        }
     }
 }

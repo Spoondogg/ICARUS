@@ -111,6 +111,20 @@ class MAIN extends CONTAINER {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
+                        'icon': ICONS.HOME,
+                        'label': 'Home'
+                    })
+                })
+            ).el.onclick = function () {
+                app.loader.log(100, 'Returning Home...');
+                setTimeout(function () {
+                    location.href = url.origin;
+                }.bind(this), 1000);
+            }.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
                         'icon': ICONS.TOGGLE,
                         'label': 'Headers'
                     })
