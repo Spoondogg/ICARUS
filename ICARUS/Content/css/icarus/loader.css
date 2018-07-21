@@ -38,9 +38,9 @@
     display: none; 
 }
 
-.modal .loader .modal-content {
-    background-color: transparent;
-}
+    .modal .loader .modal-content {
+        background-color: #00000094; /*transparent;*/
+    }
 
     .modal .loader .console {
         margin-top: 0;

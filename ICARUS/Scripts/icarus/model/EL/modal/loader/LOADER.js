@@ -13,6 +13,10 @@ class LOADER extends MODAL {
         value = value ? value : 0;
         
         super(label, null, true);
+        this.el.style.zIndex = 99999;
+        this.el.setAttribute('name', 'LOADER');
+
+        this.dialog.el.style.width = '80%';
         //this.el.setAttribute('data-backdrop', 'static');
         //this.el.setAttribute('data-keyboard', false);
 
@@ -40,8 +44,8 @@ class LOADER extends MODAL {
         this.progressBar.el.onclick = function () {
             $(this.console.el).collapse('toggle');
             setTimeout(function () {
-                this.hide();
-                
+                $(this.console.el).toggle();
+                this.hide();                
             }.bind(this), 300);
         }.bind(this);
 
@@ -71,6 +75,10 @@ class LOADER extends MODAL {
             }
             if (show) {
                 this.show();
+
+                if (value === 100) {
+                    this.hide(1500);
+                }
             }
         } else {
             console.log('Unable to find loader');

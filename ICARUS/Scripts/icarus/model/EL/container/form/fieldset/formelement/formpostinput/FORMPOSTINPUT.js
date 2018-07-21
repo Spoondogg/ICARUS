@@ -94,7 +94,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
                     })).set({
                         'element': 'INPUT',
                         'label': 'id'
-                    }), 
+                    }) 
 
                     /*
                     new MODEL(new ATTRIBUTES({

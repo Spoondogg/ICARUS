@@ -418,7 +418,6 @@ class CONTAINER extends GROUP {
     /**
         Creates a TAB that represents this container
         @param {MODEL} model Object Model
-        @param {string} antiForgeryToken Token
         @returns {NAVITEMLINK} A tab (navitemlink)
     */
     createTab(model) {

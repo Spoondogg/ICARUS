@@ -20,7 +20,9 @@ class INDEX extends BANNER {
         //$(this.containerHeader.el).insertBefore(this.body.pane);
 
         let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY']; //'Main',
-        
+
+        app.loader.log('Constructing Container Index...');
+
         for (let l = 0; l < elementList.length; l++) {
 
             let thumb = new NAVITEMICON(this.body.pane, new MODEL().set({
@@ -44,6 +46,9 @@ class INDEX extends BANNER {
                 }
             }));
             */
+
+            app.loader.log(100, 'Retrieving ' + elementList[l] + '...', true);
+
 
            // list = 0;
             $.post('/' + elementList[l] + '/List', {
@@ -72,10 +77,14 @@ class INDEX extends BANNER {
                         thumb.data.listClass = payload.className;
                         thumb.data.list = payload.list;
                         */
+
+
                     }                    
                 }.bind(this)
             );
         }
+
+        //app.loader.hide(500);
     }
 
     /**
@@ -84,6 +93,7 @@ class INDEX extends BANNER {
      */
     launchModal(header, p, listClass, list) {
         debug('Launch Index Thumbnail Modal');
+        app.loader.log(100, 'Launching Modal', true);
 
         this.modal = new MODAL(header);
         this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
@@ -158,6 +168,7 @@ class INDEX extends BANNER {
      * @param {number} id Object id
      */
     launchPreview(delay = 500, title = 'Preview', node, className, id) {
+        app.loader.log(100, 'Launch Preview', true);
         setTimeout(function () {
             $.getJSON('/' + className + '/Get/' + id, function (result) {
                 console.log(className + ':');
