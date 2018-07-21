@@ -16,9 +16,7 @@ class INDEXMAIN extends BANNER {
         this.pageLength = 6;
         this.pageTotal = 0;
 
-        if (this.dataId > 0) {
-
-        }
+        //if (this.dataId > 0) {    }
 
         this.header = new HEADER(this, new MODEL());
         $(this.header.el).insertBefore(this.body.pane.el);
@@ -44,77 +42,75 @@ class INDEXMAIN extends BANNER {
 
 
         this.loadPage(this.page);
-
-        
-
     }
 
     construct() {
-        $.post('/Main/PageIndex?page='+this.page+'&pageLength='+this.pageLength, {
-            '__RequestVerificationToken': token.value
-        },
-            function (payload, status) {
-                if (status === 'success') {
+        if (!isNaN(this.page)) {
 
-                    this.pageTotal = payload.total;
-                    for (let l = 0; l < payload.list.length; l++) {
-                        let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
-                            'label': payload.list[l].label,
-                            'dataId': -1,
-                            'data': {
-                                'header': payload.list[l].label,
-                                'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>'
-                                    + payload.className + '[' + payload.list[l].index + ']'
-                            }
-                        }));
-                        thumb.image.el.setAttribute('style', 'display:none;');
+            $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
+                '__RequestVerificationToken': token.value
+            },
+                function (payload, status) {
+                    if (status === 'success') {
 
-                        thumb.button.el.onclick = function() {
-                            this.launchMain(payload.list[l].id, payload.list[l].label);
-                        }.bind(this);
-                    }
+                        this.pageTotal = payload.total;
+                        for (let l = 0; l < payload.list.length; l++) {
+                            let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
+                                'label': payload.list[l].label,
+                                'dataId': -1,
+                                'data': {
+                                    'header': payload.list[l].label,
+                                    'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>'
+                                        + payload.className + '[' + payload.list[l].index + ']'
+                                }
+                            }));
+                            thumb.image.el.setAttribute('style', 'display:none;');
 
-                    if (!this.pagination.buttonGroup.loaded) {
-                        console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
-                        this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-                        console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
-                        for (let p = 0; p < this.pageCount; p++) {
-                            let btn = this.pagination.buttonGroup.addButton(p + 1);
-                            btn.el.onclick = function () {
-                                this.loadPage(p);
+                            thumb.button.el.onclick = function () {
+                                this.launchMain(payload.list[l].id, payload.list[l].label);
                             }.bind(this);
                         }
-                        this.pagination.buttonGroup.loaded = true;
+
+                        if (!this.pagination.buttonGroup.loaded) {
+                            console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
+                            this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
+                            console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
+                            for (let p = 0; p < this.pageCount; p++) {
+                                let btn = this.pagination.buttonGroup.addButton(p + 1);
+                                btn.el.onclick = function () {
+                                    this.loadPage(p);
+                                }.bind(this);
+                            }
+                            this.pagination.buttonGroup.loaded = true;
+                        }
                     }
-                }                    
-            }.bind(this)
-        );
+                }.bind(this)
+            );
+        } else {
+            let note = new P(this.body.pane, new MODEL(), 'No Containers Exist');
+        }
     }
 
     loadPage(page) {
         console.log('Loading page ' + page);
-        this.header.setInnerHTML('Page ' + (page + 1));
+        try {
+            this.header.setInnerHTML('Page ' + (page + 1));
 
-        let buttons = this.pagination.buttonGroup.el.children;
-        for (let b = 0; b < buttons.length; b++) {
-            $(buttons[b]).removeClass('active');
+            let buttons = this.pagination.buttonGroup.el.children;
+            for (let b = 0; b < buttons.length; b++) {
+                $(buttons[b]).removeClass('active');
+            }
+            //console.log('Activating button[' + page + ']');
+            $(buttons[page]).addClass('active');
+
+            this.body.pane.empty();
+            this.page = page;
+            this.construct();
+            ///this.body.pane.el.setAttribute('style', 'height:auto;');
+        } catch (e) {
+            console.log('Unable to load page.');
+            console.log(e);
         }
-        //console.log('Activating button[' + page + ']');
-        $(buttons[page]).addClass('active');        
-
-        /*
-        let height = $(this.body.pane.el).height();
-        //console.log('Height: ' + height);
-        if (height > 0) {
-            this.body.pane.el.setAttribute('style', 'height:' + (height + 48) + 'px;display:block;');
-        }
-        */
-        
-        this.body.pane.empty();
-        this.page = page;
-        this.construct();
-        ///this.body.pane.el.setAttribute('style', 'height:auto;');
-
         
     }
 

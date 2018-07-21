@@ -99,13 +99,17 @@ class MODAL extends EL { // ALIGN VERTICALLY??
         @param {boolean} destroy If true, this modal is destroyed
     */
     hide(delay = 1000, destroy = false) {
-        setTimeout(function () {
-            $(this.el).modal('hide');
-            $('.modal-backdrop').animate({ opacity: 'toggle' }, 0).remove();
-            if (destroy) {
-                this.destroy(delay);
-            }
-        }.bind(this), delay);
+        try {
+            setTimeout(function () {
+                $(this.el).modal('hide');
+                $('.modal-backdrop').animate({ opacity: 'toggle' }, 0).remove();
+                if (destroy) {
+                    this.destroy(delay);
+                }
+            }.bind(this), delay);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     /**

@@ -25,7 +25,7 @@
         clear: both;
         border-radius: 5px;
         border: 1px solid #f3f3f3;
-        box-shadow: 0px 2px 1px 1px #0000003d;
+        box-shadow: 0 2px 1px 1px #0000003d;
     }
 
     .image-gallery footer.pagination {

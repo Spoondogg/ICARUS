@@ -9,10 +9,11 @@ class IFRAME extends CONTAINER {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
+        
+        //this.populate(model.children);
+    }
 
-        //this.body.pane.el.setAttribute('style', 'width:100%;height:300px;border:0;');
-        //this.body.pane.el.setAttribute('frameborder', 0);
-
+    construct() {
         this.frame = new EL(this.body.pane, 'IFRAME', new MODEL(
             new ATTRIBUTES({
                 'width': '100%',
@@ -21,15 +22,5 @@ class IFRAME extends CONTAINER {
                 'style': 'height:calc(100vh - 142px);'
             })
         ));
-
-        
-
-        //this.populate(model.children);
-    }
-
-    construct() {
-        if (this.data.src) {
-            //this.frame.el.setAttribute('src', this.data.src);
-        }
     }
 }
