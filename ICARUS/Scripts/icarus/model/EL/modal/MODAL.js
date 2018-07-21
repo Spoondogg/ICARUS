@@ -73,7 +73,9 @@ class MODAL extends EL { // ALIGN VERTICALLY??
             'class': 'btn btn-default btn-block',
             'data-dismiss': 'modal',
             'aria-hidden': 'true'
-        })), 'Close').el.onclick = close;
+        })), 'Close').el.onclick = function () {
+            this.hide(1000, true);
+        }.bind(this);
     }    
 
     /**
@@ -88,11 +90,7 @@ class MODAL extends EL { // ALIGN VERTICALLY??
         Reveal the modal
     */
     show() {
-        if ($(this.el).hasClass('in')) {
-            $(this.el).modal('show');
-        } /*else {
-            console.log('modal already shown');
-        }*/
+        $(this.el).modal('show');
     }
 
     /**
@@ -111,14 +109,6 @@ class MODAL extends EL { // ALIGN VERTICALLY??
     }
 
     /**
-        Convenience method for hide();  Should get ride of this
-        @param {number} delay Millisecond delay
-    
-    close(delay) {
-        this.hide(delay);
-    }*/
-
-    /**
         Sets the text to prompt well
         @param {string} text The text contained within the prompt's well
     */
@@ -127,14 +117,4 @@ class MODAL extends EL { // ALIGN VERTICALLY??
             this.well.el.innerHTML = text;
         }
     }
-
-    /**
-        Adds text to the prompt's well
-        @param {string} text The text to be added
-    
-    addText(text) {
-        if (this.well) {
-            this.well.el.innerHTML += '<br>' + text;
-        }
-    }*/
 }

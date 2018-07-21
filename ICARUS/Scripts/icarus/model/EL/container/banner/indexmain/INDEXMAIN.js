@@ -74,8 +74,6 @@ class INDEXMAIN extends BANNER {
                         }.bind(this);
                     }
 
-
-
                     if (!this.pagination.buttonGroup.loaded) {
                         console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
                         this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
@@ -88,8 +86,6 @@ class INDEXMAIN extends BANNER {
                         }
                         this.pagination.buttonGroup.loaded = true;
                     }
-
-                    
                 }                    
             }.bind(this)
         );

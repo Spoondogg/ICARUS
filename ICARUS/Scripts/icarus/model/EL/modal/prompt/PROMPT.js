@@ -16,7 +16,10 @@ class PROMPT extends MODAL {
         debug('PROMPT('+label+');');
         super(label, text, vertical);
         this.addClass('prompt');
-        
+
+        this.form = app.createEmptyForm(this.container.body.pane, false);
+        this.form.prompt = this;
+        /*
         this.form = new FORM(
             this.container.body.pane,
             new MODEL().set({
@@ -43,6 +46,7 @@ class PROMPT extends MODAL {
                 'hasTab': 0
             })
         );
+        */
 
         // TODO: Fix this up
         if (inputs) {

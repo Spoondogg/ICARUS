@@ -109,6 +109,5 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
                 this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
             }.bind(this));
         }.bind(this), delay);
-
     }
 }

@@ -26,6 +26,7 @@
 .modal-body {
     padding: 0;
     /*height: 85vh;*/
+    height: calc(100vh - 134px);
     max-height: 85vh;
     overflow-y: auto;
     /*margin-bottom: 1em;*/
@@ -102,11 +103,15 @@
     -o-transform: translate(0);
     -ms-transform: translate(0);
     transform: translate(0);
+    margin: 0;
 }
-.modal.fade .modal-dialog {
-    -webkit-transform: translate(0);
-    -moz-transform: translate(0);
-    -o-transform: translate(0);
-    -ms-transform: translate(0);
-    transform: translate(0);
+
+
+
+.modal.prompt .modal-body {
+    height: auto;
+}
+
+.modal.prompt .modal-dialog {
+    padding: 0.3em;
 }

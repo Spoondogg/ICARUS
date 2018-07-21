@@ -17,7 +17,7 @@ class FORM extends CONTAINER {
         this.setPostUrl('Form/Submit');
         this.updateUrl = 'Form/Update';
         this.footer = new IcarusFormFooter(this.body, new MODEL());
-        this.footer.buttonGroup.addButton('Submit', ICON.SAVE).el.onclick = this.post.bind(this);
+        this.footer.buttonGroup.addButton('Submit', ICONS.SAVE).el.onclick = this.post.bind(this);
         this.populate(model.children);
     }
 

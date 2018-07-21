@@ -91,6 +91,7 @@ namespace ICARUS {
 
                 // Generic
                 "~/Scripts/icarus/DATAELEMENTS.js",
+                "~/Scripts/icarus/ICONS.js",
                 "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
                 "~/Scripts/icarus/WATERMARK.js",
 

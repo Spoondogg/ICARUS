@@ -25,7 +25,7 @@ class THUMBNAIL extends CONTAINER {
         this.p = new P(this.body.pane, new MODEL(), truncate(this.data.p, 128));
 
         this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
-        this.button = this.buttonGroup.addButton('', ICON.CHEVRON_RIGHT);
+        this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
         this.button.addClass('btn-block');
 
         console.log('dataId:' + this.dataId);

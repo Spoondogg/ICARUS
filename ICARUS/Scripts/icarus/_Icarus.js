@@ -1,14 +1,10 @@
 ﻿/**
-    Icarus Web Engine
-    Dynamically load objects into Containers 
-    @language Typescript ES6
-    
-    @description Requires Typescript ES6
-    @version 0.4.0.20180428
+    Icarus
+    @description A Single Page Web Application Engine
+    @version 0.4.0.20180720
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
-
-//"use strict";
+"use strict";
 
 /**
     Sorts an object array by the specified property.
@@ -60,10 +56,7 @@ function dynamicSortMultiple() {
     @returns {string} An html friendly string for input names
  */
 function friendly(str) {
-
     try {
-        //console.log('Friendly: ' + str);
-
         let table = {
             '<': 'lt',
             '>': 'gt',
@@ -202,58 +195,6 @@ const SIZE = {
 };
 
 /**
- * Bootstrap glyphicon references
- */
-const ICON = {
-    CHEVRON_UP: 'glyphicon-chevron-up',
-    CHEVRON_DOWN: 'glyphicon-chevron-down',
-    CHEVRON_LEFT: 'glyphicon-chevron-left',
-    CHEVRON_RIGHT: 'glyphicon-chevron-right',
-    PENCIL: 'glyphicon-pencil',
-    ARROW_UP: 'glyphicon-arrow-up',
-    ARROW_DOWN: 'glyphicon-arrow-down',
-    LOCK: 'glyphicon-lock',
-    UNLOCK: 'glyphicon-pencil',
-    COG: 'glyphicon-cog',
-    PLUS: 'glyphicon-plus',
-    SAVE: 'glyphicon-save',
-    DELETE: 'glyphicon-minus',
-    LOAD: 'glyphicon-open-file',
-    UP: 'glyphicon-triangle-top',
-    DOWN: 'glyphicon-triangle-bottom',
-    OPTIONS: 'glyphicon-option-vertical',
-    RESET: 'glyphicon-refresh',
-    REFRESH: 'glyphicon-refresh',
-    REMOVE: 'glyphicon-remove-circle',
-    LIST: 'glyphicon-th-list',
-    CERTIFICATE: 'glyphicon-certificate',
-    USER: 'glyphicon-user',
-    EXCLAMATION: 'glyphicon-exclamation-sign',
-    PUBLIC: 'glyphicon-eye-open',
-    PRIVATE: 'glyphicon-eye-close',
-    IFRAME: 'glyphicon-new-window',
-    CONSOLE: 'glyphicon-new-window',
-    FORM: 'glyphicon-list-alt',
-    JUMBOTRON: 'glyphicon-blackboard',
-    BANNER: 'glyphicon-th-large',
-    PARAGRAPH: 'glyphicon-text-background',
-    FIELDSET: 'glyphicon-folder-close',
-    ARTICLE: 'glyphicon-file',
-    SECTION: 'glyphicon-indent-left',
-    FORMELEMENTGROUP: 'glyphicon-tasks',
-    INPUT: 'glyphicon-log-in',
-    SELECT: 'glyphicon-tasks',
-    TEXTAREA: 'glyphicon-text-background',
-    CALLOUT: 'glyphicon-comment',
-    THUMBNAIL: 'glyphicon-credit-card',
-    TOGGLE: 'glyphicon-check',
-    IMAGE: 'glyphicon-picture',
-    CHAT: 'glyphicon-comment',
-    MENULIST: 'glyphicon-menu-hamburger',
-    WORD: 'glyphicon-tags'
-};
-
-/**
  * Form methods
  */
 const METHOD = {
@@ -273,8 +214,6 @@ const STATUS = {
     LOCKED: 0
 };
 
-
-
 /**
  * Create a globally unique identifier
     @returns {string} Unique string
@@ -283,8 +222,6 @@ const guid = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
 };
-
-
 
 /////////////////////////////
 // https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
@@ -345,8 +282,9 @@ function debug(output) {
         console.log(output);
     }
 }
-const DEBUGMODE = false; // If true, debug outputs are shown
+const DEBUGMODE = true; // If true, debug outputs are shown
 const TESTING = false; // If true, tests are ran and results are shown in the console.
+const THEME = 0; //0=dark,1=light...
 /**
  * Main method that launches the application
  * @param {number} id Application Id
@@ -363,7 +301,17 @@ function main(id) {
     debug('Token: ' + token.value);
     debug('DebugMode: ' + DEBUGMODE);
 
-    // Modal animation
+    // Set global URL
+    var url = new URL(window.location.href);
+    var returnUrl = url.searchParams.get('ReturnUrl');
+    if (returnUrl) {
+        returnUrl = url.origin + returnUrl;
+        location.href = returnUrl;
+    }
+
+    // Extend String to add CamelCasing
+
+    // Set Global Modal animation
     $('.modal').on('show.bs.modal', function (e) {
         $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
 

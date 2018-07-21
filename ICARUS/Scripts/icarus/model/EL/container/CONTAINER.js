@@ -87,7 +87,7 @@ class CONTAINER extends GROUP {
             }
 
             if (model.shared) {
-                this.navBar.header.tab.anchor.icon.el.className = ICON.PUBLIC;
+                this.navBar.header.tab.anchor.icon.el.className = ICONS.PUBLIC;
             }
         }
 
@@ -253,7 +253,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.UP,
+                        'icon': ICONS.UP,
                         'label': 'UP'
                     })
                 })
@@ -265,7 +265,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.DOWN,
+                        'icon': ICONS.DOWN,
                         'label': 'DOWN'
                     })
                 })
@@ -277,7 +277,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.REFRESH,
+                        'icon': ICONS.REFRESH,
                         'label': 'REFRESH'
                     })
                 })
@@ -340,7 +340,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.LOAD,
+                        'icon': ICONS.LOAD,
                         'label': 'Load'
                     })
                 })
@@ -350,7 +350,7 @@ class CONTAINER extends GROUP {
             this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.SAVE,
+                        'icon': ICONS.SAVE,
                         'label': 'SAVE'
                     })
                 })
@@ -387,7 +387,7 @@ class CONTAINER extends GROUP {
             this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.SAVE,
+                        'icon': ICONS.SAVE,
                         'label': 'QUICKSAVE'
                     })
                 })
@@ -397,7 +397,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.DELETE,
+                        'icon': ICONS.DELETE,
                         'label': 'REMOVE'
                     })
                 })
@@ -406,7 +406,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON.EXCLAMATION,
+                        'icon': ICONS.EXCLAMATION,
                         'label': 'DELETE'
                     })
                 })
@@ -503,7 +503,7 @@ class CONTAINER extends GROUP {
             this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
-                        'icon': ICON[className],
+                        'icon': ICONS[className],
                         'label': className //'Create ^'
                     })
                 })
@@ -513,7 +513,7 @@ class CONTAINER extends GROUP {
                     'className': className
                 }));
                 try {
-                    this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICON.EXCLAMATION);
+                    this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICONS.EXCLAMATION);
                 } catch (e) {
                     console.log(e);
                 }
@@ -553,7 +553,7 @@ class CONTAINER extends GROUP {
             this.status = STATUS.OPEN;
             super.open();
             this.el.setAttribute('data-status', 'open');
-            this.header.btnLock.icon.el.className = ICON.UNLOCK;
+            this.header.btnLock.icon.el.className = ICONS.UNLOCK;
             this.header.options.el.removeAttribute('disabled');
         } catch (e) {
             console.log('Unable to open parent.');
@@ -581,7 +581,7 @@ class CONTAINER extends GROUP {
         }
 
         console.log('Children are closed. Closing ' + this.element + '(' + this.getId() + ')');
-        this.header.btnLock.icon.el.className = ICON.LOCK;
+        this.header.btnLock.icon.el.className = ICONS.LOCK;
         $(this.header.btnLock.el).removeClass('active');
         this.header.options.el.setAttribute('disabled', 'disabled');
 
@@ -1224,7 +1224,7 @@ class CONTAINER extends GROUP {
         let text = 'Remove ' + this.className + ' from ' + this.node.node.node.className + '?';
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
-            this.prompt.form.footer.buttonGroup.children[0].setLabel('Remove', ICON.REMOVE);
+            this.prompt.form.footer.buttonGroup.children[0].setLabel('Remove', ICONS.REMOVE);
             this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
                 this.destroy();
                 this.prompt.hide();
@@ -1245,7 +1245,7 @@ class CONTAINER extends GROUP {
         let text = 'Disable ' + this.className + 'j['+this.id+'] in the Database?<br>This '+this.className+' will be permenantly deleted from database in X days!!!';
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
-            this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICON.REMOVE);
+            this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICONS.REMOVE);
             this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
                 this.destroy();
                 this.prompt.hide();

@@ -22,25 +22,25 @@ class IcarusSectionHeader extends HEADER {
         this.left = this.addButtonGroup('btn-group-left');
 
         // Lock / Unlock Options for this SECTION
-        this.btnLock = this.left.addButton('', ICON.UNLOCK); //
+        this.btnLock = this.left.addButton('', ICONS.UNLOCK); //
         this.btnLock.addClass('active');
         this.btnLock.addClass('button-lock');
 
         // Button to collapse SECTION body
-        this.label = this.left.addButton(label, ICON.DOWN);
+        this.label = this.left.addButton(label, ICONS.DOWN);
         this.label.addClass('btn-label text-left');
 
         // Right aligned button group
         this.right = this.addButtonGroup('pull-right'); 
 
         // Moves the element up/down one within its container
-        this.btnUp = this.right.addButton('', ICON.ARROW_UP).el.onclick = this.moveUp.bind(this);
-        this.btnDown = this.right.addButton('', ICON.ARROW_DOWN).el.onclick = this.moveDown.bind(this);
+        this.btnUp = this.right.addButton('', ICONS.ARROW_UP).el.onclick = this.moveUp.bind(this);
+        this.btnDown = this.right.addButton('', ICONS.ARROW_DOWN).el.onclick = this.moveDown.bind(this);
 
 
 
         // Create a toggle button with a series of relevant options for this section
-        this.options = this.right.addToggleButton('', ICON.OPTIONS);
+        this.options = this.right.addToggleButton('', ICONS.OPTIONS);
         //this.options.list.addGroup(new GROUP('UL', 'CRUD', new MODEL().set('name', 'CRUD')));
         //this.options.list.addGroup(new GROUP('UL', 'ELEMENTS', new MODEL().set('name', 'ELEMENTS')));
         //this.options.list.addGroup(new GROUP('UL', 'UPDATE', new MODEL().set('name', 'UPDATE')));
@@ -115,7 +115,7 @@ class IcarusSectionHeader extends HEADER {
         console.log(section);
 
         console.log('Unlocking...');
-        this.btnLock.icon.el.className = ICON.UNLOCK;
+        this.btnLock.icon.el.className = ICONS.UNLOCK;
         this.options.el.removeAttribute('disabled');
         container.open();
         console.log('Unlocked!');
@@ -150,7 +150,7 @@ class IcarusSectionHeader extends HEADER {
             console.log('Children are closed. Closing Container');
             container.close();
 
-            this.btnLock.icon.el.className = ICON.LOCK;
+            this.btnLock.icon.el.className = ICONS.LOCK;
             $(this.btnLock.el).removeClass('active');
 
             this.options.el.setAttribute('disabled', 'disabled');

@@ -17,8 +17,5 @@
             'id': 'logoutForm',
             'label': 'Logout Form'            
         }));
-        
-        //this.el.style.display = 'none;';
-        //this.antiForgeryToken = new TokenInput(this);
     }
 }
