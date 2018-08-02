@@ -336,11 +336,10 @@ function main(id) {
                     debug(e);
                 }
             } else {
-                app.loader.log(100, 'Failed to retrieve Main(' + id +
+                app.loader.log(0, 'Failed to retrieve Main(' + id +
                     ') from server\n' + data.message
                 );
-                app.loader.log(100, 'Access Denied');
-                $(app.loader.console.el).collapse('show');
+                app.loader.showConsole();
             }
         }
     );

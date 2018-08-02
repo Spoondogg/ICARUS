@@ -13,7 +13,8 @@ class LOADER extends MODAL {
         value = value ? value : 0;
         
         super(label, null, true);
-        this.el.style.zIndex = 99999;
+        this.addClass('modal-loader');
+        //this.el.style.zIndex = 99999;
         this.el.setAttribute('name', 'LOADER');
 
         this.dialog.el.style.width = '80%';
@@ -21,7 +22,6 @@ class LOADER extends MODAL {
         //this.el.setAttribute('data-keyboard', false);
 
         this.dialog.addClass('loader');
-        //this.footer.el.style.display = 'none';
 
         this.progress = new EL(this.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('progress')));
         
@@ -35,18 +35,13 @@ class LOADER extends MODAL {
         
         this.console = new CONSOLE(this.container.body.pane, new MODEL(
             new ATTRIBUTES({
-                'class': 'console collapse',
-                'style': 'height:0',
+                'class': 'console collapse in',
                 'aria-expanded': false
             })
         ));
 
         this.progressBar.el.onclick = function () {
             $(this.console.el).collapse('toggle');
-            setTimeout(function () {
-                $(this.console.el).toggle();
-                this.hide();                
-            }.bind(this), 300);
         }.bind(this);
 
         if (this.well) {
@@ -81,7 +76,21 @@ class LOADER extends MODAL {
                 }
             }
         } else {
-            console.log('Unable to find loader');
+            debug('Unable to find loader');
         }
+    }
+
+    /**
+     * Shows the Loader Console
+     */
+    showConsole() {
+        $(this.console.el).collapse('show');
+    }
+
+    /**
+     * Hides the Loader Console
+     */
+    hideConsole() {
+        $(this.console.el).collapse('hide');
     }
 }

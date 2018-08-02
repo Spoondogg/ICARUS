@@ -64,8 +64,8 @@ class INDEXMAIN extends BANNER {
                                         + payload.className + '[' + payload.list[l].index + ']'
                                 }
                             }));
-                            thumb.image.el.setAttribute('style', 'display:none;');
-
+                            //thumb.image.el.setAttribute('style', 'display:none;');
+                            thumb.buttonGroup.removeClass('btn-block');
                             thumb.button.el.onclick = function () {
                                 this.launchMain(payload.list[l].id, payload.list[l].label);
                             }.bind(this);
