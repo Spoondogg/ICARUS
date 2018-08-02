@@ -285,12 +285,11 @@ class CONTAINER extends GROUP {
                 console.log('TODO: Refresh CONTAINER{' + this.className + '}[' + this.id + ']');
                 console.log(this);
 
-                app.loader.log(20, 'Emptying body.pane');
-                app.loader.show();
+                app.loader.log(20, 'Emptying body.pane', true);
 
                 this.body.pane.empty();
 
-                console.log('Rebuilding children...');
+                app.loader.log(30, 'Rebuilding children', true);
 
                 // This needs to handle the Container constructor
                 // Does this mean that I CALL the constructor?
@@ -305,35 +304,7 @@ class CONTAINER extends GROUP {
                 
 
 
-                // Retrieve the object from the server? Or use local model.
-                // TRY to use local first.
-                /*
-                try {
-                    $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
-
-                        // If access granted...
-                        if (data.model) {
-                            //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
-                            //console.log(data.model);
-                            console.log('Parsed...');
-                            let parsed = JSON.parse(data.model.jsonResults);
-                            console.log(parsed);
-
-                            // Extract the base64 values and create an image
-                            for (let p = 0; p < parsed.length; p++) {
-                                if (parsed[p].name === 'base64') {
-                                    this.body.pane.el.setAttribute('style',
-                                        'background: url(' + parsed[p].value + ');'
-                                    );
-                                }
-                            }
-                        }
-                    }.bind(this));
-                } catch (e) {
-                    console.log('Unable to retrieve FormPost.');
-                    console.log(e);
-                }
-                */
+                app.loader.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
 
             }.bind(this);
 
@@ -357,7 +328,6 @@ class CONTAINER extends GROUP {
             );
             this.btnSave.el.onclick = function () {
                 this.btnSave.toggle('active');
-                //this.navBar.header.menu.scrollTo();
 
                 // CREATE A TEMPORARY wrapper to hold the SAVE FORM
                 if ($(this.btnSave.el).hasClass('active')) {

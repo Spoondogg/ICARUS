@@ -269,11 +269,9 @@ class FORM extends CONTAINER {
             
         } else {
             debug('FormPost is invalid');
-            app.loader.log(50,
-                'Failed to submit...<br><hr/>Values are invalid<br><hr/>'
-            );            
-            app.loader.log(100, 'Post Failed.');
-            $(app.loader.console.el).collapse('show');
+            app.loader.log(0, 'Post Failed to submit.  Values may be invalid.');
+            app.loader.showConsole();
+            //$(app.loader.console.el).collapse('show');
         }
     }
 }

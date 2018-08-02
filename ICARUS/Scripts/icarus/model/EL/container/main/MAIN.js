@@ -45,10 +45,7 @@ class MAIN extends CONTAINER {
         this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);
-        this.loader.log(100, 'Loading');
-        if (DEBUGMODE) {
-            $(this.loader.console.el).collapse('show');
-        }
+        this.loader.log(100, 'Loading');        
 
         if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
@@ -144,7 +141,8 @@ class MAIN extends CONTAINER {
             ).el.onclick = function () {
                 console.log('Showing Console');
                 app.loader.show();
-                $(app.loader.console.el).collapse('show');
+                app.loader.showConsole();
+                //$(app.loader.console.el).collapse('show');
             }.bind(this);
 
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
@@ -280,11 +278,11 @@ class MAIN extends CONTAINER {
 
         //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
         this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
-            this.loader.log(100, 'Logging In');
+            this.loader.log(25, 'Logging In', true);
             $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
                 function (payload, status) {           
                     if (status === "success") {
-                        this.loader.log(100, 'Success');
+                        this.loader.log(100, 'Success', true);
                         setTimeout(function () {
 
                             let url = new URL(window.location.href);
@@ -322,18 +320,18 @@ class MAIN extends CONTAINER {
         Logs the current user out
     */
     logout() {
-        debug('Logging out');
+        app.loader.log(25, 'Logging out', true);
         $.post('/Account/LogOff', {
             '__RequestVerificationToken': token.value
         }, function (payload, status) {
-            this.loader.log(50, 'Status: ' + status);
+            this.loader.log(50, 'Status: ' + status, true);
             debug('Payload:');
             debug(payload);
 
             // textStatus contains the status: success, error, etc
             // If server responds with 'success'            
             if (status === "success") {
-                app.loader.log(100, 'Logging Out...');
+                app.loader.log(99, 'Logging Out...');
                 setTimeout(function () {
                     location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
                 }.bind(this), 1000);
@@ -341,9 +339,10 @@ class MAIN extends CONTAINER {
             } else {
                 debug('Failed to POST results to server with status: "' + status + '"');
                 app.loader.log(0, 'Failed to send<br>' +
-                    payload.message + '<br><hr/>'
+                    payload.message + '<br><hr/>', true
                 );
-                $(app.loader.console.el).collapse('show');
+                app.loader.showConsole();
+                //$(app.loader.console.el).collapse('show');
                 debug('Payload:\n');
                 debug(payload);
             }
