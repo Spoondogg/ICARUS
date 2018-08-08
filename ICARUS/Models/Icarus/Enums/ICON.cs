@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 
 namespace ICARUS.Models.Icarus.Enums {
-
+    [Serializable]
     public class ICON : Dictionary<String, String> {
         
         public ICON() {

@@ -13,8 +13,8 @@ namespace ICARUS {
         public void Configuration(IAppBuilder app) {
             //var services = new ServiceCollection();
             ConfigureAuth(app);
-            //ConfigureServices(services);
+            //ConfigureServices(new ServiceCollection()); // .net core
         }
-        //public void ConfigureServices(IServiceCollection services) {        }
+        //public void ConfigureServices(ServiceCollection services) {        } // .net core
     }
 }

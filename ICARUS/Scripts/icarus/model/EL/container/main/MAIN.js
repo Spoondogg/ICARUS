@@ -276,13 +276,23 @@ class MAIN extends CONTAINER {
             })
         );
 
+        this.provider = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'provider'
+        })));
+
+        this.returnUrl = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'returnUrl'
+        })));
+
         //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
         this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
-            this.loader.log(25, 'Logging In', true);
+            app.loader.log(25, 'Logging In', true);
             $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
                 function (payload, status) {           
                     if (status === "success") {
-                        this.loader.log(100, 'Success', true);
+                        app.loader.log(100, 'Success', true);
                         setTimeout(function () {
 
                             let url = new URL(window.location.href);
@@ -296,7 +306,7 @@ class MAIN extends CONTAINER {
 
                         }.bind(this), 1000);
                     } else {
-                        this.loader.log(0, 'Login failed. (err_'+status+').<br>' +
+                        app.loader.log(0, 'Login failed. (err_'+status+').<br>' +
                             payload.message
                         );
                         debug('Failed to POST results to server with status: "' + status + '"');
@@ -306,6 +316,76 @@ class MAIN extends CONTAINER {
                 }.bind(this)
             );
         }.bind(this);
+
+        this.prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+
+        this.prompt.form.footer.buttonGroup.addButton('Google').el.onclick = function () {
+
+            app.loader.log(50, 'Launching third party authorization...');
+
+            let url = new URL(window.location.href);
+            let returnUrl = url.origin + '/signin-google';
+            this.returnUrl.el.setAttribute('value', returnUrl);
+            
+            let provider = 'Google';
+            this.provider.el.setAttribute('value', provider);
+
+            let postUrl = '/Account/ExternalLogin?provider='
+                + provider + '&returnUrl=' + encodeURI(returnUrl); 
+
+            //location.href = postUrl;
+            //window.open(postUrl, '_blank');
+
+            
+            this.modal = new MODAL('Google Login');
+            this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
+                'label': 'iframe',
+                'dataId': -1,
+                'data': {
+                    'src': postUrl
+                }
+            }));
+            this.iframe.frame.el.setAttribute('src', postUrl);
+            this.modal.show();
+            
+
+            /*
+            $.post(postUrl, $(this.prompt.form.el).serialize(),
+                function (payload, status) {
+                    if (status === "success") {
+                        app.loader.log(100, 'Success', true);
+
+                        console.log('Payload:::');
+                        console.log(payload);
+
+                        setTimeout(function () {
+
+                            //let url = new URL(window.location.href);
+                            //let returnUrl = url.searchParams.get('ReturnUrl');
+                            if (payload.model.RedirectUri) {
+                                //returnUrl = url.origin + returnUrl;
+                                location.href = payload.model.RedirectUri;
+                            } else {
+                                //location.reload(true);
+                                console.log('something went wrong');
+                                console.log(payload);
+                            }
+
+                        }.bind(this), 1000);
+                    } else {
+                        app.loader.log(0, 'Login failed. (err_' + status + ').<br>' +
+                            payload.message
+                        );
+                        debug('Failed to POST results to server with status: "' + status + '"');
+                        debug('Payload:\n');
+                        debug(payload);
+                    }
+                }.bind(this)
+            );
+            */
+
+        }.bind(this);
+
         this.prompt.show();
 
         /*
@@ -347,5 +427,94 @@ class MAIN extends CONTAINER {
                 debug(payload);
             }
         }.bind(this), "json");
+    }
+
+    /**
+     * Log into the application using the given credentials
+     * @param {string} email Username / Email 
+     * @param {string} password Account Password
+     */
+    register() {
+        console.log('Register');
+
+        this.prompt = new PROMPT('Log In', '', [], [], true);
+        this.prompt.addClass('prompt');
+
+        this.prompt.form.setPostUrl('/Account/Register');
+        this.prompt.form.el.setAttribute('class', 'register');
+        this.prompt.form.el.setAttribute('method', 'POST');
+        this.prompt.form.el.setAttribute('action', '#');
+
+        //this.email = new INPUT(this.prompt.formElementGroup.body.pane,
+        this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.INPUT,
+                    'type': 'Email',
+                    'name': 'Email'
+                })
+            ).set({
+                'label': 'Username',
+                'showHeader': 0
+            })
+        );
+
+        this.password = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.PASSWORD,
+                    'type': 'Password',
+                    'name': 'Password'
+                })
+            ).set({
+                'label': 'Password',
+                'showHeader': 0
+            })
+        );
+
+        this.passwordConfirm = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.PASSWORD,
+                    'type': 'PasswordConfirm',
+                    'name': 'PasswordConfirm'
+                })
+            ).set({
+                'label': 'Confirm Password',
+                'showHeader': 0
+            })
+        );
+
+        //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+        this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
+            app.loader.log(25, 'Register User', true);
+            $.post('/Account/Register', $(this.prompt.form.el).serialize(),
+                function (payload, status) {
+                    if (status === "success") {
+                        app.loader.log(100, 'Success', true);
+                        setTimeout(function () {
+
+                            let url = new URL(window.location.href);
+                            let returnUrl = url.searchParams.get('ReturnUrl');
+                            if (returnUrl) {
+                                returnUrl = url.origin + returnUrl;
+                                location.href = returnUrl;
+                            } else {
+                                location.reload(true);
+                            }
+
+                        }.bind(this), 1000);
+                    } else {
+                        app.loader.log(0, 'Registration failed. (err_' + status + ').<br>' +
+                            payload.message
+                        );
+                        debug('Failed to POST results to server with status: "' + status + '"');
+                        debug('Payload:\n');
+                        debug(payload);
+                    }
+                }.bind(this)
+            );
+        }.bind(this);
+        this.prompt.show();
     }
 }

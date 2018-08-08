@@ -17,7 +17,7 @@ class IMAGEGALLERY extends BANNER {
         this.pageTotal = 0;
 
         if (this.dataId > 0) {
-
+            //
         }
 
         this.header = new HEADER(this, new MODEL().set({
