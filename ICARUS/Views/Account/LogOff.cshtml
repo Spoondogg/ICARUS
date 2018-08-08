@@ -1,7 +1,8 @@
 ﻿@using ICARUS.Models
 @model LoginViewModel
+@using Microsoft.Owin.Security
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "LogOff";
 }
 @section viewInit {
     @Html.AntiForgeryToken()
@@ -12,15 +13,7 @@
             const user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
             const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
             const app = new MAIN();
-            app.login();
-
-            /*
-                TODO:
-                Create INPUT CHECKBOX called 'RememberMe'
-                Create BUTTON to launch 'Register as new User'
-                Create AHREF to 'ForgotPassword'
-            */
-
+            app.logout();
         </script>
     } else {
         <script type="text/javascript">
@@ -29,9 +22,9 @@
             const user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
             const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
             const app = new MAIN();
-            app.loader.log(100, 'You are already logged in.\nRedirecting...');
+            app.loader.log(100, 'You are not logged in.\nRedirecting...');
             setTimeout(function () {
-                location.href = '/'; 
+                location.href = '/';
             }, 1000);
         </script>
     }

@@ -69,8 +69,14 @@ namespace ICARUS.Controllers {
             }
 
             // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            // To enable password failures to trigger account lockout, 
+            // change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(
+                model.Email, 
+                model.Password, 
+                model.RememberMe, 
+                shouldLockout: false
+            );
 
             switch (result) {
                 case SignInStatus.Success:
@@ -79,8 +85,13 @@ namespace ICARUS.Controllers {
                     return Json(new Payload(1, "MODEL", result, "Successfully logged in"));
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new {
+                        ReturnUrl = returnUrl,
+                        RememberMe = model.RememberMe
+                    });
+
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -102,7 +113,12 @@ namespace ICARUS.Controllers {
             if (!await SignInManager.HasBeenVerifiedAsync()) {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+
+            return View(new VerifyCodeViewModel {
+                Provider = provider,
+                ReturnUrl = returnUrl,
+                RememberMe = rememberMe
+            });
         }
 
 
@@ -115,8 +131,7 @@ namespace ICARUS.Controllers {
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model) {
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 return View(model);
             }
 
@@ -124,13 +139,18 @@ namespace ICARUS.Controllers {
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
-            switch (result)
-            {
+            var result = await SignInManager.TwoFactorSignInAsync(
+                model.Provider, model.Code, isPersistent:  model.RememberMe, 
+                rememberBrowser: model.RememberBrowser
+            );
+
+            switch (result) {
                 case SignInStatus.Success:
                     return RedirectToLocal(model.ReturnUrl);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid code.");
@@ -138,16 +158,22 @@ namespace ICARUS.Controllers {
             }
         }
 
-        //
-        // GET: /Account/Register
+        /// <summary>
+        /// GET: /Account/Register
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public ActionResult Register() {
             ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
             return View();
         }
 
-        //
-        // POST: /Account/Register
+        /// <summary>
+        /// Attempts to register the given user 
+        /// POST: /Account/Register
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -163,12 +189,15 @@ namespace ICARUS.Controllers {
                     //Ends Here
 
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+
+                    // For more information on how to enable account confirmation and 
+                    // password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -179,38 +208,42 @@ namespace ICARUS.Controllers {
             return View(model);
         }
 
-        //
-        // GET: /Account/ConfirmEmail
+        /// <summary>
+        /// GET: /Account/ConfirmEmail
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code) {
-            if (userId == null || code == null)
-            {
+            if (userId == null || code == null) {
                 return View("Error");
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
-        // GET: /Account/ForgotPassword
+        /// <summary>
+        /// GET: /Account/ForgotPassword
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
+        public ActionResult ForgotPassword() {
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
+        /// <summary>
+        /// POST: /Account/ForgotPassword
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
+            if (ModelState.IsValid) {
                 var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id))) {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
@@ -227,19 +260,24 @@ namespace ICARUS.Controllers {
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
+
+        /// <summary>
+        /// GET: /Account/ForgotPasswordConfirmation
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
+        public ActionResult ForgotPasswordConfirmation() {
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
+        /// <summary>
+        /// Resets the user's password
+        /// GET: /Account/ResetPassword
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
+        public ActionResult ResetPassword(string code) {
             return code == null ? View("Error") : View();
         }
 
@@ -272,14 +310,31 @@ namespace ICARUS.Controllers {
             return View();
         }
 
-        //
-        // POST: /Account/ExternalLogin
+        // GET: /Account/ExternalLogin
+        [AllowAnonymous]
+        public ActionResult ExternalLogin() {
+            return View();
+        }
+
+        /// <summary>
+        /// POST: /Account/ExternalLogin
+        /// Third party OAuth2 Authorization
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl) {
             // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            var challengeResult = new ChallengeResult(provider, 
+                Url.Action("ExternalLoginCallback", "Account", 
+                    new { ReturnUrl = returnUrl }
+                )
+            );
+            //return Json(new Payload(1, "ExternalLoginCallback", challengeResult, "Challenge Results"));
+            return challengeResult;
         }
 
         //
@@ -307,42 +362,73 @@ namespace ICARUS.Controllers {
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider)) {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+
+            return RedirectToAction("VerifyCode", new {
+                Provider = model.SelectedProvider,
+                ReturnUrl = model.ReturnUrl,
+                RememberMe = model.RememberMe
+            });
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
+        /// <summary>
+        /// GET: /Account/ExternalLoginCallback
+        /// Retrieves authentication from third party 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl) {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
+            if (loginInfo == null) {
                 return RedirectToAction("Login");
+                //return Json(new Payload(1, "Redirect to Login"), JsonRequestBehavior.AllowGet);
             }
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
-            {
+            switch (result) {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //return RedirectToLocal(returnUrl);
+                    return Json(new Payload(2, "Redirect", result, "Success!  Redirect to "+returnUrl), JsonRequestBehavior.AllowGet);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+                    //return Json(new Payload(3, "Locked out"), JsonRequestBehavior.AllowGet);
+
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    return RedirectToAction("SendCode", new {
+                        ReturnUrl = returnUrl,
+                        RememberMe = false
+                    });
+                    //return Json(new Payload(4, "Requires Verification: "+returnUrl), JsonRequestBehavior.AllowGet);
+
                 case SignInStatus.Failure:
                 default:
-                    // If the user does not have an account, then prompt the user to create an account
+                    
+                    // If the user does not have an account, then prompt 
+                    // the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return View("ExternalLoginConfirmation", 
+                        new ExternalLoginConfirmationViewModel {
+                            Email = loginInfo.Email
+                        }
+                    );
+                    
+                    //return Json(new Payload(5, "External Login Confirmation: "+loginInfo.Email), JsonRequestBehavior.AllowGet);
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
+        /// <summary>
+        /// POST: /Account/ExternalLoginConfirmation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl) {
+        public async Task<ActionResult> ExternalLoginConfirmation(
+            ExternalLoginConfirmationViewModel model, string returnUrl
+        ) {
             if (User.Identity.IsAuthenticated) {
                 return RedirectToAction("Index", "Manage");
             }
@@ -369,24 +455,26 @@ namespace ICARUS.Controllers {
             return View(model);
         }
 
-
         /// <summary>
         /// POST: /Account/LogOff
         /// Recieves the __RequestVerificationToken and logs out
         /// </summary>
         /// <returns>Json Payload</returns>
-        [HttpPost, ValidateAntiForgeryToken]
+        /// HttpPost, 
+        //[HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             //return RedirectToAction("Index", "Home");
             return Json(new {
                 state = 1,
                 status = "success"
-            });
+            }, JsonRequestBehavior.AllowGet);
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
+        /// <summary>
+        /// GET: /Account/ExternalLoginFailure
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure() {
             return View();
@@ -412,40 +500,31 @@ namespace ICARUS.Controllers {
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
+        private IAuthenticationManager AuthenticationManager {
+            get {
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
 
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
+        private void AddErrors(IdentityResult result) {
+            foreach (var error in result.Errors) {
                 ModelState.AddModelError("", error);
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
+        private ActionResult RedirectToLocal(string returnUrl) {
+            if (Url.IsLocalUrl(returnUrl)) {
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
         }
 
-        internal class ChallengeResult : HttpUnauthorizedResult
-        {
+        internal class ChallengeResult : HttpUnauthorizedResult {
             public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
+                : this(provider, redirectUri, null) {
             }
 
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
+            public ChallengeResult(string provider, string redirectUri, string userId) {
                 LoginProvider = provider;
                 RedirectUri = redirectUri;
                 UserId = userId;
@@ -455,11 +534,9 @@ namespace ICARUS.Controllers {
             public string RedirectUri { get; set; }
             public string UserId { get; set; }
 
-            public override void ExecuteResult(ControllerContext context)
-            {
+            public override void ExecuteResult(ControllerContext context) {
                 var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
-                {
+                if (UserId != null) {
                     properties.Dictionary[XsrfKey] = UserId;
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);

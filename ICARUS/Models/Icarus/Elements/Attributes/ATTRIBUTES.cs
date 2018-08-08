@@ -8,6 +8,7 @@ namespace ICARUS.Models.Icarus.Elements.Attributes {
     /// <summary>
     /// An abstract ATTRIBUTES object that can be extended for various element types
     /// </summary>
+    [Serializable]
     public class ATTRIBUTES : Dictionary<string, Object> {
 
         /// <summary>
