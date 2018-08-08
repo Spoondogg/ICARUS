@@ -90,6 +90,10 @@ class INDEX extends BANNER {
     /**
      * Creates the Modal that contains the list of objects for preview
      * TODO: Consider paging these results
+     * @param {string} header Header text
+     * @param {string} p paragraph
+     * @param {string} listClass element class
+     * @param {Array} list A list
      */
     launchModal(header, p, listClass, list) {
         debug('Launch Index Thumbnail Modal');

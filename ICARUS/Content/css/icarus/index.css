@@ -77,7 +77,7 @@
         background-color: none;
     }
 
-    .index-main footer.pagination {
+    .index-main .pagination { /*footer.pagination*/
         width: 100%;
         text-align: center;
         border-radius: 0;

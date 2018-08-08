@@ -3,12 +3,11 @@
     //ViewBag.Description = "";
     //ViewBag.Version = "0.2.2018.05.07";
 }
-
 @section viewInit {
     @Html.AntiForgeryToken()
     <script type="text/javascript">
-        const token = document.getElementsByName('__RequestVerificationToken')[0];        
-        const factory = new CONTAINERFACTORY();        
+        const token = document.getElementsByName('__RequestVerificationToken')[0];
+        const factory = new CONTAINERFACTORY();
         const user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
         const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
         const app = new MAIN();

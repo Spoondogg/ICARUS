@@ -1,4 +1,6 @@
 ﻿.image-gallery {
+    /* A browseable list of images */
+    color: inherit;
 }
 
     .image-gallery > .container-body > header {

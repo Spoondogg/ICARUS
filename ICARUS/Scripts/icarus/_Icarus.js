@@ -5,7 +5,10 @@
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
 "use strict";
-
+/**
+    See http://2ality.com/2014/09/es6-modules-final.html 
+    See http://exploringjs.com/es6/ch_modules.html#sec_overview-modules
+ */
 /**
     Sorts an object array by the specified property.
     @see https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
@@ -222,54 +225,6 @@ const guid = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
 };
-
-/////////////////////////////
-// https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
-
-document.addEventListener('touchstart', handleTouchStart, false);
-document.addEventListener('touchmove', handleTouchMove, false);
-
-var xDown = null;
-var yDown = null;
-
-function handleTouchStart(evt) {
-    xDown = evt.touches[0].clientX;
-    yDown = evt.touches[0].clientY;
-}
-
-function handleTouchMove(evt) {
-    if (!xDown || !yDown) {
-        return;
-    }
-
-    var xUp = evt.touches[0].clientX;
-    var yUp = evt.touches[0].clientY;
-
-    var xDiff = xDown - xUp;
-    var yDiff = yDown - yUp;
-
-    if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
-        if (xDiff > 0) {
-            /* left swipe */
-            console.log('left swipe');
-        } else {
-            /* right swipe */
-            console.log('right swipe');
-        }
-    } else {
-        if (yDiff > 0) {
-            /* up swipe */
-            console.log('up swipe');
-        } else {
-            /* down swipe */
-            console.log('down swipe');
-        }
-    }
-    /* reset values */
-    xDown = null;
-    yDown = null;
-}
-
 
 /**
  * If application is set to debug mode, debug details
