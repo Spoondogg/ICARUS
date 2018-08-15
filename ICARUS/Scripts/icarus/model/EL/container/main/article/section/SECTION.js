@@ -13,7 +13,7 @@ class SECTION extends CONTAINER {
     constructor(node, model) {
         super(node, 'SECTION', model, ['FORM']);
         //this.addContainerCase('FORM');
-        //this.populate(model.children);
+        this.populate(model.children);
     }
 
     construct() {

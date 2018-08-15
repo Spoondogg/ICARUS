@@ -266,13 +266,10 @@ namespace ICARUS.Controllers {
                     "Successfully instantiated " + this.className + "(" + model.id + ")"
                 ), JsonRequestBehavior.AllowGet);
             } catch (Exception e) {
-                return Json(new Payload(
-                        0,
-                        "Unable to create new instance of " +
+                return Json(new Payload(0, e,
+                    "Unable to create new instance of " +
                         this.className + "()\n" + e.ToString() + "\n\n" +
-                        e.Message.ToString(),
-                        e
-                    ), JsonRequestBehavior.AllowGet
+                        e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
         }
@@ -318,11 +315,11 @@ namespace ICARUS.Controllers {
                 return Json(
                     new Payload(
                         0,
+                        e
+,
                         "Unable to create new instance of " +
                         this.className + "()\n" + e.ToString() + "\n\n" +
-                        e.Message.ToString(),
-                        e
-                    ), JsonRequestBehavior.AllowGet
+                        e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
         }
@@ -346,21 +343,28 @@ namespace ICARUS.Controllers {
                 // Set new values
                 int result = 0;
                 if (model != null) {
-                    model.status = 1;
-                    
-                    model.updateContainerModel(formPost);
-                    model.dateLastModified = DateTime.UtcNow;
 
-                    // Save the object
-                    db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
-                    ctx.Entry(model).State = System.Data.Entity.EntityState.Modified; // Critical
-                    result = ctx.SaveChanges();
+                    if(model.authorId == User.Identity.Name) {
+                        model.status = 1;
 
-                    // Return the success response along with the message body
-                    return Json(new Payload(
-                        1, this.className, model,
-                        "Successfully set " + this.className + " (" + model.id + "," + id + ")"
-                    ), JsonRequestBehavior.AllowGet);
+                        model.updateContainerModel(formPost);
+                        model.dateLastModified = DateTime.UtcNow;
+
+                        // Save the object
+                        db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
+                        ctx.Entry(model).State = System.Data.Entity.EntityState.Modified; // Critical
+                        result = ctx.SaveChanges();
+
+                        // Return the success response along with the message body
+                        return Json(new Payload(
+                            1, this.className, model,
+                            "Successfully set " + this.className + " (" + model.id + "," + id + ")"
+                        ), JsonRequestBehavior.AllowGet);
+                    } else {
+                        return Json(new Payload(
+                            0, "You are not authorized to modify this " + this.className + "(" + id + ")"
+                        ), JsonRequestBehavior.AllowGet);
+                    }                    
 
                 } else {
                     return Json(new Payload(
@@ -369,8 +373,10 @@ namespace ICARUS.Controllers {
                 }
             } catch (Exception e) {
                 return Json(new Payload(
-                    0, "Unknown exception for " + this.className + "<br><br>" + e.Message.ToString(), e
-                ), JsonRequestBehavior.AllowGet);
+                    0, e, 
+                    "Unknown exception for " + this.className + "<br><br>" 
+                    + e.Message.ToString()), JsonRequestBehavior.AllowGet
+                );
             }
         }
 
@@ -449,7 +455,7 @@ namespace ICARUS.Controllers {
                     return Json(new Payload(0, message), JsonRequestBehavior.AllowGet);
                 }
             } catch (Exception e) {
-                return Json(new Payload(0, e.Message, e), JsonRequestBehavior.AllowGet);
+                return Json(new Payload(0, e, e.Message), JsonRequestBehavior.AllowGet);
             }
         }
     }

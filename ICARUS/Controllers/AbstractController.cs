@@ -93,8 +93,8 @@ namespace ICARUS.Controllers {
                 } catch (Exception e) {
                     string message = "Failed to GET " + this.className + "("+id+")\n" + e.Message.ToString();
                     return Json(new Payload(
-                        0, message, e
-                    ), JsonRequestBehavior.AllowGet);
+                        0, e
+, message), JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -178,8 +178,8 @@ namespace ICARUS.Controllers {
             } else {
                 string message = User.Identity.Name + ", You do not have permission to access this " + this.className;
                 return Json(new Payload(
-                    0, message, new Exception(message)
-                ), JsonRequestBehavior.AllowGet);
+                    0, new Exception(message)
+, message), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -233,7 +233,7 @@ namespace ICARUS.Controllers {
                 }
             } catch (Exception e) {
                 return Json(new Payload(
-                    Int32.Parse(GetResults.Fail.ToString()), e.Message, e), JsonRequestBehavior.AllowGet
+                    Int32.Parse(GetResults.Fail.ToString()), e, e.Message), JsonRequestBehavior.AllowGet
                 );
             }
         }

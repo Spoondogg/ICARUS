@@ -60,6 +60,30 @@ class MAIN extends CONTAINER {
 
     construct() {
 
+        try {
+            //this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+            this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICONS.MAIN,
+                        'label': 'MAIN'
+                    })
+                })
+            ).el.onclick = function () {
+
+                app.loader.log(20, 'Create a new MAIN @ MAIN/Get/0');
+
+                $.getJSON('/MAIN/Get/0', function (payload) {
+                    app.loader.log(100, 'Created MAIN', true);
+                    console.log(payload);
+                    setTimeout(function () {
+                        location.href = '/' + payload.model.id;
+                    }.bind(this), 1000);
+                });
+            }.bind(this);
+        } catch (e) {
+            //
+        }
     }
 
     /**
@@ -233,6 +257,151 @@ class MAIN extends CONTAINER {
     }
 
     /**
+        Launches the External Authentication Process
+        The user will be redirected to a third party authenticator
+    */
+    loginExternal() {
+        console.log('Log In - External OAuth Provider');
+
+        this.prompt = new PROMPT('Log In - OAuth', '', [], [], true);
+        this.prompt.addClass('prompt');
+
+        this.prompt.form.postUrl = '/Account/ExternalLogin';
+        this.prompt.form.provider = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'provider'
+        })));
+
+        this.prompt.form.returnUrl = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'ReturnUrl'
+        })));
+        this.prompt.form.destroy(0);
+
+        /*
+            Check results of challenge
+        
+        this.prompt.form.afterSuccessfulPost = function (payload) {
+            console.log('form.afterSuccessfulPost');
+            console.log(payload);
+
+            if (payload.model.RedirectUri !== '') {
+                //location.href = payload.model.RedirectUri;
+            }
+
+            /*
+            $(node.el).collapse('toggle');
+            node.empty();
+            this.setLabel(form.el.elements['label'].value);
+            if (caller) {
+                caller.toggle('active');
+                console.log(caller);
+                caller.node.node.toggleCollapse();
+            }
+            app.loader.hide();
+            
+        }.bind(this); */
+        
+
+        // Create a new form to submit 3rd party logins
+        this.externalLogin = this.createEmptyForm(this.prompt.container.body.pane);
+        this.externalLogin.el.setAttribute('method', 'post');
+        this.externalLogin.el.setAttribute('action', '/Account/ExternalLogin?ReturnUrl=%2F');
+        this.externalLogin.footer.buttonGroup.children[0].el.style.display = 'none';
+        this.provider = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'provider'
+        })));
+
+        this.returnUrl = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'ReturnUrl'
+        })));
+        let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth - Google');
+        btnOAuth.el.onclick = function () {
+
+            app.loader.log(50, 'Launching OAuth2 Authenticator...');
+            
+            let url = new URL(window.location.href);
+            let returnUrl = url.origin + '/signin-google';
+            this.returnUrl.el.setAttribute('value', returnUrl);
+            
+            let provider = 'Google';
+            this.provider.el.setAttribute('value', provider);
+            
+
+            let postUrl = '/Account/ExternalLogin/externalLogin?provider='
+                + provider + '&returnUrl=' + encodeURI(returnUrl);
+
+            location.href = postUrl;
+
+            /*
+            // Callback to self
+            $.post(postUrl, $(this.prompt.form.el).serialize(),
+                function (payload, status) {
+
+                    console.log('callback to self');
+                    console.log(payload);
+
+                    if (status === "success") {
+                        app.loader.log(100, 'Success', true);
+
+                        console.log('Payload:::');
+                        console.log(payload);
+
+                        setTimeout(function () {
+
+                            let url = new URL(window.location.href);
+                            let returnUrl = url.searchParams.get('ReturnUrl');
+                            if (payload.model.RedirectUri) {
+                                //returnUrl = url.origin + returnUrl;
+                                //location.href = payload.model.RedirectUri;
+
+                                // Post to Account/ExternalLoginCallback
+                                
+                                //console.log('RedirectUri Exists...  Posting...');
+                                //$.post(payload.model.RedirectUri, "", function (payload2, status2) {
+                                //    console.log('New Payload: ' + status2);
+                                //    console.log(payload2);
+                                //}.bind(this));
+                                
+
+                                
+                                console.log('RedirectUri Exists...  Redirecting...');
+                                //location.href = http://localhost:8052/signin-google;
+                                
+                                $.post('http://localhost:8052/signin-google;', "", function (payload2, status2) {
+                                    console.log('New Payload: ' + status2);
+                                    console.log(payload2);
+                                }.bind(this));
+                                
+
+                            } else {
+                                //location.reload(true);
+                                console.log('something went wrong');
+                                console.log(payload);
+                            }
+
+                        }.bind(this), 1000);
+                    } else {
+                        app.loader.log(0, 'Login failed. (err_' + status + ').<br>' +
+                            payload.message
+                        );
+                        debug('Failed to POST results to server with status: "' + status + '"');
+                        debug('Payload:\n');
+                        debug(payload);
+                    }
+                }.bind(this)
+            );
+            */
+
+        }.bind(this);
+
+        this.prompt.show();
+
+    }
+
+    /**
      * Log into the application using the given credentials
      * @param {string} email Username / Email 
      * @param {string} password Account Password
@@ -276,16 +445,6 @@ class MAIN extends CONTAINER {
             })
         );
 
-        this.provider = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-            'type': 'hidden',
-            'name': 'provider'
-        })));
-
-        this.returnUrl = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-            'type': 'hidden',
-            'name': 'returnUrl'
-        })));
-
         //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
         this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
             app.loader.log(25, 'Logging In', true);
@@ -319,24 +478,61 @@ class MAIN extends CONTAINER {
 
         this.prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 
-        this.prompt.form.footer.buttonGroup.addButton('Google').el.onclick = function () {
 
-            app.loader.log(50, 'Launching third party authorization...');
+        // Create a new form to submit 3rd party logins
+        this.externalLogin = this.createEmptyForm(this.prompt.container.body.pane);
+        this.externalLogin.el.setAttribute('method', 'post');
+        this.externalLogin.el.setAttribute('action', '/Account/ExternalLogin');
+        this.externalLogin.footer.buttonGroup.children[0].el.style.display = 'none';
+        this.provider = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'provider'
+        })));
 
+        this.returnUrl = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'returnUrl'
+        })));
+        let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth');
+        btnOAuth.el.onclick = function () {
+
+            app.loader.log(50, 'Launching OAuth2 Authenticator...');
+
+            /*
             let url = new URL(window.location.href);
             let returnUrl = url.origin + '/signin-google';
             this.returnUrl.el.setAttribute('value', returnUrl);
             
             let provider = 'Google';
             this.provider.el.setAttribute('value', provider);
+            
 
             let postUrl = '/Account/ExternalLogin?provider='
                 + provider + '&returnUrl=' + encodeURI(returnUrl); 
+            */
 
-            //location.href = postUrl;
+            location.href = '/Account/ExternalLogin';
+
+            /****
+            
+            <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
+                <input name="__RequestVerificationToken" type="hidden" value="NUl4K_C0ubvHbrEeyfF19jddMf9-BZ-MTIuA33kSxdhMJoh5TEvV53sbv61vtRCp_vbWI2DQzFENnljDRpx2srlaBpQZQRsWZoKkLwSjTek1">                <div id="socialLoginList">
+                <p>
+                    <button type="submit" 
+                        class="btn btn-default" id="Google" 
+                        name="provider" value="Google" 
+                        title="Log in using your Google account"
+                    >Google</button>
+                </p>
+                </div>
+            </form>
+
+            ****/
+
+
             //window.open(postUrl, '_blank');
 
-            
+            /*
             this.modal = new MODAL('Google Login');
             this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
                 'label': 'iframe',
@@ -347,7 +543,7 @@ class MAIN extends CONTAINER {
             }));
             this.iframe.frame.el.setAttribute('src', postUrl);
             this.modal.show();
-            
+            */
 
             /*
             $.post(postUrl, $(this.prompt.form.el).serialize(),
@@ -437,13 +633,14 @@ class MAIN extends CONTAINER {
     register() {
         console.log('Register');
 
-        this.prompt = new PROMPT('Log In', '', [], [], true);
+        this.prompt = new PROMPT('Register', '', [], [], true);
         this.prompt.addClass('prompt');
 
         this.prompt.form.setPostUrl('/Account/Register');
         this.prompt.form.el.setAttribute('class', 'register');
-        this.prompt.form.el.setAttribute('method', 'POST');
-        this.prompt.form.el.setAttribute('action', '#');
+        //this.prompt.form.el.setAttribute('method', 'POST');
+        //this.prompt.form.el.setAttribute('action', 'Account/Register');
+        this.prompt.form.postUrl = "Account/Register";
 
         //this.email = new INPUT(this.prompt.formElementGroup.body.pane,
         this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
@@ -451,7 +648,7 @@ class MAIN extends CONTAINER {
                 new ATTRIBUTES({
                     'typeId': IcarusInputType.INPUT,
                     'type': 'Email',
-                    'name': 'Email'
+                    'name': 'email'
                 })
             ).set({
                 'label': 'Username',
@@ -464,7 +661,7 @@ class MAIN extends CONTAINER {
                 new ATTRIBUTES({
                     'typeId': IcarusInputType.PASSWORD,
                     'type': 'Password',
-                    'name': 'Password'
+                    'name': 'password'
                 })
             ).set({
                 'label': 'Password',
@@ -476,7 +673,7 @@ class MAIN extends CONTAINER {
             new MODEL(
                 new ATTRIBUTES({
                     'typeId': IcarusInputType.PASSWORD,
-                    'type': 'PasswordConfirm',
+                    'type': 'Password',
                     'name': 'PasswordConfirm'
                 })
             ).set({
@@ -484,7 +681,24 @@ class MAIN extends CONTAINER {
                 'showHeader': 0
             })
         );
+        this.prompt.form.afterSuccessfulPost = function (payload) {
+            this.prompt.hide();
+            if (payload.result === 1) {
+                setTimeout(function () {
 
+                    let url = new URL(window.location.href);
+                    let returnUrl = url.searchParams.get('ReturnUrl');
+                    if (returnUrl) {
+                        returnUrl = url.origin + returnUrl;
+                        location.href = returnUrl;
+                    } else {
+                        location.reload(true);
+                    }
+
+                }.bind(this), 1000);
+            }
+        };
+        /*
         //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
         this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
             app.loader.log(25, 'Register User', true);
@@ -515,6 +729,103 @@ class MAIN extends CONTAINER {
                 }.bind(this)
             );
         }.bind(this);
+        */
+
+
+        this.prompt.show();
+    }
+
+
+    /**
+     * Log into the application using the given credentials
+     * @param {string} email Username / Email 
+     */
+    registerExternal(email) {
+        console.log('Register External Login');
+
+        this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
+        this.prompt.addClass('prompt');
+
+        this.prompt.form.destroy();
+
+        let tmp = new EL(this.prompt.container.body.pane, 'DIV', new MODEL());
+        $(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
+        tmp.destroy();
+
+        
+
+        /*
+        this.prompt.form.setPostUrl('/Account/ExternalLoginConfirmation?ReturnUrl=%2F');
+        this.prompt.form.el.setAttribute('class', 'register');
+        this.prompt.form.el.setAttribute('method', 'POST');
+        this.prompt.form.el.setAttribute('action', '/Account/ExternalLoginConfirmation?ReturnUrl=%2F');
+
+        this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.INPUT,
+                    'type': 'Email',
+                    'name': 'Email',
+                    'value': email
+                })
+            ).set({
+                'label': 'Email',
+                'showHeader': 0
+            })
+        );
+
+        this.name = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
+            new MODEL(
+                new ATTRIBUTES({
+                    'typeId': IcarusInputType.INPUT,
+                    'type': 'text',
+                    'name': 'Name',
+                    'value': email
+                })
+            ).set({
+                'label': 'Name',
+                'showHeader': 0
+            })
+        );
+        
+        this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
+            app.loader.log(25, 'Register User', true);
+
+            $.post('/Account/ExternalLoginConfirmation?ReturnUrl=%2F', $(this.prompt.form.el).serialize(),
+                function (payload, status) {
+                    if (status === "success") {
+                        console.log(payload);
+                        app.loader.log(100, 'Success', true);
+                        setTimeout(function () {
+
+                            let url = new URL(window.location.href);
+                            let returnUrl = url.searchParams.get('ReturnUrl');
+                            if (returnUrl) {
+                                returnUrl = url.origin + returnUrl;
+                                //location.href = returnUrl;
+                                console.log('Return Url: ' + returnUrl);
+                            } else {
+                                //location.reload(true);
+                                console.log('Reload!');
+                            }
+
+                        }.bind(this), 1000);
+                    } else {
+                        app.loader.log(0, 'Registration failed. (err_' + status + ').<br>' +
+                            payload.message
+                        );
+                        debug('Failed to POST results to server with status: "' + status + '"');
+                        debug('Payload:\n');
+                        debug(payload);
+                    }
+                }.bind(this)
+            );
+
+            return false;
+
+        }.bind(this);
+        */
+
         this.prompt.show();
     }
 }
