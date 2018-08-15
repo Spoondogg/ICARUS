@@ -50,7 +50,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="className"></param>
         /// <param name="model"></param>
         /// <param name="message"></param>
-        public Payload(int result, string className, object model, string message) {
+        public Payload(int result, string className, object model, string message = "") {
             this.result = result;
             this.className = className;
             this.model = model;
@@ -62,7 +62,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// </summary>
         /// <param name="result"></param>
         /// <param name="message"></param>
-        public Payload(int result, string message) {
+        public Payload(int result, string message = "") {
             this.result = result;
             this.message = message;
         }
@@ -71,9 +71,9 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a Payload for cases where an exception message is returned
         /// </summary>
         /// <param name="result"></param>
-        /// <param name="message"></param>
         /// <param name="exception"></param>
-        public Payload(int result, string message, Exception exception) {
+        /// <param name="message"></param>
+        public Payload(int result, Exception exception, string message = "") {
             this.result = result;
             this.message = message += "<br><br><span class='bold'>Exception Details:</span><br>" + exception.Data.ToString(); ;
             this.exception = exception.Message;

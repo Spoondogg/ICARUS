@@ -232,6 +232,7 @@ class FORM extends CONTAINER {
                     200: function (response) {
                         debug('StatusCode: 200');
                         debug(response);
+                        app.loader.log(0, response.message, true);
                     },
                     201: function (response) {
                         debug('StatusCode: 201');

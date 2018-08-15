@@ -5,9 +5,7 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("VerifyPhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
+@using (Html.BeginForm("VerifyPhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
     @Html.Hidden("phoneNumber", @Model.PhoneNumber)
     <h4>Enter verification code</h4>
     <h5>@ViewBag.Status</h5>

@@ -27,18 +27,9 @@
             @Html.DisplayFor(model => model.label)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.groups)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.groups)
-        </dd>
-
     </dl>
 
     @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |

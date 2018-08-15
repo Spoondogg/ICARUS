@@ -112,7 +112,7 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(1, "FORMPOST", formPost, formPost.getMessage()));
 
             } catch (Exception e)  {
-                return Json(new Payload(0, "FormController.submit() Unknown Exception<br><br><h5>FormPost</h5>"+formPost.ToString()+"<br><br>" + e.Message, e));
+                return Json(new Payload(0, e, "FormController.submit() Unknown Exception<br><br><h5>FormPost</h5>" + formPost.ToString() + "<br><br>" + e.Message));
             }
         }
 

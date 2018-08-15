@@ -99,9 +99,6 @@ namespace ICARUS.Models.Icarus {
         /// Construct an XML object and message body based on the set form post results 
         /// </summary>
         public void resultsToXml() {
-
-            
-
             if(this.xml == null) {
                 StringBuilder xmlResults = new StringBuilder();
                 StringBuilder messageBody = new StringBuilder();
@@ -150,6 +147,20 @@ namespace ICARUS.Models.Icarus {
                     this.results = null;
                 }
             }            
+        }
+
+        /// <summary>
+        /// Construct an XML object and message body based on the set form post results 
+        /// </summary>
+        public Dictionary<string, object> resultsToDictionary() {
+
+            Dictionary<string, object> results = new Dictionary<string, object>();
+            if (this.results.Count > 0) {
+                foreach (FormValue frmVal in this.results) {
+                    results.Add(frmVal.name, frmVal.value);
+                }
+            }
+            return results;
         }
 
         /// <summary>

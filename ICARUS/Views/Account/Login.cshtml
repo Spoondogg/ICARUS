@@ -4,31 +4,12 @@
     ViewBag.Title = "Login";
 }
 @section viewInit {
-    @Html.AntiForgeryToken()
     @if (!User.Identity.IsAuthenticated) {
         <script type="text/javascript">
-            const token = document.getElementsByName('__RequestVerificationToken')[0];
-            const factory = new CONTAINERFACTORY();
-            const user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
-            const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
-            const app = new MAIN();
             app.login();
-
-            /*
-                TODO:
-                Create INPUT CHECKBOX called 'RememberMe'
-                Create BUTTON to launch 'Register as new User'
-                Create AHREF to 'ForgotPassword'
-            */
-
         </script>
     } else {
         <script type="text/javascript">
-            const token = document.getElementsByName('__RequestVerificationToken')[0];
-            const factory = new CONTAINERFACTORY();
-            const user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
-            const dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
-            const app = new MAIN();
             app.loader.log(100, 'You are already logged in.\nRedirecting...');
             setTimeout(function () {
                 location.href = '/'; 
@@ -36,6 +17,6 @@
         </script>
     }
 }
-@section Scripts {
+@*section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+}*@
