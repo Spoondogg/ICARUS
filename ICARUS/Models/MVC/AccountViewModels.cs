@@ -24,8 +24,7 @@ namespace ICARUS.Models {
         [Required]
         public string Provider { get; set; }
 
-        [Required]
-        [Display(Name = "Code")]
+        [Required, Display(Name = "Code")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
@@ -36,19 +35,15 @@ namespace ICARUS.Models {
     }
 
     public class ForgotViewModel {
-        [Required]
-        [Display(Name = "Email")]
+        [Required, Display(Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Required, Display(Name = "Email"), EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required, DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
@@ -77,9 +72,7 @@ namespace ICARUS.Models {
     }
 
     public class ResetPasswordViewModel {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required, EmailAddress, Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
@@ -96,10 +89,12 @@ namespace ICARUS.Models {
         public string Code { get; set; }
     }
 
+    /// <summary>
+    /// The user has forgotten their password and will 
+    /// recieve an email at the given Email (if exists)
+    /// </summary>
     public class ForgotPasswordViewModel {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required, EmailAddress, Display(Name = "Email")]
         public string Email { get; set; }
     }
 }

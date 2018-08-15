@@ -70,11 +70,11 @@ namespace ICARUS.Controllers {
             } catch (Exception e) {
                 return Json(new Payload(
                         0,
-                        "Unable to create new instance of " +
+                    e
+,
+                    "Unable to create new instance of " +
                         this.className + "()\n" + e.ToString() + "\n\n" +
-                        e.Message.ToString(),
-                        e
-                    ), JsonRequestBehavior.AllowGet
+                        e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
         }
@@ -132,8 +132,8 @@ namespace ICARUS.Controllers {
             } else {
                 string message = "You do not have permission to access this " + this.className;
                 return Json(new Payload(
-                    0, message, new Exception(message)
-                ), JsonRequestBehavior.AllowGet);
+                    0, new Exception(message)
+, message), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -182,8 +182,8 @@ namespace ICARUS.Controllers {
 
             } catch (Exception e) {
                 return Json(new Payload(
-                    0, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString(), e
-                ), JsonRequestBehavior.AllowGet);
+                    0, e
+, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()), JsonRequestBehavior.AllowGet);
             }
         }
     }

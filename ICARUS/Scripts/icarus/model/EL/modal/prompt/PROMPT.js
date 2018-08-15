@@ -19,34 +19,6 @@ class PROMPT extends MODAL {
 
         this.form = app.createEmptyForm(this.container.body.pane, false);
         this.form.prompt = this;
-        /*
-        this.form = new FORM(
-            this.container.body.pane,
-            new MODEL().set({
-                'label': 'PROMPT FORM',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        this.form.prompt = this;
-        this.fieldset = new FIELDSET(
-            this.form.body.pane, new MODEL().set({
-                'label': 'FIELDSET',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        this.formElementGroup = new FORMELEMENTGROUP(
-            this.fieldset.body.pane, new MODEL().set({
-                'label': 'FORMELEMENTGROUP',
-                'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        */
 
         // TODO: Fix this up
         if (inputs) {

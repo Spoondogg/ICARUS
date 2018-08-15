@@ -49,27 +49,7 @@ class NAVHEADER extends MENU {
             ).el.onclick = function () {
                 app.login();
             };
-        }
-
-        /**
-         * Anything that references navHeader.menu will now require try/catch
-         */
-        if (dev) {
-
-            /*
-            this.btnLogout = this.options.addNavItem(
-                new MODEL().set({
-                    'anchor': new MODEL('pull-right').set({
-                        'icon': ICON.USER,
-                        'label': '',
-                        'url': '#'
-                    })
-                })
-            ).el.onclick = function () {
-                app.logout();
-            };
-            */
-
+        } else {
             // Add a default tab to show/hide the Options Menu
             this.toggle = this.options.addNavItem(
                 new MODEL(new ATTRIBUTES({

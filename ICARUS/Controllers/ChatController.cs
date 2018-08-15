@@ -181,9 +181,9 @@ namespace ICARUS.Controllers {
 
             } catch (Exception ee) {
                 return Json(new Payload(1,
-                    "I'm sorry, but I don't understand. :(",
                     ee
-                ));
+,
+                    "I'm sorry, but I don't understand. :("));
             }
         }
 
@@ -246,8 +246,8 @@ namespace ICARUS.Controllers {
 
             } catch (Exception e) {
                 return new Payload(
-                    0, "Unknown exception for Word '" + word + "'<br><br>" + e.Message.ToString(), e
-                );
+                    0, e
+, "Unknown exception for Word '" + word + "'<br><br>" + e.Message.ToString());
             }
         }
     }
