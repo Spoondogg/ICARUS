@@ -344,34 +344,33 @@ nav header {
 }
 
 .sidebar {
-    width: 250px;
+    width: 300px;
     -moz-transition: all .2s ease-in-out;
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
     overflow-y: hidden;
-    margin-left: -250px;
-}
-
-/* The MAIN sidebar is full height, all others should default to auto */
-.sidebar-tall {
-    height: calc(100vh - 97px);
+    margin-left: -300px;
+    height: calc(100% - 104px);
+    position: absolute;
+    top: 50px;
+    z-index: 999;
+    height: calc(100vh - 104px);
     overflow-y: auto;
+    background-color: #292929d6;
+    border-right: 3px solid black;
 }
 
-    .sidebar-tall > .collapse {
-        height: calc(100vh - 97px);
-        overflow-y: auto;
-    }
+ .sidebar.active {
+        margin-left: 0;
+    }   
 
 .pane-tall {
     height: calc(100vh - 97px);
     overflow-y: auto;
 }
 
-    .sidebar.active {
-        margin-left: 0;
-    }
+    
 
     
 

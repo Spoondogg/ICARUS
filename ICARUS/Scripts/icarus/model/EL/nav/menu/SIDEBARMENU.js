@@ -1,7 +1,7 @@
 ﻿/**
  * A vertical navitemgroup with a search panel
  */
-class SIDEBAR extends MENU { // NAVBAR
+class SIDEBARMENU extends MENU { // NAVBAR
 
     /**
         A vertical navitemgroup with a search panel
@@ -10,6 +10,7 @@ class SIDEBAR extends MENU { // NAVBAR
      */
     constructor(node, model) {
         super(node, model);
+        //this.wrapper.addClass('sidebar');
         this.addClass('sidebar navbar-inverse collapse'); //active
 
         this.search = new NAVSEARCH(this);

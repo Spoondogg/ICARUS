@@ -45,7 +45,7 @@ class MAIN extends CONTAINER {
         this.body.pane.addClass('pane-tall');
 
         this.loader = new LOADER('Loading', 'Loading', 100);
-        this.loader.log(100, 'Loading');        
+        this.loader.log(100, 'Loading');
 
         if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
@@ -61,7 +61,8 @@ class MAIN extends CONTAINER {
     construct() {
 
         try {
-            //this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
+
+            // Create NEW Page (Main)
             this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
@@ -81,6 +82,22 @@ class MAIN extends CONTAINER {
                     }.bind(this), 1000);
                 });
             }.bind(this);
+
+            // Toggle Sidebar
+            /*this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICONS.SIDEBAR,
+                        'label': 'SIDEBAR'
+                    })
+                })
+            ).el.onclick = function () {
+                //this.navBar.header.toggleCollapse();
+                setTimeout(function () {
+                    this.toggleSidebar();
+                }.bind(this), 500);
+            }.bind(this);  */
+
         } catch (e) {
             //
         }

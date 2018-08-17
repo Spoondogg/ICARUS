@@ -11,7 +11,8 @@ namespace ICARUS {
         
         public static void RegisterBundles(BundleCollection bundles) {
             bundles.Add(new ScriptBundle("~/bundles/jquery.js").Include(
-                "~/Scripts/jquery/jquery-{version}.js"
+                "~/Scripts/jquery/jquery-{version}.js",
+                "~/Scripts/jquery/jquery-ui-{version}.js"
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval.js").Include(
@@ -136,7 +137,7 @@ namespace ICARUS {
                 // Container > NAV > MENU
                 "~/Scripts/icarus/model/el/nav/menu/MENU.js",
                 "~/Scripts/icarus/model/el/nav/menu/NAVHEADER.js",
-                "~/Scripts/icarus/model/el/nav/menu/SIDEBAR.js",
+                "~/Scripts/icarus/model/el/nav/menu/SIDEBARMENU.js",
 
                 "~/Scripts/icarus/model/el/nav/navitem/navitemtab/NAVITEMTAB.js",
                 "~/Scripts/icarus/model/el/nav/navitem/navitemtab/dropdowntab/DROPDOWNTAB.js",
@@ -215,6 +216,7 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/main/chat/CHAT.js",
                 "~/Scripts/icarus/model/el/container/main/article/section/SECTION.js",
                 "~/Scripts/icarus/model/el/container/main/article/ARTICLE.js",
+                "~/Scripts/icarus/model/el/container/main/sidebar/SIDEBAR.js",
                 "~/Scripts/icarus/model/el/container/main/MAIN.js"
             ));
         }

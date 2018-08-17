@@ -18,6 +18,28 @@ class NAVHEADER extends MENU {
             })
         );
 
+        // Add a button to toggle sidebar (modify)
+        this.btnSidebar = this.tabs.addNavItem(
+            new MODEL().set({
+                'anchor': new MODEL().set({
+                    'label': '<',
+                    'url': '#',
+                    'icon': ICONS.ARROW_UP
+                })
+            })
+        );
+        this.btnSidebar.el.setAttribute('style', 'float:left;width:32px;background-color:#101010;overflow:hidden;');
+        this.btnSidebar.el.onclick = function () {
+            let container = this.getProtoTypeByClass('CONTAINER');
+
+            let form = container.createEmptyForm(container.sidebar, false);
+
+            container.toggleSidebar();
+            //container.sidebar.el.innerHTML = 'Populate sidebar';
+
+
+
+        }.bind(this);
         // Add a default tab to show/hide the collapse
         this.tab = this.tabs.addNavItem(
             new MODEL().set({
@@ -28,6 +50,34 @@ class NAVHEADER extends MENU {
                 })
             })
         );
+        this.tab.el.setAttribute('style', 'float:left;width:calc(100% - 32px);clear:none;');
+
+        this.tab.el.onclick = function () {
+            this.getProtoTypeByClass("CONTAINER").toggleBody();
+        }.bind(this);
+
+        // Simulate LONG CLICK to edit the label
+        this.tab.pressTimer;
+        this.tab.el.onmousedown = function (ev) {
+            this.tab.pressTimer = window.setTimeout(function () {
+                console.log('Long Clicked ' + this.tab.anchor.label);
+                //this.getProtoTypeByClass('CONTAINER').quickSave(true);
+                this.getProtoTypeByClass('CONTAINER').toggleSidebar();
+                ev.stopPropagation();
+            }.bind(this), 1000);
+
+
+        }.bind(this);
+
+        this.tab.el.onmouseup = function (ev) {
+            clearTimeout(this.tab.pressTimer);
+            ev.stopPropagation();
+            return false;
+        }.bind(this);
+        
+
+
+
 
         // Right aligned group
         this.options = new MENU(this,
