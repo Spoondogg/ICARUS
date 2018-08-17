@@ -53,5 +53,6 @@ const ICONS = {
     CLASSVIEWER: 'glyphicon-list-alt',
     INDEX: 'glyphicon-th',
     INDEXMAIN: 'glyphicon-th-large',
-    HOME: 'glyphicon-home'
+    HOME: 'glyphicon-home',
+    SIDEBAR: 'glyphicon-log-in'
 };
