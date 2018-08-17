@@ -12,7 +12,7 @@ class EL extends MODEL {
     */
     constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) {
         super(model.attributes);
-
+        
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
         this.className = this.constructor.name;
         this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
@@ -46,7 +46,6 @@ class EL extends MODEL {
             } else {
                 this.el = node.el.appendChild(document.createElement(this.element));
             }
-
             this.merge(model);
             this.setInnerHTML(innerHTML);
 
@@ -96,6 +95,8 @@ class EL extends MODEL {
             console.log(e);
         }
     }
+
+
 
     /**
      * Creates a TEXTAREA and populates with this element's contents

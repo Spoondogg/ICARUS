@@ -41,6 +41,7 @@ class CONTAINER extends GROUP {
     }), containerList = []) {
         super(node, element, model);
         this.addClass('icarus-container');
+        this.isContainer = 1;
 
         // Data elements contain a list of arguments for a data object
         this.dataElements = DATAELEMENTS[this.className];
@@ -78,24 +79,87 @@ class CONTAINER extends GROUP {
         
         if (model.navBar) {
             this.navBar = new NAVBAR(this, model.navBar);
+            
+
             if (model.element !== 'MAIN') {
                 if (model.showHeader && dev === true) {
                     this.navBar.addClass('active');
+
                 } else {
                     this.navBar.el.style.display = 'none';
                 }
             }
 
+            // On drag, drag this container
+            this.navBar.el.setAttribute('draggable', true);
+
+            // https://www.w3schools.com/jsref/event_ondrag.asp
+            // Drag containers by their NavBars
+            this.navBar.el.ondragstart = function (ev) {
+                console.log('Dragging Container: ' + this.className + '(' + this.id + ') '+this.label);
+                //console.log(this.el);
+                ev.dataTransfer.setData("Container", this.id);
+            }.bind(this);
+
+            // Drop the Container
+            this.navBar.el.ondrop = function (ev) {
+                console.log('Dropping onto Container: ' + this.className + '(' + this.id + ')');
+                ev.preventDefault();
+                //var containerId = ev.dataTransfer.getData("Container");
+                //console.log(data);            
+                $(
+                    document.getElementById(
+                        ev.dataTransfer.getData("Container")
+                    )
+                ).insertBefore(this.el);
+
+                setTimeout(function () {
+                    console.log('QuickSaving drop recipient parent ' + this.className + '(' + this.id + ')');
+                    this.getProtoTypeByClass('CONTAINER').quickSave(false);
+                    /*
+                    parentContainer = parentContainer.getContainer('isContainer', 1, parentContainer);
+                    if (parentContainer !== null) {
+                        console.log('parentContainer');
+                        console.log(parentContainer);
+                        parentContainer.quickSave(true);
+                    }
+                    */
+                }.bind(this), 500);
+
+            }.bind(this);
+
+            // Allow drop on this Container
+            this.navBar.el.ondragover = function (ev) {
+                //console.log('Dragging over ' + this.className + '(' + this.id + ')');
+                ev.preventDefault();
+                //if(ev.currentTarget
+                //ev.target.ap
+
+                //if(ev.currentTargetconsole.log(container);
+            }.bind(this);
+
+            this.navBar.el.ondragend = function (ev) {
+                
+            }.bind(this);
+
+            // Ic//s
             if (model.shared) {
                 this.navBar.header.tab.anchor.icon.el.className = ICONS.PUBLIC;
             }
         }
 
+        // The sidebar is used to modify this Container's MODEL
+        this.sidebar = new SIDEBAR(this, new MODEL());
+
         this.body = new CONTAINERBODY(this, model);
 
         if (model.navBar) {
-            this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
+            //this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
             this.addNavBarDefaults();
+
+            if (!model.showHeader) {
+                this.navBar.hide();
+            }
         }
 
         // Default permitted child containers
@@ -111,20 +175,13 @@ class CONTAINER extends GROUP {
         // Add any additional containers from containerList
         for (let c = 0; c < containerList.length; c++) {
             this.addContainerCase(containerList[c]);
-        }
+        }        
 
         // Collapse or Expand Body Pane
         if (this.collapsed) {
             this.collapse();
         } else {
             this.expand();
-        }
-
-        // Show or Hide the NavBar
-        if (model.navBar) {
-            if (!model.showHeader) {
-                this.navBar.hide();
-            }
         }
 
         // Adds a Tab to the SideBar (where applicable)
@@ -235,20 +292,20 @@ class CONTAINER extends GROUP {
     addNavBarDefaults() {
         if (this.navBar.header.menu) {
 
-            if (this.hasSidebar) {                
-                this.navBar.header.menu.getGroup('DOM').addNavItem(
+            /** DOM ACTIONS **/
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                     new MODEL().set({
                         'anchor': new MODEL().set({
-                            'label': 'Toggle Sidebar'
+                            'icon': ICONS.SIDEBAR,
+                            'label': 'SIDEBAR'
                         })
                     })
                 ).el.onclick = function () {
-                    this.navBar.header.toggleCollapse();
+                    //this.navBar.header.toggleCollapse();
                     setTimeout(function () {
                         this.toggleSidebar();
                     }.bind(this), 500);
-                }.bind(this);                
-            }
+                }.bind(this); 
             
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
@@ -308,11 +365,30 @@ class CONTAINER extends GROUP {
 
             }.bind(this);
 
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICONS.DELETE,
+                        'label': 'REMOVE'
+                    })
+                })
+            ).el.onclick = this.remove.bind(this);
+
+            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICONS.EXCLAMATION,
+                        'label': 'DELETE'
+                    })
+                })
+            ).el.onclick = this.disable.bind(this);
+
+            /** CRUD ACTIONS **/
             this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.LOAD,
-                        'label': 'Load'
+                        'label': 'LOAD'
                     })
                 })
             ).el.onclick = this.load.bind(this);
@@ -363,25 +439,6 @@ class CONTAINER extends GROUP {
                 })
             );
             this.btnQuickSave.el.onclick = this.quickSave.bind(this);
-
-            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
-                new MODEL().set({
-                    'anchor': new MODEL().set({
-                        'icon': ICONS.DELETE,
-                        'label': 'REMOVE'
-                    })
-                })
-            ).el.onclick = this.remove.bind(this);
-
-            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
-                new MODEL().set({
-                    'anchor': new MODEL().set({
-                        'icon': ICONS.EXCLAMATION,
-                        'label': 'DELETE'
-                    })
-                })
-            ).el.onclick = this.disable.bind(this);
-
         }
     }
     
@@ -629,10 +686,11 @@ class CONTAINER extends GROUP {
         Toggles the active state of the sidebar
      */
     toggleSidebar() {
-        this.body.sidebar.toggle('active');
-        setTimeout(function () {
+        //this.body.sidebar.toggle('active');
+        this.sidebar.toggle('active');
+        /*setTimeout(function () {
             $(this.body.sidebar.el).collapse('toggle');
-        }.bind(this), 600);
+        }.bind(this), 600);*/
     }
 
     /**
@@ -804,7 +862,10 @@ class CONTAINER extends GROUP {
         form.setPostUrl(this.className + '/Set');
 
         /*
-        // THIS IS THE PART THAT USES NODE/CALLER
+            THIS IS THE PART THAT USES NODE/CALLER
+            to collapse the header.  
+
+            It's dumb.  Get rid of it.
         */
         form.afterSuccessfulPost = function () {
             $(node.el).collapse('toggle');
@@ -839,31 +900,38 @@ class CONTAINER extends GROUP {
 
     /**
      * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
-     * @param {any} key The object key to search within
+     * @param {string} key The object key to search within
      * @param {any} value The value to search for within this key
-     * @param {any} node Entry point to traversing the chain
-     * @param {any} attempt Recursion loop
+     * @param {EL} node Entry point to traversing the chain
+     * @param {number} attempt Recursion loop
      * @returns {CONTAINER} The parent container
      */
-    getContainer(key, value, node = this.node, attempt = 0) {
+    getContainer(key, value, node = this.node, attempt = 0, maxAttempt = 100) {
         attempt++;
 
         debug('Searching for ' + key + ': ' + value + '(' + attempt + ')');
         debug(node);
 
-        if (attempt < 100) {
+        if (attempt < maxAttempt) {
             try {
-                debug('id: ' + node.id);
-                if (node[key] === value.toString()) {
-                    return node;
-                } else {
-                    return this.getContainer(key, value, node.node, attempt++);
+                debug('id: ' + node.id+', key: '+key);
+                if (node[key]) {
+                    console.log('\tComparing ' + key + ' > ' + node[key] + ' to ' + value.toString());
+                    if (node[key] === value) {
+                        console.log('\t\tWe have a match');
+                        return node;
+                    } else {
+                        console.log('\t\t' + node[key] + ' is not equal to ' + value.toString());
+                        return this.getContainer(key, value, node.node, attempt++);
+                    }
                 }
             } catch (e) {
                 debug(e);
+                return null;
             }
         } else {
             debug('getContainer(): Too many attempts (' + attempt + ')');
+            return null;
         }
     }
 
@@ -958,7 +1026,7 @@ class CONTAINER extends GROUP {
      */
     quickSave(noPrompt = false) {
 
-        if (noPrompt || confirm('Quick Save?')) {
+        if (noPrompt || confirm('Quick Save '+this.className+'('+this.id+') : '+this.label+' ?')) {
             app.loader.log(20, 'Quick Save');
 
             debug(this.element + '.save()');

@@ -13,7 +13,7 @@ class CONTAINERBODY extends EL {
 
         this.sidebar = null;
         if (model.hasSidebar) {
-            this.sidebar = new SIDEBAR(this,
+            this.sidebar = new SIDEBARMENU(this,
                 new MODEL(new ATTRIBUTES('pull-left')).set({
                     'name': 'sidebar',
                     'label': 'SideBar'
