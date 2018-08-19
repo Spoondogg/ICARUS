@@ -253,7 +253,6 @@ function main(id) {
     debug('Launching Main(' + id + ')...');
     debug('User: ' + user);
     debug('Dev: ' + dev);
-    //debug('Token: ' + token);
     debug('DebugMode: ' + DEBUGMODE);
 
     // Set global URL
