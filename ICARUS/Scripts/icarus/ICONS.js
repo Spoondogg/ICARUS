@@ -54,5 +54,6 @@ const ICONS = {
     INDEX: 'glyphicon-th',
     INDEXMAIN: 'glyphicon-th-large',
     HOME: 'glyphicon-home',
-    SIDEBAR: 'glyphicon-log-in'
+    SIDEBAR: 'glyphicon-log-in',
+    MAIN: 'glyphicon-modal-window'
 };

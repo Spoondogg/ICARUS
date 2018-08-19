@@ -148,8 +148,7 @@ class CONTAINER extends GROUP {
             }
         }
 
-        // The sidebar is used to modify this Container's MODEL
-        this.sidebar = new SIDEBAR(this, new MODEL());
+        
 
         this.body = new CONTAINERBODY(this, model);
 
@@ -293,20 +292,6 @@ class CONTAINER extends GROUP {
         if (this.navBar.header.menu) {
 
             /** DOM ACTIONS **/
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
-                    new MODEL().set({
-                        'anchor': new MODEL().set({
-                            'icon': ICONS.SIDEBAR,
-                            'label': 'SIDEBAR'
-                        })
-                    })
-                ).el.onclick = function () {
-                    //this.navBar.header.toggleCollapse();
-                    setTimeout(function () {
-                        this.toggleSidebar();
-                    }.bind(this), 500);
-                }.bind(this); 
-            
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
@@ -682,16 +667,7 @@ class CONTAINER extends GROUP {
         $(this.body.el).collapse('toggle');
     }
 
-    /**
-        Toggles the active state of the sidebar
-     */
-    toggleSidebar() {
-        //this.body.sidebar.toggle('active');
-        this.sidebar.toggle('active');
-        /*setTimeout(function () {
-            $(this.body.sidebar.el).collapse('toggle');
-        }.bind(this), 600);*/
-    }
+    
 
     /**
      * Creates a modal and populates with a list of Form Groups that belong to this user
@@ -868,14 +844,15 @@ class CONTAINER extends GROUP {
             It's dumb.  Get rid of it.
         */
         form.afterSuccessfulPost = function () {
-            $(node.el).collapse('toggle');
-            node.empty();
+            //$(node.el).collapse('toggle');
+            //node.empty();
             this.setLabel(form.el.elements['label'].value);
             if (caller) {
                 caller.toggle('active');
                 console.log(caller);
                 caller.node.node.toggleCollapse();
             }
+            app.focusBody();
             app.loader.hide();
         }.bind(this);
 
@@ -1187,7 +1164,7 @@ class CONTAINER extends GROUP {
             console.log('Quick Save Cancelled');
         }
 
-        this.navBar.header.toggleCollapse();
+        //this.navBar.header.toggleCollapse();
     }
 
     /**

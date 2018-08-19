@@ -49,7 +49,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
             this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
             this.btnNew.el.onclick = function () {
                 // TODO:  PLEASE, fix this.  This is ugly
-                let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
+                //let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
+                let container = this.getProtoTypeByClass('CONTAINER');
                 this.newAttributes(container, this.attributes.name, this);
             }.bind(this);
         //}
@@ -117,7 +118,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         inputs.push(model.inputs[m]);
                     }
                 } catch (e) {
-                    console.log(e);
+                    //console.log(e);
+                    console.log('No additional inputs exist for this form post');
                 }
 
                 

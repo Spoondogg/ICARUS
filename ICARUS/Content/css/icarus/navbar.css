@@ -362,7 +362,7 @@ nav header {
 }
 
  .sidebar.active {
-        margin-left: 0;
+        margin-left: 4px;
     }   
 
 .pane-tall {
