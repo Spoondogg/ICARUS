@@ -42,11 +42,17 @@ class MAIN extends CONTAINER {
         new WATERMARK();
         
         super(document.body, 'MAIN', model, ['ARTICLE','INDEX','INDEXMAIN','CLASSVIEWER','IMAGEGALLERY','DICTIONARY','WORD']);
+        //this.addClass('noselect');
         this.body.pane.addClass('pane-tall');
+
 
         this.loader = new LOADER('Loading', 'Loading', 100);
         this.loader.log(100, 'Loading');
 
+        // The sidebar is used to modify this Container's MODEL
+        this.sidebar = new SIDEBAR(this, new MODEL());
+
+        // Legacy sidebar as Document Map
         if (this.body.sidebar) {
             this.body.sidebar.addClass('sidebar-tall');
         }        
@@ -59,48 +65,7 @@ class MAIN extends CONTAINER {
     }
 
     construct() {
-
-        try {
-
-            // Create NEW Page (Main)
-            this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
-                new MODEL().set({
-                    'anchor': new MODEL().set({
-                        'icon': ICONS.MAIN,
-                        'label': 'MAIN'
-                    })
-                })
-            ).el.onclick = function () {
-
-                app.loader.log(20, 'Create a new MAIN @ MAIN/Get/0');
-
-                $.getJSON('/MAIN/Get/0', function (payload) {
-                    app.loader.log(100, 'Created MAIN', true);
-                    console.log(payload);
-                    setTimeout(function () {
-                        location.href = '/' + payload.model.id;
-                    }.bind(this), 1000);
-                });
-            }.bind(this);
-
-            // Toggle Sidebar
-            /*this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
-                new MODEL().set({
-                    'anchor': new MODEL().set({
-                        'icon': ICONS.SIDEBAR,
-                        'label': 'SIDEBAR'
-                    })
-                })
-            ).el.onclick = function () {
-                //this.navBar.header.toggleCollapse();
-                setTimeout(function () {
-                    this.toggleSidebar();
-                }.bind(this), 500);
-            }.bind(this);  */
-
-        } catch (e) {
-            //
-        }
+        
     }
 
     /**
@@ -123,6 +88,29 @@ class MAIN extends CONTAINER {
     addNavOptions() {
         if (this.navBar.header.menu) {
 
+            // Add a button to toggle sidebar (modify)
+            this.btnSidebar = this.navBar.header.tabs.addNavItem(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'label': '<',
+                        'url': '#',
+                        'icon': ICONS.SIDEBAR
+                    })
+                })
+            );
+            $(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
+            this.btnSidebar.el.setAttribute('style', 'float:left;width:32px;background-color:#101010;overflow:hidden;');
+            this.btnSidebar.el.onclick = function () {
+                //let container = this.getProtoTypeByClass('CONTAINER');
+                let form = this.createEmptyForm(this.sidebar, false);
+                this.toggleSidebar();
+                //container.sidebar.el.innerHTML = 'Populate sidebar';
+            }.bind(this);
+
+            // Hide Sidebar when container body is focused
+            this.body.el.onclick = this.focusBody.bind(this);
+
+            // Add USER options
             this.navBar.header.menu.getGroup('USER').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
@@ -198,8 +186,49 @@ class MAIN extends CONTAINER {
                 setTimeout(function () {
                     location.reload(true);
                 }.bind(this), 1000);
+                }.bind(this);
+
+            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+                new MODEL().set({
+                    'anchor': new MODEL().set({
+                        'icon': ICONS.MAIN,
+                        'label': 'New'
+                    })
+                })
+            ).el.onclick = function () {
+
+                $.getJSON('/MAIN/Get/0', function (payload) {
+                    app.loader.log(100, 'Created MAIN', true);
+                    //console.log(payload);
+                    setTimeout(function () {
+                        location.href = '/' + payload.model.id;
+                    }.bind(this), 1000);
+                });
+
+                /*$.post('/MAIN/Get/0', {},
+                    function (payload, status) {
+                        //console.log(status);
+                        //console.log(payload);
+                        app.loader.log(100, 'Launching New Page');
+                        setTimeout(function () {
+                            location.href = '/' + payload.model.id;
+                        }.bind(this), 1000);
+                    }
+                );*/
             }.bind(this);
         }
+    }
+
+    /**
+        Sets the focus on the Main container body.  
+        This generally is used to hide elements such 
+        as a Sidebar, Modal or an EDIT pane
+     */
+    focusBody() {
+        if ($(this.sidebar.el).hasClass('active')) {
+            this.sidebar.removeClass('active');
+        }
+        $(this.navBar.header.menu.el).collapse('hide');
     }
 
     /**
@@ -226,6 +255,13 @@ class MAIN extends CONTAINER {
         }.bind(this);
         */
         this.prompt.show();
+    }
+
+    /**
+        Toggles the active state of the sidebar
+     */
+    toggleSidebar() {
+        this.sidebar.toggle('active');
     }
 
     /**
