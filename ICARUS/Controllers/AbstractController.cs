@@ -92,9 +92,11 @@ namespace ICARUS.Controllers {
                     return getJson(id);
                 } catch (Exception e) {
                     string message = "Failed to GET " + this.className + "("+id+")\n" + e.Message.ToString();
-                    return Json(new Payload(
-                        0, e
-, message), JsonRequestBehavior.AllowGet);
+                    return Json(
+                        new Payload(
+                            0, e, message
+                        ), JsonRequestBehavior.AllowGet
+                    );
                 }
             }
         }

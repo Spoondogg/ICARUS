@@ -1,7 +1,7 @@
 ﻿/**
-    A banner that can be populated with CallOuts
+    An Icarus Date Object
 */
-class PARAGRAPH extends CONTAINER {
+class DATE {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
@@ -18,7 +18,6 @@ class PARAGRAPH extends CONTAINER {
     }
 
     construct() {
-        
         if (this.dataId > 0) {
             if (this.data.p) {
 
@@ -29,26 +28,6 @@ class PARAGRAPH extends CONTAINER {
                 }));
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
             }
-        } else {
-            // This object REQUIRES model.data 
-            // Open up the save panel and generate some
-
-            
-            let formPostInput = new FORMPOSTINPUT(this, new MODEL().set({
-                'inputs': this.inputs
-            }));
-            formPostInput.newAttributes(this, 'dataId', this);
-
-            
-
-
-           // app.sidebar.empty();
-            //app.toggleSidebar();
-
-            //let saveForm = this.save(app.sidebar);
-
-            
-            //app.sidebar.target = this;
         }
     }
 }

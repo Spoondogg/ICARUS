@@ -9,7 +9,15 @@
  */
 const DATAELEMENTS = {
     ARTICLE: [],
-    SECTION: [],
+    SECTION: [
+        new MODEL(new ATTRIBUTES({
+            'name': 'collapsed',
+            'type': 'NUMBER'
+        })).set({
+            'element': 'INPUT',
+            'label': 'Collapsed'
+        })
+    ],
 
     CONTAINER: [],
     

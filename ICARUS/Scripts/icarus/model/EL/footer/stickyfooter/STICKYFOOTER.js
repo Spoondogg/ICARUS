@@ -11,4 +11,18 @@ class STICKYFOOTER extends FOOTER {
         super(node, model);
         this.el.setAttribute('class', 'stickyfooter');
     }
+
+    /**
+        Expands the footer to include context menu
+    */
+    show() {
+        this.addClass('active');
+    }
+
+    /**
+        Shrinks the footer down to basics
+    */
+    hide() {
+        this.removeClass('active');
+    }
 }

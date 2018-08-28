@@ -31,7 +31,7 @@ namespace ICARUS.Models.Icarus {
         public Main() : base("MAIN", new MODEL(new ATTRIBUTES("app"))) {
             this.label = "MAIN";
             this.showHeader = 1;
-            this.collapsed = 0;
+            //this.collapsed = 0;
             this.hasTab = 0;
             this.hasSidebar = 1;
             this.attributesId = 0;

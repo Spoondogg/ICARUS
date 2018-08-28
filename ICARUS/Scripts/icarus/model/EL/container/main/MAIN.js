@@ -42,9 +42,7 @@ class MAIN extends CONTAINER {
         new WATERMARK();
         
         super(document.body, 'MAIN', model, ['ARTICLE','INDEX','INDEXMAIN','CLASSVIEWER','IMAGEGALLERY','DICTIONARY','WORD']);
-        //this.addClass('noselect');
         this.body.pane.addClass('pane-tall');
-
 
         this.loader = new LOADER('Loading', 'Loading', 100);
         this.loader.log(100, 'Loading');
