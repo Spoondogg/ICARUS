@@ -37,8 +37,8 @@ namespace ICARUS.Models.Icarus.Elements {
         /// If set to true, the element section will be collapsed with
         /// only the header visible
         /// </summary>
-        [Required]
-        public int collapsed { get; set; } //= 0;
+        //[Required]
+        //public int collapsed { get; set; } //= 0;
 
         /// <summary>
         /// If set to true, the header will be shown, otherwise it is hidden
@@ -78,7 +78,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.id = id;
             this.label = model.label;
             this.subsections = "0";
-            this.collapsed = 0; // TODO: This should be migrated out of here and into attributes
+            //this.collapsed = 0; // TODO: This should be migrated out of here and into attributes
             this.showHeader = 1; // TODO: This should be migrated out of here and into attributes
             this.hasTab = 1; // TODO: This should be migrated out of here and into attributes
             this.hasSidebar = 0; // TODO: This should be migrated out of here and into attributes
@@ -116,7 +116,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.hasTab = formPost.parseInt("hasTab", 1);
             this.hasSidebar = formPost.parseInt("hasSidebar");
             this.showHeader = formPost.parseInt("showHeader", 1);
-            this.collapsed = formPost.parseInt("collapsed");
+            //this.collapsed = formPost.parseInt("collapsed");
             this.attributesId = formPost.parseInt("attributesId");
             this.dataId = formPost.parseInt("dataId");
             this.descriptionId = formPost.parseInt("descriptionId");

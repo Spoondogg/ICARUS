@@ -175,7 +175,7 @@ namespace ICARUS.Controllers {
             columns.Add("status");
             columns.Add("showHeader");
             columns.Add("label");
-            columns.Add("collapsed");
+            //columns.Add("collapsed");
             columns.Add("hasTab");
             columns.Add("dateCreated");
             columns.Add("dateLastModified");

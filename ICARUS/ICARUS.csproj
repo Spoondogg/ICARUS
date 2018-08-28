@@ -532,6 +532,10 @@
     <Compile Include="Migrations\201807190346536_20180718__006-FormPost-DateLastModified.Designer.cs">
       <DependentUpon>201807190346536_20180718__006-FormPost-DateLastModified.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808210051270_20180820__001.cs" />
+    <Compile Include="Migrations\201808210051270_20180820__001.Designer.cs">
+      <DependentUpon>201808210051270_20180820__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -630,6 +634,12 @@
     <Content Include="Content\css\icarus\imagegallery.css" />
     <Content Include="Content\css\icarus\index.css" />
     <Content Include="Content\css\icarus\menulist.css" />
+    <Content Include="Content\css\icarus\scss\icarus.css">
+      <DependentUpon>icarus.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\css\icarus\scss\icarus.min.css">
+      <DependentUpon>icarus.css</DependentUpon>
+    </Content>
     <Content Include="Content\css\icarus\word.css" />
     <Content Include="Content\css\icomoon\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />
@@ -729,6 +739,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Scripts\icarus\DATE.js" />
     <Content Include="Scripts\icarus\ICONS.js" />
     <Content Include="Scripts\icarus\DATAELEMENTS.js" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
@@ -824,6 +835,11 @@
     <Content Include="Content\css\icomoon\icomoon.eot" />
     <Content Include="Content\css\icomoon\icomoon.ttf" />
     <Content Include="Content\css\icomoon\icomoon.woff" />
+    <Content Include="Content\css\icarus\scss\icarus.scss" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />
     <None Include="Properties\PublishProfiles\JAC.pubxml" />
@@ -1126,6 +1142,9 @@
     <EmbeddedResource Include="Migrations\201807190346536_20180718__006-FormPost-DateLastModified.resx">
       <DependentUpon>201807190346536_20180718__006-FormPost-DateLastModified.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808210051270_20180820__001.resx">
+      <DependentUpon>201808210051270_20180820__001.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1203,7 +1222,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.11.326\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.11.326\build\BuildWebCompiler.targets'))" />
   </Target>
+  <Import Project="..\packages\BuildWebCompiler.1.11.326\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.11.326\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

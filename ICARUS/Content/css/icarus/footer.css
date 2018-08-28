@@ -37,4 +37,18 @@ footer > cite a:hover {
     padding: 0;
     background-color: #222;
     border-top: 2px solid #3a3a3a;
+    -moz-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+
 }
+
+.stickyfooter.active {
+    height: 16em;
+
+}
+
+    .stickyfooter.active > textarea {
+        height: 196px;
+    }

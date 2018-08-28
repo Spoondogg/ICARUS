@@ -44,16 +44,23 @@ class FORMPOSTINPUT extends FORMELEMENT {
                 console.log(this);
                 this.editFormPost();
             }.bind(this);
-        } //else {
-            //console.log('btnNew');
-            this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
-            this.btnNew.el.onclick = function () {
-                // TODO:  PLEASE, fix this.  This is ugly
-                //let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
-                let container = this.getProtoTypeByClass('CONTAINER');
-                this.newAttributes(container, this.attributes.name, this);
-            }.bind(this);
-        //}
+        }
+
+        this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
+        this.btnNew.el.onclick = function () {
+            
+            // TODO:  PLEASE, fix this.  This is ugly
+            //let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
+            //let container = this.getProtoTypeByClass('CONTAINER');
+            let container = app.sidebar.target;
+
+            //console.log('Container');
+            //console.log(container);    
+
+            this.newAttributes(container, this.attributes.name, this);
+            
+
+        }.bind(this);
     }
 
     /**
@@ -86,7 +93,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
                         'value': data.model.shared
                     })).set({
                         'element': 'INPUT',
-                        'label': 'shared'
+                        'label': 'shared',
+                        'value': '1'
                     }),
 
                     new MODEL(new ATTRIBUTES({
@@ -127,12 +135,13 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                 // Set values in MODEL and DOM
                 this.input.el.setAttribute('value', data.model.id);
-                //container['formId'] = 3;
                 container[dataIdLabel] = data.model.id; 
-                //container['id'] = 3;
 
                 if (dataIdLabel === 'dataId') {
                     // Append additional dataElements
+                    console.log('DATAELEMENTS:');
+                    console.log(container.dataElements);
+
                     if (container.dataElements.length > 0) {
                         for (let i = 0; i < container.dataElements.length; i++) {
                             inputs.push(container.dataElements[i]);
@@ -183,11 +192,55 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                 this.form.setPostUrl('FormPost/Set');
                 this.form.afterSuccessfulPost = function () { 
+                    console.log('woot');
                     app.loader.log(100, 'Success');                    
                     this.updateInput(data.model.id);
 
                     // TODO: Iterate though input values
                     console.log('TODO: Iterate through inputs and update values in model');
+
+
+                    //https://developers.google.com/web/fundamentals/primers/promises
+                    let promise = new Promise(function (resolve, reject) {
+
+                        console.log('Promise');
+                        // do a thing, possibly async, then…
+                        // How about saving the parent form (if exists)
+                        console.log('saving parent form');
+                        container.quickSave(true);
+
+
+
+                        //console.log(result);
+                        if (1 === 1) {
+                            //resolve('Successfully created Element');
+                            resolve('Saved');
+                        } else {
+                            reject(Error('Failed to create element'));
+                        }
+                    }.bind(this));
+
+                    // @see https://scotch.io/tutorials/javascript-promises-for-dummies
+                    promise.then(
+                        function (result) {
+                            console.log('promise success');
+                            container.getProtoTypeByClass('CONTAINER').refresh();
+
+                        }.bind(this),
+                        function (err) {
+                            console.log('promise fail');
+                            console.log(err); // Error: "It broke"
+                        }.bind(this)
+                    );
+
+
+                    
+
+                    // promise to refresh parent?
+                    
+
+                    // refresh -- bad idea, creates duplication
+                    //container.getProtoTypeByClass('CONTAINER').refresh();
 
                     //app.loader.hide();
                 }.bind(this);
