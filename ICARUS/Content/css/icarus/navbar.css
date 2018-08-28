@@ -140,6 +140,30 @@
     Horizontal nav-bars should scroll horizontally in order to avoid cases
     where the menu gets lost inside the container
 */
+@media only screen and (max-width: 768px) {
+    /**
+        On mobile only
+    */
+    ul.navbar-nav.horizontal {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+        ul.navbar-nav.horizontal.collapse {
+            height: 0;
+        }
+
+        ul.navbar-nav.horizontal.collapse.in {
+            height: auto;
+        }
+
+        ul.navbar-nav.horizontal > .nav-item-icon {
+            display: inline-block !important;
+        }
+}
+
 .navbar-nav.horizontal > .nav-item {
     clear: none;
     width: auto;
@@ -349,21 +373,24 @@ nav header {
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
-    overflow-y: hidden;
     margin-left: -300px;
-    height: calc(100% - 104px);
+    height: calc(100% - 103px);
     position: absolute;
     top: 50px;
     z-index: 999;
-    height: calc(100vh - 104px);
     overflow-y: auto;
     background-color: #292929d6;
     border-right: 3px solid black;
 }
 
  .sidebar.active {
-        margin-left: 4px;
-    }   
+        margin-left: auto;
+    }
+
+.sidebar .sidebar-formPane {
+    overflow-y: auto;
+    height: calc(100vh - 171px);
+}
 
 .pane-tall {
     height: calc(100vh - 97px);

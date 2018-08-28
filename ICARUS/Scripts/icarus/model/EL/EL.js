@@ -1,5 +1,14 @@
 ﻿/**
-    Generic Element Constructor    
+    Generic Element Constructor  
+
+    Ideally, this should be treated like an Abstract rather than
+    constructed on its own.  
+    
+    It can be convenient to do this:
+        new EL(node, 'DIV', model)
+
+    But it is better practice to do this:
+        new DIV(node, model)
 */
 class EL extends MODEL {
     /**
@@ -66,7 +75,7 @@ class EL extends MODEL {
         attempt++;
         try {
             debug('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')');
-            debug(node);
+            //debug(node);
 
             if (attempt < 100) {
                 try {
@@ -80,9 +89,11 @@ class EL extends MODEL {
                     }
                 } catch (e) {
                     debug(e);
+                    return null;
                 }
             } else {
                 debug('getProtoTypeByClass(): Too many attempts (' + attempt + ')');
+                return null;
             }
         } catch (e) {
             //TypeError: this.getProtoTypeByClass is not a function
@@ -102,8 +113,11 @@ class EL extends MODEL {
      * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
+
+        app.stickyFooter.show();
+
         $(this.el).addClass('edit');
-        this.editor = new TEXTAREA(this, new MODEL(
+        this.editor = new TEXTAREA(app.stickyFooter, new MODEL(
             new ATTRIBUTES({
                 'value': this.el.innerHTML
             })
@@ -111,12 +125,12 @@ class EL extends MODEL {
             'label': '<' + this.element + '>'
         }));
 
-        $(this.editor.el).insertAfter(this.el);
-
+        //$(this.editor.el).insertAfter(this.el);
+        this.editor.input.el.setAttribute('style', 'height:200px;');
         this.editor.input.el.onkeyup = function () {
             this.el.innerHTML = this.editor.input.el.value;
         }.bind(this);
-
+        
         this.editor.input.el.onblur = function () {
 
             try {
@@ -136,18 +150,9 @@ class EL extends MODEL {
             $(this.el).removeClass('edit');
             debug('QuickSave');
             this.getProtoTypeByClass('CONTAINER').quickSave(true);
-            /*
-            try {
-               
-                this.getProtoTypeByClass('CONTAINER').quickSave(true);
-                //this.node.node.node.quickSave(true);
 
-            } catch (e) {
-                this.node.getProtoTypeByClass('CONTAINER').quickSave(true);
-
-                debug(e);
-            }
-            */
+            app.stickyFooter.hide();
+            app.stickyFooter.empty();
         }.bind(this);
 
         this.editor.input.el.focus();
@@ -160,7 +165,6 @@ class EL extends MODEL {
         whereas an actual SWITCH statement would be overridden on each inheritted class.
         @see https://stackoverflow.com/a/35769291/722785
     
-        param {string} className HTML Element and Javascript Class to construct
         @param {MODEL} model The object model for the element to be created
         @returns {EL} Constructed Element
      */
@@ -171,6 +175,9 @@ class EL extends MODEL {
             this.callbacks[model.className].forEach(function (fn) {
                 result = fn(model);
             }.bind(this));
+
+            
+
         } catch (e) {
             app.loader.log(0,
                 this.className + '.create(): No constructor exists '
@@ -178,6 +185,15 @@ class EL extends MODEL {
             );
             debug(e);
         }
+        
+        /*
+        try {
+            this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICONS.EXCLAMATION);
+        } catch (e) {
+            console.log(e);
+        }
+        */
+
         return result;
     }
 

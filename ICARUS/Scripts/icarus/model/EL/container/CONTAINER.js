@@ -36,7 +36,7 @@ class CONTAINER extends GROUP {
         'label': element,
         'hasTab': 1,
         'showHeader': 1,
-        'collapsed': 0,
+        //'collapsed': 0,
         'shared': 1
     }), containerList = []) {
         super(node, element, model);
@@ -177,11 +177,20 @@ class CONTAINER extends GROUP {
         }        
 
         // Collapse or Expand Body Pane
+        this.expand();
+        if (model.dataId > 0) {
+            if (model.data.collapsed) {
+                this.collapse();
+            }
+        }
+
+        /*
         if (this.collapsed) {
             this.collapse();
         } else {
             this.expand();
         }
+        */
 
         // Adds a Tab to the SideBar (where applicable)
         if (model.hasTab) {
@@ -210,6 +219,8 @@ class CONTAINER extends GROUP {
             throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
         }
     }
+
+    
 
     /**
         HTML Encode the given value.
@@ -285,6 +296,33 @@ class CONTAINER extends GROUP {
         }
     }
 
+    refresh() {
+        console.log('TODO: Refresh CONTAINER{' + this.className + '}[' + this.id + ']');
+        console.log(this);
+
+        app.loader.log(20, 'Emptying body.pane', true);
+
+        this.body.pane.empty();
+
+        app.loader.log(30, 'Rebuilding children', true);
+
+        // This needs to handle the Container constructor
+        // Does this mean that I CALL the constructor?
+        // ie:  CONTAINER.call(
+        //let newContainer = new this.__proto__.constructor(this.node, this);
+
+        // Reconstruct from model
+        this.construct();
+
+        // Populate based on children
+        this.populate(this.body.pane.children);
+
+
+
+        app.loader.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
+    }
+    
+
     /**
         Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
      */
@@ -323,32 +361,7 @@ class CONTAINER extends GROUP {
                         'label': 'REFRESH'
                     })
                 })
-            ).el.onclick = function () {
-                console.log('TODO: Refresh CONTAINER{' + this.className + '}[' + this.id + ']');
-                console.log(this);
-
-                app.loader.log(20, 'Emptying body.pane', true);
-
-                this.body.pane.empty();
-
-                app.loader.log(30, 'Rebuilding children', true);
-
-                // This needs to handle the Container constructor
-                // Does this mean that I CALL the constructor?
-                // ie:  CONTAINER.call(
-                //let newContainer = new this.__proto__.constructor(this.node, this);
-
-                // Reconstruct from model
-                this.construct();
-
-                // Populate based on children
-                this.populate(this.body.pane.children);
-                
-
-
-                app.loader.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
-
-            }.bind(this);
+            ).el.onclick = this.refresh.bind(this);
 
             this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
                 new MODEL().set({
@@ -510,7 +523,6 @@ class CONTAINER extends GROUP {
     addConstructElementButton(className) {
         if (this.navBar.header.menu) {
 
-            //this.navBar.header.menu.getGroup('ELEMENTS').addNavItem(
             this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
@@ -520,14 +532,39 @@ class CONTAINER extends GROUP {
                 })
             ).el.onclick = function () {
                 this.navBar.header.toggleCollapse();
-                this.create(new MODEL().set({
-                    'className': className
-                }));
-                try {
-                    this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICONS.EXCLAMATION);
-                } catch (e) {
-                    console.log(e);
-                }
+
+                //https://developers.google.com/web/fundamentals/primers/promises
+                let promise = new Promise(function (resolve, reject) {
+
+                    console.log('Promise');
+                    // do a thing, possibly async, then…
+                    let result = this.create(new MODEL().set({
+                        'className': className
+                    }));
+                    console.log(result);
+                    if (1 === 1) {
+                        //resolve('Successfully created Element');
+                        resolve(result);
+                    } else {
+                        reject(Error('Failed to create element'));
+                    }
+                }.bind(this));
+
+                // @see https://scotch.io/tutorials/javascript-promises-for-dummies
+                promise.then(
+                    function (result) {
+                        console.log('promise success');
+                        //console.log(result); // "Stuff worked!"
+                        this.quickSave(true);
+
+                    }.bind(this),
+                    function (err) {
+                        console.log('promise fail');
+                        console.log(err); // Error: "It broke"
+                    }.bind(this)
+                );
+
+                
             }.bind(this);
         }
     }
@@ -696,6 +733,8 @@ class CONTAINER extends GROUP {
 
         debug('Creating save form...');        
         let form = this.createEmptyForm(node, false);
+        form.addClass('saveContainer');
+        form.fieldset.formElementGroup.body.pane.addClass('sidebar-formPane');
         form.el.setAttribute('style', 'background-color:white;');
 
         let inputs = [
@@ -766,6 +805,7 @@ class CONTAINER extends GROUP {
                 'addTab': 0
             }),
 
+            /*
             new MODEL(new ATTRIBUTES({
                 'name': 'collapsed',
                 'type': 'NUMBER',
@@ -775,6 +815,7 @@ class CONTAINER extends GROUP {
                 'label': 'Collapsed',
                 'addTab': 0
             }),
+            */
 
             new MODEL(new ATTRIBUTES({
                 'name': 'hasTab',
@@ -825,7 +866,7 @@ class CONTAINER extends GROUP {
             new MODEL(new ATTRIBUTES({
                 'name': 'shared',
                 'type': 'NUMBER',
-                'value': new String(this.get('shared')) || '0'
+                'value': new String(this.get('shared')) || '1'
             })).set({
                 'element': 'BUTTON',
                 'label': 'shared',
@@ -854,9 +895,19 @@ class CONTAINER extends GROUP {
             }
             app.focusBody();
             app.loader.hide();
+
+            let container = this.getProtoTypeByClass('CONTAINER');
+            if (container !== 'undefined') {
+                container.refresh();
+            } else {
+                location.reload(true);
+            }
+
         }.bind(this);
 
-        $(node.el).collapse("show");
+        $(node.el).collapse('show');
+
+        return form;
     }
 
     /**
@@ -927,7 +978,7 @@ class CONTAINER extends GROUP {
                 'style': hidden ? 'display:none;' : ''
             })).set({
                 'label': 'FORM',
-                'collapsed': 0,
+                //'collapsed': 0,
                 'showHeader': 0,
                 'hasTab': 0
             })
@@ -935,7 +986,7 @@ class CONTAINER extends GROUP {
         form.fieldset = new FIELDSET(
             form.body.pane, new MODEL().set({
                 'label': 'FIELDSET',
-                'collapsed': 0,
+                //'collapsed': 0,
                 'showHeader': 0,
                 'hasTab': 0
             })
@@ -943,7 +994,7 @@ class CONTAINER extends GROUP {
         form.fieldset.formElementGroup = new FORMELEMENTGROUP(
             form.fieldset.body.pane, new MODEL().set({
                 'label': 'FORMELEMENTGROUP',
-                'collapsed': 0,
+                //'collapsed': 0,
                 'showHeader': 0,
                 'hasTab': 0
             })
@@ -1082,6 +1133,7 @@ class CONTAINER extends GROUP {
                     'addTab': 0
                 }),
 
+                /*
                 new MODEL(new ATTRIBUTES({
                     'name': 'collapsed',
                     'type': 'NUMBER',
@@ -1091,6 +1143,7 @@ class CONTAINER extends GROUP {
                     'label': 'Collapsed',
                     'addTab': 0
                 }),
+                */
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'hasTab',

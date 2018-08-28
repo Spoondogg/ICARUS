@@ -128,6 +128,46 @@ function pad(num, size) {
 }
 
 /**
+     * Returns a Javascript date object from a .NET JavaScriptSerializer date
+     * See https://stackoverflow.com/a/50292370/722785
+     * @param {string} dateString from .NET Serializer ie: Date(1534759609990)
+     * @returns {Date} Javascript Date Object
+     */
+function getDateValue(dateString) {
+    return new Date(parseInt(dateString.replace(/\D+/g, '')));
+}
+
+/**
+ * This should be a class...  But anyways,
+ * Generates a generic Date object for print
+ * @param {any} dateObj
+ */
+function getDateObject(dateObj) {
+    console.log('getDateObject');
+    // splits the string to array ie: ["2014-05-10", "22:00:00.000Z"]
+    let d = dateObj.toISOString().split('T');
+
+    // Splits the date ie: ['2014','05','10']
+    let dd = d[0].split('-');
+
+    // Splits the time ie: ['22','00','00.000Z']
+    let t = d[1].split(':');
+    let tt = t[2].split('.');
+
+    return {
+        'date': d[0],
+        'year': dd[0],
+        'month': dd[1],
+        'day': dd[2],
+        'time': t[0]+':'+t[1]+':'+tt[0],
+        'hour': t[0],
+        'minute': t[1],
+        'second': tt[0],
+        'millisecond': tt[1].replace('Z', '')
+    };
+}
+
+/**
     Enumerated list of Input Types
     Matched to IcarusFormGroup Enums
 */

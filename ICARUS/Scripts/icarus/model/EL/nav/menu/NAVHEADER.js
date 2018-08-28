@@ -40,12 +40,15 @@ class NAVHEADER extends MENU {
         this.tab.el.onmousedown = function (ev) {
             this.tab.pressTimer = window.setTimeout(function () {
                 console.log('Long Clicked ' + this.tab.anchor.label);
-                //this.getProtoTypeByClass('CONTAINER').quickSave(true);            
+                //this.getProtoTypeByClass('CONTAINER').quickSave(true);    
+                app.sidebar.empty();
                 app.toggleSidebar();
 
                 let container = this.getProtoTypeByClass('CONTAINER');
-                app.sidebar.el.innerHTML = '<span style="color:white;">Toggled by "' + container.label + '"</span>';
+                //app.sidebar.el.innerHTML = '<header style="color:white;">Toggled by "' + container.label + '"</header>';
+
                 container.save(app.sidebar);
+                app.sidebar.target = container;
 
                 ev.stopPropagation();
             }.bind(this), 1000);
