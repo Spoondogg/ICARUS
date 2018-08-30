@@ -10,7 +10,7 @@ class MENU extends UL {
     constructor(node, model) {
         super(node, model);
         this.addClass('nav navbar-nav');
-
+        
         this.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('wrapper')));
 
         if (model.showHeader) {

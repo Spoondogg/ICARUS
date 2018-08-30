@@ -10,8 +10,18 @@ class NAVBAR extends NAV {
      */
     constructor(node, model) {
         super(node, model);
-        this.addClass('navbar-nav');
-        
+        this.addClass('navbar-nav collapse');
+
+        //this.wrapper = new EL(node, 'DIV', new MODEL('navbar-wrapper'));
+
+        //this.toggler = new EL(this.wrapper, 'DIV', new MODEL('toggler')); //, 'Toggle'
+
+        //this.toggler.el.onclick = function () {
+        //    $(this.el).collapse('toggle');
+        //}.bind(this);
+
+        //$(this.el).appendTo(this.wrapper.el);
+
         this.header = new NAVHEADER(this, new MODEL().set({
             'className': 'NAVHEADER',
             'name': 'header',

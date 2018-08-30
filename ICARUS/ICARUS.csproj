@@ -536,6 +536,10 @@
     <Compile Include="Migrations\201808210051270_20180820__001.Designer.cs">
       <DependentUpon>201808210051270_20180820__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808281954057_2018-08-28__001.cs" />
+    <Compile Include="Migrations\201808281954057_2018-08-28__001.Designer.cs">
+      <DependentUpon>201808281954057_2018-08-28__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -628,45 +632,15 @@
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\css\icarus\chat.css" />
-    <Content Include="Content\css\icarus\classviewer.css" />
-    <Content Include="Content\css\icarus\dictionary.css" />
-    <Content Include="Content\css\icarus\imagegallery.css" />
-    <Content Include="Content\css\icarus\index.css" />
-    <Content Include="Content\css\icarus\menulist.css" />
     <Content Include="Content\css\icarus\scss\icarus.css">
       <DependentUpon>icarus.scss</DependentUpon>
     </Content>
     <Content Include="Content\css\icarus\scss\icarus.min.css">
       <DependentUpon>icarus.css</DependentUpon>
     </Content>
-    <Content Include="Content\css\icarus\word.css" />
     <Content Include="Content\css\icomoon\icomoon.css" />
     <Content Include="Content\css\icomoon\icomoon.svg" />
-    <Content Include="Content\css\icarus\banner.css" />
-    <Content Include="Content\css\icarus\button.css" />
-    <Content Include="Content\css\icarus\console.css" />
-    <Content Include="Content\css\icarus\container.css" />
-    <Content Include="Content\css\icarus\dropdown.css" />
-    <Content Include="Content\css\icarus\elementgroup.css" />
-    <Content Include="Content\css\icarus\footer.css" />
-    <Content Include="Content\css\icarus\form.css" />
-    <Content Include="Content\css\icarus\glyphicon.css" />
-    <Content Include="Content\css\icarus\icarus.css" />
-    <Content Include="Content\css\icarus\icon.css" />
-    <Content Include="Content\css\icarus\jumbotron.css" />
-    <Content Include="Content\css\icarus\label.css" />
-    <Content Include="Content\css\icarus\loader.css" />
-    <Content Include="Content\css\icarus\main.css" />
     <Content Include="Content\css\icarus\mobile.css" />
-    <Content Include="Content\css\icarus\modal.css" />
-    <Content Include="Content\css\icarus\navbar.css" />
-    <Content Include="Content\css\icarus\preview.css" />
-    <Content Include="Content\css\icarus\prompt.css" />
-    <Content Include="Content\css\icarus\section.css" />
-    <Content Include="Content\css\icarus\table.css" />
-    <Content Include="Content\css\icarus\textblock.css" />
-    <Content Include="Content\css\icarus\thumbnail.css" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -796,7 +770,6 @@
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\FORMELEMENT.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\FORMELEMENTGROUP.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\FIELDSET.js" />
-    <Content Include="Scripts\icarus\_deprec\IcarusSectionHeader.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\input\INPUT.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\select\OPTION.js" />
     <Content Include="Scripts\icarus\model\el\container\form\fieldset\formelement\select\SELECT.js" />
@@ -810,7 +783,6 @@
     <Content Include="Scripts\icarus\model\el\container\textblock\TEXTBLOCK.js" />
     <Content Include="Scripts\icarus\model\el\container\main\MAIN.js" />
     <Content Include="Scripts\icarus\model\el\container\main\article\ARTICLE.js" />
-    <Content Include="Scripts\icarus\_deprec\CHART.js" />
     <Content Include="Scripts\icarus\model\el\EL.js" />
     <Content Include="Scripts\icarus\model\el\footer\stickyfooter\STICKYFOOTER.js" />
     <Content Include="Scripts\icarus\model\el\header\HEADER.js" />
@@ -820,7 +792,6 @@
     <Content Include="Scripts\icarus\model\el\graphic\SVG.js" />
     <Content Include="Scripts\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\icarus\model\el\nav\navbar\NAVBAR.js" />
-    <Content Include="Scripts\icarus\_deprec\REPORT.js" />
     <Content Include="Scripts\icarus\model\el\text\p\P.js" />
     <Content Include="Scripts\icarus\model\el\text\span\SPAN.js" />
     <Content Include="Scripts\icarus\_deprec\table\TABLE.js" />
@@ -1144,6 +1115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808210051270_20180820__001.resx">
       <DependentUpon>201808210051270_20180820__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808281954057_2018-08-28__001.resx">
+      <DependentUpon>201808281954057_2018-08-28__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

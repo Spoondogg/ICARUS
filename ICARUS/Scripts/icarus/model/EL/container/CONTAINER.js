@@ -1,23 +1,4 @@
 ﻿/**
- * An enumerated list of supported container html element types
- */
-var CONTAINERTYPES = {
-    DEFAULT: 'DIV',
-    MAIN: 'MAIN',
-    ARTICLE: 'ARTICLE',
-    SECTION: 'SECTION',
-    FORM: 'FORM',
-    FIELDSET: 'FIELDSET',
-    FORMELEMENTGROUP: 'FORMELEMENTGROUP',
-    FORMELEMENT: 'FORMELEMENT',
-    INPUT: 'INPUT',
-    SELECT: 'SELECT',
-    TEXTAREA: 'TEXTAREA',
-    DIV: 'DIV',
-    INDEX: 'INDEX'
-};
-
-/**
     A generic CONTAINER with a header that controls population of this element.
 
     A container can be expanded or hidden and
@@ -34,9 +15,6 @@ class CONTAINER extends GROUP {
         'element': element,
         'name': element || '',
         'label': element,
-        'hasTab': 1,
-        'showHeader': 1,
-        //'collapsed': 0,
         'shared': 1
     }), containerList = []) {
         super(node, element, model);
@@ -56,13 +34,8 @@ class CONTAINER extends GROUP {
 
         // Container Properties
         this.prompt = null;
-        this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?
-        
-        // Delimited list of child ids
-        this.subsections = '0';
-        if (model.subsections) {
-            this.subsections = model.subsections.split(',');
-        }
+        this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?                
+        this.subsections = (model.subsections) ? model.subsections.split(',') : '0'; // Delimited list of child ids
 
         // HELLO!!!!!!!!!!!!
         // Consider that if model.navBar doesn't exist, it doesn't need to be created
@@ -74,91 +47,75 @@ class CONTAINER extends GROUP {
         if (model.navBar === undefined) {
             model.navBar = {};
             model.navBar.label = model.label;
-            model.navBar.brand = this.element;
         }
-        
-        if (model.navBar) {
-            this.navBar = new NAVBAR(this, model.navBar);
-            
 
-            if (model.element !== 'MAIN') {
-                if (model.showHeader && dev === true) {
-                    this.navBar.addClass('active');
-
-                } else {
-                    this.navBar.el.style.display = 'none';
-                }
-            }
-
-            // On drag, drag this container
-            this.navBar.el.setAttribute('draggable', true);
-
-            // https://www.w3schools.com/jsref/event_ondrag.asp
-            // Drag containers by their NavBars
-            this.navBar.el.ondragstart = function (ev) {
-                console.log('Dragging Container: ' + this.className + '(' + this.id + ') '+this.label);
-                //console.log(this.el);
-                ev.dataTransfer.setData("Container", this.id);
-            }.bind(this);
-
-            // Drop the Container
-            this.navBar.el.ondrop = function (ev) {
-                console.log('Dropping onto Container: ' + this.className + '(' + this.id + ')');
-                ev.preventDefault();
-                //var containerId = ev.dataTransfer.getData("Container");
-                //console.log(data);            
-                $(
-                    document.getElementById(
-                        ev.dataTransfer.getData("Container")
-                    )
-                ).insertBefore(this.el);
-
-                setTimeout(function () {
-                    console.log('QuickSaving drop recipient parent ' + this.className + '(' + this.id + ')');
-                    this.getProtoTypeByClass('CONTAINER').quickSave(false);
-                    /*
-                    parentContainer = parentContainer.getContainer('isContainer', 1, parentContainer);
-                    if (parentContainer !== null) {
-                        console.log('parentContainer');
-                        console.log(parentContainer);
-                        parentContainer.quickSave(true);
-                    }
-                    */
-                }.bind(this), 500);
-
-            }.bind(this);
-
-            // Allow drop on this Container
-            this.navBar.el.ondragover = function (ev) {
-                //console.log('Dragging over ' + this.className + '(' + this.id + ')');
-                ev.preventDefault();
-                //if(ev.currentTarget
-                //ev.target.ap
-
-                //if(ev.currentTargetconsole.log(container);
-            }.bind(this);
-
-            this.navBar.el.ondragend = function (ev) {
-                
-            }.bind(this);
-
-            // Ic//s
-            if (model.shared) {
-                this.navBar.header.tab.anchor.icon.el.className = ICONS.PUBLIC;
-            }
+        let showHeader = false;
+        if (dev || model.element === 'MAIN') {
+            showHeader = true;
         }
+
+        /*
+         * Ok, so you need to create a placeholder or some sort of toggle button to trigger the 
+         * navbar.
+         * 
+         * Pressing the button would then load the entire navbar...  better, right?
+         * 
+         * The toggle button should only be visible if the user has DEV priveliges
+         */
+
+
+        // Create the full navBar...  Ugh
+        this.navBar = new NAVBAR(this, model.navBar);
+        if (showHeader) {
+            this.showNavBar();
+        }
+
+        // On drag, drag this container
+        this.navBar.el.setAttribute('draggable', true);
+
+        // https://www.w3schools.com/jsref/event_ondrag.asp
+        // Drag containers by their NavBars
+        this.navBar.el.ondragstart = function (ev) {
+            console.log('Dragging Container: ' + this.className + '(' + this.id + ') ' + this.label);
+            this.collapse();
+            //console.log(this.el);
+            ev.dataTransfer.setData("Container", this.id);
+        }.bind(this);
+
+        // Drop the Container
+        this.navBar.el.ondrop = function (ev) {
+            console.log('Dropping onto Container: ' + this.className + '(' + this.id + ')');
+            ev.preventDefault();
+            //var containerId = ev.dataTransfer.getData("Container");
+            //console.log(data);    
+
+            let container = $(document.getElementById(ev.dataTransfer.getData("Container")));
+            container.insertBefore(this.el);
+            container.collapse('show');
+
+            setTimeout(function () {
+                console.log('QuickSaving drop recipient parent ' + this.className + '(' + this.id + ')');
+                this.getProtoTypeByClass('CONTAINER').quickSave(false); // QuickSave Parent
+            }.bind(this), 500);
+
+        }.bind(this);
+
+        // Allow drop on this Container
+        this.navBar.el.ondragover = function (ev) {
+            //console.log('Dragging over ' + this.className + '(' + this.id + ')');
+            ev.preventDefault();
+        }.bind(this);
+
+        this.navBar.el.ondragend = function (ev) {
+            // Drag Ending
+        }.bind(this);    
 
         
 
         this.body = new CONTAINERBODY(this, model);
 
         if (model.navBar) {
-            //this.navBar.header.tab.el.onclick = this.toggleBody.bind(this);
             this.addNavBarDefaults();
-
-            if (!model.showHeader) {
-                this.navBar.hide();
-            }
         }
 
         // Default permitted child containers
@@ -182,34 +139,18 @@ class CONTAINER extends GROUP {
             if (model.data.collapsed) {
                 this.collapse();
             }
-        }
 
-        /*
-        if (this.collapsed) {
-            this.collapse();
-        } else {
-            this.expand();
-        }
-        */
-
-        // Adds a Tab to the SideBar (where applicable)
-        if (model.hasTab) {
-            this.tab = this.createTab(this);
+            if (model.data.showNavBar) {
+                this.showNavBar();
+            }
         }
 
         // These methods may need to be migrated within the extended objects
         if (this.className !== 'CONTAINER') {
             this.construct();
-        } else {
+        } /*else {
             this.populate(model.children);
-        }
-
-        /*
-        // Load any children that were provided in the model
-        if (this.className === 'CONTAINER') {
-            this.populate(model.children);
-        }
-        */
+        }*/
     }
 
     /** Abstract construct method throws an error if not declared */
@@ -219,8 +160,6 @@ class CONTAINER extends GROUP {
             throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
         }
     }
-
-    
 
     /**
         HTML Encode the given value.
@@ -296,32 +235,32 @@ class CONTAINER extends GROUP {
         }
     }
 
+    /**
+        Empties the Container Pane and reconstructs its contents 
+        based on the current model
+    */
     refresh() {
-        console.log('TODO: Refresh CONTAINER{' + this.className + '}[' + this.id + ']');
-        console.log(this);
+        console.log('Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
 
-        app.loader.log(20, 'Emptying body.pane', true);
-
+        app.loader.log(20, 'Emptying...', true);
         this.body.pane.empty();
 
-        app.loader.log(30, 'Rebuilding children', true);
-
-        // This needs to handle the Container constructor
-        // Does this mean that I CALL the constructor?
-        // ie:  CONTAINER.call(
-        //let newContainer = new this.__proto__.constructor(this.node, this);
-
-        // Reconstruct from model
+        app.loader.log(30, 'Reconstructing...', true);
         this.construct();
 
         // Populate based on children
+        app.loader.log(60, 'Populating...', true);
         this.populate(this.body.pane.children);
-
-
 
         app.loader.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
     }
-    
+
+    /**
+        Shows the Container nav bar
+    */
+    showNavBar() {
+        $(this.navBar.el).collapse('show');
+    }
 
     /**
         Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
@@ -423,8 +362,6 @@ class CONTAINER extends GROUP {
                         console.log(e);
                     }
                 }
-
-                //this.navBar.header.toggleCollapse();
 
             }.bind(this);
 
@@ -580,7 +517,6 @@ class CONTAINER extends GROUP {
         @param {boolean} addButton If false, no button is created
     */
     addContainerCase(className, addButton = true) {
-        //console.log(this.className + '.addContainerCase(' + className + ')');
         this.addCase(className,
             function (model) {
                 return factory.get(this.body.pane, className, model.id || 0);
@@ -734,8 +670,8 @@ class CONTAINER extends GROUP {
         debug('Creating save form...');        
         let form = this.createEmptyForm(node, false);
         form.addClass('saveContainer');
-        form.fieldset.formElementGroup.body.pane.addClass('sidebar-formPane');
-        form.el.setAttribute('style', 'background-color:white;');
+        //form.fieldset.formElementGroup.body.pane.addClass('sidebar-formPane');
+        //form.el.setAttribute('style', 'background-color:white;');
 
         let inputs = [
             new MODEL(new ATTRIBUTES({
@@ -782,48 +718,6 @@ class CONTAINER extends GROUP {
             })).set({
                 'element': 'INPUT',
                 'label': 'Status',
-                'addTab': 0
-            }),
-
-            new MODEL(new ATTRIBUTES({
-                'name': 'showHeader',
-                'type': 'NUMBER',
-                'value': new String(this.get('showHeader'))
-            })).set({
-                'element': 'INPUT',
-                'label': 'Show Header',
-                'addTab': 0
-            }),
-
-            new MODEL(new ATTRIBUTES({
-                'name': 'hasSidebar',
-                'type': 'NUMBER',
-                'value': new String(this.get('hasSidebar'))
-            })).set({
-                'element': 'INPUT',
-                'label': 'Show Sidebar',
-                'addTab': 0
-            }),
-
-            /*
-            new MODEL(new ATTRIBUTES({
-                'name': 'collapsed',
-                'type': 'NUMBER',
-                'value': new String(this.get('collapsed'))
-            })).set({
-                'element': 'INPUT',
-                'label': 'Collapsed',
-                'addTab': 0
-            }),
-            */
-
-            new MODEL(new ATTRIBUTES({
-                'name': 'hasTab',
-                'type': 'NUMBER',
-                'value': new String(this.get('hasTab'))
-            })).set({
-                'element': 'INPUT',
-                'label': 'Has Tab',
                 'addTab': 0
             }),
 
@@ -885,8 +779,6 @@ class CONTAINER extends GROUP {
             It's dumb.  Get rid of it.
         */
         form.afterSuccessfulPost = function () {
-            //$(node.el).collapse('toggle');
-            //node.empty();
             this.setLabel(form.el.elements['label'].value);
             if (caller) {
                 caller.toggle('active');
@@ -933,7 +825,7 @@ class CONTAINER extends GROUP {
      * @param {EL} node Entry point to traversing the chain
      * @param {number} attempt Recursion loop
      * @returns {CONTAINER} The parent container
-     */
+     
     getContainer(key, value, node = this.node, attempt = 0, maxAttempt = 100) {
         attempt++;
 
@@ -962,7 +854,7 @@ class CONTAINER extends GROUP {
             return null;
         }
     }
-
+    */
     
 
     /**
@@ -1051,6 +943,8 @@ class CONTAINER extends GROUP {
     /**
         Displays a prompt that performs a save of the container, it's 
         attributes and any data objects associated with it.
+        @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
+        @returns {BOOLEAN} True if successful
      */
     quickSave(noPrompt = false) {
 
@@ -1113,7 +1007,7 @@ class CONTAINER extends GROUP {
                     'addTab': 0
                 }),
 
-                new MODEL(new ATTRIBUTES({
+                /*new MODEL(new ATTRIBUTES({
                     'name': 'showHeader',
                     'type': 'NUMBER',
                     'value': new String(this.get('showHeader'))
@@ -1121,9 +1015,9 @@ class CONTAINER extends GROUP {
                     'element': 'INPUT',
                     'label': 'Show Header',
                     'addTab': 0
-                }),
+                }),*/
 
-                new MODEL(new ATTRIBUTES({
+                /*new MODEL(new ATTRIBUTES({
                     'name': 'hasSidebar',
                     'type': 'NUMBER',
                     'value': new String(this.get('hasSidebar'))
@@ -1131,7 +1025,7 @@ class CONTAINER extends GROUP {
                     'element': 'INPUT',
                     'label': 'Show Sidebar',
                     'addTab': 0
-                }),
+                }),*/
 
                 /*
                 new MODEL(new ATTRIBUTES({
@@ -1145,7 +1039,7 @@ class CONTAINER extends GROUP {
                 }),
                 */
 
-                new MODEL(new ATTRIBUTES({
+                /*new MODEL(new ATTRIBUTES({
                     'name': 'hasTab',
                     'type': 'NUMBER',
                     'value': new String(this.get('hasTab'))
@@ -1153,7 +1047,7 @@ class CONTAINER extends GROUP {
                     'element': 'INPUT',
                     'label': 'Has Tab',
                     'addTab': 0
-                }),
+                }),*/
 
                 new MODEL(new ATTRIBUTES({
                     'name': 'dataId',
@@ -1188,6 +1082,7 @@ class CONTAINER extends GROUP {
                     'addTab': 0
                 }),
 
+                // TODO Try making this a CHECKBOX or something more BOOLEANesque
                 new MODEL(new ATTRIBUTES({
                     'name': 'shared',
                     'type': 'NUMBER',
@@ -1213,11 +1108,26 @@ class CONTAINER extends GROUP {
 
             app.loader.log(100, 'Quick Save Complete');
             //app.loader.hide();
+            return true;
+
         } else {
             console.log('Quick Save Cancelled');
+            return false;
         }
+    }
 
-        //this.navBar.header.toggleCollapse();
+    /**
+        Attempts to have the direct parent Container of this Container perform
+        a QuickSave
+        @returns {Boolean} Returns true if successful
+    */
+    quickSaveParent() {
+        try {
+            return this.getProtoTypeByClass('CONTAINER').quickSave(false);
+        } catch (e) {
+            console.log('Container.QuickSaveParent() No parent exists');
+            return false;
+        }
     }
 
     /**

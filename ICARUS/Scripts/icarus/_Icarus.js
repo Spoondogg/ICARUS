@@ -140,7 +140,8 @@ function getDateValue(dateString) {
 /**
  * This should be a class...  But anyways,
  * Generates a generic Date object for print
- * @param {any} dateObj
+ * @param {Date} dateObj A Javascript Date object
+ * @returns {Object} A broken down set of date values that should actually be a class
  */
 function getDateObject(dateObj) {
     console.log('getDateObject');

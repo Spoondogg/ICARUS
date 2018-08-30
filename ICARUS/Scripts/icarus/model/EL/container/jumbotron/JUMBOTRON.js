@@ -10,7 +10,7 @@ class JUMBOTRON extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.body.pane.addClass('jumbotron');
-        this.body.pane.addClass('noselect');
+        //this.body.pane.addClass('noselect');
         //this.construct();
         //this.populate(model.children);
     }

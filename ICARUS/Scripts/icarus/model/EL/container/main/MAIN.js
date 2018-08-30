@@ -9,10 +9,6 @@ class MAIN extends CONTAINER {
     constructor(model) {
         model = model || new MODEL().set({
             'id': 0,
-            'showHeader': 1,
-            'hasSidebar': 0,
-            'collapsed': 0,
-            'hasTab': 0,
             'dataId': 0,
             'attributesId': 0,
             'descriptionId': 0,
@@ -46,14 +42,9 @@ class MAIN extends CONTAINER {
 
         this.loader = new LOADER('Loading', 'Loading', 100);
         this.loader.log(100, 'Loading');
-
-        // The sidebar is used to modify this Container's MODEL
-        this.sidebar = new SIDEBAR(this, new MODEL());
-
-        // Legacy sidebar as Document Map
-        if (this.body.sidebar) {
-            this.body.sidebar.addClass('sidebar-tall');
-        }        
+        this.sidebar = new SIDEBAR(this, new MODEL().set({
+            'label': 'Left Sidebar'
+        }));    
 
         this.addNavOptions();
         
@@ -88,28 +79,29 @@ class MAIN extends CONTAINER {
 
             // Add a button to toggle sidebar (modify)
             this.btnSidebar = this.navBar.header.tabs.addNavItem(
-                new MODEL().set({
+                new MODEL('pull-right').set({
                     'anchor': new MODEL().set({
-                        'label': '<',
+                        'label': '',
                         'url': '#',
                         'icon': ICONS.SIDEBAR
                     })
                 })
             );
-            $(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
-            this.btnSidebar.el.setAttribute('style', 'float:left;width:32px;background-color:#101010;overflow:hidden;');
-            this.btnSidebar.el.onclick = function () {
-                //let container = this.getProtoTypeByClass('CONTAINER');
-                let form = this.createEmptyForm(this.sidebar, false);
-                this.toggleSidebar();
-                //container.sidebar.el.innerHTML = 'Populate sidebar';
-            }.bind(this);
+            //$(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
+            this.btnSidebar.el.onclick = this.toggleSidebar.bind(this); 
 
             // Hide Sidebar when container body is focused
             this.body.el.onclick = this.focusBody.bind(this);
 
             // Add USER options
-            this.navBar.header.menu.getGroup('USER').addNavItemIcon(
+            let userMenu = this.navBar.header.menu.addMenu(
+                new MODEL(new ATTRIBUTES('horizontal collapse')).set({
+                    'name': 'USER',
+                    'showHeader': 1,
+                    'collapsed': 1
+                })
+            );
+            userMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.USER,
@@ -122,7 +114,7 @@ class MAIN extends CONTAINER {
                 this.logout();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('USER').addNavItemIcon(
+            userMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.OPTIONS,
@@ -132,7 +124,8 @@ class MAIN extends CONTAINER {
                 })
             );
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            let domMenu = this.navBar.header.menu.getGroup('DOM');
+            domMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.HOME,
@@ -146,7 +139,7 @@ class MAIN extends CONTAINER {
                 }.bind(this), 1000);
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.TOGGLE,
@@ -158,7 +151,7 @@ class MAIN extends CONTAINER {
                 this.navBar.header.toggleCollapse();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.CONSOLE,
@@ -172,7 +165,7 @@ class MAIN extends CONTAINER {
                 //$(app.loader.console.el).collapse('show');
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.REFRESH,
@@ -186,7 +179,8 @@ class MAIN extends CONTAINER {
                 }.bind(this), 1000);
                 }.bind(this);
 
-            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+            let crudMenu = this.navBar.header.menu.getGroup('CRUD');
+            crudMenu.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.MAIN,
@@ -195,6 +189,7 @@ class MAIN extends CONTAINER {
                 })
             ).el.onclick = function () {
 
+                // TODO:  This should be a POST to avoid CSRF
                 $.getJSON('/MAIN/Get/0', function (payload) {
                     app.loader.log(100, 'Created MAIN', true);
                     //console.log(payload);
@@ -203,6 +198,7 @@ class MAIN extends CONTAINER {
                     }.bind(this), 1000);
                 });
 
+                // Something like this...  Coordinate with controller
                 /*$.post('/MAIN/Get/0', {},
                     function (payload, status) {
                         //console.log(status);

@@ -173,13 +173,13 @@ namespace ICARUS.Controllers {
             columns.Add("className");
             columns.Add("authorId");
             columns.Add("status");
-            columns.Add("showHeader");
+            //columns.Add("showHeader");
             columns.Add("label");
             //columns.Add("collapsed");
-            columns.Add("hasTab");
+            //columns.Add("hasTab");
             columns.Add("dateCreated");
             columns.Add("dateLastModified");
-            columns.Add("hasSidebar");
+            //columns.Add("hasSidebar");
             columns.Add("attributesId");
             columns.Add("dataId");
             columns.Add("shared");

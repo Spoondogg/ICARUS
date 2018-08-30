@@ -13,14 +13,9 @@ class NAVITEMICON extends LI {
         super(node, model);
         this.className = 'NAVITEMICON';
         this.addClass('nav-item-icon');
-        this.addClass('clickable');
         this.el.setAttribute('title', model.anchor.label);
 
-        //console.log('navitemicon:');
-        //console.log(model);
-
         this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
-        //this.anchor.el.setAttribute('style', 'padding:0;');
 
         //this.anchor.icon = new GLYPHICON(this.anchor, '', ICON.COG);
         //this.anchor.icon.el.setAttribute('style', 'line-height:64px;font-size:28px;');

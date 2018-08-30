@@ -5,7 +5,7 @@ class PARAGRAPH extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
-         @param {MODEL} model Object Model
+        @param {MODEL} model Object Model
      */
     constructor(node, model) {
         super(node, 'DIV', model);
