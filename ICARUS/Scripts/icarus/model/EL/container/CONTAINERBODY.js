@@ -9,28 +9,11 @@ class CONTAINERBODY extends EL {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        this.setClass('container-body q in');
+        this.setClass('container-body collapse in'); // q??
 
         this.sidebar = null;
-        if (model.hasSidebar) {
-            this.sidebar = new SIDEBARMENU(this,
-                new MODEL(new ATTRIBUTES('pull-left')).set({
-                    'name': 'sidebar',
-                    'label': 'SideBar'
-                })
-            );        
-            this.sidebar.addClass('active');
-            this.sidebar.addClass('in');
-        }
 
-        // The pane is the main viewing area of a Container.  
-        this.pane = new EL(this, 'DIV',
-            new MODEL(
-                new ATTRIBUTES({
-                    'class': 'pane pull-right'
-                })
-            )
-        );
+        this.pane = new EL(this, 'DIV', new MODEL('pane'));
 
         // Add swipe detection for editing options in sidebar
         this.pane.el.addEventListener('touchstart', this.handleTouchStart, false);
@@ -50,9 +33,13 @@ class CONTAINERBODY extends EL {
         }
     }
 
-    handleTouchStart(evt) {
-        this.xDown = evt.touches[0].clientX;
-        this.yDown = evt.touches[0].clientY;
+    /**
+     * Sets start coordinates
+     * @param {Event} ev Event
+     */
+    handleTouchStart(ev) {
+        this.xDown = ev.touches[0].clientX;
+        this.yDown = ev.touches[0].clientY;
     }
 
 
@@ -102,6 +89,4 @@ class CONTAINERBODY extends EL {
     collapse() {
         $(this.el).collapse('toggle');
     }
-
-
 }

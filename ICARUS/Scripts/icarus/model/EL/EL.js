@@ -19,7 +19,7 @@ class EL extends MODEL {
         @param {string} innerHTML This text will be displayed within the HTML element
         @param {array} children An object array of child models
     */
-    constructor(node, element = CONTAINERTYPES.DEFAULT, model, innerHTML, children) {
+    constructor(node, element = 'DIV', model, innerHTML, children) {
         super(model.attributes);
         
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
@@ -66,7 +66,7 @@ class EL extends MODEL {
 
     /**
      * Recursively iterates through parent nodes until an object with the given prototype
-     * @param {any} value The value to search for within this key
+     * @param {string} value The value to search for within this key
      * @param {any} node Entry point to traversing the chain
      * @param {any} attempt Recursion loop
      * @returns {CONTAINER} The parent container

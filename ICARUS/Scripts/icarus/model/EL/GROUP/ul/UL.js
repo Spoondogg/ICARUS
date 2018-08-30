@@ -9,6 +9,7 @@ class UL extends GROUP {
      */
     constructor(node, model) {
         super(node, 'UL', model);
+        
 
         /* Add cases for each relevant constructor that inherited class does not have */
         this.addCase('UL', function (model) {

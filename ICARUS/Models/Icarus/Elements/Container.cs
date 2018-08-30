@@ -43,20 +43,20 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <summary>
         /// If set to true, the header will be shown, otherwise it is hidden
         /// </summary>
-        [Required]
-        public int showHeader { get; set; } //= 1;
+        //[Required]
+        //public int showHeader { get; set; } //= 1;
 
         /// <summary>
         /// If set to true, a tab will be created in the sidebar (document-map)
         /// </summary>
-        [Required]
-        public int hasTab { get; set; } //= 1;
+        //[Required]
+        //public int hasTab { get; set; } //= 1;
 
         /// <summary>
         /// If set to true, a sidebar will be created for this container
         /// </summary>
-        [Required]
-        public int hasSidebar { get; set; }
+        //[Required]
+        //public int hasSidebar { get; set; }
 
         /// <summary>
         /// Construct Container as a DIV
@@ -79,9 +79,9 @@ namespace ICARUS.Models.Icarus.Elements {
             this.label = model.label;
             this.subsections = "0";
             //this.collapsed = 0; // TODO: This should be migrated out of here and into attributes
-            this.showHeader = 1; // TODO: This should be migrated out of here and into attributes
-            this.hasTab = 1; // TODO: This should be migrated out of here and into attributes
-            this.hasSidebar = 0; // TODO: This should be migrated out of here and into attributes
+            //this.showHeader = 1; // TODO: This should be migrated out of here and into attributes
+            //this.hasTab = 1; // TODO: This should be migrated out of here and into attributes
+            //this.hasSidebar = 0; // TODO: This should be migrated out of here and into attributes
             this.status = 1;
             this.attributesId = 0;
             this.dataId = 0;
@@ -113,9 +113,9 @@ namespace ICARUS.Models.Icarus.Elements {
             this.subsections = formPost.parseString("subsections", "0");
             this.label = formPost.parseString("label");
             this.id = formPost.parseInt("id", -1);
-            this.hasTab = formPost.parseInt("hasTab", 1);
-            this.hasSidebar = formPost.parseInt("hasSidebar");
-            this.showHeader = formPost.parseInt("showHeader", 1);
+            //this.hasTab = formPost.parseInt("hasTab", 1);
+            //this.hasSidebar = formPost.parseInt("hasSidebar");
+            //this.showHeader = formPost.parseInt("showHeader", 1);
             //this.collapsed = formPost.parseInt("collapsed");
             this.attributesId = formPost.parseInt("attributesId");
             this.dataId = formPost.parseInt("dataId");
