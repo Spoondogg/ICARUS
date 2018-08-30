@@ -1,7 +1,10 @@
 ﻿/**
     Represents an <INPUT> for an Icarus Form
     A FormPost Input acts as a special input that is populated
-    with the Form Post Editor
+    with the Form Post Editor.
+
+    The FormPostInput initially displays an individual INPUT, but can
+    retrieve a secondary sub-form based on the input's value (aka: FormPost Id)
 */
 class FORMPOSTINPUT extends FORMELEMENT {
     /**
@@ -11,10 +14,8 @@ class FORMPOSTINPUT extends FORMELEMENT {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-
         this.createInput();
-
-        this.populate(model.children);
+        //this.populate(model.children);
     }
 
     createInput() {
@@ -192,7 +193,7 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                 this.form.setPostUrl('FormPost/Set');
                 this.form.afterSuccessfulPost = function () { 
-                    console.log('woot');
+                    console.log('FormPostInput.form.afterSuccessfulPost()');
                     app.loader.log(100, 'Success');                    
                     this.updateInput(data.model.id);
 
@@ -202,29 +203,22 @@ class FORMPOSTINPUT extends FORMELEMENT {
 
                     //https://developers.google.com/web/fundamentals/primers/promises
                     let promise = new Promise(function (resolve, reject) {
-
-                        console.log('Promise');
-                        // do a thing, possibly async, then…
-                        // How about saving the parent form (if exists)
-                        console.log('saving parent form');
-                        container.quickSave(true);
-
-
-
-                        //console.log(result);
-                        if (1 === 1) {
-                            //resolve('Successfully created Element');
-                            resolve('Saved');
+                        console.log('Promise: Saving parent form');
+                        if (container.quickSave(true)) {
+                            resolve('QuickSaved');
                         } else {
-                            reject(Error('Failed to create element'));
+                            reject(Error('Failed to QuickSave'));
                         }
                     }.bind(this));
 
                     // @see https://scotch.io/tutorials/javascript-promises-for-dummies
                     promise.then(
                         function (result) {
-                            console.log('promise success');
-                            container.getProtoTypeByClass('CONTAINER').refresh();
+                            console.log('Promise success');
+                            let cc = container.getProtoTypeByClass('CONTAINER');
+                            if (cc !== null) {
+                                cc.refresh();
+                            }
 
                         }.bind(this),
                         function (err) {

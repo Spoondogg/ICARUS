@@ -52,6 +52,7 @@ class IMAGEGALLERY extends BANNER {
     }
 
     construct() {
+        console.log('Constructing imagegallery');
         let postUrl = '/ImageGallery/ImageIndex';
         if (this.page) {
             postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;

@@ -1,9 +1,1464 @@
-﻿$font-stack: Helvetica, sans-serif;
-$primary-color: #333;
+﻿/** A SASS stylesheet for Icarus, extending Bootstrap 3.3.7 */
+// SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
+/*
+    #region Variables: See https://sass-lang.com/guide#topic-2-SCSS
+*/
+$font-major: 'Raleway', sans-serif;
+$font-minor: 'Lato', sans-serif;
+
+$font-primary: 'Lato', sans-serif;
+$font-primary-weight: 300;
+
+$font-header: 'Raleway', sans-serif;
+$font-size-normal: 16px;
+$color-primary: #555;
+$background-primary: #FFF;
+$sidebar-width: 80%;
+$navbar-height: 50px;
+$transition-speed: .2s;
+$transition-motion: ease-in-out;
+$transition-default: all $transition-speed $transition-motion;
+$icon-width: 64px;
+$icon-height: 64px;
+$jumbotron-bg-default: #008196; /*Turquoisish*/
+$content-maxwidth: 900px;
+$container-bgcolor: rgba(0, 0, 0, 0.8);
+// Consider http://sass-lang.com/documentation/Sass/Script/Functions.html#saturate-instance_method
+$color-light-less: rgb(227, 227, 227);
+$color-light: rgb(247, 247, 247);
+$color-light-more: rgb(250, 250, 250);
+$color-darker: rgb(16, 16, 16);
+$color-dark: rgb(23, 23, 23);
+$color-dark-less: rgb(33, 33, 33);
+/*#endregion */
+
 
 /*
-body {
-    font: 100% $font-stack;
-    color: $primary-color;
-}
+    #region Mixins: https://sass-lang.com/guide#topic-6-SCSS
 */
+@mixin darken($alpha) {
+    background-color: rgba(0,0,0,$alpha);
+}
+@mixin lighten($alpha) {
+    background-color: rgba(255,255,255,$alpha);
+}
+@mixin transition($property) {
+    -moz-transition: $property;
+    -webkit-transition: $property;
+    -o-transition: $property;
+    transition: $property;
+}
+@mixin boxShadow($x, $y, $blur, $spread, $color) {
+    -webkit-box-shadow: $x $y $blur $spread $color;
+    -moz-box-shadow: $x $y $blur $spread $color;
+    box-shadow: $x $y $blur $spread $color;
+}
+@mixin boxShadowInset($x, $y, $blur, $spread, $color) {
+    -webkit-box-shadow: inset $x $y $blur $spread $color;
+    -moz-box-shadow: inset $x $y $blur $spread $color;
+    box-shadow: inset $x $y $blur $spread $color;
+}
+/*#endregion */
+
+/*
+    #region Abstract Classes
+    See Inheritance: https://sass-lang.com/guide#topic-7-SCSS
+*/
+%noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+%clickable {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+%gradient-primary {
+    $color-one: #00AFF2;
+    $color-two: #006396;
+    background-image: -moz-radial-gradient(left center, ellipse farthest-corner, $color-one 0%, $color-two 100%);
+    background-image: -webkit-gradient(radial, left center, 0, left center, 530, color-stop(0, $color-one), color-stop(100, $color-two));
+    background-image: -webkit-radial-gradient(left center, ellipse farthest-corner, $color-one 0%, $color-two 100%);
+    background-image: -o-linear-gradient(left center, 0, left center, 530, color-stop(0, $color-one), color-stop(100, $color-two));
+    background-image: radial-gradient(ellipse farthest-corner at left center, $color-one 0%, $color-two 100%);
+}
+%gradient-vignette {
+    // Permalink http://colorzilla.com/gradient-editor/#000000+0,383838+100&0+0,0+57,0+57,0.87+100
+    background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%, rgba(32,32,32,0) 57%, rgba(56,56,56,0.87) 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#de383838',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+%gradient-vertical-fade {
+    background: rgba(1,2,10,0.85);
+    background: -moz-linear-gradient(top, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(1,2,10,0.85)), color-stop(100%, rgba(0,0,0,0.3)));
+    background: -webkit-linear-gradient(top, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
+    background: -o-linear-gradient(top, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
+    background: -ms-linear-gradient(top, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
+    background: linear-gradient(to bottom, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01020a', endColorstr='#000000', GradientType=0 );
+}
+%bevel {
+    width: 100%;
+    float: left;
+    clear: both;
+    border-left: none;
+    border-right: none;
+    min-height: $navbar-height;
+    line-height: $navbar-height;
+}
+%bevel-up {
+    @extend %bevel;
+    border-top: 1px solid #525252;
+    border-bottom: 1px solid #232323;
+}
+%bevel-down {
+    @extend %bevel;
+    border-top: 1px solid #232323;
+    border-bottom: 1px solid #525252;
+}
+%pane-tall {
+    $navheights: ($navbar-height * 2) + 3; // 1.5 pixels (one top, one bottom and fuzz)
+    height: calc(100vh - #{$navheights}); // Interpolate for calc https://stackoverflow.com/a/20236515/722785
+    overflow-y: auto !important;
+}
+/* #endregion */
+
+/*
+    #region Abstract Classes
+*/
+// Generic UI tweaks
+.noSelect {
+    @extend %noSelect;
+}
+.clickable {
+    @extend %clickable;
+}
+
+/*#endregion */
+
+
+// DROPDOWN TAB
+.dropdown-tab {
+    width: 160px;
+
+    & > a {
+        float: right;
+        display: block;
+    }
+
+    & > .dropdown-toggle {
+        background-color: #333;
+        border-right: 1px solid #b9b9b9;
+    }
+}
+
+// NAVBAR
+.navbar {
+    //margin-bottom: 0;
+    border-radius: 0;
+    background-color: $color-dark;
+}
+
+.navbar-nav {
+    margin: 0;
+    //width: 100%;
+}
+
+/* #region HTML Tags */
+// HTML5 Basics
+body {
+    font-family: $font-primary;
+    font-weight: $font-primary-weight;
+    font-size: $font-size-normal;
+    color: $color-primary;
+    padding-top: $navbar-height;
+    background-color: $background-primary;
+    overflow-y: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-major;
+    font-weight: $font-primary-weight;
+    color: $color-dark; //#333;
+}
+
+nav, .nav {
+
+    @extend %bevel-up;
+    //background-color: $color-dark;
+    header {
+        @extend %bevel-up;
+        @extend %clickable;
+        color: $color-light;
+        padding: 0 0.2em;
+        text-transform: uppercase;
+        background-color: $color-dark;
+
+        &:hover {
+            background-color: $color-dark-less;
+        }
+    }
+
+    header ~ ul.nav { /*First ul after nav header*/
+        background-color: $color-darker;
+    }
+
+    .btn-group > .dropdown-menu > li {
+        text-align: left;
+        text-decoration: none;
+        color: rgb(109,109,109);
+    }
+}
+
+.icon-label {
+    @extend %noSelect;
+}
+
+// Classes
+
+// A left aligned Container for the MAIN UI
+.sidebar {
+    @extend %pane-tall;
+    width: $sidebar-width !important;
+    margin-left: -100% !important;
+    position: absolute;
+    top: $navbar-height;
+    z-index: 999;
+    @include darken(0.75);
+    @include transition($transition-default);
+    @include boxShadow(0, 0, 3px, 0, #000);
+
+    &.active {
+        margin-left: 0 !important;
+    }
+    // Each embedded list gets smaller
+    ul li ul {
+        font-size: 90%;
+        text-indent: 1em;
+        @include boxShadowInset(0, 1px, 1px, 0, rgba(1,1,1,0.2));
+    }
+}
+
+// A wide button to toggle collapsed state of a Child Container
+.toggler {
+    @extend %bevel-up;
+    @extend %clickable;
+    height: 6px;
+    background-color: $color-dark;
+    color: $color-light;
+
+    &:hover {
+        background-color: $color-dark-less;
+    }
+}
+
+.icarus-container {
+    width: 100%; /*Necessary*/
+    padding: 0;
+    margin: 0;
+    //overflow: hidden; // This may be wrong!!!
+    .panel {
+        @include darken(0.5);
+    }
+}
+
+.container-body {
+    width: 100%;
+    background-color: $color-light;
+}
+
+
+.index-main {
+    > .container-body {
+        > header {
+            @extend %bevel-up;
+            color: $color-light;
+            padding: 0 0.5em;
+            background-color: $color-dark;
+            text-transform: uppercase;
+        }
+
+        > .banner {
+            border-top: none;
+            height: 528px;
+            max-height: 528px;
+            overflow-y: auto;
+        }
+
+        > .pane > .thumbnail {
+        }
+    }
+
+    .pagination { /*footer.pagination*/
+        width: 100%;
+        text-align: center;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .thumbnail {
+        color: $color-dark;
+        background-color: $color-light;
+        border: 1px solid #4e4e4e;
+
+        > img {
+            width: 128px;
+            height: 128px;
+            background-color: grey;
+            border-radius: 0.3em;
+            float: left;
+            clear: left;
+            display: block;
+            border: 1px solid grey;
+            margin: 0.3em;
+        }
+
+        > header {
+            width: calc(100% - 148px);
+            margin: 0.5em 0 0;
+            padding: 0;
+            display: block;
+            float: left;
+            clear: right;
+        }
+
+        > p {
+            height: 70px;
+            padding: 0;
+            margin: 0 0.3em;
+            float: left;
+            width: calc(100% - 148px);
+            overflow: hidden;
+        }
+
+        > .btn-group {
+            position: absolute;
+            right: 1.35em;
+            bottom: 1.75em;
+
+            > button.btn {
+                border: none;
+                border-radius: 0.3em;
+            }
+        }
+    }
+}
+
+main {
+
+
+
+    & > .navbar-wrapper {
+        // This toggler would be appended to document.body
+        & > .toggler {
+            display: none;
+        }
+    }
+
+    // The pane within the Main container should fill the remaining screen space
+    > .container-body > .pane {
+        @extend %pane-tall;        
+    }
+}
+
+.banner {
+    @extend %bevel-up;
+    padding: 1.4em 0;
+    background-color: $color-light-more;
+}
+
+.callout {
+    text-align: center;
+    padding: 0;
+
+    & > .icon {
+        font-size: 3em;
+    }
+}
+
+
+
+.navbar-collapse {
+    padding: 0;
+    clear: both;
+
+    & .in {
+        @include boxShadow(0, 2px, 4px, 0, #000);
+        border-bottom: 1px solid grey;
+    }
+}
+
+.nav-item {
+    min-height: $navbar-height;
+    cursor: pointer;
+    float: left;
+}
+
+.nav-item-icon {
+    @extend %clickable;
+
+    list-style: none;
+    background-color: $color-dark-less;
+    text-align: center;
+    width: $icon-width;
+    height: $icon-height;
+    border: thin solid #383838;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 4px 4px 2em;
+    border-radius: .6em;
+    float: left;
+    border-bottom: 3px solid #4c4c4c;
+
+    & > a {
+        padding: 0 !important;
+        color: $color-light; // #9d9d9d;
+
+        &:hover {
+            color: $color-light-more;
+        }
+
+        & > .icon {
+            line-height: 62px;
+            font-size: 28px;
+
+            & > .icon-label {
+                line-height: 20px;
+                font-size: 10px;
+                float: none;
+                clear: both;
+                display: block;
+                width: $icon-width;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
+// Horizontal nav-bars should scroll horizontally in 
+// order to avoid cases where the menu gets lost inside 
+// the container
+@media only screen and (max-width: 768px) {
+    // Horizontal srolling for Mobile
+    ul.navbar-nav.horizontal {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        & .collapse {
+            height: 0;
+
+            & .in {
+                height: auto;
+            }
+        }
+
+        & > .nav-item-icon {
+            display: inline-block !important;
+        }
+    }
+}
+
+.navbar-nav.horizontal > .nav-item {
+    clear: none;
+    width: auto;
+}
+
+.pane {
+    width: 100%;
+    @include transition($transition-default);
+}
+
+// CHAT
+.chat {
+    background-color: $color-light-more;
+
+    & .pane {
+        width: 100%;
+        height: 400px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    & .statement {
+        border-top: 1px solid #d2d2d2;
+        border-bottom: 2px solid #4c4c4c;
+        float: left;
+        width: 100%;
+        padding: 0.5em 0;
+        background-color: orange;
+
+        &:nth-child(odd) {
+            background-color: #6e7880;
+        }
+
+        &:nth-child(even) {
+            background-color: #98a594;
+        }
+    }
+
+    .thumb {
+        margin-right: 1em;
+        float: left;
+
+        & .user-photo {
+            height: 64px;
+            width: 64px;
+            border: 1px solid darkgrey;
+            border-radius: 64px;
+            margin: 4px 0 0 12px;
+        }
+    }
+
+    .bubble {
+        width: calc(100% - 124px);
+        float: left;
+    }
+
+    .panel {
+        position: relative;
+        margin-top: 20px;
+
+        .panel-body {
+            background-color: #FFF;
+        }
+
+        .panel-heading {
+
+            cite {
+                display: block;
+                font-size: 10px;
+            }
+
+            &:after, &:before {
+                position: absolute;
+                top: 11px;
+                left: -16px;
+                right: 100%;
+                width: 0;
+                height: 0;
+                display: block;
+                content: " ";
+                border-color: transparent;
+                border-style: solid solid outset;
+                pointer-events: none;
+            }
+
+            &:before {
+                border-right-color: #ddd;
+                border-width: 8px;
+            }
+
+            &:after {
+                border-width: 7px;
+                border-right-color: #f7f7f7;
+                margin-top: 1px;
+                margin-left: 2px;
+            }
+        }
+    }
+
+    footer {
+        width: 100%;
+        padding: 1em;
+        float: left;
+        position: relative;
+
+        textearea {
+            padding: 0.2em 0.5em;
+            border-radius: 6px;
+            color: grey;
+            border: 2px solid #7c7bd8;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+
+    .nav-pills {
+
+        > li {
+            display: block;
+            float: left;
+            list-style: none;
+        }
+    }
+
+    .word-summary {
+        > li {
+            > a {
+                color: blue;
+            }
+        }
+    }
+}
+
+// BUTTON
+button {
+    > .icon {
+        color: black;
+    }
+}
+
+.btn.glyphicon .icon-label {
+    top: -3px;
+    color: black;
+    text-transform: uppercase;
+    padding: 0 0 0 4px;
+    font-family: sans-serif;
+}
+
+div.btn-group .btn:hover {
+    background-color: #9db4d9;
+}
+
+.btn-block {
+    border-radius: 0;
+    border-top: 1px solid #BEE1EF;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid #c5c5c5;
+}
+
+.classviewer {
+
+}
+
+// CONSOLE
+.console {
+    margin: 0;
+    font-family: monospace;
+    @include darken(0.75);
+    //background: rgba(0,0,0,0.75);
+    color: #ccc;
+    display: block;
+    padding: 1em;
+    font-size: 8pt;
+    @include transition($transition-default);
+    max-height: 200px;
+    overflow-y: auto;
+    list-style: none;
+    line-height: 2em;
+}
+
+// DICTIONARY
+.dictionary {
+
+}
+
+// FOOTER
+footer {
+    @include boxShadow(0, -1px, 2px, 0, rgba(0,0,0,0.75));
+    border-top: 1px solid #b6bebf;
+    padding: 15px;
+    background-color: #3f4553;
+    line-height: 32px;
+    color: #fff;
+    font-size: smaller;
+
+    > .container { /*div*/
+        margin: 0.4em auto;
+    }
+
+    > cite {
+        text-align: right;
+        float: right;
+        line-height: 16px;
+
+        a, a:visited {
+            color: #FFF;
+            text-decoration: underline;
+
+            &:hover {
+                color: #00AFF2;
+            }
+        }
+    }
+}
+
+.stickyfooter {
+    @extend %bevel-up;
+    position: fixed; /*!important;*/
+    bottom: 0;
+    //width: 100%;
+    height: $navbar-height; //4em; /* Footer must be fixed height */
+    padding: 0;
+    background-color: $color-dark;
+    //border-top: 2px solid #3a3a3a;
+    @include transition($transition-default);
+
+    $height: $navbar-height * 5;
+    // Extends to hold WYSIWIG Editor?
+    &.active {
+        height: $height;
+    }
+
+    textarea {
+        height: 40px; // calc(#{$height} - 3em) !important; //60px;
+    }
+}
+
+// FORM
+form {
+    @extend %bevel-up;
+
+    .login label, 
+    .login input {
+        text-align: center;
+    }
+}
+
+.childGroup .form-group {
+    padding: 0;
+    margin-bottom: 0;
+    height: auto;
+    @include transition(height 800ms);
+    transition-delay: 300ms;
+}
+
+.form-group-container h1 {
+    @extend %bevel-down;
+    //border-top: 3px solid #292b33;
+    //border-bottom: 1px solid black;
+    font-size: 1em;
+    padding: 0.2em 0.2em 0.4em;
+    background-color: $color-dark-less;
+    color: $color-light;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+input, select, textarea {
+    width: 100%;
+    margin: 0;
+}
+
+input {
+    &[type="submit"] {
+        width: 100%;
+        height: 50px;
+        background-color: #006396;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: larger;
+
+        &:hover {
+            background-color: #00aff2;
+        }
+
+        &:disabled {
+            background-color: #641818;
+        }
+    }
+}
+
+button:disabled {
+    background-color: #641818;
+}
+
+.form-footer {
+    background-color: transparent;
+}
+
+// NAVBAR
+.navbar-header {
+    width: 100%;
+}
+
+.navbar-header-label {
+    border-radius: 0;
+    line-height: 36px;
+    border: none;
+}
+
+.nav-link {
+    color: white;
+    cursor: pointer;
+}
+
+.nav-item a .glyphicon {
+    padding-right: 0.5em;
+    float: left;
+}
+
+
+/*Nav Item within a MenuList */
+.menulist {
+    & .container-body {
+        & ul.nav {
+            & .nav-item {
+                @extend %bevel-up;
+                line-height: 3em;
+                background-color: #3c3c3c;
+                padding: 0 1em;
+                color: #d4d4d4;
+
+                &:hover {
+                    color: #eee;
+                    background-color: #313131;
+                }
+            }
+        }
+    }
+}
+
+
+
+.toggle > .toggle-wide { /*a.toggle-wide */
+    @extend %bevel-up;
+    color: $color-light;
+    background-color: $color-dark;
+    text-align: center;
+    font-size: 8px;
+    height: 12px;
+    //border-bottom: thin solid #656161;
+    //border-top: thin solid #d0d0d0;
+    line-height: 12px;
+    font-weight: bolder;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+
+
+.app {
+    display: flex;
+    align-items: stretch;
+}
+
+.app-body {
+    /*display: flex;*/
+    width: 100%;
+}
+
+.navbar-search {
+    padding: 0.3em;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
+
+
+.glyphicon .icon-label {
+    color: #9d9d9d;
+    font-family: Lato;
+}
+
+button .glyphicon .icon-label {
+    color: black;
+    text-transform: uppercase;
+}
+
+
+/*
+	Icarus CSS - Mobile First extending Bootstrap 3
+*/
+h2 input[type="number"] {
+    display: block;
+    float: right;
+    width: 70px;
+    text-align: right;
+}
+
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.badge-group {
+    border: thin solid grey;
+    height: 240px;
+    overflow-y: auto;
+    border-radius: 0.3em;
+    margin-bottom: 1em;
+    padding: 1em;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.list-group .list-group-item:hover {
+    background-color: #f3f7f7;
+}
+
+.control-label:hover { /*label*/
+    text-decoration: underline;
+    color: #005879;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    ul.navbar-nav {
+        border-bottom: 1px solid white;
+    }
+
+    &.navbar-inverse .nav-item a {
+        color: $color-light;
+
+        .nav-item a:hover {
+            color: $color-light-more;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}
+
+
+
+
+// JUMBOTRON
+.jumbotron {
+    @extend %noSelect;
+    @extend %bevel-up;
+    width: 100%;
+    min-height: 420px;
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% !important;
+    background-size: cover !important;
+    text-align: center;
+    font-family: "Raleway";
+    font-weight: 300;
+    color: #FFF;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.95);
+
+    @extend %gradient-vignette;
+    background-color: $jumbotron-bg-default;
+    position: relative;
+
+    > .screen {
+        @extend %gradient-vignette;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 120px 0;
+    }
+
+    h1 {
+        font-size: 40px;
+        padding: 0 6px;
+    }
+
+    p {
+        font-weight: normal;
+        padding: 0 6px;
+    }
+}
+
+// IMAGE GALLERY A browseable list of images
+.image-gallery {
+    color: inherit;
+
+    > .container-body {
+
+        & > header {
+            color: $color-light;
+            font-family: sans-serif;
+            padding: 0.2em 1em;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+            text-align: right;
+        }
+
+        & > .banner {
+            height: 500px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    }
+
+    .thumbnail {
+
+        & > img {
+            max-height: 256px;
+            max-width: 256px;
+            margin: 0.5em auto;
+            float: none;
+            clear: both;
+            border-radius: 5px;
+            border: 1px solid #f3f3f3;
+            box-shadow: 0 2px 1px 1px rgba(0, 0, 0, 0.25);
+        }
+    }
+
+    footer.pagination {
+        width: 100%;
+        text-align: center;
+        border-radius: 0;
+        margin: 0;
+    }
+}
+
+// LABEL
+label {
+    color: #333;
+    text-transform: uppercase;
+    width: 100%;
+    float: left;
+    clear: both;
+    display: block;
+    font-size: smaller;
+    text-align: left;
+    margin: 0.3em 0;
+
+    &.invalid {
+        color: red;
+    }
+}
+
+// MODAL
+/**
+    Header located at the top of the modal
+    Contains a label and a close button
+*/
+.modal-header {
+    padding: 0.5em 1em;
+    background-color: #383e46;
+
+    // TODO: MIXIN THIS
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: white;
+    font-weight: bolder;
+    @include boxShadow(0, 1px, 1px, 0, rgba(1,1,1,0.3));
+    border-bottom: 1px solid dimgrey;
+
+    .close {
+        color: #00dcff;
+    }
+}
+
+.modal-body {
+    padding: 0;
+    height: calc(100vh - 134px);
+    max-height: 85vh;
+    overflow-y: auto;
+
+    
+}
+
+.modal-footer {
+    padding: 0;
+}
+
+.modal-footer, .modal-footer .btn {
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    @include boxShadowInset(0, 2px, 2px, 0, rgba(1,1,1,0.3));
+    border-top: 1px solid #757575;
+    background-color: #d0d0d0;
+    border-color: #d0d0d0;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #525252;
+    text-shadow: 0 -1px 1px rgba(150, 150, 150, 1);
+    cursor: pointer;
+
+    &:hover {
+
+    }
+}
+
+.modal-footer .btn:hover {
+    color: #476475;
+    background-color: #a9b9f5;
+    @include transition(color 400ms);
+    @include transition(background-color 400ms);
+}
+
+// https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
+.vertical-alignment-helper {
+    display: table;
+    height: 100%;
+    width: 100%;
+    pointer-events: none; // This makes sure that we can still click outside of the modal to close it
+}
+
+.vertical-align-center {
+    // To center vertically
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.modal-content {
+    // Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it
+    width: inherit;
+    max-width: inherit; /* For Bootstrap 4 - to avoid the modal window stretching full width */
+    /*height: inherit;*/
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+
+    .well {
+        margin-bottom: 0;
+    }
+}
+
+// LOADER
+.modal-loader {
+    z-index: 99999;
+
+    .container-body {
+        @include darken(0.1); //background-color: $darken10pct;
+    }
+
+    .modal-dialog {
+        width: 80% !important;
+    }
+}
+
+.modal {
+
+    .fade .modal-dialog {
+        -webkit-transform: translate(0);
+        -moz-transform: translate(0);
+        -o-transform: translate(0);
+        -ms-transform: translate(0);
+        transform: translate(0);
+        margin: 0;
+        width: 100%;
+        padding: 0.3em;
+    }
+
+    .loader {
+        height: 260px;
+        max-height: 260px;
+        margin-left: 1em;
+        margin-right: 1em;
+
+        .progress {
+            width: calc(100% - 1em);
+            text-decoration: none;
+            text-transform: uppercase;
+            margin: .5em .5em;
+
+            .progress-bar {
+                text-shadow: 0 1px 4px rgb(41, 41, 41);
+            }
+        }
+
+        .console {
+            margin-left: 0.5em;
+            margin-right: 0.5em;
+
+            &.collapse {
+                margin-top: 0;
+                border-radius: 5px;
+                border: 0;
+                opacity: 0;
+                padding: 0;
+                height: 0;
+
+                &.in {
+                    opacity: 1;
+                    height: auto;
+                    padding: initial;
+                }
+            }
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        .modal-body {
+            height: auto;
+
+            .well {
+                font-size: smaller;
+                margin: 0;
+            }
+        }
+
+        .modal-header, .modal-footer {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    }
+
+    .prompt {
+        .modal-body {
+            height: auto;
+        }
+
+        .modal-dialog {
+            padding: 0.3em;
+        }
+
+        .modal-footer {
+            display: none;
+        }
+    }
+}
+
+// PROMPT
+.prompt .modal-body .well {
+    max-height: 200px;
+    overflow: auto;
+    margin: 0.3em 1em;
+    font-size: smaller;
+}
+
+// MENULIST
+.menulist {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.menulist-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #7b7b7b;
+    border-bottom: 3px solid #3a3a3a;
+}
+
+// PREVIEW
+.preview {
+    background: rgba(255,255,255,1);
+    background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
+    background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
+    /*background-color: white;*/
+    border-top: 3px solid #353e52;
+    border-bottom: 3px solid #2b2b2b;
+    margin: 0;
+}
+
+.preview-notes {
+    font-size: small;
+    font-weight: bold;
+    color: #464444;
+    @extend %bevel-up;
+    //border-top: 1px solid grey;
+    //border-bottom: 1px solid grey;
+    height: 2em;
+    margin: 0;
+    background-color: #d0d8d4;
+    line-height: 2em;
+    overflow: hidden;
+    padding: 0 1em;
+}
+
+.index {
+    color: inherit;
+    background-color: rgba(0,0,0,0.5);
+
+    .container-body {
+        > .banner > header {
+            border-bottom: 1px solid #5a5a5a;
+            color: #9d9d9d;
+            padding: 0 0.5em;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        > .pane {
+            background-color: #404040;
+            @extend %bevel-up;
+            //border-bottom: 1px solid #a7a7a7;
+            //border-top: 2px solid #353535;
+            padding: 0;
+        }
+    }
+}
+
+
+
+// SECTION
+
+/*
+.application-header {
+    background-color: white;
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    border-bottom: 1px solid #c3c3c3;
+}
+    */
+
+/**
+Due to implementation of dropdown-group
+*/
+.dropdown-menu li > a,
+.dropdown-group li > a {
+    color: #FFF;
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    white-space: nowrap;
+}
+
+.form-element .container-body .pane {
+    padding: 0.4em;
+}
+
+.sidebar::-webkit-scrollbar,
+.pane::-webkit-scrollbar {
+    display: none;
+}
+
+//TABLE
+/* Fixed TBody height */
+.table-fixed {
+    font-size: smaller;
+
+    table {
+        display: -moz-groupbox;
+        font-size: smaller;
+    }
+
+    thead {
+        padding-right: 18px;
+        border-bottom: 2px solid grey;
+    }
+
+    th {
+        border: none;
+        font-size: smaller;
+        text-transform: uppercase;
+        background-color: #f5f5f5;
+    }
+
+    tr {
+        width: 100%;
+        display: inline-table;
+        table-layout: fixed;
+        border-top: 1px solid #94a6d0;
+        border-bottom: 1px solid #e2e2e2;
+    }
+
+    td, th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    tbody {
+        border-bottom: thin solid grey;
+
+        tr:hover {
+            background-color: #e3eced;
+        }
+    }
+
+    .btn-group-sm {
+        .btn {
+            height: 24px;
+            line-height: 12px;
+        }
+    }
+}
+
+// TEXTBLOCK
+.textblock {
+    font-family: 'Raleway';
+    //background-color: red;
+
+    h1 {
+        border-bottom: 1px solid dimgrey;
+        padding: 4px;
+        margin: 4px 0 8px;
+    }
+
+    p {
+        max-width: $content-maxwidth;
+        padding: 0 1.8em;
+        line-height: 1.8em;
+        margin: 0.5em auto 2em;
+        text-align: justify;
+    }
+
+    .paragraph {
+        header {
+            @extend %gradient-vertical-fade;
+            color: $color-light;
+            padding: 0 1em;
+            line-height: $navbar-height;
+            height: $navbar-height;
+            @extend %bevel-down;
+        }
+    }
+}
+
+// THUMBNAIL
+.thumbnail {
+    padding: 0;
+    font-family: 'Raleway';
+
+    img {
+        width: 100%;
+        border-radius: 0.3em 0.3em 0 0;
+        border-bottom: 2px solid rgba(45, 45, 45, 0.8);
+        background-color: grey;
+    }
+
+    > header {
+        font-weight: bold;
+        margin: 0 0 .6em;
+        padding: 0.6em 0.6em;
+        text-transform: uppercase;
+    }
+
+    p {
+        text-align: justify;
+        padding: 0 0.8em;
+        height: 80px;
+        overflow-y: auto;
+        font-size: smaller;
+    }
+}
+
+.form-element-group {
+    border-bottom: thin solid #d0d0d0;
+    transition: position 800ms;
+    position: relative;
+    transition-delay: 300ms;
+}
+
+.index-thumbnail {
+    margin-bottom: 0;
+}
+
+// WORD
+.word {
+
+}

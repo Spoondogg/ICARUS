@@ -49,7 +49,7 @@ namespace ICARUS {
             // Icarus specific styles - Names cannot contain UNDERSCORES
             bundles.Add(new StyleBundle("~/Content/css/icarus.css").Include(
                 "~/Content/css/icarus/scss/icarus.css",
-                "~/Content/css/icarus/icarus.css",
+                /*"~/Content/css/icarus/icarus.css",
                 "~/Content/css/icarus/icon.css",
                 "~/Content/css/icarus/thumbnail.css",
                 "~/Content/css/icarus/console.css",
@@ -79,6 +79,7 @@ namespace ICARUS {
                 "~/Content/css/icarus/footer.css",
                 "~/Content/css/icarus/chat.css",
                 "~/Content/css/icarus/table.css",
+                */
                 "~/Content/css/icarus/mobile.css"
             ));
 

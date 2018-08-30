@@ -30,10 +30,10 @@ namespace ICARUS.Models.Icarus {
         /// </summary>
         public Main() : base("MAIN", new MODEL(new ATTRIBUTES("app"))) {
             this.label = "MAIN";
-            this.showHeader = 1;
+            //this.showHeader = 1;
             //this.collapsed = 0;
-            this.hasTab = 0;
-            this.hasSidebar = 1;
+            //this.hasTab = 0;
+            //this.hasSidebar = 1;
             this.attributesId = 0;
             this.dataId = 0;
 

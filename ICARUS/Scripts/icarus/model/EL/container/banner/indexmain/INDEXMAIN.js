@@ -46,7 +46,7 @@ class INDEXMAIN extends BANNER {
 
     construct() {
         if (!isNaN(this.page)) {
-
+            console.log('Retrieving page ' + this.page);
             $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
                 '__RequestVerificationToken': token.value
             },
