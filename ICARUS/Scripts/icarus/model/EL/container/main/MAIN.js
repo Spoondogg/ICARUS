@@ -1,6 +1,7 @@
 ﻿/**
     A top level application object
 */
+//import * as CONTAINER from '../CONTAINER';
 class MAIN extends CONTAINER {
     /**
         Constructs an APP
@@ -238,9 +239,9 @@ class MAIN extends CONTAINER {
         @param {number} id App Id to load
     */
     load(id) {
-        this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
+        /*this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
             { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
-        ]);
+        ]);*/
         /*
         prompt.form.submit = function () {
             id = prompt.form.el.elements['id'].value;
@@ -248,7 +249,30 @@ class MAIN extends CONTAINER {
             window.location.href = id || 0;
         }.bind(this);
         */
-        this.prompt.show();
+        //this.prompt.show();
+        // Retrieve object model
+        $.getJSON(
+            'Main/Get/' + id, function (data) {
+                if (data.result === 1) {
+                    try {
+                        if (data.model.label) {
+                            document.title = data.model.label;
+                        }
+                        app.setId(id);
+                        app.setLabel(data.model.label);
+                        app.populate(data.model.children);
+                    } catch (e) {
+                        app.loader.log(0, 'Unable to construct Main(' + id + ')');
+                        debug(e);
+                    }
+                } else {
+                    app.loader.log(0, 'Failed to retrieve Main(' + id +
+                        ') from server\n' + data.message
+                    );
+                    app.loader.showConsole();
+                }
+            }
+        );
     }
 
     /**

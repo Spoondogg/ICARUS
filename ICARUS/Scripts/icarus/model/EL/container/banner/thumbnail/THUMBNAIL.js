@@ -28,7 +28,7 @@ class THUMBNAIL extends CONTAINER {
         this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
         this.button.addClass('btn-block');
 
-        console.log('dataId:' + this.dataId);
+        //console.log('dataId:' + this.dataId);
         if (this.dataId > 0 || this.dataId === -1) {
 
             let parsed = null;

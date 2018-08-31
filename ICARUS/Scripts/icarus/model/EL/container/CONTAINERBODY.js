@@ -16,8 +16,9 @@ class CONTAINERBODY extends EL {
         this.pane = new EL(this, 'DIV', new MODEL('pane'));
 
         // Add swipe detection for editing options in sidebar
-        this.pane.el.addEventListener('touchstart', this.handleTouchStart, false);
-        this.pane.el.addEventListener('touchmove', this.handleTouchMove, false);
+
+        this.pane.el.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+        this.pane.el.addEventListener('touchmove', this.handleTouchMove, { passive: true });
 
         this.xDown = null;
         this.yDown = null;

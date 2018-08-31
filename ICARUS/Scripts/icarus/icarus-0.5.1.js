@@ -1,14 +1,18 @@
 ﻿/**
     Icarus
     @description A Single Page Web Application Engine
-    @version 0.4.0.20180720
+    @version 0.5.1.20180830
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
 "use strict";
+const DEBUGMODE = true; // If true, debug outputs are shown
+const TESTING = false; // If true, tests are ran and results are shown in the console.
+const THEME = 0; //0=dark,1=light...
 /**
     See http://2ality.com/2014/09/es6-modules-final.html 
     See http://exploringjs.com/es6/ch_modules.html#sec_overview-modules
  */
+//import * from 'WATERMARK.js';
 /**
     Sorts an object array by the specified property.
     @see https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
@@ -41,7 +45,9 @@ function dynamicSortMultiple() {
      */
     let props = arguments;
     return function (obj1, obj2) {
-        let i = 0, result = 0, numberOfProperties = props.length;
+        let i = 0;
+        let result = 0;
+        let numberOfProperties = props.length;
         /* try getting a different result from 0 (equal)
          * as long as we have extra properties to compare
          */
@@ -105,7 +111,7 @@ function camelCase(str) {
  * @param {string} ending String to append
  * @returns {string} A string truncated to the given length
  */
-function truncate(str, length = 100, ending = '...') {
+function truncate(str, length = 100, ending = "...") {
     if (str.length > length) {
         return str.substring(0, length - ending.length) + ending;
     } else {
@@ -120,7 +126,7 @@ function truncate(str, length = 100, ending = '...') {
     @returns {string} A zero padded string
 */
 function pad(num, size) {
-    var s = num + '';
+    let s = num + '';
     while (s.length < size) {
         s = '0' + s;
     }
@@ -144,7 +150,7 @@ function getDateValue(dateString) {
  * @returns {Object} A broken down set of date values that should actually be a class
  */
 function getDateObject(dateObj) {
-    console.log('getDateObject');
+    //console.log('getDateObject');
     // splits the string to array ie: ["2014-05-10", "22:00:00.000Z"]
     let d = dateObj.toISOString().split('T');
 
@@ -160,7 +166,7 @@ function getDateObject(dateObj) {
         'year': dd[0],
         'month': dd[1],
         'day': dd[2],
-        'time': t[0]+':'+t[1]+':'+tt[0],
+        'time': t[0] + ':' + t[1] + ':' + tt[0],
         'hour': t[0],
         'minute': t[1],
         'second': tt[0],
@@ -168,104 +174,16 @@ function getDateObject(dateObj) {
     };
 }
 
-/**
-    Enumerated list of Input Types
-    Matched to IcarusFormGroup Enums
-*/
-const IcarusInputType = {
-    TEXT: 1,
-    NUMBER: 2,
-    DATE: 3,
-    DATETIME: 4,
-    HIDDEN: 5,
-    PASSWORD: 6
-};
-
-/**
- * Supported HTML 5 Elements
- */
-const HtmlElement = {
-    DEFAULT: "DIV",
-    DIV: "DIV",
-    SPAN: "SPAN",
-    P: "P",
-    MAIN: "MAIN",
-    ARTICLE: "ARTICLE",
-    SECTION: "SECTION",
-    UL: "UL",
-    OL: "OL",
-    LI: "LI",
-    FORM: "FORM",
-    FIELDSET: "FIELDSET",
-    LABEL: "LABEL",
-    INPUT: "INPUT",
-    SELECT: "SELECT",
-    OPTION: "OPTION",
-    TEXTAREA: "TEXTAREA"
-};
-
-/**
- * CSS Alignment options
- */
-const ALIGN = {
-    TOP: 0,
-    RIGHT: 1,
-    BOTTOM: 2, 
-    LEFT: 3,
-    HORIZONTAL: '',
-    VERTICAL: 'vertical'
-};
-
-/**
- * Bootstrap button types
- */
-const BUTTONTYPE = {
-    DEFAULT: 'default',
-    PRIMARY: 'primary',
-    SUCCESS: 'success',
-    INFO: 'info', 
-    WARNING: 'warning',
-    DANGER: 'danger'
-};
-
-/**
- * Bootstrap size options
- */
-const SIZE = {
-    EXTRA_SMALL: 'xs',
-    SMALL: 'sm',
-    MED: 'md',
-    LARGE: 'lg'
-};
-
-/**
- * Form methods
- */
-const METHOD = {
-    DEFAULT: 'POST',
-    POST: 'POST',
-    GET: 'GET',
-    PUT: 'PUT'
-};
-
-/**
- * Element status for any state changes
- */
-const STATUS = {
-    DEFAULT: 0,
-    OPEN: 1,
-    CLOSED: 0,
-    LOCKED: 0
-};
 
 /**
  * Create a globally unique identifier
     @returns {string} Unique string
  */
-const guid = () => {
+//const guid = () => {
+function guid() {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
-};
+}
 
 /**
  * If application is set to debug mode, debug details
@@ -276,72 +194,5 @@ const guid = () => {
 function debug(output) {
     if (DEBUGMODE) {
         console.log(output);
-    }
-}
-const DEBUGMODE = true; // If true, debug outputs are shown
-const TESTING = false; // If true, tests are ran and results are shown in the console.
-const THEME = 0; //0=dark,1=light...
-/**
- * Main method that launches the application
- * @param {number} id Application Id
- * param {string} user User identifier
- * param {boolean} dev Dev Mode
- * param {HTMLInputElement} token Token Element
- * 
- */
-function main(id) {
-    document.title = 'Loading...';
-    debug('Launching Main(' + id + ')...');
-    debug('User: ' + user);
-    debug('Dev: ' + dev);
-    debug('DebugMode: ' + DEBUGMODE);
-
-    // Set global URL
-    var url = new URL(window.location.href);
-    var returnUrl = url.searchParams.get('ReturnUrl');
-    if (returnUrl) {
-        returnUrl = url.origin + returnUrl;
-        location.href = returnUrl;
-    }
-
-    // Extend String to add CamelCasing
-
-    // Set Global Modal animation
-    $('.modal').on('show.bs.modal', function (e) {
-        $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
-
-    });
-    $('.modal').on('hide.bs.modal', function (e) {
-        $('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
-    });
-
-    // Retrieve object model
-    $.getJSON(
-        'Main/Get/' + id, function (data) {
-            if (data.result === 1) {
-                try {
-                    if (data.model.label) {
-                        document.title = data.model.label;
-                    }
-                    app.setId(id);
-                    app.setLabel(data.model.label);
-                    app.populate(data.model.children);
-                } catch (e) {
-                    app.loader.log(0, 'Unable to construct Main('+id+')');
-                    debug(e);
-                }
-            } else {
-                app.loader.log(0, 'Failed to retrieve Main(' + id +
-                    ') from server\n' + data.message
-                );
-                app.loader.showConsole();
-            }
-        }
-    );
-    try {
-        token.parentNode.removeChild(token);
-    } catch (e) {
-        debug('Failed to remove TOKEN from BODY');
-        debug(e);
     }
 }

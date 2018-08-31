@@ -657,7 +657,9 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\icon192.png" />
     <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\icon512.png" />
     <Content Include="Content\Images\jac\cover_about.jpg" />
     <Content Include="Content\Images\jac\customerfirst\JT_CustomerFirst.jpg" />
     <Content Include="Content\Images\jac\main\JT_Main.jpg" />
@@ -714,8 +716,9 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Scripts\icarus\DATE.js" />
-    <Content Include="Scripts\icarus\ICONS.js" />
-    <Content Include="Scripts\icarus\DATAELEMENTS.js" />
+    <Content Include="Scripts\icarus\icarus-0.5.1.js" />
+    <Content Include="Scripts\icarus\enums\ICONS.js" />
+    <Content Include="Scripts\icarus\enums\DATAELEMENTS.js" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
@@ -750,6 +753,7 @@
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\icarus\model\el\text\HR.js" />
+    <Content Include="service-worker.js" />
     <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />
@@ -811,6 +815,9 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />
     <None Include="Properties\PublishProfiles\JAC.pubxml" />
@@ -823,7 +830,6 @@
     <Content Include="Scripts\jquery\jquery-3.3.1.min.map" />
     <Content Include="Scripts\icarus\model\el\group\li\LI.js" />
     <Content Include="Scripts\icarus\model\el\group\ul\UL.js" />
-    <Content Include="Scripts\icarus\_Icarus.js" />
     <None Include="Scripts\jquery\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery\jquery-ui-1.12.1.min.js" />
