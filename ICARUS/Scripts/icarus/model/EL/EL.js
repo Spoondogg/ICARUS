@@ -1,4 +1,4 @@
-﻿/**
+/**
     Generic Element Constructor  
 
     Ideally, this should be treated like an Abstract rather than
@@ -48,8 +48,7 @@ class EL extends MODEL {
     make(node, model, innerHTML) {
         try {
             if (node === document.body) {
-                console.log('BODY.create(' + this.element + ')');
-
+                //console.log('BODY.create(' + this.element + ')');
                 this.el = node.appendChild(document.createElement(this.element));
                 node = this;
             } else {
@@ -106,8 +105,6 @@ class EL extends MODEL {
             console.log(e);
         }
     }
-
-
 
     /**
      * Creates a TEXTAREA and populates with this element's contents
@@ -169,15 +166,12 @@ class EL extends MODEL {
         @returns {EL} Constructed Element
      */
     create(model) {
-        debug(this.className+'.create(' + model.className + ')');
+        //debug(this.className+'.create(' + model.className + ')');
         let result = null;
         try {
             this.callbacks[model.className].forEach(function (fn) {
                 result = fn(model);
             }.bind(this));
-
-            
-
         } catch (e) {
             app.loader.log(0,
                 this.className + '.create(): No constructor exists '
@@ -185,15 +179,6 @@ class EL extends MODEL {
             );
             debug(e);
         }
-        
-        /*
-        try {
-            this.navBar.header.tab.anchor.icon.setIcon('glyphicon ' + ICONS.EXCLAMATION);
-        } catch (e) {
-            console.log(e);
-        }
-        */
-
         return result;
     }
 
@@ -203,7 +188,6 @@ class EL extends MODEL {
         @param {Function} fn Function to call (should accept model)
     */
     addCase(className, fn) {
-        //this.callbacks[className] = this.callbacks[className] || [];
         this.callbacks[className] = [];
         this.callbacks[className].push(fn);
     }
@@ -379,16 +363,16 @@ class EL extends MODEL {
             let denom = children.length;
             let progress = 0; // 0 to 100
             
-            app.loader.log(this.className + '.populate(' + children.length + ');');
-            app.loader.show();
+            //app.loader.log(this.className + '.populate(' + children.length + ');');
+            //app.loader.show();
             try {
                 for (let c = 0; c < children.length; c++) {
                     progress = Math.round((c+1) / denom * 100);
-                    app.loader.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
+                    //app.loader.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
                     this.create(children[c]);
                 }
             } catch (e) { console.log(e); }
-            app.loader.log(100, 'Success');
+            //app.loader.log(100, 'Success');
             if (!DEBUGMODE) {
                 app.loader.hide();
             }

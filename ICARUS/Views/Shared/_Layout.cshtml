@@ -9,48 +9,54 @@
     <meta name="apple-mobile-web-app-title" content="@ViewBag.Title">
     <meta name="description" content="@ViewBag.Description" />
     <meta name="author" content="Ryan Dunphy" />
+    <meta name="theme-color" content="#FFF" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts *@
-    @Scripts.Render("~/bundles/jquery.js")
-    @Scripts.Render("~/bundles/modernizr.js")
-    @Scripts.Render("~/bundles/bootstrap.js")
-    @Scripts.Render("~/bundles/icarus.js")
-    <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
-    <!--<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>-->
-    @{ // Google Adsense - https://www.google.com/adsense/new/u/0/pub-0892818773427301/myads/auto-ads/onboarding
-        //if (ViewBag.showAds == true) {
-        /*
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({
-                    google_ad_client: "ca-pub-0892818773427301",
-                    enable_page_level_ads: true
-                });
-            </script>
-        */
-        //}
-    }
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
-    @Styles.Render("~/Content/css/bootstrap.css")
-    @Styles.Render("~/Content/css/icarus.css")
+    @Scripts.Render("~/bundles/scripts.js")
+    @Scripts.Render("~/bundles/icarus.js")
+    @Styles.Render("~/Content/css/styles.css")
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     @Html.AntiForgeryToken()
+    @RenderSection("Splash", required: false)
     <script>
         var token = document.getElementsByName('__RequestVerificationToken')[0];
         var factory = new CONTAINERFACTORY();
         var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
         var dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
         var app = new MAIN();
+
+        // https://developers.google.com/web/fundamentals/app-install-banners/
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+
+            
+
+            // Update UI notify the user they can add to home screen
+            //btnAdd.style.display = 'block';
+            console.log('Service-Worker: You can install me!');
+            
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            //app.logEvent('a2hs', 'installed');
+            console.log('service-worker: App Installed');
+        });
     </script>
     @RenderBody()
     <noscript>
         <a href="/noScript">JavaScript must be enabled for this page to function.  Click here for details</a>
     </noscript>
-    @RenderSection("scripts", required: false)
-    @RenderSection("viewInit", required: false)
+    @RenderSection("Scripts", required: false)
+    @RenderSection("viewInit", required: true)
 </body>
 </html>

@@ -22,7 +22,7 @@ class CONTAINERFACTORY {
         @returns {CONTAINER} A newly constructed container
     */
     get(node, className, id) {
-        debug('CONTAINERFACTORY.get(' + className + ',' + id + ');');
+        //debug('CONTAINERFACTORY.get(' + className + ',' + id + ');');
 
         let span = new SPAN(node, new MODEL());
         let index = node.children.push(span); // Reserve the slot in the array

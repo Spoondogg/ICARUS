@@ -1,18 +1,55 @@
 ﻿@{
-    //ViewBag.Title = "Index";
-    //ViewBag.Description = "";
-    //ViewBag.Version = "0.2.2018.05.07";
+    ViewBag.Title = "Icarus";
 }
 @section viewInit {
     <script type="text/javascript">
-        main(@ViewBag.id);
+        // Register service worker
+        // https://developers.google.com/web/fundamentals/primers/service-workers/
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
 
-        let url = new URL(window.location.href);
+        // Set Global Modal animation
+        $('.modal').on('show.bs.modal', function (e) {
+            $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
+
+        });
+        $('.modal').on('hide.bs.modal', function (e) {
+            $('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
+        });
+
+
+        var url = new URL(window.location.href);
+
+        var returnUrl = url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            returnUrl = url.origin + returnUrl;
+            location.href = returnUrl;
+        }
+
         let isLogin = url.searchParams.get('login');
+        app.load(@ViewBag.id);
+
         if (isLogin) {
             if (user === 'Guest') {
                 app.login();
-            }            
+            }
+        }
+
+
+        try {
+            token.parentNode.removeChild(token);
+        } catch (e) {
+            debug('Failed to remove TOKEN from BODY');
+            debug(e);
         }
     </script>
 }

@@ -27,13 +27,9 @@
 
 .jumbotron, .jumbotron > .screen {
   background: -moz-radial-gradient(center, ellipse cover, transparent 0%, rgba(32, 32, 32, 0) 57%, rgba(56, 56, 56, 0.87) 100%);
-  /* FF3.6-15 */
   background: -webkit-radial-gradient(center, ellipse cover, transparent 0%, rgba(32, 32, 32, 0) 57%, rgba(56, 56, 56, 0.87) 100%);
-  /* Chrome10-25,Safari5.1-6 */
   background: radial-gradient(ellipse at center, transparent 0%, rgba(32, 32, 32, 0) 57%, rgba(56, 56, 56, 0.87) 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#de383838',GradientType=1 );
-  /* IE6-9 fallback on horizontal gradient */ }
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#de383838',GradientType=1 ); }
 
 .textblock .paragraph header {
   background: rgba(1, 2, 10, 0.85);

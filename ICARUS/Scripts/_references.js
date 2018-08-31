@@ -11,7 +11,6 @@
 /// <reference path="respond/respond.js" />
 
 // Generic
-/// <reference path="icarus/_Icarus.js" />
 /// <reference path="icarus/WATERMARK.js" />
 /// <reference path="icarus/model/ATTRIBUTES.js" />
 /// <reference path="icarus/model/MODEL.js" />

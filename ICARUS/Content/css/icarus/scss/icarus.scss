@@ -89,10 +89,10 @@ $color-dark-less: rgb(33, 33, 33);
 }
 %gradient-vignette {
     // Permalink http://colorzilla.com/gradient-editor/#000000+0,383838+100&0+0,0+57,0+57,0.87+100
-    background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%, rgba(32,32,32,0) 57%, rgba(56,56,56,0.87) 100%); /* FF3.6-15 */
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#de383838',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%, rgba(32,32,32,0) 57%, rgba(56,56,56,0.87) 100%);
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%);
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(32,32,32,0) 57%,rgba(56,56,56,0.87) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#de383838',GradientType=1 );
 }
 %gradient-vertical-fade {
     background: rgba(1,2,10,0.85);
@@ -111,7 +111,7 @@ $color-dark-less: rgb(33, 33, 33);
     border-left: none;
     border-right: none;
     min-height: $navbar-height;
-    line-height: $navbar-height;
+    line-height: $navbar-height;    
 }
 %bevel-up {
     @extend %bevel;
@@ -1056,9 +1056,7 @@ label {
     padding: 0;
     height: calc(100vh - 134px);
     max-height: 85vh;
-    overflow-y: auto;
-
-    
+    overflow-y: auto;    
 }
 
 .modal-footer {
