@@ -4,9 +4,9 @@
 @{
     ViewBag.Title = "ExternalLogin";
 }
-<h4>Use another service to log in.</h4>
-<hr />
 @{
+    <h4>Use another service to log in.</h4>
+    <hr />
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0) {
         <div>
@@ -31,6 +31,9 @@
 }
 @section viewInit {
     <script>document.getElementsByClassName('app')[0].style.display = 'none';</script>
+    <script type="text/javascript">
+        app.hide();
+    </script>
 }
 @*section viewInit {
     @if (!User.Identity.IsAuthenticated) {

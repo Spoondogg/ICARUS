@@ -10,6 +10,8 @@ namespace ICARUS {
     public class BundleConfig {
         
         public static void RegisterBundles(BundleCollection bundles) {
+
+            /*
             bundles.Add(new ScriptBundle("~/bundles/jquery.js").Include(
                 "~/Scripts/jquery/jquery-{version}.js",
                 "~/Scripts/jquery/jquery-ui-{version}.js"
@@ -26,66 +28,36 @@ namespace ICARUS {
             ));
 
             // http://requirejs.org/docs/download.html#latest
-            bundles.Add(new ScriptBundle("~/bundles/require.js").Include(
-                "~/Scripts/require/require-*"
-            ));
+            //bundles.Add(new ScriptBundle("~/bundles/require.js").Include(
+            //    "~/Scripts/require/require-*"
+            //));
 
             // TODO Automate minified in final build
             bundles.Add(new ScriptBundle("~/bundles/bootstrap.js").Include(
                 "~/Scripts/bootstrap/bootstrap.js",
                 "~/Scripts/bootstrap/respond.js"
             ));
-            
-            // Bootstrap Styles
-            bundles.Add(new StyleBundle("~/Content/css/bootstrap.css").Include(
-                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
+            */
+
+            // JS MEGA BUNDLE
+            bundles.Add(new ScriptBundle("~/bundles/scripts.js").Include(
+                "~/Scripts/jquery/jquery-{version}.js",
+                "~/Scripts/jquery/jquery-ui-{version}.js",
+                "~/Scripts/jquery/jquery.validate*",
+                "~/Scripts/modernizr/modernizr-{version}",
+                "~/Scripts/bootstrap/bootstrap.js",
+                "~/Scripts/bootstrap/respond.js"
             ));
 
-            // Animate.css Styles
-            bundles.Add(new StyleBundle("~/Content/css/animate").Include(
-                "~/Content/css/animate/animate.css"
+            bundles.Add(new ScriptBundle("~/bundles/service-worker.js").Include(
+                "~/Scripts/icarus/service-worker.js"
             ));
 
-            // Icarus specific styles - Names cannot contain UNDERSCORES
-            bundles.Add(new StyleBundle("~/Content/css/icarus.css").Include(
-                "~/Content/css/icarus/scss/icarus.css",
-                /*"~/Content/css/icarus/icarus.css",
-                "~/Content/css/icarus/icon.css",
-                "~/Content/css/icarus/thumbnail.css",
-                "~/Content/css/icarus/console.css",
-                "~/Content/css/icarus/loader.css",
-                "~/Content/css/icarus/container.css",
-                "~/Content/css/icarus/dictionary.css",
-                "~/Content/css/icarus/word.css",
-                "~/Content/css/icarus/main.css",
-                "~/Content/css/icarus/label.css",
-                "~/Content/css/icarus/textblock.css",
-                "~/Content/css/icarus/dropdown.css",
-                "~/Content/css/icarus/button.css",
-                "~/Content/css/icarus/glyphicon.css",
-                "~/Content/css/icarus/menulist.css",
-                "~/Content/css/icarus/navbar.css",
-                "~/Content/css/icarus/prompt.css",
-                "~/Content/css/icarus/preview.css",
-                "~/Content/css/icarus/modal.css",
-                "~/Content/css/icarus/banner.css",
-                "~/Content/css/icarus/imagegallery.css",
-                "~/Content/css/icarus/classview.css",
-                "~/Content/css/icarus/index.css",
-                "~/Content/css/icarus/jumbotron.css",
-                "~/Content/css/icarus/section.css",
-                "~/Content/css/icarus/form.css",
-                "~/Content/css/icarus/elementgroup.css",
-                "~/Content/css/icarus/footer.css",
-                "~/Content/css/icarus/chat.css",
-                "~/Content/css/icarus/table.css",
-                */
-                "~/Content/css/icarus/mobile.css"
-            ));
 
             // Custom Javascript objects from the Icarus.js library (Ordered by Dependency)
-            // bundles.Add(new ScriptBundle("~/bundles/icarus").IncludeDirectory("~/Scripts/icarus", "*.js", true)); // All objects in folder (alphabetical)
             bundles.Add(new ScriptBundle("~/bundles/icarus.js").Include(
+
+                "~/Scripts/icarus/icarus-{version}.js",
 
                 // Model
                 "~/Scripts/icarus/model/ATTRIBUTES.js",
@@ -93,9 +65,11 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/EL.js",
 
                 // Generic
-                "~/Scripts/icarus/DATAELEMENTS.js",
-                "~/Scripts/icarus/ICONS.js",
-                "~/Scripts/icarus/_Icarus.js",  // Clean up when possible
+                "~/Scripts/icarus/enums/DATAELEMENTS.js",
+                "~/Scripts/icarus/enums/ICONS.js",
+
+                
+
                 "~/Scripts/icarus/WATERMARK.js",
 
                 // Graphic
@@ -220,6 +194,34 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/main/article/ARTICLE.js",
                 "~/Scripts/icarus/model/el/container/main/sidebar/SIDEBAR.js",
                 "~/Scripts/icarus/model/el/container/main/MAIN.js"
+            ));
+
+
+
+            /*
+            // Bootstrap Styles
+            bundles.Add(new StyleBundle("~/Content/css/bootstrap.css").Include(
+                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
+            ));
+
+            // Animate.css Styles
+            bundles.Add(new StyleBundle("~/Content/css/animate").Include(
+                "~/Content/css/animate/animate.css"
+            ));
+
+            // Icarus specific styles - Names cannot contain UNDERSCORES
+            bundles.Add(new StyleBundle("~/Content/css/icarus.css").Include(
+                "~/Content/css/icarus/scss/icarus.css",
+                "~/Content/css/icarus/mobile.css"
+            ));
+            */
+
+            // CSS MEGA BUNDLE
+            bundles.Add(new StyleBundle("~/Content/css/styles.css").Include(
+                "~/Content/css/bootstrap/bootstrap.css",
+                "~/Content/css/animate/animate.css",
+                "~/Content/css/icarus/scss/icarus.css",
+                "~/Content/css/icarus/mobile.css"
             ));
         }
     }

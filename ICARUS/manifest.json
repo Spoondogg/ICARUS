@@ -1,0 +1,21 @@
+﻿{
+  "short_name": "Icarus",
+  "name": "spoonMEDIA: Icarus",
+  "icons": [
+    {
+      "src": "/Content/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/Content/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#FFF"
+}

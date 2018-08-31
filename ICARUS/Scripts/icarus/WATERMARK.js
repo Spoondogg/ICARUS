@@ -1,6 +1,9 @@
 ﻿class WATERMARK {
+    /**
+        Prints the spoonMEDIA.ca watermark to the console because its cool.
+        @See http://ascii.co.uk/text : chunky
+    */
     constructor() {
-        // http://ascii.co.uk/text : chunky
         console.log("\n\n");
         console.log(".-----.-----.-----.-----.-----.--------.-----.--|  |__|.---.-.  .----.---.-.");
         console.log("|__ --|  _  |  _  |  _  |     |        |  -__|  _  |  ||  _  |__|  __|  _  |");

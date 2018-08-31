@@ -47,7 +47,7 @@ class INDEX extends BANNER {
             }));
             */
 
-            app.loader.log(100, 'Retrieving ' + elementList[l] + '...', true);
+            //app.loader.log(100, 'Retrieving ' + elementList[l] + '...', true);
 
 
            // list = 0;
