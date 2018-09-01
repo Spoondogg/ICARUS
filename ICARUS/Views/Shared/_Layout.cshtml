@@ -13,9 +13,9 @@
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts *@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
-    @Scripts.Render("~/bundles/scripts.js")
-    @Scripts.Render("~/bundles/icarus.js")
     @Styles.Render("~/Content/css/styles.css")
+    @Scripts.Render("~/bundles/scripts.js")
+    <script src="/Scripts/icarus/icarus.js"></script>
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
@@ -38,13 +38,9 @@
             e.preventDefault();
             // Stash the event so it can be triggered later.
             deferredPrompt = e;
-
-            
-
             // Update UI notify the user they can add to home screen
             //btnAdd.style.display = 'block';
-            console.log('Service-Worker: You can install me!');
-            
+            console.log('Service-Worker: You can install me!');            
         });
 
         window.addEventListener('appinstalled', (evt) => {

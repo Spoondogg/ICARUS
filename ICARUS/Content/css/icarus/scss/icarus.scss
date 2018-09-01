@@ -31,7 +31,7 @@ $color-darker: rgb(16, 16, 16);
 $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
 /*#endregion */
-
+  
 
 /*
     #region Mixins: https://sass-lang.com/guide#topic-6-SCSS
@@ -446,7 +446,17 @@ main {
         }
     }
 }
+/*******************************************
+    
+    Mobile specific tweaks
+    
+*******************************************/
+@media only screen and (max-width: 767px) { /*768px = standard*/
 
+
+
+
+}
 // Horizontal nav-bars should scroll horizontally in 
 // order to avoid cases where the menu gets lost inside 
 // the container
@@ -466,7 +476,7 @@ main {
             }
         }
 
-        & > .nav-item-icon {
+        > .nav-item-icon {
             display: inline-block !important;
         }
     }

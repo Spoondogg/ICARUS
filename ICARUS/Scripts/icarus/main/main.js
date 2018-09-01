@@ -179,11 +179,10 @@ function getDateObject(dateObj) {
  * Create a globally unique identifier
     @returns {string} Unique string
  */
-//const guid = () => {
-function guid() {
+const guid = () => {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
-}
+};
 
 /**
  * If application is set to debug mode, debug details
@@ -193,6 +192,7 @@ function guid() {
  */
 function debug(output) {
     if (DEBUGMODE) {
-        console.log(output);
+        console.log(output); 
     }
 }
+//woot
