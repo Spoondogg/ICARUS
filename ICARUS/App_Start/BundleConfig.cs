@@ -11,53 +11,30 @@ namespace ICARUS {
         
         public static void RegisterBundles(BundleCollection bundles) {
 
-            /*
-            bundles.Add(new ScriptBundle("~/bundles/jquery.js").Include(
-                "~/Scripts/jquery/jquery-{version}.js",
-                "~/Scripts/jquery/jquery-ui-{version}.js"
-            ));
-
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval.js").Include(
-                "~/Scripts/jquery/jquery.validate*"
-            ));
-
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr.js").Include(
-                "~/Scripts/modernizr/modernizr-*"
-            ));
-
-            // http://requirejs.org/docs/download.html#latest
-            //bundles.Add(new ScriptBundle("~/bundles/require.js").Include(
-            //    "~/Scripts/require/require-*"
-            //));
-
-            // TODO Automate minified in final build
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap.js").Include(
-                "~/Scripts/bootstrap/bootstrap.js",
-                "~/Scripts/bootstrap/respond.js"
-            ));
-            */
-
             // JS MEGA BUNDLE
             bundles.Add(new ScriptBundle("~/bundles/scripts.js").Include(
                 "~/Scripts/jquery/jquery-{version}.js",
                 "~/Scripts/jquery/jquery-ui-{version}.js",
                 "~/Scripts/jquery/jquery.validate*",
                 "~/Scripts/modernizr/modernizr-{version}",
-                "~/Scripts/bootstrap/bootstrap.js",
-                "~/Scripts/bootstrap/respond.js"
+                "~/Scripts/bootstrap/bootstrap.js"
             ));
 
-            bundles.Add(new ScriptBundle("~/bundles/service-worker.js").Include(
-                "~/Scripts/icarus/service-worker.js"
+            // CSS MEGA BUNDLE
+            bundles.Add(new StyleBundle("~/Content/css/styles.css").Include(
+                "~/Content/css/bootstrap/bootstrap.css",
+                "~/Content/css/animate/animate.css",
+                "~/Content/css/icarus/scss/icarus.css"
             ));
 
-
+            ////////////////
+            /*
             // Custom Javascript objects from the Icarus.js library (Ordered by Dependency)
-            bundles.Add(new ScriptBundle("~/bundles/icarus.js").Include(
+            //bundles.Add(new ScriptBundle("~/bundles/icarus.js").Include(
+            bundles.Add(new Bundle("~/bundles/icarus.js", new BabelTransform(), new JsMinify()).Include(
 
-                "~/Scripts/icarus/icarus-{version}.js",
+                //"~/Scripts/icarus/icarus-{version}.js",
+                "~/Scripts/icarus/main.js",
 
                 // Model
                 "~/Scripts/icarus/model/ATTRIBUTES.js",
@@ -67,9 +44,6 @@ namespace ICARUS {
                 // Generic
                 "~/Scripts/icarus/enums/DATAELEMENTS.js",
                 "~/Scripts/icarus/enums/ICONS.js",
-
-                
-
                 "~/Scripts/icarus/WATERMARK.js",
 
                 // Graphic
@@ -86,9 +60,6 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/text/span/GLYPHICON.js",
                 "~/Scripts/icarus/model/el/text/p/P.js",
                 "~/Scripts/icarus/model/el/text/p/WELL.js",
-
-                
-
 
                 // Group (Generic Data Structure) (LIST?)
                 "~/Scripts/icarus/model/el/group/GROUP.js",
@@ -168,7 +139,7 @@ namespace ICARUS {
 
                 // Form
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/FORMELEMENT.js",
-                
+
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/textarea/TEXTAREA.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/OPTION.js",
                 "~/Scripts/icarus/model/el/container/form/fieldset/formelement/select/SELECT.js",
@@ -196,33 +167,9 @@ namespace ICARUS {
                 "~/Scripts/icarus/model/el/container/main/MAIN.js"
             ));
 
-
-
-            /*
-            // Bootstrap Styles
-            bundles.Add(new StyleBundle("~/Content/css/bootstrap.css").Include(
-                "~/Content/css/bootstrap/bootstrap.css" //,new CssRewriteUrlTransform()
-            ));
-
-            // Animate.css Styles
-            bundles.Add(new StyleBundle("~/Content/css/animate").Include(
-                "~/Content/css/animate/animate.css"
-            ));
-
-            // Icarus specific styles - Names cannot contain UNDERSCORES
-            bundles.Add(new StyleBundle("~/Content/css/icarus.css").Include(
-                "~/Content/css/icarus/scss/icarus.css",
-                "~/Content/css/icarus/mobile.css"
-            ));
             */
 
-            // CSS MEGA BUNDLE
-            bundles.Add(new StyleBundle("~/Content/css/styles.css").Include(
-                "~/Content/css/bootstrap/bootstrap.css",
-                "~/Content/css/animate/animate.css",
-                "~/Content/css/icarus/scss/icarus.css",
-                "~/Content/css/icarus/mobile.css"
-            ));
+
         }
     }
 }

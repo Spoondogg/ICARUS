@@ -1,11 +1,17 @@
 ﻿// https://developers.google.com/web/fundamentals/primers/service-workers/
 // https://developers.google.com/web/fundamentals/web-app-manifest/
+/**
+    A collection of scripts, stylesheets and images that 
+    can be cached
+*/
 var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
-    //'/',
-    //'/styles/main.css',
-    //'/script/main.js'
-    'https://fonts.googleapis.com/css?family=Lato|Raleway'
+    'https://fonts.googleapis.com/css?family=Lato|Raleway',
+    '/bundles/scripts.js',
+    '/Scripts/icarus/icarus.js',
+    '/Content/css/styles.css',
+    '/Content/Images/Logo.png',
+    '/Content/favicon.ico'
 ];
 
 //https://developers.google.com/web/fundamentals/app-install-banners/
@@ -19,7 +25,6 @@ self.addEventListener('install', function (event) {
             })
     );
 });
-
 
 
 self.addEventListener('fetch', function (event) {
@@ -53,6 +58,7 @@ self.addEventListener('activate', function (event) {
     );
 });
 
+// https://developers.google.com/web/fundamentals/app-install-banners/
 /*
 btnAdd.addEventListener('click', (e) => {
     // hide our user interface that shows our A2HS button
@@ -73,3 +79,4 @@ btnAdd.addEventListener('click', (e) => {
 */
 
 
+// https://developers.google.com/web/fundamentals/codelabs/push-notifications/
