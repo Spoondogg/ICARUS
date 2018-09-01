@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ICARUS")]
-[assembly: AssemblyDescription("Web Application Engine")]
+[assembly: AssemblyDescription("Single Page Web Application Engine")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("spoonMEDIA")]
 [assembly: AssemblyProduct("ICARUS")]

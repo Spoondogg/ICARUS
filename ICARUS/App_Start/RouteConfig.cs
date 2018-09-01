@@ -24,7 +24,11 @@ namespace ICARUS {
             routes.MapRoute(
                 name: "LaunchApp",
                 url: "{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new {
+                    controller = "Home",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
             );
 
 
@@ -35,39 +39,49 @@ namespace ICARUS {
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new {
+                    controller = "Home",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
             );
-            
 
-            
-
+            // TODO: Verify if this is still required
             routes.MapRoute(
                 name: "formObject",
                 url: "Form/FormObject/{id}",
-                defaults: new { controller = "Form", action = "FormObject", id = UrlParameter.Optional }
+                defaults: new {
+                    controller = "Form",
+                    action = "FormObject",
+                    id = UrlParameter.Optional
+                }
             );
 
+            // TODO: Verify if this is still required
             routes.MapRoute(
                 name: "formElementEditor",
                 url: "FormElement/FormElementEditor/{id}",
                 defaults: new { controller = "FormElement", action = "FormElementEditor", id = UrlParameter.Optional }
             );
-            
+
             /**
              * Form data is POSTED via FORM.submit();
             */
+            // TODO: Verify if this is still required
             routes.MapRoute(
                 name: "formPost",
                 url: "Form/Submit",
                 defaults: new { controller = "Form", action = "Submit", id = UrlParameter.Optional }
             );
 
+            // TODO: Verify if this is still required
             routes.MapRoute(
                 name: "formPostEdit",
                 url: "FormPosts/Edit",
                 defaults: new { controller = "FormPosts", action = "Edit", id = UrlParameter.Optional }
             );
 
+            // TODO: Verify if this is still required
             routes.MapRoute(
                 name: "formGroupPost",
                 url: "Form/FormGroupObject",
