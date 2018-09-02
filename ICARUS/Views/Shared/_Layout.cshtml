@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     @Styles.Render("~/Content/css/styles.css")
     @Scripts.Render("~/bundles/scripts.js")
-    <script src="/Scripts/icarus/icarus.js"></script>
+    <script src="@Url.Content("~/Scripts/icarus/icarus.js")"></script>
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
@@ -24,6 +24,7 @@
 <body>
     @Html.AntiForgeryToken()
     @RenderSection("Splash", required: false)
+    <script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>
     <script>
         var token = document.getElementsByName('__RequestVerificationToken')[0];
         var factory = new CONTAINERFACTORY();
@@ -40,7 +41,7 @@
             deferredPrompt = e;
             // Update UI notify the user they can add to home screen
             //btnAdd.style.display = 'block';
-            console.log('Service-Worker: You can install me!');            
+            console.log('Service-Worker: You can install me!');
         });
 
         window.addEventListener('appinstalled', (evt) => {
