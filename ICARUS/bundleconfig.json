@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "outputFileName": "Scripts/icarus/icarus.js",
     "inputFiles": [
@@ -86,7 +86,12 @@
     "minify": {
       "enabled": false
     },
-    "includeInProject": true,
     "sourceMap": true
+  },
+  {
+    "outputFileName": "Scripts/injector/FRUIT.min.js",
+    "inputFiles": [
+      "Scripts/injector/FRUIT.js"
+    ]
   }
 ]
