@@ -7,7 +7,6 @@
 "use strict";
 const DEBUGMODE = true; // If true, debug outputs are shown
 const TESTING = false; // If true, tests are ran and results are shown in the console.
-const THEME = 0; //0=dark,1=light...
 /**
     See http://2ality.com/2014/09/es6-modules-final.html 
     See http://exploringjs.com/es6/ch_modules.html#sec_overview-modules
@@ -87,22 +86,29 @@ function friendly(str) {
 }
 
 /**
-    Returns string as camelcase
-    https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
-    @param {string} str String to convert
-    @returns {string} A camelcased version of the string
- */
-function camelCase(str) {
-    str = str === undefined ? '' : str;
-    return str.split(' ').map(function (word, index) {
-        // If it is the first word make sure to lowercase all the chars.
-        if (index === 0) {
-            return word.toLowerCase();
-        }
-        // If it is not the first word only upper case the first char and lowercase the rest.
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }).join('');
-}
+    Extend String Methods
+    @See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+    @See https://stackoverflow.com/a/30259322/722785
+
+Property assignment is frequently used to add new properties to an object. 
+This post explained that that can cause problems. Hence, it is best to follow the simple rules:
+    If you want to create a new property, use definition.
+    If you want to change the value of a property, use assignment.
+
+*/
+Object.defineProperty(String.prototype, 'camelCase', {
+    value() {
+        /**
+            Returns string as camelcase
+            https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
+        */
+        return this.split(' ').map(function (word, index) {
+            return index === 0
+                ? word.toLowerCase()
+                : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join('');
+    }
+});
 
 /**
  * Trims the given string to the specified length and applies the given ending

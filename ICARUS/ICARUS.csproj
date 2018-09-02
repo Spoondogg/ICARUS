@@ -787,6 +787,12 @@
     <Content Include="Scripts\icarus\model\MODEL.es5.min.js">
       <DependentUpon>MODEL.es5.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\injector\APPLE.js" />
+    <Content Include="Scripts\injector\FRUIT.js" />
+    <Content Include="Scripts\injector\FRUIT.min.js">
+      <DependentUpon>FRUIT.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\injector\main.js" />
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr\modernizr-2.8.3.js" />
