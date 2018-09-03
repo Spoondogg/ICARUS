@@ -9,4 +9,3 @@ export class FRUIT {
         this.type = 'Unknown';
     }
 }
-//export { FRUIT };

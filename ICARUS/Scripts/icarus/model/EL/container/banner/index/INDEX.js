@@ -1,7 +1,10 @@
 ﻿/**
     Contains a high level view of all objects owned by this user
 */
-class INDEX extends BANNER {
+import { BANNER } from '../BANNER.js';
+import { HEADER } from '../../../header/HEADER.js';
+import { NAVITEMICON } from '../../../nav/navitemicon/NAVITEMICON.js';
+export class INDEX extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node

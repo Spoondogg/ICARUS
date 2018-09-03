@@ -1,10 +1,11 @@
-﻿/**
+﻿import GROUP from '../group/GROUP.js';
+/**
     A generic CONTAINER with a header that controls population of this element.
 
     A container can be expanded or hidden and
     have elements added to itself.
 */
-class CONTAINER extends GROUP {
+export class CONTAINER extends GROUP {
     /**
         @param {EL} node The element to contain the section
         @param {string} element HTML element

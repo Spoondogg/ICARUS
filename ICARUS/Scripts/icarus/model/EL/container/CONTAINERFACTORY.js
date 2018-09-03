@@ -1,7 +1,7 @@
 ﻿/**
     Constructs various Containers and returns them to be appended
  */
-class CONTAINERFACTORY {
+export class CONTAINERFACTORY {
     /**
         A Container Factory
      */

@@ -1,7 +1,10 @@
 ﻿/**
     Jumbotron with centered icon and text
 */
-class THUMBNAIL extends CONTAINER {
+import IMG from '../../../graphic/IMG.js';
+import HEADER from '../../../header/header.js';
+import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+export class THUMBNAIL extends CONTAINER {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model

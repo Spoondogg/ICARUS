@@ -1,8 +1,27 @@
 ﻿@{
-    ViewBag.Title = "Icarus";
+    ViewBag.Title = "Index";
 }
-@section viewInit {
+
+@section ServiceWorker {
     <script type="text/javascript">
+        console.log('Index.ServiceWorker');
+        // https://developers.google.com/web/fundamentals/app-install-banners/
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can add to home screen
+            //btnAdd.style.display = 'block';
+            console.log('Service-Worker: Index: This page can be installed as an App');
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            //app.logEvent('a2hs', 'installed');
+            console.log('service-worker: App Installed');
+        });
+
         // Register service worker
         // https://developers.google.com/web/fundamentals/primers/service-workers/
         if ('serviceWorker' in navigator) {
@@ -16,40 +35,13 @@
                 });
             });
         }
-
-        // Set Global Modal animation
-        $('.modal').on('show.bs.modal', function (e) {
-            $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
-
-        });
-        $('.modal').on('hide.bs.modal', function (e) {
-            $('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
-        });
-
-
-        var url = new URL(window.location.href);
-
-        var returnUrl = url.searchParams.get('ReturnUrl');
-        if (returnUrl) {
-            returnUrl = url.origin + returnUrl;
-            location.href = returnUrl;
-        }
-
-        let isLogin = url.searchParams.get('login');
-        app.load(@ViewBag.id);
-
-        if (isLogin) {
-            if (user === 'Guest') {
-                app.login();
-            }
-        }
-
-
-        try {
-            token.parentNode.removeChild(token);
-        } catch (e) {
-            debug('Failed to remove TOKEN from BODY');
-            debug(e);
-        }
     </script>
+}
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>
+}
+
+@section viewInit {
+    <script src="@Url.Content("~/Scripts/icarus/main.js")" type="module"></script>
 }
