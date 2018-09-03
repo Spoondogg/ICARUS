@@ -4,205 +4,60 @@
     @version 0.5.1.20180830
     @author Ryan Dunphy <ryan@spoonmedia.ca>
 */
+console.log('Icarus.main.js');
 "use strict";
+
+console.log('Icarus.Index.cshtml > viewInit');
+
 const DEBUGMODE = true; // If true, debug outputs are shown
 const TESTING = false; // If true, tests are ran and results are shown in the console.
-/**
-    See http://2ality.com/2014/09/es6-modules-final.html 
-    See http://exploringjs.com/es6/ch_modules.html#sec_overview-modules
- */
-//import * from 'WATERMARK.js';
-/**
-    Sorts an object array by the specified property.
-    @see https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript
-    @param {string} property Name of property to sort by
-    @returns {number} Sorting index
- */
-function dynamicSort(property) {
-    let sortOrder = 1;
-    if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
+
+import './StringMethods.js';
+import './DebugMethods.js';
+import './DomMethods.js';
+
+import CONTAINERFACTORY from './model/el/container/CONTAINERFACTORY.js';
+import MAIN from './model/el/container/main/MAIN.js';
+
+var token = document.getElementsByName('__RequestVerificationToken')[0];
+try {
+    token.parentNode.removeChild(token);
+} catch (e) {
+    debug('Failed to remove TOKEN from BODY');
+    debug(e);
+}
+
+var factory = new CONTAINERFACTORY();
+
+
+
+// Set application URL and forward to return URL if required
+var app = new MAIN();
+app.url = new URL(window.location.href);
+let returnUrl = app.url.searchParams.get('ReturnUrl');
+if (returnUrl) {
+    returnUrl = app.url.origin + returnUrl;
+    location.href = returnUrl;
+}
+
+console.log('This sentence should be camelcased'.camelcase());
+console.log('GUID: ' + new String().guid());
+debug('This is debugger output.');
+
+console.log('App ID: ' + app.id + '(From main.js)');
+
+let isLogin = app.url.searchParams.get('login');
+if (isLogin) {
+    if (user === 'Guest') {
+        app.login();
     }
-    return function (a, b) {
-        let result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-        return result * sortOrder;
-    };
 }
 
+app.load(appId);
 /**
-    Sorts an object array with multiple paramaters.
-    Accepts multiple params.
-    @example People.sort(dynamicSortMultiple("Name", "-Surname"));
-    @returns {number} result
- */
-function dynamicSortMultiple() {
-    /*
-     * save the arguments object as it will be overwritten
-     * note that arguments object is an array-like object
-     * consisting of the names of the properties to sort by
-     */
-    let props = arguments;
-    return function (obj1, obj2) {
-        let i = 0;
-        let result = 0;
-        let numberOfProperties = props.length;
-        /* try getting a different result from 0 (equal)
-         * as long as we have extra properties to compare
-         */
-        while (result === 0 && i < numberOfProperties) {
-            result = dynamicSort(props[i])(obj1, obj2);
-            i++;
-        }
-        return result;
-    };
-}
-
-/**
- * Converts the given string to an html-name friendly value
-    @param {string} str The string to process
-    @returns {string} An html friendly string for input names
- */
-function friendly(str) {
-    try {
-        let table = {
-            '<': 'lt',
-            '>': 'gt',
-            '"': 'quot',
-            '\'': 'apos',
-            '&': 'amp',
-            '\r': '#10',
-            '\n': '#13',
-            //'?': '#63',
-            ':': '#58',
-            ';': '#59'
-        };
-
-        return str.toString().replace(/[<>"'\r\n&]/g, function (chr) { // Strip out characters
-            return '&' + table[chr] + ';';
-        }).replace(/[?=\s]+/g, '-'); // replace spaces with dashes
-
-    } catch (e) { console.log(e); }
-}
-
-/**
-    Extend String Methods
-    @See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
-    @See https://stackoverflow.com/a/30259322/722785
-
-Property assignment is frequently used to add new properties to an object. 
-This post explained that that can cause problems. Hence, it is best to follow the simple rules:
-    If you want to create a new property, use definition.
-    If you want to change the value of a property, use assignment.
-
+    A Console Output Watermark
 */
-Object.defineProperty(String.prototype, 'camelCase', {
-    value() {
-        /**
-            Returns string as camelcase
-            https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
-        */
-        return this.split(' ').map(function (word, index) {
-            return index === 0
-                ? word.toLowerCase()
-                : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        }).join('');
-    }
-});
-
-/**
- * Trims the given string to the specified length and applies the given ending
- * @param {string} str Text to truncate
- * @param {number} length Length to trim string
- * @param {string} ending String to append
- * @returns {string} A string truncated to the given length
- */
-function truncate(str, length = 100, ending = "...") {
-    if (str.length > length) {
-        return str.substring(0, length - ending.length) + ending;
-    } else {
-        return str;
-    }
-}
-
-/**
-    Pad with zeroes
-    @param {number} num The original number to be padded
-    @param {number} size The number of zeros to pad with
-    @returns {string} A zero padded string
-*/
-function pad(num, size) {
-    let s = num + '';
-    while (s.length < size) {
-        s = '0' + s;
-    }
-    return s;
-}
-
-/**
-     * Returns a Javascript date object from a .NET JavaScriptSerializer date
-     * See https://stackoverflow.com/a/50292370/722785
-     * @param {string} dateString from .NET Serializer ie: Date(1534759609990)
-     * @returns {Date} Javascript Date Object
-     */
-function getDateValue(dateString) {
-    return new Date(parseInt(dateString.replace(/\D+/g, '')));
-}
-
-/**
- * This should be a class...  But anyways,
- * Generates a generic Date object for print
- * @param {Date} dateObj A Javascript Date object
- * @returns {Object} A broken down set of date values that should actually be a class
- */
-function getDateObject(dateObj) {
-    //console.log('getDateObject');
-    // splits the string to array ie: ["2014-05-10", "22:00:00.000Z"]
-    let d = dateObj.toISOString().split('T');
-
-    // Splits the date ie: ['2014','05','10']
-    let dd = d[0].split('-');
-
-    // Splits the time ie: ['22','00','00.000Z']
-    let t = d[1].split(':');
-    let tt = t[2].split('.');
-
-    return {
-        'date': d[0],
-        'year': dd[0],
-        'month': dd[1],
-        'day': dd[2],
-        'time': t[0] + ':' + t[1] + ':' + tt[0],
-        'hour': t[0],
-        'minute': t[1],
-        'second': tt[0],
-        'millisecond': tt[1].replace('Z', '')
-    };
-}
-
-
-/**
- * Create a globally unique identifier
-    @returns {string} Unique string
- */
-const guid = () => {
-    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
-};
-
-/**
- * If application is set to debug mode, debug details
- * are logged to the console.
- * 
- * @param {string} output A string or an exception
- */
-function debug(output) {
-    if (DEBUGMODE) {
-        console.log(output); 
-    }
-}
-//woot
-class WATERMARK {
+export class WATERMARK {
     /**
         Prints the spoonMEDIA.ca watermark to the console because its cool.
         @See http://ascii.co.uk/text : chunky
@@ -218,8 +73,9 @@ class WATERMARK {
 }
 /**
     A generic set of ATTRIBUTES for an EL
+    TODO: Consider just extending Map()
  */
-class ATTRIBUTES extends Object {
+export class ATTRIBUTES extends Object { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
         Constructs a generic Attributes data structure.
         If the 'className' argument is an object, break it out into individual attributes
@@ -275,10 +131,12 @@ class ATTRIBUTES extends Object {
         return this;
     }
 }
+import { ATTRIBUTES } from './ATTRIBUTES.js';
 /**
-    A generic object model    
+    A Map like data structure
+    TODO: Consider just extending Map() 
 */
-class MODEL {
+export class MODEL { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
         Constructs a generic MODEL
         @param {ATTRIBUTES} attributes A collection of attributes
@@ -335,6 +193,7 @@ class MODEL {
         }
     }
 }
+import { MODEL } from '../MODEL.js';
 /**
     Generic Element Constructor  
 
@@ -347,7 +206,7 @@ class MODEL {
     But it is better practice to do this:
         new DIV(node, model)
 */
-class EL extends MODEL {
+export class EL extends MODEL {
     /**
         Constructs a generic html element.
         @param {EL} node The object to contain this element
@@ -1381,10 +1240,11 @@ class WELL extends P {
         this.addClass('well');
     }
 }
+import EL from '../EL.js';
 /**
     A grouping of list items
  */
-class GROUP extends EL {
+export class GROUP extends EL {
 
     /**
         Construct a group of NavItems
@@ -1435,7 +1295,7 @@ class GROUP extends EL {
 /**
  * Containers have a 'body' that can contain an optional sidebar
  */
-class CONTAINERBODY extends EL {
+export class CONTAINERBODY extends EL {
     /**
         Construct a body with an optional sidebar
          @param {CONTAINER} node Parent
@@ -1528,7 +1388,7 @@ class CONTAINERBODY extends EL {
 /**
     Constructs various Containers and returns them to be appended
  */
-class CONTAINERFACTORY {
+export class CONTAINERFACTORY {
     /**
         A Container Factory
      */
@@ -1711,13 +1571,14 @@ class CONTAINERFACTORY {
         });
     }
 }
+import GROUP from '../group/GROUP.js';
 /**
     A generic CONTAINER with a header that controls population of this element.
 
     A container can be expanded or hidden and
     have elements added to itself.
 */
-class CONTAINER extends GROUP {
+export class CONTAINER extends GROUP {
     /**
         @param {EL} node The element to contain the section
         @param {string} element HTML element
@@ -4032,10 +3893,11 @@ class NAVBAR extends NAV {
         }));
     }
 }
+import { BUTTONGROUP } from '../group/buttongroup/BUTTONGROUP.js';
 /**
     A generic header that should be placed at the top of content    
 */
-class HEADER extends EL {
+export class HEADER extends EL {
     /**
         Constructs a Header.
         @param {EL} node The object to contain the header
@@ -4068,6 +3930,7 @@ class HEADER extends EL {
 /**
     A generic footer that should be placed at the bottom of content
 */
+import { EL } from '../EL.js';
 class FOOTER extends EL {
     /**
         Constructs a generic footer.
@@ -4078,10 +3941,11 @@ class FOOTER extends EL {
         super(node, 'FOOTER', model);
     }    
 }
+import { FOOTER } from '../FOOTER.js';
 /**
     A Footer that sticks to bottom of page    
 */
-class STICKYFOOTER extends FOOTER {
+export class STICKYFOOTER extends FOOTER {
     /**
         Constructs a footer stuck to the bottom of the viewpane
         @param {EL} node The object to contain the table
@@ -4218,7 +4082,10 @@ class JUMBOTRON extends CONTAINER {
 /**
     Jumbotron with centered icon and text
 */
-class THUMBNAIL extends CONTAINER {
+import IMG from '../../../graphic/IMG.js';
+import HEADER from '../../../header/header.js';
+import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+export class THUMBNAIL extends CONTAINER {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model
@@ -4497,7 +4364,8 @@ class CALLOUT extends CONTAINER {
 /**
     A banner that can be populated with CallOuts
 */
-class BANNER extends CONTAINER {
+import CONTAINER from '../CONTAINER.js';
+export class BANNER extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
@@ -4507,8 +4375,6 @@ class BANNER extends CONTAINER {
         super(node, 'DIV', model, ['CALLOUT','THUMBNAIL']);
         this.body.pane.addClass('banner');
         this.body.pane.addClass('noselect');
-        //this.addContainerCase('CALLOUT');
-        //this.addContainerCase('THUMBNAIL');
         this.populate(model.children);
     }
 
@@ -4519,7 +4385,10 @@ class BANNER extends CONTAINER {
 /**
     Contains a high level view of all objects owned by this user
 */
-class INDEX extends BANNER {
+import { BANNER } from '../BANNER.js';
+import { HEADER } from '../../../header/HEADER.js';
+import { NAVITEMICON } from '../../../nav/navitemicon/NAVITEMICON.js';
+export class INDEX extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node
@@ -6859,8 +6728,9 @@ class SIDEBAR extends CONTAINER { // NAVBAR
 /**
     A top level application object
 */
-//import * as CONTAINER from '../CONTAINER';
-class MAIN extends CONTAINER {
+import { WATERMARK } from '../../../../WATERMARK.js';
+import { CONTAINER } from '../CONTAINER.js';
+export class MAIN extends CONTAINER {
     /**
         Constructs an APP
         @param {MODEL} model APP model
@@ -7097,6 +6967,17 @@ class MAIN extends CONTAINER {
         @param {number} id App Id to load
     */
     load(id) {
+
+        id = id ? id : 1;
+
+
+        let url = new URL(window.location.href);
+        let returnUrl = url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            returnUrl = url.origin + returnUrl;
+            location.href = returnUrl;
+        }
+
         /*this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
             { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
         ]);*/
@@ -7662,6 +7543,14 @@ class MAIN extends CONTAINER {
 
 
         this.prompt.show();
+    }
+
+    /**
+         Sets the application url on view initialization 
+         @returns {URL} Current url
+    */
+    getUrl() {
+        return new URL(window.location.href);
     }
 
 

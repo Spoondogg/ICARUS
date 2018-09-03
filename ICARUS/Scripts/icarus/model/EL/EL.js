@@ -1,3 +1,4 @@
+import { MODEL } from '../MODEL.js';
 /**
     Generic Element Constructor  
 
@@ -10,7 +11,7 @@
     But it is better practice to do this:
         new DIV(node, model)
 */
-class EL extends MODEL {
+export class EL extends MODEL {
     /**
         Constructs a generic html element.
         @param {EL} node The object to contain this element

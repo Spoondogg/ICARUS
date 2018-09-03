@@ -1,7 +1,8 @@
-﻿/**
+﻿import { BUTTONGROUP } from '../group/buttongroup/BUTTONGROUP.js';
+/**
     A generic header that should be placed at the top of content    
 */
-class HEADER extends EL {
+export class HEADER extends EL {
     /**
         Constructs a Header.
         @param {EL} node The object to contain the header

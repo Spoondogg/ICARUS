@@ -1,7 +1,9 @@
-﻿/**
-    A generic object model    
+﻿import { ATTRIBUTES } from './ATTRIBUTES.js';
+/**
+    A Map like data structure
+    TODO: Consider just extending Map() 
 */
-class MODEL {
+export class MODEL { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
         Constructs a generic MODEL
         @param {ATTRIBUTES} attributes A collection of attributes

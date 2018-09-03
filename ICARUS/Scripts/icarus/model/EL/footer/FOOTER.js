@@ -1,6 +1,7 @@
 ﻿/**
     A generic footer that should be placed at the bottom of content
 */
+import { EL } from '../EL.js';
 class FOOTER extends EL {
     /**
         Constructs a generic footer.
