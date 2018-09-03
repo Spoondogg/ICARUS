@@ -2,8 +2,8 @@
   {
     "outputFileName": "Scripts/icarus/icarus.js",
     "inputFiles": [
-      "Scripts/icarus/main/main.js",
-      "Scripts/icarus/main/WATERMARK.js",
+      "Scripts/icarus/main.js",
+      "Scripts/icarus/WATERMARK.js",
       "Scripts/icarus/model/ATTRIBUTES.js",
       "Scripts/icarus/model/MODEL.js",
       "Scripts/icarus/model/el/EL.js",
@@ -87,11 +87,5 @@
       "enabled": false
     },
     "sourceMap": true
-  },
-  {
-    "outputFileName": "Scripts/injector/FRUIT.min.js",
-    "inputFiles": [
-      "Scripts/injector/FRUIT.js"
-    ]
   }
 ]

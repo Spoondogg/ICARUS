@@ -1,7 +1,8 @@
 ﻿/**
     A banner that can be populated with CallOuts
 */
-class BANNER extends CONTAINER {
+import CONTAINER from '../CONTAINER.js';
+export class BANNER extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
@@ -11,8 +12,6 @@ class BANNER extends CONTAINER {
         super(node, 'DIV', model, ['CALLOUT','THUMBNAIL']);
         this.body.pane.addClass('banner');
         this.body.pane.addClass('noselect');
-        //this.addContainerCase('CALLOUT');
-        //this.addContainerCase('THUMBNAIL');
         this.populate(model.children);
     }
 

@@ -731,16 +731,12 @@
     <Content Include="Scripts\applicationinsights\ai.1.0.20-build00666.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
     <Content Include="Scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\icarus\DATEOBJECT.js" />
+    <Content Include="Scripts\icarus\DomMethods.js" />
     <Content Include="Scripts\icarus\icarus.js" />
-    <Content Include="Scripts\icarus\main\main.js" />
+    <Content Include="Scripts\icarus\main.js" />
     <Content Include="Scripts\icarus\enums\ICONS.js" />
     <Content Include="Scripts\icarus\enums\DATAELEMENTS.js" />
-    <Content Include="Scripts\icarus\model\ATTRIBUTES.es5.js">
-      <DependentUpon>ATTRIBUTES.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\icarus\model\ATTRIBUTES.es5.min.js">
-      <DependentUpon>ATTRIBUTES.es5.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
@@ -764,12 +760,6 @@
     <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
-    <Content Include="Scripts\icarus\model\el\EL.es5.js">
-      <DependentUpon>EL.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\icarus\model\el\EL.es5.min.js">
-      <DependentUpon>EL.es5.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\icarus\model\el\graphic\IMG.js" />
     <Content Include="Scripts\icarus\model\el\group\ul\console\CONSOLE.js" />
     <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
@@ -781,23 +771,17 @@
     <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\icarus\model\el\text\HR.js" />
-    <Content Include="Scripts\icarus\model\MODEL.es5.js">
-      <DependentUpon>MODEL.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\icarus\model\MODEL.es5.min.js">
-      <DependentUpon>MODEL.es5.js</DependentUpon>
-    </Content>
+    <Content Include="Scripts\icarus\SERVICEWORKER.js" />
+    <Content Include="Scripts\icarus\DebugMethods.js" />
+    <Content Include="Scripts\icarus\StringMethods.js" />
     <Content Include="Scripts\injector\APPLE.js" />
     <Content Include="Scripts\injector\FRUIT.js" />
-    <Content Include="Scripts\injector\FRUIT.min.js">
-      <DependentUpon>FRUIT.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\injector\main.js" />
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr\modernizr-2.8.3.js" />
     <Content Include="service-worker.js" />
-    <Content Include="Scripts\icarus\main\WATERMARK.js" />
+    <Content Include="Scripts\icarus\WATERMARK.js" />
     <Content Include="Scripts\icarus\model\el\text\span\CARET.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />
     <Content Include="Scripts\icarus\model\el\container\form\FORMPOST.js" />

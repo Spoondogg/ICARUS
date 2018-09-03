@@ -1,7 +1,7 @@
 ﻿/**
  * Containers have a 'body' that can contain an optional sidebar
  */
-class CONTAINERBODY extends EL {
+export class CONTAINERBODY extends EL {
     /**
         Construct a body with an optional sidebar
          @param {CONTAINER} node Parent

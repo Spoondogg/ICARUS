@@ -1,8 +1,9 @@
 ﻿/**
     A top level application object
 */
-//import * as CONTAINER from '../CONTAINER';
-class MAIN extends CONTAINER {
+import { WATERMARK } from '../../../../WATERMARK.js';
+import { CONTAINER } from '../CONTAINER.js';
+export class MAIN extends CONTAINER {
     /**
         Constructs an APP
         @param {MODEL} model APP model
@@ -239,6 +240,17 @@ class MAIN extends CONTAINER {
         @param {number} id App Id to load
     */
     load(id) {
+
+        id = id ? id : 1;
+
+
+        let url = new URL(window.location.href);
+        let returnUrl = url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            returnUrl = url.origin + returnUrl;
+            location.href = returnUrl;
+        }
+
         /*this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
             { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
         ]);*/
@@ -804,6 +816,14 @@ class MAIN extends CONTAINER {
 
 
         this.prompt.show();
+    }
+
+    /**
+         Sets the application url on view initialization 
+         @returns {URL} Current url
+    */
+    getUrl() {
+        return new URL(window.location.href);
     }
 
 

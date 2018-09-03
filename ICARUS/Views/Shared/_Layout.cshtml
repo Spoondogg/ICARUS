@@ -15,45 +15,40 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     @Styles.Render("~/Content/css/styles.css")
     @Scripts.Render("~/bundles/scripts.js")
-    <script src="@Url.Content("~/Scripts/icarus/icarus.js")"></script>
+    <!--<script src="@Url.Content("~/Scripts/icarus/icarus.js")"></script>-->
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+
     @Html.AntiForgeryToken()
+
     @RenderSection("Splash", required: false)
-    <script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>
+    @RenderSection("ServiceWorker", required: false)
+
+    <!--<script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>-->
+    @*
+        Globals
+        These values need to be declared here so that they have access to server values
+    *@
     <script>
-        var token = document.getElementsByName('__RequestVerificationToken')[0];
-        var factory = new CONTAINERFACTORY();
         var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
-        var dev = @( User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
-        var app = new MAIN();
-
-        // https://developers.google.com/web/fundamentals/app-install-banners/
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later.
-            deferredPrompt = e;
-            // Update UI notify the user they can add to home screen
-            //btnAdd.style.display = 'block';
-            console.log('Service-Worker: You can install me!');
-        });
-
-        window.addEventListener('appinstalled', (evt) => {
-            //app.logEvent('a2hs', 'installed');
-            console.log('service-worker: App Installed');
-        });
+        var dev = @(User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
+        var appId = @ViewBag.id;
     </script>
+
+
     @RenderBody()
+
     <noscript>
-        <a href="/noScript">JavaScript must be enabled for this page to function.  Click here for details</a>
+        <p>JavaScript must be enabled for this page to function.</p>
+        <p><a href="/noScript">Click here for details</a></p>
     </noscript>
+
     @RenderSection("Scripts", required: false)
     @RenderSection("viewInit", required: true)
+
 </body>
 </html>

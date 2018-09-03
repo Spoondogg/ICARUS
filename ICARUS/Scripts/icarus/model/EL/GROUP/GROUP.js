@@ -1,7 +1,8 @@
-﻿/**
+﻿import EL from '../EL.js';
+/**
     A grouping of list items
  */
-class GROUP extends EL {
+export class GROUP extends EL {
 
     /**
         Construct a group of NavItems
