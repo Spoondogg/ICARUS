@@ -1,10 +1,16 @@
-﻿/**
-    Jumbotron with centered icon and text
-*/
-import IMG from '../../../graphic/IMG.js';
+﻿import IMG from '../../../graphic/IMG.js';
 import HEADER from '../../../header/header.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
-export class THUMBNAIL extends CONTAINER {
+import CONTAINER from '../../CONTAINER.js';
+import EL, { MODEL } from '../../../EL.js';
+import P from '../../../p/P.js';
+import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+import MODAL from '../../../modal/MODAL.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
+/**
+    Jumbotron with centered icon and text
+*/
+export default class THUMBNAIL extends CONTAINER {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model
@@ -25,7 +31,7 @@ export class THUMBNAIL extends CONTAINER {
         this.header = new HEADER(this.body.pane, new MODEL().set({
             'label': this.data.header
         }));
-        this.p = new P(this.body.pane, new MODEL(), truncate(this.data.p, 128));
+        this.p = new P(this.body.pane, new MODEL(), String(this.data.p).truncate(128));
 
         this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
         this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
@@ -111,22 +117,21 @@ export class THUMBNAIL extends CONTAINER {
      */
     launchModal() {
         console.log('Launch Modal');
+        this.modal = new MODAL(this.data.header);
+        this.modal.container.body.pane.addClass('thumbnail');
 
-        let modal = new MODAL(this.data.header);
-        modal.container.body.pane.addClass('thumbnail');
+        this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL());
+        this.modal.container.image.el.src = this.image.el.src;
 
-        modal.container.image = new IMG(modal.container.body.pane, new MODEL());
-        modal.container.image.el.src = this.image.el.src;
-
-        modal.container.header = new HEADER(modal.container.body.pane, new MODEL().set({
+        this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set({
             'label': this.data.header
         }));
 
-        modal.container.p = new P(modal.container.body.pane, new MODEL(new ATTRIBUTES({
+        this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
             'style': 'height:auto;'
         })), this.data.p);
 
-        modal.show();
+        this.modal.show();
     }
 
 }

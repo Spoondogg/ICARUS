@@ -1,7 +1,13 @@
-﻿/**
+﻿import GROUP from '../GROUP.js';
+import ATTRIBUTES from '../../../ATTRIBUTES.js';
+import BUTTON from '../../button/BUTTON.js';
+import TOGGLEBUTTON from '../../button/togglebutton/TOGGLEBUTTON.js';
+import MODEL from '../../../MODEL.js';
+import { ALIGN } from '../../../../enums/ALIGN.js';
+/**
     A container for Buttons
 */
-class BUTTONGROUP extends GROUP {
+export default class BUTTONGROUP extends GROUP {
     /**
         Constructs a Button Group
         @param {EL} node The parent
@@ -27,7 +33,6 @@ class BUTTONGROUP extends GROUP {
             return this.addToggleButton(model.label, model.glyphicon, model.buttonType);
         }.bind(this));
     }
-    
     /**
         Creates a button and adds it to this button group, then adds it to the buttons array
         @param {string} label The label
@@ -40,11 +45,9 @@ class BUTTONGROUP extends GROUP {
         btn.el.onclick = function () {
             return false;
         };
-
         this.children.push(btn);
         return this.children[this.children.length - 1];
     }
-
     /**
         Createa a toggle button with a corresponding dropdown menu
         @param {string} label The label
@@ -56,14 +59,4 @@ class BUTTONGROUP extends GROUP {
         this.children.push(new TOGGLEBUTTON(this, label, glyphicon, buttonType));
         return this.children[this.children.length - 1];
     }
-
-    /**
-        Removes all buttons from this group
-     
-    empty() {
-        for (let b = 0; b < this.buttons.length; b++) {
-            this.buttons[b].destroy(0);
-        }
-        this.buttons.length = 0;
-    }*/
 }

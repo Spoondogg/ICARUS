@@ -1,29 +1,31 @@
-﻿/**
+﻿import CONTAINER from '../CONTAINER.js';
+import DATEOBJECT from '../../../../DATEOBJECT.js';
+import HEADER from '../../header/HEADER.js';
+import MODEL from '../../../MODEL.js';
+import P from '../../p/P.js';
+import '../../../../StringMethods.js';
+/**
     A banner that can be populated with CallOuts
 */
-class PARAGRAPH extends CONTAINER {
+export default class PARAGRAPH extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model
      */
     constructor(node, model) {
-        super(node, 'DIV', model);
+        super(node, 'DIV', model, ['IMAGE']);
         this.addClass('textblock');
         this.body.pane.addClass('paragraph');
         //this.dataElements = DATAELEMENTS.PARAGRAPH;
-        this.addContainerCase('IMAGE');
         //this.construct();
         this.populate(model.children);
     }
 
-    construct() {
-        
+    construct() {        
         if (this.dataId > 0) {
             if (this.data.p) {
-
-                let d = getDateObject(getDateValue(this.dateCreated));
-
+                let d = DATEOBJECT.getDateObject(String(this.dateCreated).getDateValue(this.dateCreated));
                 this.header = new HEADER(this.body.pane, new MODEL().set({
                     'label': d.date + ' - ' + d.time//'paragraph header'
                 }));

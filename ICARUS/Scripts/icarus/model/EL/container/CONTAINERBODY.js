@@ -1,7 +1,10 @@
-﻿/**
- * Containers have a 'body' that can contain an optional sidebar
+﻿import EL from '../EL.js';
+import MODEL from '../../MODEL.js';
+/**
+    Containers have a 'body' that can contain an optional sidebar
+    and detect swipe events
  */
-export class CONTAINERBODY extends EL {
+export default class CONTAINERBODY extends EL {
     /**
         Construct a body with an optional sidebar
          @param {CONTAINER} node Parent
@@ -9,24 +12,20 @@ export class CONTAINERBODY extends EL {
      */
     constructor(node, model) {
         super(node, 'DIV', model);
-        this.setClass('container-body collapse in'); // q??
-
+        this.setClass('container-body collapse in');
         this.sidebar = null;
-
         this.pane = new EL(this, 'DIV', new MODEL('pane'));
 
         // Add swipe detection for editing options in sidebar
-
         this.pane.el.addEventListener('touchstart', this.handleTouchStart, { passive: true });
         this.pane.el.addEventListener('touchmove', this.handleTouchMove, { passive: true });
-
         this.xDown = null;
         this.yDown = null;
 
         if (dev) {
             this.pane.el.ondblclick = function (e) {
                 //node.toggleSidebar();
-                app.loader.log('Launch Editor for ' + node.className + '(' + node.id + ')');
+                console.log('Launch Editor for ' + node.className + '(' + node.id + ')');
                 $(node.navBar.header.menu.el).collapse('show');
                 node.btnSave.el.click();
                 e.stopPropagation(); // Prevent parent double click()
@@ -42,7 +41,6 @@ export class CONTAINERBODY extends EL {
         this.xDown = ev.touches[0].clientX;
         this.yDown = ev.touches[0].clientY;
     }
-
 
     /**
      *

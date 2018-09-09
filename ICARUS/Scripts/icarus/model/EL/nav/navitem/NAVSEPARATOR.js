@@ -1,7 +1,8 @@
-﻿/**
+﻿import NAVITEM from '../navitem/NAVITEM.js';
+/**
     A horizontal line that separates content inside a navbar dropdown menu
 */
-class NAVSEPARATOR extends NAVITEM {
+export default class NAVSEPARATOR extends NAVITEM {
     /**
         A separator for menus
         @param {EL} node The element that will contain this object

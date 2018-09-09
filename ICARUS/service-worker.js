@@ -8,7 +8,7 @@ var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
     'https://fonts.googleapis.com/css?family=Lato|Raleway',
     '/bundles/scripts.js',
-    '/Scripts/icarus/icarus.js',
+    //'/Scripts/icarus/icarus.js',
     '/Content/css/styles.css',
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'

@@ -1,7 +1,13 @@
-﻿/**
+﻿import CONSOLE from '../../group/ul/console/CONSOLE.js';
+import EL from '../../EL.js';
+import PROGRESSBAR from './PROGRESSBAR.js';
+import MODAL from '../MODAL.js';
+import MODEL from '../../../MODEL.js';
+import ATTRIBUTES from '../../../ATTRIBUTES.js';
+/**
     A Loader type modal.
 */
-class LOADER extends MODAL {
+export default class LOADER extends MODAL {
     /**
         Constructs a Loader
         @param {string} label The header text for this modal
@@ -14,7 +20,6 @@ class LOADER extends MODAL {
         
         super(label, null, true);
         this.addClass('modal-loader');
-        //this.el.style.zIndex = 99999;
         this.el.setAttribute('name', 'LOADER');
 
         this.dialog.el.style.width = '80%';
@@ -24,14 +29,8 @@ class LOADER extends MODAL {
         this.dialog.addClass('loader');
 
         this.progress = new EL(this.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('progress')));
-        
-        this.progressBar = new EL(this.progress, 'DIV', new MODEL(new ATTRIBUTES({
-            'class': 'progress-bar progress-bar-info progress-bar-striped active noselect',
-            'role': 'progressbar',
-            'aria-valuenow': value,
-            'aria-valuemin': 0,
-            'aria-valuemax': 100
-        })));
+
+        this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
         
         this.console = new CONSOLE(this.container.body.pane, new MODEL(
             new ATTRIBUTES({
@@ -66,17 +65,24 @@ class LOADER extends MODAL {
                 let txt = text.substr(0, 32) + '...';
                 this.progressBar.setInnerHTML(txt);
                 this.console.addEntry(text);
-                debug(text);
+                try {
+                    app.DEBUG.log(text);
+                } catch (e) {
+                    console.log(text);
+                }
             }
             if (show) {
                 this.show();
-
                 if (value === 100) {
                     this.hide(1500);
                 }
             }
         } else {
-            debug('Unable to find loader');
+            try {
+                app.DEBUG.log('Unable to find loader');
+            } catch (e) {
+                console.log('Unable to find loader');
+            }
         }
     }
 

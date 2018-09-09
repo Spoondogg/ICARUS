@@ -1,7 +1,8 @@
-﻿/**
+﻿import EL from '../../EL.js';
+/**
     List Item Constructor
 */
-class LI extends EL {
+export default class LI extends EL {
     /**
         Constructs a List Item
         @param {UL} node The object to contain this element

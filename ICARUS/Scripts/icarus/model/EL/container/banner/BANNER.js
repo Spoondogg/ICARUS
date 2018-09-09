@@ -1,8 +1,9 @@
-﻿/**
-    A banner that can be populated with CallOuts
+﻿import CONTAINER from '../CONTAINER.js';
+/**
+    A horizontal container designed to be
+    populated with self contained objects
 */
-import CONTAINER from '../CONTAINER.js';
-export class BANNER extends CONTAINER {
+export default class BANNER extends CONTAINER {
     /**
         Constructs a Banner that contains CallOuts.
         @param {CONTAINER} node The model

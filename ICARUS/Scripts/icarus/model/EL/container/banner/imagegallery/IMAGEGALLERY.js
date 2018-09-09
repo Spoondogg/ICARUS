@@ -1,7 +1,8 @@
-﻿/**
+﻿import BANNER from '../BANNER.js';
+/**
     Contains a high level view of all objects owned by this user
 */
-class IMAGEGALLERY extends BANNER {
+export default class IMAGEGALLERY extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node

@@ -1,4 +1,5 @@
-﻿/**
+﻿import CONTAINER from '../CONTAINER.js';
+/**
     Textblock Constructor
     A TEXTBLOCK is essentially a DIV that is designed to contain
     rich text (paragraph and span with formatting attributes) and images.
@@ -9,7 +10,7 @@
     @param {MODEL} model The textblock
     @param {number} depth The heirarchy for header elements, classes etc
 */
-class TEXTBLOCK extends CONTAINER {
+export default class TEXTBLOCK extends CONTAINER {
     constructor(node, model, depth) {
         super(node, 'DIV', model);
         this.addClass('textblock');

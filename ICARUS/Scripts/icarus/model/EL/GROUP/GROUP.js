@@ -2,8 +2,7 @@
 /**
     A grouping of list items
  */
-export class GROUP extends EL {
-
+export default class GROUP extends EL {
     /**
         Construct a group of NavItems
         @param {EL} node The element that will contain this object
@@ -18,7 +17,6 @@ export class GROUP extends EL {
         }
         this.groups = {};
     }
-
     /**
         Retrieves the specified group
         @param {string} name Name of group
@@ -27,7 +25,6 @@ export class GROUP extends EL {
     getGroup(name) {
         return this.groups[name];
     }
-
     /**
         Adds the given group to this.groups
         @param {GROUP} group A GROUP Element
@@ -37,7 +34,6 @@ export class GROUP extends EL {
         this.groups[group.name] = group;
         return this.groups[group.name];
     }
-
     /**
         Adds or Overrides the given group to this.groups
         @param {GROUP} group A GROUP Element

@@ -1,18 +1,18 @@
-﻿/**
+﻿import THUMBNAIL from '../THUMBNAIL.js';
+import '../../../../../../StringMethods.js';
+/**
     A thumbnail with a preview window and a list of Containers
     that can be loaded into the preview
 */
-class INDEXTHUMBNAIL extends THUMBNAIL {
+export default class INDEXTHUMBNAIL extends THUMBNAIL {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model
-         @param {MODEL} model Object Model
+        @param {MODEL} model Object Model
      */
     constructor(node, model) {
         super(node, model);
         this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
-        
-
         //this.construct();
         //this.populate(model.children);
     }
@@ -22,7 +22,7 @@ class INDEXTHUMBNAIL extends THUMBNAIL {
      * TODO: Consider paging these results
      */
     launchModal() {
-        debug('Launch Index Thumbnail Modal');
+        DEBUG.log('Launch Index Thumbnail Modal');
 
         this.modal = new MODAL(this.data.header);
         this.modal.container.body.pane.addClass('thumbnail index-thumbnail');

@@ -1,14 +1,26 @@
-﻿/**
+﻿import BANNER from '../BANNER.js';
+import HEADER from '../../../header/HEADER.js';
+import NAVITEMICON from '../../../nav/navitemicon/NAVITEMICON.js';
+//import MODEL from '../../../../MODEL.js';
+import EL, { MODEL } from '../../../EL.js';
+import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+import P from '../../../p/P.js';
+import TOKEN from '../../formelement/input/TOKEN.js';
+import DEBUG from '../../../../../DEBUG.js';
+import MODAL from '../../../modal/MODAL.js';
+import CONTAINER from '../../CONTAINER.js';
+import MENULIST from '../../menulist/MENULIST.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
+/**
     Contains a high level view of all objects owned by this user
+    @extends BANNER
 */
-import { BANNER } from '../BANNER.js';
-import { HEADER } from '../../../header/HEADER.js';
-import { NAVITEMICON } from '../../../nav/navitemicon/NAVITEMICON.js';
-export class INDEX extends BANNER {
+export default class INDEX extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node
         @param {MODEL} model INDEX model
+        
      */
     constructor(node, model) {
         super(node, model);
@@ -17,14 +29,18 @@ export class INDEX extends BANNER {
     }
 
     construct() {
+
+        this.token = TOKEN.getToken();
+
         this.containerHeader = new HEADER(this.body.pane, new MODEL().set({
             'label': 'INDEX'
         }));
         //$(this.containerHeader.el).insertBefore(this.body.pane);
 
-        let elementList = ['ARTICLE', 'Form', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY']; //'Main',
-
-        app.loader.log('Constructing Container Index...');
+        let elementList = [
+            'ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL',
+            'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'
+        ];
 
         for (let l = 0; l < elementList.length; l++) {
 
@@ -50,12 +66,10 @@ export class INDEX extends BANNER {
             }));
             */
 
-            //app.loader.log(100, 'Retrieving ' + elementList[l] + '...', true);
-
 
            // list = 0;
             $.post('/' + elementList[l] + '/List', {
-                '__RequestVerificationToken': token.value
+                '__RequestVerificationToken': this.token.value
             },
                 function (payload, status) {
                     if (status === 'success') {
@@ -86,8 +100,6 @@ export class INDEX extends BANNER {
                 }.bind(this)
             );
         }
-
-        //app.loader.hide(500);
     }
 
     /**
@@ -99,8 +111,7 @@ export class INDEX extends BANNER {
      * @param {Array} list A list
      */
     launchModal(header, p, listClass, list) {
-        debug('Launch Index Thumbnail Modal');
-        app.loader.log(100, 'Launching Modal', true);
+        DEBUG.log('Launch Index Thumbnail Modal');
 
         this.modal = new MODAL(header);
         this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
@@ -175,7 +186,6 @@ export class INDEX extends BANNER {
      * @param {number} id Object id
      */
     launchPreview(delay = 500, title = 'Preview', node, className, id) {
-        app.loader.log(100, 'Launch Preview', true);
         setTimeout(function () {
             $.getJSON('/' + className + '/Get/' + id, function (result) {
                 console.log(className + ':');

@@ -1,4 +1,7 @@
-import { MODEL } from '../MODEL.js';
+import MODEL from '../MODEL.js';
+export { MODEL };
+import { STATUS } from '../../enums/STATUS.js';
+import DEBUG from '../../DEBUG.js';
 /**
     Generic Element Constructor  
 
@@ -11,7 +14,7 @@ import { MODEL } from '../MODEL.js';
     But it is better practice to do this:
         new DIV(node, model)
 */
-export class EL extends MODEL {
+export default class EL extends MODEL {
     /**
         Constructs a generic html element.
         @param {EL} node The object to contain this element
@@ -26,14 +29,12 @@ export class EL extends MODEL {
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
         this.className = this.constructor.name;
         this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
-
         this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
 
         this.children = children ? children : []; // Contains an array of child element models
         this.callbacks = {}; // Contains a series of Constructor functions that this element can use
 
         this.make(node, model, innerHTML);
-
         //this.merge(model);
         //this.setInnerHTML(innerHTML);
     }
@@ -64,97 +65,112 @@ export class EL extends MODEL {
         return this.el;
     }
 
-    /**
-     * Recursively iterates through parent nodes until an object with the given prototype
-     * @param {string} value The value to search for within this key
-     * @param {any} node Entry point to traversing the chain
-     * @param {any} attempt Recursion loop
-     * @returns {CONTAINER} The parent container
-     */
-    getProtoTypeByClass(value, node = this.node, attempt = 0) {
-        attempt++;
-        try {
-            debug('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')');
-            //debug(node);
 
-            if (attempt < 100) {
-                try {
-                    debug('id: ' + node.id);
-                    debug('super class: ');
-                    debug(node.__proto__);
-                    if (node.__proto__.__proto__.constructor.name === value.toString()) {
-                        return node;
-                    } else {
-                        return this.getProtoTypeByClass(value, node.node, attempt++);
+    /**
+        Recursively iterates through parent nodes until an object with the given prototype is found
+        @param {string} value The value to search for within this key
+        @param {EL} node Entry point to traversing the chain
+        @param {number} attempt Recursion loop
+        @returns {CONTAINER} The parent container
+    */
+    getProtoTypeByClass(value, node = this.node, attempt = 0) {
+
+        /*if (attempt === 0) {
+            console.log('Getting prototype...', node);
+        }*/
+
+        attempt++;
+
+        if (node === document.body) {
+            //console.log('YOU HAVE REACHED THE BODY');
+            return null;
+        } else {
+            try {
+                //console.log('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')');
+                //console.log(node);
+
+                if (attempt < 100) {
+                    try {
+                        //console.log('id: ' + node.id);
+                        //console.log('super class: ' + node.__proto__.__proto__.constructor.name);
+                        //console.log(node.__proto__);
+                        if (node.__proto__.__proto__.constructor.name === value.toString()) {
+                            //console.log('Found container(' + value.toString() + ')...', node);
+                            return node;
+                        } else {
+                            return this.getProtoTypeByClass(value, node.node, attempt++);
+                        }
+                    } catch (e) {
+                        console.log(e);
+                        return null;
                     }
-                } catch (e) {
-                    debug(e);
+                } else {
+                    console.log('getProtoTypeByClass(): Too many attempts (' + attempt + ')', this);
                     return null;
                 }
-            } else {
-                debug('getProtoTypeByClass(): Too many attempts (' + attempt + ')');
-                return null;
-            }
-        } catch (e) {
-            //TypeError: this.getProtoTypeByClass is not a function
-            if (e.name === 'TypeError') {
-                console.log('Error Caught: ' + e.message);
+            } catch (e) {
+                //TypeError: this.getProtoTypeByClass is not a function
+                if (e.name === 'TypeError') {
+                    console.log('Error Caught: ' + e.message);
 
-            } else {
-                console.log('Error not caught.');
+                } else {
+                    console.log('Error not caught.');
+                }
+                console.log(e);
             }
-            console.log(e);
-        }
+        }        
     }
-
+    
     /**
      * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
+        try {
+            app.stickyFooter.show();
 
-        app.stickyFooter.show();
+            $(this.el).addClass('edit');
+            this.editor = new TEXTAREA(app.stickyFooter, new MODEL(
+                new ATTRIBUTES({
+                    'value': this.el.innerHTML
+                })
+            ).set({
+                'label': '<' + this.element + '>'
+            }));
 
-        $(this.el).addClass('edit');
-        this.editor = new TEXTAREA(app.stickyFooter, new MODEL(
-            new ATTRIBUTES({
-                'value': this.el.innerHTML
-            })
-        ).set({
-            'label': '<' + this.element + '>'
-        }));
+            //$(this.editor.el).insertAfter(this.el);
+            this.editor.input.el.setAttribute('style', 'height:200px;');
+            this.editor.input.el.onkeyup = function () {
+                this.el.innerHTML = this.editor.input.el.value;
+            }.bind(this);
 
-        //$(this.editor.el).insertAfter(this.el);
-        this.editor.input.el.setAttribute('style', 'height:200px;');
-        this.editor.input.el.onkeyup = function () {
-            this.el.innerHTML = this.editor.input.el.value;
-        }.bind(this);
-        
-        this.editor.input.el.onblur = function () {
+            this.editor.input.el.onblur = function () {
+                try {
+                    console.log('Editing ' + this.className + ' inside ' + this.node.className);
+                    let val = this.editor.input.el.value;
+                    console.log('Value: ' + val);
+                    this.node.node.node.data[this.className.toLowerCase()] = val;
 
-            try {
-                console.log('Editing ' + this.className + ' inside ' + this.node.className);
-                let val = this.editor.input.el.value;
-                console.log('Value: ' + val);
-                this.node.node.node.data[this.className.toLowerCase()] = val;
+                    console.log('THIS.NODE.NODE (Container) ELEMENT DATA:');
+                    console.log(this.node.node.node);
 
-                console.log('THIS.NODE.NODE (Container) ELEMENT DATA:');
-                console.log(this.node.node.node);
+                } catch (e) {
+                    console.log(e);
+                }
 
-            } catch (e) {
-                console.log(e);
-            }
+                this.editor.destroy();
+                $(this.el).removeClass('edit');
+                DEBUG.log('QuickSave');
+                this.getProtoTypeByClass('CONTAINER').quickSave(true);
 
-            this.editor.destroy();
-            $(this.el).removeClass('edit');
-            debug('QuickSave');
-            this.getProtoTypeByClass('CONTAINER').quickSave(true);
+                app.stickyFooter.hide();
+                app.stickyFooter.empty();
+            }.bind(this);
 
-            app.stickyFooter.hide();
-            app.stickyFooter.empty();
-        }.bind(this);
-
-        this.editor.input.el.focus();
-        event.stopPropagation();
+            this.editor.input.el.focus();
+            event.stopPropagation();
+        } catch (ee) {
+            console.log(ee);
+        }
     }
 
     /**
@@ -167,18 +183,18 @@ export class EL extends MODEL {
         @returns {EL} Constructed Element
      */
     create(model) {
-        //debug(this.className+'.create(' + model.className + ')');
         let result = null;
         try {
             this.callbacks[model.className].forEach(function (fn) {
                 result = fn(model);
             }.bind(this));
         } catch (e) {
-            app.loader.log(0,
+            console.log(0,
                 this.className + '.create(): No constructor exists '
                 + 'for className "' + model.className + '"'
             );
-            debug(e);
+            console.log(e);
+            return false;
         }
         return result;
     }
@@ -360,23 +376,26 @@ export class EL extends MODEL {
     */
     populate(children) {
         if (children) {
-
             let denom = children.length;
-            let progress = 0; // 0 to 100
-            
-            //app.loader.log(this.className + '.populate(' + children.length + ');');
+            let progress = 0; // 0 to 100            
+            //console.log(this.className + '.populate(' + children.length + ');');
             //app.loader.show();
             try {
                 for (let c = 0; c < children.length; c++) {
                     progress = Math.round((c+1) / denom * 100);
-                    //app.loader.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
+                    //console.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
                     this.create(children[c]);
                 }
-            } catch (e) { console.log(e); }
-            //app.loader.log(100, 'Success');
+            } catch (e) {
+                console.log(e);
+            }
+            //console.log(100, 'Success');
+
+            /*
             if (!DEBUGMODE) {
                 app.loader.hide();
             }
+            */
         }
     }
 

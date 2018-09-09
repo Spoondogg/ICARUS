@@ -1,4 +1,5 @@
-﻿class LogoutForm extends FORM {
+﻿import FORM from '../FORM.js';
+export default class LogoutForm extends FORM {
     /**
         Constructs an Icarus Logout Form
         @param {APP} node APP element to contain logout form
