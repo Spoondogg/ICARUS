@@ -8,6 +8,7 @@ import EL, { MODEL } from '../EL.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 import DEBUG from '../../../DEBUG.js';
+import MODAL from '../modal/MODAL.js';
 /**
     A generic CONTAINER with a header that controls population of this element.
 
@@ -63,14 +64,9 @@ export default class CONTAINER extends GROUP {
         // Create it on demand instead of always being here
         // Use el.make() as required
         // Implement el.make() as an argument of new EL();
-        
-        if (model.navBar === undefined) {
-            model.navBar = {};
-            model.navBar.label = model.label;
-        }
 
         let showHeader = false;
-        if (dev || model.element === 'MAIN') {
+        if (dev) {
             showHeader = true;
         }
 
@@ -85,7 +81,9 @@ export default class CONTAINER extends GROUP {
 
 
         // Create the full navBar...  Ugh
-        this.navBar = new NAVBAR(this, model.navBar);
+        this.navBar = new NAVBAR(this, new MODEL().set({
+            'label': model.label
+        }));
         if (showHeader) {
             this.showNavBar();
         }
@@ -137,9 +135,7 @@ export default class CONTAINER extends GROUP {
 
         this.body = new CONTAINERBODY(this, model);
 
-        if (model.navBar) {
-            this.addNavBarDefaults();
-        }
+        this.addNavBarDefaults();
 
         let defaultContainers = [
             'IFRAME', 'FORM', 'LIST', 'MENULIST',
@@ -391,62 +387,6 @@ export default class CONTAINER extends GROUP {
                 })
             );
             this.btnQuickSave.el.onclick = this.quickSave.bind(this);
-        }
-    }
-    
-    /**
-        Creates a TAB that represents this container
-        @param {MODEL} model Object Model
-        @returns {NAVITEMLINK} A tab (navitemlink)
-    */
-    createTab(model) {
-        try {
-            let tab = null;
-            let container = model.node.node.node;
-
-            if (container.tab) {
-                tab = container.tab.addMenu(new MODEL()).addNavItem(
-                    new MODEL(new ATTRIBUTES()).set({
-                        'anchor': new MODEL().set({
-                            'label': model.label
-                        })
-                    })
-                );
-            } else {
-                if (typeof app !== 'undefined' && app.body.sidebar) {
-                    tab = app.body.sidebar.menu.addNavItem(
-                        new MODEL(new ATTRIBUTES()).set({
-                            'anchor': new MODEL().set({
-                                'label': model.label
-                            })
-                        })
-                    );
-                }
-            }
-
-            if (tab !== null) {
-                tab.el.onclick = function (e) {
-                    // Activate parent(s)
-                    app.setArticle(model);
-                    let parentNode = model.node.node.node;
-                    while (parentNode.node.node) { // 
-                        try {
-                            parentNode.tab.activate();
-                            parentNode.show();
-                        } catch (ee) { /*console.log(ee)*/ }
-                        parentNode = parentNode.node.node.node;
-                    }
-
-                    // Prevent parent click()
-                    e.stopPropagation();
-
-                }.bind(this);
-            }
-            return tab;
-        } catch (e) {
-            console.log(this.element+' has not been instantiated.  Unable to create tab.');
-            console.log(e);
-            return null;
         }
     }
     

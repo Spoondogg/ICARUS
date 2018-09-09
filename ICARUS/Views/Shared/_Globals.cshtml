@@ -1,5 +1,10 @@
 ﻿@*
-    Global Javascript variables that are generated Server Side using Razor
+    Global Javascript variables that are generated 
+    Server Side.
+
+    This partial view can be imported into _Layout.cshtml
+    before initializing the application, and will be 
+    available for init.js
 *@
 <script>
     /**
@@ -13,7 +18,11 @@
     var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
 
     /**
-        For debugging purposes
+        If enabled, features that are under development 
+        are also shown.  
+
+        This will most definately include buggy or 
+        incomplete code, so be warned.
     */
     var dev = @(User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
 </script>
