@@ -1,5 +1,4 @@
 ﻿import CONTAINER from '../CONTAINER.js';
-import WATERMARK from '../../../../WATERMARK.js';
 import EL, { MODEL } from '../../EL.js';
 import LOADER from '../../modal/loader/LOADER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
@@ -20,51 +19,26 @@ export default class MAIN extends CONTAINER {
     /**
         Constructs a MAIN Container
         @param {MODEL} model APP model
+        param {LOADER} loader The default loader
      */
-    constructor(model, loader) {
-        model = model || new MODEL().set({
-            'id': 0,
-            'dataId': 0,
-            'attributesId': 0,
-            'descriptionId': 0,
-            'shared': 0,
-            'element': 'MAIN',
-            'navBar': {
-                'className': 'NAVBAR',
-                'attributes': {
-                    'class': 'navbar navbar-fixed-top navbar-inverse'
-                },
-                'element': 'NAV'
-            },
-            'footer': {
-                'className': 'STICKYFOOTER',
-                'attributes': {
-                    'class': 'stickyfooter'
-                },
-                'element': 'FOOTER'
-            },
-            'className': 'Main',
-            'attributes': {
-                'class': 'app'
-            }
-        });
+    constructor(model) {
 
-        document.title = model.label;
-        new WATERMARK();
+        document.title = model.label;        
         
         super(document.body, 'MAIN', model, [
             'ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
             'IMAGEGALLERY', 'DICTIONARY', 'WORD'
         ]);
+        this.addClass('app');
+        this.showNavBar();
+        this.navBar.addClass('navbar-fixed-top');
         this.body.pane.addClass('pane-tall');
 
         /**
             The primary LOADER
         */
-        this.loader = new LOADER('Loading', 'Loading', 100);
-        this.loader.log(100, 'Loading');
-
-        //this.factory = new CONTAINERFACTORY(); // APP.factory ?
+        this.loader = model.loader;
+        
 
         this.sidebar = new SIDEBAR(this, new MODEL().set({
             'label': 'Left Sidebar'
@@ -92,14 +66,6 @@ export default class MAIN extends CONTAINER {
                 this.login();
             }.bind(this);
         }
-    }
-
-    /**
-        Sets the controller value for this application
-        @param {any} app
-     */
-    setApp(app) {
-        this.app = app;
     }
 
     /**
@@ -180,7 +146,7 @@ export default class MAIN extends CONTAINER {
             ).el.onclick = function () {
                 console.log(100, 'Returning Home...');
                 setTimeout(function () {
-                    location.href = url.origin;
+                    location.href = this.url.origin;
                 }.bind(this), 1000);
             }.bind(this);
 

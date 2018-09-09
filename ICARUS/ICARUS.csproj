@@ -744,7 +744,7 @@
     <Content Include="Scripts\icarus\enums\ICONS.js" />
     <Content Include="Scripts\icarus\enums\DATAELEMENTS.js" />
     <Content Include="Scripts\icarus\init.js" />
-    <Content Include="Scripts\icarus\lib\icarus.js" />
+    <Content Include="Scripts\icarus\bundles\icarus.js" />
     <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
     <Content Include="Scripts\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
@@ -943,6 +943,7 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
+    <Folder Include="Scripts\icarus\controller\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201801240358189_Initial.resx">
@@ -1237,6 +1238,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties bundleconfig_1json__JSONSchema="http://json.schemastore.org/cryproj.54.schema" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets" Condition="Exists('..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets')" />
