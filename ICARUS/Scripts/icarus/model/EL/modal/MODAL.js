@@ -2,6 +2,7 @@
 import EL, { MODEL } from '../EL.js';
 import CONTAINER from '../container/CONTAINER.js';
 import HEADER from '../header/HEADER.js';
+import WELL from '../p/WELL.js';
 /**
     A Bootstrap 3 Modal
     https://www.w3schools.com/bootstrap/bootstrap_modal.asp    

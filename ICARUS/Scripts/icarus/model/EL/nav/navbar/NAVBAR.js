@@ -13,7 +13,7 @@ export default class NAVBAR extends NAV {
      */
     constructor(node, model) {
         super(node, model);
-        this.addClass('navbar-nav collapse');
+        this.addClass('navbar navbar-nav navbar-inverse collapse');
 
         //this.wrapper = new EL(node, 'DIV', new MODEL('navbar-wrapper'));
 

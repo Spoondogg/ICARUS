@@ -1,7 +1,6 @@
 ﻿import CONTAINER from '../CONTAINER.js';
 import EL, { MODEL } from '../../EL.js';
 import FORM from '../form/FORM.js';
-//import MODEL from '../../../MODEL.js';
 import ATTRIBUTES from '../../../ATTRIBUTES.js';
 import CONTAINERFACTORY from '../CONTAINERFACTORY.js';
 /**
@@ -18,8 +17,6 @@ export default class CHAT extends CONTAINER {
         this.addClass('chat');
 
         //this.conversation = new EL(this.body.pane, 'DIV', new MODEL('conversation'));
-
-        
 
         this.form = CONTAINERFACTORY.createEmptyForm(this.body.pane);
         this.form.el.style = 'height:68px;background-color:#5a5a5a;';
