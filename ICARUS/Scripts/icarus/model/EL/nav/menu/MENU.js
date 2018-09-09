@@ -1,7 +1,14 @@
-﻿/**
+﻿import UL from '../../group/ul/UL.js';
+import EL from '../../el.js';
+import MODEL from '../../../MODEL.js';
+import ATTRIBUTES from '../../../ATTRIBUTES.js';
+import NAVITEM from '../navitem/NAVITEM.js';
+import HEADER from '../../header/HEADER.js';
+import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
+/**
     Nav item within navbar
 */
-class MENU extends UL {
+export default class MENU extends UL {
     /**
         Construct a group of NavItems
         @param {EL} node The element that will contain this object

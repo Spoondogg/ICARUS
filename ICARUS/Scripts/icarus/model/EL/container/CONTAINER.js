@@ -1,26 +1,45 @@
-﻿import GROUP from '../group/GROUP.js';
+﻿import { ICONS } from '../../../enums/ICONS.js';
+import { STATUS } from '../../../enums/STATUS.js';
+import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
+import GROUP from '../group/GROUP.js';
+import NAVBAR from '../nav/navbar/NAVBAR.js';
+import CONTAINERBODY from './CONTAINERBODY.js';
+import EL, { MODEL } from '../EL.js';
+import ATTRIBUTES from '../../ATTRIBUTES.js';
+import CONTAINERFACTORY from './CONTAINERFACTORY.js';
+import DEBUG from '../../../DEBUG.js';
 /**
     A generic CONTAINER with a header that controls population of this element.
 
     A container can be expanded or hidden and
     have elements added to itself.
 */
-export class CONTAINER extends GROUP {
+export default class CONTAINER extends GROUP {
     /**
         @param {EL} node The element to contain the section
         @param {string} element HTML element
         @param {MODEL} model The CONTAINER object retrieved from the server
         @param {array} containerList An array of strings representing child Containers that this Container can create
+        @param {CONTAINERFACTORY} factory A container constructor factory class
      */
-    constructor(node, element, model = new MODEL().set({
-        'element': element,
-        'name': element || '',
-        'label': element,
-        'shared': 1
-    }), containerList = []) {
+    constructor(
+        node,
+        element,
+        model = new MODEL().set({
+            'element': element,
+            'name': element || '',
+            'label': element,
+            'shared': 1
+        }),
+        containerList = [],
+        factory
+    ) {
         super(node, element, model);
         this.addClass('icarus-container');
         this.isContainer = 1;
+        this.container = null; //this.getContainer();
+
+        //this.main = this.getMainContainer();
 
         // Data elements contain a list of arguments for a data object
         this.dataElements = DATAELEMENTS[this.className];
@@ -94,10 +113,13 @@ export class CONTAINER extends GROUP {
             container.insertBefore(this.el);
             container.collapse('show');
 
+            /*
             setTimeout(function () {
                 console.log('QuickSaving drop recipient parent ' + this.className + '(' + this.id + ')');
                 this.getProtoTypeByClass('CONTAINER').quickSave(false); // QuickSave Parent
             }.bind(this), 500);
+            */
+            console.log('You should save your changes');
 
         }.bind(this);
 
@@ -119,15 +141,11 @@ export class CONTAINER extends GROUP {
             this.addNavBarDefaults();
         }
 
-        // Default permitted child containers
-        this.addContainerCase('IFRAME');
-        this.addContainerCase('FORM');
-        this.addContainerCase('LIST');
-        this.addContainerCase('MENULIST');
-        this.addContainerCase('JUMBOTRON');
-        this.addContainerCase('BANNER');
-        this.addContainerCase('PARAGRAPH');
-        this.addContainerCase('CHAT');
+        let defaultContainers = [
+            'IFRAME', 'FORM', 'LIST', 'MENULIST',
+            'JUMBOTRON', 'BANNER', 'PARAGRAPH', 'CHAT'
+        ];
+        containerList.splice(2, 0, ...defaultContainers);
 
         // Add any additional containers from containerList
         for (let c = 0; c < containerList.length; c++) {
@@ -156,7 +174,7 @@ export class CONTAINER extends GROUP {
 
     /** Abstract construct method throws an error if not declared */
     construct() {
-        debug('CONTAINER.construct();');
+        DEBUG.log('CONTAINER.construct();');
         if (this.className !== 'CONTAINER') {
             throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
         }
@@ -195,8 +213,6 @@ export class CONTAINER extends GROUP {
     moveUp() {
         console.log('Move Up');
         let node = $(this.el);
-        //let node = $(this.node.el);
-        //let container = this.node.node.el;
         if (node.prev().length > 0) {
             node.animate({ height: 'toggle' }, 300);
             setTimeout(function () {
@@ -218,8 +234,6 @@ export class CONTAINER extends GROUP {
     moveDown() {
         console.log('Move Down');
         let node = $(this.el);
-        //let node = $(this.node.el);
-        //let container = this.node.node.el;
         if (node.next().length > 0) {
             node.animate({ height: 'toggle' }, 300);
             setTimeout(function () {
@@ -243,17 +257,17 @@ export class CONTAINER extends GROUP {
     refresh() {
         console.log('Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
 
-        app.loader.log(20, 'Emptying...', true);
+        console.log(20, 'Emptying...', true);
         this.body.pane.empty();
 
-        app.loader.log(30, 'Reconstructing...', true);
+        console.log(30, 'Reconstructing...', true);
         this.construct();
 
         // Populate based on children
-        app.loader.log(60, 'Populating...', true);
+        console.log(60, 'Populating...', true);
         this.populate(this.body.pane.children);
 
-        app.loader.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
+        console.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
     }
 
     /**
@@ -270,7 +284,8 @@ export class CONTAINER extends GROUP {
         if (this.navBar.header.menu) {
 
             /** DOM ACTIONS **/
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            let domGroup = this.navBar.header.menu.getGroup('DOM');
+            domGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.UP,
@@ -282,7 +297,7 @@ export class CONTAINER extends GROUP {
                 this.moveUp();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.DOWN,
@@ -294,7 +309,7 @@ export class CONTAINER extends GROUP {
                 this.moveDown();
             }.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.REFRESH,
@@ -303,7 +318,7 @@ export class CONTAINER extends GROUP {
                 })
             ).el.onclick = this.refresh.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.DELETE,
@@ -312,7 +327,7 @@ export class CONTAINER extends GROUP {
                 })
             ).el.onclick = this.remove.bind(this);
 
-            this.navBar.header.menu.getGroup('DOM').addNavItemIcon(
+            domGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.EXCLAMATION,
@@ -322,7 +337,8 @@ export class CONTAINER extends GROUP {
             ).el.onclick = this.disable.bind(this);
 
             /** CRUD ACTIONS **/
-            this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+            let crudGroup = this.navBar.header.menu.getGroup('CRUD');
+            crudGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.LOAD,
@@ -332,7 +348,7 @@ export class CONTAINER extends GROUP {
             ).el.onclick = this.load.bind(this);
 
             // Add items to Options Dropdown Tab
-            this.btnSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+            this.btnSave = crudGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.SAVE,
@@ -366,7 +382,7 @@ export class CONTAINER extends GROUP {
 
             }.bind(this);
 
-            this.btnQuickSave = this.navBar.header.menu.getGroup('CRUD').addNavItemIcon(
+            this.btnQuickSave = crudGroup.addNavItemIcon(
                 new MODEL().set({
                     'anchor': new MODEL().set({
                         'icon': ICONS.SAVE,
@@ -508,19 +524,19 @@ export class CONTAINER extends GROUP {
     }
 
     /**
-        Performs addCase() for the given Element within a Container of
-        an element that extends Container
+        Performs addCase() for the given Element within a 
+        Container of an element that extends Container
 
         Sets the constructor callback for this element
-        and adds respective tabs etc to this container
+        and adds respective button to this container
 
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
     */
     addContainerCase(className, addButton = true) {
         this.addCase(className,
-            function (model) {
-                return factory.get(this.body.pane, className, model.id || 0);
+            function (model, factory) {
+                return CONTAINERFACTORY.get(this.body.pane, className, model.id || 0);
             }.bind(this)
         );
         if (addButton) {
@@ -641,8 +657,6 @@ export class CONTAINER extends GROUP {
         $(this.body.el).collapse('toggle');
     }
 
-    
-
     /**
      * Creates a modal and populates with a list of Form Groups that belong to this user
      */
@@ -658,21 +672,19 @@ export class CONTAINER extends GROUP {
      */
     save(node, caller) {
         console.log(this.element + '.save()');
-        console.log('Node:');
-        console.log(node);
-        console.log('Caller:');
-        console.log(caller);
-        console.log('This:');
-        console.log(this);
+        //console.log('Node:');
+        //console.log(node);
+        //console.log('Caller:');
+        //console.log(caller);
+        //console.log('This:');
+        //console.log(this);
 
         // Populate subsections with elements in this body
         let subsections = this.getSubSections();
-
-        debug('Creating save form...');        
-        let form = this.createEmptyForm(node, false);
+       
+        let form = CONTAINERFACTORY.createEmptyForm(node, false);
         form.addClass('saveContainer');
-        //form.fieldset.formElementGroup.body.pane.addClass('sidebar-formPane');
-        //form.el.setAttribute('style', 'background-color:white;');
+        form.setPostUrl(this.className + '/Set');
 
         let inputs = [
             new MODEL(new ATTRIBUTES({
@@ -770,8 +782,6 @@ export class CONTAINER extends GROUP {
         ];
 
         form.fieldset.formElementGroup.addInputElements(inputs);
-        
-        form.setPostUrl(this.className + '/Set');
 
         /*
             THIS IS THE PART THAT USES NODE/CALLER
@@ -786,14 +796,20 @@ export class CONTAINER extends GROUP {
                 console.log(caller);
                 caller.node.node.toggleCollapse();
             }
-            app.focusBody();
-            app.loader.hide();
 
-            let container = this.getProtoTypeByClass('CONTAINER');
-            if (container !== 'undefined') {
-                container.refresh();
-            } else {
-                location.reload(true);
+            try {
+                this.getMainContainer().focusBody();
+                this.getMainContainer().loader.hide();
+            } catch (e) {
+                console.log(e);
+            }
+            
+            try {
+                this.getContainer().refresh();
+            } catch (e) {
+                //console.log('Unable to reload Container);
+                //location.reload(true);
+                this.getMainContainer().refresh();
             }
 
         }.bind(this);
@@ -820,79 +836,36 @@ export class CONTAINER extends GROUP {
     }
 
     /**
-     * Recursively iterates through parent nodes until an object with the given 'attributeName' is found
-     * @param {string} key The object key to search within
-     * @param {any} value The value to search for within this key
-     * @param {EL} node Entry point to traversing the chain
-     * @param {number} attempt Recursion loop
-     * @returns {CONTAINER} The parent container
-     
-    getContainer(key, value, node = this.node, attempt = 0, maxAttempt = 100) {
-        attempt++;
+        Sets the parent container for this container if it does not exist,
+        then returns it or null
+        @returns {CONTAINER} The parent container for this container
+    */
+    getContainer() {
+        if (this.className.toUpperCase() === 'MAIN') {
+            console.log(this.className+'.getContainer() has no parent container', this);
+            return this;
 
-        debug('Searching for ' + key + ': ' + value + '(' + attempt + ')');
-        debug(node);
-
-        if (attempt < maxAttempt) {
-            try {
-                debug('id: ' + node.id+', key: '+key);
-                if (node[key]) {
-                    console.log('\tComparing ' + key + ' > ' + node[key] + ' to ' + value.toString());
-                    if (node[key] === value) {
-                        console.log('\t\tWe have a match');
-                        return node;
-                    } else {
-                        console.log('\t\t' + node[key] + ' is not equal to ' + value.toString());
-                        return this.getContainer(key, value, node.node, attempt++);
-                    }
-                }
-            } catch (e) {
-                debug(e);
-                return null;
-            }
         } else {
-            debug('getContainer(): Too many attempts (' + attempt + ')');
-            return null;
+            if (this.container === undefined || this.container === null) {
+                this.container = this.getProtoTypeByClass('CONTAINER');
+            }
+            return this.container;
         }
     }
-    */
-    
 
     /**
-     * Creates an empty form with a single fieldset and formelementgroup
-     * @param {EL} node Parent node
-     * @param {boolean} hidden If true, form is hidden
-     * @returns {FORM} An empty form container
-     */
-    createEmptyForm(node, hidden = false) {
-        let form = new FORM(
-            node,
-            new MODEL(new ATTRIBUTES({
-                'style': hidden ? 'display:none;' : ''
-            })).set({
-                'label': 'FORM',
-                //'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        form.fieldset = new FIELDSET(
-            form.body.pane, new MODEL().set({
-                'label': 'FIELDSET',
-                //'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        form.fieldset.formElementGroup = new FORMELEMENTGROUP(
-            form.fieldset.body.pane, new MODEL().set({
-                'label': 'FORMELEMENTGROUP',
-                //'collapsed': 0,
-                'showHeader': 0,
-                'hasTab': 0
-            })
-        );
-        return form;
+        Returns the MAIN container
+    */
+    getMainContainer() {
+        if (this.className.toUpperCase() === 'MAIN') {
+            return this;
+        } else {
+            //let container = this.getContainer().getContainer();
+            let container = this.getContainer();
+            if (container.className !== 'MAIN') {
+                return container.getMainContainer();
+            }
+        }
     }
 
     /**
@@ -904,11 +877,11 @@ export class CONTAINER extends GROUP {
         console.log('QuickSaveFormPost:'+modelId);
         console.log(data);
         if (modelId > 0) {
-            app.loader.log(50, 'Saving FormPost: ' + modelId);
-            let form = this.createEmptyForm(this, true);
+            console.log(50, 'Saving FormPost: ' + modelId);
+            let form = CONTAINERFACTORY.createEmptyForm(this, true);
             let inputs = [];
             for (let key in data) {
-                debug('Adding data attributes');
+                DEBUG.log('Adding data attributes');
 
                 //let value = this.data[key] ? this.data[key] : data[key];
                 console.log('Key: ' + key);
@@ -933,11 +906,11 @@ export class CONTAINER extends GROUP {
             form.post();
             form.afterSuccessfulPost = function () {
                 form.destroy();
-                debug('FormPost: ' + modelId + ' has been quicksaved');
+                DEBUG.log('FormPost: ' + modelId + ' has been quicksaved');
             }.bind(this);
 
         } else {
-            debug('No modelId provided');
+            DEBUG.log('No modelId provided');
         }
     }
 
@@ -950,16 +923,16 @@ export class CONTAINER extends GROUP {
     quickSave(noPrompt = false) {
 
         if (noPrompt || confirm('Quick Save '+this.className+'('+this.id+') : '+this.label+' ?')) {
-            app.loader.log(20, 'Quick Save');
+            console.log(20, 'Quick Save');
 
-            debug(this.element + '.save()');
-            debug(this);
+            DEBUG.log(this.element + '.save()');
+            DEBUG.log(this);
 
             // Populate subsections with elements in this body
             let subsections = this.getSubSections();
 
-            debug('Creating save form...');
-            let form = this.createEmptyForm(this, true);
+            DEBUG.log('Creating save form...');
+            let form = CONTAINERFACTORY.createEmptyForm(this, true);
             form.fieldset.formElementGroup.addInputElements([
                 new MODEL(new ATTRIBUTES({
                     'name': 'element',
@@ -1107,7 +1080,7 @@ export class CONTAINER extends GROUP {
                 //app.loader.hide();
             }.bind(this);
 
-            app.loader.log(100, 'Quick Save Complete');
+            console.log(100, 'Quick Save Complete');
             //app.loader.hide();
             return true;
 
@@ -1137,7 +1110,7 @@ export class CONTAINER extends GROUP {
         @param {EL} caller This
      */
     afterSuccessfulPost(node, caller) {
-        app.loader.log(100, 'Success');
+        console.log(100, 'Success');
         //app.loader.hide();
     }
 
@@ -1209,8 +1182,8 @@ export class CONTAINER extends GROUP {
             }.bind(this);            
             this.prompt.show();
         } catch (e) {
-            debug('Unable to disable this ' + this.element);
-            debug(e);
+            DEBUG.log('Unable to disable this ' + this.element);
+            DEBUG.log(e);
         }
     }
 
@@ -1228,13 +1201,13 @@ export class CONTAINER extends GROUP {
                 this.destroy();
                 this.prompt.hide();
                 console.log('TODO: Disable method on Container controller.');
-                app.loader.log(100, 'Disabling '+this.className);
+                console.log(100, 'Disabling '+this.className);
                 $.post('/' + this.className + '/Disable/' + this.id, {
                     '__RequestVerificationToken': token.value
                 },
                     function (payload, status) {
                         if (payload.result !== 0) {
-                            app.loader.log(100, 'Success');
+                            console.log(100, 'Success');
                             setTimeout(function () {
 
                                 let url = new URL(window.location.href);
@@ -1248,17 +1221,17 @@ export class CONTAINER extends GROUP {
 
                             }.bind(this), 1000);
                         } else {
-                            app.loader.log(0, 'Login failed. (err_' + status + ').<br>' +
+                            console.log(0, 'Login failed. (err_' + status + ').<br>' +
                                 payload.message
                             );
-                            debug('Failed to POST results to server with status: "' + status + '"');
-                            debug('Payload:\n');
-                            debug(payload);
+                            DEBUG.log('Failed to POST results to server with status: "' + status + '"');
+                            DEBUG.log('Payload:\n');
+                            DEBUG.log(payload);
                         }
                     }.bind(this)
                 );
 
-                app.loader.log(100, 'Disable Complete');
+                console.log(100, 'Disable Complete');
 
 
 
@@ -1266,8 +1239,8 @@ export class CONTAINER extends GROUP {
             }.bind(this);
             this.prompt.show();
         } catch (e) {
-            debug('Unable to disable this ' + this.element);
-            debug(e);
+            DEBUG.log('Unable to disable this ' + this.element);
+            DEBUG.log(e);
         }
     } 
 }

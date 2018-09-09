@@ -2,7 +2,7 @@
     A search input wrapped in a FORM that filter's the
     contents of a given GROUP
  */
-class NAVSEARCH extends NAVITEM { //LI {
+export default class NAVSEARCH extends NAVITEM { //LI {
 
     /**
         Construct a NAVSEARCH

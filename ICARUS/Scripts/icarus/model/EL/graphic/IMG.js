@@ -1,7 +1,8 @@
-﻿/**
+﻿import EL from '../EL.js';
+/**
     An image
 */
-class IMG extends EL {
+export default class IMG extends EL {
     /**
         Constructs a Paragraph
         @param {EL} node The object to contain this element

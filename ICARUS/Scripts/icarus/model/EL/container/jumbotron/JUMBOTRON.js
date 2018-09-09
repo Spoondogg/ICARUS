@@ -1,16 +1,24 @@
-﻿/**
-    Jumbotron / Hero unit Constructor
+﻿import CONTAINER from '../CONTAINER.js';
+import HEADER from '../../header/HEADER.js';
+import HR from '../../hr/HR.js';
+import P from '../../p/P.js';
+import EL from '../../EL.js';
+import MODEL from '../../../MODEL.js';
+import ATTRIBUTES from '../../../ATTRIBUTES.js';
+/**
+    A lightweight, flexible component that can optionally extend the entire 
+    viewport to showcase key content on your site.
+    See https://getbootstrap.com/docs/3.3/components/#jumbotron }
 */
-class JUMBOTRON extends CONTAINER {
+export default class JUMBOTRON extends CONTAINER {
     /**
-        Constructs a Bootstrap Jumbotron.
+        Constructs a Bootstrap style Jumbotron
         @param {CONTAINER} node The model
-        @param {MODEL} model Object Model
+        @param {MODEL} model Object Model        
      */
     constructor(node, model) {
         super(node, 'DIV', model);
         this.body.pane.addClass('jumbotron');
-        //this.body.pane.addClass('noselect');
         //this.construct();
         //this.populate(model.children);
     }
@@ -20,12 +28,10 @@ class JUMBOTRON extends CONTAINER {
      */
     construct() {
         if (this.dataId > 0) {
-
             this.screen = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('screen')));
             console.log('screen');
             if (this.data.screencolor && this.data.screencolor !== '.') {
                 console.log(this.data.screencolor);
-                //this.screen.el.backgroundColor = 'background-color: rgba(162, 34, 34, 0.88);';
                 this.screen.el.setAttribute('style', 'background-color: '+this.data.screencolor+';');
             }
 
@@ -40,39 +46,7 @@ class JUMBOTRON extends CONTAINER {
                 }
             }
 
-            // Test to see if the formpost can be retrieved            
-            if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
-                //console.log('JUMBOTRON');
-                try {
-                    $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
-
-                        // If access granted...
-                        if (data.model) {
-                            if (data.model.jsonResults) {
-                                //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
-                                //console.log(data.model);
-                                console.log('Parsed...');
-                                let parsed = JSON.parse(data.model.jsonResults);
-                                console.log(parsed);
-
-                                // Extract the base64 values and create an image
-                                for (let p = 0; p < parsed.length; p++) {
-                                    if (parsed[p].name === 'base64') {
-                                        this.body.pane.el.setAttribute('style',
-                                            'background: url(' + parsed[p].value + ');'
-                                        );
-                                    }
-                                }
-                            } else {
-                                console.log('Json Results are empty');
-                            }
-                        }
-                    }.bind(this));
-                } catch (e) {
-                    console.log('Unable to retrieve FormPost.');
-                    console.log(e);
-                }
-            }
+            this.loadBgImage();
 
             if (this.data.bgcolor && this.data.bgcolor !== '.') {
                 this.body.pane.el.style.backgroundColor = this.data.bgcolor;
@@ -80,4 +54,40 @@ class JUMBOTRON extends CONTAINER {
         }
     }
 
+    /**
+        Attempt to retrieve a background image if one is specified
+        in this.data.bgimage
+    */
+    loadBgImage() {           
+        if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
+            try {
+                $.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), function (data) {
+                    // If access granted...
+                    if (data.model) {
+                        if (data.model.jsonResults) {
+                            //console.log('Retrieved image id: ' + parseInt(this.data.bgimage));
+                            //console.log(data.model);
+                            console.log('Parsed...');
+                            let parsed = JSON.parse(data.model.jsonResults);
+                            console.log(parsed);
+
+                            // Extract the base64 values and create an image
+                            for (let p = 0; p < parsed.length; p++) {
+                                if (parsed[p].name === 'base64') {
+                                    this.body.pane.el.setAttribute('style',
+                                        'background: url(' + parsed[p].value + ');'
+                                    );
+                                }
+                            }
+                        } else {
+                            console.log('Json Results are empty');
+                        }
+                    }
+                }.bind(this));
+            } catch (e) {
+                console.log('Unable to retrieve FormPost.');
+                console.log(e);
+            }
+        }
+    }
 }

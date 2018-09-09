@@ -1,15 +1,16 @@
-﻿/**
+﻿import GROUP from '../GROUP.js';
+import LI from '../li/LI.js';
+/**
     A generic unorganized list
 */
-class UL extends GROUP {
+export default class UL extends GROUP {
     /**
         Constructs an Unordered List
         @param {EL} node The node to contain this element
         @param {MODEL} model The element model
      */
     constructor(node, model) {
-        super(node, 'UL', model);
-        
+        super(node, 'UL', model);        
 
         /* Add cases for each relevant constructor that inherited class does not have */
         this.addCase('UL', function (model) {

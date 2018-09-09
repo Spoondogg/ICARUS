@@ -1,8 +1,11 @@
-﻿/**
+﻿import NAV from '../NAV.js';
+import NAVHEADER from '../menu/NAVHEADER.js';
+import MODEL from '../../../MODEL.js';
+/**
     A Bootstrap 3 Nav Menu that is fixed to the top of the page.
     See https://getbootstrap.com/docs/3.3/components/#nav
 */
-class NAVBAR extends NAV {
+export default class NAVBAR extends NAV {
     /**
         Constructs a Navigation Panel.
         @param {EL} node The element that will contain this object

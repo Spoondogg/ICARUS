@@ -1,7 +1,8 @@
-﻿/**
+﻿import JUMBOTRON from '../JUMBOTRON.js';
+/**
     Jumbotron with centered icon and text
 */
-class HEADERWRAP extends JUMBOTRON {
+export default class HEADERWRAP extends JUMBOTRON {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model

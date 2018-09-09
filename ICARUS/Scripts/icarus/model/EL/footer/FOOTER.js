@@ -1,8 +1,8 @@
-﻿/**
+﻿import EL from '../EL.js';
+/**
     A generic footer that should be placed at the bottom of content
 */
-import { EL } from '../EL.js';
-class FOOTER extends EL {
+export default class FOOTER extends EL {
     /**
         Constructs a generic footer.
         @param {EL} node The object to contain the footer

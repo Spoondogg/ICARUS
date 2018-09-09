@@ -1,6 +1,6 @@
 [
   {
-    "outputFileName": "Scripts/icarus/icarus.js",
+    "outputFileName": "Scripts/icarus/lib/icarus.js",
     "inputFiles": [
       "Scripts/icarus/main.js",
       "Scripts/icarus/WATERMARK.js",

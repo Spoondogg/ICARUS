@@ -6,7 +6,7 @@
     The user can move objects from the left column to the right, as well as sort the order
     of these objects, affecting the order in which they are constructed within the parent
 */
-class IcarusInputList {
+export default class IcarusInputList {
     /**
         Constructs an Input List
         @param {EL} node The object that contains constructed results

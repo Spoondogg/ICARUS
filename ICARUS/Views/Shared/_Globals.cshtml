@@ -1,0 +1,19 @@
+﻿@*
+    Global Javascript variables that are generated Server Side using Razor
+*@
+<script>
+    /**
+        The Application Identifier
+    */
+    var id = @ViewBag.id;
+
+    /**
+        A friendly string identifier for the user
+    */
+    var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
+
+    /**
+        For debugging purposes
+    */
+    var dev = @(User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
+</script>

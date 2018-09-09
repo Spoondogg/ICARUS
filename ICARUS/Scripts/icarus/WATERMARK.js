@@ -1,7 +1,7 @@
 ﻿/**
     A Console Output Watermark
 */
-export class WATERMARK {
+export default class WATERMARK {
     /**
         Prints the spoonMEDIA.ca watermark to the console because its cool.
         @See http://ascii.co.uk/text : chunky

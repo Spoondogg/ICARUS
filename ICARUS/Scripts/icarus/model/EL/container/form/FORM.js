@@ -1,10 +1,20 @@
-﻿/**
+﻿import CONTAINER from '../CONTAINER.js';
+import FIELDSET from '../fieldset/FIELDSET.js';
+import FORMELEMENTGROUP from '../formelement/FORMELEMENTGROUP.js';
+import MODEL from '../../../MODEL.js';
+import ATTRIBUTES from '../../../ATTRIBUTES.js';
+import TOKEN from '../formelement/input/TOKEN.js';
+import FORMFOOTER from './FORMFOOTER.js';
+import FORMPOST from './FORMPOST.js';
+import DEBUG from '../../../../DEBUG.js';
+import { ICONS } from '../../../../enums/ICONS.js';
+/**
     Constructs an Icarus Form Object.
 
     An FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
 */
-class FORM extends CONTAINER {
+export default class FORM extends CONTAINER {
     /**
         Constructs a Form for collecting and posting
 
@@ -13,10 +23,10 @@ class FORM extends CONTAINER {
      */
     constructor(node, model) {
         super(node, 'FORM', model, ['FIELDSET']);
-        this.tokenInput = new TokenInput(this);
+        this.tokenInput = new TOKEN(this);
         this.setPostUrl('Form/Submit');
         this.updateUrl = 'Form/Update';
-        this.footer = new IcarusFormFooter(this.body, new MODEL());
+        this.footer = new FORMFOOTER(this.body, new MODEL());
         this.footer.buttonGroup.addButton('Submit', ICONS.SAVE).el.onclick = this.post.bind(this);
         this.populate(model.children);
     }
@@ -119,7 +129,7 @@ class FORM extends CONTAINER {
         @returns {object} The validation payload
     */
     validate() {
-        debug('Validating...');
+        console.log('Validating...');
 
         this.htmlEncodeValues();
 
@@ -129,7 +139,7 @@ class FORM extends CONTAINER {
         };
 
         for (let e = 0; e < this.el.elements.length; e++) {
-            //debug('Element: ' + this.el.elements[e].name);
+            //DEBUG.log('Element: ' + this.el.elements[e].name);
             switch (this.el.elements[e].type) {
                 case 'input':
                 case 'text':
@@ -147,7 +157,7 @@ class FORM extends CONTAINER {
                         }
                         break;
                     } else {
-                        debug(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
+                        console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
                         this.setInvalid(this.el.elements[e]);
                         break;
                     }
@@ -206,7 +216,7 @@ class FORM extends CONTAINER {
     post() {
 
         // Post results to server
-        app.loader.log(10, 'Posting values to server: ' + this.getPostUrl());
+        console.log(10, 'Posting values to server: ' + this.getPostUrl());
         let formPost = this.getFormPost();
         console.log('FORMPOST: ');
         console.log(formPost);
@@ -226,51 +236,51 @@ class FORM extends CONTAINER {
                 type: "POST",
                 data: formPost,
                 error: function (xhr, statusText, errorThrown) {
-                    app.loader.log(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
+                    console.log(100, 'Access Denied: ' + statusText + '('+ xhr.status+')');
                 }.bind(this),
                 statusCode: {
                     200: function (response) {
-                        debug('StatusCode: 200');
-                        debug(response);
-                        app.loader.log(0, response.message, true);
+                        console.log('StatusCode: 200');
+                        console.log(response);
+                        console.log(0, response.message, true);
                     },
                     201: function (response) {
-                        debug('StatusCode: 201');
-                        debug(response);
+                        console.log('StatusCode: 201');
+                        console.log(response);
 
                     },
                     400: function (response) {
-                        debug('StatusCode: 400');
-                        debug(response);
+                        console.log('StatusCode: 400');
+                        console.log(response);
                     },
                     403: function (response) {
-                        debug('StatusCode: 403');
-                        debug(response);
-                        app.loader.log(100, 'Access Denied: ' + response);
+                        console.log('StatusCode: 403');
+                        console.log(response);
+                        console.log(100, 'Access Denied: ' + response);
                         app.login();
                     },
                     404: function (response) {
-                        debug('StatusCode: 404');
-                        debug(response);
+                        console.log('StatusCode: 404');
+                        console.log(response);
                     }
                 }, success: function (payload) {
-                    debug('Success');
-                    app.loader.log(25, 'Posted results to server.');
+                    DEBUG.log('Success');
+                    console.log(25, 'Posted results to server.');
 
-                    app.loader.log(50,
+                    console.log(50,
                         'Updating...<br><hr/>'
                         + payload.message + '<br><hr/>'
                     );
 
                     this.unlock();
-                    app.loader.log(100, 'Form Submitted');
+                    console.log(100, 'Form Submitted');
                     this.afterSuccessfulPost(payload);
                 }.bind(this)
             });
             
         } else {
-            debug('FormPost is invalid');
-            app.loader.log(0, 'Post Failed to submit.  Values may be invalid.');
+            DEBUG.log('FormPost is invalid');
+            console.log(0, 'Post Failed to submit.  Values may be invalid.');
             app.loader.showConsole();
             //$(app.loader.console.el).collapse('show');
         }

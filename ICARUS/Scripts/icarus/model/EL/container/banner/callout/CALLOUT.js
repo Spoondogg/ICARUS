@@ -1,7 +1,12 @@
-﻿/**
+﻿import CONTAINER from '../../CONTAINER.js';
+import GLYPHICON from '../../../span/GLYPHICON.js';
+import HEADER from '../../../header/HEADER.js';
+import MODEL from '../../../../MODEL.js';
+import P from '../../../p/P.js';
+/**
     Jumbotron with centered icon and text
 */
-class CALLOUT extends CONTAINER { 
+export default class CALLOUT extends CONTAINER { 
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model

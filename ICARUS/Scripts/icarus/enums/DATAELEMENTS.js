@@ -1,4 +1,6 @@
-﻿/**
+﻿import MODEL from '../model/MODEL.js';
+import ATTRIBUTES from '../model/ATTRIBUTES.js';
+/**
  * Stores the default DATA ELEMENTS collections for each Class
  * This belongs on the database or within a config
  * 
@@ -7,7 +9,7 @@
  * NOTE:  'value' is a reserved keyword... I think
  * 
  */
-const DATAELEMENTS = {
+export const DATAELEMENTS = {
     ARTICLE: [],
     SECTION: [
         new MODEL(new ATTRIBUTES({
@@ -260,95 +262,4 @@ const DATAELEMENTS = {
             'label': 'text'
         })
     ]
-};
-
-
-/**
-    Enumerated list of Input Types
-    Matched to IcarusFormGroup Enums
-*/
-const IcarusInputType = {
-    TEXT: 1,
-    NUMBER: 2,
-    DATE: 3,
-    DATETIME: 4,
-    HIDDEN: 5,
-    PASSWORD: 6
-};
-
-/**
- * Supported HTML 5 Elements
- */
-const HtmlElement = {
-    DEFAULT: "DIV",
-    DIV: "DIV",
-    SPAN: "SPAN",
-    P: "P",
-    MAIN: "MAIN",
-    ARTICLE: "ARTICLE",
-    SECTION: "SECTION",
-    UL: "UL",
-    OL: "OL",
-    LI: "LI",
-    FORM: "FORM",
-    FIELDSET: "FIELDSET",
-    LABEL: "LABEL",
-    INPUT: "INPUT",
-    SELECT: "SELECT",
-    OPTION: "OPTION",
-    TEXTAREA: "TEXTAREA"
-};
-
-/**
- * CSS Alignment options
- */
-const ALIGN = {
-    TOP: 0,
-    RIGHT: 1,
-    BOTTOM: 2,
-    LEFT: 3,
-    HORIZONTAL: '',
-    VERTICAL: 'vertical'
-};
-
-/**
- * Bootstrap button types
- */
-const BUTTONTYPE = {
-    DEFAULT: 'default',
-    PRIMARY: 'primary',
-    SUCCESS: 'success',
-    INFO: 'info',
-    WARNING: 'warning',
-    DANGER: 'danger'
-};
-
-/**
- * Bootstrap size options
- */
-const SIZE = {
-    EXTRA_SMALL: 'xs',
-    SMALL: 'sm',
-    MED: 'md',
-    LARGE: 'lg'
-};
-
-/**
- * Form methods
- */
-const METHOD = {
-    DEFAULT: 'POST',
-    POST: 'POST',
-    GET: 'GET',
-    PUT: 'PUT'
-};
-
-/**
- * Element status for any state changes
- */
-const STATUS = {
-    DEFAULT: 0,
-    OPEN: 1,
-    CLOSED: 0,
-    LOCKED: 0
 };
