@@ -1,4 +1,7 @@
-﻿class DATEOBJECT {
+﻿/**
+    Helper class for working with Dates
+*/
+export default class DATEOBJECT {
     constructor() {
 
     }
@@ -9,7 +12,7 @@
      * @param {Date} dateObj A Javascript Date object
      * @returns {Object} A broken down set of date values that should actually be a class
      */
-    getDateObject(dateObj) {
+    static getDateObject(dateObj) {
         //console.log('getDateObject');
         // splits the string to array ie: ["2014-05-10", "22:00:00.000Z"]
         let d = dateObj.toISOString().split('T');

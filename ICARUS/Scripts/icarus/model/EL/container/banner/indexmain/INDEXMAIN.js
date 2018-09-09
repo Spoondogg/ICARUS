@@ -1,7 +1,18 @@
-﻿/**
+﻿import BANNER from '../BANNER.js';
+import P from '../../../p/P.js';
+import MODEL from '../../../../MODEL.js';
+import HEADER from '../../../header/HEADER.js';
+import FOOTER from '../../../footer/FOOTER.js';
+import BUTTON from '../../../button/BUTTON.js';
+import IFRAME from '../../iframe/IFRAME.js';
+import MODAL from '../../../modal/MODAL.js';
+import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+import TOKEN from '../../formelement/input/TOKEN.js';
+import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
+/**
     Contains a high level view of all MAIN Objects available to this user
 */
-class INDEXMAIN extends BANNER {
+export default class INDEXMAIN extends BANNER {
     /**
         Constructs a SECTION Container Element
         @param {CONTAINER} node Parent node
@@ -11,6 +22,8 @@ class INDEXMAIN extends BANNER {
         super(node, model);
         this.addClass('index-main');
         //this.populate(model.children);
+
+        this.token = TOKEN.getToken();
 
         this.page = 0;
         this.pageLength = 6;
@@ -47,8 +60,9 @@ class INDEXMAIN extends BANNER {
     construct() {
         if (!isNaN(this.page)) {
             console.log('Retrieving page ' + this.page);
+            //let token = TOKEN.getToken();
             $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-                '__RequestVerificationToken': token.value
+                '__RequestVerificationToken': this.token.value
             },
                 function (payload, status) {
                     if (status === 'success') {
@@ -106,7 +120,6 @@ class INDEXMAIN extends BANNER {
             this.body.pane.empty();
             this.page = page;
             this.construct();
-            ///this.body.pane.el.setAttribute('style', 'height:auto;');
         } catch (e) {
             console.log('Unable to load page.');
             console.log(e);
@@ -141,7 +154,7 @@ class INDEXMAIN extends BANNER {
         //window.open(new URL(window.location.href).origin + '/' + id);
 
         // Try opening an IFRAME Modal instead
-        debug('Launch Index IFrame Modal');
+        DEBUG.log('Launch Index IFrame Modal');
 
         this.modal = new MODAL(label);
         this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
@@ -164,7 +177,7 @@ class INDEXMAIN extends BANNER {
      * TODO: Consider paging these results
      */
     launchModal() {
-        debug('Launch Index IFrame Modal');
+        DEBUG.log('Launch Index IFrame Modal');
 
         this.modal = new MODAL(this.data.header);
         this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({

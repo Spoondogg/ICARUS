@@ -1,7 +1,9 @@
-﻿/**
+﻿import UL from '../UL.js';
+import MODEL from '../../../../MODEL.js';
+/**
     A console like panel (UL) that contains entries as list items (LI)
  */
-class CONSOLE extends UL {
+export default class CONSOLE extends UL {
 
     /**
      * Construct a console

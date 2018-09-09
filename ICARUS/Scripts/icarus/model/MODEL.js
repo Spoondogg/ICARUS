@@ -1,9 +1,10 @@
-﻿import { ATTRIBUTES } from './ATTRIBUTES.js';
+﻿import ATTRIBUTES from './ATTRIBUTES.js';
+export { ATTRIBUTES };
 /**
     A Map like data structure
     TODO: Consider just extending Map() 
 */
-export class MODEL { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
+export default class MODEL { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
         Constructs a generic MODEL
         @param {ATTRIBUTES} attributes A collection of attributes

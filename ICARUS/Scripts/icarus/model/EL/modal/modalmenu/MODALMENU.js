@@ -1,10 +1,12 @@
-﻿/**
+﻿import MODAL from '../MODAL.js';
+import MENU from '../../nav/menu/MENU.js';
+/**
     A modal prompt.
     
     Creates a modal and displays a text well and any buttons that have
     been added.
 */
-class MODALMENU extends MODAL { // CALL ME A MENU!!!!
+export default class MODALMENU extends MODAL { // CALL ME A MENU!!!!
     /**
         @param {string} label The label
         @param {string} text The html text that is displayed in the prompt's well
@@ -12,16 +14,10 @@ class MODALMENU extends MODAL { // CALL ME A MENU!!!!
         @param {boolean} vertical If true, prompt is vertically centered
      */
     constructor(label, text, children, vertical) {
-        console.log('MODALMENU(' + label + ');');
-        console.log(children);
         super(label, text, vertical);
         this.addClass('prompt');
-
-        console.log('Creating Modal Menu...');
-
         this.container.addContainerCase('MENU');
 
-        
         this.menu = new MENU(
             this.container.body.pane,
             new MODEL(
@@ -31,19 +27,6 @@ class MODALMENU extends MODAL { // CALL ME A MENU!!!!
                 'name': 'menu'
             })
         );
-        
-        /* THIS IS WRONG, learn from this
-         * // Why have a method instead of calling the constructor?
-        this.menu = this.container.create(
-
-            new MODEL(
-                new ATTRIBUTES('nav navbar-nav navbar-inverse')
-            ).set({
-                'className'
-                'name': 'menu'
-            })
-        );*/
-
         this.menu.populate(children);
     }    
 }

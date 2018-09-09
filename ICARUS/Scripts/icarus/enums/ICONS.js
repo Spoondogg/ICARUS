@@ -1,7 +1,7 @@
 ﻿/**
  * Bootstrap glyphicon references
  */
-const ICONS = {
+export const ICONS = {
     CHEVRON_UP: 'glyphicon-chevron-up',
     CHEVRON_DOWN: 'glyphicon-chevron-down',
     CHEVRON_LEFT: 'glyphicon-chevron-left',

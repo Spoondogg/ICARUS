@@ -1,7 +1,9 @@
-﻿/**
+﻿import MENU from '../../nav/menu/MENU.js';
+import BUTTON from '../BUTTON.js';
+/**
     Button that show/hides a list of options
 */
-class TOGGLEBUTTON extends BUTTON {
+export default class TOGGLEBUTTON extends BUTTON {
     /**
         Construct a toggle button
         @param {EL} node The parent object

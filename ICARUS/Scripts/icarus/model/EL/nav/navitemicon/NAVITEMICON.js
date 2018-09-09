@@ -1,10 +1,13 @@
-﻿/**
+﻿import LI from '../../group/li/LI.js';
+import ANCHOR from '../../anchor/ANCHOR.js';
+import ARTICLE from '../../container/article/ARTICLE.js';
+/**
     A navigation item that populates a Bootstrap 3 navbar.
     Nav items can be single buttons or dropdowns with nav items nested within them  
     
     CORE ITEMS CAN NOT BECOME CONTAINERS...  STOP TRYING TO MAKE THEM THAT WAY
 */
-class NAVITEMICON extends LI {
+export default class NAVITEMICON extends LI {
     /**
         @param {EL} node The element that will contain this object
         @param {MODEL} model The nav-item json object retrieved from the server
@@ -14,13 +17,7 @@ class NAVITEMICON extends LI {
         this.className = 'NAVITEMICON';
         this.addClass('nav-item-icon');
         this.el.setAttribute('title', model.anchor.label);
-
         this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
-
-        //this.anchor.icon = new GLYPHICON(this.anchor, '', ICON.COG);
-        //this.anchor.icon.el.setAttribute('style', 'line-height:64px;font-size:28px;');
-
-        
         
         /* Add cases for each relevant constructor that inherited class does not have */
         this.addCase('MENU', function (model) {

@@ -2,7 +2,7 @@
     A generic set of ATTRIBUTES for an EL
     TODO: Consider just extending Map()
  */
-export class ATTRIBUTES extends Object { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
+export default class ATTRIBUTES extends Object { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
         Constructs a generic Attributes data structure.
         If the 'className' argument is an object, break it out into individual attributes

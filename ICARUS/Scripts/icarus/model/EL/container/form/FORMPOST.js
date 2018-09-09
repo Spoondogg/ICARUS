@@ -1,13 +1,14 @@
-﻿/**
+﻿import TOKEN from '../formelement/input/TOKEN.js';
+/**
     Represents the data object to be submitted to the server for validation.
     @param {FORM} form An Icarus Form
 */
-class FORMPOST {
+export default class FORMPOST {
     /**
         @param {FORM} form The form that generated this FORMPOST
      */
     constructor(form) {
-        this.__RequestVerificationToken = token.value;
+        this.__RequestVerificationToken = TOKEN.getToken().value;
         this.id = form.el.getAttribute('id');
         this.formId = form.el.getAttribute('id');
         this.label = form.el.getAttribute('name');

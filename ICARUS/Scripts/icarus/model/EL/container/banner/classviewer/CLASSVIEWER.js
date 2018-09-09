@@ -1,7 +1,9 @@
-﻿/**
+﻿import BANNER from '../BANNER.js';
+
+/**
     Contains a high level view of all MAIN Objects available to this user
 */
-class CLASSVIEWER extends BANNER {
+export default class CLASSVIEWER extends BANNER {
     /**
         Constructs a CLASSVIEWER Container Element
         @param {CONTAINER} node Parent node
@@ -14,11 +16,6 @@ class CLASSVIEWER extends BANNER {
 
         this.classType = 'JUMBOTRON';
         //this.classId = 3283;
-
-
-
-        
-
     }
 
     construct() {
@@ -31,7 +28,7 @@ class CLASSVIEWER extends BANNER {
             'label': this.classType + ' viewer'
         }), 1);
 
-        this.form = this.createEmptyForm(this.body.pane);
+        this.form = CONTAINERFACTORY.createEmptyForm(this.body.pane);
 
         let inputs = [
 

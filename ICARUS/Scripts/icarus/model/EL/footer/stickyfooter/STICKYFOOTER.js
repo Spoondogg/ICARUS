@@ -1,8 +1,8 @@
-﻿import { FOOTER } from '../FOOTER.js';
+﻿import FOOTER from '../FOOTER.js';
 /**
     A Footer that sticks to bottom of page    
 */
-export class STICKYFOOTER extends FOOTER {
+export default class STICKYFOOTER extends FOOTER {
     /**
         Constructs a footer stuck to the bottom of the viewpane
         @param {EL} node The object to contain the table

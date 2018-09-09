@@ -1,8 +1,12 @@
-﻿/**
+﻿import ATTRIBUTES from '../../ATTRIBUTES.js';
+import EL, { MODEL } from '../EL.js';
+import CONTAINER from '../container/CONTAINER.js';
+import HEADER from '../header/HEADER.js';
+/**
     A Bootstrap 3 Modal
     https://www.w3schools.com/bootstrap/bootstrap_modal.asp    
 */
-class MODAL extends EL { // ALIGN VERTICALLY??
+export default class MODAL extends EL { // ALIGN VERTICALLY??
     /**
         Constructs a Modal
         @param {string} title The header text for this modal
@@ -57,7 +61,6 @@ class MODAL extends EL { // ALIGN VERTICALLY??
             this.well = new WELL(this.content, new MODEL(), text);
         }
 
-        // Body	: Place forms, objects etc inside 'this.modalbody.el'
         this.container = new CONTAINER(
             this.content, 'DIV',
             new MODEL(new ATTRIBUTES('modal-body')).set({
