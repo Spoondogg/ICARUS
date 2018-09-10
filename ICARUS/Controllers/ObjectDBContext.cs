@@ -44,7 +44,7 @@ namespace ICARUS.Controllers {
 
         // Populate with relevant objects
 
-        public DbSet<Main> Mains { get; set; }
+        public DbSet<MAIN> Mains { get; set; }
         public object Main { get; internal set; }        
 
         public DbSet<Container> Containers { get; set; }

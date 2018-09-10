@@ -32,8 +32,8 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new Main()
-                : new Main(formPost);
+                ? new MAIN()
+                : new MAIN(formPost);
             
             obj.dateCreated = DateTime.UtcNow;
             obj.dateLastModified = DateTime.UtcNow;

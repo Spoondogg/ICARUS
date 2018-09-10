@@ -120,16 +120,37 @@ export default class EL extends MODEL {
             }
         }        
     }
+
+    /**
+        Sets the parent container for this Nav Header if it does not exist,
+        then returns it or null
+        @returns {CONTAINER} The parent container for this container
+    */
+    getContainer() {
+        console.log('NAVHEADER.getContainer()', this.container);
+        if (this.container === undefined || this.container === null) {
+            this.container = this.getProtoTypeByClass('CONTAINER');
+        }
+        return this.container;
+    }
+
+    /**
+        Returns the MAIN container
+        @returns {CONTAINER} This EL's parent container
+    */
+    getMainContainer() {
+        return this.getContainer().getMainContainer();
+    }
     
     /**
      * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
         try {
-            app.stickyFooter.show();
+            this.getMainContainer().stickyFooter.show();
 
             $(this.el).addClass('edit');
-            this.editor = new TEXTAREA(app.stickyFooter, new MODEL(
+            this.editor = new TEXTAREA(this.getMainContainer().stickyFooter, new MODEL(
                 new ATTRIBUTES({
                     'value': this.el.innerHTML
                 })
@@ -160,10 +181,9 @@ export default class EL extends MODEL {
                 this.editor.destroy();
                 $(this.el).removeClass('edit');
                 DEBUG.log('QuickSave');
-                this.getProtoTypeByClass('CONTAINER').quickSave(true);
-
-                app.stickyFooter.hide();
-                app.stickyFooter.empty();
+                this.getContainer().quickSave(true);
+                this.getMainContainer().stickyFooter.hide();
+                this.getMainContainer().stickyFooter.empty();
             }.bind(this);
 
             this.editor.input.el.focus();
@@ -243,40 +263,46 @@ export default class EL extends MODEL {
     /**
         Opens the ELEMENT up for editing.  This should create a link
         between the object on the server and its client side representation
+        @returns {EL} This EL
     */
     open() {
         this.status = STATUS.OPEN;
+        //this.el.setAttribute('data-status', 'open');
         try {
-            this.node.open();
-            //this.el.setAttribute('data-status', 'open'); // TODO: Does this need to be exposed?
+            this.node.open();            
         } catch (e) {
-            console.log('Unable to open parent element('+this.element+')');
-            console.log(e);
+            console.log('Unable to open parent element('+this.element+')', e);
         }
+        return this;
     }
 
     /**
         Closes the EL up for editing.  This should create a link
         between the object on the server and its client side representation
         and update accordingly
+        @returns {EL} This EL
     */
     close() {
         this.status = STATUS.CLOSED;
-        this.el.setAttribute('data-status', 'closed');
+        //this.el.setAttribute('data-status', 'closed');
+        return this;
     }
 
     /**
         Empties contents of node element
+        @returns {EL} This EL
     */
-    empty() {	// Remove all children
+    empty() {
         while (this.el.firstChild) {
             this.el.removeChild(this.el.firstChild);
         }
+        return this;
     }
 
     /**
         Removes this element from the DOM
-        @param {number} delay Millisecond delay 
+        @param {number} delay Millisecond delay
+        @returns {EL} This EL
     */
     destroy(delay) {
         delay = delay ? delay : 300;
@@ -297,69 +323,85 @@ export default class EL extends MODEL {
             console.log('Unable to destroy this ' + this.element);
             console.log(e);
         }
+        return this;
     }
 
     /**
         Override this element's class with the given value
         @param {string} className A class
+        @returns {EL} Returns this element for chaining purposes
      */
     setClass(className) {
         this.el.className = className;
         this.attributes.class = className;
+        return this;
     }
 
     /**
         Adds the given class name to the element's list of classes
         @param {string} className the class to be appended
+        @returns {EL} Returns this element for chaining purposes
     */
     addClass(className) {
         $(this.el).addClass(className);
         let prevClass = this.attributes.class || '';
         this.attributes['class'] = prevClass += ' ' + className;
+        return this;
     }
 
     /**
         Revoves the given class name from the element's list of classes
         @param {string} className the class to be removed
+        @returns {EL} Returns this element for chaining purposes
     */
     removeClass(className) {
         $(this.el).removeClass(className);
         this.attributes.set('class',
             this.attributes.get('class').replace(className, '')
         );
+        return this;
     }
 
     /**
         Shows this Element
+        @returns {EL} This EL
     */
     show() {
         this.el.style.display = 'block';
+        return this;
     }
 
     /**
         Hides this Element
+        @returns {EL} This EL
     */
     hide() {
         this.el.style.display = 'none';
+        return this;
     }
 
     /**
         Adds 'active' to this element's classes
+        @returns {EL} This EL
      */
     activate() {
         $(this.el).addClass('active');
+        return this;
     }
 
     /**
         Removes 'active' from this element's classes
+        @returns {EL} This EL
      */
     deactivate() {
         $(this.el).removeClass('active');
+        return this;
     }
 
     /**
         Toggles the 'active' class on this element
         @param {string} className Optionally toggle this class
+        @returns {EL} This EL
     */
     toggle(className) {
         if (className) {
@@ -367,19 +409,20 @@ export default class EL extends MODEL {
         } else {
             $(this.el).toggle();
         }
+        return this;
     }
 
     /**
         Create all children elements in the order that
         they were pushed into provided array
         @param {array} children Array of children object models to be constructed
+        @returns {EL} This EL
     */
     populate(children) {
         if (children) {
             let denom = children.length;
             let progress = 0; // 0 to 100            
             //console.log(this.className + '.populate(' + children.length + ');');
-            //app.loader.show();
             try {
                 for (let c = 0; c < children.length; c++) {
                     progress = Math.round((c+1) / denom * 100);
@@ -389,41 +432,30 @@ export default class EL extends MODEL {
             } catch (e) {
                 console.log(e);
             }
-            //console.log(100, 'Success');
-
-            /*
-            if (!DEBUGMODE) {
-                app.loader.hide();
-            }
-            */
         }
+        return this;
     }
-
-    /**
-        Modifies the element
-        @param {string} name The name to be assigned to this element
-    
-    save(name) {
-        this.el.setAttribute('name', name);
-    }*/
 
     /**
         Sets the inner HTML of this element
         @param {string} innerHTML Html string to be parsed into HTML
+        @returns {EL} This EL
     */
-    setInnerHTML(innerHTML) {
-        //this.el.innerHTML = innerHTML ? innerHTML : '';
-        this.el.innerHTML = innerHTML || '';
+    setInnerHTML(innerHTML = '') {
+        this.el.innerHTML = innerHTML;
+        return this;
     }
 
     /**
         Scrolls page to the top of this element
-     * @param {any} speed Millisecond duration
-     */
+        @param {number} speed Millisecond duration
+        @returns {EL} This EL
+    */
     scrollTo(speed = 1000) {
         console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
         $(this.node.el).animate({
             scrollTop: parseInt($(this.el).offset().top)
         }, speed);
+        return this;
     }
 }

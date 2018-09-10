@@ -8,7 +8,8 @@ import EL, { MODEL } from '../EL.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 import DEBUG from '../../../DEBUG.js';
-import MODAL from '../modal/MODAL.js';
+//import MODAL from '../modal/MODAL.js';
+import PROMPT, { MODAL } from '../modal/prompt/PROMPT.js';
 /**
     A generic CONTAINER with a header that controls population of this element.
 
@@ -38,15 +39,10 @@ export default class CONTAINER extends GROUP {
         super(node, element, model);
         this.addClass('icarus-container');
         this.isContainer = 1;
-        this.container = null; //this.getContainer();
-
-        //this.main = this.getMainContainer();
-
-        // Data elements contain a list of arguments for a data object
+        this.container = null;
         this.dataElements = DATAELEMENTS[this.className];
+        this.attrElements = [];
 
-        this.attrElements = []; // Attribute elements contain a list of attributes that apply for this object
-        
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
@@ -169,9 +165,9 @@ export default class CONTAINER extends GROUP {
     }
 
     /** Abstract construct method throws an error if not declared */
-    construct() {
-        DEBUG.log('CONTAINER.construct();');
+    construct() {        
         if (this.className !== 'CONTAINER') {
+            console.log('CONTAINER.construct();');
             throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
         }
     }
@@ -204,8 +200,9 @@ export default class CONTAINER extends GROUP {
     }
 
     /**
-     * Moves this element UP one slot
-     */
+        Moves this element UP one slot
+        @returns {CONTAINER} This Container
+    */
     moveUp() {
         console.log('Move Up');
         let node = $(this.el);
@@ -222,11 +219,13 @@ export default class CONTAINER extends GROUP {
                 node.animate({ height: 'toggle' }, 300).delay(300);
             }, 300);
         }
+        return this;
     }
 
     /**
-     * Moves this element DOWN one slot
-     */
+        Moves this element DOWN one slot
+        @returns (CONTAINER} This Container
+    */
     moveDown() {
         console.log('Move Down');
         let node = $(this.el);
@@ -244,6 +243,7 @@ export default class CONTAINER extends GROUP {
                 node.animate({ height: 'toggle' }, 300);
             }, 300);
         }
+        return this;
     }
 
     /**
@@ -251,18 +251,10 @@ export default class CONTAINER extends GROUP {
         based on the current model
     */
     refresh() {
-        console.log('Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
-
-        console.log(20, 'Emptying...', true);
+        console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
         this.body.pane.empty();
-
-        console.log(30, 'Reconstructing...', true);
         this.construct();
-
-        // Populate based on children
-        console.log(60, 'Populating...', true);
         this.populate(this.body.pane.children);
-
         console.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
     }
 
@@ -288,10 +280,7 @@ export default class CONTAINER extends GROUP {
                         'label': 'UP'
                     })
                 })
-            ).el.onclick = function () {
-                this.navBar.header.toggleCollapse();
-                this.moveUp();
-            }.bind(this);
+            ).el.onclick = this.moveContainerUp.bind(this);
 
             domGroup.addNavItemIcon(
                 new MODEL().set({
@@ -300,10 +289,7 @@ export default class CONTAINER extends GROUP {
                         'label': 'DOWN'
                     })
                 })
-            ).el.onclick = function () {
-                this.navBar.header.toggleCollapse();
-                this.moveDown();
-            }.bind(this);
+            ).el.onclick = this.moveContainerDown.bind(this);
 
             domGroup.addNavItemIcon(
                 new MODEL().set({
@@ -332,7 +318,8 @@ export default class CONTAINER extends GROUP {
                 })
             ).el.onclick = this.disable.bind(this);
 
-            /** CRUD ACTIONS **/
+            /* CRUD ACTIONS */
+
             let crudGroup = this.navBar.header.menu.getGroup('CRUD');
             crudGroup.addNavItemIcon(
                 new MODEL().set({
@@ -352,31 +339,7 @@ export default class CONTAINER extends GROUP {
                     })
                 })
             );
-            this.btnSave.el.onclick = function () {
-                this.btnSave.toggle('active');
-
-                // CREATE A TEMPORARY wrapper to hold the SAVE FORM
-                if ($(this.btnSave.el).hasClass('active')) {
-                    let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
-                    this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
-                    this.save(this.btnSave.wrapper, this.btnSave); //.bind(this);
-                } else {
-                    console.log('closing save form');
-                    let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
-                    
-                    try {
-                        $(wrp).collapse('toggle');
-                        setTimeout(function () {          
-                            wrp.parentNode.removeChild(wrp);
-                        }.bind(this), 2000);
-
-                    } catch (e) {
-                        console.log('Unable to destroy this ');
-                        console.log(e);
-                    }
-                }
-
-            }.bind(this);
+            this.btnSave.el.onclick = this.createWrappedSaveForm.bind(this);
 
             this.btnQuickSave = crudGroup.addNavItemIcon(
                 new MODEL().set({
@@ -389,7 +352,50 @@ export default class CONTAINER extends GROUP {
             this.btnQuickSave.el.onclick = this.quickSave.bind(this);
         }
     }
-    
+
+    /**
+        Moves the Container up one slot in the DOM
+    */
+    moveContainerUp() {
+        this.navBar.header.toggleCollapse();
+        this.moveUp();
+    }
+
+    /**
+        Moves the Container down one slot in the DOM
+    */
+    moveContainerDown() {
+        this.navBar.header.toggleCollapse();
+        this.moveDown();
+    }
+
+    /**
+        Creates a save form for this Container and places it in a wrapper
+        inside the CRUD Group
+    */
+    createWrappedSaveForm() {
+        this.btnSave.toggle('active');
+
+        // CREATE A TEMPORARY wrapper to hold the SAVE FORM
+        if ($(this.btnSave.el).hasClass('active')) {
+            let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
+            this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
+            this.save(this.btnSave.wrapper);
+        } else {
+            console.log(0, 'Closing ' + this.className + '.save() form.');
+            let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
+            try {
+                $(wrp).collapse('toggle');
+                setTimeout(function () {
+                    wrp.parentNode.removeChild(wrp);
+                }.bind(this), 2000);
+            } catch (e) {
+                console.log('Unable to destroy this ');
+                console.log(e);
+            }
+        }        
+    }
+
     /**
         Performs JQuery's ajax method to the given url.
         @param {string} url Target url
@@ -424,12 +430,16 @@ export default class CONTAINER extends GROUP {
                         'label': className //'Create ^'
                     })
                 })
-            ).el.onclick = function () {
+            ).el.onclick =
+            /**
+                Makes a Promise to perform Container.create() with the
+                response (MODEL) and performs a QuickSave on the parent Container
+            */
+            function () {
                 this.navBar.header.toggleCollapse();
 
                 //https://developers.google.com/web/fundamentals/primers/promises
                 let promise = new Promise(function (resolve, reject) {
-
                     console.log('Promise');
                     // do a thing, possibly async, then…
                     let result = this.create(new MODEL().set({
@@ -448,7 +458,6 @@ export default class CONTAINER extends GROUP {
                 promise.then(
                     function (result) {
                         console.log('promise success');
-                        //console.log(result); // "Stuff worked!"
                         this.quickSave(true);
 
                     }.bind(this),
@@ -457,8 +466,6 @@ export default class CONTAINER extends GROUP {
                         console.log(err); // Error: "It broke"
                     }.bind(this)
                 );
-
-                
             }.bind(this);
         }
     }
@@ -608,19 +615,10 @@ export default class CONTAINER extends GROUP {
     /**
         Saves the state of this Element
         @param {EL} node The parent container to hold the save menu
-        @param {EL} caller The element (typically a button) that called the save method
      */
-    save(node, caller) {
-        console.log(this.element + '.save()');
-        //console.log('Node:');
-        //console.log(node);
-        //console.log('Caller:');
-        //console.log(caller);
-        //console.log('This:');
-        //console.log(this);
-
-        // Populate subsections with elements in this body
-        let subsections = this.getSubSections();
+    save(node) {
+        console.log(this.element + '.save()');        
+        let subsections = this.getSubSections();    // Populate subsections with elements in this body
        
         let form = CONTAINERFACTORY.createEmptyForm(node, false);
         form.addClass('saveContainer');
@@ -724,18 +722,10 @@ export default class CONTAINER extends GROUP {
         form.fieldset.formElementGroup.addInputElements(inputs);
 
         /*
-            THIS IS THE PART THAT USES NODE/CALLER
-            to collapse the header.  
-
-            It's dumb.  Get rid of it.
+            Restore Container View to defaults and refresh parent Container
         */
         form.afterSuccessfulPost = function () {
             this.setLabel(form.el.elements['label'].value);
-            if (caller) {
-                caller.toggle('active');
-                console.log(caller);
-                caller.node.node.toggleCollapse();
-            }
 
             try {
                 this.getMainContainer().focusBody();
@@ -782,9 +772,8 @@ export default class CONTAINER extends GROUP {
     */
     getContainer() {
         if (this.className.toUpperCase() === 'MAIN') {
-            console.log(this.className+'.getContainer() has no parent container', this);
+            //console.log(this.className+'.getContainer() has no parent container', this);
             return this;
-
         } else {
             if (this.container === undefined || this.container === null) {
                 this.container = this.getProtoTypeByClass('CONTAINER');
@@ -795,43 +784,36 @@ export default class CONTAINER extends GROUP {
 
     /**
         Returns the MAIN container
+        @returns {MAIN} The MAIN Container
     */
     getMainContainer() {
-        if (this.className.toUpperCase() === 'MAIN') {
+        //console.log('getMainContainer()', this.className);
+        if (this.className === 'MAIN') { //.toUpperCase()
             return this;
         } else {
-            //let container = this.getContainer().getContainer();
-            let container = this.getContainer();
-            if (container.className !== 'MAIN') {
-                return container.getMainContainer();
-            }
+            return this.getContainer().getMainContainer();
         }
     }
 
     /**
-     * If dataId or attributesId exists, extract the appropriate values
-     * @param {number} modelId The object's unique identifier
-     * @param {object} data The object to be saved
-     */
+        If dataId or attributesId exists, extract the appropriate values
+        @param {number} modelId The object's unique identifier
+        @param {object} data The object to be saved
+    */
     quickSaveFormPost(modelId, data) {
-        console.log('QuickSaveFormPost:'+modelId);
-        console.log(data);
+        console.log('QuickSaveFormPost:'+modelId, data);
         if (modelId > 0) {
             console.log(50, 'Saving FormPost: ' + modelId);
             let form = CONTAINERFACTORY.createEmptyForm(this, true);
             let inputs = [];
+            console.log('Adding data attributes');
             for (let key in data) {
-                DEBUG.log('Adding data attributes');
-
-                //let value = this.data[key] ? this.data[key] : data[key];
-                console.log('Key: ' + key);
-                console.log('Value:');
-                console.log(this.htmlEncode(data[key]));
+                console.log('Key', key);
+                console.log('Value', this.htmlEncode(data[key]));
 
                 inputs.push(
                     new MODEL(new ATTRIBUTES({
                         'name': key,
-                        //'value': this[key] ? this[key].el ? this[key].el.innerHTML : data[key] : data[key]
                         'value': this.htmlEncode(data[key]) //value
                     })).set({
                         'element': 'INPUT',
@@ -846,11 +828,11 @@ export default class CONTAINER extends GROUP {
             form.post();
             form.afterSuccessfulPost = function () {
                 form.destroy();
-                DEBUG.log('FormPost: ' + modelId + ' has been quicksaved');
+                console.log('FormPost: ' + modelId + ' has been quicksaved');
             }.bind(this);
 
         } else {
-            DEBUG.log('No modelId provided');
+            console.log('No modelId provided');
         }
     }
 
@@ -861,17 +843,12 @@ export default class CONTAINER extends GROUP {
         @returns {BOOLEAN} True if successful
      */
     quickSave(noPrompt = false) {
-
         if (noPrompt || confirm('Quick Save '+this.className+'('+this.id+') : '+this.label+' ?')) {
-            console.log(20, 'Quick Save');
-
-            DEBUG.log(this.element + '.save()');
-            DEBUG.log(this);
+            console.log(this.element + '.save()', this);
 
             // Populate subsections with elements in this body
             let subsections = this.getSubSections();
-
-            DEBUG.log('Creating save form...');
+            
             let form = CONTAINERFACTORY.createEmptyForm(this, true);
             form.fieldset.formElementGroup.addInputElements([
                 new MODEL(new ATTRIBUTES({
@@ -1017,11 +994,9 @@ export default class CONTAINER extends GROUP {
                 this.quickSaveFormPost(this.dataId, this.data);
                 this.quickSaveFormPost(this.attributesId, this.attributes);
 
-                //app.loader.hide();
             }.bind(this);
 
             console.log(100, 'Quick Save Complete');
-            //app.loader.hide();
             return true;
 
         } else {
@@ -1037,7 +1012,7 @@ export default class CONTAINER extends GROUP {
     */
     quickSaveParent() {
         try {
-            return this.getProtoTypeByClass('CONTAINER').quickSave(false);
+            return this.getContainer().quickSave(false);
         } catch (e) {
             console.log('Container.QuickSaveParent() No parent exists');
             return false;
@@ -1050,8 +1025,7 @@ export default class CONTAINER extends GROUP {
         @param {EL} caller This
      */
     afterSuccessfulPost(node, caller) {
-        console.log(100, 'Success');
-        //app.loader.hide();
+        console.log(100, 'Successful Post');
     }
 
     /**
@@ -1133,7 +1107,13 @@ export default class CONTAINER extends GROUP {
     */
     disable() {
         let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
-        let text = 'Disable ' + this.className + 'j['+this.id+'] in the Database?<br>This '+this.className+' will be permenantly deleted from database in X days!!!';
+        let text = 'Disable ' + this.className + 'j[' + this.id + '] in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
+
+        let container = this.getContainer();
+        let main = container.getMainContainer();
+
+        let token = main.token;
+        console.log('Token', token);
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
             this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICONS.REMOVE);
@@ -1143,7 +1123,7 @@ export default class CONTAINER extends GROUP {
                 console.log('TODO: Disable method on Container controller.');
                 console.log(100, 'Disabling '+this.className);
                 $.post('/' + this.className + '/Disable/' + this.id, {
-                    '__RequestVerificationToken': token.value
+                    '__RequestVerificationToken': token//token.value
                 },
                     function (payload, status) {
                         if (payload.result !== 0) {
