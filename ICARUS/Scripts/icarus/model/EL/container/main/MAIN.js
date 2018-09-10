@@ -29,9 +29,15 @@ export default class MAIN extends CONTAINER {
             'ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
             'IMAGEGALLERY', 'DICTIONARY', 'WORD'
         ]);
+
+        /*
         this.addClass('app');
-        this.showNavBar();
         this.navBar.addClass('navbar-fixed-top');
+        
+        */
+        this.addClass('app').navBar.addClass('navbar-fixed-top');
+
+        this.showNavBar();
         this.body.pane.addClass('pane-tall');
 
         /**
@@ -171,9 +177,8 @@ export default class MAIN extends CONTAINER {
                 })
             ).el.onclick = function () {
                 console.log('Showing Console');
-                app.loader.show();
-                app.loader.showConsole();
-                //$(app.loader.console.el).collapse('show');
+                this.loader.show();
+                this.loader.showConsole();
             }.bind(this);
 
             domMenu.addNavItemIcon(
@@ -245,53 +250,49 @@ export default class MAIN extends CONTAINER {
     }    
 
     /**
-        Loads the specified app by id
+        Loads the specified app id into the Main Container
         @param {number} id App Id to load
     */
     load(id = 1) {
-        //id = id ? id : 1;
-
-        let url = new URL(window.location.href);
-        let returnUrl = url.searchParams.get('ReturnUrl');
+        let returnUrl = this.url.searchParams.get('ReturnUrl');
         if (returnUrl) {
-            returnUrl = url.origin + returnUrl;
+            returnUrl = this.url.origin + returnUrl;
             location.href = returnUrl;
         }
 
-        /*this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
-            { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
-        ]);*/
-        /*
-        prompt.form.submit = function () {
-            id = prompt.form.el.elements['id'].value;
-            alert('Loading App(' + id + ')');
-            window.location.href = id || 0;
-        }.bind(this);
-        */
-        //this.prompt.show();
-        // Retrieve object model
-        $.getJSON(
-            'Main/Get/' + id, function (data) {
-                if (data.result === 1) {
-                    try {
-                        if (data.model.label) {
-                            document.title = data.model.label;
-                        }
-                        this.setId(id);
-                        this.setLabel(data.model.label);
-                        this.populate(data.model.children);
-                    } catch (e) {
-                        this.loader.log(0, 'Unable to construct Main(' + id + ')');
-                        this.DEBUG.log(e);
-                    }
-                } else {
-                    this.loader.log(0, 'Failed to retrieve Main(' + id +
-                        ') from server\n' + data.message
-                    );
-                    this.loader.showConsole();
+        // TODO: Prompt the user for an Id to load
+        // Eventually create a simple application browser
+        // Retrieve Main
+        $.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
+    }
+
+    /**
+        The ajax call performed when MAIN.load is called
+        Receives the MAIN model from Main/Get/id (if permitted)
+        Then, sets the document title, application id and label
+        and Populates accordingly
+        @param {any} data The ajax payload
+    */
+    loadAjaxCall(data) {
+        if (data.result === 1) {
+            try {
+                if (data.model.label) {
+                    document.title = data.model.label;
                 }
-            }.bind(this)
-        );
+                this.body.pane.empty();
+                this.setId(id);
+                this.setLabel(data.model.label);
+                this.populate(data.model.children);
+            } catch (e) {
+                this.loader.log(0, 'Unable to construct ' + this.className + '(' + id + ')');
+                console.log(e);
+            }
+        } else {
+            this.loader.log(0, 'Failed to retrieve ' + this.className + '(' + id +
+                ') from server\n' + data.message
+            );
+            this.loader.showConsole();
+        }
     }
 
     /**
@@ -314,8 +315,7 @@ export default class MAIN extends CONTAINER {
         Allows the user to open an ARTICLE in this APP.
         @param {number} id Article id
     */
-    open(id) {
-        id = id || 0;
+    open(id = 0) {
         console.log('TODO: APP.open(' + id + ')');
     }
 
@@ -600,40 +600,39 @@ export default class MAIN extends CONTAINER {
         Logs the current user out
     */
     logout() {
-        console.log(25, 'Logging out', true);
+        this.loader.showConsole();
+        this.loader.log(50, 'MAIN.logout(); Logging out...', true);
         $.post('/Account/LogOff', {
-            '__RequestVerificationToken': TOKEN.getToken().value
+            '__RequestVerificationToken': this.token
         }, function (payload, status) {
-            this.loader.log(50, 'Status: ' + status, true);
-            DEBUG.log('Payload:');
-            DEBUG.log(payload);
+            this.loader.log(60, 'Status: ' + status, true);
+            console.log('Payload', payload);
 
             // textStatus contains the status: success, error, etc
             // If server responds with 'success'            
             if (status === "success") {
-                console.log(99, 'Logging Out...');
+                this.loader.log(99, 'Success.');
                 setTimeout(function () {
                     location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
                 }.bind(this), 1000);
 
             } else {
-                DEBUG.log('Failed to POST results to server with status: "' + status + '"');
+                this.loader.log('Failed to POST results to server with status: "' + status + '"');
                 console.log(0, 'Failed to send<br>' +
                     payload.message + '<br><hr/>', true
                 );
-                app.loader.showConsole();
-                //$(app.loader.console.el).collapse('show');
-                DEBUG.log('Payload:\n');
-                DEBUG.log(payload);
+                
+                this.loader.log('Payload:\n');
+                this.loader.log(payload);
             }
         }.bind(this), "json");
     }
 
     /**
-     * Log into the application using the given credentials
-     * @param {string} email Username / Email 
-     * @param {string} password Account Password
-     */
+        Log into the application using the given credentials
+        @param {string} email Username / Email 
+        @param {string} password Account Password
+    */
     register() {
         console.log('Register');
 
@@ -738,16 +737,7 @@ export default class MAIN extends CONTAINER {
 
         this.prompt.show();
     }
-
-    /**
-         Sets the application url on view initialization 
-         @returns {URL} Current url
-    */
-    getUrl() {
-        return new URL(window.location.href);
-    }
-
-
+    
     /**
      * Log into the application using the given credentials
      * @param {string} email Username / Email 
@@ -756,15 +746,11 @@ export default class MAIN extends CONTAINER {
         console.log('Register External Login');
 
         this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
-        this.prompt.addClass('prompt');
-
         this.prompt.form.destroy();
 
         let tmp = new EL(this.prompt.container.body.pane, 'DIV', new MODEL());
         $(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
         tmp.destroy();
-
-        
 
         /*
         this.prompt.form.setPostUrl('/Account/ExternalLoginConfirmation?ReturnUrl=%2F');

@@ -4,6 +4,7 @@ import HEADER from '../../header/HEADER.js';
 import MODEL from '../../../MODEL.js';
 import P from '../../p/P.js';
 import '../../../../StringMethods.js';
+import FORMPOSTINPUT from '../formelement/formpostinput/FORMPOSTINPUT.js';
 /**
     A banner that can be populated with CallOuts
 */
@@ -22,6 +23,9 @@ export default class PARAGRAPH extends CONTAINER {
         this.populate(model.children);
     }
 
+    /**
+        Constructs a Paragraph Container.
+    */
     construct() {        
         if (this.dataId > 0) {
             if (this.data.p) {
@@ -34,23 +38,11 @@ export default class PARAGRAPH extends CONTAINER {
         } else {
             // This object REQUIRES model.data 
             // Open up the save panel and generate some
-
             
             let formPostInput = new FORMPOSTINPUT(this, new MODEL().set({
                 'inputs': this.inputs
             }));
             formPostInput.newAttributes(this, 'dataId', this);
-
-            
-
-
-           // app.sidebar.empty();
-            //app.toggleSidebar();
-
-            //let saveForm = this.save(app.sidebar);
-
-            
-            //app.sidebar.target = this;
         }
     }
 }
