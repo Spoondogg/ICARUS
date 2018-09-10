@@ -1,6 +1,7 @@
 ﻿import MODAL from '../MODAL.js';
 import DEBUG from '../../../../DEBUG.js';
 import CONTAINERFACTORY, { FORM } from '../../container/CONTAINERFACTORY.js';
+export { MODAL };
 /**
     A modal prompt.
     

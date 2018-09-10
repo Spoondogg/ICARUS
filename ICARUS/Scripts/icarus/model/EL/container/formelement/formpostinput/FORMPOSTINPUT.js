@@ -1,8 +1,9 @@
 ﻿import FORMELEMENT from '../FORMELEMENT.js';
-//import MODEL from '../../../../MODEL.js';
 import ATTRIBUTES from '../../../../ATTRIBUTES.js';
 import SPAN from '../../../span/SPAN.js';
 import EL, { MODEL } from '../../../EL.js';
+import CONTAINERFACTORY from '../../CONTAINERFACTORY.js';
+import INPUT from '../../formelement/input/INPUT.js';
 /**
     Represents an <INPUT> for an Icarus Form
     A FormPost Input acts as a special input that is populated
@@ -41,11 +42,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 
         if (this.attributes.value > 0 || this.value > 0) {
             this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT1');
-            this.btnEdit.el.onclick = function () {
-                console.log('Editing FormPost: ' + this.label);
-                console.log(this);
-                this.editFormPost();
-            }.bind(this);
+            this.btnEdit.el.onclick = this.editFormPost.bind(this);
         }
 
         this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
@@ -54,7 +51,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
             // TODO:  PLEASE, fix this.  This is ugly
             //let container = this.node.node.node.node.node.node.node.node.node.node.node.node.node.node.node;
             //let container = this.getProtoTypeByClass('CONTAINER');
-            let container = app.sidebar.target;
+            //let container = this.getContainer().getMainContainer().sidebar.target;
+            let container = this.getContainer();
 
             
 
@@ -166,7 +164,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                 }
                 
                 // Construct empty form
-                this.form = container.createEmptyForm(this.body.pane);
+                this.form = CONTAINERFACTORY.createEmptyForm(this.body.pane);
                 console.log('formpostinput: 3');
                 //this.form.formId = 3;
                 this.form.id = 3;
@@ -228,18 +226,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                             console.log('promise fail');
                             console.log(err); // Error: "It broke"
                         }.bind(this)
-                    );
-
-
-                    
-
-                    // promise to refresh parent?
-                    
-
-                    // refresh -- bad idea, creates duplication
-                    //container.getProtoTypeByClass('CONTAINER').refresh();
-
-                    //app.loader.hide();
+                    );                    
                 }.bind(this);
 
             }.bind(this));
@@ -348,10 +335,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                         this.form.afterSuccessfulPost = function () {
                             console.log('success');
                             this.updateInput(data.model.id);
-
-                            //this.form.loader.hide(200);
-                            //app.loader.hide();
-                            //this.prompt.close(300);
                         }.bind(this);
                     } else {
                         console.log('Json Results empty');
@@ -361,7 +344,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     this.prompt = new MODAL('Exception', data.message);
                     this.prompt.show();
 
-                    app.login();
+                    this.getMainContainer().login();
                 }
 
             }.bind(this));
@@ -473,10 +456,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                             this.form.afterSuccessfulPost = function () {
                                 console.log(100, 'Updated Attributes');
                                 this.updateInput(data.model.id);
-                                //app.loader.hide();
                             }.bind(this);
-
-                            //app.loader.hide();
 
                         } else {
                             console.log('Unable to retrieve parent container');
@@ -489,7 +469,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                 } else {
                     console.log(0, data.message);
                     console.log(0, 'An Exception Occurred');
-                    app.login();
+                    this.getMainContainer().login();
                 }
 
             }.bind(this));

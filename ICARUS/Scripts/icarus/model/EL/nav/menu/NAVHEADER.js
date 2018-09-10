@@ -15,13 +15,6 @@ export default class NAVHEADER extends MENU {
         super(node, model);
         this.addClass('navbar-header');
 
-        /**
-            A container
-            @type {CONTAINER}
-        
-        console.log('NavHeader getting Container', this.el);
-        this.container = null; //this.getContainer(); //this.getProtoTypeByClass('CONTAINER');
-        console.log('NavHeader Container', this.container);*/
         
         // Left aligned group
         this.tabs = new MENU(this, 
@@ -42,6 +35,7 @@ export default class NAVHEADER extends MENU {
         );
 
         this.tab.el.onclick = function () {
+            console.log('Toggle Body');
             this.getContainer().toggleBody();
         }.bind(this);
 
@@ -105,6 +99,14 @@ export default class NAVHEADER extends MENU {
     }
 
     /**
+        Override for NavHeader
+        @returns {CONTAINER} The NavHeader Container
+    */
+    getContainer() {
+        return this.node.node;
+    }
+
+    /**
      * Return the user or Guest if doesn't exist
      * @returns {string} User string
      */
@@ -122,20 +124,6 @@ export default class NAVHEADER extends MENU {
         Show/Hide this.menu
      */
     toggleCollapse() {
-        //console.log('NAVHEADER.toggleCollapse()');
         $(this.menu.el).collapse('toggle');
-    }
-
-    /**
-        Sets the parent container for this Nav Header if it does not exist,
-        then returns it or null
-        @returns {CONTAINER} The parent container for this container
-    */
-    getContainer() {
-        //console.log('NAVHEADER.getContainer()', this.container);
-        if (this.container === undefined) {
-            this.container = this.getProtoTypeByClass('CONTAINER');
-        }
-        return this.container;
     }
 }

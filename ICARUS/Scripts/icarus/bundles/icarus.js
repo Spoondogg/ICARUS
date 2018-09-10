@@ -260,16 +260,37 @@ export default class EL extends MODEL {
             }
         }        
     }
+
+    /**
+        Sets the parent container for this Nav Header if it does not exist,
+        then returns it or null
+        @returns {CONTAINER} The parent container for this container
+    */
+    getContainer() {
+        console.log('NAVHEADER.getContainer()', this.container);
+        if (this.container === undefined || this.container === null) {
+            this.container = this.getProtoTypeByClass('CONTAINER');
+        }
+        return this.container;
+    }
+
+    /**
+        Returns the MAIN container
+        @returns {CONTAINER} This EL's parent container
+    */
+    getMainContainer() {
+        return this.getContainer().getMainContainer();
+    }
     
     /**
      * Creates a TEXTAREA and populates with this element's contents
      */
     edit() {
         try {
-            app.stickyFooter.show();
+            this.getMainContainer().stickyFooter.show();
 
             $(this.el).addClass('edit');
-            this.editor = new TEXTAREA(app.stickyFooter, new MODEL(
+            this.editor = new TEXTAREA(this.getMainContainer().stickyFooter, new MODEL(
                 new ATTRIBUTES({
                     'value': this.el.innerHTML
                 })
@@ -300,10 +321,9 @@ export default class EL extends MODEL {
                 this.editor.destroy();
                 $(this.el).removeClass('edit');
                 DEBUG.log('QuickSave');
-                this.getProtoTypeByClass('CONTAINER').quickSave(true);
-
-                app.stickyFooter.hide();
-                app.stickyFooter.empty();
+                this.getContainer().quickSave(true);
+                this.getMainContainer().stickyFooter.hide();
+                this.getMainContainer().stickyFooter.empty();
             }.bind(this);
 
             this.editor.input.el.focus();
@@ -383,40 +403,46 @@ export default class EL extends MODEL {
     /**
         Opens the ELEMENT up for editing.  This should create a link
         between the object on the server and its client side representation
+        @returns {EL} This EL
     */
     open() {
         this.status = STATUS.OPEN;
+        //this.el.setAttribute('data-status', 'open');
         try {
-            this.node.open();
-            //this.el.setAttribute('data-status', 'open'); // TODO: Does this need to be exposed?
+            this.node.open();            
         } catch (e) {
-            console.log('Unable to open parent element('+this.element+')');
-            console.log(e);
+            console.log('Unable to open parent element('+this.element+')', e);
         }
+        return this;
     }
 
     /**
         Closes the EL up for editing.  This should create a link
         between the object on the server and its client side representation
         and update accordingly
+        @returns {EL} This EL
     */
     close() {
         this.status = STATUS.CLOSED;
-        this.el.setAttribute('data-status', 'closed');
+        //this.el.setAttribute('data-status', 'closed');
+        return this;
     }
 
     /**
         Empties contents of node element
+        @returns {EL} This EL
     */
-    empty() {	// Remove all children
+    empty() {
         while (this.el.firstChild) {
             this.el.removeChild(this.el.firstChild);
         }
+        return this;
     }
 
     /**
         Removes this element from the DOM
-        @param {number} delay Millisecond delay 
+        @param {number} delay Millisecond delay
+        @returns {EL} This EL
     */
     destroy(delay) {
         delay = delay ? delay : 300;
@@ -437,69 +463,85 @@ export default class EL extends MODEL {
             console.log('Unable to destroy this ' + this.element);
             console.log(e);
         }
+        return this;
     }
 
     /**
         Override this element's class with the given value
         @param {string} className A class
+        @returns {EL} Returns this element for chaining purposes
      */
     setClass(className) {
         this.el.className = className;
         this.attributes.class = className;
+        return this;
     }
 
     /**
         Adds the given class name to the element's list of classes
         @param {string} className the class to be appended
+        @returns {EL} Returns this element for chaining purposes
     */
     addClass(className) {
         $(this.el).addClass(className);
         let prevClass = this.attributes.class || '';
         this.attributes['class'] = prevClass += ' ' + className;
+        return this;
     }
 
     /**
         Revoves the given class name from the element's list of classes
         @param {string} className the class to be removed
+        @returns {EL} Returns this element for chaining purposes
     */
     removeClass(className) {
         $(this.el).removeClass(className);
         this.attributes.set('class',
             this.attributes.get('class').replace(className, '')
         );
+        return this;
     }
 
     /**
         Shows this Element
+        @returns {EL} This EL
     */
     show() {
         this.el.style.display = 'block';
+        return this;
     }
 
     /**
         Hides this Element
+        @returns {EL} This EL
     */
     hide() {
         this.el.style.display = 'none';
+        return this;
     }
 
     /**
         Adds 'active' to this element's classes
+        @returns {EL} This EL
      */
     activate() {
         $(this.el).addClass('active');
+        return this;
     }
 
     /**
         Removes 'active' from this element's classes
+        @returns {EL} This EL
      */
     deactivate() {
         $(this.el).removeClass('active');
+        return this;
     }
 
     /**
         Toggles the 'active' class on this element
         @param {string} className Optionally toggle this class
+        @returns {EL} This EL
     */
     toggle(className) {
         if (className) {
@@ -507,19 +549,20 @@ export default class EL extends MODEL {
         } else {
             $(this.el).toggle();
         }
+        return this;
     }
 
     /**
         Create all children elements in the order that
         they were pushed into provided array
         @param {array} children Array of children object models to be constructed
+        @returns {EL} This EL
     */
     populate(children) {
         if (children) {
             let denom = children.length;
             let progress = 0; // 0 to 100            
             //console.log(this.className + '.populate(' + children.length + ');');
-            //app.loader.show();
             try {
                 for (let c = 0; c < children.length; c++) {
                     progress = Math.round((c+1) / denom * 100);
@@ -529,42 +572,31 @@ export default class EL extends MODEL {
             } catch (e) {
                 console.log(e);
             }
-            //console.log(100, 'Success');
-
-            /*
-            if (!DEBUGMODE) {
-                app.loader.hide();
-            }
-            */
         }
+        return this;
     }
-
-    /**
-        Modifies the element
-        @param {string} name The name to be assigned to this element
-    
-    save(name) {
-        this.el.setAttribute('name', name);
-    }*/
 
     /**
         Sets the inner HTML of this element
         @param {string} innerHTML Html string to be parsed into HTML
+        @returns {EL} This EL
     */
-    setInnerHTML(innerHTML) {
-        //this.el.innerHTML = innerHTML ? innerHTML : '';
-        this.el.innerHTML = innerHTML || '';
+    setInnerHTML(innerHTML = '') {
+        this.el.innerHTML = innerHTML;
+        return this;
     }
 
     /**
         Scrolls page to the top of this element
-     * @param {any} speed Millisecond duration
-     */
+        @param {number} speed Millisecond duration
+        @returns {EL} This EL
+    */
     scrollTo(speed = 1000) {
         console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
         $(this.node.el).animate({
             scrollTop: parseInt($(this.el).offset().top)
         }, speed);
+        return this;
     }
 }
 import MODEL from '../model/MODEL.js';
@@ -1130,6 +1162,7 @@ import BANNER from '../container/banner/BANNER.js';
 import THUMBNAIL from '../container/banner/thumbnail/THUMBNAIL.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import IFRAME from '../container/iframe/IFRAME.js';
+import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
 export { FORM, TOKEN };
 
 /**
@@ -1357,7 +1390,8 @@ import EL, { MODEL } from '../EL.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 import DEBUG from '../../../DEBUG.js';
-import MODAL from '../modal/MODAL.js';
+//import MODAL from '../modal/MODAL.js';
+import PROMPT, { MODAL } from '../modal/prompt/PROMPT.js';
 /**
     A generic CONTAINER with a header that controls population of this element.
 
@@ -1387,15 +1421,10 @@ export default class CONTAINER extends GROUP {
         super(node, element, model);
         this.addClass('icarus-container');
         this.isContainer = 1;
-        this.container = null; //this.getContainer();
-
-        //this.main = this.getMainContainer();
-
-        // Data elements contain a list of arguments for a data object
+        this.container = null;
         this.dataElements = DATAELEMENTS[this.className];
+        this.attrElements = [];
 
-        this.attrElements = []; // Attribute elements contain a list of attributes that apply for this object
-        
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
@@ -1518,9 +1547,9 @@ export default class CONTAINER extends GROUP {
     }
 
     /** Abstract construct method throws an error if not declared */
-    construct() {
-        DEBUG.log('CONTAINER.construct();');
+    construct() {        
         if (this.className !== 'CONTAINER') {
+            console.log('CONTAINER.construct();');
             throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
         }
     }
@@ -1553,8 +1582,9 @@ export default class CONTAINER extends GROUP {
     }
 
     /**
-     * Moves this element UP one slot
-     */
+        Moves this element UP one slot
+        @returns {CONTAINER} This Container
+    */
     moveUp() {
         console.log('Move Up');
         let node = $(this.el);
@@ -1571,11 +1601,13 @@ export default class CONTAINER extends GROUP {
                 node.animate({ height: 'toggle' }, 300).delay(300);
             }, 300);
         }
+        return this;
     }
 
     /**
-     * Moves this element DOWN one slot
-     */
+        Moves this element DOWN one slot
+        @returns (CONTAINER} This Container
+    */
     moveDown() {
         console.log('Move Down');
         let node = $(this.el);
@@ -1593,6 +1625,7 @@ export default class CONTAINER extends GROUP {
                 node.animate({ height: 'toggle' }, 300);
             }, 300);
         }
+        return this;
     }
 
     /**
@@ -1600,18 +1633,10 @@ export default class CONTAINER extends GROUP {
         based on the current model
     */
     refresh() {
-        console.log('Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
-
-        console.log(20, 'Emptying...', true);
+        console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
         this.body.pane.empty();
-
-        console.log(30, 'Reconstructing...', true);
         this.construct();
-
-        // Populate based on children
-        console.log(60, 'Populating...', true);
         this.populate(this.body.pane.children);
-
         console.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
     }
 
@@ -1637,10 +1662,7 @@ export default class CONTAINER extends GROUP {
                         'label': 'UP'
                     })
                 })
-            ).el.onclick = function () {
-                this.navBar.header.toggleCollapse();
-                this.moveUp();
-            }.bind(this);
+            ).el.onclick = this.moveContainerUp.bind(this);
 
             domGroup.addNavItemIcon(
                 new MODEL().set({
@@ -1649,10 +1671,7 @@ export default class CONTAINER extends GROUP {
                         'label': 'DOWN'
                     })
                 })
-            ).el.onclick = function () {
-                this.navBar.header.toggleCollapse();
-                this.moveDown();
-            }.bind(this);
+            ).el.onclick = this.moveContainerDown.bind(this);
 
             domGroup.addNavItemIcon(
                 new MODEL().set({
@@ -1681,7 +1700,8 @@ export default class CONTAINER extends GROUP {
                 })
             ).el.onclick = this.disable.bind(this);
 
-            /** CRUD ACTIONS **/
+            /* CRUD ACTIONS */
+
             let crudGroup = this.navBar.header.menu.getGroup('CRUD');
             crudGroup.addNavItemIcon(
                 new MODEL().set({
@@ -1701,31 +1721,7 @@ export default class CONTAINER extends GROUP {
                     })
                 })
             );
-            this.btnSave.el.onclick = function () {
-                this.btnSave.toggle('active');
-
-                // CREATE A TEMPORARY wrapper to hold the SAVE FORM
-                if ($(this.btnSave.el).hasClass('active')) {
-                    let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
-                    this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
-                    this.save(this.btnSave.wrapper, this.btnSave); //.bind(this);
-                } else {
-                    console.log('closing save form');
-                    let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
-                    
-                    try {
-                        $(wrp).collapse('toggle');
-                        setTimeout(function () {          
-                            wrp.parentNode.removeChild(wrp);
-                        }.bind(this), 2000);
-
-                    } catch (e) {
-                        console.log('Unable to destroy this ');
-                        console.log(e);
-                    }
-                }
-
-            }.bind(this);
+            this.btnSave.el.onclick = this.createWrappedSaveForm.bind(this);
 
             this.btnQuickSave = crudGroup.addNavItemIcon(
                 new MODEL().set({
@@ -1738,7 +1734,50 @@ export default class CONTAINER extends GROUP {
             this.btnQuickSave.el.onclick = this.quickSave.bind(this);
         }
     }
-    
+
+    /**
+        Moves the Container up one slot in the DOM
+    */
+    moveContainerUp() {
+        this.navBar.header.toggleCollapse();
+        this.moveUp();
+    }
+
+    /**
+        Moves the Container down one slot in the DOM
+    */
+    moveContainerDown() {
+        this.navBar.header.toggleCollapse();
+        this.moveDown();
+    }
+
+    /**
+        Creates a save form for this Container and places it in a wrapper
+        inside the CRUD Group
+    */
+    createWrappedSaveForm() {
+        this.btnSave.toggle('active');
+
+        // CREATE A TEMPORARY wrapper to hold the SAVE FORM
+        if ($(this.btnSave.el).hasClass('active')) {
+            let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
+            this.btnSave.wrapper = new EL(node, 'DIV', new MODEL(new ATTRIBUTES('collapse in wrapper')));
+            this.save(this.btnSave.wrapper);
+        } else {
+            console.log(0, 'Closing ' + this.className + '.save() form.');
+            let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
+            try {
+                $(wrp).collapse('toggle');
+                setTimeout(function () {
+                    wrp.parentNode.removeChild(wrp);
+                }.bind(this), 2000);
+            } catch (e) {
+                console.log('Unable to destroy this ');
+                console.log(e);
+            }
+        }        
+    }
+
     /**
         Performs JQuery's ajax method to the given url.
         @param {string} url Target url
@@ -1773,12 +1812,16 @@ export default class CONTAINER extends GROUP {
                         'label': className //'Create ^'
                     })
                 })
-            ).el.onclick = function () {
+            ).el.onclick =
+            /**
+                Makes a Promise to perform Container.create() with the
+                response (MODEL) and performs a QuickSave on the parent Container
+            */
+            function () {
                 this.navBar.header.toggleCollapse();
 
                 //https://developers.google.com/web/fundamentals/primers/promises
                 let promise = new Promise(function (resolve, reject) {
-
                     console.log('Promise');
                     // do a thing, possibly async, then…
                     let result = this.create(new MODEL().set({
@@ -1797,7 +1840,6 @@ export default class CONTAINER extends GROUP {
                 promise.then(
                     function (result) {
                         console.log('promise success');
-                        //console.log(result); // "Stuff worked!"
                         this.quickSave(true);
 
                     }.bind(this),
@@ -1806,8 +1848,6 @@ export default class CONTAINER extends GROUP {
                         console.log(err); // Error: "It broke"
                     }.bind(this)
                 );
-
-                
             }.bind(this);
         }
     }
@@ -1957,19 +1997,10 @@ export default class CONTAINER extends GROUP {
     /**
         Saves the state of this Element
         @param {EL} node The parent container to hold the save menu
-        @param {EL} caller The element (typically a button) that called the save method
      */
-    save(node, caller) {
-        console.log(this.element + '.save()');
-        //console.log('Node:');
-        //console.log(node);
-        //console.log('Caller:');
-        //console.log(caller);
-        //console.log('This:');
-        //console.log(this);
-
-        // Populate subsections with elements in this body
-        let subsections = this.getSubSections();
+    save(node) {
+        console.log(this.element + '.save()');        
+        let subsections = this.getSubSections();    // Populate subsections with elements in this body
        
         let form = CONTAINERFACTORY.createEmptyForm(node, false);
         form.addClass('saveContainer');
@@ -2073,18 +2104,10 @@ export default class CONTAINER extends GROUP {
         form.fieldset.formElementGroup.addInputElements(inputs);
 
         /*
-            THIS IS THE PART THAT USES NODE/CALLER
-            to collapse the header.  
-
-            It's dumb.  Get rid of it.
+            Restore Container View to defaults and refresh parent Container
         */
         form.afterSuccessfulPost = function () {
             this.setLabel(form.el.elements['label'].value);
-            if (caller) {
-                caller.toggle('active');
-                console.log(caller);
-                caller.node.node.toggleCollapse();
-            }
 
             try {
                 this.getMainContainer().focusBody();
@@ -2131,9 +2154,8 @@ export default class CONTAINER extends GROUP {
     */
     getContainer() {
         if (this.className.toUpperCase() === 'MAIN') {
-            console.log(this.className+'.getContainer() has no parent container', this);
+            //console.log(this.className+'.getContainer() has no parent container', this);
             return this;
-
         } else {
             if (this.container === undefined || this.container === null) {
                 this.container = this.getProtoTypeByClass('CONTAINER');
@@ -2144,43 +2166,36 @@ export default class CONTAINER extends GROUP {
 
     /**
         Returns the MAIN container
+        @returns {MAIN} The MAIN Container
     */
     getMainContainer() {
-        if (this.className.toUpperCase() === 'MAIN') {
+        //console.log('getMainContainer()', this.className);
+        if (this.className === 'MAIN') { //.toUpperCase()
             return this;
         } else {
-            //let container = this.getContainer().getContainer();
-            let container = this.getContainer();
-            if (container.className !== 'MAIN') {
-                return container.getMainContainer();
-            }
+            return this.getContainer().getMainContainer();
         }
     }
 
     /**
-     * If dataId or attributesId exists, extract the appropriate values
-     * @param {number} modelId The object's unique identifier
-     * @param {object} data The object to be saved
-     */
+        If dataId or attributesId exists, extract the appropriate values
+        @param {number} modelId The object's unique identifier
+        @param {object} data The object to be saved
+    */
     quickSaveFormPost(modelId, data) {
-        console.log('QuickSaveFormPost:'+modelId);
-        console.log(data);
+        console.log('QuickSaveFormPost:'+modelId, data);
         if (modelId > 0) {
             console.log(50, 'Saving FormPost: ' + modelId);
             let form = CONTAINERFACTORY.createEmptyForm(this, true);
             let inputs = [];
+            console.log('Adding data attributes');
             for (let key in data) {
-                DEBUG.log('Adding data attributes');
-
-                //let value = this.data[key] ? this.data[key] : data[key];
-                console.log('Key: ' + key);
-                console.log('Value:');
-                console.log(this.htmlEncode(data[key]));
+                console.log('Key', key);
+                console.log('Value', this.htmlEncode(data[key]));
 
                 inputs.push(
                     new MODEL(new ATTRIBUTES({
                         'name': key,
-                        //'value': this[key] ? this[key].el ? this[key].el.innerHTML : data[key] : data[key]
                         'value': this.htmlEncode(data[key]) //value
                     })).set({
                         'element': 'INPUT',
@@ -2195,11 +2210,11 @@ export default class CONTAINER extends GROUP {
             form.post();
             form.afterSuccessfulPost = function () {
                 form.destroy();
-                DEBUG.log('FormPost: ' + modelId + ' has been quicksaved');
+                console.log('FormPost: ' + modelId + ' has been quicksaved');
             }.bind(this);
 
         } else {
-            DEBUG.log('No modelId provided');
+            console.log('No modelId provided');
         }
     }
 
@@ -2210,17 +2225,12 @@ export default class CONTAINER extends GROUP {
         @returns {BOOLEAN} True if successful
      */
     quickSave(noPrompt = false) {
-
         if (noPrompt || confirm('Quick Save '+this.className+'('+this.id+') : '+this.label+' ?')) {
-            console.log(20, 'Quick Save');
-
-            DEBUG.log(this.element + '.save()');
-            DEBUG.log(this);
+            console.log(this.element + '.save()', this);
 
             // Populate subsections with elements in this body
             let subsections = this.getSubSections();
-
-            DEBUG.log('Creating save form...');
+            
             let form = CONTAINERFACTORY.createEmptyForm(this, true);
             form.fieldset.formElementGroup.addInputElements([
                 new MODEL(new ATTRIBUTES({
@@ -2366,11 +2376,9 @@ export default class CONTAINER extends GROUP {
                 this.quickSaveFormPost(this.dataId, this.data);
                 this.quickSaveFormPost(this.attributesId, this.attributes);
 
-                //app.loader.hide();
             }.bind(this);
 
             console.log(100, 'Quick Save Complete');
-            //app.loader.hide();
             return true;
 
         } else {
@@ -2386,7 +2394,7 @@ export default class CONTAINER extends GROUP {
     */
     quickSaveParent() {
         try {
-            return this.getProtoTypeByClass('CONTAINER').quickSave(false);
+            return this.getContainer().quickSave(false);
         } catch (e) {
             console.log('Container.QuickSaveParent() No parent exists');
             return false;
@@ -2399,8 +2407,7 @@ export default class CONTAINER extends GROUP {
         @param {EL} caller This
      */
     afterSuccessfulPost(node, caller) {
-        console.log(100, 'Success');
-        //app.loader.hide();
+        console.log(100, 'Successful Post');
     }
 
     /**
@@ -2482,7 +2489,13 @@ export default class CONTAINER extends GROUP {
     */
     disable() {
         let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
-        let text = 'Disable ' + this.className + 'j['+this.id+'] in the Database?<br>This '+this.className+' will be permenantly deleted from database in X days!!!';
+        let text = 'Disable ' + this.className + 'j[' + this.id + '] in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
+
+        let container = this.getContainer();
+        let main = container.getMainContainer();
+
+        let token = main.token;
+        console.log('Token', token);
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
             this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICONS.REMOVE);
@@ -2492,7 +2505,7 @@ export default class CONTAINER extends GROUP {
                 console.log('TODO: Disable method on Container controller.');
                 console.log(100, 'Disabling '+this.className);
                 $.post('/' + this.className + '/Disable/' + this.id, {
-                    '__RequestVerificationToken': token.value
+                    '__RequestVerificationToken': token//token.value
                 },
                     function (payload, status) {
                         if (payload.result !== 0) {
@@ -2969,13 +2982,6 @@ export default class NAVHEADER extends MENU {
         super(node, model);
         this.addClass('navbar-header');
 
-        /**
-            A container
-            @type {CONTAINER}
-        
-        console.log('NavHeader getting Container', this.el);
-        this.container = null; //this.getContainer(); //this.getProtoTypeByClass('CONTAINER');
-        console.log('NavHeader Container', this.container);*/
         
         // Left aligned group
         this.tabs = new MENU(this, 
@@ -2996,6 +3002,7 @@ export default class NAVHEADER extends MENU {
         );
 
         this.tab.el.onclick = function () {
+            console.log('Toggle Body');
             this.getContainer().toggleBody();
         }.bind(this);
 
@@ -3059,6 +3066,14 @@ export default class NAVHEADER extends MENU {
     }
 
     /**
+        Override for NavHeader
+        @returns {CONTAINER} The NavHeader Container
+    */
+    getContainer() {
+        return this.node.node;
+    }
+
+    /**
      * Return the user or Guest if doesn't exist
      * @returns {string} User string
      */
@@ -3076,21 +3091,7 @@ export default class NAVHEADER extends MENU {
         Show/Hide this.menu
      */
     toggleCollapse() {
-        //console.log('NAVHEADER.toggleCollapse()');
         $(this.menu.el).collapse('toggle');
-    }
-
-    /**
-        Sets the parent container for this Nav Header if it does not exist,
-        then returns it or null
-        @returns {CONTAINER} The parent container for this container
-    */
-    getContainer() {
-        //console.log('NAVHEADER.getContainer()', this.container);
-        if (this.container === undefined) {
-            this.container = this.getProtoTypeByClass('CONTAINER');
-        }
-        return this.container;
     }
 }
 /**
@@ -3520,6 +3521,7 @@ export default class MODALMENU extends MODAL { // CALL ME A MENU!!!!
 import MODAL from '../MODAL.js';
 import DEBUG from '../../../../DEBUG.js';
 import CONTAINERFACTORY, { FORM } from '../../container/CONTAINERFACTORY.js';
+export { MODAL };
 /**
     A modal prompt.
     
@@ -4700,6 +4702,11 @@ export default class INDEXMAIN extends BANNER {
 
 }
 import BANNER from '../BANNER.js';
+import CONTAINERFACTORY from '../../CONTAINERFACTORY.js';
+import HEADER from '../../../header/HEADER.js';
+import MODEL from '../../../../MODEL.js';
+import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+import MENULIST from '../../menulist/MENULIST.js';
 
 /**
     Contains a high level view of all MAIN Objects available to this user
@@ -4774,6 +4781,7 @@ import HEADER from '../../header/HEADER.js';
 import MODEL from '../../../MODEL.js';
 import P from '../../p/P.js';
 import '../../../../StringMethods.js';
+import FORMPOSTINPUT from '../formelement/formpostinput/FORMPOSTINPUT.js';
 /**
     A banner that can be populated with CallOuts
 */
@@ -4792,6 +4800,9 @@ export default class PARAGRAPH extends CONTAINER {
         this.populate(model.children);
     }
 
+    /**
+        Constructs a Paragraph Container.
+    */
     construct() {        
         if (this.dataId > 0) {
             if (this.data.p) {
@@ -4804,23 +4815,11 @@ export default class PARAGRAPH extends CONTAINER {
         } else {
             // This object REQUIRES model.data 
             // Open up the save panel and generate some
-
             
             let formPostInput = new FORMPOSTINPUT(this, new MODEL().set({
                 'inputs': this.inputs
             }));
             formPostInput.newAttributes(this, 'dataId', this);
-
-            
-
-
-           // app.sidebar.empty();
-            //app.toggleSidebar();
-
-            //let saveForm = this.save(app.sidebar);
-
-            
-            //app.sidebar.target = this;
         }
     }
 }
@@ -5356,9 +5355,15 @@ export default class MAIN extends CONTAINER {
             'ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
             'IMAGEGALLERY', 'DICTIONARY', 'WORD'
         ]);
+
+        /*
         this.addClass('app');
-        this.showNavBar();
         this.navBar.addClass('navbar-fixed-top');
+        
+        */
+        this.addClass('app').navBar.addClass('navbar-fixed-top');
+
+        this.showNavBar();
         this.body.pane.addClass('pane-tall');
 
         /**
@@ -5498,9 +5503,8 @@ export default class MAIN extends CONTAINER {
                 })
             ).el.onclick = function () {
                 console.log('Showing Console');
-                app.loader.show();
-                app.loader.showConsole();
-                //$(app.loader.console.el).collapse('show');
+                this.loader.show();
+                this.loader.showConsole();
             }.bind(this);
 
             domMenu.addNavItemIcon(
@@ -5572,53 +5576,49 @@ export default class MAIN extends CONTAINER {
     }    
 
     /**
-        Loads the specified app by id
+        Loads the specified app id into the Main Container
         @param {number} id App Id to load
     */
     load(id = 1) {
-        //id = id ? id : 1;
-
-        let url = new URL(window.location.href);
-        let returnUrl = url.searchParams.get('ReturnUrl');
+        let returnUrl = this.url.searchParams.get('ReturnUrl');
         if (returnUrl) {
-            returnUrl = url.origin + returnUrl;
+            returnUrl = this.url.origin + returnUrl;
             location.href = returnUrl;
         }
 
-        /*this.prompt = new PROMPT('Load App', 'Loads an Application by Id', [], [
-            { 'element': 'INPUT', 'type': 'number', 'name': 'id', 'value': this.id }
-        ]);*/
-        /*
-        prompt.form.submit = function () {
-            id = prompt.form.el.elements['id'].value;
-            alert('Loading App(' + id + ')');
-            window.location.href = id || 0;
-        }.bind(this);
-        */
-        //this.prompt.show();
-        // Retrieve object model
-        $.getJSON(
-            'Main/Get/' + id, function (data) {
-                if (data.result === 1) {
-                    try {
-                        if (data.model.label) {
-                            document.title = data.model.label;
-                        }
-                        this.setId(id);
-                        this.setLabel(data.model.label);
-                        this.populate(data.model.children);
-                    } catch (e) {
-                        this.loader.log(0, 'Unable to construct Main(' + id + ')');
-                        this.DEBUG.log(e);
-                    }
-                } else {
-                    this.loader.log(0, 'Failed to retrieve Main(' + id +
-                        ') from server\n' + data.message
-                    );
-                    this.loader.showConsole();
+        // TODO: Prompt the user for an Id to load
+        // Eventually create a simple application browser
+        // Retrieve Main
+        $.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
+    }
+
+    /**
+        The ajax call performed when MAIN.load is called
+        Receives the MAIN model from Main/Get/id (if permitted)
+        Then, sets the document title, application id and label
+        and Populates accordingly
+        @param {any} data The ajax payload
+    */
+    loadAjaxCall(data) {
+        if (data.result === 1) {
+            try {
+                if (data.model.label) {
+                    document.title = data.model.label;
                 }
-            }.bind(this)
-        );
+                this.body.pane.empty();
+                this.setId(id);
+                this.setLabel(data.model.label);
+                this.populate(data.model.children);
+            } catch (e) {
+                this.loader.log(0, 'Unable to construct ' + this.className + '(' + id + ')');
+                console.log(e);
+            }
+        } else {
+            this.loader.log(0, 'Failed to retrieve ' + this.className + '(' + id +
+                ') from server\n' + data.message
+            );
+            this.loader.showConsole();
+        }
     }
 
     /**
@@ -5641,8 +5641,7 @@ export default class MAIN extends CONTAINER {
         Allows the user to open an ARTICLE in this APP.
         @param {number} id Article id
     */
-    open(id) {
-        id = id || 0;
+    open(id = 0) {
         console.log('TODO: APP.open(' + id + ')');
     }
 
@@ -5927,40 +5926,39 @@ export default class MAIN extends CONTAINER {
         Logs the current user out
     */
     logout() {
-        console.log(25, 'Logging out', true);
+        this.loader.showConsole();
+        this.loader.log(50, 'MAIN.logout(); Logging out...', true);
         $.post('/Account/LogOff', {
-            '__RequestVerificationToken': TOKEN.getToken().value
+            '__RequestVerificationToken': this.token
         }, function (payload, status) {
-            this.loader.log(50, 'Status: ' + status, true);
-            DEBUG.log('Payload:');
-            DEBUG.log(payload);
+            this.loader.log(60, 'Status: ' + status, true);
+            console.log('Payload', payload);
 
             // textStatus contains the status: success, error, etc
             // If server responds with 'success'            
             if (status === "success") {
-                console.log(99, 'Logging Out...');
+                this.loader.log(99, 'Success.');
                 setTimeout(function () {
                     location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
                 }.bind(this), 1000);
 
             } else {
-                DEBUG.log('Failed to POST results to server with status: "' + status + '"');
+                this.loader.log('Failed to POST results to server with status: "' + status + '"');
                 console.log(0, 'Failed to send<br>' +
                     payload.message + '<br><hr/>', true
                 );
-                app.loader.showConsole();
-                //$(app.loader.console.el).collapse('show');
-                DEBUG.log('Payload:\n');
-                DEBUG.log(payload);
+                
+                this.loader.log('Payload:\n');
+                this.loader.log(payload);
             }
         }.bind(this), "json");
     }
 
     /**
-     * Log into the application using the given credentials
-     * @param {string} email Username / Email 
-     * @param {string} password Account Password
-     */
+        Log into the application using the given credentials
+        @param {string} email Username / Email 
+        @param {string} password Account Password
+    */
     register() {
         console.log('Register');
 
@@ -6065,16 +6063,7 @@ export default class MAIN extends CONTAINER {
 
         this.prompt.show();
     }
-
-    /**
-         Sets the application url on view initialization 
-         @returns {URL} Current url
-    */
-    getUrl() {
-        return new URL(window.location.href);
-    }
-
-
+    
     /**
      * Log into the application using the given credentials
      * @param {string} email Username / Email 
@@ -6083,15 +6072,11 @@ export default class MAIN extends CONTAINER {
         console.log('Register External Login');
 
         this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
-        this.prompt.addClass('prompt');
-
         this.prompt.form.destroy();
 
         let tmp = new EL(this.prompt.container.body.pane, 'DIV', new MODEL());
         $(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
         tmp.destroy();
-
-        
 
         /*
         this.prompt.form.setPostUrl('/Account/ExternalLoginConfirmation?ReturnUrl=%2F');

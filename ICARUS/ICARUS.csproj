@@ -560,7 +560,7 @@
     <Compile Include="Models\Icarus\Database\db_Icarus.cs" />
     <Compile Include="Models\Icarus\Database\IcarusDatabase.cs" />
     <Compile Include="Models\Icarus\Elements\ARTICLE.cs" />
-    <Compile Include="Models\Icarus\Elements\Main.cs" />
+    <Compile Include="Models\Icarus\Elements\MAIN.cs" />
     <Compile Include="Models\Icarus\Elements\Attributes\ATTRIBUTES.cs" />
     <Compile Include="Models\Icarus\Elements\EL.cs" />
     <Compile Include="Models\Icarus\Database\Ingestors\IcarusIngestor.cs" />
@@ -616,22 +616,16 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\animate.css" />
-    <Content Include="Content\animate.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.min.css" />
+    <Content Include="Content\css\animate\animate.css" />
+    <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap-theme.css" />
     <Content Include="Content\css\bootstrap\bootstrap-theme.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\css\animate\animate.css" />
-    <Content Include="Content\css\animate\animate.min.css" />
+    <Content Include="Content\css\bootstrap\bootstrap-grid.css" />
+    <Content Include="Content\css\bootstrap\bootstrap-grid.min.css" />
+    <Content Include="Content\css\bootstrap\bootstrap-reboot.css" />
+    <Content Include="Content\css\bootstrap\bootstrap-reboot.min.css" />
     <Content Include="Content\css\icarus\scss\icarus.css">
       <DependentUpon>icarus.scss</DependentUpon>
     </Content>
@@ -682,10 +676,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\css\bootstrap\bootstrap.min.css.map" />
+    <Content Include="Content\css\bootstrap\bootstrap.css.map" />
+    <Content Include="Content\css\bootstrap\bootstrap-theme.min.css.map" />
+    <Content Include="Content\css\bootstrap\bootstrap-theme.css.map" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -856,10 +850,6 @@
     <Content Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\css\bootstrap\bootstrap.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.css.map" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />

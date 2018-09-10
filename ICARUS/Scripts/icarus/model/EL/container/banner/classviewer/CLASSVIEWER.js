@@ -1,4 +1,9 @@
 ﻿import BANNER from '../BANNER.js';
+import CONTAINERFACTORY from '../../CONTAINERFACTORY.js';
+import HEADER from '../../../header/HEADER.js';
+import MODEL from '../../../../MODEL.js';
+import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+import MENULIST from '../../menulist/MENULIST.js';
 
 /**
     Contains a high level view of all MAIN Objects available to this user
