@@ -1,8 +1,13 @@
-﻿/** A SASS stylesheet for Icarus, extending Bootstrap 3.3.7 */
-// SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
-/*
-    #region Variables: See https://sass-lang.com/guide#topic-2-SCSS
-*/
+﻿/// A SASS stylesheet for Icarus, extending Bootstrap 3.3.7
+/// @author Ryan Dunphy
+/// @see SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
+/// @see http://sassdoc.com/annotations/
+/// @see https://webdevstudios.com/2015/03/17/getting-started-with-sassdoc/
+/// @todo Implement SASSDoc
+
+/// woot
+
+
 $font-major: 'Raleway', sans-serif;
 $font-minor: 'Lato', sans-serif;
 
@@ -13,7 +18,11 @@ $font-header: 'Raleway', sans-serif;
 $font-size-normal: 16px;
 $color-primary: #555;
 $background-primary: #FFF;
+
+/// The width of the sidebar
 $sidebar-width: 80%;
+
+/// The height of the navbar
 $navbar-height: 50px;
 $transition-speed: .2s;
 $transition-motion: ease-in-out;
@@ -30,18 +39,24 @@ $color-light-more: rgb(250, 250, 250);
 $color-darker: rgb(16, 16, 16);
 $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
-/*#endregion */
   
 
 /*
     #region Mixins: https://sass-lang.com/guide#topic-6-SCSS
 */
+
+/// Darken the background color
+/// @param {decimal} $alpha [0.5] - Percentage to darken
 @mixin darken($alpha) {
     background-color: rgba(0,0,0,$alpha);
 }
+
+/// Lighten the background color
+/// @param {decimal} $alpha [0.5] - Percentage to darken
 @mixin lighten($alpha) {
     background-color: rgba(255,255,255,$alpha);
 }
+
 @mixin transition($property) {
     -moz-transition: $property;
     -webkit-transition: $property;
@@ -64,6 +79,7 @@ $color-dark-less: rgb(33, 33, 33);
     #region Abstract Classes
     See Inheritance: https://sass-lang.com/guide#topic-7-SCSS
 */
+/// Prevents the user from selecting this element
 %noSelect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -72,6 +88,8 @@ $color-dark-less: rgb(33, 33, 33);
     user-select: none;
     cursor: default;
 }
+
+/// The object can be clicked or tapped
 %clickable {
     cursor: pointer;
     &:hover {
@@ -104,6 +122,8 @@ $color-dark-less: rgb(33, 33, 33);
     background: linear-gradient(to bottom, rgba(1,2,10,0.85) 0%, rgba(0,0,0,0.3) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01020a', endColorstr='#000000', GradientType=0 );
 }
+
+/// A commonly used bevel to offset rows
 %bevel {
     width: 100%;
     float: left;
@@ -113,16 +133,22 @@ $color-dark-less: rgb(33, 33, 33);
     min-height: $navbar-height;
     line-height: $navbar-height;    
 }
+
+/// The bevel appears to be coming towards the screen
 %bevel-up {
     @extend %bevel;
     border-top: 1px solid #525252;
     border-bottom: 1px solid #232323;
 }
+
+/// The bevel appears to be going away from the screen
 %bevel-down {
     @extend %bevel;
     border-top: 1px solid #232323;
     border-bottom: 1px solid #525252;
 }
+
+/// A content window that is the height of the page, minus header and footer
 %pane-tall {
     $navheights: ($navbar-height * 2) + 3; // 1.5 pixels (one top, one bottom and fuzz)
     height: calc(100vh - #{$navheights}); // Interpolate for calc https://stackoverflow.com/a/20236515/722785
@@ -179,7 +205,7 @@ body {
     font-size: $font-size-normal;
     color: $color-primary;
     padding-top: $navbar-height;
-    background-color: $background-primary;
+    background-color: $color-dark-less; //$background-primary;
     overflow-y: hidden;
     -webkit-font-smoothing: antialiased;
     -webkit-overflow-scrolling: touch;
@@ -355,8 +381,6 @@ nav, .nav {
 
 main {
 
-
-
     & > .navbar-wrapper {
         // This toggler would be appended to document.body
         & > .toggler {
@@ -372,6 +396,7 @@ main {
 
 .banner {
     @extend %bevel-up;
+    @extend %noSelect;
     padding: 1.4em 0;
     background-color: $color-light-more;
 }
@@ -384,8 +409,6 @@ main {
         font-size: 3em;
     }
 }
-
-
 
 .navbar-collapse {
     padding: 0;

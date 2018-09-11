@@ -255,11 +255,10 @@ export default class CONTAINER extends GROUP {
         this.body.pane.empty();
         this.construct();
         this.populate(this.body.pane.children);
-        console.log(100, 'Refreshed ' + this.className + '[' + this.id + ']', true);
     }
 
     /**
-        Shows the Container nav bar
+        Shows the Container NavBar
     */
     showNavBar() {
         $(this.navBar.el).collapse('show');
@@ -1102,18 +1101,47 @@ export default class CONTAINER extends GROUP {
     }
 
     /**
+        Typically this function is used within JQuery posts.
+        If the results are a Payload and its status is "success",
+        the page is reloaded.
+
+        @param {object} payload
+        @param {any} status
+    */
+    ajaxRefreshIfSuccessful(payload, status) {
+        console.log('ajaxRefreshIfSuccessful: Payload', payload);
+        console.log('status', status);
+        if (payload.result !== 0) {
+            setTimeout(function () {
+                let url = new URL(window.location.href);
+                let returnUrl = url.searchParams.get('ReturnUrl');
+                if (returnUrl) {
+                    returnUrl = url.origin + returnUrl;
+                    location.href = returnUrl;
+                } else {
+                    location.reload(true);
+                }
+            }.bind(this), 1000);
+        } else {
+            console.log('Login failed. (err_' + status + ')', payload.message);
+            console.log('Failed to POST results to server with status: "' + status + '"');
+            console.log('Payload', payload);
+        }
+    }
+
+    /**
         Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
     */
     disable() {
         let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
-        let text = 'Disable ' + this.className + 'j[' + this.id + '] in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
+        let text = 'Disable ' + label + ' in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
 
         let container = this.getContainer();
         let main = container.getMainContainer();
-
         let token = main.token;
         console.log('Token', token);
+
         try {
             this.prompt = new PROMPT(label, text, [], [], true);
             this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICONS.REMOVE);
@@ -1122,45 +1150,16 @@ export default class CONTAINER extends GROUP {
                 this.prompt.hide();
                 console.log('TODO: Disable method on Container controller.');
                 console.log(100, 'Disabling '+this.className);
+
                 $.post('/' + this.className + '/Disable/' + this.id, {
                     '__RequestVerificationToken': token//token.value
-                },
-                    function (payload, status) {
-                        if (payload.result !== 0) {
-                            console.log(100, 'Success');
-                            setTimeout(function () {
-
-                                let url = new URL(window.location.href);
-                                let returnUrl = url.searchParams.get('ReturnUrl');
-                                if (returnUrl) {
-                                    returnUrl = url.origin + returnUrl;
-                                    location.href = returnUrl;
-                                } else {
-                                    location.reload(true);
-                                }
-
-                            }.bind(this), 1000);
-                        } else {
-                            console.log(0, 'Login failed. (err_' + status + ').<br>' +
-                                payload.message
-                            );
-                            DEBUG.log('Failed to POST results to server with status: "' + status + '"');
-                            DEBUG.log('Payload:\n');
-                            DEBUG.log(payload);
-                        }
-                    }.bind(this)
-                );
+                }, this.ajaxRefreshIfSuccessful);
 
                 console.log(100, 'Disable Complete');
-
-
-
-
             }.bind(this);
             this.prompt.show();
         } catch (e) {
-            DEBUG.log('Unable to disable this ' + this.element);
-            DEBUG.log(e);
+            console.log('Unable to disable this ' + this.element, e);
         }
     } 
 }

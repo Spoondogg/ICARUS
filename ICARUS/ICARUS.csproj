@@ -721,6 +721,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="gulpfile.js" />
     <Content Include="Scripts\applicationinsights\ai.1.0.20-build00666.js" />
     <Content Include="Scripts\applicationinsights\ai.1.0.20-build00666.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap.js" />
@@ -839,6 +840,9 @@
     <Content Include="Content\css\icomoon\icomoon.ttf" />
     <Content Include="Content\css\icomoon\icomoon.woff" />
     <Content Include="Content\css\icarus\scss\icarus.scss" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <None Include=".bin\npm.cmd" />
     <None Include="bundleconfig.json" />
     <Content Include="bundleconfig.json.bindings">
       <DependentUpon>bundleconfig.json</DependentUpon>
@@ -850,6 +854,8 @@
     <Content Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="package.json" />
+    <Content Include="jsdoc.json" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />
@@ -928,7 +934,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include=".bin\" />
     <Folder Include="App_Data\" />
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />

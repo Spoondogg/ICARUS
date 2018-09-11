@@ -54,27 +54,13 @@ export default class CHAT extends CONTAINER {
     }
 
     /**
-     * Return the user or Guest if doesn't exist
-     * @returns {string} User string
-     */
-    getUser() {
-        let userVar;
-        try {
-            userVar = user;
-        } catch (e) {
-            userVar = 'Guest';
-        }
-        return userVar;
-    }
-
-    /**
      * Posts the chat statement to the server and handles any responses
      * when the user presses ENTER 
      * @returns {Boolean} True if succeeds
      */
     postStatement() {
         if (window.event.keyCode === 13) {
-            this.addStatement(this.getUser(), this.chatInput.el.value);
+            this.addStatement(user, this.chatInput.el.value);
             this.form.post();
             this.chatInput.el.value = '';
             return false;
@@ -120,7 +106,7 @@ export default class CHAT extends CONTAINER {
 
     construct() {
         setTimeout(function () {
-            this.addStatement('ICARUS', 'Hello ' + this.getUser());
+            this.addStatement('ICARUS', 'Hello ' + user);
         }.bind(this), 2000);
     }
 }

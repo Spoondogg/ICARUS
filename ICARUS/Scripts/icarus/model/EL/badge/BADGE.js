@@ -1,4 +1,5 @@
 ﻿import EL from '../EL.js';
+import SPAN from '../span/SPAN.js';
 /**
     A bootstrap badge, typically contained within a list-item
     @param {EL} node The object to contain this element
