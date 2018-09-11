@@ -23,7 +23,7 @@ import THUMBNAIL from '../container/banner/thumbnail/THUMBNAIL.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import IFRAME from '../container/iframe/IFRAME.js';
 import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
-export { FORM, TOKEN };
+export { FORM, TOKEN, MODEL };
 
 /**
     Constructs various Containers and returns them to be appended

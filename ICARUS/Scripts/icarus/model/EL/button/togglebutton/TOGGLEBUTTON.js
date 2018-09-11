@@ -1,5 +1,6 @@
 ﻿import MENU from '../../nav/menu/MENU.js';
 import BUTTON from '../BUTTON.js';
+import MODEL from '../../../MODEL.js';
 /**
     Button that show/hides a list of options
 */

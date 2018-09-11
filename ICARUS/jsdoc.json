@@ -1,0 +1,5 @@
+﻿{
+  "opts": {
+    "destination": "./Documentation/jsdoc"
+  }
+}

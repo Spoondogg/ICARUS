@@ -23,8 +23,6 @@ export default class INDEXMAIN extends BANNER {
         this.addClass('index-main');
         //this.populate(model.children);
 
-        this.token = TOKEN.getToken();
-
         this.page = 0;
         this.pageLength = 6;
         this.pageTotal = 0;
@@ -57,6 +55,9 @@ export default class INDEXMAIN extends BANNER {
         this.loadPage(this.page);
     }
 
+    /**
+        Constructs the INDEXMAIN Container
+    */
     construct() {
         if (!isNaN(this.page)) {
             console.log('Retrieving page ' + this.page);
@@ -135,6 +136,9 @@ export default class INDEXMAIN extends BANNER {
         }
     }
 
+    /**
+        Loads the previous page
+    */
     prevPage() {
         if (this.page > 0) {
             this.loadPage(this.page - 1);
@@ -143,50 +147,35 @@ export default class INDEXMAIN extends BANNER {
         }
     }
 
-
-
     /**
-     * Opens the given Main Id in a new window
-     * @param {number} id Main Container Id
-     * @param {string} label Main Container Label
-     */
+        Opens the given Main Id in a new window
+        @param {number} id Main Container Id
+        @param {string} label Main Container Label
+    */
     launchMain(id, label) {
-        //window.open(new URL(window.location.href).origin + '/' + id);
-
-        // Try opening an IFRAME Modal instead
-        DEBUG.log('Launch Index IFrame Modal');
-
+        console.log('Launch Index IFrame Modal');
         this.modal = new MODAL(label);
         this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
             'label': 'iframe',
             'dataId': -1,
             'data': {
-                'src': url.origin + '/' + id
+                'src': this.url.origin + '/' + id
             }
         }));
-        this.iframe.frame.el.setAttribute('src', url.origin + '/' + id);
-
+        this.iframe.frame.el.setAttribute('src', this.url.origin + '/' + id);
         this.modal.show();
     }
 
-
-
-
     /**
-     * Creates the Modal that contains an iFrame with the given page loaded
-     * TODO: Consider paging these results
-     */
+        Creates the Modal that contains an iFrame with the given page loaded
+        TODO: Consider paging these results
+    */
     launchModal() {
-        DEBUG.log('Launch Index IFrame Modal');
-
+        console.log('Launch Index IFrame Modal');
         this.modal = new MODAL(this.data.header);
         this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
             'label':'iframe'
         }));
-
-
         this.modal.show();
     }
-
-
 }

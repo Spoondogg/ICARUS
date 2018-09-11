@@ -13,6 +13,8 @@ import DEBUG from '../../DEBUG.js';
 
     But it is better practice to do this:
         new DIV(node, model)
+    
+    @extends MODEL
 */
 export default class EL extends MODEL {
     /**
