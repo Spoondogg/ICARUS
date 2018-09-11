@@ -90,9 +90,9 @@ namespace ICARUS.Controllers {
 
         /// <summary>
         /// Get Request Index page for Forms
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> Index() {
             /*
             var containers = from s in getObjectDbContext().Containers
@@ -110,9 +110,9 @@ namespace ICARUS.Controllers {
 
         /// <summary>
         /// Returns a count of all matching containers that belong to this user
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> Count() {
             var count = selectAll(getObjectDbContext()).Count();
 
@@ -124,9 +124,9 @@ namespace ICARUS.Controllers {
 
         /// <summary>
         /// Returns a list of Container Ids that belong to this user
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> List() {
             /*
             var list = from s in selectAll(getObjectDbContext())
@@ -155,9 +155,9 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Returns a list of Container Ids that contain this container
         /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> Page(
             string page = "0", string pageLength = "10"
         ) {
@@ -198,9 +198,9 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Returns a list of Container Ids that contain this container
         /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> PageIndex(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);
