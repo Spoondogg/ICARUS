@@ -1,4 +1,4 @@
-﻿/// <binding ProjectOpened='watchJs, watchSass' />
+﻿/// <binding AfterBuild='doxygen' ProjectOpened='watchJs, watchSass' />
 "use strict";
 /**
     This file is the main entry point for defining Gulp tasks and using Gulp plugins.
@@ -6,6 +6,8 @@
     @see https://www.davepaquette.com/archive/2014/10/08/how-to-use-gulp-in-visual-studio.aspx
 
     @see https://exceptionnotfound.net/using-gulp-js-and-the-task-runner-explorer-in-asp-net-5/
+
+    @see https://github.com/gulpjs/gulp/blob/v3.9.1/docs/getting-started.md
 */
 
 var gulp = require('gulp');
@@ -17,6 +19,7 @@ var del = require('del');
 var sassdoc = require('sassdoc');
 var jsdoc = require('gulp-jsdoc3');
 var rename = require("gulp-rename");
+var doxygen = require('doxygen');
 
 /**
     Javascript files
@@ -41,6 +44,37 @@ gulp.task('watchJs', function () {
 });
 gulp.task('watchSass', function () {
     return gulp.watch(stylesheets.src, ['sassdoc']);
+});
+
+
+gulp.task('doxygen', function () {
+
+    //https://www.npmjs.com/package/doxygen
+    //https://stackoverflow.com/questions/9502426/how-to-make-an-introduction-page-with-doxygen
+    var userOptions = {
+        PROJECT_NAME: 'Icarus',
+        OUTPUT_DIRECTORY: 'Documentation/doxygen',
+        INPUT: './**/*',
+        RECURSIVE: 'YES',
+        FILE_PATTERNS: ['*.cs', '*.md', '*.dox'],
+        EXTENSION_MAPPING: 'cs=C#',
+        GENERATE_LATEX: 'NO',
+        EXCLUDE_PATTERNS: ['*/node_modules/*'],
+        MARKDOWN_SUPPORT: 'YES',
+        //INPUT: './README.md',
+        USE_MDFILE_AS_MAINPAGE: './README.md'
+    };
+
+    /*
+    doxygen.downloadVersion().then(function (data) {
+        doxygen.createConfig(userOptions).run();
+        //doxygen.run()
+    });
+    */
+    doxygen.createConfig(userOptions).run();
+
+    
+    //return gulp.pipe(doxygen.run());
 });
 
 // https://www.npmjs.com/package/gulp-jsdoc3
@@ -86,7 +120,7 @@ gulp.task('scripts', ['clean'], function () {
     return gulp.src(scripts.src)
         //.pipe(uglify())
         .pipe(concat('icarus-gulp-bundled.js'))
-        .pipe(gulp.dest('Scripts/icarus/bundles/' + ((new Date()).getTime())+'/'));
+        .pipe(gulp.dest('Scripts/icarus/bundles/' + ((new Date()).getTime()) + '/')); // https://www.npmjs.com/package/gulp-rename
 });
 
 /**

@@ -4345,7 +4345,7 @@ export default class INDEX extends BANNER {
         }.bind(this), delay);
     }
 }
-000000import BANNER from '../BANNER.js';
+import BANNER from '../BANNER.js';
 /**
     Contains a high level view of all objects owned by this user
 */

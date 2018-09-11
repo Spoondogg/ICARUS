@@ -8,6 +8,8 @@
   },
   "devDependencies": {
     "del": "^3.0.0",
+    "docfx": "^1.0.5",
+    "doxygen": "^0.3.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-htmlclean": "^2.7.22",
