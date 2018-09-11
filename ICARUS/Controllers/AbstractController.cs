@@ -34,7 +34,7 @@ namespace ICARUS.Controllers {
     /// POST to create that resource; and DELETE to remove it.
     /// 
     /// </summary>
-    /// <see cref="http://searchmicroservices.techtarget.com/definition/RESTful-API"/>
+    /// http://searchmicroservices.techtarget.com/definition/RESTful-API
     //[Authorize(Roles = "User,Dev,Admin")]
     public abstract class AbstractController : Controller {
 

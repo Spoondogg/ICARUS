@@ -1,0 +1,2435 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ObjectDBContext
+   | Icarus docFx API </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ObjectDBContext
+   | Icarus docFx API ">
+    <meta name="generator" content="docfx 2.39.2.0">
+    
+    <link rel="shortcut icon" href="../Content/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../Content/icon50.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="ICARUS.Controllers.ObjectDBContext">
+  
+  
+  <h1 id="ICARUS_Controllers_ObjectDBContext" data-uid="ICARUS.Controllers.ObjectDBContext" class="text-break">Class ObjectDBContext
+  </h1>
+  <div class="markdown level0 summary"><p>Database Context for Survey Entries
+see p.119</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">System.Data.Entity.DbContext</span></div>
+    <div class="level2"><span class="xref">ObjectDBContext</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+    <div><span class="xref">System.Data.Entity.Infrastructure.IObjectContextAdapter</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Set&lt;TEntity&gt;()</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Set(System.Type)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.SaveChanges()</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.SaveChangesAsync()</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.SaveChangesAsync(System.Threading.CancellationToken)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.GetValidationErrors()</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.ShouldValidateEntity(System.Data.Entity.Infrastructure.DbEntityEntry)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.ValidateEntity(System.Data.Entity.Infrastructure.DbEntityEntry, System.Collections.Generic.IDictionary&lt;System.Object, System.Object&gt;)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Entry&lt;TEntity&gt;(TEntity)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Entry(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Dispose()</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Dispose(System.Boolean)</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Database</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.System.Data.Entity.Infrastructure.IObjectContextAdapter.ObjectContext</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.ChangeTracker</span>
+    </div>
+    <div>
+      <span class="xref">System.Data.Entity.DbContext.Configuration</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="ICARUS.Controllers.html">ICARUS.Controllers</a></h6>
+  <h6><strong>Assembly</strong>: ICARUS.dll</h6>
+  <h5 id="ICARUS_Controllers_ObjectDBContext_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ObjectDBContext : DbContext, IDisposable, IObjectContextAdapter</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext__ctor.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L162">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext__ctor_" data-uid="ICARUS.Controllers.ObjectDBContext.#ctor*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext__ctor" data-uid="ICARUS.Controllers.ObjectDBContext.#ctor">ObjectDBContext()</h4>
+  <div class="markdown level1 summary"><p>Construct the Object Database Context</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ObjectDBContext()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_className.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.className%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L22">View Source</a>
+  </span>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_className" data-uid="ICARUS.Controllers.ObjectDBContext.className">className</h4>
+  <div class="markdown level1 summary"><p>Key reference for ObjectDbContext.class ie: ObjectDbContext.Articles would use &quot;Article&quot;</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string className</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_dbContainerSets.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.dbContainerSets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L43">View Source</a>
+  </span>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_dbContainerSets" data-uid="ICARUS.Controllers.ObjectDBContext.dbContainerSets">dbContainerSets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, DbSet&lt;Container&gt;&gt; dbContainerSets</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.Container.html">Container</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_dbSets.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.dbSets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L41">View Source</a>
+  </span>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_dbSets" data-uid="ICARUS.Controllers.ObjectDBContext.dbSets">dbSets</h4>
+  <div class="markdown level1 summary"><p>DbSets collected into a list for easy retrieval</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, DbSet&gt; dbSets</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Data.Entity.DbSet</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Article.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Article%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L60">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Article_" data-uid="ICARUS.Controllers.ObjectDBContext.Article*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Article" data-uid="ICARUS.Controllers.ObjectDBContext.Article">Article</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Article { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Articles.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Articles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L59">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Articles_" data-uid="ICARUS.Controllers.ObjectDBContext.Articles*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Articles" data-uid="ICARUS.Controllers.ObjectDBContext.Articles">Articles</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;ARTICLE&gt; Articles { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.ARTICLE.html">ARTICLE</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Banner.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Banner%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L119">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Banner_" data-uid="ICARUS.Controllers.ObjectDBContext.Banner*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Banner" data-uid="ICARUS.Controllers.ObjectDBContext.Banner">Banner</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Banner { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Banners.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Banners%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L118">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Banners_" data-uid="ICARUS.Controllers.ObjectDBContext.Banners*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Banners" data-uid="ICARUS.Controllers.ObjectDBContext.Banners">Banners</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;BANNER&gt; Banners { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.BANNER.html">BANNER</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Callout.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Callout%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L122">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Callout_" data-uid="ICARUS.Controllers.ObjectDBContext.Callout*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Callout" data-uid="ICARUS.Controllers.ObjectDBContext.Callout">Callout</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Callout { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Callouts.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Callouts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L121">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Callouts_" data-uid="ICARUS.Controllers.ObjectDBContext.Callouts*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Callouts" data-uid="ICARUS.Controllers.ObjectDBContext.Callouts">Callouts</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;CALLOUT&gt; Callouts { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.CALLOUT.html">CALLOUT</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Chat.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Chat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L110">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Chat_" data-uid="ICARUS.Controllers.ObjectDBContext.Chat*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Chat" data-uid="ICARUS.Controllers.ObjectDBContext.Chat">Chat</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Chat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Chats.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Chats%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L109">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Chats_" data-uid="ICARUS.Controllers.ObjectDBContext.Chats*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Chats" data-uid="ICARUS.Controllers.ObjectDBContext.Chats">Chats</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;CHAT&gt; Chats { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.CHAT.html">CHAT</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ClassViewer.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ClassViewer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L54">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ClassViewer_" data-uid="ICARUS.Controllers.ObjectDBContext.ClassViewer*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ClassViewer" data-uid="ICARUS.Controllers.ObjectDBContext.ClassViewer">ClassViewer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object ClassViewer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ClassViewers.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ClassViewers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L53">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ClassViewers_" data-uid="ICARUS.Controllers.ObjectDBContext.ClassViewers*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ClassViewers" data-uid="ICARUS.Controllers.ObjectDBContext.ClassViewers">ClassViewers</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;CLASSVIEWER&gt; ClassViewers { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.CLASSVIEWER.html">CLASSVIEWER</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Container.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Container%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L51">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Container_" data-uid="ICARUS.Controllers.ObjectDBContext.Container*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Container" data-uid="ICARUS.Controllers.ObjectDBContext.Container">Container</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Container { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Containers.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Containers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L50">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Containers_" data-uid="ICARUS.Controllers.ObjectDBContext.Containers*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Containers" data-uid="ICARUS.Controllers.ObjectDBContext.Containers">Containers</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Container&gt; Containers { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.Container.html">Container</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Dictionaries.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Dictionaries%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L144">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Dictionaries_" data-uid="ICARUS.Controllers.ObjectDBContext.Dictionaries*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Dictionaries" data-uid="ICARUS.Controllers.ObjectDBContext.Dictionaries">Dictionaries</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;DICTIONARY&gt; Dictionaries { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Dictionary.DICTIONARY.html">DICTIONARY</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Dictionary.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Dictionary%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L145">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Dictionary_" data-uid="ICARUS.Controllers.ObjectDBContext.Dictionary*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Dictionary" data-uid="ICARUS.Controllers.ObjectDBContext.Dictionary">Dictionary</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Dictionary { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FieldSet.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FieldSet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L70">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FieldSet_" data-uid="ICARUS.Controllers.ObjectDBContext.FieldSet*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FieldSet" data-uid="ICARUS.Controllers.ObjectDBContext.FieldSet">FieldSet</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object FieldSet { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FieldSets.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FieldSets%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L69">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FieldSets_" data-uid="ICARUS.Controllers.ObjectDBContext.FieldSets*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FieldSets" data-uid="ICARUS.Controllers.ObjectDBContext.FieldSets">FieldSets</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;FIELDSET&gt; FieldSets { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.FIELDSET.html">FIELDSET</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Form.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Form%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L67">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Form_" data-uid="ICARUS.Controllers.ObjectDBContext.Form*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Form" data-uid="ICARUS.Controllers.ObjectDBContext.Form">Form</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Form { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormElement.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormElement%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L76">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormElement_" data-uid="ICARUS.Controllers.ObjectDBContext.FormElement*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormElement" data-uid="ICARUS.Controllers.ObjectDBContext.FormElement">FormElement</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object FormElement { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormElementGroup.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormElementGroup%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L73">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormElementGroup_" data-uid="ICARUS.Controllers.ObjectDBContext.FormElementGroup*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormElementGroup" data-uid="ICARUS.Controllers.ObjectDBContext.FormElementGroup">FormElementGroup</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object FormElementGroup { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormElementGroups.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormElementGroups%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L72">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormElementGroups_" data-uid="ICARUS.Controllers.ObjectDBContext.FormElementGroups*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormElementGroups" data-uid="ICARUS.Controllers.ObjectDBContext.FormElementGroups">FormElementGroups</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;FORMELEMENTGROUP&gt; FormElementGroups { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.FORMELEMENTGROUP.html">FORMELEMENTGROUP</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormElements.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormElements%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L75">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormElements_" data-uid="ICARUS.Controllers.ObjectDBContext.FormElements*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormElements" data-uid="ICARUS.Controllers.ObjectDBContext.FormElements">FormElements</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;FormElement&gt; FormElements { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.FormElement.html">FormElement</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormPost.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormPost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L135">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormPost_" data-uid="ICARUS.Controllers.ObjectDBContext.FormPost*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormPost" data-uid="ICARUS.Controllers.ObjectDBContext.FormPost">FormPost</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object FormPost { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_FormPosts.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.FormPosts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L134">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_FormPosts_" data-uid="ICARUS.Controllers.ObjectDBContext.FormPosts*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_FormPosts" data-uid="ICARUS.Controllers.ObjectDBContext.FormPosts">FormPosts</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;FormPost&gt; FormPosts { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.FormPost.html">FormPost</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Forms.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Forms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L66">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Forms_" data-uid="ICARUS.Controllers.ObjectDBContext.Forms*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Forms" data-uid="ICARUS.Controllers.ObjectDBContext.Forms">Forms</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;FORM&gt; Forms { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.FORM.html">FORM</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_IFrame.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.IFrame%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L57">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_IFrame_" data-uid="ICARUS.Controllers.ObjectDBContext.IFrame*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_IFrame" data-uid="ICARUS.Controllers.ObjectDBContext.IFrame">IFrame</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object IFrame { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_IFrames.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.IFrames%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L56">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_IFrames_" data-uid="ICARUS.Controllers.ObjectDBContext.IFrames*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_IFrames" data-uid="ICARUS.Controllers.ObjectDBContext.IFrames">IFrames</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;IFRAME&gt; IFrames { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.IFRAME.html">IFRAME</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ImageGalleries.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ImageGalleries%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L103">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ImageGalleries_" data-uid="ICARUS.Controllers.ObjectDBContext.ImageGalleries*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ImageGalleries" data-uid="ICARUS.Controllers.ObjectDBContext.ImageGalleries">ImageGalleries</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;IMAGEGALLERY&gt; ImageGalleries { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.IMAGEGALLERY.html">IMAGEGALLERY</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ImageGallery.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ImageGallery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L104">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ImageGallery_" data-uid="ICARUS.Controllers.ObjectDBContext.ImageGallery*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ImageGallery" data-uid="ICARUS.Controllers.ObjectDBContext.ImageGallery">ImageGallery</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object ImageGallery { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Index.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Index%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L101">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Index_" data-uid="ICARUS.Controllers.ObjectDBContext.Index*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Index" data-uid="ICARUS.Controllers.ObjectDBContext.Index">Index</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Index { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Indexes.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Indexes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L100">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Indexes_" data-uid="ICARUS.Controllers.ObjectDBContext.Indexes*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Indexes" data-uid="ICARUS.Controllers.ObjectDBContext.Indexes">Indexes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;INDEX&gt; Indexes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.INDEX.html">INDEX</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_IndexMain.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.IndexMain%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L107">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_IndexMain_" data-uid="ICARUS.Controllers.ObjectDBContext.IndexMain*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_IndexMain" data-uid="ICARUS.Controllers.ObjectDBContext.IndexMain">IndexMain</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object IndexMain { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_IndexMains.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.IndexMains%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L106">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_IndexMains_" data-uid="ICARUS.Controllers.ObjectDBContext.IndexMains*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_IndexMains" data-uid="ICARUS.Controllers.ObjectDBContext.IndexMains">IndexMains</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;INDEXMAIN&gt; IndexMains { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.INDEXMAIN.html">INDEXMAIN</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Input.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Input%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L79">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Input_" data-uid="ICARUS.Controllers.ObjectDBContext.Input*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Input" data-uid="ICARUS.Controllers.ObjectDBContext.Input">Input</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Input { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Inputs.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Inputs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L78">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Inputs_" data-uid="ICARUS.Controllers.ObjectDBContext.Inputs*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Inputs" data-uid="ICARUS.Controllers.ObjectDBContext.Inputs">Inputs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Input&gt; Inputs { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Input.html">Input</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Jumbotron.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Jumbotron%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L113">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Jumbotron_" data-uid="ICARUS.Controllers.ObjectDBContext.Jumbotron*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Jumbotron" data-uid="ICARUS.Controllers.ObjectDBContext.Jumbotron">Jumbotron</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Jumbotron { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Jumbotrons.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Jumbotrons%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L112">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Jumbotrons_" data-uid="ICARUS.Controllers.ObjectDBContext.Jumbotrons*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Jumbotrons" data-uid="ICARUS.Controllers.ObjectDBContext.Jumbotrons">Jumbotrons</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;JUMBOTRON&gt; Jumbotrons { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.JUMBOTRON.html">JUMBOTRON</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_List.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.List%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L95">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_List_" data-uid="ICARUS.Controllers.ObjectDBContext.List*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_List" data-uid="ICARUS.Controllers.ObjectDBContext.List">List</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object List { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ListItem.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ListItem%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L92">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ListItem_" data-uid="ICARUS.Controllers.ObjectDBContext.ListItem*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ListItem" data-uid="ICARUS.Controllers.ObjectDBContext.ListItem">ListItem</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object ListItem { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_ListItems.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.ListItems%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L91">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_ListItems_" data-uid="ICARUS.Controllers.ObjectDBContext.ListItems*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_ListItems" data-uid="ICARUS.Controllers.ObjectDBContext.ListItems">ListItems</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;ListItem&gt; ListItems { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.ListItem.html">ListItem</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Lists.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Lists%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L94">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Lists_" data-uid="ICARUS.Controllers.ObjectDBContext.Lists*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Lists" data-uid="ICARUS.Controllers.ObjectDBContext.Lists">Lists</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;List&gt; Lists { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.List.html">List</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Log.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Log%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L157">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Log_" data-uid="ICARUS.Controllers.ObjectDBContext.Log*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Log" data-uid="ICARUS.Controllers.ObjectDBContext.Log">Log</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Log { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Logs.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Logs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L156">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Logs_" data-uid="ICARUS.Controllers.ObjectDBContext.Logs*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Logs" data-uid="ICARUS.Controllers.ObjectDBContext.Logs">Logs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Log&gt; Logs { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Log.html">Log</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Main.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Main%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L48">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Main_" data-uid="ICARUS.Controllers.ObjectDBContext.Main*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Main" data-uid="ICARUS.Controllers.ObjectDBContext.Main">Main</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Main { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Mains.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Mains%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L47">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Mains_" data-uid="ICARUS.Controllers.ObjectDBContext.Mains*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Mains" data-uid="ICARUS.Controllers.ObjectDBContext.Mains">Mains</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;MAIN&gt; Mains { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.MAIN.html">MAIN</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_MenuList.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.MenuList%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L98">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_MenuList_" data-uid="ICARUS.Controllers.ObjectDBContext.MenuList*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_MenuList" data-uid="ICARUS.Controllers.ObjectDBContext.MenuList">MenuList</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object MenuList { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_MenuLists.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.MenuLists%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L97">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_MenuLists_" data-uid="ICARUS.Controllers.ObjectDBContext.MenuLists*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_MenuLists" data-uid="ICARUS.Controllers.ObjectDBContext.MenuLists">MenuLists</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;MenuList&gt; MenuLists { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.MenuList.html">MenuList</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_NavItem.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.NavItem%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L131">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_NavItem_" data-uid="ICARUS.Controllers.ObjectDBContext.NavItem*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_NavItem" data-uid="ICARUS.Controllers.ObjectDBContext.NavItem">NavItem</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object NavItem { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_NavItems.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.NavItems%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L130">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_NavItems_" data-uid="ICARUS.Controllers.ObjectDBContext.NavItems*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_NavItems" data-uid="ICARUS.Controllers.ObjectDBContext.NavItems">NavItems</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;NavItem&gt; NavItems { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.NavItem.html">NavItem</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Option.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Option%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L88">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Option_" data-uid="ICARUS.Controllers.ObjectDBContext.Option*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Option" data-uid="ICARUS.Controllers.ObjectDBContext.Option">Option</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Option { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Options.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Options%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L87">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Options_" data-uid="ICARUS.Controllers.ObjectDBContext.Options*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Options" data-uid="ICARUS.Controllers.ObjectDBContext.Options">Options</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Option&gt; Options { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Option.html">Option</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Paragraph.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Paragraph%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L116">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Paragraph_" data-uid="ICARUS.Controllers.ObjectDBContext.Paragraph*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Paragraph" data-uid="ICARUS.Controllers.ObjectDBContext.Paragraph">Paragraph</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Paragraph { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Paragraphs.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Paragraphs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L115">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Paragraphs_" data-uid="ICARUS.Controllers.ObjectDBContext.Paragraphs*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Paragraphs" data-uid="ICARUS.Controllers.ObjectDBContext.Paragraphs">Paragraphs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;PARAGRAPH&gt; Paragraphs { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.PARAGRAPH.html">PARAGRAPH</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Procedure.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Procedure%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L138">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Procedure_" data-uid="ICARUS.Controllers.ObjectDBContext.Procedure*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Procedure" data-uid="ICARUS.Controllers.ObjectDBContext.Procedure">Procedure</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Procedure { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Procedures.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Procedures%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L137">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Procedures_" data-uid="ICARUS.Controllers.ObjectDBContext.Procedures*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Procedures" data-uid="ICARUS.Controllers.ObjectDBContext.Procedures">Procedures</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Procedure&gt; Procedures { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Procedure.html">Procedure</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Report.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Report%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L141">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Report_" data-uid="ICARUS.Controllers.ObjectDBContext.Report*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Report" data-uid="ICARUS.Controllers.ObjectDBContext.Report">Report</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Report { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Reports.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Reports%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L140">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Reports_" data-uid="ICARUS.Controllers.ObjectDBContext.Reports*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Reports" data-uid="ICARUS.Controllers.ObjectDBContext.Reports">Reports</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Report&gt; Reports { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Report.html">Report</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Section.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Section%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L63">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Section_" data-uid="ICARUS.Controllers.ObjectDBContext.Section*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Section" data-uid="ICARUS.Controllers.ObjectDBContext.Section">Section</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Section { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Sections.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Sections%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L62">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Sections_" data-uid="ICARUS.Controllers.ObjectDBContext.Sections*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Sections" data-uid="ICARUS.Controllers.ObjectDBContext.Sections">Sections</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;SECTION&gt; Sections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.SECTION.html">SECTION</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Select.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Select%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L82">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Select_" data-uid="ICARUS.Controllers.ObjectDBContext.Select*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Select" data-uid="ICARUS.Controllers.ObjectDBContext.Select">Select</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Select { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Selects.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Selects%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L81">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Selects_" data-uid="ICARUS.Controllers.ObjectDBContext.Selects*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Selects" data-uid="ICARUS.Controllers.ObjectDBContext.Selects">Selects</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;Select&gt; Selects { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Select.html">Select</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_TextArea.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.TextArea%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L85">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_TextArea_" data-uid="ICARUS.Controllers.ObjectDBContext.TextArea*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_TextArea" data-uid="ICARUS.Controllers.ObjectDBContext.TextArea">TextArea</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object TextArea { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_TextAreas.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.TextAreas%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L84">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_TextAreas_" data-uid="ICARUS.Controllers.ObjectDBContext.TextAreas*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_TextAreas" data-uid="ICARUS.Controllers.ObjectDBContext.TextAreas">TextAreas</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;TextArea&gt; TextAreas { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.TextArea.html">TextArea</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_TextBlock.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.TextBlock%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L128">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_TextBlock_" data-uid="ICARUS.Controllers.ObjectDBContext.TextBlock*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_TextBlock" data-uid="ICARUS.Controllers.ObjectDBContext.TextBlock">TextBlock</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object TextBlock { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_TextBlocks.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.TextBlocks%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L127">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_TextBlocks_" data-uid="ICARUS.Controllers.ObjectDBContext.TextBlocks*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_TextBlocks" data-uid="ICARUS.Controllers.ObjectDBContext.TextBlocks">TextBlocks</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;TEXTBLOCK&gt; TextBlocks { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.TEXTBLOCK.html">TEXTBLOCK</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Thumbnail.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Thumbnail%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L125">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Thumbnail_" data-uid="ICARUS.Controllers.ObjectDBContext.Thumbnail*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Thumbnail" data-uid="ICARUS.Controllers.ObjectDBContext.Thumbnail">Thumbnail</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Thumbnail { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Thumbnails.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Thumbnails%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L124">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Thumbnails_" data-uid="ICARUS.Controllers.ObjectDBContext.Thumbnails*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Thumbnails" data-uid="ICARUS.Controllers.ObjectDBContext.Thumbnails">Thumbnails</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;THUMBNAIL&gt; Thumbnails { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Elements.THUMBNAIL.html">THUMBNAIL</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Word.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Word%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L151">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Word_" data-uid="ICARUS.Controllers.ObjectDBContext.Word*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Word" data-uid="ICARUS.Controllers.ObjectDBContext.Word">Word</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Word { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Words.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Words%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L150">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Words_" data-uid="ICARUS.Controllers.ObjectDBContext.Words*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Words" data-uid="ICARUS.Controllers.ObjectDBContext.Words">Words</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DbSet&lt;WORD&gt; Words { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbSet</span>&lt;<a class="xref" href="ICARUS.Models.Icarus.Dictionary.WORD.html">WORD</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_Create.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.Create%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L25">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_Create_" data-uid="ICARUS.Controllers.ObjectDBContext.Create*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_Create" data-uid="ICARUS.Controllers.ObjectDBContext.Create">Create()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ObjectDBContext Create()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="ICARUS.Controllers.ObjectDBContext.html">ObjectDBContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext_OnModelCreating_System_Data_Entity_DbModelBuilder_.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext.OnModelCreating(System.Data.Entity.DbModelBuilder)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L33">View Source</a>
+  </span>
+  <a id="ICARUS_Controllers_ObjectDBContext_OnModelCreating_" data-uid="ICARUS.Controllers.ObjectDBContext.OnModelCreating*"></a>
+  <h4 id="ICARUS_Controllers_ObjectDBContext_OnModelCreating_System_Data_Entity_DbModelBuilder_" data-uid="ICARUS.Controllers.ObjectDBContext.OnModelCreating(System.Data.Entity.DbModelBuilder)">OnModelCreating(DbModelBuilder)</h4>
+  <div class="markdown level1 summary"><p>Set the default schema</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void OnModelCreating(DbModelBuilder modelBuilder)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Data.Entity.DbModelBuilder</span></td>
+        <td><span class="parametername">modelBuilder</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Data.Entity.DbContext.OnModelCreating(System.Data.Entity.DbModelBuilder)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <div>
+      <span class="xref">System.Data.Entity.Infrastructure.IObjectContextAdapter</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Spoondogg/ICARUS/new/dev/docs-ref-overwrite/new?filename=ICARUS_Controllers_ObjectDBContext.md&amp;value=---%0Auid%3A%20ICARUS.Controllers.ObjectDBContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Controllers/ObjectDBContext.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright � 2017 - 2018 Ryan Dunphy
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -20,7 +20,7 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Instantiate a Container using List defaults
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An image gallery</returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
                 ? new IMAGEGALLERY()
@@ -54,9 +54,9 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Returns a list of Container Ids that contain this container
         /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// [Authorize]
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         public virtual async Task<ActionResult> Image(
             string page = "0", string pageLength = "10"
         ) {
@@ -88,9 +88,9 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Returns a list of Image Ids
         /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
+        /// [Authorize]
         /// </summary>
-        /// <returns></returns>
-        //[Authorize]
+        /// <returns></returns>        
         public async Task<ActionResult> ImageIndex(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);
