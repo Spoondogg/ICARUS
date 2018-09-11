@@ -2,10 +2,9 @@
     Imports
 */
 import WATERMARK from './WATERMARK.js';
-import CONTAINERFACTORY, { TOKEN } from './model/el/container/CONTAINERFACTORY.js';
+import CONTAINERFACTORY, { TOKEN, MODEL } from './model/el/container/CONTAINERFACTORY.js';
 import MAIN from './model/el/container/main/MAIN.js';
 import LOADER from './model/el/modal/loader/LOADER.js';
-import MODEL from './model/MODEL.js';
 /**
     A Single Page Web Application Engine
 */
@@ -19,7 +18,7 @@ export default class APP {
 
         @param {MODEL} model An Application Configuration Model
     */
-    constructor(model) {
+    constructor(id = 0, user = 'Guest', dev = false) {
 
         new WATERMARK();
         this.name = 'Icarus';
@@ -31,6 +30,15 @@ export default class APP {
         this.recursionLimit = 100;
 
         /**
+            If a ReturnUrl is provided, redirect to that Url
+        */
+        this.returnUrl = this.url.searchParams.get('ReturnUrl');
+        if (this.returnUrl) {
+            this.returnUrl = this.url.origin + this.returnUrl;
+            location.href = this.returnUrl;
+        }
+
+        /**
             The default loader modal
         */
         this.loader = new LOADER('Loading', 'Loading', 100);
@@ -40,25 +48,17 @@ export default class APP {
             The MAIN Container
             this.main = new MAIN(new MODEL(), this.loader)
         */
-        //this.main = new MAIN(new MODEL(), this.loader);
         this.main = new MAIN(new MODEL().set({
-            'label': this.name + ' : ' + this.version,
+            'id': id,
+            'user': user,
+            'dev': dev,
+            'label': '', //this.name + ' : ' + this.version,
             'loader': this.loader,
             'token': this.token,
             'url': this.url,
             'debug': this.debug,
             'recursionLimit': this.recursionLimit
         }));
-
-
-        /**
-            If a ReturnUrl is provided, redirect to that Url
-        */
-        this.returnUrl = this.url.searchParams.get('ReturnUrl');
-        if (this.returnUrl) {
-            this.returnUrl = this.url.origin + this.returnUrl;
-            location.href = this.returnUrl;
-        }
 
         /**
             If a 'login' parameter exists, show the login prompt

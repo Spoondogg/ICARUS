@@ -5,13 +5,13 @@ import SIDEBAR from '../sidebar/SIDEBAR.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import ATTRIBUTES from '../../../ATTRIBUTES.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
-import CONTAINERFACTORY from '../CONTAINERFACTORY.js';
-import TOKEN from '../formelement/input/TOKEN.js';
+import CONTAINERFACTORY, { FORM, TOKEN } from '../CONTAINERFACTORY.js';
+//import TOKEN from '../formelement/input/TOKEN.js';
 import DEBUG from '../../../../DEBUG.js';
 import PROMPT from '../../modal/prompt/PROMPT.js';
 import INPUT from '../formelement/input/INPUT.js';
 import { INPUTTYPES } from '../../../../enums/INPUTTYPES.js';
-import FORM from '../form/FORM.js';
+export { LOADER };
 /**
     A top level View that holds all other child Containers
 */
@@ -19,7 +19,6 @@ export default class MAIN extends CONTAINER {
     /**
         Constructs a MAIN Container
         @param {MODEL} model APP model
-        param {LOADER} loader The default loader
      */
     constructor(model) {
 
@@ -29,19 +28,12 @@ export default class MAIN extends CONTAINER {
             'ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
             'IMAGEGALLERY', 'DICTIONARY', 'WORD'
         ]);
-
-        /*
-        this.addClass('app');
-        this.navBar.addClass('navbar-fixed-top');
-        
-        */
         this.addClass('app').navBar.addClass('navbar-fixed-top');
-
         this.showNavBar();
         this.body.pane.addClass('pane-tall');
 
         /**
-            The primary LOADER
+            The LOADER exists outside of the Container
         */
         this.loader = model.loader;
         
@@ -58,7 +50,7 @@ export default class MAIN extends CONTAINER {
     }
 
     construct() {
-        if (this.getUser() === 'Guest') {
+        if (user === 'Guest') {
             this.btnLogin = this.navBar.header.tabs.addNavItem( //this.tabs.addNavItem(
                 new MODEL('pull-right').set({
                     'icon': ICONS.USER,
@@ -68,24 +60,8 @@ export default class MAIN extends CONTAINER {
                         'url': '#'
                     })
                 })
-            ).el.onclick = function () {
-                this.login();
-            }.bind(this);
+            ).el.onclick = this.login.bind(this);
         }
-    }
-
-    /**
-        Return the user or Guest if doesn't exist
-        @returns {string} User string
-    */
-    getUser() {
-        let userVar;
-        try {
-            userVar = user;
-        } catch (e) {
-            userVar = 'Guest';
-        }
-        return userVar;
     }
 
     /**
@@ -94,18 +70,20 @@ export default class MAIN extends CONTAINER {
     addNavOptions() {
         if (this.navBar.header.menu) {
 
-            // Add a button to toggle sidebar (modify)
+            /**
+                A NavItem that toggles the visibility of the Sidebar
+            */
             this.btnSidebar = this.navBar.header.tabs.addNavItem(
-                new MODEL('pull-right').set({
+                new MODEL('pull-left').set({
                     'anchor': new MODEL().set({
                         'label': '',
                         'url': '#',
                         'icon': ICONS.SIDEBAR
                     })
                 })
-            );
-            //$(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
+            );            
             this.btnSidebar.el.onclick = this.toggleSidebar.bind(this); 
+            $(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
 
             // Hide Sidebar when container body is focused
             this.body.el.onclick = this.focusBody.bind(this);
@@ -203,30 +181,25 @@ export default class MAIN extends CONTAINER {
                         'label': 'New'
                     })
                 })
-            ).el.onclick = function () {
-
-                // TODO:  This should be a POST to avoid CSRF
-                $.getJSON('/MAIN/Get/0', function (payload) {
-                    console.log(100, 'Created MAIN', true);
-                    //console.log(payload);
-                    setTimeout(function () {
-                        location.href = '/' + payload.model.id;
-                    }.bind(this), 1000);
-                });
-
-                // Something like this...  Coordinate with controller
-                /*$.post('/MAIN/Get/0', {},
-                    function (payload, status) {
-                        //console.log(status);
-                        //console.log(payload);
-                        console.log(100, 'Launching New Page');
-                        setTimeout(function () {
-                            location.href = '/' + payload.model.id;
-                        }.bind(this), 1000);
-                    }
-                );*/
-            }.bind(this);
+            ).el.onclick = this.newMain.bind(this);
         }
+    }
+
+    /**
+        Requests a new {@link MAIN} from the server and 
+        redirects to that page
+
+        @todo This should be a POST to avoid CSRF
+    */
+    newMain() {
+        $.getJSON('/MAIN/Get/0', function (payload) {
+            console.log('Created MAIN', payload);
+            setTimeout(function () {
+                location.href = '/' + payload.model.id;
+            }.bind(this), 1000);
+        });
+
+        
     }
 
     /**
@@ -239,15 +212,7 @@ export default class MAIN extends CONTAINER {
             this.sidebar.removeClass('active');
         }
         $(this.navBar.header.menu.el).collapse('hide');
-    }
-
-    /**
-        Override Container.createTab()
-        @param {MODEL} model Object model
-     */
-    createTab(model) {
-        DEBUG.log('\tMAIN.createTab();');
-    }    
+    }  
 
     /**
         Loads the specified app id into the Main Container
@@ -320,25 +285,6 @@ export default class MAIN extends CONTAINER {
     }
 
     /**
-        Sets the given index id article, displaying the corresponding article
-        and hiding all others
-
-        @param {ARTICLE} article The article to set
-    */
-    setArticle(article) {
-        DEBUG.log('APP.setArticle(' + article.getId() + ')');
-        $('ul[name=document-map] .nav-item').removeClass('active');
-        $('article').hide();
-        article.activate();
-        article.show();
-        try {
-            article.tab.activate();
-        } catch (e) {
-            DEBUG.log('Article does not have a tab.');
-        }
-    }
-
-    /**
         Returns the APP Id
         @returns {number} App Id
     */
@@ -387,8 +333,8 @@ export default class MAIN extends CONTAINER {
 
             console.log(50, 'Launching OAuth2 Authenticator...');
             
-            let url = new URL(window.location.href);
-            let returnUrl = url.origin + '/signin-google';
+            //let url = new URL(window.location.href);
+            let returnUrl = this.url.origin + '/signin-google';
             this.returnUrl.el.setAttribute('value', returnUrl);
             
             let provider = 'Google';
@@ -402,14 +348,13 @@ export default class MAIN extends CONTAINER {
         }.bind(this);
 
         this.prompt.show();
-
     }
 
     /**
-     * Log into the application using the given credentials
-     * @param {string} email Username / Email 
-     * @param {string} password Account Password
-     */
+        Log into the application using the given credentials
+        @param {string} email Username / Email 
+        @param {string} password Account Password
+    */
     login(email, password) {
         console.log('Log In');
         // TODO Handle supplied arguments... Or don't... Not sure yet.
@@ -421,8 +366,7 @@ export default class MAIN extends CONTAINER {
         this.prompt.form.el.setAttribute('class', 'login');
         this.prompt.form.el.setAttribute('method', 'POST');
         this.prompt.form.el.setAttribute('action', '#');
-
-        //this.email = new INPUT(this.prompt.formElementGroup.body.pane,
+        
         this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
             new MODEL(
                 new ATTRIBUTES({
@@ -450,33 +394,17 @@ export default class MAIN extends CONTAINER {
         );
 
         //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+        /**
+            Post the Login FormPost
+            If login successful, load the new User Session (Refresh Page)
+
+        */
         this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
             console.log(25, 'Logging In', true);
-            $.post('/Account/LogIn', $(this.prompt.form.el).serialize(),
-                function (payload, status) {           
-                    if (status === "success") {
-                        console.log(100, 'Success', true);
-                        setTimeout(function () {
-
-                            let url = new URL(window.location.href);
-                            let returnUrl = url.searchParams.get('ReturnUrl');
-                            if (returnUrl) {
-                                returnUrl = url.origin + returnUrl;
-                                location.href = returnUrl;
-                            } else {
-                                location.reload(true);
-                            }
-
-                        }.bind(this), 1000);
-                    } else {
-                        console.log(0, 'Login failed. (err_'+status+').<br>' +
-                            payload.message
-                        );
-                        DEBUG.log('Failed to POST results to server with status: "' + status + '"');
-                        DEBUG.log('Payload:\n');
-                        DEBUG.log(payload);
-                    }
-                }.bind(this)
+            $.post(
+                '/Account/LogIn',
+                $(this.prompt.form.el).serialize(),
+                this.ajaxRefreshIfSuccessful
             );
         }.bind(this);
 
@@ -503,8 +431,7 @@ export default class MAIN extends CONTAINER {
             console.log(50, 'Launching OAuth2 Authenticator...');
 
             /*
-            let url = new URL(window.location.href);
-            let returnUrl = url.origin + '/signin-google';
+            let returnUrl = this.url.origin + '/signin-google';
             this.returnUrl.el.setAttribute('value', returnUrl);
             
             let provider = 'Google';
@@ -516,9 +443,7 @@ export default class MAIN extends CONTAINER {
             */
 
             location.href = '/Account/ExternalLogin';
-
-            /****
-            
+            /****            
             <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
                 <input name="__RequestVerificationToken" type="hidden" value="NUl4K_C0ubvHbrEeyfF19jddMf9-BZ-MTIuA33kSxdhMJoh5TEvV53sbv61vtRCp_vbWI2DQzFENnljDRpx2srlaBpQZQRsWZoKkLwSjTek1">                <div id="socialLoginList">
                 <p>
@@ -530,60 +455,7 @@ export default class MAIN extends CONTAINER {
                 </p>
                 </div>
             </form>
-
             ****/
-
-
-            //window.open(postUrl, '_blank');
-
-            /*
-            this.modal = new MODAL('Google Login');
-            this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
-                'label': 'iframe',
-                'dataId': -1,
-                'data': {
-                    'src': postUrl
-                }
-            }));
-            this.iframe.frame.el.setAttribute('src', postUrl);
-            this.modal.show();
-            */
-
-            /*
-            $.post(postUrl, $(this.prompt.form.el).serialize(),
-                function (payload, status) {
-                    if (status === "success") {
-                        console.log(100, 'Success', true);
-
-                        console.log('Payload:::');
-                        console.log(payload);
-
-                        setTimeout(function () {
-
-                            //let url = new URL(window.location.href);
-                            //let returnUrl = url.searchParams.get('ReturnUrl');
-                            if (payload.model.RedirectUri) {
-                                //returnUrl = url.origin + returnUrl;
-                                location.href = payload.model.RedirectUri;
-                            } else {
-                                //location.reload(true);
-                                console.log('something went wrong');
-                                console.log(payload);
-                            }
-
-                        }.bind(this), 1000);
-                    } else {
-                        console.log(0, 'Login failed. (err_' + status + ').<br>' +
-                            payload.message
-                        );
-                        DEBUG.log('Failed to POST results to server with status: "' + status + '"');
-                        DEBUG.log('Payload:\n');
-                        DEBUG.log(payload);
-                    }
-                }.bind(this)
-            );
-            */
-
         }.bind(this);
 
         this.prompt.show();
@@ -604,28 +476,7 @@ export default class MAIN extends CONTAINER {
         this.loader.log(50, 'MAIN.logout(); Logging out...', true);
         $.post('/Account/LogOff', {
             '__RequestVerificationToken': this.token
-        }, function (payload, status) {
-            this.loader.log(60, 'Status: ' + status, true);
-            console.log('Payload', payload);
-
-            // textStatus contains the status: success, error, etc
-            // If server responds with 'success'            
-            if (status === "success") {
-                this.loader.log(99, 'Success.');
-                setTimeout(function () {
-                    location.reload(true); //https://www.w3schools.com/jsref/met_loc_reload.asp
-                }.bind(this), 1000);
-
-            } else {
-                this.loader.log('Failed to POST results to server with status: "' + status + '"');
-                console.log(0, 'Failed to send<br>' +
-                    payload.message + '<br><hr/>', true
-                );
-                
-                this.loader.log('Payload:\n');
-                this.loader.log(payload);
-            }
-        }.bind(this), "json");
+        }, this.ajaxRefreshIfSuccessful, "json");
     }
 
     /**
@@ -685,63 +536,18 @@ export default class MAIN extends CONTAINER {
             })
         );
         this.prompt.form.afterSuccessfulPost = function (payload) {
-            this.prompt.hide();
-            if (payload.result === 1) {
-                setTimeout(function () {
-
-                    let url = new URL(window.location.href);
-                    let returnUrl = url.searchParams.get('ReturnUrl');
-                    if (returnUrl) {
-                        returnUrl = url.origin + returnUrl;
-                        location.href = returnUrl;
-                    } else {
-                        location.reload(true);
-                    }
-
-                }.bind(this), 1000);
-            }
-        };
-        /*
-        //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
-        this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
-            console.log(25, 'Register User', true);
-            $.post('/Account/Register', $(this.prompt.form.el).serialize(),
-                function (payload, status) {
-                    if (status === "success") {
-                        console.log(100, 'Success', true);
-                        setTimeout(function () {
-
-                            let url = new URL(window.location.href);
-                            let returnUrl = url.searchParams.get('ReturnUrl');
-                            if (returnUrl) {
-                                returnUrl = url.origin + returnUrl;
-                                location.href = returnUrl;
-                            } else {
-                                location.reload(true);
-                            }
-
-                        }.bind(this), 1000);
-                    } else {
-                        console.log(0, 'Registration failed. (err_' + status + ').<br>' +
-                            payload.message
-                        );
-                        DEBUG.log('Failed to POST results to server with status: "' + status + '"');
-                        DEBUG.log('Payload:\n');
-                        DEBUG.log(payload);
-                    }
-                }.bind(this)
-            );
+            this.prompt.form.ajaxRefreshIfSuccessful(payload, 'success');
+            this.prompt.hide();            
         }.bind(this);
-        */
-
+        
 
         this.prompt.show();
     }
     
     /**
-     * Log into the application using the given credentials
-     * @param {string} email Username / Email 
-     */
+        Log into the application using the given credentials
+        @param {string} email Username / Email 
+    */
     registerExternal(email) {
         console.log('Register External Login');
 
@@ -751,78 +557,6 @@ export default class MAIN extends CONTAINER {
         let tmp = new EL(this.prompt.container.body.pane, 'DIV', new MODEL());
         $(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
         tmp.destroy();
-
-        /*
-        this.prompt.form.setPostUrl('/Account/ExternalLoginConfirmation?ReturnUrl=%2F');
-        this.prompt.form.el.setAttribute('class', 'register');
-        this.prompt.form.el.setAttribute('method', 'POST');
-        this.prompt.form.el.setAttribute('action', '/Account/ExternalLoginConfirmation?ReturnUrl=%2F');
-
-        this.email = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
-            new MODEL(
-                new ATTRIBUTES({
-                    'typeId': IcarusInputType.INPUT,
-                    'type': 'Email',
-                    'name': 'Email',
-                    'value': email
-                })
-            ).set({
-                'label': 'Email',
-                'showHeader': 0
-            })
-        );
-
-        this.name = new INPUT(this.prompt.form.fieldset.formElementGroup.body.pane,
-            new MODEL(
-                new ATTRIBUTES({
-                    'typeId': IcarusInputType.INPUT,
-                    'type': 'text',
-                    'name': 'Name',
-                    'value': email
-                })
-            ).set({
-                'label': 'Name',
-                'showHeader': 0
-            })
-        );
-        
-        this.prompt.form.footer.buttonGroup.children[0].el.onclick = function () {
-            console.log(25, 'Register User', true);
-
-            $.post('/Account/ExternalLoginConfirmation?ReturnUrl=%2F', $(this.prompt.form.el).serialize(),
-                function (payload, status) {
-                    if (status === "success") {
-                        console.log(payload);
-                        console.log(100, 'Success', true);
-                        setTimeout(function () {
-
-                            let url = new URL(window.location.href);
-                            let returnUrl = url.searchParams.get('ReturnUrl');
-                            if (returnUrl) {
-                                returnUrl = url.origin + returnUrl;
-                                //location.href = returnUrl;
-                                console.log('Return Url: ' + returnUrl);
-                            } else {
-                                //location.reload(true);
-                                console.log('Reload!');
-                            }
-
-                        }.bind(this), 1000);
-                    } else {
-                        console.log(0, 'Registration failed. (err_' + status + ').<br>' +
-                            payload.message
-                        );
-                        DEBUG.log('Failed to POST results to server with status: "' + status + '"');
-                        DEBUG.log('Payload:\n');
-                        DEBUG.log(payload);
-                    }
-                }.bind(this)
-            );
-
-            return false;
-
-        }.bind(this);
-        */
 
         this.prompt.show();
     }

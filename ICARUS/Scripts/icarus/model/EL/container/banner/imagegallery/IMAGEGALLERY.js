@@ -1,4 +1,4 @@
-﻿import BANNER from '../BANNER.js';
+﻿000000import BANNER from '../BANNER.js';
 /**
     Contains a high level view of all objects owned by this user
 */
@@ -61,6 +61,12 @@ export default class IMAGEGALLERY extends BANNER {
         $.post(postUrl, {
             '__RequestVerificationToken': token.value
         },
+
+            /**
+                Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
+                @param {any} payload The POST payload
+                @param {any} status The POST status
+            */
             function (payload, status) {
                 if (status === 'success') {
 
@@ -91,8 +97,6 @@ export default class IMAGEGALLERY extends BANNER {
                         }.bind(this);
                     }
 
-
-
                     if (!this.pagination.buttonGroup.loaded) {
                         console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
                         this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
@@ -105,13 +109,15 @@ export default class IMAGEGALLERY extends BANNER {
                         }
                         this.pagination.buttonGroup.loaded = true;
                     }
-
-
                 }
             }.bind(this)
         );
     }
 
+    /**
+        Sets the page variables and reconstructs
+        @param {any} page A page to load
+    */
     loadPage(page) {
         console.log('Loading page ' + page);
         this.header.setInnerHTML('Page ' + (page + 1));
@@ -120,25 +126,16 @@ export default class IMAGEGALLERY extends BANNER {
         for (let b = 0; b < buttons.length; b++) {
             $(buttons[b]).removeClass('active');
         }
-        //console.log('Activating button[' + page + ']');
         $(buttons[page]).addClass('active');
-
-        /*
-        let height = $(this.body.pane.el).height();
-        //console.log('Height: ' + height);
-        if (height > 0) {
-            this.body.pane.el.setAttribute('style', 'height:' + (height + 48) + 'px;display:block;');
-        }
-        */
 
         this.body.pane.empty();
         this.page = page;
         this.construct();
-        ///this.body.pane.el.setAttribute('style', 'height:auto;');
-
-
     }
 
+    /**
+        Loads the next page
+    */
     nextPage() {
         if (this.pageTotal > this.page * this.pageLength + 1) {
             this.loadPage(this.page + 1);
@@ -147,6 +144,9 @@ export default class IMAGEGALLERY extends BANNER {
         }
     }
 
+    /**
+        Loads the previous page
+    */
     prevPage() {
         if (this.page > 0) {
             this.loadPage(this.page - 1);

@@ -12,7 +12,6 @@ export default class BANNER extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model, ['CALLOUT','THUMBNAIL']);
         this.body.pane.addClass('banner');
-        this.body.pane.addClass('noselect');
         this.populate(model.children);
     }
 

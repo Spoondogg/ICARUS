@@ -1,6 +1,5 @@
-﻿import EL from '../EL.js';
+﻿import EL, { MODEL } from '../EL.js';
 import GLYPHICON from '../span/GLYPHICON.js';
-import MODEL from '../../MODEL.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 /**
     A hyperlink / page anchor    
