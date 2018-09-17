@@ -1,10 +1,17 @@
 ﻿/**
+    @module
+*/
+import EL from '../../EL.js';
+
+/**
     The IcarusInputList populates two columns with a set of values based on a delimited list.
     The left column contains values that are currently not stored in the parent object, while
     the right column contains values that are referenced by the parent.
 
     The user can move objects from the left column to the right, as well as sort the order
     of these objects, affecting the order in which they are constructed within the parent
+
+    @class
 */
 export default class IcarusInputList {
     /**

@@ -1,8 +1,12 @@
-﻿import CONTAINER from '../CONTAINER.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
-import EL, { MODEL } from '../../EL.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
+import EL, { MODEL, ATTRIBUTES } from '../../EL.js';
 /**
     Inline Frame
+    @class
+    @extends CONTAINER
 */
 export default class IFRAME extends CONTAINER {
     /**
@@ -11,13 +15,12 @@ export default class IFRAME extends CONTAINER {
         @param {MODEL} model Object Model
      */
     constructor(node, model) {
-        super(node, 'DIV', model);
-        
+        super(node, 'DIV', model);        
         //this.populate(model.children);
     }
 
     /**
-        TODO: Remove inline styles
+        @todo Remove inline styles
     */
     construct() {
         this.frame = new EL(this.body.pane, 'IFRAME', new MODEL(

@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
-    A paragraph of text
+    A paragraph (P) Element
+    @class
+    @extends EL
 */
 export default class P extends EL {
     /**

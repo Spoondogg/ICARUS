@@ -1,6 +1,8 @@
 ﻿/**
- * Bootstrap glyphicon references
- */
+    Bootstrap glyphicon references
+    @readonly
+    @enum {string}
+*/
 export const ICONS = {
     CHEVRON_UP: 'glyphicon-chevron-up',
     CHEVRON_DOWN: 'glyphicon-chevron-down',

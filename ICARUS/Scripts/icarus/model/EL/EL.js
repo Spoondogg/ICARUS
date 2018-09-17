@@ -1,24 +1,19 @@
-import MODEL from '../MODEL.js';
-export { MODEL };
+/**
+    @module
+*/
+import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import { STATUS } from '../../enums/STATUS.js';
-import DEBUG from '../../DEBUG.js';
+import RecursionLimitError from '../../error/RecursionLimitError.js';
+export { MODEL, ATTRIBUTES };
 /**
     Generic Element Constructor  
-
-    Ideally, this should be treated like an Abstract rather than
-    constructed on its own.  
-    
-    It can be convenient to do this:
-        new EL(node, 'DIV', model)
-
-    But it is better practice to do this:
-        new DIV(node, model)
-    
+    @description An abstract html element class
+    @class
     @extends MODEL
 */
 export default class EL extends MODEL {
     /**
-        Constructs a generic html element.
+        Constructs a generic html element
         @param {EL} node The object to contain this element
         @param {string} element The HTML tag that is used for this element
         @param {MODEL} model A set of key/value pairs for this element's model
@@ -27,7 +22,8 @@ export default class EL extends MODEL {
     */
     constructor(node, element = 'DIV', model, innerHTML, children) {
         super(model.attributes);
-        
+
+        this.container = this.setContainer();
         this.node = node; // The parent EL (or Body) that this ELEMENT is within        
         this.className = this.constructor.name;
         this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
@@ -43,7 +39,7 @@ export default class EL extends MODEL {
 
     /**
         Create the HTML element in the DOM, appended to the given node
-        // Append the element to its parent and set its inner HTML (when available)
+        @description Append the element to its parent and set its inner HTML (when available)
         @param {EL} node Parent node to append to
         @param {MODEL} model A set of key/value pairs for this element's model
         @param {string} innerHTML This text will be displayed within the HTML element
@@ -67,60 +63,55 @@ export default class EL extends MODEL {
         return this.el;
     }
 
-
     /**
-        Recursively iterates through parent nodes until an object with the given prototype is found
+        Retrieve an {@link EL} based on its __proto__
+        @description Recursively iterates through parent nodes until an object with the given prototype is found
         @param {string} value The value to search for within this key
         @param {EL} node Entry point to traversing the chain
         @param {number} attempt Recursion loop
         @returns {CONTAINER} The parent container
+        @throws Will throw an error if recursion attempt exceeds limit
     */
     getProtoTypeByClass(value, node = this.node, attempt = 0) {
-
-        /*if (attempt === 0) {
-            console.log('Getting prototype...', node);
-        }*/
-
-        attempt++;
-
         if (node === document.body) {
-            //console.log('YOU HAVE REACHED THE BODY');
-            return null;
+            return null; // You have reached the top of the chain
         } else {
+            attempt++;
             try {
-                //console.log('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')');
-                //console.log(node);
-
+                //console.log('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')', node);
                 if (attempt < 100) {
-                    try {
-                        //console.log('id: ' + node.id);
-                        //console.log('super class: ' + node.__proto__.__proto__.constructor.name);
-                        //console.log(node.__proto__);
-                        if (node.__proto__.__proto__.constructor.name === value.toString()) {
-                            //console.log('Found container(' + value.toString() + ')...', node);
-                            return node;
-                        } else {
-                            return this.getProtoTypeByClass(value, node.node, attempt++);
-                        }
-                    } catch (e) {
-                        console.log(e);
-                        return null;
+                    if (
+                        node.__proto__.__proto__.__proto__.constructor.name === value.toString()
+                        || node.__proto__.__proto__.constructor.name === value.toString()
+                        || node.__proto__.constructor.name === value.toString()
+                    ) {
+                        //console.log('Found container(' + value.toString() + ')...', node);
+                        return node;
+                    } else {
+                        return this.getProtoTypeByClass(value, node.node, attempt++);
                     }
                 } else {
-                    console.log('getProtoTypeByClass(): Too many attempts (' + attempt + ')', this);
-                    return null;
+                    throw new RecursionLimitError(this.className + '.getProtoTypeByClass(): Exceeded attempt limit. (' + attempt + ')');
                 }
             } catch (e) {
                 //TypeError: this.getProtoTypeByClass is not a function
                 if (e.name === 'TypeError') {
-                    console.log('Error Caught: ' + e.message);
-
+                    // Cannot read property '__proto__' of undefined
+                    //console.warn('A TypeError was caught while attempting to find proto "'+value+'"\n');
                 } else {
-                    console.log('Error not caught.');
+                    console.log('An unknown error occurred');
+                    console.log(e.name, e.message);
+                    throw e;
                 }
-                console.log(e);
             }
-        }        
+        }
+    }
+
+    /**
+        Retrieves the container (if exists) and sets it
+    */
+    setContainer() {
+        this.container = this.getProtoTypeByClass('CONTAINER');
     }
 
     /**
@@ -129,11 +120,20 @@ export default class EL extends MODEL {
         @returns {CONTAINER} The parent container for this container
     */
     getContainer() {
-        console.log('NAVHEADER.getContainer()', this.container);
-        if (this.container === undefined || this.container === null) {
-            this.container = this.getProtoTypeByClass('CONTAINER');
+        try {
+            if (this.container === undefined) { // || this.container === null
+                this.container = this.getProtoTypeByClass('CONTAINER');
+                return this.container;
+            } else {
+                return this.container;
+            }
+        } catch (e) {
+            console.log(e);
+            throw {
+                name: 'MissingContainerError',
+                message: this.className + ' is unable to find a parent Container'
+            };
         }
-        return this.container;
     }
 
     /**
@@ -141,54 +141,57 @@ export default class EL extends MODEL {
         @returns {CONTAINER} This EL's parent container
     */
     getMainContainer() {
-        return this.getContainer().getMainContainer();
+        if (this.container !== undefined) {
+            try {
+                return this.container.getMainContainer();
+            } catch (e) {
+                console.warn('EL{' + this.className + '} Unable to retrieve Container', e);
+                //throw e;
+            }
+        }
+        /*if (this.getContainer() !== null) {
+            return this.getContainer().getMainContainer();
+        } else {
+            console.log(this.className + ' does not have a parent Container');
+            return null;
+        }*/
     }
     
     /**
-     * Creates a TEXTAREA and populates with this element's contents
+     * Creates a textarea input and populates with this element's contents
      */
     edit() {
         try {
-            this.getMainContainer().stickyFooter.show();
+            //console.log(this.className + '.edit()', this);
+            let footer = this.getMainContainer().stickyFooter;
+            this.addClass('edit');
+            this.status = STATUS.LOCKED;
 
-            $(this.el).addClass('edit');
-            this.editor = new TEXTAREA(this.getMainContainer().stickyFooter, new MODEL(
+            this.editor = new EL(footer, 'TEXTAREA', new MODEL(
                 new ATTRIBUTES({
                     'value': this.el.innerHTML
                 })
-            ).set({
-                'label': '<' + this.element + '>'
-            }));
+            ), this.el.innerHTML);
 
-            //$(this.editor.el).insertAfter(this.el);
-            this.editor.input.el.setAttribute('style', 'height:200px;');
-            this.editor.input.el.onkeyup = function () {
-                this.el.innerHTML = this.editor.input.el.value;
+            this.editor.el.onkeyup = function () {
+                this.el.innerHTML = this.editor.el.value;
             }.bind(this);
 
-            this.editor.input.el.onblur = function () {
+            this.editor.el.onblur = function () {
                 try {
-                    console.log('Editing ' + this.className + ' inside ' + this.node.className);
-                    let val = this.editor.input.el.value;
-                    console.log('Value: ' + val);
-                    this.node.node.node.data[this.className.toLowerCase()] = val;
-
-                    console.log('THIS.NODE.NODE (Container) ELEMENT DATA:');
-                    console.log(this.node.node.node);
-
+                    this.getContainer().data[this.className.toLowerCase()] = this.editor.el.value;
+                    this.editor.destroy();
+                    this.removeClass('edit');
+                    if (this.getContainer().quickSave(true)) {
+                        this.getMainContainer().stickyFooter.hide();
+                    }
                 } catch (e) {
-                    console.log(e);
+                    throw e;
                 }
-
-                this.editor.destroy();
-                $(this.el).removeClass('edit');
-                DEBUG.log('QuickSave');
-                this.getContainer().quickSave(true);
-                this.getMainContainer().stickyFooter.hide();
-                this.getMainContainer().stickyFooter.empty();
             }.bind(this);
+            this.editor.el.focus();
 
-            this.editor.input.el.focus();
+            footer.show();
             event.stopPropagation();
         } catch (ee) {
             console.log(ee);
@@ -279,7 +282,7 @@ export default class EL extends MODEL {
     }
 
     /**
-        Closes the EL up for editing.  This should create a link
+        Closes the EL up for editing.  <br>This should create a link
         between the object on the server and its client side representation
         and update accordingly
         @returns {EL} This EL
@@ -306,24 +309,19 @@ export default class EL extends MODEL {
         @param {number} delay Millisecond delay
         @returns {EL} This EL
     */
-    destroy(delay) {
-        delay = delay ? delay : 300;
+    destroy(delay = 300) {
         try {
-            setTimeout(function () {
-                //this.node.el.removeChild(this.el);            
+            setTimeout(function () {           
                 this.el.parentNode.removeChild(this.el);
             }.bind(this), delay);
-
             try {
                 let i = this.node.children.indexOf(this);
                 this.node.children.splice(i, 1);
             } catch (ee) {
                 console.log('Unable to remove ' + this.element + ' from node.children');
             }
-
         } catch (e) {
-            console.log('Unable to destroy this ' + this.element);
-            console.log(e);
+            console.log('Unable to destroy this ' + this.element, e);
         }
         return this;
     }

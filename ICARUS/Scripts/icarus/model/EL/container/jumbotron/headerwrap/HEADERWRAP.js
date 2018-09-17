@@ -1,12 +1,22 @@
-﻿import JUMBOTRON from '../JUMBOTRON.js';
+﻿/**
+    @module
+*/
+import JUMBOTRON from '../JUMBOTRON.js';
+import HEADER from '../../../header/HEADER.js';
+import P from '../../../p/P.js';
+import GLYPHICON from '../../../span/GLYPHICON.js';
+import EL, { MODEL, ATTRIBUTES } from '../../../EL.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
 /**
     Jumbotron with centered icon and text
+    @class
+    @extends JUMBOTRON
 */
 export default class HEADERWRAP extends JUMBOTRON {
     /**
         Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model
-         @param {MODEL} model Object Model
+        @param {MODEL} model Object Model
      */
     constructor(node, model) {
         super(node, model);

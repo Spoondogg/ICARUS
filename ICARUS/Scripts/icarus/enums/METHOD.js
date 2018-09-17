@@ -1,6 +1,8 @@
 ﻿/**
- * Form methods
- */
+    Form methods
+    @readonly
+    @enum {string}
+*/
 export const METHOD = {
     DEFAULT: 'POST',
     POST: 'POST',

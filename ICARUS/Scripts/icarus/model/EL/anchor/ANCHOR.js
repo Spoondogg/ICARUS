@@ -1,12 +1,18 @@
-﻿import EL, { MODEL } from '../EL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL } from '../EL.js';
 import GLYPHICON from '../span/GLYPHICON.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 /**
     A hyperlink / page anchor    
+    @class
+    @extends EL
 */
 export default class ANCHOR extends EL {
     /**
         Constructs a generic Anchor
+        @constructs ANCHOR
         @param {EL} node The object to contain this element
         @param {MODEL} model The object model
      */

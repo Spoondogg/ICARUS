@@ -1,7 +1,12 @@
-﻿import GROUP from '../GROUP.js';
+﻿/**
+    @module
+*/
+import GROUP from '../GROUP.js';
 import LI from '../li/LI.js';
 /**
     A generic unorganized list
+    @class
+    @extends GROUP
 */
 export default class UL extends GROUP {
     /**
@@ -13,13 +18,13 @@ export default class UL extends GROUP {
         super(node, 'UL', model);        
 
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('UL', function (model) {
+        this.addCase('UL', (model) => {
             return this.addUnorderedList(model);
-        }.bind(this));
+        });
 
-        this.addCase('LI', function (model) {
+        this.addCase('LI', (model) => {
             return this.addListItem(model);
-        }.bind(this));
+        });
     }
 
     /**

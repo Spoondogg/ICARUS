@@ -1,5 +1,7 @@
-﻿import EL, { MODEL } from '../EL.js';
-import ATTRIBUTES from '../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL, ATTRIBUTES } from '../EL.js';
 /**
     A standard control-label for form elements
 */

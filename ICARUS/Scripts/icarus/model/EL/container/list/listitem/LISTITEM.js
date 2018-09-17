@@ -1,10 +1,12 @@
-﻿import CONTAINER from './CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from './CONTAINER.js';
 /**
     List Item Constructor
     A LIST is essentially a UL that is designed to contain List Items (LI)
-
-    @param {EL} node The object to contain this element
-    @param {MODEL} model The textblock
+    @class
+    @extends CONTAINER    
 */
 export default class LISTITEM extends CONTAINER {
     /**

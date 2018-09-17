@@ -102,6 +102,8 @@
   "ICARUS.Controllers.DictionaryController.make(ICARUS.Models.Icarus.FormPost)": "ICARUS.Controllers.DictionaryController.yml",
   "ICARUS.Controllers.DictionaryController.select(ICARUS.Controllers.ObjectDBContext,System.Int32)": "ICARUS.Controllers.DictionaryController.yml",
   "ICARUS.Controllers.DictionaryController.selectAll(ICARUS.Controllers.ObjectDBContext)": "ICARUS.Controllers.DictionaryController.yml",
+  "ICARUS.Controllers.DocumentationController": "ICARUS.Controllers.DocumentationController.yml",
+  "ICARUS.Controllers.DocumentationController.Index": "ICARUS.Controllers.DocumentationController.yml",
   "ICARUS.Controllers.FieldsetController": "ICARUS.Controllers.FieldsetController.yml",
   "ICARUS.Controllers.FieldsetController.#ctor": "ICARUS.Controllers.FieldsetController.yml",
   "ICARUS.Controllers.FieldsetController.make(ICARUS.Models.Icarus.FormPost)": "ICARUS.Controllers.FieldsetController.yml",

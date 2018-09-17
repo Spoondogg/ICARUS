@@ -1,6 +1,7 @@
 ﻿/**
-    Enumerated list of Input Types
-    Matched to IcarusFormGroup Enums
+    Enumerated list of Input Types matched to IcarusFormGroup Enums
+    @readonly
+    @enum {number}
 */
 export const INPUTTYPES = {
     TEXT: 1,

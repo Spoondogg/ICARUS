@@ -1,9 +1,14 @@
-﻿import FORMELEMENT from '../FORMELEMENT.js';
+﻿/**
+    @module
+*/
+import FORMELEMENT from '../FORMELEMENT.js';
 import EL from '../../../EL.js';
 import MODEL from '../../../../MODEL.js';
 import ATTRIBUTES from '../../../../ATTRIBUTES.js';
 /**
     Represents a <TEXTAREA> for an Icarus Form       
+    @class
+    @extends FORMELEMENT
 */
 export default class TEXTAREA extends FORMELEMENT {
     /**

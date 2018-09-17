@@ -1,4 +1,7 @@
-﻿import BANNER from '../BANNER.js';
+﻿/**
+    @module
+*/
+import BANNER from '../BANNER.js';
 import P from '../../../p/P.js';
 import MODEL from '../../../../MODEL.js';
 import HEADER from '../../../header/HEADER.js';
@@ -11,6 +14,8 @@ import TOKEN from '../../formelement/input/TOKEN.js';
 import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
 /**
     Contains a high level view of all MAIN Objects available to this user
+    @class
+    @extends BANNER
 */
 export default class INDEXMAIN extends BANNER {
     /**
@@ -60,10 +65,12 @@ export default class INDEXMAIN extends BANNER {
     */
     construct() {
         if (!isNaN(this.page)) {
+
+            this.getMainContainer().token;
             console.log('Retrieving page ' + this.page);
             //let token = TOKEN.getToken();
             $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-                '__RequestVerificationToken': this.token.value
+                '__RequestVerificationToken': this.getMainContainer().token// this.token.value
             },
                 function (payload, status) {
                     if (status === 'success') {
@@ -159,10 +166,10 @@ export default class INDEXMAIN extends BANNER {
             'label': 'iframe',
             'dataId': -1,
             'data': {
-                'src': this.url.origin + '/' + id
+                'src': this.getMainContainer().url.origin + '/' + id
             }
         }));
-        this.iframe.frame.el.setAttribute('src', this.url.origin + '/' + id);
+        this.iframe.frame.el.setAttribute('src', this.getMainContainer().url.origin + '/' + id);
         this.modal.show();
     }
 

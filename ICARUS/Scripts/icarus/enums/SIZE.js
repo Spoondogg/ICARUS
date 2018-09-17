@@ -1,6 +1,8 @@
 ﻿/**
- * Bootstrap size options
- */
+    Bootstrap size options
+    @readonly
+    @enum {string}
+*/
 export const SIZE = {
     EXTRA_SMALL: 'xs',
     SMALL: 'sm',

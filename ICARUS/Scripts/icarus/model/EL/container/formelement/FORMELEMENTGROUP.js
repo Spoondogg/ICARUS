@@ -1,10 +1,15 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import TEXTAREA from './textarea/TEXTAREA.js';
 import INPUT from './input/INPUT.js';
 import SELECT from './select/SELECT.js';
 /**
     A container made up of a group of form elements
+    @class
+    @extends CONTAINER
 */
 export default class FORMELEMENTGROUP extends CONTAINER {
     /**

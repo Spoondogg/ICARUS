@@ -1,4 +1,7 @@
-﻿import IMG from '../../../graphic/IMG.js';
+﻿/**
+    @module
+*/
+import IMG from '../../../graphic/IMG.js';
 import HEADER from '../../../header/header.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONTAINER from '../../CONTAINER.js';
@@ -9,6 +12,8 @@ import MODAL from '../../../modal/MODAL.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 /**
     Jumbotron with centered icon and text
+    @class
+    @extends CONTAINER
 */
 export default class THUMBNAIL extends CONTAINER {
     /**

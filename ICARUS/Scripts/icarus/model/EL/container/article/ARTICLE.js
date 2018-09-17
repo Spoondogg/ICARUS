@@ -1,7 +1,12 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 
 /**
-    A generic Article    
+    A generic Article  
+    @class
+    @extends CONTAINER
 */
 export default class ARTICLE extends CONTAINER {
     /**

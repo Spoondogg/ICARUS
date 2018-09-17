@@ -1,12 +1,15 @@
-﻿import UL from '../../group/ul/UL.js';
-import EL from '../../el.js';
-import MODEL from '../../../MODEL.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import UL from '../../group/ul/UL.js';
+import EL, { MODEL, ATTRIBUTES } from '../../el.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 import HEADER from '../../header/HEADER.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 /**
     Nav item within navbar
+    @class
+    @extends UL
 */
 export default class MENU extends UL {
     /**
@@ -34,17 +37,17 @@ export default class MENU extends UL {
             }.bind(this);
         }
 
-        this.addCase('MENU', function (model) {
+        this.addCase('MENU', (model) => {
             return this.addMenu(model);
-        }.bind(this));
+        });
 
-        this.addCase('NAVITEM', function (model) {
+        this.addCase('NAVITEM', (model) => {
             return this.addNavItem(model);
-        }.bind(this));
+        });
 
-        this.addCase('NAVSEPARATOR', function (model) {
+        this.addCase('NAVSEPARATOR', (model) => {
             return this.addNavSeparator();
-        }.bind(this));
+        });
     }
 
     /**

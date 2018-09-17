@@ -1,12 +1,17 @@
 ﻿/**
+    @module
+*/
+
+/**
     A generic set of ATTRIBUTES for an EL
-    TODO: Consider just extending Map()
+    @class
+    @extends Object
+    @todo Consider just extending Map()
  */
 export default class ATTRIBUTES extends Object { // extends Map https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
     /**
-        Constructs a generic Attributes data structure.
         If the 'className' argument is an object, break it out into individual attributes
-        Otherwise, map to className, name, type and value (Optionally)
+        Otherwise, map to className, name, type and value
 
         @param {object} className A collection of attributes || className Element class attribute
         @param {string} name Optional Element name attribute
@@ -41,15 +46,16 @@ export default class ATTRIBUTES extends Object { // extends Map https://medium.c
         try {
             obj = this[key];
         } catch (e) {
-            console.log('No attribute exists for key "' + key + '"');
+            console.warn('No attribute exists for key "' + key + '"');
         }
         return obj;
     }
 
     /**
+        Sets the given key to the specified value
         @param {string} key Attribute name
         @param {any} value Attribute value
-        @returns {ATTRIBUTES} this 
+        @returns {ATTRIBUTES} This attributes Object 
      */
     set(key, value) {
         if (value !== undefined && value !== null) {

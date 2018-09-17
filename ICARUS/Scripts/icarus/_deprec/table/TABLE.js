@@ -27,7 +27,7 @@ const TABLE = function (node, columns) {
 
     // Construct the initial groups for this table
     this.groups = ['thead', 'tbody', 'tfoot'];
-    for (var g = 0; g < this.groups.length; g++) {
+    for (let g = 0; g < this.groups.length; g++) {
         this.addGroup(this.groups[g]);
     }
 

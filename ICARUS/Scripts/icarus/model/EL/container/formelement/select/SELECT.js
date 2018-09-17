@@ -1,8 +1,13 @@
-﻿import FORMELEMENT from '../FORMELEMENT.js';
+﻿/**
+    @module
+*/
+import FORMELEMENT from '../FORMELEMENT.js';
 import OPTION from './OPTION.js';
 export { OPTION };
 /**
     Represents a <SELECT> for an Icarus Form    
+    @class
+    @extends FORMELEMENT
 */
 export default class SELECT extends FORMELEMENT {
     /**
@@ -17,6 +22,9 @@ export default class SELECT extends FORMELEMENT {
         this.createSelect();
     }
 
+    /**
+        Creates the SELECT Element
+    */
     createSelect() {
         this.input = new EL(this.body.pane, 'SELECT', new MODEL(
             new ATTRIBUTES({

@@ -1,12 +1,16 @@
-﻿import MODAL from '../MODAL.js';
+﻿/**
+    @module
+*/
+import MODAL from '../MODAL.js';
 import MENU from '../../nav/menu/MENU.js';
 /**
     A modal prompt.
-    
-    Creates a modal and displays a text well and any buttons that have
+    @description Creates a modal and displays a text well and any buttons that have
     been added.
+    @class
+    @extends MODAL
 */
-export default class MODALMENU extends MODAL { // CALL ME A MENU!!!!
+export default class MODALMENU extends MODAL {
     /**
         @param {string} label The label
         @param {string} text The html text that is displayed in the prompt's well

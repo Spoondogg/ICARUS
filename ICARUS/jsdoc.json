@@ -1,5 +1,13 @@
 ﻿{
+  "title": "Icarus Javascript API",
   "opts": {
-    "destination": "./Documentation/jsdoc"
-  }
+    "destination": "Documentation/jsdoc",
+    "readme": "Scripts/icarus/index.md",
+    "name":  "Icarus"
+  },
+  "source": {
+    "include": [ "Scripts/icarus" ],
+    "exclude": [ "Scripts/icarus/_deprec", "Scripts/icarus/bundles", "Scripts/icarus/init.js" ]
+  },
+  "sourceType": "module"
 }

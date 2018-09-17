@@ -1,12 +1,12 @@
-﻿import BANNER from '../BANNER.js';
+﻿/**
+    @module
+*/
+import BANNER from '../BANNER.js';
 import HEADER from '../../../header/HEADER.js';
 import NAVITEMICON from '../../../nav/navitemicon/NAVITEMICON.js';
-//import MODEL from '../../../../MODEL.js';
-import EL, { MODEL } from '../../../EL.js';
-import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+import EL, { MODEL, ATTRIBUTES } from '../../../EL.js';
 import P from '../../../p/P.js';
 import TOKEN from '../../formelement/input/TOKEN.js';
-import DEBUG from '../../../../../DEBUG.js';
 import MODAL from '../../../modal/MODAL.js';
 import CONTAINER from '../../CONTAINER.js';
 import MENULIST from '../../menulist/MENULIST.js';
@@ -111,7 +111,7 @@ export default class INDEX extends BANNER {
      * @param {Array} list A list
      */
     launchModal(header, p, listClass, list) {
-        DEBUG.log('Launch Index Thumbnail Modal');
+        console.log('Launch Index Thumbnail Modal');
 
         this.modal = new MODAL(header);
         this.modal.container.body.pane.addClass('thumbnail index-thumbnail');

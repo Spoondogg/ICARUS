@@ -36,27 +36,27 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>A single ImageGallery Element</returns>
         public override Container select(ObjectDBContext ctx, int id) {
             return ctx.ImageGalleries.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single element
+        /// Select all elements
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>A collection of elements</returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
             return ctx.ImageGalleries.Where(FilterAllowed());
         }
 
+        // "http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2"/>
+
         /// <summary>
         /// Returns a list of Container Ids that contain this container
-        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
-        /// [Authorize]
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An image</returns>
         public virtual async Task<ActionResult> Image(
             string page = "0", string pageLength = "10"
         ) {
@@ -85,12 +85,12 @@ namespace ICARUS.Controllers {
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
+        // http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2 [Authorize]
+
         /// <summary>
         /// Returns a list of Image Ids
-        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
-        /// [Authorize]
         /// </summary>
-        /// <returns></returns>        
+        /// <returns>A list of image Ids</returns>        
         public async Task<ActionResult> ImageIndex(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);

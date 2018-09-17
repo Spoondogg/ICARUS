@@ -1,6 +1,11 @@
-﻿import BANNER from '../BANNER.js';
+﻿/**
+    @module
+*/
+import BANNER from '../BANNER.js';
 /**
     Contains a high level view of all objects owned by this user
+    @class
+    @extends BANNER
 */
 export default class IMAGEGALLERY extends BANNER {
     /**

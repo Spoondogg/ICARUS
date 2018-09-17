@@ -1,12 +1,4 @@
-﻿/**
- * @mainpage
- * The EL object is the main building block
- */
-/**
-* @page wootpage Another Page
-* Documentation that will occur on another page.
-*/
-using ICARUS.Models.Icarus.Elements;
+﻿using ICARUS.Models.Icarus.Elements;
 using ICARUS.Models.Icarus.Elements.Attributes;
 using System;
 using System.Collections.Generic;

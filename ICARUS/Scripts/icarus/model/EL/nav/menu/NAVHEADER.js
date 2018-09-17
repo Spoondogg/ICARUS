@@ -1,9 +1,14 @@
-﻿import MENU from '../menu/MENU.js';
+﻿/**
+    @module
+*/
+import MENU from '../menu/MENU.js';
 import MODEL from '../../../MODEL.js';
 import ATTRIBUTES from '../../../ATTRIBUTES.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 /**
     An expandable menu with clickable header that opens a container full of icons
+    @class
+    @extends MENU
 */
 export default class NAVHEADER extends MENU {
     /**
@@ -14,7 +19,6 @@ export default class NAVHEADER extends MENU {
     constructor(node, model) {
         super(node, model);
         this.addClass('navbar-header');
-
         
         // Left aligned group
         this.tabs = new MENU(this, 
@@ -28,46 +32,43 @@ export default class NAVHEADER extends MENU {
             new MODEL('pull-left').set({
                 'anchor': new MODEL().set({
                     'label': model.label,
-                    'url': '#',
-                    'icon': ICONS.PLUS
+                    'url': '#'
                 })
             })
         );
 
-        this.tab.el.onclick = function () {
+        this.tab.el.onclick = () => {
             console.log('Toggle Body');
             this.getContainer().toggleBody();
-        }.bind(this);
+        };
 
         // Simulate LONG CLICK to edit the label
         this.tab.pressTimer;
-        this.tab.el.onmousedown = function (ev) {
-
-            this.tab.pressTimer = window.setTimeout(                
-                function () {
+        this.tab.el.onmousedown = (ev) => {
+            this.tab.pressTimer = window.setTimeout(
+                () => {
                     this.launchSidebarSave();
                     ev.stopPropagation();
-                }.bind(this),
-            1000);
+                }, 1000
+            );
+        };
 
-        }.bind(this);
-
-        this.tab.el.onmouseup = function (ev) {
+        this.tab.el.onmouseup = (ev) => {
             clearTimeout(this.tab.pressTimer);
             ev.stopPropagation();
             return false;
-        }.bind(this);
+        };
 
         // If the user is a 'Guest', show the Login Button   
         try {
-            if (this.getMainContainer().user !== 'Guest') {
+            if (this.getContainer().getMainContainer().user !== 'Guest') {
 
                 // Add a default tab to show/hide the Options Menu
                 this.toggle = this.tabs.addNavItem(
                     new MODEL('pull-right').set({
                         'anchor': new MODEL().set({
                             'icon': ICONS.COG,
-                            'label': '', //Options
+                            'label': '',
                             'url': '#'
                         })
                     })
@@ -90,9 +91,23 @@ export default class NAVHEADER extends MENU {
                     );
                 }
             }
-        } catch (e) {
 
-            console.log('Unable to retrieve MAIN Container', e);
+        } catch (e) {
+            let modal = this.getProtoTypeByClass('MODAL');
+            if (modal !== null) {
+                switch (modal.className) {
+                    case 'LOADER':
+                    case 'PROMPT':
+                        break;
+
+                    default:
+                        console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
+                        break;
+                }
+            } else {
+                console.warn('Unable to retrieve MAIN Container', e);
+                throw e;
+            }            
         }
     }
 
@@ -113,14 +128,6 @@ export default class NAVHEADER extends MENU {
         } catch (e) {
             console.log(e);
         }
-    }
-
-    /**
-        Override for NavHeader
-        @returns {CONTAINER} The NavHeader Container
-    */
-    getContainer() {
-        return this.node.node;
     }
 
     /**

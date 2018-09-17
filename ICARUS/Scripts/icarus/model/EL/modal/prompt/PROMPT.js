@@ -1,12 +1,16 @@
-﻿import MODAL from '../MODAL.js';
-import DEBUG from '../../../../DEBUG.js';
+﻿/**
+    A Prompt Modal module
+    @module
+*/
+import MODAL from '../MODAL.js';
 import CONTAINERFACTORY, { FORM } from '../../container/CONTAINERFACTORY.js';
 export { MODAL };
+
 /**
-    A modal prompt.
-    
-    Creates a modal and displays a text well and any buttons that have
-    been added.
+    A modal prompt
+    @description Creates a modal and displays a text well and any included buttons
+    @class
+    @extends MODAL
 */
 export default class PROMPT extends MODAL {
     /**
@@ -17,7 +21,7 @@ export default class PROMPT extends MODAL {
         @param {boolean} vertical If true, prompt is vertically centered
      */
     constructor(label, text, buttons, inputs, vertical) {
-        DEBUG.log('PROMPT('+label+');');
+        console.log('PROMPT('+label+');');
         super(label, text, vertical);
         this.addClass('prompt');
 
