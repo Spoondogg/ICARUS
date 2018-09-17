@@ -1,10 +1,15 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 import EL, { MODEL } from '../../EL.js';
 import FORM from '../form/FORM.js';
 import ATTRIBUTES from '../../../ATTRIBUTES.js';
 import CONTAINERFACTORY from '../CONTAINERFACTORY.js';
 /**
     A Chat Window
+    @class
+    @extends CONTAINER
 */
 export default class CHAT extends CONTAINER {
     /**

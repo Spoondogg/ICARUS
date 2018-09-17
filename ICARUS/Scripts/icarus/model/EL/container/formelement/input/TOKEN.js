@@ -1,7 +1,11 @@
-﻿import EL, { MODEL } from '../../../EL.js';
-import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL, ATTRIBUTES } from '../../../EL.js';
 /**
     A token provided by the client side to authenticate form POST    
+    @class
+    @extends EL
 */
 export default class TOKEN extends EL {
     /**

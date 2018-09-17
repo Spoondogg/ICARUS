@@ -1,6 +1,12 @@
-﻿import SPAN from './SPAN.js';
+﻿/**
+    @module
+*/
+import SPAN from './SPAN.js';
+
 /**
     An icon button that toggles a dropdown
+    @class
+    @extends SPAN
 */
 export default class CARET extends SPAN {
     /**

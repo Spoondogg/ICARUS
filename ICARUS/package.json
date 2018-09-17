@@ -1,19 +1,30 @@
 {
   "name": "icarus",
+  "author": "Ryan Dunphy <ryan@spoonmedia.ca>",
   "version": "0.5.2",
   "description": "Single Page Web Application Engine",
+  "keywords": [
+    "SPWA",
+    "Javascript",
+    "ES6",
+    "MVC.NET"
+  ],
+  "license": "ISC",
   "main": "service-worker.js",
+  "homepage": "https://github.com/Spoondogg/ICARUS#readme",
   "dependencies": {
     "gulp": "^3.9.1"
   },
   "devDependencies": {
     "del": "^3.0.0",
-    "docfx": "^1.0.5",
     "doxygen": "^0.3.0",
+    "eslint": "^5.6.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^5.0.0",
     "gulp-htmlclean": "^2.7.22",
     "gulp-jsdoc3": "^2.0.0",
+    "gulp-jslint": "^1.0.10",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
     "gulp-watch": "^5.0.1",
@@ -27,12 +38,5 @@
   "repository": {
     "type": "git",
     "url": "github.com/Spoondogg/ICARUS"
-  },
-  "keywords": [
-    "SPA",
-    "Javascript",
-    "MVC.NET"
-  ],
-  "author": "Ryan Dunphy <ryan@spoonmedia.ca>",
-  "license": "ISC"
+  }
 }

@@ -1,4 +1,7 @@
-﻿import BANNER from '../BANNER.js';
+﻿/**
+    @module
+*/
+import BANNER from '../BANNER.js';
 import CONTAINERFACTORY from '../../CONTAINERFACTORY.js';
 import HEADER from '../../../header/HEADER.js';
 import MODEL from '../../../../MODEL.js';
@@ -7,6 +10,8 @@ import MENULIST from '../../menulist/MENULIST.js';
 
 /**
     Contains a high level view of all MAIN Objects available to this user
+    @class
+    @extends BANNER
 */
 export default class CLASSVIEWER extends BANNER {
     /**
@@ -24,7 +29,6 @@ export default class CLASSVIEWER extends BANNER {
     }
 
     construct() {
-
         if (!this.classType) {
             this.classType = 'JUMBOTRON';
         }
@@ -36,7 +40,6 @@ export default class CLASSVIEWER extends BANNER {
         this.form = CONTAINERFACTORY.createEmptyForm(this.body.pane);
 
         let inputs = [
-
             // SHOULD BE A SELECT
             new MODEL(new ATTRIBUTES({
                 'name': 'classType',

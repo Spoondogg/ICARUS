@@ -1,23 +1,28 @@
-﻿import { ICONS } from '../../../enums/ICONS.js';
+﻿/**
+    @module
+*/
+import { ICONS } from '../../../enums/ICONS.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import GROUP from '../group/GROUP.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import CONTAINERBODY from './CONTAINERBODY.js';
-import EL, { MODEL } from '../EL.js';
-import ATTRIBUTES from '../../ATTRIBUTES.js';
+import EL, { MODEL, ATTRIBUTES } from '../EL.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
-import DEBUG from '../../../DEBUG.js';
-//import MODAL from '../modal/MODAL.js';
 import PROMPT, { MODAL } from '../modal/prompt/PROMPT.js';
-/**
-    A generic CONTAINER with a header that controls population of this element.
+import AbstractMethodError from '../../../error/AbstractMethodError.js';
 
-    A container can be expanded or hidden and
-    have elements added to itself.
+export { PROMPT };
+
+/**
+    An abstract Container element with NAVBAR
+    @description A container can be expanded or hidden and have elements added to itself
+    @class
+    @extends GROUP
 */
 export default class CONTAINER extends GROUP {
     /**
+        @constructs CONTAINER
         @param {EL} node The element to contain the section
         @param {string} element HTML element
         @param {MODEL} model The CONTAINER object retrieved from the server
@@ -39,17 +44,26 @@ export default class CONTAINER extends GROUP {
         super(node, element, model);
         this.addClass('icarus-container');
         this.isContainer = 1;
-        this.container = null;
         this.dataElements = DATAELEMENTS[this.className];
         this.attrElements = [];
 
+        // Eventually, this needs to go.  I don't like cluttering up the DOM with attributes
         if (model.id) {
             this.el.setAttribute('id', model.id);
         }
 
+        /**
+            @property {number} shared If shared == 1
+        */
         this.shared = this.shared ? this.shared : 1;
 
-        // Container Properties
+        /**
+            @property {PROMPT} prompt A local PROMPT
+            @type {PROMPT}
+            @todo This should really only be needed in the MAIN Container.  
+            There should never be more than one prompt in the DOM.
+            Consider creating a queue to hold multiple prompts
+        */
         this.prompt = null;
         this.updateUrl = this.element + '/Set';  // model.className should be the actual value, no?                
         this.subsections = (model.subsections) ? model.subsections.split(',') : '0'; // Delimited list of child ids
@@ -126,9 +140,7 @@ export default class CONTAINER extends GROUP {
         this.navBar.el.ondragend = function (ev) {
             // Drag Ending
         }.bind(this);    
-
         
-
         this.body = new CONTAINERBODY(this, model);
 
         this.addNavBarDefaults();
@@ -159,16 +171,19 @@ export default class CONTAINER extends GROUP {
         // These methods may need to be migrated within the extended objects
         if (this.className !== 'CONTAINER') {
             this.construct();
-        } /*else {
-            this.populate(model.children);
-        }*/
+        }
     }
 
-    /** Abstract construct method throws an error if not declared */
+    /** 
+        Abstract construct method throws an error if not declared 
+        @abstract
+    */
     construct() {        
         if (this.className !== 'CONTAINER') {
-            console.log('CONTAINER.construct();');
-            throw new Error('Abstract method ' + this.className + '.construct() not implemented.');
+            throw new AbstractMethodError(
+                'CONTAINER{' + this.className + '} : Abstract method '
+                + this.className + '.construct() not implemented.'
+            );
         }
     }
 
@@ -765,32 +780,33 @@ export default class CONTAINER extends GROUP {
     }
 
     /**
-        Sets the parent container for this container if it does not exist,
-        then returns it or null
+        Returns the parent container for this container or null if it does not exist
         @returns {CONTAINER} The parent container for this container
     */
     getContainer() {
-        if (this.className.toUpperCase() === 'MAIN') {
-            //console.log(this.className+'.getContainer() has no parent container', this);
-            return this;
-        } else {
-            if (this.container === undefined || this.container === null) {
-                this.container = this.getProtoTypeByClass('CONTAINER');
-            }
-            return this.container;
-        }
+        return this.container;
     }
 
     /**
         Returns the MAIN container
         @returns {MAIN} The MAIN Container
+        @throws Will throw an error 
     */
     getMainContainer() {
-        //console.log('getMainContainer()', this.className);
-        if (this.className === 'MAIN') { //.toUpperCase()
-            return this;
-        } else {
-            return this.getContainer().getMainContainer();
+        try {
+            return this.getProtoTypeByClass('MAIN');
+        } catch (e) {
+            switch (this.getProtoTypeByClass('MODAL').className) {
+                case 'LOADER':
+                    console.warn('Modals exist in body.document and do not have a parent Container');
+                    break;
+
+                default:
+                    console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('MODAL'));
+            }
+            //return null;
+            //console.log('CONTAINER.getMainContainer() caught an error');
+            //throw e;
         }
     }
 
@@ -843,7 +859,7 @@ export default class CONTAINER extends GROUP {
      */
     quickSave(noPrompt = false) {
         if (noPrompt || confirm('Quick Save '+this.className+'('+this.id+') : '+this.label+' ?')) {
-            console.log(this.element + '.save()', this);
+            //console.log(this.className + '.save()', this);
 
             // Populate subsections with elements in this body
             let subsections = this.getSubSections();
@@ -1011,7 +1027,7 @@ export default class CONTAINER extends GROUP {
     */
     quickSaveParent() {
         try {
-            return this.getContainer().quickSave(false);
+            return this.container.quickSave(false);
         } catch (e) {
             console.log('Container.QuickSaveParent() No parent exists');
             return false;
@@ -1095,8 +1111,7 @@ export default class CONTAINER extends GROUP {
             }.bind(this);            
             this.prompt.show();
         } catch (e) {
-            DEBUG.log('Unable to disable this ' + this.element);
-            DEBUG.log(e);
+            console.log('Unable to disable this ' + this.element, e);
         }
     }
 
@@ -1137,9 +1152,9 @@ export default class CONTAINER extends GROUP {
         let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
         let text = 'Disable ' + label + ' in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
 
-        let container = this.getContainer();
-        let main = container.getMainContainer();
-        let token = main.token;
+        //let container = this.getContainer();
+        //let main = container.getMainContainer();
+        let token = this.getMainContainer().token;
         console.log('Token', token);
 
         try {

@@ -1,8 +1,15 @@
 ﻿/**
+    @module
+*/
+import NAVITEM from '../navitem/NAVITEM.js';
+import EL, { MODEL, ATTRIBUTES } from '../../EL.js';
+/**
     A search input wrapped in a FORM that filter's the
     contents of a given GROUP
+    @class
+    @extends NAVITEM
  */
-export default class NAVSEARCH extends NAVITEM { //LI {
+export default class NAVSEARCH extends NAVITEM {
 
     /**
         Construct a NAVSEARCH

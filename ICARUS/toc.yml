@@ -1,7 +1,3 @@
-- name: Home
-  href: index.md
-- name: Articles
-  href: articles/
-  homepage: articles/intro.md
-- name: API Documentation
-  href: fusion/
+- name: Javascript
+  href: Scripts/icarus/
+  homepage: Scripts/icarus/index.md

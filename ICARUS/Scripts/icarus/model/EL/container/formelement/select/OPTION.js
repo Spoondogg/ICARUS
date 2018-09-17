@@ -1,7 +1,12 @@
-﻿import EL from '../../../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../../../EL.js';
+
 /**
     Represents the model for an <OPTION> for an Icarus Form Select
-    
+    @class
+    @extends EL
 */
 export default class OPTION extends EL {
     /**

@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
-    A blob of text
+    A span (SPAN) Element
+    @class
+    @extends EL
 */
 export default class SPAN extends EL {
     /**

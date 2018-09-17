@@ -1,6 +1,11 @@
-﻿import EL from '../../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../../EL.js';
 /**
     A Bootstrap Progress Bar 
+    @class
+    @extends EL
 */
 export default class PROGRESSBAR extends EL {
     constructor(node, model) {

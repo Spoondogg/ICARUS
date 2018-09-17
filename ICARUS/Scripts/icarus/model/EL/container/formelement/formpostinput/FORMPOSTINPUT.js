@@ -1,4 +1,7 @@
-﻿import FORMELEMENT from '../FORMELEMENT.js';
+﻿/**
+    @module
+*/
+import FORMELEMENT from '../FORMELEMENT.js';
 import ATTRIBUTES from '../../../../ATTRIBUTES.js';
 import SPAN from '../../../span/SPAN.js';
 import EL, { MODEL } from '../../../EL.js';
@@ -11,6 +14,9 @@ import INPUT from '../../formelement/input/INPUT.js';
 
     The FormPostInput initially displays an individual INPUT, but can
     retrieve a secondary sub-form based on the input's value (aka: FormPost Id)
+
+    @class
+    @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
     /**

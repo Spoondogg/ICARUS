@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
     Generic NAV Element
+    @class
+    @extends EL
 */
 export default class NAV extends EL {
     /**

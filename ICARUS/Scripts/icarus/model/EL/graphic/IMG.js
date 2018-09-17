@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
-    An image
+    An image (IMG) Element
+    @class
+    @extends EL
 */
 export default class IMG extends EL {
     /**

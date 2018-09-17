@@ -1,14 +1,16 @@
-﻿import MODEL from '../model/MODEL.js';
+﻿/**
+    @module
+    @todo This might be a better fit inside {@link CONTAINERFACTORY}
+*/
+import MODEL from '../model/MODEL.js';
 import ATTRIBUTES from '../model/ATTRIBUTES.js';
 /**
- * Stores the default DATA ELEMENTS collections for each Class
- * This belongs on the database or within a config
- * 
- * DataElements can act as a mask to filter values for this element
- * 
- * NOTE:  'value' is a reserved keyword... I think
- * 
- */
+    Stores the default DATA ELEMENTS collections for each Class
+    This belongs on the database or within a config 
+    DataElements can act as a mask to filter values for this element
+    @readonly
+    @enum {any}
+*/
 export const DATAELEMENTS = {
     ARTICLE: [],
     SECTION: [

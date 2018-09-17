@@ -1,8 +1,13 @@
-﻿import THUMBNAIL from '../THUMBNAIL.js';
+﻿/**
+    @module
+*/
+import THUMBNAIL from '../THUMBNAIL.js';
 import '../../../../../../StringMethods.js';
 /**
     A thumbnail with a preview window and a list of Containers
     that can be loaded into the preview
+    @class
+    @extends THUMBNAIL
 */
 export default class INDEXTHUMBNAIL extends THUMBNAIL {
     /**

@@ -1,6 +1,8 @@
 ﻿/**
- * Bootstrap button types
- */
+    Bootstrap button types
+    @readonly
+    @enum {string}
+*/
 export const BUTTONTYPE = {
     DEFAULT: 'default',
     PRIMARY: 'primary',

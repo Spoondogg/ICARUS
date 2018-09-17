@@ -13,6 +13,7 @@ String.prototype.camelcase = function () {
 
 /**
     Returns a friendly formatted string, safe for html and web components
+    @method
     @returns {String} HTML friendly string
 */
 String.prototype.friendly = function () {

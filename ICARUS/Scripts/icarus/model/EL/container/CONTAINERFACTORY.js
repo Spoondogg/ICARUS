@@ -1,4 +1,7 @@
-﻿import ATTRIBUTES from '../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import ATTRIBUTES from '../../ATTRIBUTES.js';
 import MODEL from '../../MODEL.js';
 import ARTICLE from '../container/article/ARTICLE.js';
 import INDEX from '../container/banner/index/INDEX.js';
@@ -27,6 +30,7 @@ export { FORM, TOKEN, MODEL };
 
 /**
     Constructs various Containers and returns them to be appended
+    @class
  */
 export default class CONTAINERFACTORY {
     /**

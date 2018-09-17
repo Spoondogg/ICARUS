@@ -2,7 +2,7 @@
   {
     "outputFileName": "Scripts/icarus/bundles/icarus.js",
     "inputFiles": [
-      "Scripts/icarus/main.js",
+      /*"Scripts/icarus/main.js",
       "Scripts/icarus/WATERMARK.js",
       "Scripts/icarus/model/ATTRIBUTES.js",
       "Scripts/icarus/model/MODEL.js",
@@ -81,7 +81,7 @@
       "Scripts/icarus/model/el/container/main/article/section/SECTION.js",
       "Scripts/icarus/model/el/container/main/article/ARTICLE.js",
       "Scripts/icarus/model/el/container/main/sidebar/SIDEBAR.js",
-      "Scripts/icarus/model/el/container/main/MAIN.js"
+      "Scripts/icarus/model/el/container/main/MAIN.js"*/
     ],
     "minify": {
       "enabled": false

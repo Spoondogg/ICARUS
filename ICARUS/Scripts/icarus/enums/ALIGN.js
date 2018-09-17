@@ -1,6 +1,8 @@
 ﻿/**
- * CSS Alignment options
- */
+    CSS Alignment options
+    @readonly
+    @enum {number|string}
+*/
 export const ALIGN = {
     TOP: 0,
     RIGHT: 1,
