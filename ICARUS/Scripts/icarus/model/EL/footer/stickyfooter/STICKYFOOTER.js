@@ -1,6 +1,11 @@
-﻿import FOOTER from '../FOOTER.js';
+﻿/**
+    @module
+*/
+import FOOTER from '../FOOTER.js';
 /**
     A Footer that sticks to bottom of page    
+    @class
+    @extends FOOTER
 */
 export default class STICKYFOOTER extends FOOTER {
     /**
@@ -15,15 +20,19 @@ export default class STICKYFOOTER extends FOOTER {
 
     /**
         Expands the footer to include context menu
+        @returns {STICKYFOOTER} This Stickyfooter
     */
     show() {
         this.addClass('active');
+        return this;
     }
 
     /**
         Shrinks the footer down to basics
+        @returns {STICKYFOOTER} This Stickyfooter
     */
     hide() {
         this.removeClass('active');
+        return this;
     }
 }

@@ -1,7 +1,10 @@
-﻿import TOKEN from '../formelement/input/TOKEN.js';
+﻿/**
+    @module
+*/
+import TOKEN from '../formelement/input/TOKEN.js';
 /**
     Represents the data object to be submitted to the server for validation.
-    @param {FORM} form An Icarus Form
+    @class    
 */
 export default class FORMPOST {
     /**

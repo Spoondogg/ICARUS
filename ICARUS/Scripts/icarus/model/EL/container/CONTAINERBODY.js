@@ -1,8 +1,12 @@
-﻿import EL from '../EL.js';
-import MODEL from '../../MODEL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL } from '../EL.js';
 /**
     Containers have a 'body' that can contain an optional sidebar
     and detect swipe events
+    @class
+    @extends EL
  */
 export default class CONTAINERBODY extends EL {
     /**
@@ -22,7 +26,7 @@ export default class CONTAINERBODY extends EL {
         this.xDown = null;
         this.yDown = null;
 
-        if (dev) {
+        /*if (dev) {
             this.pane.el.ondblclick = function (e) {
                 //node.toggleSidebar();
                 console.log('Launch Editor for ' + node.className + '(' + node.id + ')');
@@ -30,7 +34,7 @@ export default class CONTAINERBODY extends EL {
                 node.btnSave.el.click();
                 e.stopPropagation(); // Prevent parent double click()
             };
-        }
+        }*/
     }
 
     /**

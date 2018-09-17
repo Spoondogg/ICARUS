@@ -1,8 +1,13 @@
 ﻿/**
- * A vertical navitemgroup with a search panel
+    @module
+*/
+import MENU from './MENU.js';
+/**
+    A vertical navitemgroup with a search panel
+    @class
+    @extends MENU
  */
-class SIDEBARMENU extends MENU { // NAVBAR
-
+export default class SIDEBARMENU extends MENU { // NAVBAR
     /**
         A vertical navitemgroup with a search panel
         @param {CONTAINERBODY} node The CONTAINERBODY to contain the sidebar
@@ -37,7 +42,7 @@ class SIDEBARMENU extends MENU { // NAVBAR
 
     /**
         Show / Hide the Document Map Menu
-     */
+    */
     toggleDocumentMap() {
         //this.menu.toggle('in');
         $(this.menu.el).collapse('toggle');

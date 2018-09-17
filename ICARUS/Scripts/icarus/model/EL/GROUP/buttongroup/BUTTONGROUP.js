@@ -1,11 +1,15 @@
-﻿import GROUP from '../GROUP.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import GROUP from '../GROUP.js';
+import MODEL, { ATTRIBUTES } from '../../../MODEL.js';
 import BUTTON from '../../button/BUTTON.js';
 import TOGGLEBUTTON from '../../button/togglebutton/TOGGLEBUTTON.js';
-import MODEL from '../../../MODEL.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /**
     A container for Buttons
+    @class
+    @extends GROUP
 */
 export default class BUTTONGROUP extends GROUP {
     /**

@@ -1,9 +1,14 @@
-﻿import FORMELEMENT from '../FORMELEMENT.js';
-import EL, { MODEL } from '../../../EL.js';
-import ATTRIBUTES from '../../../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import FORMELEMENT from '../FORMELEMENT.js';
+import EL, { MODEL, ATTRIBUTES } from '../../../EL.js';
 import TEXTAREA from '../textarea/TEXTAREA.js';
+export { EL, MODEL, ATTRIBUTES };
 /**
-    Represents an <INPUT> for an Icarus Form
+    Represents an INPUT for an Icarus Form
+    @class
+    @extends FORMELEMENT
 */
 export default class INPUT extends FORMELEMENT {
     /**
@@ -17,8 +22,8 @@ export default class INPUT extends FORMELEMENT {
     }
 
     /**
-     * TODO:
-     * This should use a factory constructor pattern to create specific input types 
+        Creates an INPUT Element
+        @todo: This should use a factory constructor pattern to create specific input types 
      */
     createInput() {
         let nm = this.attributes.name || this.data.name;

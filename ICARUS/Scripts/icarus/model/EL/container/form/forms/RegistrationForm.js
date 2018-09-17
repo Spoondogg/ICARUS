@@ -1,4 +1,13 @@
-﻿import FORM from '../FORM.js';
+﻿/**
+    @module
+*/
+import FORM, { ATTRIBUTES } from '../FORM.js';
+
+/**
+    A Registration Form
+    @class
+    @extends FORM
+*/
 export default class RegistrationForm extends FORM {
     /**
         Constructs an Icarus Logout Form

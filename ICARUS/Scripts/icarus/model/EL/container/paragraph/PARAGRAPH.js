@@ -1,12 +1,17 @@
-﻿import CONTAINER from '../CONTAINER.js';
-import DATEOBJECT from '../../../../DATEOBJECT.js';
+﻿/**
+    @module
+*/
+import DATEOBJECT from '../../../../helper/DATEOBJECT.js';
 import HEADER from '../../header/HEADER.js';
 import MODEL from '../../../MODEL.js';
 import P from '../../p/P.js';
 import '../../../../StringMethods.js';
 import FORMPOSTINPUT from '../formelement/formpostinput/FORMPOSTINPUT.js';
+import CONTAINER from '../CONTAINER.js';
 /**
-    A banner that can be populated with CallOuts
+    A block of text
+    @class
+    @extends CONTAINER
 */
 export default class PARAGRAPH extends CONTAINER {
     /**
@@ -24,7 +29,7 @@ export default class PARAGRAPH extends CONTAINER {
     }
 
     /**
-        Constructs a Paragraph Container.
+        Constructs a Paragraph Container
     */
     construct() {        
         if (this.dataId > 0) {
@@ -36,9 +41,6 @@ export default class PARAGRAPH extends CONTAINER {
                 this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
             }
         } else {
-            // This object REQUIRES model.data 
-            // Open up the save panel and generate some
-            
             let formPostInput = new FORMPOSTINPUT(this, new MODEL().set({
                 'inputs': this.inputs
             }));

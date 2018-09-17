@@ -1,14 +1,18 @@
-﻿import LI from '../../group/li/LI.js';
+﻿/**
+    @module
+*/
+import LI from '../../group/li/LI.js';
 import ANCHOR from '../../anchor/ANCHOR.js';
 import ARTICLE from '../../container/article/ARTICLE.js';
 /**
     A navigation item that populates a Bootstrap 3 navbar.
-    Nav items can be single buttons or dropdowns with nav items nested within them  
-    
-    CORE ITEMS CAN NOT BECOME CONTAINERS...  STOP TRYING TO MAKE THEM THAT WAY
+    @description Nav items can be single buttons or dropdowns with nav items nested within them  
+    @class
+    @extends LI
 */
 export default class NAVITEMICON extends LI {
     /**
+        @constructs NAVITEMICON
         @param {EL} node The element that will contain this object
         @param {MODEL} model The nav-item json object retrieved from the server
      */
@@ -20,17 +24,17 @@ export default class NAVITEMICON extends LI {
         this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
         
         /* Add cases for each relevant constructor that inherited class does not have */
-        this.addCase('MENU', function (model) {
+        this.addCase('MENU', (model) => {
             return this.addMenu(model);
-        }.bind(this));
+        });
         
-        this.addCase('ANCHOR', function (model) {
+        this.addCase('ANCHOR', (model) => {
             return this.addAnchor(model);
-        }.bind(this));
+        });
 
-        this.addCase('ARTICLE', function (model) {
+        this.addCase('ARTICLE', (model) => {
             return this.addArticle(model);
-        }.bind(this));
+        });
     }
 
     /**
@@ -40,16 +44,6 @@ export default class NAVITEMICON extends LI {
      */
     addMenu(model) {
         this.children.push(new MENU(this, model));
-        return this.children[this.children.length - 1];
-    }
-
-    /**
-        Add an Anchor to this NavItem
-        @param {ANCHOR} model Anchor model
-        @returns {MENU} The newly created element
-     */
-    addAnchor(model) {
-        this.children.push(new ANCHOR(this, model));
         return this.children[this.children.length - 1];
     }
 

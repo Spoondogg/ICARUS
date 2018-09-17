@@ -1,9 +1,14 @@
-﻿import FOOTER from '../../footer/FOOTER.js';
+﻿/**
+    @module
+*/
+import FOOTER from '../../footer/FOOTER.js';
 import BUTTONGROUP from '../../group/buttongroup/BUTTONGROUP.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 import { SIZE } from '../../../../enums/SIZE.js';
 /**
     A generic footer that should be placed at the bottom of content
+    @class
+    @extends FOOTER
 */
 export default class FORMFOOTER extends FOOTER {
     /**

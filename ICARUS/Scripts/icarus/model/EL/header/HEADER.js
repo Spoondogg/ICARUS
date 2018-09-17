@@ -1,7 +1,12 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL } from '../EL.js';
 import BUTTONGROUP from '../group/buttongroup/BUTTONGROUP.js';
 /**
     A generic header that should be placed at the top of content    
+    @class
+    @extends EL
 */
 export default class HEADER extends EL {
     /**

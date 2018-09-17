@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
     A generic footer that should be placed at the bottom of content
+    @class
+    @extends EL
 */
 export default class FOOTER extends EL {
     /**

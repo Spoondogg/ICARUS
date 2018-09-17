@@ -5,15 +5,12 @@ namespace ICARUS.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<ICARUS.Controllers.ObjectDBContext>
-    {
-        public Configuration()
-        {
+    internal sealed class Configuration : DbMigrationsConfiguration<ICARUS.Controllers.ObjectDBContext> {
+        public Configuration() {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(ICARUS.Controllers.ObjectDBContext context)
-        {
+        protected override void Seed(ICARUS.Controllers.ObjectDBContext context) {
             //  This method will be called after migrating to the latest version.
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 

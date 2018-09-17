@@ -1,7 +1,12 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 /**
- * A vertical navitemgroup with a search panel
- */
+    A vertical navitemgroup with a search panel
+    @class
+    @extends CONTAINER
+*/
 export default class SIDEBAR extends CONTAINER { // NAVBAR
 
     /**

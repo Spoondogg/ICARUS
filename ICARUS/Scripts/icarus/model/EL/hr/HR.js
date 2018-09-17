@@ -1,4 +1,7 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL from '../EL.js';
 /**
     A horizontal ruler
 */

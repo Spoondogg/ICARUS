@@ -1,11 +1,16 @@
-﻿import ATTRIBUTES from '../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import ATTRIBUTES from '../../ATTRIBUTES.js';
 import EL, { MODEL } from '../EL.js';
 import CONTAINER from '../container/CONTAINER.js';
 import HEADER from '../header/HEADER.js';
 import WELL from '../p/WELL.js';
 /**
     A Bootstrap 3 Modal
-    https://www.w3schools.com/bootstrap/bootstrap_modal.asp    
+    @see https://www.w3schools.com/bootstrap/bootstrap_modal.asp    
+    @class
+    @extends EL
 */
 export default class MODAL extends EL { // ALIGN VERTICALLY??
     /**
@@ -124,5 +129,18 @@ export default class MODAL extends EL { // ALIGN VERTICALLY??
         if (text) {
             this.well.el.innerHTML = text;
         }
+    }
+
+    /**
+        Modals can not return a Container. 
+        @returns {null} A modal can not return a Container
+    */
+    getContainer() {
+        console.warn(
+            'You are attempting to get the Container of a modal, '
+            + 'however a Modal does not have a parent Container '
+            + 'because it belongs to document.body'
+        );
+        return null;
     }
 }

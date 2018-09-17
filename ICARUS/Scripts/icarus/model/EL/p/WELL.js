@@ -1,6 +1,12 @@
-﻿import P from './P.js';
+﻿/**
+    @module
+*/
+import P from './P.js';
+
 /**
     A block of text contained within a Well.
+    @class
+    @extends P
  */
 export default class WELL extends P {
     /**

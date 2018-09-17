@@ -1,8 +1,13 @@
-﻿import SPAN from './SPAN.js';
+﻿/**
+    @module
+*/
+import SPAN from './SPAN.js';
 import MODEL from '../../MODEL.js';
 import ATTRIBUTES from '../../ATTRIBUTES.js';
 /**
     Bootstrap style buttons, groups etc
+    @class
+    @extends SPAN
 */
 export default class GLYPHICON extends SPAN {
     /**

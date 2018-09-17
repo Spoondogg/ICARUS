@@ -1,14 +1,19 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 import HEADER from '../../header/HEADER.js';
 import HR from '../../hr/HR.js';
 import P from '../../p/P.js';
-import EL from '../../EL.js';
-import MODEL from '../../../MODEL.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
+import EL, { MODEL, ATTRIBUTES } from '../../EL.js';
 /**
-    A lightweight, flexible component that can optionally extend the entire 
+    A full width Container with a fixed height
+    @description A lightweight, flexible component that can optionally extend the entire 
     viewport to showcase key content on your site.
-    See https://getbootstrap.com/docs/3.3/components/#jumbotron }
+    @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
+
+    @class
+    @extends CONTAINER
 */
 export default class JUMBOTRON extends CONTAINER {
     /**
@@ -19,19 +24,15 @@ export default class JUMBOTRON extends CONTAINER {
     constructor(node, model) {
         super(node, 'DIV', model);
         this.body.pane.addClass('jumbotron');
-        //this.construct();
-        //this.populate(model.children);
     }
 
     /**
-     * Override abstract method
+        Override abstract method
      */
     construct() {
         if (this.dataId > 0) {
             this.screen = new EL(this.body.pane, 'DIV', new MODEL(new ATTRIBUTES('screen')));
-            console.log('screen');
             if (this.data.screencolor && this.data.screencolor !== '.') {
-                console.log(this.data.screencolor);
                 this.screen.el.setAttribute('style', 'background-color: '+this.data.screencolor+';');
             }
 

@@ -1,9 +1,12 @@
-﻿import INPUT from '../INPUT.js';
-import MODEL from '../../../../../MODEL.js';
-import ATTRIBUTES from '../../../../../ATTRIBUTES.js';
+﻿/**
+    @module
+*/
+import INPUT, { EL, MODEL, ATTRIBUTES } from '../INPUT.js';
 import TEXTAREA from '../../textarea/TEXTAREA.js';
 /**
-    Represents an file <INPUT> for an Icarus Form
+    A file INPUT element for a FORM Container
+    @class
+    @extends INPUT
 */
 export default class FILE extends INPUT {
     /**
@@ -19,6 +22,9 @@ export default class FILE extends INPUT {
             })
         ));
 
+        /**
+            @property {TEXTAREA} base64 A textarea to hold a base64 encoded string
+        */
         this.base64 = new TEXTAREA(this.body.pane, new MODEL().set({
             'name':'base64'
         }));

@@ -22,10 +22,15 @@ bld/
 [Oo]bj/
 [Ll]og/
 
+# ICARUS Build Folders to Ignore
+Documentation/
+Scripts/icarus/bundles
+Scripts/icarus/_deprec
+api/
+
+
 # Visual Studio 2015 cache/options directory
 .vs/
-# Uncomment if you have tasks that create the project's static files in wwwroot
-#wwwroot/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

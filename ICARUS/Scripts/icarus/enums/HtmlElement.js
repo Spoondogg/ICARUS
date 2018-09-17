@@ -1,6 +1,8 @@
 ﻿/**
- * Supported HTML 5 Elements
- */
+    Supported HTML 5 Elements
+    @readonly
+    @enum {string}
+*/
 export const HtmlElement = {
     DEFAULT: "DIV",
     DIV: "DIV",

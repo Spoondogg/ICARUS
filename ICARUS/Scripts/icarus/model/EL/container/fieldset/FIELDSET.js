@@ -1,8 +1,12 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 import EL, { MODEL } from '../../EL.js';
-//import MODEL from '../../../MODEL.js';
 /**
     Construct a Form Fieldset
+    @class
+    @extends CONTAINER
 */
 export default class FIELDSET extends CONTAINER {
     /**

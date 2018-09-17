@@ -152,12 +152,12 @@ namespace ICARUS.Controllers {
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        // http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2 [Authorize]
+        
         /// <summary>
         /// Returns a list of Container Ids that contain this container
-        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
-        /// [Authorize]
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Page</returns>
         public virtual async Task<ActionResult> Page(
             string page = "0", string pageLength = "10"
         ) {
@@ -195,12 +195,15 @@ namespace ICARUS.Controllers {
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
+
+        // http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2 [Authorize]
+
         /// <summary>
         /// Returns a list of Container Ids that contain this container
-        /// ie http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2
-        /// [Authorize]
         /// </summary>
-        /// <returns></returns>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
+        /// <returns>A Json PageIndex</returns>
         public virtual async Task<ActionResult> PageIndex(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);
@@ -233,7 +236,7 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Returns a list of Container Ids that contain this container
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Json Object</returns>
         [Authorize]
         public virtual async Task<ActionResult> GetContainerParents(int id = -1) {
             List<string> columns = new List<string>();
@@ -245,16 +248,13 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(1, "id", id));
 
             Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
-
-            //List<Dictionary<string, string>> records = this.Call(procedure);
-
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
         /// Create an instance of a Container on the database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Json Object</returns>
         [Authorize]
         public override async Task<ActionResult> Create() {
             try {
@@ -277,7 +277,7 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Create an instance of a Container on the database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A View</returns>
         [Authorize(Roles = "Dev,Admin")]
         public ActionResult Debug() {
             try {
@@ -303,8 +303,8 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Create an instance of a Container on the database based on the given formPost
         /// </summary>
-        /// <param name="formPost"></param>
-        /// <returns></returns>
+        /// <param name="formPost">FormPost</param>
+        /// <returns>A Json Object</returns>
         public override async Task<ActionResult> Create(FormPost formPost) {
             try {
                 var model = make();
@@ -327,8 +327,8 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Sets the value of the target object based on the given formPost values
         /// </summary>
-        /// <param name="formPost"></param>
-        /// <returns></returns>
+        /// <param name="formPost">FormPost</param>
+        /// <returns>A Json Object</returns>
         public override async Task<ActionResult> Set(FormPost formPost) {
             try {
 
@@ -387,10 +387,11 @@ namespace ICARUS.Controllers {
         /// 
         /// Be sure to update any dependant objects as well, or prevent the change
         /// 
+        /// [HttpGet]  // TODO: Secure as HttpPost 
+        /// 
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //[HttpGet]  // TODO: Secure as HttpPost 
+        /// <param name="id">id</param>
+        /// <returns>A Json Object</returns>
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Dev,Admin")] //Authorize
         public virtual async Task<ActionResult> Disable(int id) {
             string message = "";

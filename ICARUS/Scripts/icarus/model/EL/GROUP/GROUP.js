@@ -1,6 +1,11 @@
-﻿import EL from '../EL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL } from '../EL.js';
 /**
     A grouping of list items
+    @class
+    @extends EL
  */
 export default class GROUP extends EL {
     /**
@@ -8,7 +13,7 @@ export default class GROUP extends EL {
         @param {EL} node The element that will contain this object
         @param {string} element HTML Element 
         @param {MODEL} model The json object representing this element
-     */
+    */
     constructor(node, element, model) {
         super(node, element, model);
         if (model.name) {

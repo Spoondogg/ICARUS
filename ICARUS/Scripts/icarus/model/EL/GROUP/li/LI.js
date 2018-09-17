@@ -1,6 +1,12 @@
-﻿import EL from '../../EL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL } from '../../EL.js';
+import ANCHOR from '../../anchor/ANCHOR.js';
 /**
     List Item Constructor
+    @class
+    @extends EL
 */
 export default class LI extends EL {
     /**
@@ -10,5 +16,14 @@ export default class LI extends EL {
      */
     constructor(node, model) {
         super(node, 'LI', model, model.label);
+    }
+    /**
+        Add an Anchor to this element
+        @param {ANCHOR} model Anchor model
+        @returns {MENU} The newly created element
+     */
+    addAnchor(model) {
+        this.children.push(new ANCHOR(this, model));
+        return this.children[this.children.length - 1];
     }
 }

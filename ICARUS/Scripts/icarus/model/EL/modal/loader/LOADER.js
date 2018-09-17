@@ -1,11 +1,14 @@
-﻿import CONSOLE from '../../group/ul/console/CONSOLE.js';
-import EL from '../../EL.js';
+﻿/**
+    @module
+*/
+import CONSOLE from '../../group/ul/console/CONSOLE.js';
+import EL, { MODEL, ATTRIBUTES } from '../../EL.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 import MODAL from '../MODAL.js';
-import MODEL from '../../../MODEL.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
 /**
     A Loader type modal.
+    @class
+    @extends MODAL
 */
 export default class LOADER extends MODAL {
     /**
@@ -87,15 +90,15 @@ export default class LOADER extends MODAL {
     }
 
     /**
-     * Shows the Loader Console
-     */
+        Shows the Loader Console
+    */
     showConsole() {
         $(this.console.el).collapse('show');
     }
 
     /**
-     * Hides the Loader Console
-     */
+        Hides the Loader Console
+    */
     hideConsole() {
         $(this.console.el).collapse('hide');
     }

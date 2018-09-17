@@ -1,9 +1,13 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 /**
     A generic SECTION within an ARTICLE.
-
-    A SECTION represents a container that can be expanded or hidden and
+    @description A SECTION represents a container that can be expanded or hidden and
     have elements added to itself.    
+    @class
+    @extends CONTAINER
 */
 export default class SECTION extends CONTAINER {
     /**

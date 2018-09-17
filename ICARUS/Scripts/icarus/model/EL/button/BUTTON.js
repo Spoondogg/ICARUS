@@ -1,8 +1,12 @@
-﻿import EL, { MODEL } from '../EL.js';
+﻿/**
+    @module
+*/
+import EL, { MODEL, ATTRIBUTES } from '../EL.js';
 import GLYPHICON from '../span/GLYPHICON.js';
-import ATTRIBUTES from '../../ATTRIBUTES.js';
 /**
     A generic Bootstrap button    
+    @class
+    @extends EL
 */
 export default class BUTTON extends EL {
     /**
@@ -24,8 +28,9 @@ export default class BUTTON extends EL {
         @param {string} glyphicon Glyphicon string or ICON.ENUM
      */
     setLabel(label, glyphicon) {
-        console.log('setLabel(' + label + ')');
-        this.icon.setIcon(glyphicon);
         this.icon.label.setInnerHTML(label);
+        if (glyphicon) {
+            this.icon.setIcon(glyphicon);
+        }        
     }
 }

@@ -1,29 +1,31 @@
-﻿import CONTAINER from '../CONTAINER.js';
-import EL, { MODEL } from '../../EL.js';
+﻿/**
+    @module
+*/
+import CONTAINERFACTORY, { FORM, TOKEN } from '../CONTAINERFACTORY.js';
+import CONTAINER, { PROMPT } from '../CONTAINER.js';
+import EL, { MODEL, ATTRIBUTES } from '../../EL.js';
 import LOADER from '../../modal/loader/LOADER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
-import { ICONS } from '../../../../enums/ICONS.js';
-import ATTRIBUTES from '../../../ATTRIBUTES.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
-import CONTAINERFACTORY, { FORM, TOKEN } from '../CONTAINERFACTORY.js';
-//import TOKEN from '../formelement/input/TOKEN.js';
-import DEBUG from '../../../../DEBUG.js';
-import PROMPT from '../../modal/prompt/PROMPT.js';
 import INPUT from '../formelement/input/INPUT.js';
+import { ICONS } from '../../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../../enums/INPUTTYPES.js';
 export { LOADER };
+
 /**
     A top level View that holds all other child Containers
+    @class
+    @extends CONTAINER
 */
 export default class MAIN extends CONTAINER {
     /**
-        Constructs a MAIN Container
+        Constructs a MAIN Container and populates the DOM
+        with any relevant elements
+        @constructor
         @param {MODEL} model APP model
      */
     constructor(model) {
-
         document.title = model.label;        
-        
         super(document.body, 'MAIN', model, [
             'ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
             'IMAGEGALLERY', 'DICTIONARY', 'WORD'
@@ -34,13 +36,24 @@ export default class MAIN extends CONTAINER {
 
         /**
             The LOADER exists outside of the Container
+            @property {LOADER} loader The MAIN Loader modal
         */
         this.loader = model.loader;
-        
 
+        /**
+            Browser Url
+            @property {Url} url The browser url
+        */
+        this.url = model.url;
+        
+        /**
+            A Sidebar for details and navigation
+            @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
+        */
         this.sidebar = new SIDEBAR(this, new MODEL().set({
             'label': 'Left Sidebar'
         }));    
+
 
         this.addNavOptions();
         
@@ -192,14 +205,67 @@ export default class MAIN extends CONTAINER {
         @todo This should be a POST to avoid CSRF
     */
     newMain() {
+        console.log('Launching new tab');
         $.getJSON('/MAIN/Get/0', function (payload) {
             console.log('Created MAIN', payload);
-            setTimeout(function () {
-                location.href = '/' + payload.model.id;
-            }.bind(this), 1000);
-        });
 
-        
+            /**
+                Prompts the user to open the new page.
+                In order to avoid popup blocking, the user must 
+                manually click to be redirected or launch a new
+                page in this window
+            */
+            let url = '/' + payload.model.id;
+            //var redirectWindow = window.open('/' + payload.model.id, '_blank');
+            //redirectWindow.location;
+
+            //location.href = '/' + payload.model.id;
+            //window.open('/' + payload.model.id);
+
+            //this.openInNewTab('/' + payload.model.id);
+
+            let prompt = new PROMPT('New Page',
+                'A new page has been created at <a href="'
+                + url + '" target="_blank">' + url + '</a>'
+            );
+
+            let button = prompt.form.footer.buttonGroup.children[0];
+            button.setLabel('Open in new Window?');
+            button.el.onclick = function () {
+                window.open(url, '_blank');
+                prompt.hide(300, true);
+            }.bind(this);
+
+            prompt.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = function () {
+                location.href = url;
+                prompt.hide(300, true);
+            };
+
+            /*
+            let anchor = new EL(prompt.container, 'A', new MODEL(new ATTRIBUTES({
+                'href': url,
+                'target': '_blank'
+            })), 'GO!!!');
+            */
+
+            prompt.show();
+        }.bind(this));        
+    }
+
+    /**
+        Overrides CONTAINER.getContainer() and returns this MAIN Container
+        @returns {MAIN} The MAIN Container
+    */
+    getContainer() {
+        return this;
+    }
+
+    /**
+        Overrides CONTAINER.getMainContainer() and returns this MAIN Container
+        @returns {MAIN} The MAIN Container
+    */
+    getMainContainer() {
+        return this;
     }
 
     /**
@@ -217,6 +283,7 @@ export default class MAIN extends CONTAINER {
     /**
         Loads the specified app id into the Main Container
         @param {number} id App Id to load
+        @returns {MAIN} This MAIN
     */
     load(id = 1) {
         let returnUrl = this.url.searchParams.get('ReturnUrl');
@@ -229,6 +296,7 @@ export default class MAIN extends CONTAINER {
         // Eventually create a simple application browser
         // Retrieve Main
         $.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
+        return this;
     }
 
     /**

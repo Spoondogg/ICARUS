@@ -1,8 +1,13 @@
-﻿import CONTAINER from '../CONTAINER.js';
+﻿/**
+    @module
+*/
+import CONTAINER from '../CONTAINER.js';
 import HEADER from '../../header/HEADER.js';
 import MODEL from '../../../MODEL.js';
 /**
     A word used in a Vocabulary
+    @class
+    @extends CONTAINER
 */
 export default class WORD extends CONTAINER {
     /**
