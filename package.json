@@ -5,5 +5,8 @@
   "scripts": {},
   "author": "",
   "license": "",
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {
+    "gulp": "^3.9.1"
+  }
 }

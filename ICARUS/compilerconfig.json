@@ -1,12 +1,12 @@
 ﻿[
-  {
+  /*{
     "outputFile": "Content/css/icarus/scss/icarus.css",
     "inputFile": "Content/css/icarus/scss/icarus.scss",
     "options": {
       "sourceMap": true
     }
-  }/*,
-  {
+  },*/
+  /*{
     "outputFile": "Scripts/icarus/icarus-ES5.js",
     "inputFile": "Scripts/icarus/icarus-ES6.js",
     "options": {
