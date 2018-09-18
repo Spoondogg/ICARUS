@@ -1,4 +1,4 @@
-﻿/**
+/**
     @module
 */
 import EL from '../EL.js';
@@ -8,15 +8,15 @@ import EL from '../EL.js';
     @extends EL
 */
 export default class IMG extends EL {
-    /**
-        Constructs a Paragraph
-        @param {EL} node The object to contain this element
-        @param {MODEL} model The object
-     */
-    constructor(node, model){
-        super(node, 'IMG', model);
-        if (dev) {
-            this.el.ondblclick = this.edit.bind(this);
-        }
-    }
+	/**
+	    Constructs a Paragraph
+	    @param {EL} node The object to contain this element
+	    @param {MODEL} model The object
+	 */
+	constructor(node, model) {
+		super(node, 'IMG', model);
+		if (dev) {
+			this.el.ondblclick = this.edit.bind(this);
+		}
+	}
 }

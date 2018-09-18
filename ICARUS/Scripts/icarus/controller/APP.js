@@ -1,10 +1,11 @@
 /** 
     @module 
 */
-import WATERMARK from '../helper/WATERMARK.js';
-import CONTAINERFACTORY, { TOKEN, MODEL } from '../model/el/container/CONTAINERFACTORY.js';
-import MAIN from '../model/el/container/main/MAIN.js';
 import LOADER from '../model/el/modal/loader/LOADER.js';
+import MAIN from '../model/el/container/main/MAIN.js';
+import MODEL from '../model/MODEL.js';
+import TOKEN from '../model/el/container/formelement/input/TOKEN.js';
+import WATERMARK from '../helper/WATERMARK.js';
 /**
     @class
     @extends Object
@@ -26,6 +27,9 @@ export default class APP extends Object {
 		this.name = 'Icarus';
 		this.version = '0.5.20180909';
 		this.token = TOKEN.getToken().value;
+		/**
+		    @property {Url} url An Url object
+		*/
 		this.url = new URL(window.location.href);
 		/**
 		    @property {boolean} debug If true, debug outputs are shown
@@ -49,9 +53,9 @@ export default class APP extends Object {
 		    @property {MAIN} main The MAIN Container
 		*/
 		this.main = new MAIN(new MODEL().set({
-			'id': id,
-			'user': user,
-			'dev': dev,
+			id: id,
+			user: user,
+			dev: dev,
 			'label': '', //this.name + ' : ' + this.version,
 			'loader': this.loader,
 			'token': this.token,
