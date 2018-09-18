@@ -1,16 +1,7 @@
-﻿/**
+/**
     @module
 */
 import APP from './APP.js';
-
-
-
-
-
-
-
-
-
 /**
     @name init Initializes the Application
     @description 
@@ -20,4 +11,3 @@ import APP from './APP.js';
     </ul>
 */
 var app = new APP(id, user, dev).showLoginPrompt().main.load(id);
-// woot

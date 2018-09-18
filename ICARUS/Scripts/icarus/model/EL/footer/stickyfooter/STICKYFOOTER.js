@@ -1,4 +1,4 @@
-﻿/**
+/**
     @module
 */
 import FOOTER from '../FOOTER.js';
@@ -8,31 +8,29 @@ import FOOTER from '../FOOTER.js';
     @extends FOOTER
 */
 export default class STICKYFOOTER extends FOOTER {
-    /**
-        Constructs a footer stuck to the bottom of the viewpane
-        @param {EL} node The object to contain the table
-        @param {MODEL} model stickyfooter model
-     */
-    constructor(node, model) {
-        super(node, model);
-        this.el.setAttribute('class', 'stickyfooter');
-    }
-
-    /**
-        Expands the footer to include context menu
-        @returns {STICKYFOOTER} This Stickyfooter
-    */
-    show() {
-        this.addClass('active');
-        return this;
-    }
-
-    /**
-        Shrinks the footer down to basics
-        @returns {STICKYFOOTER} This Stickyfooter
-    */
-    hide() {
-        this.removeClass('active');
-        return this;
-    }
+	/**
+	    Constructs a footer stuck to the bottom of the viewpane
+	    @param {EL} node The object to contain the table
+	    @param {MODEL} model stickyfooter model
+	 */
+	constructor(node, model) {
+		super(node, model);
+		this.el.setAttribute('class', 'stickyfooter');
+	}
+	/**
+	    Expands the footer to include context menu
+	    @returns {STICKYFOOTER} This Stickyfooter
+	*/
+	show() {
+		this.addClass('active');
+		return this;
+	}
+	/**
+	    Shrinks the footer down to basics
+	    @returns {STICKYFOOTER} This Stickyfooter
+	*/
+	hide() {
+		this.removeClass('active');
+		return this;
+	}
 }

@@ -1,4 +1,4 @@
-﻿/**
+/**
     @module
 */
 import EL from '../EL.js';
@@ -8,12 +8,12 @@ import EL from '../EL.js';
     @extends EL
 */
 export default class FOOTER extends EL {
-    /**
-        Constructs a generic footer.
-        @param {EL} node The object to contain the footer
-        @param {MODEL} model The object model
-     */
-    constructor(node, model) {
-        super(node, 'FOOTER', model);
-    }    
+	/**
+	    Constructs a generic footer.
+	    @param {EL} node The object to contain the footer
+	    @param {MODEL} model The object model
+	 */
+	constructor(node, model) {
+		super(node, 'FOOTER', model);
+	}
 }

@@ -1,4 +1,4 @@
-﻿/**
+/**
     @module
 */
 import CONTAINER from '../CONTAINER.js';
@@ -10,17 +10,14 @@ import CONTAINER from '../CONTAINER.js';
     @extends CONTAINER
 */
 export default class SECTION extends CONTAINER {
-    /**
-        Constructs a SECTION Container Element
-        @param {ARTICLE} node The ARTICLE to contain the section
-        @param {MODEL} model The SECTION object retrieves from the server
-     */
-    constructor(node, model) {
-        super(node, 'SECTION', model, ['FORM']);
-        this.populate(model.children);
-    }
-
-    construct() {
-
-    }
+	/**
+	    Constructs a SECTION Container Element
+	    @param {ARTICLE} node The ARTICLE to contain the section
+	    @param {MODEL} model The SECTION object retrieves from the server
+	 */
+	constructor(node, model) {
+		super(node, 'SECTION', model, ['FORM']);
+		this.populate(model.children);
+	}
+	construct() {}
 }
