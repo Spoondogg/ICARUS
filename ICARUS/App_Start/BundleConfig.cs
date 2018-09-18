@@ -9,6 +9,12 @@ namespace ICARUS {
     /// </summary>
     public class BundleConfig {
         
+        /// <summary>
+        /// Server Side Bundling
+        /// This should be replaced with a Gulp task
+        /// (All build tasks should be ran through Gulp where possible)
+        /// </summary>
+        /// <param name="bundles"></param>
         public static void RegisterBundles(BundleCollection bundles) {
 
             // JS MEGA BUNDLE
@@ -24,7 +30,8 @@ namespace ICARUS {
             bundles.Add(new StyleBundle("~/Content/css/styles.css").Include(
                 "~/Content/css/bootstrap/bootstrap.css",
                 "~/Content/css/animate/animate.css",
-                "~/Content/css/icarus/scss/icarus.css"
+                //"~/Content/css/icarus/scss/icarus.css"
+                "~/Content/css/icarus/css/icarus.css"
             ));
 
             ////////////////
