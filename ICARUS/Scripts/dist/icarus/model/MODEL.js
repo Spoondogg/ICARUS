@@ -1,0 +1,2 @@
+import ATTRIBUTES from"./ATTRIBUTES.js";export default class MODEL{constructor(t,e,o){this.attributes="string"==typeof t?new ATTRIBUTES(t):t||new ATTRIBUTES,this.data=e||new ATTRIBUTES,this.description=o||new ATTRIBUTES}set(t,e){if("string"==typeof t)try{return this[t]=void 0===e?t:e,this}catch(t){throw console.log("Unable to set property of this MODEL"),t}for(let e in t)"string"==typeof e&&(this[e]=t[e]);return this}get(t){try{return this[t]}catch(e){console.log('Unable to get property "'+t+'" of this MODEL.',e)}}}export{ATTRIBUTES};
+//# sourceMappingURL=MODEL.js.map

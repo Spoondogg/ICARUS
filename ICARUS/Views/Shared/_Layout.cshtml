@@ -13,20 +13,19 @@
     <meta name="theme-color" content="#FFF" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts *@
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
-    @Styles.Render("~/Content/css/styles.css")
-    @Scripts.Render("~/bundles/scripts.js")
+    <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/vendor.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/icarus/icarus.min.css")" />
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
-    <link rel="manifest" href="/manifest.json">
+    <script src="@Url.Content("~/Scripts/dist/vendor.js")"></script>
 </head>
 <body>
-    @* The AntiForgery Token is required on ALL pages *@
-    @Html.AntiForgeryToken()
-
+    @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
-    @if (IsSectionDefined("NoScript")) {
+    @if (IsSectionDefined("NoScript")) {  
         @RenderSection("NoScript", required: false)
     } else {
         <noscript>

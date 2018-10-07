@@ -1,0 +1,2 @@
+import CONTAINER,{ATTRIBUTES,DATAELEMENTS,EL,MODEL}from"../CONTAINER.js";import P from"../../p/P.js";export default class TEXTBLOCK extends CONTAINER{constructor(t,e){super(t,"DIV",e),this.addClass("textblock"),this.body.pane.addClass("container"),this.dataElements=DATAELEMENTS.TEXTBLOCK,this.row=new EL(this.body.pane,"DIV",new MODEL(new ATTRIBUTES("row"))),this.col=new EL(this.row,"DIV",new MODEL(new ATTRIBUTES("col-lg-offset-2 col-lg-8"))),e.dataId>0&&(this.text=new P(this.col,e.data,e.data.text)),this.populate(e.children)}}
+//# sourceMappingURL=TEXTBLOCK.js.map

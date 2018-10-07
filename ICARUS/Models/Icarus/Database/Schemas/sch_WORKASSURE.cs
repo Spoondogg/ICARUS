@@ -4,14 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 namespace ICARUS.Models.Icarus.Schemas {
-
     /// <summary>
     /// A Work Assure schema based on PROD feeds
     /// </summary>
     public class sch_WORKASSURE : IcarusSchema {
-
         /// <summary>
         /// Constructs a generic Logging schema
         /// </summary>

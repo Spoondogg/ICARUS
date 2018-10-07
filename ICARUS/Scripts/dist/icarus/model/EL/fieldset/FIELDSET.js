@@ -1,0 +1,2 @@
+import CONTAINER,{ATTRIBUTES,EL,MODEL}from"../container/CONTAINER.js";import LEGEND from"../legend/LEGEND.js";export default class FIELDSET extends CONTAINER{constructor(t,E){super(t,"FIELDSET",E,["FORMELEMENTGROUP"]),this.addClass("form-group-container"),this.body.addClass("form-group"),this.populate(E.children)}construct(){this.dataId>0&&this.data.legend&&(this.legend=new LEGEND(this.body.pane,new MODEL,this.data.legend))}}export{ATTRIBUTES,EL,MODEL};
+//# sourceMappingURL=FIELDSET.js.map

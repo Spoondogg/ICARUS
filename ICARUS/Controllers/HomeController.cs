@@ -32,7 +32,7 @@ namespace ICARUS.Controllers {
 
             ViewBag.Version = "0.2.2018.05.22";
 
-            /// TODO: This should be its own fork.  This is bad practice
+            /// TODO: This should be its own fork.  This is VERY bad practice
             if (Request.Url.Authority.Contains("johnsautocare")) {
                 id = 2819;
                 ViewBag.id = id;

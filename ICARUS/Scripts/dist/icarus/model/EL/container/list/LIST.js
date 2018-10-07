@@ -1,0 +1,2 @@
+import CONTAINER from"../CONTAINER.js";import LISTITEM from"./listitem/LISTITEM.js";export default class LIST extends CONTAINER{constructor(t,s){super(t,"UL",s,["LISTITEM"]),this.addClass("list"),this.populate(s.children)}construct(){}addListItem(t){return this.children.push(new LISTITEM(this,t)),this.addGroup(this.children[this.children.length-1])}}export{LISTITEM};
+//# sourceMappingURL=LIST.js.map
