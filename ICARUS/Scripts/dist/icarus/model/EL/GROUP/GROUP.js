@@ -1,0 +1,2 @@
+import EL,{ATTRIBUTES,MODEL}from"../EL.js";export default class GROUP extends EL{constructor(s,t,e){super(s,t,e);try{e.name&&(this.name=e.name,this.el.setAttribute("name",e.name))}catch(s){console.log("Why is this happening? GROUP.js",this,s)}this.groups={}}getGroup(s){return this.groups[s]}addGroup(s){return this.groups[s.name]=s,this.groups[s.name]}setGroup(s){return void 0===this.groups[name]&&(this.groups[s.name]=s),this.groups[s.name]}}export{ATTRIBUTES,EL,GROUP,MODEL};
+//# sourceMappingURL=GROUP.js.map

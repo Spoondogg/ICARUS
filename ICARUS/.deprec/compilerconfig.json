@@ -1,0 +1,20 @@
+﻿[
+  /*{
+    "outputFile": "Content/css/icarus/icarus.css",
+    "inputFile": "Content/css/icarus/icarus.scss",
+    "options": {
+      "sourceMap": true
+    }
+  },*/
+  /*{
+    "outputFile": "Scripts/icarus/icarus-ES5.js",
+    "inputFile": "Scripts/icarus/icarus-ES6.js",
+    "options": {
+      "sourceMap": true
+    },
+    "minify": {
+      "enabled": true
+      //"commentMode": "all"
+    }
+  }*/
+]

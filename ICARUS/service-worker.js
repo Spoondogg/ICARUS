@@ -1,15 +1,19 @@
-﻿// https://developers.google.com/web/fundamentals/primers/service-workers/
-// https://developers.google.com/web/fundamentals/web-app-manifest/
-/**
-    A collection of scripts, stylesheets and images that 
-    can be cached
+﻿/**
+    A collection of scripts, stylesheets and images that can be cached
+    @see https://developers.google.com/web/fundamentals/primers/service-workers/
+    @see https://developers.google.com/web/fundamentals/web-app-manifest/
 */
 var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
     'https://fonts.googleapis.com/css?family=Lato|Raleway',
-    '/bundles/scripts.js',
-    //'/Scripts/icarus/icarus.js',
-    '/Content/css/styles.css',
+    '/Scripts/dist/icarus/vendor.js',
+    '/Content/styles/dist/icarus/vendor.css',
+    '/Content/styles/dist/icarus/icarus.min.css',
+    '/Content/styles/fonts/glyphicons-halflings-regular.eot',
+    '/Content/styles/fonts/glyphicons-halflings-regular.svg',
+    '/Content/styles/fonts/glyphicons-halflings-regular.ttf',
+    '/Content/styles/fonts/glyphicons-halflings-regular.woff',
+    '/Content/styles/fonts/glyphicons-halflings-regular.woff2',
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'
 ];
@@ -36,15 +40,11 @@ self.addEventListener('fetch', function (event) {
                     return response;
                 }
                 return fetch(event.request);
-            }
-            )
-    );
+            }));
 });
 
 self.addEventListener('activate', function (event) {
-
-    var cacheWhitelist = ['icarus-cache-v1']; //, 'blog-posts-cache-v1'
-
+    var cacheWhitelist = ['icarus-cache-v1'];
     event.waitUntil(
         caches.keys().then(function (cacheNames) {
             return Promise.all(
@@ -52,10 +52,8 @@ self.addEventListener('activate', function (event) {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
                         return caches.delete(cacheName);
                     }
-                })
-            );
-        })
-    );
+                }));
+        }));
 });
 
 // https://developers.google.com/web/fundamentals/app-install-banners/

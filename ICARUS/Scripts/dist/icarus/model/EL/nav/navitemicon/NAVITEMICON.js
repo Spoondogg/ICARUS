@@ -1,0 +1,2 @@
+import LI,{ANCHOR}from"../../li/LI.js";import MENU from"../menu/MENU.js";export default class NAVITEMICON extends LI{constructor(t,s){super(t,s),this.className="NAVITEMICON",this.addClass("nav-item-icon"),this.el.setAttribute("title",s.anchor.label),this.anchor=s.anchor?new ANCHOR(this,s.anchor):null,this.addCase("MENU",()=>this.addMenu(s)),this.addCase("ANCHOR",()=>this.addAnchor(s))}addMenu(t){return this.children.push(new MENU(this,t)),this.children[this.children.length-1]}}
+//# sourceMappingURL=NAVITEMICON.js.map
