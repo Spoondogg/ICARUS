@@ -1,4 +1,4 @@
-/** 
+/**
     @module 
 */
 import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
@@ -22,8 +22,8 @@ export default class CONTROLLER extends MODEL {
 	        @param {string} version The application version
 	        @param {string} token The session token
 	        @param {CONTAINERFACTORY} factory The container constructor factory 
-		*/
-	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token, factory) {
+	*/
+	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token, factory) { // eslint-disable-line max-params
 		super().set({
 			id,
 			user,

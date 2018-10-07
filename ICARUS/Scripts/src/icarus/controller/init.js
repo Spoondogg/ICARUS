@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 console.log('init.js');
 /**
     @module
@@ -13,3 +14,4 @@ import APP from './APP.js';
 */
 var app = new APP(id, user, dev);
 app.showLoginPrompt().main.load(id);
+/* eslint-enable no-undef */
