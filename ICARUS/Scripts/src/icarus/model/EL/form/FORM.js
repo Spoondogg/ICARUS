@@ -60,12 +60,13 @@ export default class FORM extends CONTAINER {
 		return form;
 	}
 	/**
-		    Sets the POST url for this form
-		    @param {string} url Target url
-	        @returns {void}
-		 */
+        Sets the POST url for this form
+        @param {string} url Target url
+        @returns {ThisType} Returns this form
+    */
 	setPostUrl(url) {
-		this.postUrl = url;
+        this.postUrl = url;
+        return this;
 	}
 	/**
 		    Disables all fieldsets within this form
@@ -268,6 +269,26 @@ export default class FORM extends CONTAINER {
 			console.log(0, 'Post Failed to submit.  Values may be invalid.');
 			this.getMainContainer().loader.showConsole();
 		}
+	}
+	/**
+	    Creates an Input Model
+	    @param {string} element Element name
+	    @param {string} name Input name
+	    @param {string} label Label to display
+	    @param {string} value Value of input
+	    @param {string} type The input type
+	    @returns {MODEL} An input model
+	 */
+	createInputModel(element, name, label, value = '', type = 'TEXT') {
+		return new MODEL(new ATTRIBUTES({
+			name,
+			value,
+			'type': type === 'FORMPOSTINPUT' ? 'NUMBER' : type
+		})).set({
+			element,
+			label,
+			type
+		})
 	}
 }
 export { ATTRIBUTES, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };
