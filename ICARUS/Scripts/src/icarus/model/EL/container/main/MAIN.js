@@ -370,11 +370,11 @@ export default class MAIN extends CONTAINER {
 		    @param {any} payload Data returned by server
 	        @deprecated
 	        @returns {void}
-		 */
+		 
 	updateModel(payload) {
 		this.setLabel(payload.label);
 		this.setSubSections(payload.subsections);
-	}
+	}*/
 	/**
 		    Allows the user to open a MAIN 
 		    @param {number} id MAIN id

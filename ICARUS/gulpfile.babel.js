@@ -60,6 +60,12 @@ const paths = {
     server: {
         dev: 'I://iis/dev/',
         prod: 'I://iis/icarus/'
+    },
+    config: {
+        sasslint: './config/sasslint.json',
+        beautify: './config/beautify.json',
+        eslint: './config/eslint.json',
+        doxygen: './config/doxygen.json'
     }
 };
 // #endregion
@@ -105,7 +111,7 @@ export function styles_build_vendor() {
     Beautifies Sass Document
 */
 export function styles_beautify_src() {
-    let config = require('./config/beautify.json');
+    let config = require(paths.config.beautify);
     return gulp.src(paths.styles.src, { base: './' })
         .pipe(beautify(config))
         .pipe(gulp.dest('./'));
@@ -117,7 +123,7 @@ export function styles_beautify_src() {
     @see https://github.com/sasstools/gulp-sass-lint#optionsrules
 */
 export function styles_lint_src(done) {
-    let config = require('./config/sasslint.json');
+    let config = require(paths.config.sasslint);
     return gulp.src(paths.styles.src)
         .pipe(sasslint(config))
         .pipe(sasslint.format())
@@ -156,7 +162,7 @@ export function scripts_build_vendor() {
         .pipe(gulp.dest(paths.scripts.dest));
 }
 export function scripts_beautify_src() {
-    let config = require('./config/beautify.json');
+    let config = require(paths.config.beautify);
     return gulp.src(paths.scripts.src, { base: './' })
         .pipe(beautify(config))
         .pipe(gulp.dest('./'));
@@ -164,8 +170,8 @@ export function scripts_beautify_src() {
 /**
     Lint the Scripts 'src' files
 */
-export function scripts_lint_src() {
-    let config = require('./config/eslint.json');
+export function scripts_lint_src(done) {
+    let config = require(paths.config.eslint);
     return gulp.src(paths.scripts.src)
         .pipe(eslint(config))
         .pipe(eslint.format())
@@ -224,10 +230,9 @@ export function document_scripts() {
 */
 export function document_api() {
     return new Promise((resolve, reject) => {
-        let config = require('./config/doxygen.json');
         doxygen.downloadVersion().then(() => {
-            doxygen.createConfig(config, './config/doxygen.config');
-            doxygen.run('./config/doxygen.config');
+            doxygen.createConfig(config, paths.config.doxygen);
+            doxygen.run(paths.config.doxygen);
         });
         resolve();
     });
