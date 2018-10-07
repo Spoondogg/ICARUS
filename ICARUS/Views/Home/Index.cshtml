@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-
 @section ServiceWorker {
     <script type="text/javascript">
         console.log('Index.ServiceWorker');
@@ -16,12 +15,10 @@
             //btnAdd.style.display = 'block';
             console.log('Service-Worker: Index: This page can be installed as an App');
         });
-
         window.addEventListener('appinstalled', (evt) => {
             //app.logEvent('a2hs', 'installed');
             console.log('service-worker: App Installed');
         });
-
         // Register service worker
         // https://developers.google.com/web/fundamentals/primers/service-workers/
         if ('serviceWorker' in navigator) {
@@ -37,13 +34,14 @@
         }
     </script>
 }
-
 @section Scripts {
     @*
         <script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>
+        <script src="@Url.Content("~/Scripts/dist/dependencies.js")" type="module"></script>
     *@
-}
 
+}
 @section viewInit {
-    <script src="@Url.Content("~/Scripts/icarus/controller/init.js")" type="module"></script>
+    <script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module">
+    </script>
 }

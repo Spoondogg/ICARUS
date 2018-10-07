@@ -1,0 +1,2 @@
+import"../../../../StringMethods.js";import MENU,{MODEL}from"../../nav/menu/MENU.js";import BUTTON from"../BUTTON.js";export default class TOGGLEBUTTON extends BUTTON{constructor(t,e,s,r){super(t,e,s,r),this.addClass("dropdown-toggle"),this.el.setAttribute("data-toggle","dropdown"),this.el.setAttribute("aria-haspopup","true"),this.el.setAttribute("aria-expanded","false"),this.menu=new MENU(t,(new MODEL).set("name",e.friendly()))}}export{BUTTON,MENU};
+//# sourceMappingURL=TOGGLEBUTTON.js.map

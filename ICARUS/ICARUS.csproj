@@ -108,8 +108,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
@@ -589,40 +589,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\animate\animate.css" />
-    <Content Include="Content\css\animate\animate.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap.css" />
-    <Content Include="Content\css\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.min.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.css" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.min.css" />
-    <Content Include="Content\css\icarus\scss\icarus.css">
-      <DependentUpon>icarus.scss</DependentUpon>
+    <Content Include="Content\styles\dist\icarus\icarus.min.css" />
+    <Content Include="Content\styles\dist\vendor.css" />
+    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\css\icarus\scss\icarus.min.css">
-      <DependentUpon>icarus.css</DependentUpon>
-    </Content>
-    <Content Include="Content\css\icomoon\icomoon.css" />
-    <Content Include="Content\css\icomoon\icomoon.svg" />
     <Content Include="Content\favicon.ico" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\icon192.png" />
     <Content Include="Content\icon50.png" />
     <Content Include="Content\Images\background.jpg" />
@@ -630,163 +602,264 @@
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-reboot.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-grid.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.min.css.map" />
-    <Content Include="Content\css\bootstrap\bootstrap-theme.css.map" />
-    <Content Include="gulpfile.js" />
-    <Content Include="Scripts\bootstrap\bootstrap.js" />
-    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
-    <Content Include="Scripts\icarus\helper\DATEOBJECT.js" />
-    <Content Include="Scripts\icarus\DomMethods.js" />
-    <Content Include="Scripts\icarus\enums\HtmlElement.js" />
-    <Content Include="Scripts\icarus\enums\INPUTTYPES.js" />
-    <Content Include="Scripts\icarus\enums\ALIGN.js" />
-    <Content Include="Scripts\icarus\enums\METHOD.js" />
-    <Content Include="Scripts\icarus\enums\SIZE.js" />
-    <Content Include="Scripts\icarus\enums\BUTTONTYPE.js" />
-    <Content Include="Scripts\icarus\enums\STATUS.js" />
-    <Content Include="Scripts\icarus\controller\APP.js" />
-    <Content Include="Scripts\icarus\enums\ICONS.js" />
-    <Content Include="Scripts\icarus\enums\DATAELEMENTS.js" />
-    <Content Include="Scripts\icarus\error\RecursionLimitError.js" />
-    <Content Include="Scripts\icarus\error\ExtendableError.js" />
-    <Content Include="Scripts\icarus\error\AbstractMethodError.js" />
-    <Content Include="Scripts\icarus\controller\init.js" />
-    <Content Include="Scripts\icarus\model\el\button\BUTTON.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\input\file\FILE.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\forms\RegistrationForm.js" />
-    <Content Include="Scripts\icarus\model\el\container\iframe\IFRAME.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\index\INDEX.js" />
-    <Content Include="Scripts\icarus\model\el\container\dictionary\DICTIONARY.js" />
-    <Content Include="Scripts\icarus\model\el\container\word\WORD.js" />
-    <Content Include="Scripts\icarus\model\el\container\chat\CHAT.js" />
-    <Content Include="Scripts\icarus\model\el\container\sidebar\SIDEBAR.js" />
-    <Content Include="Scripts\icarus\model\el\container\menulist\MENULIST.js" />
-    <Content Include="Scripts\icarus\model\el\container\paragraph\PARAGRAPH.js" />
-    <Content Include="Scripts\icarus\model\el\container\CONTAINERFACTORY.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\formpostinput\FORMPOSTINPUT.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\callout\CALLOUT.js" />
-    <Content Include="Scripts\icarus\model\el\container\banner\BANNER.js" />
-    <Content Include="Scripts\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
-    <Content Include="Scripts\icarus\model\el\container\list\listitem\LISTITEM.js" />
-    <Content Include="Scripts\icarus\model\el\container\list\LIST.js" />
-    <Content Include="Scripts\icarus\model\el\div\DIV.js" />
-    <Content Include="Scripts\icarus\model\el\graphic\IMG.js" />
-    <Content Include="Scripts\icarus\model\el\group\ul\console\CONSOLE.js" />
-    <Content Include="Scripts\icarus\model\el\modal\loader\PROGRESSBAR.js" />
-    <Content Include="Scripts\icarus\model\el\modal\modalmenu\MODALMENU.js" />
-    <Content Include="Scripts\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
-    <Content Include="Scripts\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
-    <Content Include="Scripts\icarus\model\el\container\CONTAINERBODY.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\forms\LogoutForm.js" />
-    <Content Include="Scripts\icarus\model\el\modal\loader\LOADER.js" />
-    <Content Include="Scripts\icarus\model\ATTRIBUTES.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
-    <Content Include="Scripts\icarus\model\el\hr\HR.js" />
-    <Content Include="Scripts\icarus\helper\SERVICEWORKER.js" />
-    <Content Include="Scripts\icarus\StringMethods.js" />
-    <Content Include="Scripts\jquery\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr\modernizr-2.8.3.js" />
+    <Content Include="Documentation\index.html" />
+    <Content Include="gulpfile.babel.js" />
+    <Content Include="Scripts\dist\icarus\controller\APP.js" />
+    <Content Include="Scripts\dist\icarus\controller\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\dist\icarus\controller\CONTROLLER.js" />
+    <Content Include="Scripts\dist\icarus\controller\init.js" />
+    <Content Include="Scripts\dist\icarus\controller\TOKEN.js" />
+    <Content Include="Scripts\dist\icarus\DomMethods.js" />
+    <Content Include="Scripts\dist\icarus\enums\ALIGN.js" />
+    <Content Include="Scripts\dist\icarus\enums\BUTTONTYPE.js" />
+    <Content Include="Scripts\dist\icarus\enums\DATAELEMENTS.js" />
+    <Content Include="Scripts\dist\icarus\enums\HtmlElement.js" />
+    <Content Include="Scripts\dist\icarus\enums\ICONS.js" />
+    <Content Include="Scripts\dist\icarus\enums\INPUTTYPES.js" />
+    <Content Include="Scripts\dist\icarus\enums\METHOD.js" />
+    <Content Include="Scripts\dist\icarus\enums\SIZE.js" />
+    <Content Include="Scripts\dist\icarus\enums\STATUS.js" />
+    <Content Include="Scripts\dist\icarus\error\AbstractMethodError.js" />
+    <Content Include="Scripts\dist\icarus\error\ExtendableError.js" />
+    <Content Include="Scripts\dist\icarus\error\MissingContainerError.js" />
+    <Content Include="Scripts\dist\icarus\error\RecursionLimitError.js" />
+    <Content Include="Scripts\dist\icarus\error\TokenError.js" />
+    <Content Include="Scripts\dist\icarus\helper\DATEOBJECT.js" />
+    <Content Include="Scripts\dist\icarus\helper\SERVICEWORKER.js" />
+    <Content Include="Scripts\dist\icarus\helper\WATERMARK.js" />
+    <Content Include="Scripts\dist\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\article\ARTICLE.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\a\A.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\a\anchor\ANCHOR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\button\BUTTON.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\button\togglebutton\TOGGLEBUTTON.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\BANNER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\callout\CALLOUT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\classviewer\CLASSVIEWER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\imagegallery\IMAGEGALLERY.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\indexmain\INDEXMAIN.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\index\INDEX.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\thumbnail\THUMBNAIL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\chat\CHAT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\CONTAINER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\CONTAINERBODY.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\dictionary\DICTIONARY.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\FORMELEMENT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\FORMELEMENTGROUP.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\FORMINPUT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\forminputfile\FORMINPUTFILE.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\forminputtoken\FORMINPUTTOKEN.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formpostinput\FORMPOSTINPUT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formselect\FORMSELECT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formtextarea\FORMTEXTAREA.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\iframe\IFRAME.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\jumbotron\headerwrap\HEADERWRAP.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\jumbotron\JUMBOTRON.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\list\LIST.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\list\listitem\LISTITEM.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\main\MAIN.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\menulist\MENULIST.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\paragraph\PARAGRAPH.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\sidebar\SIDEBAR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\textblock\TEXTBLOCK.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\word\WORD.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\datalist\DATALIST.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\dialog\DIALOG.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\div\DIV.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\EL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\fieldset\FIELDSET.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\footer\FOOTER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\footer\stickyfooter\STICKYFOOTER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORM.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORMFOOTER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORMPOST.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\forms\LogoutForm.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\forms\RegistrationForm.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\GROUP\buttongroup\BUTTONGROUP.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\GROUP\GROUP.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\header\HEADER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\hr\HR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\img\IMG.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\input\INPUT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\label\LABEL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\legend\LEGEND.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\li\LI.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\loader\LOADER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\loader\PROGRESSBAR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\MODAL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\modalmenu\MODALMENU.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\prompt\PROMPT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\MENU.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\NAVHEADER.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\SIDEBARMENU.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\NAV.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navbar\NAVBAR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitemicon\NAVITEMICON.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVITEM.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVSEARCH.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVSEPARATOR.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\option\OPTION.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\p\P.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\p\WELL.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\section\SECTION.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\select\SELECT.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\badge\BADGE.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\CARET.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\GLYPHICON.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\SPAN.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\svg\SVG.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\textarea\TEXTAREA.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\ul\console\CONSOLE.js" />
+    <Content Include="Scripts\dist\icarus\model\EL\ul\UL.js" />
+    <Content Include="Scripts\dist\icarus\model\MODEL.js" />
+    <Content Include="Scripts\dist\icarus\StringMethods.js" />
+    <Content Include="Scripts\dist\vendor.js" />
+    <Content Include="Scripts\src\icarus\controller\APP.js" />
+    <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
+    <Content Include="Scripts\src\icarus\controller\init.js" />
+    <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
+    <Content Include="Scripts\src\icarus\DomMethods.js" />
+    <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
+    <Content Include="Scripts\src\icarus\enums\BUTTONTYPE.js" />
+    <Content Include="Scripts\src\icarus\enums\DATAELEMENTS.js" />
+    <Content Include="Scripts\src\icarus\enums\HtmlElement.js" />
+    <Content Include="Scripts\src\icarus\enums\ICONS.js" />
+    <Content Include="Scripts\src\icarus\enums\INPUTTYPES.js" />
+    <Content Include="Scripts\src\icarus\enums\METHOD.js" />
+    <Content Include="Scripts\src\icarus\enums\SIZE.js" />
+    <Content Include="Scripts\src\icarus\enums\STATUS.js" />
+    <Content Include="Scripts\src\icarus\error\AbstractMethodError.js" />
+    <Content Include="Scripts\src\icarus\error\ExtendableError.js" />
+    <Content Include="Scripts\src\icarus\error\MissingContainerError.js" />
+    <Content Include="Scripts\src\icarus\error\RecursionLimitError.js" />
+    <Content Include="Scripts\src\icarus\error\TokenError.js" />
+    <Content Include="Scripts\src\icarus\helper\DATEOBJECT.js" />
+    <Content Include="Scripts\src\icarus\helper\SERVICEWORKER.js" />
+    <Content Include="Scripts\src\icarus\helper\WATERMARK.js" />
+    <Content Include="Scripts\src\icarus\model\ATTRIBUTES.js" />
+    <Content Include="Scripts\src\icarus\model\el\a\A.js" />
+    <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
+    <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
+    <Content Include="Scripts\src\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
+    <Content Include="Scripts\src\icarus\model\el\article\ARTICLE.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\BANNER.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\callout\CALLOUT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\index\INDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\THUMBNAIL.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\chat\CHAT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\CONTAINER.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\CONTAINERBODY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\dictionary\DICTIONARY.js" />
+    <Content Include="Scripts\src\icarus\model\el\fieldset\FIELDSET.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\FORMELEMENT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\FORMELEMENTGROUP.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\forminput\FORMINPUT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\forminput\forminputfile\FORMINPUTFILE.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\forminput\forminputtoken\FORMINPUTTOKEN.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\formpostinput\FORMPOSTINPUT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\formselect\FORMSELECT.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\formtextarea\FORMTEXTAREA.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\FORM.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\FORMFOOTER.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\FORMPOST.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\forms\LogoutForm.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\forms\RegistrationForm.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\iframe\IFRAME.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\list\LIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\list\listitem\LISTITEM.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\main\MAIN.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\menulist\MENULIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\paragraph\PARAGRAPH.js" />
+    <Content Include="Scripts\src\icarus\model\el\legend\LEGEND.js" />
+    <Content Include="Scripts\src\icarus\model\el\section\SECTION.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\sidebar\SIDEBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\textblock\TEXTBLOCK.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\word\WORD.js" />
+    <Content Include="Scripts\src\icarus\model\el\datalist\DATALIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\DIALOG.js" />
+    <Content Include="Scripts\src\icarus\model\el\div\DIV.js" />
+    <Content Include="Scripts\src\icarus\model\el\EL.js" />
+    <Content Include="Scripts\src\icarus\model\el\footer\FOOTER.js" />
+    <Content Include="Scripts\src\icarus\model\el\footer\stickyfooter\STICKYFOOTER.js" />
+    <Content Include="Scripts\src\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
+    <Content Include="Scripts\src\icarus\model\el\group\GROUP.js" />
+    <Content Include="Scripts\src\icarus\model\el\header\HEADER.js" />
+    <Content Include="Scripts\src\icarus\model\el\hr\HR.js" />
+    <Content Include="Scripts\src\icarus\model\el\img\IMG.js" />
+    <Content Include="Scripts\src\icarus\model\el\input\INPUT.js" />
+    <Content Include="Scripts\src\icarus\model\el\label\LABEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\li\LI.js" />
+    <Content Include="Scripts\src\icarus\model\el\modal\loader\LOADER.js" />
+    <Content Include="Scripts\src\icarus\model\el\modal\loader\PROGRESSBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
+    <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\modal\prompt\PROMPT.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\NAVHEADER.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\SIDEBARMENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVITEM.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEARCH.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
+    <Content Include="Scripts\src\icarus\model\el\option\OPTION.js" />
+    <Content Include="Scripts\src\icarus\model\el\p\P.js" />
+    <Content Include="Scripts\src\icarus\model\el\p\WELL.js" />
+    <Content Include="Scripts\src\icarus\model\el\select\SELECT.js" />
+    <Content Include="Scripts\src\icarus\model\el\span\badge\BADGE.js" />
+    <Content Include="Scripts\src\icarus\model\el\span\CARET.js" />
+    <Content Include="Scripts\src\icarus\model\el\span\GLYPHICON.js" />
+    <Content Include="Scripts\src\icarus\model\el\span\SPAN.js" />
+    <Content Include="Scripts\src\icarus\model\el\svg\SVG.js" />
+    <Content Include="Scripts\src\icarus\model\el\textarea\TEXTAREA.js" />
+    <Content Include="Scripts\src\icarus\model\el\ul\console\CONSOLE.js" />
+    <Content Include="Scripts\src\icarus\model\el\ul\UL.js" />
+    <Content Include="Scripts\src\icarus\model\MODEL.js" />
+    <Content Include="Scripts\src\icarus\StringMethods.js" />
     <Content Include="service-worker.js" />
-    <Content Include="Scripts\icarus\helper\WATERMARK.js" />
-    <Content Include="Scripts\icarus\model\el\span\CARET.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\FORMFOOTER.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\FORMPOST.js" />
-    <Content Include="Scripts\icarus\model\el\nav\menu\MENU.js" />
-    <Content Include="Scripts\icarus\model\el\nav\menu\NAVHEADER.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVITEM.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEARCH.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
-    <Content Include="Scripts\icarus\model\el\nav\NAV.js" />
-    <Content Include="Scripts\icarus\model\MODEL.js" />
-    <Content Include="Scripts\icarus\model\el\nav\menu\SIDEBARMENU.js" />
-    <Content Include="Scripts\icarus\model\el\container\CONTAINER.js" />
-    <Content Include="Scripts\icarus\model\el\p\WELL.js" />
-    <Content Include="Scripts\icarus\model\el\footer\FOOTER.js" />
-    <Content Include="Scripts\icarus\model\el\span\GLYPHICON.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\input\TOKEN.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\FORMELEMENT.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\FORMELEMENTGROUP.js" />
-    <Content Include="Scripts\icarus\model\el\container\fieldset\FIELDSET.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\input\INPUT.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\select\OPTION.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\select\SELECT.js" />
-    <Content Include="Scripts\icarus\model\el\container\formelement\textarea\TEXTAREA.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\IcarusInputList.js" />
-    <Content Include="Scripts\icarus\model\el\anchor\ANCHOR.js" />
-    <Content Include="Scripts\icarus\model\el\group\GROUP.js" />
-    <Content Include="Scripts\icarus\model\el\label\LABEL.js" />
-    <Content Include="Scripts\icarus\model\el\modal\prompt\PROMPT.js" />
-    <Content Include="Scripts\icarus\model\el\container\section\SECTION.js" />
-    <Content Include="Scripts\icarus\model\el\container\textblock\TEXTBLOCK.js" />
-    <Content Include="Scripts\icarus\model\el\container\main\MAIN.js" />
-    <Content Include="Scripts\icarus\model\el\container\article\ARTICLE.js" />
-    <Content Include="Scripts\icarus\model\el\EL.js" />
-    <Content Include="Scripts\icarus\model\el\footer\stickyfooter\STICKYFOOTER.js" />
-    <Content Include="Scripts\icarus\model\el\header\HEADER.js" />
-    <Content Include="Scripts\icarus\model\el\container\form\FORM.js" />
-    <Content Include="Scripts\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
-    <Content Include="Scripts\icarus\model\el\badge\BADGE.js" />
-    <Content Include="Scripts\icarus\model\el\graphic\SVG.js" />
-    <Content Include="Scripts\icarus\model\el\modal\MODAL.js" />
-    <Content Include="Scripts\icarus\model\el\nav\navbar\NAVBAR.js" />
-    <Content Include="Scripts\icarus\model\el\p\P.js" />
-    <Content Include="Scripts\icarus\model\el\span\SPAN.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\css\icomoon\.DS_Store" />
-    <Content Include="Content\css\icomoon\icomoon-.eot" />
-    <Content Include="Content\css\icomoon\icomoon.eot" />
-    <Content Include="Content\css\icomoon\icomoon.ttf" />
-    <Content Include="Content\css\icomoon\icomoon.woff" />
-    <Content Include="Content\css\icarus\scss\icarus.scss" />
-    <None Include="bundleconfig.json" />
-    <Content Include="bundleconfig.json.bindings">
-      <DependentUpon>bundleconfig.json</DependentUpon>
-    </Content>
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
     <Content Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
-    <Content Include="jsdoc.json" />
+    <Content Include="config\jsdoc.json" />
     <Content Include="index.md" />
     <Content Include="LICENCE.md" />
-    <Content Include="doxygen.config" />
+    <Content Include="config\eslint.json" />
+    <Content Include="package-lock.json" />
+    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\src\icarus\icarus.scss" />
+    <Content Include=".eslintrc.json" />
+    <Content Include=".babelrc" />
+    <Content Include="Content\styles\dist\icarus\icarus.min.css.map" />
+    <Content Include="config\beautify.json" />
+    <Content Include="config\sasslint.json" />
+    <Content Include="config\doxygen.json" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />
     <None Include="Properties\PublishProfiles\JAC.pubxml" />
-    <None Include="Scripts\jquery\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.slim.min.js" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.slim.min.map" />
-    <Content Include="Scripts\jquery\jquery-3.3.1.min.map" />
-    <Content Include="Scripts\icarus\model\el\group\li\LI.js" />
-    <Content Include="Scripts\icarus\model\el\group\ul\UL.js" />
-    <None Include="Scripts\jquery\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery\jquery-ui-1.12.1.js" />
-    <Content Include="Scripts\jquery\jquery-ui-1.12.1.min.js" />
-    <Content Include="Scripts\jquery\jquery.validate.js" />
-    <Content Include="Scripts\jquery\jquery.validate.min.js" />
-    <Content Include="Scripts\modernizr\modernizr-2.6.2.js" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -837,6 +910,116 @@
     <Content Include="Views\Account\ExternalLogin.cshtml" />
     <Content Include="Views\Shared\_Globals.cshtml" />
     <Content Include="toc.yml" />
+    <Content Include="Scripts\dist\icarus\controller\APP.js.map" />
+    <Content Include="Scripts\dist\icarus\controller\CONTAINERFACTORY.js.map" />
+    <Content Include="Scripts\dist\icarus\controller\CONTROLLER.js.map" />
+    <Content Include="Scripts\dist\icarus\controller\init.js.map" />
+    <Content Include="Scripts\dist\icarus\controller\TOKEN.js.map" />
+    <Content Include="Scripts\dist\icarus\DomMethods.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\ALIGN.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\BUTTONTYPE.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\DATAELEMENTS.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\HtmlElement.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\ICONS.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\INPUTTYPES.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\METHOD.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\SIZE.js.map" />
+    <Content Include="Scripts\dist\icarus\enums\STATUS.js.map" />
+    <Content Include="Scripts\dist\icarus\error\AbstractMethodError.js.map" />
+    <Content Include="Scripts\dist\icarus\error\ExtendableError.js.map" />
+    <Content Include="Scripts\dist\icarus\error\MissingContainerError.js.map" />
+    <Content Include="Scripts\dist\icarus\error\RecursionLimitError.js.map" />
+    <Content Include="Scripts\dist\icarus\error\TokenError.js.map" />
+    <Content Include="Scripts\dist\icarus\helper\DATEOBJECT.js.map" />
+    <Content Include="Scripts\dist\icarus\helper\SERVICEWORKER.js.map" />
+    <Content Include="Scripts\dist\icarus\helper\WATERMARK.js.map" />
+    <Content Include="Scripts\dist\icarus\model\ATTRIBUTES.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\article\ARTICLE.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\a\A.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\a\anchor\ANCHOR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\button\BUTTON.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\button\togglebutton\TOGGLEBUTTON.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\BANNER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\callout\CALLOUT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\classviewer\CLASSVIEWER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\imagegallery\IMAGEGALLERY.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\indexmain\INDEXMAIN.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\index\INDEX.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\banner\thumbnail\THUMBNAIL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\chat\CHAT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\CONTAINER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\CONTAINERBODY.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\dictionary\DICTIONARY.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\FORMELEMENT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\FORMELEMENTGROUP.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\FORMINPUT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\forminputfile\FORMINPUTFILE.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\forminput\forminputtoken\FORMINPUTTOKEN.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formpostinput\FORMPOSTINPUT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formselect\FORMSELECT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\formelement\formtextarea\FORMTEXTAREA.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\iframe\IFRAME.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\jumbotron\headerwrap\HEADERWRAP.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\jumbotron\JUMBOTRON.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\list\LIST.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\list\listitem\LISTITEM.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\main\MAIN.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\menulist\MENULIST.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\paragraph\PARAGRAPH.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\sidebar\SIDEBAR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\textblock\TEXTBLOCK.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\container\word\WORD.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\datalist\DATALIST.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\dialog\DIALOG.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\div\DIV.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\EL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\fieldset\FIELDSET.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\footer\FOOTER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\footer\stickyfooter\STICKYFOOTER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORM.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORMFOOTER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\FORMPOST.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\forms\LogoutForm.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\form\forms\RegistrationForm.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\GROUP\buttongroup\BUTTONGROUP.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\GROUP\GROUP.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\header\HEADER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\hr\HR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\img\IMG.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\input\INPUT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\label\LABEL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\legend\LEGEND.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\li\LI.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\loader\LOADER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\loader\PROGRESSBAR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\MODAL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\modalmenu\MODALMENU.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\modal\prompt\PROMPT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\MENU.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\NAVHEADER.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\menu\SIDEBARMENU.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\NAV.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navbar\NAVBAR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitemicon\NAVITEMICON.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVITEM.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVSEARCH.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\nav\navitem\NAVSEPARATOR.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\option\OPTION.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\p\P.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\p\WELL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\section\SECTION.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\select\SELECT.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\badge\BADGE.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\CARET.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\GLYPHICON.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\span\SPAN.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\svg\SVG.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\textarea\TEXTAREA.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\ul\console\CONSOLE.js.map" />
+    <Content Include="Scripts\dist\icarus\model\EL\ul\UL.js.map" />
+    <Content Include="Scripts\dist\icarus\model\MODEL.js.map" />
+    <Content Include="Scripts\dist\icarus\StringMethods.js.map" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>
@@ -846,6 +1029,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include=".deprec\" />
     <Folder Include="App_Data\" />
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
@@ -1145,20 +1329,15 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties bundleconfig_1json__JSONSchema="http://json.schemastore.org/cryproj.54.schema" />
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets" Condition="Exists('..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildBundlerMinifier.2.8.391\build\BuildBundlerMinifier.targets'))" />
-    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.11.375\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.11.375\build\BuildWebCompiler.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
-  <Import Project="..\packages\BuildWebCompiler.1.11.375\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.11.375\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

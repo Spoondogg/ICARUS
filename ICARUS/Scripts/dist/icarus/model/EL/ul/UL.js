@@ -1,0 +1,2 @@
+import LI,{ANCHOR,ATTRIBUTES,EL,MODEL}from"../li/LI.js";import GROUP from"../group/GROUP.js";export default class UL extends GROUP{constructor(t,e){super(t,"UL",e),this.addCase("UL",()=>this.addUnorderedList(e)),this.addCase("LI",()=>this.addListItem(e))}addListItem(t){return this.children.push(new LI(this,t,t.label)),this.children[this.children.length-1]}addUnorderedList(t){return this.children.push(new UL(this,t)),this.children[this.children.length-1]}}export{ANCHOR,ATTRIBUTES,EL,GROUP,LI,MODEL};
+//# sourceMappingURL=UL.js.map

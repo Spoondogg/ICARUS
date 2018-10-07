@@ -8,7 +8,10 @@ using Owin;
 using ICARUS.Models;
 
 namespace ICARUS {
-
+    /** 
+        @see http://www.tutorialsteacher.com/mvc/mvc-folder-structure 
+        @see https://exceptionnotfound.net/whats-this-and-can-i-delete-it-examining-a-default-asp-net-mvc-project/
+     */
     public partial class Startup {
 
         /// <summary>

@@ -19,13 +19,8 @@ namespace ICARUS.Models {
         /// Generic FormElement Constructor for Entity
         /// </summary>
         public Input() : base() {
-            //var guid = "INPUT_" + Guid.NewGuid();
             this.element = "INPUT";
-            //this.hasTab = 0;
-            //this.showHeader = 0; // temp
-            //this.label = guid;
             this.label = "INPUT";
-            //this.attributes.Add("name", guid);
             this.className = "INPUT";
         }
 
