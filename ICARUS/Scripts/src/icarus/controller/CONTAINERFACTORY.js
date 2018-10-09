@@ -164,7 +164,8 @@ export default class CONTAINERFACTORY {
 			}
 			node.children[index] = obj;
 			try {
-				// Inject CRUD actions
+				// Inject CRUD actions and dependencies
+                //obj.factory = this;
 				obj.save = this.save;
 				//obj.quickSaveFormPost = this.quickSaveFormPost;
 				// Overwrite span with 

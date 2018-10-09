@@ -418,7 +418,6 @@ export default class CONTAINER extends GROUP {
 		    and adds respective button to this container
 
 		    @param {string} className ie SECTION or FORM
-	        param {CONTAINERFACTORY} factory A Container Factory
 		    @param {boolean} addButton If false, no button is created
 
 	        @returns {void}
@@ -429,7 +428,7 @@ export default class CONTAINER extends GROUP {
 				this.addCase(className, function(model) {
 					console.log(this.className + ': CALLING CASE: ' + className);
 					try {
-						return this.factory.get(this.body.pane, className, model.id || 0);
+						return this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0);
 					} catch (ee) {
 						console.warn('Unable to retrieve factory for Container Case', ee);
 					}

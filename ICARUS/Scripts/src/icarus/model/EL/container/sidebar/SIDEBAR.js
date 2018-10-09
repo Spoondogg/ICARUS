@@ -1,6 +1,4 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER from '../CONTAINER.js';
 /**
     A vertical navitemgroup with a search panel

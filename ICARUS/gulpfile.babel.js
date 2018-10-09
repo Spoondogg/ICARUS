@@ -45,14 +45,18 @@ import terser from 'gulp-terser';
 /** Relevent build paths */
 const paths = {
     styles: {
+        baseglob: 'Content/styles/**/**.*',
         base: 'Content/styles/src/icarus',
-        src: 'Content/styles/src/icarus/icarus.scss',
-        dest: 'Content/styles/dist/icarus'
+        basefile: './Content/styles/src/icarus/icarus.scss',
+        dest: 'Content/styles/dist/icarus',
+        src: 'Content/styles/src/icarus/**/*.scss'        
     },
     scripts: {
-        base: 'Scripts/src',
-        src: 'Scripts/src/**/*.js',
-        dest: 'Scripts/dist/'
+        buildglob: 'Scripts/**/**.*',
+        base: 'Scripts/src/icarus',
+        baseglob: './Scripts/src/**/**.js',
+        src: 'Scripts/src/icarus/**/*.js',
+        dest: 'Scripts/dist/icarus'
     },
     images: {
         src: 'Content/Images/**/*.{jpg,jpeg,png}',
@@ -65,33 +69,29 @@ const paths = {
         dev: 'I://iis/dev/',
         prod: 'I://iis/icarus/'
     },
-    config: {
-        sasslint: './config/sasslint.json',
-        beautify: './config/beautify.json',
+    config: {        
+        beautify: './config/beautify.json',        
+        doxygen: './config/doxygen.json',
         eslint: './config/eslint.json',
-        doxygen: './config/doxygen.json'
+        sasslint: './config/sasslint.json'
     }
 };
 // #endregion
 // #region Styles
 /**
-    Parse SASS into CSS, append prefixes and minify
+    Parse SASS into CSS, append prefixes and minify (with sourcemap)
     @see https://github.com/postcss/gulp-postcss
     @see https://github.com/postcss/autoprefixer#options
 */
 export function styles_build_src() {
+    console.log('Building Styles: ' + paths.styles.src);
     let plugins = [
         autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
         postcsstouchcallout,
         postcssmomentumscrolling,
         postcssfontsmoothing
-        /*postcssclean({
-            from: paths.styles.src,
-            to: 'Content/styles/dist/icarus/icarus.min.css',
-            map: true //{ inline: true }
-        })  // http://api.postcss.org/global.html#processOptions*/
     ];
-    return gulp.src(paths.styles.src) // , { sourcemaps: true }
+    return gulp.src(paths.styles.src)
         .pipe(sourcemaps.init())        
         .pipe(sass())  //.pipe(sass().on('error', sass.logError))
         .pipe(rename({
@@ -132,21 +132,23 @@ export function styles_beautify_src() {
     @see https://github.com/sasstools/gulp-sass-lint#optionsrules
 */
 export function styles_lint_src(done) {
+    console.log('Linting Styles: ' + paths.styles.basefile);
     let config = require(paths.config.sasslint);
-    return gulp.src(paths.styles.src)
+    return gulp.src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
         .pipe(sasslint(config))
         .pipe(sasslint.format())
         .pipe(sasslint.failOnError()).on('error', (e) => {
             console.log('Failed to lint Sass');
             done();
         }).on('end', () => {
-            // success
+            console.log(paths.styles.basefile + ' has been linted');
             done();
         });
 }
 // #endregion
 // #region Scripts
 export function scripts_build_src() {
+    console.log('Building Scripts: ' + paths.scripts.src);
     return gulp.src(paths.scripts.src, { base: paths.scripts.base })
         .pipe(sourcemaps.init())
         .pipe(terser())
@@ -180,6 +182,7 @@ export function scripts_beautify_src() {
     Lint the Scripts 'src' files
 */
 export function scripts_lint_src(done) {
+    console.log('Linting Scripts: ' + paths.scripts.src);
     let config = require(paths.config.eslint);
     return gulp.src(paths.scripts.src)
         .pipe(eslint(config))
@@ -274,6 +277,7 @@ const _clean = () => del([
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function scripts_publish(dev = true) {
+    console.log('Publishing Scripts: ' + paths.scripts.buildglob); // 'Scripts/**/**.*'
     return gulp.src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 }
@@ -283,7 +287,8 @@ export function scripts_publish(dev = true) {
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function styles_publish() {
-    return gulp.src(['Content/styles/**/**.*', '!**.(yml|md)'])
+    console.log('Publishing Styles: ' + paths.styles.baseglob);
+    return gulp.src([paths.styles.baseglob, '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 }
 /**
@@ -309,13 +314,13 @@ export function _watch() {
     Watches Styles for changes and performs linting
 */
 export function _watch_styles() {
-    gulp.watch('./Content/styles/src/icarus/icarus.scss', styles_lint_src);
+    gulp.watch(paths.styles.basefile, styles_lintbuildpublish); // styles_lint_src
 }
 /**
     Watches Styles for changes and performs linting
 */
 export function _watch_scripts() {
-    gulp.watch('./Scripts/src/**/**.js', _lintbuildpublish); //scripts_lint_src
+    gulp.watch(paths.scripts.baseglob, scripts_lintbuildpublish); //scripts_lintbuildpublish, scripts_lint_src
 }
 // #endregion
 // #region Maintenance
@@ -347,22 +352,50 @@ const _build = gulp.series(
 /** 
     Lint, Build on Success, then publish
  */
-const _lintbuildpublish = gulp.series(
+const scripts_lintbuildpublish = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== scripts_lintbuildpublish BEGIN ====');
+        done();
+    },
     //scripts_beautify_src,
     scripts_lint_src,
     scripts_build_src,
-    scripts_publish
+    scripts_publish,
+    (done) => {
+        console.log('\n\n\n==== scripts_lintbuildpublish END ====');
+        done();
+    },
+);
+/** 
+    Lint, Build on Success, then publish
+ */
+const styles_lintbuildpublish = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== styles_lintbuildpublish BEGIN ====');
+        done();
+    },
+    styles_lint_src,
+    styles_build_src,
+    styles_publish,
+    (done) => {
+        console.log('\n\n\n==== styles_lintbuildpublish END ====');
+        done();
+    },
 );
 /**
     Compiles documentation for Scripts, Styles and API
 */
 const _document = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== _document ====');
+        done();
+    },
     document_scripts,
     document_styles,
     document_api
 );
 // #endregion
 // #region Exports
-export { _beautify, _build, _clean, _lint, _lintbuildpublish };
+export { _beautify, _build, _clean, _lint, scripts_lintbuildpublish, styles_lintbuildpublish };
 export default _build;
 // #endregion
