@@ -1,12 +1,10 @@
 /* eslint-disable no-undef */
-console.log('init.js');
-/**
-    @module
-*/
+/** @module */
 import APP from './APP.js';
 /**
+    
     @name init Initializes the Application
-    @description 
+    @description The id, user and dev parameters are defined in Views/Shared/_Layout
     <ul>
         <li>If a 'login' parameter exists, the login prompt is displayed</li>
         <li>If an 'id' parameter exists, the specified application id is loaded</li>

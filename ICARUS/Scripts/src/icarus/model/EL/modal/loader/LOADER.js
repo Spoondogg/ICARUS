@@ -1,32 +1,33 @@
 /**
     @module
 */
+import DIALOG from '../../dialog/DIALOG.js';
 import MODAL, { ATTRIBUTES, DIV, MODEL } from '../MODAL.js';
 import CONSOLE from '../../ul/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /**
     A Loader type modal.
     @class
-    @extends MODAL
+    @extends DIALOG
 */
-export default class LOADER extends MODAL {
+export default class LOADER extends DIALOG {
 	/**
-		    Constructs a Loader
-	        //this.el.setAttribute('data-backdrop', 'static');
-			//this.el.setAttribute('data-keyboard', false);
-		    @param {number} value Percentage complete (integer)
-	        @param {string} label The header text for this modal	    
-	        @param {string} text Text that appears in modal's well
-		 */
+        Constructs a dialog that displays loading details
+        @param {number} value Percentage complete (integer)
+        @param {string} label The header text for this modal	    
+        @param {string} text Text that appears in modal's well
+    */
 	constructor(value = 0, label = '', text = '') {
-		super(label, text, true);
-		this.addClass('modal-loader');
+		super(new MODEL().set({
+			value: 0,
+			label: '',
+			text: ''
+		}));
+		this.addClass('modal-loader loader');
 		this.el.setAttribute('name', 'LOADER');
-		//this.dialog.el.style.width = '80%';		
-		this.dialog.addClass('loader');
-		this.progress = new DIV(this.container.body.pane, new MODEL(new ATTRIBUTES('progress')));
+		this.progress = new DIV(this.body, new MODEL(new ATTRIBUTES('progress')));
 		this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
-		this.console = new CONSOLE(this.container.body.pane, new MODEL(new ATTRIBUTES({
+		this.console = new CONSOLE(this.body, new MODEL(new ATTRIBUTES({
 			'class': 'console collapse in',
 			'aria-expanded': false
 		})));
@@ -40,8 +41,7 @@ export default class LOADER extends MODAL {
 		this.log(value);
 	}
 	/**
-		    Sets the progress bar status.
-
+		    Sets the progress bar status
 		    @param {number} value Percentage as integer (ie: 50 means 50%).
 		    @param {string} text Text displayed inside progress bar.  
 	        @param {boolean} show If true, the log will be displayed
@@ -68,16 +68,16 @@ export default class LOADER extends MODAL {
 		}
 	}
 	/**
-		    Shows the Loader Console
-	        @returns {void}
-		*/
+        Shows the Loader Console
+        @returns {void}
+    */
 	showConsole() {
 		$(this.console.el).collapse('show');
 	}
 	/**
-		    Hides the Loader Console
-	        @returns {void}
-		*/
+        Hides the Loader Console
+        @returns {void}
+    */
 	hideConsole() {
 		$(this.console.el).collapse('hide');
 	}
