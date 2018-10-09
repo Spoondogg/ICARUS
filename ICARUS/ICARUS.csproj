@@ -589,8 +589,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\styles\dist\fonts\glyphicons-halflings-regular.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\styles\dist\icarus\icarus.min.css" />
-    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.svg">
+    <Content Include="Content\styles\dist\icarus\vendor.css" />
+    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\favicon.ico" />
@@ -713,7 +717,7 @@
     <Content Include="Scripts\dist\icarus\model\EL\ul\UL.js" />
     <Content Include="Scripts\dist\icarus\model\MODEL.js" />
     <Content Include="Scripts\dist\icarus\StringMethods.js" />
-    <Content Include="Scripts\dist\vendor.js" />
+    <Content Include="Scripts\dist\icarus\vendor.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
@@ -836,16 +840,16 @@
     <Content Include="LICENCE.md" />
     <Content Include="config\eslint.json" />
     <Content Include="package-lock.json" />
-    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.eot">
+    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.eot">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.ttf">
+    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.woff">
+    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.woff">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\styles\fonts\glyphicons-halflings-regular.woff2">
+    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.woff2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\styles\src\icarus\icarus.scss" />
@@ -855,6 +859,18 @@
     <Content Include="config\sasslint.json" />
     <Content Include="config\doxygen.json" />
     <Content Include="Content\styles\dist\icarus\icarus.min.css.map" />
+    <Content Include="Content\styles\dist\fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\dist\fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\dist\fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\styles\dist\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />

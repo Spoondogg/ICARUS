@@ -62,4 +62,4 @@ export default class DIALOG extends EL {
 		this.el.close();
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export { ATTRIBUTES, DIV, EL, MODEL };
