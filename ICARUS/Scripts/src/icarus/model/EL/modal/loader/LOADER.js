@@ -1,8 +1,7 @@
 /**
     @module
 */
-import DIALOG from '../../dialog/DIALOG.js';
-import MODAL, { ATTRIBUTES, DIV, MODEL } from '../MODAL.js';
+import DIALOG, { ATTRIBUTES, DIV, MODEL } from '../../dialog/DIALOG.js';
 import CONSOLE from '../../ul/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /**
@@ -19,9 +18,9 @@ export default class LOADER extends DIALOG {
     */
 	constructor(value = 0, label = '', text = '') {
 		super(new MODEL().set({
-			value: 0,
-			label: '',
-			text: ''
+			value,
+			label,
+			text
 		}));
 		this.addClass('modal-loader loader');
 		this.el.setAttribute('name', 'LOADER');

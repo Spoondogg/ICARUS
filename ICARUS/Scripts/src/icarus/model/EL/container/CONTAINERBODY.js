@@ -1,24 +1,25 @@
 /**
     @module
 */
-import EL, { MODEL } from '../EL.js';
+//import EL, { MODEL } from '../EL.js';
+import DIV, { MODEL } from '../div/DIV.js';
 /**
     Containers have a 'body' that can contain an optional sidebar
     and detect swipe events
     @class
     @extends EL
  */
-export default class CONTAINERBODY extends EL {
+export default class CONTAINERBODY extends DIV {
 	/**
 	    Construct a body with an optional sidebar
 	     @param {CONTAINER} node Parent
 	     @param {MODEL} model Object
 	 */
 	constructor(node, model) {
-		super(node, 'DIV', model);
+		super(node, model);
 		this.setClass('container-body collapse in');
-		this.sidebar = null;
-		this.pane = new EL(this, 'DIV', new MODEL('pane'));
+		//this.sidebar = null;
+		this.pane = new DIV(this, new MODEL('pane'));
 		// Add swipe detection for editing options in sidebar
 		this.pane.el.addEventListener('touchstart', this.handleTouchStart, { passive: true });
 		this.pane.el.addEventListener('touchmove', this.handleTouchMove, { passive: true });
@@ -74,9 +75,9 @@ export default class CONTAINERBODY extends EL {
 		this.yDown = null;
 	}
 	/**
-		    Toggle the collapsed state of this container
-	        @returns {void}
-		 */
+	    Toggle the collapsed state of this container
+	    @returns {void}
+	*/
 	collapse() {
 		$(this.el).collapse('toggle');
 	}

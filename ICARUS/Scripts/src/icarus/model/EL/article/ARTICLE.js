@@ -3,7 +3,7 @@
 */
 import CONTAINER from '../container/CONTAINER.js';
 /**
-    A generic Article  
+    A generic ARTICLE Element
     @class
     @extends CONTAINER
 */

@@ -20,17 +20,14 @@ $color-secondary-dark: #353e52;
 $color-statement-even: #98a594;
 $color-statement-odd: #6e7880;
 $color-scrollbar-face: #999;
-
 $color-grey: #666;
 $color-grey-dark: darken($color-grey, 25%);
 $color-grey-darker: darken($color-grey, 50%);
 $color-grey-light: lighten($color-grey, 25%);
 $color-grey-lighter: lighten($color-grey, 50%);
-
 $color-shadow-light: adjust-color($color-black, $alpha: .3); //rgba(0, 0, 0, .3);
 $color-shadow-neutral: adjust-color($color-black, $alpha: .5); // rgba(0, 0, 0, .5);
 $color-shadow-dark: adjust-color($color-black, $alpha: .8); //rgba(0, 0, 0, .8);
-
 $color-light-less: #efefef;
 $color-light: #eee;
 $color-light-more: #fafafa;
@@ -46,9 +43,8 @@ $font-primary: 'Lato', sans-serif;
 $font-primary-weight: 300;
 $font-size-small: 10px;
 $font-size-normal: 16px;
-
-$sidebar-width: 80%;
 $navbar-height: 50px;
+$sidebar-width: 80%;
 $transition-speed: .2s;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
@@ -57,12 +53,6 @@ $icon-height: 64px;
 $jumbotron-bg-default: #008196;
 
 // Mixins: https://sass-lang.com/guide#topic-6-SCSS
-/// Darken the background color
-/// @param {decimal} $alpha [.5] - Percentage to darken
-@mixin darken($pct) {
-	//background-color: rgba(0, 0, 0, $alpha);
-	background-color: adjust-color($color-black, $alpha: $pct);
-}
 @mixin transition($property) {
 	transition: $property;
 }
@@ -97,7 +87,7 @@ $jumbotron-bg-default: #008196;
 		scrollbar-track-color: $background-color;
 	}
 }
-// no scroll bar
+/// no scroll bar
 @mixin no-scroll-bar {
 	&::-webkit-scrollbar {
 		height: 0;
@@ -219,9 +209,51 @@ body {
 	font-family: $font-primary;
 	font-size: $font-size-normal;
 	font-weight: $font-primary-weight;
-	overflow: scroll;
-	overflow-y: hidden;
+    overflow: hidden;
 	padding-top: $navbar-height;
+}
+button {
+    :disabled {
+        background-color: $color-red-deep;
+    }
+
+    > .icon {
+        color: $color-black;
+    }
+
+    .glyphicon {
+        .icon-label {
+            color: $color-black;
+            text-transform: uppercase;
+        }
+    }
+}
+div {
+    .btn-group {
+        .btn {
+            &:hover {
+                background-color: $color-blue-light;
+            }
+        }
+    }
+}
+.btn {
+    &.glyphicon {
+        .icon-label {
+            color: $color-black;
+            font-family: sans-serif;
+            padding: 0 0 0 4px;
+            text-transform: uppercase;
+            top: -3px;
+        }
+    }
+}
+.btn-block {
+    border-bottom: 2px solid $color-grey-dark;
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+    border-top: 1px solid $color-blue-light;
 }
 h1,
 h2,
@@ -232,6 +264,16 @@ h6 {
 	color: $color-dark;
 	font-family: $font-major;
 	font-weight: $font-primary-weight;
+}
+h2 {
+    input {
+        &[type='number'] {
+            display: block;
+            float: right;
+            text-align: right;
+            width: 70px;
+        }
+    }
 }
 dialog {
 	border: 0;
@@ -279,33 +321,7 @@ nav,
 	@extend %noSelect;
 }
 // Classes
-// A left aligned Container for the MAIN UI
-.sidebar {
-	@extend %pane-tall;
-	@include boxShadow(0, 0, 3px, 0, $color-black);
-	@include no-scroll-bar;
-	@include transition($transition-default);
-	background-color: adjust-color($color-black, $alpha: .75);
-	margin-left: -100%; /// !important
-	position: absolute;
-	top: $navbar-height;
-	width: $sidebar-width; // !important
-	z-index: 999;
 
-	&.active {
-		margin-left: 0;
-	}
-	// Each embedded list gets smaller
-	ul {
-		li {
-			ul {
-				@include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
-				font-size: 90%;
-				text-indent: 1em;
-			}
-		}
-	}
-}
 // A wide button to toggle collapsed state of a Child Container
 .toggler {
 	@extend %bevel-up;
@@ -318,38 +334,41 @@ nav,
 	}
 }
 .icarus-container {
-	margin: 0;
-	padding: 0;
-	width: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 
-	.panel {
-		background-color: adjust-color($color-black, $alpha: .5);
-	}
+    .panel {
+        background-color: adjust-color($color-black, $alpha: .5);
+    }
+
+    > .container-body {
+        background-color: $color-light;
+        width: 100%;
+
+        .pane {
+            @include transition($transition-default);
+            @include no-scroll-bar;
+            width: 100%;
+        }
+    }
 }
-.container-body {
-	background-color: $color-light;
-	width: 100%;
-}
+
 .index-main {
-	>.container-body {
-		>header {
+	> .container-body {
+		> header {
 			@extend %bevel-up;
 			background-color: $color-dark;
 			color: $color-light;
 			padding: 0 .5em;
 			text-transform: uppercase;
 		}
-		>.banner {
+		> .banner {
 			border-top: 0;
 			height: 528px;
 			max-height: 528px;
 			overflow-y: auto;
 		}
-		//> .pane {
-		//    > .thumbnail {
-		//    
-		//    }
-		//}
 	}
 	.pagination {
 		//footer.pagination
@@ -403,16 +422,51 @@ nav,
 	}
 }
 main {
-	&>.navbar-wrapper {
-		// This toggler would be appended to document.body
-		&>.toggler {
-			display: none;
-		}
-	}
-	// The pane within the Main container should fill the remaining screen space
-	>.container-body>.pane {
-		@extend %pane-tall;
-	}
+    align-items: stretch;
+    display: flex;
+
+
+    & > .navbar-wrapper {
+        // This toggler would be appended to document.body
+        & > .toggler {
+            display: none;
+        }
+    }
+    // The pane within the Main container should fill the remaining screen space
+    > .container-body {
+        > .pane {
+            @extend %pane-tall;
+        }
+    }
+    // A left aligned Container for the MAIN UI
+    aside {
+        &.sidebar {
+            @extend %pane-tall;
+            @include boxShadow(0, 0, 3px, 0, $color-black);
+            @include no-scroll-bar;
+            @include transition($transition-default);
+            background-color: adjust-color($color-black, $alpha: .75);
+            margin-left: -100%; /// !important
+            position: absolute;
+            top: $navbar-height;
+            width: $sidebar-width; // !important
+            z-index: 999;
+
+            &.active {
+                margin-left: 0;
+            }
+            // Each embedded list gets smaller
+            ul {
+                li {
+                    ul {
+                        @include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
+                        font-size: 90%;
+                        text-indent: 1em;
+                    }
+                }
+            }
+        }
+    }
 }
 .banner {
 	@extend %bevel-up;
@@ -520,11 +574,7 @@ main {
 		}
 	}
 }
-.pane {
-	@include transition($transition-default);
-	@include no-scroll-bar;
-	width: 100%;
-}
+
 .chat {
 	background-color: $color-light-more;
 
@@ -645,49 +695,7 @@ main {
 		}
 	}
 }
-button {
-	:disabled {
-		background-color: $color-red-deep;
-	}
 
-	>.icon {
-		color: $color-black;
-	}
-
-	.glyphicon {
-		.icon-label {
-			color: $color-black;
-			text-transform: uppercase;
-		}
-	}
-}
-.btn {
-	&.glyphicon {
-		.icon-label {
-			color: $color-black;
-			font-family: sans-serif;
-			padding: 0 0 0 4px;
-			text-transform: uppercase;
-			top: -3px;
-		}
-	}
-}
-div {
-	.btn-group {
-		.btn {
-			&:hover {
-				background-color: $color-blue-light;
-			}
-		}
-	}
-}
-.btn-block {
-	border-bottom: 2px solid $color-grey-dark;
-	border-left: 0;
-	border-radius: 0;
-	border-right: 0;
-	border-top: 1px solid $color-blue-light;
-}
 .console {
 	@include transition($transition-default);
 	background-color: adjust-color($color-black, $alpha: .75);
@@ -864,14 +872,6 @@ input {
 		text-transform: uppercase;
 	}
 }
-.app {
-	align-items: stretch;
-	display: flex;
-}
-.app-body {
-	//display: flex;
-	width: 100%;
-}
 .navbar-search {
 	border: 0;
 	border-bottom: 1px solid $color-white;
@@ -883,16 +883,7 @@ input {
 		font-family: Lato;
 	}
 }
-h2 {
-	input {
-		&[type='number'] {
-			display: block;
-			float: right;
-			text-align: right;
-			width: 70px;
-		}
-	}
-}
+
 // Override the default bootstrap behavior where horizontal description lists 
 // will truncate terms that are too long to fit in the left column
 .dl-horizontal {
@@ -957,7 +948,6 @@ h2 {
 	background-color: $jumbotron-bg-default;
 	background-position: center top;
 	background-repeat: no-repeat;
-	//background-size: 100% !important;
 	background-size: cover; // !important
 	color: $color-white;
 	font-family: 'Raleway';
