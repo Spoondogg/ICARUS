@@ -1,9 +1,11 @@
+/// <binding />
 // #region Imports
 /** @module */
 import autoprefixer from 'autoprefixer';
 import babel from 'gulp-babel';
 import beautify from 'gulp-jsbeautifier';
 import buffer from 'gulp-buffer';
+import cleancss from 'gulp-clean-css';
 import concat from 'gulp-concat';
 import connect from 'connect';
 import del from 'del';
@@ -43,10 +45,12 @@ import terser from 'gulp-terser';
 /** Relevent build paths */
 const paths = {
     styles: {
-        src: 'Content/styles/src/**/*.scss',
-        dest: 'Content/styles/dist/'
+        base: 'Content/styles/src/icarus',
+        src: 'Content/styles/src/icarus/icarus.scss',
+        dest: 'Content/styles/dist/icarus'
     },
     scripts: {
+        base: 'Scripts/src',
         src: 'Scripts/src/**/*.js',
         dest: 'Scripts/dist/'
     },
@@ -80,18 +84,23 @@ export function styles_build_src() {
         autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
         postcsstouchcallout,
         postcssmomentumscrolling,
-        postcssfontsmoothing,
-        postcssclean
+        postcssfontsmoothing
+        /*postcssclean({
+            from: paths.styles.src,
+            to: 'Content/styles/dist/icarus/icarus.min.css',
+            map: true //{ inline: true }
+        })  // http://api.postcss.org/global.html#processOptions*/
     ];
-    return gulp.src(paths.styles.src)
+    return gulp.src(paths.styles.src) // , { sourcemaps: true }
         .pipe(sourcemaps.init())        
         .pipe(sass())  //.pipe(sass().on('error', sass.logError))
-        .pipe(postcss(plugins))
         .pipe(rename({
             basename: 'icarus',
             suffix: '.min',
         }))
-        .pipe(sourcemaps.write('.'))
+        .pipe(postcss(plugins))
+        .pipe(cleancss({ /*compatibility: 'ie8'*/ }))
+        .pipe(sourcemaps.write('.')) //'.'
         .pipe(gulp.dest(paths.styles.dest));
 }
 /**
@@ -138,11 +147,8 @@ export function styles_lint_src(done) {
 // #endregion
 // #region Scripts
 export function scripts_build_src() {
-    return gulp.src(paths.scripts.src)
+    return gulp.src(paths.scripts.src, { base: paths.scripts.base })
         .pipe(sourcemaps.init())
-        //.pipe(babel())
-        //.pipe(uglify())
-        //.pipe(concat('icarus.min.js'))
         .pipe(terser())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.scripts.dest));
@@ -161,6 +167,9 @@ export function scripts_build_vendor() {
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest(paths.scripts.dest));
 }
+/**
+    ES6 Beautification
+*/
 export function scripts_beautify_src() {
     let config = require(paths.config.beautify);
     return gulp.src(paths.scripts.src, { base: './' })
@@ -264,7 +273,7 @@ const _clean = () => del([
     @param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
-export function publish_scripts(dev = true) {
+export function scripts_publish(dev = true) {
     return gulp.src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 }
@@ -273,7 +282,7 @@ export function publish_scripts(dev = true) {
     @param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
-export function publish_styles() {
+export function styles_publish() {
     return gulp.src(['Content/styles/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 }
@@ -282,11 +291,12 @@ export function publish_styles() {
 */
 export function _publish() {
     return gulp.series(
-        publish_scripts,
-        publish_styles
+        scripts_publish,
+        styles_publish
     );
 }
 // #endregion
+// #region Watch
 /**
     Watches Scripts and Styles and builds on change
     @see https://gist.github.com/jeromecoupe/0b807b0c1050647eb340360902c3203a
@@ -305,8 +315,9 @@ export function _watch_styles() {
     Watches Styles for changes and performs linting
 */
 export function _watch_scripts() {
-    gulp.watch('./Scripts/src/**/**.js', scripts_lint_src);
+    gulp.watch('./Scripts/src/**/**.js', _lintbuildpublish); //scripts_lint_src
 }
+// #endregion
 // #region Maintenance
 /** Beautifies Scripts and Styles */
 const _beautify = gulp.series(
@@ -332,6 +343,16 @@ const _build = gulp.series(
     scripts_build_src,
     scripts_build_vendor
 );
+
+/** 
+    Lint, Build on Success, then publish
+ */
+const _lintbuildpublish = gulp.series(
+    //scripts_beautify_src,
+    scripts_lint_src,
+    scripts_build_src,
+    scripts_publish
+);
 /**
     Compiles documentation for Scripts, Styles and API
 */
@@ -342,6 +363,6 @@ const _document = gulp.series(
 );
 // #endregion
 // #region Exports
-export { _beautify, _build, _clean, _lint };
+export { _beautify, _build, _clean, _lint, _lintbuildpublish };
 export default _build;
 // #endregion

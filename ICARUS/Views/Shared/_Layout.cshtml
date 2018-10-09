@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="@ViewBag.Title">
-    <meta name="description" content="@ViewBag.Description" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="author" content="Ryan Dunphy" />
-    <meta name="token" content="" />
+    <meta name="description" content="@ViewBag.Description" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#FFF" />
+    <meta name="token" content="" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts *@
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
+    <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/vendor.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/icarus/icarus.min.css")" />
-    <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
-    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
-    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
     <script src="@Url.Content("~/Scripts/dist/vendor.js")"></script>
 </head>
 <body>

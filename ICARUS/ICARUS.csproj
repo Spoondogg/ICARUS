@@ -590,7 +590,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\styles\dist\icarus\icarus.min.css" />
-    <Content Include="Content\styles\dist\vendor.css" />
     <Content Include="Content\styles\fonts\glyphicons-halflings-regular.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -852,10 +851,10 @@
     <Content Include="Content\styles\src\icarus\icarus.scss" />
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
-    <Content Include="Content\styles\dist\icarus\icarus.min.css.map" />
     <Content Include="config\beautify.json" />
     <Content Include="config\sasslint.json" />
     <Content Include="config\doxygen.json" />
+    <Content Include="Content\styles\dist\icarus\icarus.min.css.map" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />
