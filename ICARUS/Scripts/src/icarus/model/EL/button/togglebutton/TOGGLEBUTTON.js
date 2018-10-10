@@ -1,17 +1,13 @@
-/**
-    @module
-*/
-import '../../../../StringMethods.js';
+/** @module */
 import MENU, { MODEL } from '../../nav/menu/MENU.js';
 import BUTTON from '../BUTTON.js';
-/**
-    Button that show/hides a list of options
+import STRING from '../../../../STRING.js';
+/** Button that show/hides a list of options
     @class
     @extends BUTTON
 */
 export default class TOGGLEBUTTON extends BUTTON {
-	/**
-	    Construct a toggle button
+	/** Construct a toggle button
 	    @param {EL} node The parent object
 	    @param {string} label The label
 	    @param {string} glyphicon glyphicon
@@ -23,7 +19,7 @@ export default class TOGGLEBUTTON extends BUTTON {
 		this.el.setAttribute('data-toggle', 'dropdown');
 		this.el.setAttribute('aria-haspopup', 'true');
 		this.el.setAttribute('aria-expanded', 'false');
-		this.menu = new MENU(node, new MODEL().set('name', label.friendly()));
+		this.menu = new MENU(node, new MODEL().set('name', new STRING(label).friendly()));
 	}
 }
 export { BUTTON, MENU };

@@ -74,11 +74,11 @@ export default class CONTROLLER extends MODEL {
 		this.loader = new LOADER('Loading', 'Loading', 100);
 		this.loader.log(100, 'Launching application...', true);
 		/**
-				    @property {PROMPT} prompt A dialog prompting the user for input
-				    @type {PROMPT}
-				    @todo There should never be more than one prompt in the DOM.
-		            @todo Create a queue to hold multiple prompts
-				*/
+			@property {PROMPT} prompt A dialog prompting the user for input
+			@type {PROMPT}
+			@todo There should never be more than one prompt in the DOM.
+		    @todo Create a queue to hold multiple prompts
+		*/
 		this.prompt = null;
 		/**
 		    @property {MAIN} main The MAIN Container

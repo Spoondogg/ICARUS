@@ -1,21 +1,17 @@
-/**
-    @module
-*/
-import '../../../../../StringMethods.js';
+/** @module */
 import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 //import PROMPT from '../../../modal/prompt/PROMPT.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
 import INPUT from '../../../input/INPUT.js';
-/**
-    Represents an INPUT for an Icarus Form
+//import STRING from '../../../../../STRING.js';
+/** Represents an INPUT for an Icarus Form
     @class
     @extends FORMELEMENT
 */
 export default class FORMINPUT extends FORMELEMENT {
-	/**
-	    Constructs a FORMINPUT element
+	/** Constructs a FORMINPUT element
 	    @param {EL} node Parent
 	    @param {MODEL} model The model
 	 */
@@ -24,14 +20,12 @@ export default class FORMINPUT extends FORMELEMENT {
 		super(node, 'DIV', model);
 		this.createInput();
 	}
-	/**
-		    Creates an INPUT Element
-		    @todo: This should use a factory constructor pattern to create specific input types 
-	        @returns {EL} An INPUT EL
-
-	        @todo file, text, number, email, phone (html5 inputs) 
-	        @todo This should use a factory constructor pattern to create specific input types
-		 */
+	/** Creates an INPUT Element
+        @returns {INPUT} An INPUT EL
+        @todo: This should use a factory constructor pattern to create specific input types
+        @todo file, text, number, email, phone (html5 inputs) 
+        @todo This should use a factory constructor pattern to create specific input types
+    */
 	createInput() {
 		let nm = this.attributes.name || this.data.name;
 		let val = this.attributes.value || this.data.value;
@@ -49,8 +43,7 @@ export default class FORMINPUT extends FORMELEMENT {
 		}
 		return this.input;
 	}
-	/**
-	    Add any preset options to the datalist
+	/** Add any preset options to the datalist
 	    @returns {void}
 	*/
 	addInputOptions() {
@@ -64,8 +57,7 @@ export default class FORMINPUT extends FORMELEMENT {
 			}
 		}
 	}
-	/**
-	    Create an empty subform, similar to a data/attributes object to 
+	/** Create an empty subform, similar to a data/attributes object to 
 	    save the image by FormPostId
 	    @returns {void}
 	*/
@@ -119,15 +111,14 @@ export default class FORMINPUT extends FORMELEMENT {
 		})));
 		this.input.el.onchange = this.readURL.bind(this);
 	}
-	/**
-		    Reads the contents of this FILE INPUT and extracts the base64 values and metadata
-	        When the input is set (selected from explorer), extract its data into the appropriate inputs (above)
-	        @description Use FileReader to extract base64 and attributes
-		    @todo This should detect file types and limit accordingly
-		    @see https://gist.github.com/batuhangoksu/06bc056399d87b09243d
-	        @throws Throws an error if unable to successfully read the Url
-	        @return {boolean} Returns true if successful
-		*/
+	/** Reads the contents of this FILE INPUT and extracts the base64 values and metadata
+        When the input is set (selected from explorer), extract its data into the appropriate inputs (above)
+        @description Use FileReader to extract base64 and attributes
+        @todo This should detect file types and limit accordingly
+        @see https://gist.github.com/batuhangoksu/06bc056399d87b09243d
+        @throws Throws an error if unable to successfully read the Url
+        @return {boolean} Returns true if successful
+    */
 	readURL() {
 		console.log(10, 'readUrl():  Reading an Image');
 		try {
@@ -148,11 +139,10 @@ export default class FORMINPUT extends FORMELEMENT {
 			throw e;
 		}
 	}
-	/**
-		    Sets the label of this element to the given value.
-		    @param {string} label The name to be set
-	        @returns {ThisType} Returns this object for method chaining
-		*/
+	/** Sets the label of this element to the given value.
+        @param {string} label The name to be set
+        @returns {ThisType} Returns this object for method chaining
+    */
 	setLabel(label) {
 		this.navBar.header.tab.anchor.setInnerHTML(label);
 		this.label.setInnerHTML(label);

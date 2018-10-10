@@ -1,6 +1,4 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER, { ATTRIBUTES, DIALOG, ICONS, INPUTTYPES, MODEL } from '../CONTAINER.js';
 //import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
@@ -10,14 +8,12 @@ import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../modal/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
-/**
-    A top level View that holds all other child Containers
+/** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
 */
 export default class MAIN extends CONTAINER {
-	/**
-	    Constructs a MAIN Container and populates the DOM
+	/** Constructs a MAIN Container and populates the DOM
 	    with any relevant elements
 	    @constructor
 	    @param {MODEL} model APP model
@@ -35,13 +31,11 @@ export default class MAIN extends CONTAINER {
 		    @type {LOADER}
 		*/
 		this.loader = model.loader;
-		/**
-		    A Security token
+		/** A Security token
 		    @type {string}
 		*/
 		this.token = model.token;
-		/**
-		    Browser Url
+		/** Browser Url
 		    @property {Url} url The browser url
 		*/
 		this.url = model.url;
@@ -141,7 +135,6 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		// Add USER options
 		let userMenu = this.navBar.header.menu.addMenu(new MODEL(new ATTRIBUTES('horizontal collapse')).set({
 			'name': 'USER',
 			'showHeader': 1,
@@ -151,115 +144,33 @@ export default class MAIN extends CONTAINER {
 			this.navBar.header.toggleCollapse();
 			this.logout();
 		};
-		/*
-		userMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.USER,
-		        'label': 'Log Out',
-		        'url': '#?url=logout'
-		    })
-		})).el.onclick = () => {
-		    this.navBar.header.toggleCollapse();
-		    this.logout();
-		};
-		*/
 		this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
-		/*
-		userMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.OPTIONS,
-		        'label': 'Manage',
-		        'url': 'Manage/Index'
-		    })
-		}));
-		*/
 		let domMenu = this.navBar.header.menu.getGroup('DOM');
 		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
-			//console.log(100, 'Returning Home...');
 			setTimeout(() => {
 				location.href = this.url.origin;
 			}, 300);
 		};
-		/*
-		domMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.HOME,
-		        'label': 'Home'
-		    })
-		})).el.onclick = () => {
-		    //console.log(100, 'Returning Home...');
-		    setTimeout(() => {
-		        location.href = this.url.origin;
-		    }, 1000);
-		};
-		*/
 		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
 			this.toggleHeaders();
 			this.navBar.header.toggleCollapse();
 		};
-		/*
-		domMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.TOGGLE,
-		        'label': 'Headers'
-		    })
-		})).el.onclick = () => {
-		    this.toggleHeaders();
-		    this.navBar.header.toggleCollapse();
-		};
-		*/
 		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
-			//console.log('Showing Console');
 			this.loader.show();
 			this.loader.showConsole();
 		};
-		/*
-		domMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.CONSOLE,
-		        'label': 'Console'
-		    })
-		})).el.onclick = () => {
-		    //console.log('Showing Console');
-		    this.loader.show();
-		    this.loader.showConsole();
-		};*/
 		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
-			//console.log(100, 'Reloading');
 			setTimeout(() => {
 				location.reload(true);
 			}, 1000);
 		};
-		/*
-		domMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.REFRESH,
-		        'label': 'Reload'
-		    })
-		})).el.onclick = () => {
-		    //console.log(100, 'Reloading');
-		    setTimeout(() => {
-		        location.reload(true);
-		    }, 1000);
-		};
-		*/
 		let crudMenu = this.navBar.header.menu.getGroup('CRUD');
-		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = this.newMain.bind(this);
-		/*
-		crudMenu.addNavItemIcon(new MODEL().set({
-		    'anchor': new MODEL().set({
-		        'icon': ICONS.MAIN,
-		        'label': 'New'
-		    })
-		})).el.onclick = this.newMain.bind(this);*/
+		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = this.newMain.bind(this);		
 	}
-	/**
-		    Requests a new {@link MAIN} from the server and 
-		    redirects to that page
-
-		    @todo This should be a POST to avoid CSRF
-	        @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
-		*/
+	/** Requests a new {@link MAIN} from the server and redirects to that page
+        @todo This should be a POST to avoid CSRF
+        @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
+    */
 	newMain() {
 		$.getJSON('/MAIN/Get/0', (payload) => {
 			console.log('Created MAIN', payload);
@@ -285,26 +196,24 @@ export default class MAIN extends CONTAINER {
 			return true;
 		});
 	}
-	/**
-	    Overrides CONTAINER.getContainer() and returns this MAIN Container
+	/** Overrides CONTAINER.getContainer() and returns this MAIN Container
 	    @returns {MAIN} The MAIN Container
 	*/
 	getContainer() {
 		return this;
 	}
-	/**
-	    Overrides CONTAINER.getMainContainer() and returns this MAIN Container
+	/** Overrides CONTAINER.getMainContainer() and returns this MAIN Container
 	    @returns {MAIN} The MAIN Container
 	*/
 	getMainContainer() {
 		return this;
 	}
-	/**
-		    Sets the focus on the Main container body.  
-		    This generally is used to hide elements such 
-		    as a Sidebar, Modal or an EDIT pane
-	        @returns {void}
-		 */
+    /**
+        Sets the focus on the Main container body.  
+        This generally is used to hide elements such 
+        as a Sidebar, Modal or an EDIT pane
+        @returns {void}
+    */
 	focusBody() {
 		if ($(this.sidebar.el).hasClass('active')) {
 			this.sidebar.removeClass('active');
@@ -312,14 +221,14 @@ export default class MAIN extends CONTAINER {
 		$(this.navBar.header.menu.el).collapse('hide');
 	}
 	/**
-		    Loads the specified app id into the Main Container
+		Loads the specified app id into the Main Container
 
-	        @todo Prompt the user for an Id to load
-	        @todo create a simple application browser to retrieve a MAIN
+	    @todo Prompt the user for an Id to load
+	    @todo create a simple application browser to retrieve a MAIN
 
-		    @param {number} id App Id to load
-		    @returns {MAIN} This MAIN
-		*/
+		@param {number} id App Id to load
+		@returns {MAIN} This MAIN
+	*/
 	load(id = 1) {
 		let returnUrl = this.url.searchParams.get('ReturnUrl');
 		if (returnUrl) {
@@ -330,14 +239,14 @@ export default class MAIN extends CONTAINER {
 		return this;
 	}
 	/**
-		    The ajax call performed when MAIN.load is called
-		    Receives the MAIN model from Main/Get/id (if permitted)
-		    Then, sets the document title, application id and label
-		    and Populates accordingly
-		    @param {any} data The ajax payload
-	        @returns {boolean} True on success
-	        @throws Throws an error if unable to construct given class
-		*/
+		The ajax call performed when MAIN.load is called
+		Receives the MAIN model from Main/Get/id (if permitted)
+		Then, sets the document title, application id and label
+		and Populates accordingly
+		@param {any} data The ajax payload
+	    @returns {boolean} True on success
+	    @throws Throws an error if unable to construct given class
+	*/
 	loadAjaxCall(data) {
 		if (data.result === 1) {
 			try {
@@ -359,45 +268,32 @@ export default class MAIN extends CONTAINER {
 		}
 	}
 	/**
-		    Toggles the active state of the sidebar
-	        @return {ThisType} Return this for method chain
-		 */
+		Toggles the active state of the sidebar
+	    @return {ThisType} Return this for method chain
+		*/
 	toggleSidebar() {
 		this.sidebar.toggle('active');
 		return this;
 	}
-	/**
-		    Made obsolete by EL.merge()
-		    @param {any} payload Data returned by server
-	        @deprecated
-	        @returns {void}
-		 
-	updateModel(payload) {
-		this.setLabel(payload.label);
-		this.setSubSections(payload.subsections);
-	}*/
-	/**
-		    Allows the user to open a MAIN 
-		    @param {number} id MAIN id
-	        @todo Create method to browse MAINs
-	        @returns {boolean} True on success
-		*/
+	/** Allows the user to open a MAIN 
+		@param {number} id MAIN id
+	    @todo Create method to browse MAINs
+	    @returns {boolean} True on success
+	*/
 	open(id = 0) {
 		console.log('TODO: APP.open(' + id + ')');
 		return false;
 	}
-	/**
-	    Returns the APP Id
+	/** Returns the APP Id
 	    @returns {number} App Id
 	*/
 	getId() {
 		return this.id;
 	}
-	/**
-		    Launches the External Authentication Process
-		    The user will be redirected to a third party authenticator
-	        @returns {void}
-		*/
+	/** Launches the External Authentication Process
+		The user will be redirected to a third party authenticator
+	    @returns {void}
+	*/
 	loginExternal() {
 		console.log('loginExternal()');
 		/*
@@ -441,76 +337,108 @@ export default class MAIN extends CONTAINER {
 				this.prompt.show();
 		        */
 	}
-	/**
-		    Log into the application using the given credentials
-		    param {string} email Username / Email 
-		    param {string} password Account Password
-	        @todo Consider handling email/password string or CREDENTIALS object
-	        @todo Create INPUT CHECKBOX called 'RememberMe'
-	        @todo Create BUTTON to launch 'Register as new User
-	        @todo Create AHREF to 'ForgotPassword'
-	        @returns {void}
-		*/
+	/** Log into the application using the given credentials
+		param {string} email Username / Email 
+		param {string} password Account Password
+	    @todo Consider handling email/password string or CREDENTIALS object
+	    @todo Create INPUT CHECKBOX called 'RememberMe'
+	    @todo Create BUTTON to launch 'Register as new User
+	    @todo Create AHREF to 'ForgotPassword'
+	    @returns {void}
+	*/
 	login() { //email, password
-		let dialog = new DIALOG(new MODEL().set({ 'text': 'woot' })); //'token': this.getMainContainer().getToken()
-		dialog.show();
-		this.prompt = new PROMPT('Log In', '', [], [], true);
-		this.prompt.addClass('prompt');
-		this.prompt.form.setPostUrl('/Account/Login');
-		this.prompt.form.el.setAttribute('class', 'login');
-		this.prompt.form.el.setAttribute('method', 'POST');
-		this.prompt.form.el.setAttribute('action', '#');
-		this.email = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'typeId': INPUTTYPES.INPUT,
-			'type': 'Email',
-			'name': 'Email'
-		})).set({
-			'label': 'Username',
-			'showHeader': 0
-		}));
-		this.password = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'typeId': INPUTTYPES.PASSWORD,
-			'type': 'Password',
-			'name': 'Password'
-		})).set({
-			'label': 'Password',
-			'showHeader': 0
-		}));
-		//this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
+        let dialog = new DIALOG(new MODEL().set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
+        let form = FORM.createEmptyForm(this.body.pane);
+        $(form.el).appendTo(dialog.body.el);
+        form.show();
+        form.setPostUrl('/Account/Login');
+        form.el.setAttribute('class', 'login');
+        form.el.setAttribute('method', 'POST');
+        form.el.setAttribute('action', '#');
+
+        let email = new FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'typeId': INPUTTYPES.INPUT,
+            'type': 'Email',
+            'name': 'Email'
+        })).set({
+            'label': 'Username',
+            'showHeader': 0
+            }));
+
+        let password = new FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'typeId': INPUTTYPES.PASSWORD,
+            'type': 'Password',
+            'name': 'Password'
+        })).set({
+            'label': 'Password',
+            'showHeader': 0
+        }));
+
+        dialog.show();
+    }
+    /**
+        @deprecated
+        Outdated login form
+        @returns {void}
+    */
+    loginLegacy() {
+        this.prompt = new PROMPT('Log In', '', [], [], true);
+        this.prompt.addClass('prompt');
+        this.prompt.form.setPostUrl('/Account/Login');
+        this.prompt.form.el.setAttribute('class', 'login');
+        this.prompt.form.el.setAttribute('method', 'POST');
+        this.prompt.form.el.setAttribute('action', '#');
+        this.email = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'typeId': INPUTTYPES.INPUT,
+            'type': 'Email',
+            'name': 'Email'
+        })).set({
+            'label': 'Username',
+            'showHeader': 0
+        }));
+        this.password = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'typeId': INPUTTYPES.PASSWORD,
+            'type': 'Password',
+            'name': 'Password'
+        })).set({
+            'label': 'Password',
+            'showHeader': 0
+        }));
+        //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
 		/**
 			Post the Login FormPost
 			If login successful, load the new User Session (Refresh Page)
 		    @returns {void}
 		*/
-		this.prompt.form.footer.buttonGroup.children[0].el.onclick = () => {
-			$.post('/Account/LogIn', $(this.prompt.form.el).serialize(), this.ajaxRefreshIfSuccessful);
-		};
-		this.prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-		// Create a new form to submit 3rd party logins
-		this.externalLogin = this.createExternalLoginForm();
-		this.provider = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'provider'
-		})));
-		this.returnUrl = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'returnUrl'
-		})));
-		let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth');
-		btnOAuth.el.onclick = function() {
-			console.log(50, 'Launching OAuth2 Authenticator...');
+        this.prompt.form.footer.buttonGroup.children[0].el.onclick = () => {
+            $.post('/Account/LogIn', $(this.prompt.form.el).serialize(), this.ajaxRefreshIfSuccessful);
+        };
+        this.prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+        // Create a new form to submit 3rd party logins
+        this.externalLogin = this.createExternalLoginForm();
+        this.provider = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'provider'
+        })));
+        this.returnUrl = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+            'type': 'hidden',
+            'name': 'returnUrl'
+        })));
+        let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth');
+        btnOAuth.el.onclick = function () {
+            console.log(50, 'Launching OAuth2 Authenticator...');
 			/*
-						let returnUrl = this.url.origin + '/signin-google';
-						this.returnUrl.el.setAttribute('value', returnUrl);
+			let returnUrl = this.url.origin + '/signin-google';
+			this.returnUrl.el.setAttribute('value', returnUrl);
 			            
-						let provider = 'Google';
-						this.provider.el.setAttribute('value', provider);
+			let provider = 'Google';
+			this.provider.el.setAttribute('value', provider);
 			            
 
-						let postUrl = '/Account/ExternalLogin?provider='
-						    + provider + '&returnUrl=' + encodeURI(returnUrl); 
-						*/
-			location.href = '/Account/ExternalLogin';
+			let postUrl = '/Account/ExternalLogin?provider='
+				+ provider + '&returnUrl=' + encodeURI(returnUrl); 
+			*/
+            location.href = '/Account/ExternalLogin';
 			/****            
 			<form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
 			    <input name="__RequestVerificationToken" type="hidden" value="NUl4K_C0ubvHbrEeyfF19jddMf9-BZ-MTIuA33kSxdhMJoh5TEvV53sbv61vtRCp_vbWI2DQzFENnljDRpx2srlaBpQZQRsWZoKkLwSjTek1">                <div id="socialLoginList">
@@ -524,9 +452,9 @@ export default class MAIN extends CONTAINER {
 			    </div>
 			</form>
 			****/
-		};
-		this.prompt.show();
-	}
+        };
+        this.prompt.show();
+    }
 	/**
 	    Sets up the External Login Form
 	    @returns {FORM} An external login form
