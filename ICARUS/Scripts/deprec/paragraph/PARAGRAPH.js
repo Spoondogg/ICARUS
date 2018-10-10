@@ -1,41 +1,33 @@
-/**
-    @module
-*/
-import '../../../../StringMethods.js';
+/** @module */
 import CONTAINER, { MODEL } from '../CONTAINER.js';
-import DATEOBJECT from '../../../../helper/DATEOBJECT.js';
 import FORMPOSTINPUT from '../formelement/formpostinput/FORMPOSTINPUT.js';
 import HEADER from '../../header/HEADER.js';
 import P from '../../p/P.js';
-/**
-    A block of text
+/** A block of text
     @class
+    @deprecated Replaced with TEXTBLOCK
     @extends CONTAINER
 */
 export default class PARAGRAPH extends CONTAINER {
-	/**
-	    Constructs a Banner that contains CallOuts.
-	    @param {CONTAINER} node The model
-	    @param {MODEL} model Object Model
-	 */
+	/** Constructs a Banner that contains CallOuts.
+        @param {CONTAINER} node The model
+        @param {MODEL} model Object Model
+    */
 	constructor(node, model) {
 		super(node, 'DIV', model, ['IMAGE']);
 		this.addClass('textblock');
 		this.body.pane.addClass('paragraph');
-		//this.dataElements = DATAELEMENTS.PARAGRAPH;
-		//this.construct();
 		this.populate(model.children);
 	}
-	/**
-		    Constructs a Paragraph Container
-	        @returns {void}
-		*/
+	/** Constructs a Paragraph Container
+        @returns {void}
+	*/
 	construct() {
 		if (this.dataId > 0) {
 			if (this.data.p) {
-				let d = DATEOBJECT.getDateObject(String(this.dateCreated).getDateValue(this.dateCreated));
+                let d = this.getDateCreated();
 				this.header = new HEADER(this.body.pane, new MODEL().set({
-					'label': d.date + ' - ' + d.time //'paragraph header'
+					'label': d.date + ' - ' + d.time
 				}));
 				this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
 			}

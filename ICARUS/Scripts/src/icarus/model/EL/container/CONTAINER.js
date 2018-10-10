@@ -4,6 +4,7 @@ import GROUP, { ATTRIBUTES, EL, MODEL } from '../group/GROUP.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import CONTAINERBODY from './CONTAINERBODY.js';
 import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
+import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import DIV from '../div/DIV.js';
 import FOOTER from '../footer/FOOTER.js';
@@ -12,22 +13,21 @@ import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import { STATUS } from '../../../enums/STATUS.js';
-/**
-    An abstract Container element with NAVBAR
+import STRING from '../../../STRING.js';
+/** An abstract Container element with NAVBAR
     @description A container can be expanded or hidden and have elements added to itself
     @class
     @extends GROUP
 */
 export default class CONTAINER extends GROUP {
-	/**
-	    @constructs CONTAINER
+	/** @constructs CONTAINER
 	    @param {EL} node The element to contain the section
 	    @param {string} element HTML element
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	 */
 	constructor(node, element, model = new MODEL().set({
-		element, //'element': 
+		element, 
 		'name': element || '',
 		'label': element,
 		'shared': 1
@@ -39,9 +39,6 @@ export default class CONTAINER extends GROUP {
 		/*if (model.id) { // Eventually, this needs to go
 			this.el.setAttribute('id', model.id);
 		}*/
-		/**
-		    @property {number} shared If shared == 1
-		*/
 		this.shared = this.shared || 1; //this.shared = this.shared ? this.shared : 1; 
 		this.updateUrl = this.element + '/Set'; // model.className should be the actual value, no?                
 		this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
@@ -64,8 +61,7 @@ export default class CONTAINER extends GROUP {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
 	}
-	/** 
-		Saves the state of the given Container
+	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    @param {EL} node The parent container to hold the save menu
         @param {CONTAINER} container The Container to save
@@ -77,8 +73,7 @@ export default class CONTAINER extends GROUP {
 		console.log(node, container);
 		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 	}
-	/**
-	    Displays a prompt that performs a save of the container, it's 
+	/** Displays a prompt that performs a save of the container, it's 
 	    attributes and any data objects associated with it.
         @param {CONTAINER} container The Container to save
 	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
@@ -89,8 +84,7 @@ export default class CONTAINER extends GROUP {
 		console.log(container, noPrompt);
 		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 	}
-	/**
-	    The default visibility state for menus and collapseable content
+	/** The default visibility state for menus and collapseable content
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @returns {void}
 	*/
@@ -105,8 +99,7 @@ export default class CONTAINER extends GROUP {
 			}
 		}
 	}
-	/**
-	    Adds the default Container Cases to the CRUD Menu
+	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names
 	    @returns {void}
 	*/
@@ -163,7 +156,7 @@ export default class CONTAINER extends GROUP {
 	    Create a in-memory div, set it's inner text(which jQuery automatically encodes
 	    then grab the encoded contents back out.  The div never exists on the page.
 	    @todo This really should just be an extention of the String class
-	    @param {any} value The string to be html encoded
+	    @param {string} value The string to be html encoded
 	    @returns {text} An html encoded string
 	 */
 	htmlEncode(value) {
@@ -172,7 +165,7 @@ export default class CONTAINER extends GROUP {
 	/**
 	    Decodes an HTML encoded value back into HTML string
 	    @todo This really should just be an extention of the String class
-	    @param {any} value An html encoded string
+	    @param {string} value An html encoded string
 	    @returns {string} A string that was previously html encoded
 	 */
 	htmlDecode(value) {
@@ -756,7 +749,13 @@ export default class CONTAINER extends GROUP {
 			console.log('Unable to disable this ' + this.element, e);
 		}
         */
-	}
+    }
+    /** Creates a DATEOBJECT using this Container's dateCreated attribute
+        @returns {DATEOBJECT} An easy to use date object
+    */
+    getDateCreated() {
+        return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
+    }
 }
-export { ATTRIBUTES, DATAELEMENTS, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL };
+export { ATTRIBUTES, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
 /* eslint-enable max-lines */

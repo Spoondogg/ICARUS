@@ -1,36 +1,29 @@
-/**
-    @module
-*/
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../../CONTAINER.js';
+/** @module */
+import CONTAINER, { ATTRIBUTES, EL, MODEL, STRING } from '../../CONTAINER.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import HEADER from '../../../header/header.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
 import MODAL from '../../../modal/MODAL.js';
 import P from '../../../p/P.js';
-/**
-    Jumbotron with centered icon and text
+/** Jumbotron with centered icon and text
     @class
     @extends CONTAINER
 */
 export default class THUMBNAIL extends CONTAINER {
-	/**
-	    Constructs a Bootstrap Jumbotron.
-	    @param {CONTAINER} node The model
-	     @param {MODEL} model Object Model
-	 */
+	/** Constructs a Bootstrap Jumbotron.
+        @param {CONTAINER} node The model
+        @param {MODEL} model Object Model
+    */
 	constructor(node, model) {
 		super(node, 'DIV', model);
 		this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0'); // Override icarus-container 
 		this.body.pane.addClass('thumbnail');
-		//this.image = new IMG(this.body.pane, new MODEL());
-		//this.construct();
-		//this.populate(model.children);
 	}
 	construct() {
 		this.image = new IMG(this.body.pane, new MODEL());
 		this.header = new HEADER(this.body.pane, new MODEL().set({ 'label': this.data.header }));
-		this.p = new P(this.body.pane, new MODEL(), String(this.data.p).truncate(128));
+		this.p = new P(this.body.pane, new MODEL(), new STRING(this.data.p).truncate(128));
 		this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
 		this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
 		this.button.addClass('btn-block');
@@ -83,12 +76,10 @@ export default class THUMBNAIL extends CONTAINER {
 			this.button.el.onclick = this.launchModal.bind(this);
 		}
 	}
-	/**
-		    Launches a modal that contains the detailed view of the given article
-	        @returns {void}
-		 */
+	/** Launches a modal that contains the detailed view of the given article
+	    @returns {void}
+	*/
 	launchModal() {
-		console.log('Launch Modal');
 		this.modal = new MODAL(this.data.header);
 		this.modal.container.body.pane.addClass('thumbnail');
 		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL());

@@ -1,6 +1,4 @@
-/**
-    @module
-*/
+/** @module */
 import BANNER from '../BANNER.js';
 import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
@@ -9,28 +7,22 @@ import HEADER from '../../../header/HEADER.js';
 import IFRAME from '../../iframe/IFRAME.js';
 import MODAL from '../../../modal/MODAL.js';
 import MODEL from '../../../../MODEL.js';
-//import P from '../../../p/P.js';
 import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
-//import TOKEN from '../../formelement/input/TOKEN.js';
-/**
-    Contains a high level view of all MAIN Objects available to this user
+/** Contains a high level view of all MAIN Objects available to this user
     @class
     @extends BANNER
 */
 export default class INDEXMAIN extends BANNER {
-	/**
-	    Constructs a SECTION Container Element
+	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
 	 */
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('index-main');
-		//this.populate(model.children);
 		this.page = 0;
 		this.pageLength = 6;
 		this.pageTotal = 0;
-		//if (this.dataId > 0) {    }
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
@@ -61,7 +53,6 @@ export default class INDEXMAIN extends BANNER {
 								'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']'
 							}
 						}));
-						//thumb.image.el.setAttribute('style', 'display:none;');
 						thumb.buttonGroup.removeClass('btn-block');
 						thumb.button.el.onclick = () => {
 							this.launchMain(payload.list[l].id, payload.list[l].label);
@@ -86,8 +77,7 @@ export default class INDEXMAIN extends BANNER {
 			let note = new P(this.body.pane, new MODEL(), 'No Containers Exist');
 		}*/
 	}
-	/**
-	    Creates a Pagination Footer
+	/** Creates a Pagination Footer
 	    @returns {FOOTER} A pagination Footer
 	*/
 	createPaginationFooter() {
@@ -103,13 +93,11 @@ export default class INDEXMAIN extends BANNER {
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
 	}
-	/**
-	    Loads the page
+	/** Loads the page
 	    @param {number} page Page to load
 	    @returns {void}
 	*/
 	loadPage(page) {
-		console.log('Loading page ' + page);
 		try {
 			this.header.setInnerHTML('Page ' + (page + 1));
 			let buttons = this.pagination.buttonGroup.el.children;
@@ -125,8 +113,7 @@ export default class INDEXMAIN extends BANNER {
 			console.log('Unable to load page.', e);
 		}
 	}
-	/**
-	    Loads the next page in sequence
+	/** Loads the next page in sequence
 	    @returns {void}
 	*/
 	nextPage() {
@@ -147,12 +134,11 @@ export default class INDEXMAIN extends BANNER {
 			console.log('No previous pages to display');
 		}
 	}
-	/**
-		    Opens the given Main Id in a new window
-		    @param {number} id Main Container Id
-		    @param {string} label Main Container Label
-	        @returns {void}
-		*/
+	/** Opens the given Main Id in a new window
+		@param {number} id Main Container Id
+		@param {string} label Main Container Label
+	    @returns {void}
+	*/
 	launchMain(id, label) {
 		console.log('Launch Index IFrame Modal');
 		this.modal = new MODAL(label);
@@ -166,11 +152,10 @@ export default class INDEXMAIN extends BANNER {
 		this.iframe.frame.el.setAttribute('src', this.getMainContainer().url.origin + '/' + id);
 		this.modal.show();
 	}
-	/**
-		    Creates the Modal that contains an iFrame with the given page loaded
-		    @todo Consider paging these results
-	        @returns {void}
-		*/
+	/** Creates the Modal that contains an iFrame with the given page loaded
+		@todo Consider paging these results
+	    @returns {void}
+	*/
 	launchModal() {
 		console.log('Launch Index IFrame Modal');
 		this.modal = new MODAL(this.data.header);

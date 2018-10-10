@@ -17,14 +17,13 @@ import HEADER from '../header/HEADER.js';
 */
 export default class DIALOG extends EL {
 	/**
-	    Constructs a generic A (anchor) Element
-	    @constructs A
-	    param {EL} node The object to contain this element
+	    Constructs a generic DIALOG Element
+	    @constructs DIALOG
 	    @param {MODEL} model The object model
 	 */
 	constructor(model) {
-		super(document.body, 'DIALOG', model);
-		//this.setInnerHTML(model.text + '<br>' + model.token);
+        super(document.body, 'DIALOG', model);
+        document.body.insertBefore(this.el, document.body.firstChild);
 		this.header = new HEADER(this, new MODEL('modal-header'));
 		this.body = new DIV(this, new MODEL('modal-body'));
 		this.body.setInnerHTML(model.text);
@@ -34,32 +33,30 @@ export default class DIALOG extends EL {
 			this.close();
 		}
 		//this.token = model.token;
-		/*
-		<dialog id="demo-modal">
-		  <h3 class="modal-header">A native modal dialog box</h3>
-		  <div class="modal-body">
-		    <p>Finally, HTML has a native dialog box element! This is fantastic.</p>
-		    <p>And a polyfill makes this usable today.</p>
-		  </div>
-		  <footer class="modal-footer">
-		    <button id="close" type="button">close</button>
-		  </footer>
-		</dialog>
-		*/
 	}
 	/**
 	    Makes modal appear (adds `open` attribute)
+        @param {number} delay Millisecond delay until dialog is shown
 	    @returns {void}
 	*/
-	show() {
-		this.el.showModal();
+	show(delay = 0) {
+        setTimeout(() => {
+            this.el.showModal();
+        }, delay);
 	}
 	/**
 	    Hides the modal
+        @param {number} delay Millisecond delay until dialog is closed
+        @param {boolean} preserve If true, element is not deleted
 	    @returns {void}
 	*/
-	close() {
-		this.el.close();
+	close(delay = 0, preserve = false) {
+        setTimeout(() => {
+            this.el.close();
+            if (!preserve) {
+                this.destroy();
+            }
+        }, delay);
 	}
 }
 export { ATTRIBUTES, DIV, EL, MODEL };

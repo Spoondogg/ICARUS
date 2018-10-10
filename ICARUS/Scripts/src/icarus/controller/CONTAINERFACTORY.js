@@ -256,7 +256,8 @@ export default class CONTAINERFACTORY {
 	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
 	    @returns {BOOLEAN} True if successful
 	 */
-	quickSave(container, noPrompt = false) {
+    quickSave(container, noPrompt = false) {
+        /* eslint-disable-next-line no-alert */
 		if (noPrompt || confirm('Quick Save ' + this.className + '(' + container.id + ') : ' + container.label + ' ?')) {
 			//console.log(this.className + '.save()', this);
 			// Populate subsections with elements in this body

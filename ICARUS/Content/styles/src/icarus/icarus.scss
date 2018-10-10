@@ -25,9 +25,9 @@ $color-grey-dark: darken($color-grey, 25%);
 $color-grey-darker: darken($color-grey, 50%);
 $color-grey-light: lighten($color-grey, 25%);
 $color-grey-lighter: lighten($color-grey, 50%);
-$color-shadow-light: adjust-color($color-black, $alpha: .3); //rgba(0, 0, 0, .3);
-$color-shadow-neutral: adjust-color($color-black, $alpha: .5); // rgba(0, 0, 0, .5);
-$color-shadow-dark: adjust-color($color-black, $alpha: .8); //rgba(0, 0, 0, .8);
+$color-shadow-light: transparentize($color-black, .8); //rgba(0, 0, 0, .3);
+$color-shadow-neutral: transparentize($color-black, .5); // rgba(0, 0, 0, .5);
+$color-shadow-dark: transparentize($color-black, .2); //rgba(0, 0, 0, .8);
 $color-light-less: #efefef;
 $color-light: #eee;
 $color-light-more: #fafafa;
@@ -128,10 +128,13 @@ $jumbotron-bg-default: #008196;
 	$color-two: $color-blue-deep;
 	background-image: radial-gradient(ellipse farthest-corner at left center, $color-one 0%, $color-two 100%);
 }
+/*
+    background: radial-gradient(ellipse at center,#0000 0,#1010102e 60%,#00000047 100%);
+*/
 %gradient-vignette {
 	background: radial-gradient(ellipse at center,
-		$color-black 0%,
-		$color-darker 60%,
+		$color-shadow-light 0%,
+		$color-shadow-neutral 60%,
 		$color-shadow-dark 100%);
 }
 %gradient-vertical-fade {
@@ -276,14 +279,15 @@ h2 {
     }
 }
 dialog {
-	border: 0;
-	border-radius: .6rem;
-	box-shadow: 0 0 1em $color-black;
-	padding: 0;
+    border: 0;
+    border-radius: .6rem;
+    box-shadow: 0 0 1em $color-black;
+    margin: 1em;
+    padding: 0;
 
-	::backdrop {
-		background-color: $color-blue-deep;
-	}
+    &::backdrop {
+        background-color: $color-shadow-dark;
+    }
 }
 nav,
 .nav {

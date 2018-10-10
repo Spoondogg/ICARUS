@@ -1,48 +1,41 @@
-/**
-    @module
-*/
-//import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+/** @module */
 import CONTAINER, { ATTRIBUTES, EL, FOOTER, HEADER, MODEL } from '../container/CONTAINER.js';
 import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import WELL from '../p/WELL.js';
-/**
-    A Bootstrap 3 Modal
+/** A Bootstrap 3 Modal
     @see https://www.w3schools.com/bootstrap/bootstrap_modal.asp    
+    @todo Integreate DIALOG wherever possible
     @class
     @extends DIV
 */
-export default class MODAL extends CONTAINER { // ALIGN VERTICALLY??
-	/**
-		    Constructs a Modal
-		    @param {string} title The header text for this modal
-		    @param {string} text The html text that is displayed in the prompt's well
-		    @param {boolean} vertical If true, modal is vertically aligned
-	        @todo There should not be any extentions of CONTAINER.  It is abstract
-		*/
+export default class MODAL extends CONTAINER {
+	/** Constructs a Modal
+		@param {string} title The header text for this modal
+		@param {string} text The html text that is displayed in the prompt's well
+		@param {boolean} vertical If true, modal is vertically aligned
+	    @todo There should not be any extentions of CONTAINER.  It is abstract
+	*/
 	constructor(title, text, vertical) {
 		super(document.body, new MODEL(new ATTRIBUTES({
 			'class': 'modal fade in',
 			'role': 'dialog'
-		})));
-		// Vertical alignment helper div where required
-		//this.alignHelper = null;
-		if (vertical) {
+		})));		
+        if (vertical) { // Vertical alignment helper div where required
 			this.alignHelper = new DIV(this, new MODEL('vertical-alignment-helper'));
 		}
 		// Dialog inside vertical align helper if set to vertical align
 		let parentEl = vertical ? this.alignHelper : this;
 		this.dialog = new DIV(parentEl, new MODEL('modal-dialog' + vertical ? ' vertical-align-center' : ''));
-		this.content = new DIV(this.dialog, new MODEL(new ATTRIBUTES('modal-content')));
+		this.content = new DIV(this.dialog, new MODEL('modal-content'));
 		this.header = this.createModalHeader(title);
-		// A well containing various alerts        
 		if (text) {
 			this.well = new WELL(this.content, new MODEL(), text);
 		}
 		//this.container = new CONTAINER(this.content, 'DIV', new MODEL(new ATTRIBUTES('modal-body')).set({
 		this.body = new DIV(this.content, new MODEL(new ATTRIBUTES('modal-body')));
 		// Footer : Contains options to save or cancel out of form
-		this.footer = new FOOTER(this.content, new MODEL(new ATTRIBUTES('modal-footer')));
+		this.footer = new FOOTER(this.content, new MODEL('modal-footer'));
 		this.footer.btnClose = new BUTTON(this.footer, new MODEL(new ATTRIBUTES({
 			'class': 'btn btn-default btn-block',
 			'data-dismiss': 'modal',
@@ -52,13 +45,12 @@ export default class MODAL extends CONTAINER { // ALIGN VERTICALLY??
 			this.hide(1000, true);
 		};
 	}
-	/**
-	    Creates a generic Modal header with close button
+	/** Creates a generic Modal header with close button
 	    @param {string} title The Header Title Text
 	    @returns {DIV} A generic Modal Header
 	*/
 	createModalHeader(title) {
-		let header = new DIV(this.content, new MODEL(new ATTRIBUTES('modal-header')));
+		let header = new DIV(this.content, new MODEL('modal-header'));
 		header.btnClose = new BUTTON(header, new MODEL(new ATTRIBUTES({
 			'class': 'close',
 			'data-dismiss': 'modal',
@@ -69,8 +61,7 @@ export default class MODAL extends CONTAINER { // ALIGN VERTICALLY??
 		header.btnClose.el.onclick = this.hide.bind(this);
 		return header;
 	}
-	/**
-	    Set Global Modal animation for show/hide
+	/** Set Global Modal animation for show/hide
 	    @returns {void}
 	*/
 	setModalAnimation() {
@@ -81,28 +72,24 @@ export default class MODAL extends CONTAINER { // ALIGN VERTICALLY??
 			$('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
 		});
 	}
-	/**
-		    Scrolls to top
-	        @returns {void}
-		*/
+	/** Scrolls to top
+	    @returns {void}
+	*/
 	scrollUp() {
-		//alert('scroll to top');
 		this.el.scrollTop = 0;
 	}
-	/**
-		    Reveal the modal
-	        @returns {ThisType} Returns MODAL for method chaining
-		*/
+	/** Reveal the modal
+	    @returns {ThisType} Returns MODAL for method chaining
+	*/
 	show() {
 		$(this.el).modal('show');
 		return this;
 	}
-	/**
-		    Hide the modal // and remove from DOM
-		    @param {number} delay Millisecond delay
-		    @param {boolean} destroy If true, this modal is destroyed
-	        @returns {void}
-		*/
+	/** Hide the modal // and remove from DOM
+		@param {number} delay Millisecond delay
+		@param {boolean} destroy If true, this modal is destroyed
+	    @returns {void}
+	*/
 	hide(delay = 1000, destroy = false) {
 		try {
 			setTimeout(() => {
@@ -116,18 +103,16 @@ export default class MODAL extends CONTAINER { // ALIGN VERTICALLY??
 			console.log(e);
 		}
 	}
-	/**
-		    Sets the text to prompt well
-		    @param {string} text The text contained within the prompt's well
-	        @returns {void}
-		*/
+	/** Sets the text to prompt well
+		@param {string} text The text contained within the prompt's well
+	    @returns {void}
+	*/
 	setText(text) {
 		if (text) {
 			this.well.el.innerHTML = text;
 		}
 	}
-	/**
-	    Modals can not return a Container. 
+	/** Modals can not return a Container. 
 	    @returns {null} A modal can not return a Container
 	*/
 	getContainer() {
