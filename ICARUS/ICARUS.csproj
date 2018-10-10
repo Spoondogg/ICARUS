@@ -723,7 +723,6 @@
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\controller\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
-    <Content Include="Scripts\src\icarus\DomMethods.js" />
     <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
     <Content Include="Scripts\src\icarus\enums\BUTTONTYPE.js" />
     <Content Include="Scripts\src\icarus\enums\DATAELEMENTS.js" />
@@ -780,7 +779,6 @@
     <Content Include="Scripts\src\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAIN.js" />
     <Content Include="Scripts\src\icarus\model\el\container\menulist\MENULIST.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\paragraph\PARAGRAPH.js" />
     <Content Include="Scripts\src\icarus\model\el\legend\LEGEND.js" />
     <Content Include="Scripts\src\icarus\model\el\section\SECTION.js" />
     <Content Include="Scripts\src\icarus\model\el\container\sidebar\SIDEBAR.js" />
@@ -827,7 +825,7 @@
     <Content Include="Scripts\src\icarus\model\el\ul\console\CONSOLE.js" />
     <Content Include="Scripts\src\icarus\model\el\ul\UL.js" />
     <Content Include="Scripts\src\icarus\model\MODEL.js" />
-    <Content Include="Scripts\src\icarus\StringMethods.js" />
+    <Content Include="Scripts\src\icarus\STRING.js" />
     <Content Include="service-worker.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

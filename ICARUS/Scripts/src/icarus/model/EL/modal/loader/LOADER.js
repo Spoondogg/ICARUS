@@ -22,8 +22,8 @@ export default class LOADER extends DIALOG {
 			label,
 			text
 		}));
-		this.addClass('modal-loader loader');
-		this.el.setAttribute('name', 'LOADER');
+        this.addClass('loader'); // modal-loader
+		//this.el.setAttribute('name', 'LOADER');
 		this.progress = new DIV(this.body, new MODEL(new ATTRIBUTES('progress')));
 		this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
 		this.console = new CONSOLE(this.body, new MODEL(new ATTRIBUTES({
@@ -40,12 +40,12 @@ export default class LOADER extends DIALOG {
 		this.log(value);
 	}
 	/**
-		    Sets the progress bar status
-		    @param {number} value Percentage as integer (ie: 50 means 50%).
-		    @param {string} text Text displayed inside progress bar.  
-	        @param {boolean} show If true, the log will be displayed
-	        @returns {void}
-		*/
+		Sets the progress bar status
+		@param {number} value Percentage as integer (ie: 50 means 50%).
+		@param {string} text Text displayed inside progress bar.  
+	    @param {boolean} show If true, the log will be displayed
+	    @returns {void}
+	*/
 	log(value, text, show = false) {
 		if (this.el) {
 			this.progressBar.el.style.width = value + '%';
@@ -59,7 +59,7 @@ export default class LOADER extends DIALOG {
 			if (show) {
 				this.show();
 				if (value === 100) {
-					this.hide(1500);
+                    this.close();
 				}
 			}
 		} else {

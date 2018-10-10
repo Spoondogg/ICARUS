@@ -1,47 +1,41 @@
-/**
-    @module
-*/
-import '../../../../../../StringMethods.js';
+/** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../../../CONTAINER.js';
 import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
 import MENULIST from '../../../menulist/MENULIST.js';
 import MODAL from '../../../../modal/MODAL.js';
 import P from '../../../../p/P.js';
+//import STRING from '../../../../../../STRING.js';
 import THUMBNAIL from '../THUMBNAIL.js';
-/**
-    A thumbnail with a preview window and a list of Containers
+/** A thumbnail with a preview window and a list of Containers 
     that can be loaded into the preview
     @class
     @extends THUMBNAIL
 */
 export default class INDEXTHUMBNAIL extends THUMBNAIL {
-	/**
-	    Constructs a Bootstrap Jumbotron.
-	    @param {CONTAINER} node The model
-	    @param {MODEL} model Object Model
-	 */
+	/** Constructs a Bootstrap Jumbotron
+        @param {CONTAINER} node The model
+        @param {MODEL} model Object Model
+    */
 	constructor(node, model) {
 		super(node, model);
 		this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
 		//this.construct();
 		//this.populate(model.children);
 	}
-	/**
-		    Creates the Modal that contains the list of objects for preview
-		    @todo Consider paging these results
-	        @returns {void}
-		*/
+	/** Creates the Modal that contains the list of objects for preview
+        @todo Consider paging these results
+        @returns {void}
+    */
 	launchModal() {
 		console.log('Launch Index Thumbnail Modal');
 		this.addModal();
 		this.addDataListNavItems();
 		this.modal.show();
 	}
-	/**
-		    Creates a MODAL and populates its Container with a Header, Image and various details
-	        @returns {MODAL} A Thumbnail MODAL
-		*/
+	/** Creates a MODAL and populates its Container with a Header, Image and various details
+        @returns {MODAL} A Thumbnail MODAL
+    */
 	addModal() {
 		this.modal = new MODAL(this.data.header);
 		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');

@@ -1,2 +1,2 @@
-import EL from"../EL.js";export default class DATALIST extends EL{constructor(t,s){super(t,"DATALIST",s),this.el.setAttributes("id",s.id)}}
+import EL from"../EL.js";export default class DATALIST extends EL{constructor(r,s){super(r,"DATALIST",s)}}
 //# sourceMappingURL=DATALIST.js.map
