@@ -195,9 +195,12 @@ $jumbotron-bg-default: #008196;
 .navbar {
 	background-color: $color-dark;
 	border-radius: 0;
+    margin-bottom: 0;
 }
 .navbar-nav {
 	margin: 0;
+    padding: 0;
+    width: 100%;
 	&.horizontal {
 		>.nav-item {
 			clear: none;
@@ -449,7 +452,7 @@ main {
             @include boxShadow(0, 0, 3px, 0, $color-black);
             @include no-scroll-bar;
             @include transition($transition-default);
-            background-color: adjust-color($color-black, $alpha: .75);
+            background-color: transparentize($color-black, .2);
             margin-left: -100%; /// !important
             position: absolute;
             top: $navbar-height;
@@ -501,6 +504,7 @@ main {
 	cursor: pointer;
 	float: left;
 	height: $navbar-height - 10px;
+    list-style: none;
 	margin: 3px;
 	min-height: $navbar-height - 10px;
 	padding: 0;
@@ -523,7 +527,7 @@ main {
 	text-align: center;
 	width: $icon-width;
 
-	>a {
+	> a {
 		color: $color-light; // #9d9d9d;
 		padding: 0;
 

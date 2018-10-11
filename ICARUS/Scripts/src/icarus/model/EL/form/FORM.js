@@ -8,23 +8,20 @@ import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
-/**
-    Constructs an Icarus Form Object
+/** Constructs an Icarus Form Object
     @description An FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
-
     @class
     @extends CONTAINER
 */
 export default class FORM extends CONTAINER {
-	/**
-	    Constructs a Form for collecting and posting
+	/** Constructs a Form for collecting and posting
 	    @param {CONTAINER} node The parent object
 	    @param {MODEL} model The object model
 	 */
 	constructor(node, model) {
 		super(node, 'FORM', model, ['FIELDSET']);
-		this.tokenInput = new FORMINPUTTOKEN(this, new MODEL().set({ 'token': '' })); //this.getMainContainer().getToken()
+		this.tokenInput = new FORMINPUTTOKEN(this, new MODEL().set({ 'value': this.getToken() }));
 		this.setPostUrl('Form/Submit');
 		this.updateUrl = 'Form/Update';
 		/** 
@@ -36,8 +33,7 @@ export default class FORM extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {}
-	/**
-	    Populates this form with a single fieldset and formelementgroup
+	/** Populates this form with a single fieldset and formelementgroup
 	    @param {EL} node Parent node
 	    @param {boolean} hidden If true, form is hidden
 	    @returns {FORM} An empty form container
@@ -46,19 +42,23 @@ export default class FORM extends CONTAINER {
 		let form = new FORM(node, new MODEL(new ATTRIBUTES({
 			'style': hidden ? 'display:none;' : ''
 		})).set({
-			'label': 'FORM',
-			'showHeader': 0
+			'label': 'FORM'
 		}));
 		form.fieldset = new FIELDSET(form.body.pane, new MODEL().set({
-			'label': 'FIELDSET',
-			'showHeader': 0
+			'label': 'FIELDSET'
 		}));
 		form.fieldset.formElementGroup = new FORMELEMENTGROUP(form.fieldset.body.pane, new MODEL().set({
-			'label': 'FORMELEMENTGROUP',
-			'showHeader': 0
+			'label': 'FORMELEMENTGROUP'
 		}));
 		return form;
-	}
+    }
+    /**
+        Retrieves the token value from the DOM Meta tags
+        @returns {string} A request verification token
+    */
+    getToken() {
+        return document.getElementsByTagName('meta').token.content;
+    }
 	/**
         Sets the POST url for this form
         @param {string} url Target url
@@ -68,13 +68,11 @@ export default class FORM extends CONTAINER {
 		this.postUrl = url;
 		return this;
 	}
-	/**
-		    Disables all fieldsets within this form
-	        @returns {boolean} Returns true if successful
-		*/
+	/** Disables all fieldsets within this form
+	    @returns {boolean} Returns true if successful
+	*/
 	lock() {
 		try {
-			//console.log('Locking FORM...');
 			for (let i = 0; i < this.children.length; i++) {
 				this.children[i].el.disabled = true;
 			}
@@ -84,12 +82,10 @@ export default class FORM extends CONTAINER {
 			throw e;
 		}
 	}
-	/**
-		    Enables all fieldsets within this form
-	        @returns {boolean} Returns true if successful
-		*/
+	/** Enables all fieldsets within this form
+	    @returns {boolean} Returns true if successful
+	*/
 	unlock() {
-		//console.log('Unlocking FORM...');
 		for (let i = 0; i < this.children.length; i++) {
 			try {
 				this.children[i].el.disabled = false;
@@ -102,15 +98,14 @@ export default class FORM extends CONTAINER {
 			}
 		}
 	}
-	/**
-		    HTML encodes all form element values
-	        @returns {void}
-		*/
+	/** HTML encodes all form element values
+	    @returns {void}
+	*/
 	htmlEncodeValues() {
 		try {
 			for (let e = 0; e < this.el.elements.length; e++) {
-				console.log('Encode type: ' + this.el.elements[e].type);
-				if (this.el.elements[e].type === 'text' || this.el.elements[e].type === 'textarea') {
+				//console.log('Encode type: ' + this.el.elements[e].type);
+				if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
 					this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
 				}
 			}
@@ -119,43 +114,29 @@ export default class FORM extends CONTAINER {
 			throw e;
 		}
 	}
-	/*
-	    Returns only alphanumeric characters
-	    @param {any} str String to convert
-	    @returns {string} A string of only alphanumeric characters
-		
-	alphaNumeric(str) {
-		str = str === undefined ? '' : str.toString().replace(/^[a-zA-Z0-9-_]+$/, '');
-		// /^[a-zA-Z0-9-_]+$/
-		return str === null || str === undefined ? '' : str.toString().replace(/[\[\]']/g, '');
-	} */
-	/**
-		     Flags the given element as invalid 
-		     @param {any} element The form element
-	         @returns {void}
-		*/
+	/** Flags the given element as invalid 
+		@param {any} element The form element
+	    @returns {void}
+	*/
 	setInvalid(element) {
 		this.payload.isValid = false;
 		element.focus();
 		element.setAttribute('data-valid', this.payload.isValid);
 		$(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
 	}
-	/**
-	    Validate the current form and return true if form is valid
+	/** Validate the current form and return true if form is valid
 	    Note that this is a simple form of validation that occurs on the
 	    client side and should not be used as a substitution for
 	    server side validation.
 	    @returns {object} The validation payload
 	*/
 	validate() {
-		//console.log('Validating...');
 		this.htmlEncodeValues();
 		this.payload = {
 			isValid: true,
 			formName: this.el.name
 		};
 		for (let e = 0; e < this.el.elements.length; e++) {
-			//DEBUG.log('Element: ' + this.el.elements[e].name);
 			switch (this.el.elements[e].type) {
 				case 'input':
 				case 'text':
@@ -175,7 +156,15 @@ export default class FORM extends CONTAINER {
 						this.setInvalid(this.el.elements[e]);
 						break;
 					}
-				case 'select-one':
+                case 'checkbox':
+                    if (this.el.elements[e].required) {
+                        if (!this.el.elements[e].checked) {
+                            this.setInvalid(this.el.elements[e]);
+                            break;
+                        }
+                    }
+                    break;
+                case 'select-one':
 					if (this.el.elements[e].selectedIndex === 0) {
 						this.setInvalid(this.el.elements[e]);
 					} else {
@@ -190,10 +179,9 @@ export default class FORM extends CONTAINER {
 		console.log('Validation Result: ' + this.payload.isValid);
 		return this.payload;
 	}
-	/**
-		    Resets the form and any validation notifications.
-	        @returns {void}
-		*/
+	/** Resets the form and any validation notifications.
+        @returns {void}
+	*/
 	reset() {
 		console.log('Resetting form[' + this.el.name + ']');
 		for (let e = 0; e < this.el.elements.length; e++) {
@@ -217,17 +205,14 @@ export default class FORM extends CONTAINER {
 	getFormPost() {
 		return this.validate().isValid ? new FORMPOST(this) : null;
 	}
-	/**
-		    Post values to server.
+	/** Post values to server.
+		Posts the contents of the given Form Post to the specified url
+		and updates the given prompt.
+		param {CONTAINER} master The master element whos state and id is to be updated
+	    @async
+	    @returns {Promise<object>} The results of the Form Post
 
-		    Posts the contents of the given Form Post to the specified url
-		    and updates the given prompt.
-
-		    param {CONTAINER} master The master element whos state and id is to be updated
-	        @async
-	        @returns {Promise<object>} The results of the Form Post
-
-		*/
+	*/
 	post() {
 		console.log(10, 'Posting values to server: ' + this.postUrl);
 		let formPost = this.getFormPost();
@@ -236,7 +221,7 @@ export default class FORM extends CONTAINER {
 			console.log('Posting to: ' + this.postUrl, formPost);
 			$.ajax({
 				url: this.postUrl,
-				type: "POST",
+				type: 'POST',
 				data: formPost,
 				error(xhr, statusText, errorThrown) {
 					console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
@@ -252,7 +237,7 @@ export default class FORM extends CONTAINER {
 						console.log('StatusCode: 400', response);
 					},
 					403(response) {
-						console.log('StatusCode: 403', 'Access Denied', response);
+						console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
 						//app.login();
 					},
 					404(response) {
@@ -270,8 +255,8 @@ export default class FORM extends CONTAINER {
 			this.getMainContainer().loader.showConsole();
 		}
 	}
-	/**
-	    Creates an Input Model
+	/** Creates an Input Model
+        @static
 	    @param {string} element Element name
 	    @param {string} name Input name
 	    @param {string} label Label to display
@@ -279,7 +264,7 @@ export default class FORM extends CONTAINER {
 	    @param {string} type The input type
 	    @returns {MODEL} An input model
 	 */
-	createInputModel(element, name, label, value = '', type = 'TEXT') {
+	static createInputModel(element, name, label, value = '', type = 'TEXT') {
 		return new MODEL(new ATTRIBUTES({
 			name,
 			value,

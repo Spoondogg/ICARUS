@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -19,18 +19,14 @@ namespace ICARUS.Controllers {
     public class AccountController : Controller {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
         private ApplicationDbContext context;
-
         public AccountController() {
             context = new ApplicationDbContext();
         }
-
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager ) {
             UserManager = userManager;
             SignInManager = signInManager;
         }
-
         public ApplicationSignInManager SignInManager {
             get {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
@@ -39,7 +35,6 @@ namespace ICARUS.Controllers {
                 _signInManager = value; 
             }
         }
-
         public ApplicationUserManager UserManager {
             get {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -49,8 +44,11 @@ namespace ICARUS.Controllers {
             }
         }
 
-        //
-        // GET: /Account/Login
+        /// <summary>
+        /// GET for /Account/Login
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public ActionResult Login(string returnUrl) {
             ViewBag.ReturnUrl = returnUrl;
@@ -63,41 +61,39 @@ namespace ICARUS.Controllers {
         /// <param name="model"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
+        [HttpPost, AllowAnonymous] //ValidateAntiForgeryToken
+        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
+        public async Task<ActionResult> Login(FormPost model, string returnUrl) {
+            try {
+                var formResults = model.resultsToDictionary();
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, 
+                // change to shouldLockout: true
+                var result = await SignInManager.PasswordSignInAsync(
+                    formResults["Email"].ToString(), 
+                    formResults["Password"].ToString(),
+                    formResults.ContainsKey("RememberMe"), // checkbox
+                    shouldLockout: false
+                );
+                switch (result) {
+                    case SignInStatus.Success:
+                        //return RedirectToLocal(returnUrl);
+                        return Json(new Payload(1, "MODEL", result, "Successfully logged in"));
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
 
-            if (!ModelState.IsValid) {
-                return View(model);
-            }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, 
-            // change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(
-                model.Email, 
-                model.Password, 
-                model.RememberMe, 
-                shouldLockout: false
-            );
-
-            switch (result) {
-                case SignInStatus.Success:
-                    //return RedirectToLocal(returnUrl);
-                    //int result, string className, object model, string message
-                    return Json(new Payload(1, "MODEL", result, "Successfully logged in"));
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {
-                        ReturnUrl = returnUrl,
-                        RememberMe = model.RememberMe
-                    });
-
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new {
+                            ReturnUrl = returnUrl,
+                            RememberMe = false // formResults["RememberMe"].ToString() //model.RememberMe
+                        });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
+            } catch (Exception e) {
+                return Json(new Payload(2, e, "An exception occurred trying to log in"));
             }
         }
 
@@ -123,15 +119,12 @@ namespace ICARUS.Controllers {
             });
         }
 
-
         /// <summary>
         /// POST: /Account/VerifyCode
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model) {
             if (!ModelState.IsValid) {
                 return View(model);
@@ -220,7 +213,10 @@ namespace ICARUS.Controllers {
         public async Task<ActionResult> Register(FormPost formPost) {
             try {
                 var formResults = formPost.resultsToDictionary();
-                var user = new ApplicationUser { UserName = formResults["email"].ToString(), Email = formResults["email"].ToString() };
+                var user = new ApplicationUser {
+                    UserName = formResults["email"].ToString(),
+                    Email = formResults["email"].ToString()
+                };
                 var result = await UserManager.CreateAsync(user, formResults["password"].ToString());
 
                 if (result.Succeeded) {
@@ -284,9 +280,7 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
             if (ModelState.IsValid) {
                 var user = await UserManager.FindByNameAsync(model.Email);
@@ -306,7 +300,6 @@ namespace ICARUS.Controllers {
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
 
         /// <summary>
         /// GET: /Account/ForgotPasswordConfirmation
@@ -328,7 +321,6 @@ namespace ICARUS.Controllers {
             return code == null ? View("Error") : View();
         }
 
-        //
         // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
@@ -350,7 +342,6 @@ namespace ICARUS.Controllers {
             return View();
         }
 
-        //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation() {
@@ -366,7 +357,6 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin() {
             return View();
         }
-
         
         /// <summary>
         /// POST: /Account/ExternalLogin
@@ -416,8 +406,7 @@ namespace ICARUS.Controllers {
             return Json(new Payload(1, "ChallengeResult", challengeResult));
             //return challengeResult;
         }*/
-
-        //
+        
         // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe) {
@@ -611,6 +600,11 @@ namespace ICARUS.Controllers {
             }
             return RedirectToAction("Index", "Home");
         }
+
+
+                            // woot
+
+
 
         internal class ChallengeResult : HttpUnauthorizedResult {
             public ChallengeResult(string provider, string redirectUri)

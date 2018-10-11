@@ -1,24 +1,20 @@
-/**
-    @module
-*/
-import FORMINPUT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMINPUT.js';
-/**
-    Represents an INPUT TOKEN for an Icarus Form
+/** @module */
+import INPUT, { ATTRIBUTES, EL, MODEL } from '../../../../input/INPUT.js';
+/** Represents an INPUT TOKEN for an Icarus Form
     @class
     @extends FORMINPUT
 */
-export default class FORMINPUTTOKEN extends FORMINPUT {
-	/**
-	    Constructs a FORMINPUTTOKEN element
+export default class FORMINPUTTOKEN extends INPUT {
+	/** Constructs a FORMINPUTTOKEN element
 	    @param {EL} node Parent
-	    @param {MODEL} model The model
-	 */
-	constructor(node, model) {
+	    param {MODEL} model The model
+	*/
+    constructor(node) { // model
 		super(node, new MODEL(new ATTRIBUTES({
 			'type': 'HIDDEN',
-			'name': model.attributes.name,
-			'value': model.token
-		})));
+            'name': '__RequestVerificationToken', //model.attributes.name || 
+            'value': document.getElementsByTagName('meta').token.content //model.value
+        })));
 	}
 }
-export { ATTRIBUTES, EL, FORMINPUT, INPUTTYPES, MODEL };
+export { ATTRIBUTES, EL, MODEL };

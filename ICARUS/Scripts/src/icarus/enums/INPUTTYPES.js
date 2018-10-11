@@ -1,5 +1,4 @@
-/**
-    Enumerated list of Input Types matched to IcarusFormGroup Enums
+/** Enumerated list of Input Types matched to IcarusFormGroup Enums
     @readonly
     @enum {number}
 */
@@ -9,5 +8,6 @@ export const INPUTTYPES = {
 	DATE: 3,
 	DATETIME: 4,
 	HIDDEN: 5,
-	PASSWORD: 6
+    PASSWORD: 6,
+    CHECKBOX: 7
 };

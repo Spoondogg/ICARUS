@@ -153,7 +153,6 @@ namespace ICARUS.Models.Icarus {
         /// Construct an XML object and message body based on the set form post results 
         /// </summary>
         public Dictionary<string, object> resultsToDictionary() {
-
             Dictionary<string, object> results = new Dictionary<string, object>();
             if (this.results.Count > 0) {
                 foreach (FormValue frmVal in this.results) {

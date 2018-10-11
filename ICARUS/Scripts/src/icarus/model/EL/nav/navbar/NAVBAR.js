@@ -1,27 +1,22 @@
-/**
-    @module
-*/
+/** @module */
 import MODEL from '../../../MODEL.js';
 import NAV from '../NAV.js';
 import NAVHEADER from '../menu/NAVHEADER.js';
-/**
-    A Bootstrap 3 Nav Menu that is fixed to the top of the page.
+/** A full width NAV Element with a NAVHEADER
+    A navbar can be hidden because it is collapseable
     @see https://getbootstrap.com/docs/3.3/components/#nav
     @class
     @extends NAV
 */
 export default class NAVBAR extends NAV {
-	/**
-	    Constructs a Navigation Panel.
+	/** Constructs a Navigation Panel
 	    @param {EL} node The element that will contain this object
 	    @param {MODEL} model The object
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('navbar navbar-nav navbar-inverse collapse');
+        this.addClass('navbar collapse');
 		this.header = new NAVHEADER(this, new MODEL().set({
-			'className': 'NAVHEADER',
-			'name': 'header',
 			'label': node.label
 		}));
 	}
