@@ -67,14 +67,14 @@ export default class INDEX extends BANNER {
 		});
 	}
 	/**
-		    Creates the Modal that contains the list of objects for preview
-		    @todo Consider paging these results
-		    @param {string} header Header text
-		    @param {string} p paragraph
-		    @param {string} listClass element class
-		    @param {Array} list A list
-	        @returns {void}
-		 */
+        Creates the Modal that contains the list of objects for preview
+        @todo Consider paging these results
+        @param {string} header Header text
+        @param {string} p paragraph
+        @param {string} listClass element class
+        @param {Array} list A list
+        @returns {void}
+    */
 	launchModal(header, p, listClass, list) {
 		console.log('Launch Index Thumbnail Modal');
 		this.modal = new MODAL(header);

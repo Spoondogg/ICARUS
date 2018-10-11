@@ -28,14 +28,12 @@ export default class DIALOG extends EL {
 		this.body = new DIV(this, new MODEL('modal-body'));
 		this.body.setInnerHTML(model.text);
 		this.footer = new FOOTER(this, new MODEL('modal-footer'));
-		this.btnClose = new BUTTON(this.footer, new MODEL());
+		this.btnClose = new BUTTON(this.footer, new MODEL('btn-block'));
 		this.btnClose.el.onclick = () => {
 			this.close();
 		}
-		//this.token = model.token;
 	}
-	/**
-	    Makes modal appear (adds `open` attribute)
+	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {void}
 	*/
@@ -44,8 +42,7 @@ export default class DIALOG extends EL {
             this.el.showModal();
         }, delay);
 	}
-	/**
-	    Hides the modal
+	/** Hides the modal
         @param {number} delay Millisecond delay until dialog is closed
         @param {boolean} preserve If true, element is not deleted
 	    @returns {void}

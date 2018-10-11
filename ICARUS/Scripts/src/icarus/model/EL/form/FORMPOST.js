@@ -1,6 +1,5 @@
-/**
-    @module
-*/
+/** @module */
+import FORM from '../form/FORM.js';
 //import FORMINPUTTOKEN from '../formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 /**
     Represents the data object to be submitted to the server for validation.
@@ -15,9 +14,9 @@ export default class FORMPOST {
 		    The form token
 		    @type {string}
 		*/
-		this.token = form.getMainContainer().getToken(); //TOKEN.getToken().value; // __RequestVerificationToken
-		this.id = form.el.getAttribute('id');
-		this.formId = form.el.getAttribute('id');
+		//this.token = form.getToken(); //TOKEN.getToken().value; // __RequestVerificationToken
+		this.id = form.id;
+        this.formId = form.id;
 		this.label = form.el.getAttribute('name');
 		// An ordered array of key/value pairs as they appear in the FORM
 		this.results = form.getResultsAsArray();

@@ -1,2 +1,2 @@
-import FORMINPUT,{ATTRIBUTES,EL,INPUTTYPES,MODEL}from"../FORMINPUT.js";export default class FORMINPUTTOKEN extends FORMINPUT{constructor(T,e){super(T,new MODEL(new ATTRIBUTES({type:"HIDDEN",name:e.attributes.name,value:e.token})))}}export{ATTRIBUTES,EL,FORMINPUT,INPUTTYPES,MODEL};
+import INPUT,{ATTRIBUTES,EL,MODEL}from"../../../../input/INPUT.js";export default class FORMINPUTTOKEN extends INPUT{constructor(e){super(e,new MODEL(new ATTRIBUTES({type:"HIDDEN",name:"__RequestVerificationToken",value:document.getElementsByTagName("meta").token.content})))}}export{ATTRIBUTES,EL,MODEL};
 //# sourceMappingURL=FORMINPUTTOKEN.js.map

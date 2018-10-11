@@ -4,6 +4,7 @@ import CONTAINER, { ATTRIBUTES, DIALOG, ICONS, INPUTTYPES, MODEL } from '../CONT
 import FORM from '../../form/FORM.js';
 import FORMINPUT from '../formelement/forminput/FORMINPUT.js';
 import LOADER from '../../modal/loader/LOADER.js';
+import MENU from '../../nav/menu/MENU.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../modal/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
@@ -49,15 +50,15 @@ export default class MAIN extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {
-		this.showNavBar();
+        this.navBar.el.setAttribute('draggable', 'false');
+        this.showNavBar();
+
 		if (this.user === 'Guest') {
-			this.btnLogin = this.navBar.header.tabs.addNavItem( //this.tabs.addNavItem(
+			this.btnLogin = this.navBar.header.tabs.addNavItem(
 				new MODEL('pull-right').set({
 					'icon': ICONS.USER,
 					'anchor': new MODEL().set({
-						'icon': ICONS.USER //,
-						//'label': '',
-						//'url': '#'
+						'icon': ICONS.USER
 					})
 				}));
 			this.btnLogin.el.onclick = this.login.bind(this);
@@ -122,7 +123,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {NAVITEMICON} A Nav Item with an Icon and optional label
 	 */
 	addNavItemIcon(menu, icon, label = '', url = '#') {
-		menu.addNavItemIcon(new MODEL().set({
+		return menu.addNavItemIcon(new MODEL().set({
 			'anchor': new MODEL().set({
 				icon,
 				label,
@@ -135,15 +136,17 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		let userMenu = this.navBar.header.menu.addMenu(new MODEL(new ATTRIBUTES('horizontal collapse')).set({
+		let userMenu = this.navBar.header.menu.addMenu(new MODEL('horizontal collapse').set({
 			'name': 'USER',
 			'showHeader': 1,
 			'collapsed': 1
-		}));
-		this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
+        }));
+
+        this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
 			this.navBar.header.toggleCollapse();
 			this.logout();
-		};
+        };
+
 		this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
 		let domMenu = this.navBar.header.menu.getGroup('DOM');
 		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
@@ -350,30 +353,42 @@ export default class MAIN extends CONTAINER {
         let dialog = new DIALOG(new MODEL().set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
         let form = FORM.createEmptyForm(this.body.pane);
         $(form.el).appendTo(dialog.body.el);
-        form.show();
+        //form.show();
         form.setPostUrl('/Account/Login');
+        form.id = 0;
+        form.label = 'Login';
+        form.el.setAttribute('id', 0);
         form.el.setAttribute('class', 'login');
         form.el.setAttribute('method', 'POST');
         form.el.setAttribute('action', '#');
-
-        let email = new FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-            'typeId': INPUTTYPES.INPUT,
-            'type': 'Email',
-            'name': 'Email'
-        })).set({
-            'label': 'Username',
-            'showHeader': 0
-            }));
-
-        let password = new FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-            'typeId': INPUTTYPES.PASSWORD,
-            'type': 'Password',
-            'name': 'Password'
-        })).set({
-            'label': 'Password',
-            'showHeader': 0
-        }));
-
+        form.fieldset.formElementGroup.addInputElements([
+            FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
+            FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
+            FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
+            /*
+            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+                'typeId': INPUTTYPES.INPUT,
+                'type': 'Email',
+                'name': 'Email'
+            })).set({
+                'label': 'Username'
+            })),
+            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+                'typeId': INPUTTYPES.PASSWORD,
+                'type': 'Password',
+                'name': 'Password'
+            })).set({
+                'label': 'Password'
+            })),
+            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+                'typeId': INPUTTYPES.CHECKBOX,
+                'type': 'Checkbox',
+                'name': 'rememberMe'
+            })).set({
+                'label': 'Remember Me'
+            }))
+            */
+        ]);
         dialog.show();
     }
     /**

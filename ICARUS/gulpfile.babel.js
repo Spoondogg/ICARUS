@@ -58,6 +58,10 @@ const paths = {
         src: 'Scripts/src/icarus/**/*.js',
         dest: 'Scripts/dist/icarus'
     },
+    serverside: {
+        cs: ['Controllers/**/**.cs', 'Models/Icarus/**/**.cs'],
+        cshtml: 'Views/**/**.cshtml'
+    },
     images: {
         src: 'Content/Images/**/*.{jpg,jpeg,png}',
         dest: 'build/img/'
@@ -76,6 +80,14 @@ const paths = {
         sasslint: './config/sasslint.json'
     }
 };
+// #endregion
+// #region ServerSide
+export function $server_beautify() {
+    let config = require(paths.config.beautify);
+    return gulp.src(paths.serverside.cs)
+        .pipe(beautify(config))
+        .pipe(gulp.dest('./'));
+}
 // #endregion
 // #region Styles
 /**

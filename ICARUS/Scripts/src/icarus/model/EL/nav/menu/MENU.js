@@ -20,7 +20,7 @@ export default class MENU extends UL {
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('nav navbar-nav');
+        this.addClass('navbar-nav'); // nav 
 		this.wrapper = new DIV(node, new MODEL(new ATTRIBUTES('wrapper')));
 		if (model.showHeader) {
 			this.header = new HEADER(this.wrapper, new MODEL().set({

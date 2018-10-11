@@ -1,2 +1,2 @@
-import EL from"../EL.js";export default class NAV extends EL{constructor(s,a){super(s,"NAV",a),this.addClass("nav navbar navbar-inverse")}}
+import EL from"../EL.js";export default class NAV extends EL{constructor(r,s){super(r,"NAV",s)}}
 //# sourceMappingURL=NAV.js.map

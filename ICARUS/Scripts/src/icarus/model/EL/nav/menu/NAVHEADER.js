@@ -1,7 +1,7 @@
 /**
     @module
 */
-import MENU, { ATTRIBUTES, MODEL } from '../menu/MENU.js';
+import MENU, { MODEL } from '../menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import SVG from '../../svg/SVG.js';
 /**
@@ -76,7 +76,7 @@ export default class NAVHEADER extends MENU {
 				}));
 				let optionGroups = ['ELEMENTS', 'CRUD', 'DOM']; //'USER' // Add Default OPTIONS groupings as HORIZONTAL menus
 				for (let oG = 0; oG < optionGroups.length; oG++) {
-					this.menu.addMenu(new MODEL(new ATTRIBUTES('horizontal collapse')).set({
+					this.menu.addMenu(new MODEL('horizontal collapse').set({
 						'name': optionGroups[oG],
 						'showHeader': 1,
 						'collapsed': 1
