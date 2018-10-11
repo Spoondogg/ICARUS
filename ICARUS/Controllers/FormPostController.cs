@@ -131,9 +131,7 @@ namespace ICARUS.Controllers {
 
             } else {
                 string message = "You do not have permission to access this " + this.className;
-                return Json(new Payload(
-                    0, new Exception(message)
-, message), JsonRequestBehavior.AllowGet);
+                return Json(new Payload(0, new Exception(message), message), JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -181,9 +179,12 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
 
             } catch (Exception e) {
-                return Json(new Payload(
-                    0, e
-, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()), JsonRequestBehavior.AllowGet);
+                return Json(
+                    new Payload(
+                        0, e, 
+                        "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()
+                    ), JsonRequestBehavior.AllowGet
+                );
             }
         }
     }

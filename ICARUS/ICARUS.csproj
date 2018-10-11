@@ -612,7 +612,6 @@
     <Content Include="Scripts\dist\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\dist\icarus\controller\init.js" />
     <Content Include="Scripts\dist\icarus\controller\TOKEN.js" />
-    <Content Include="Scripts\dist\icarus\DomMethods.js" />
     <Content Include="Scripts\dist\icarus\enums\ALIGN.js" />
     <Content Include="Scripts\dist\icarus\enums\BUTTONTYPE.js" />
     <Content Include="Scripts\dist\icarus\enums\DATAELEMENTS.js" />
@@ -716,7 +715,7 @@
     <Content Include="Scripts\dist\icarus\model\EL\ul\console\CONSOLE.js" />
     <Content Include="Scripts\dist\icarus\model\EL\ul\UL.js" />
     <Content Include="Scripts\dist\icarus\model\MODEL.js" />
-    <Content Include="Scripts\dist\icarus\StringMethods.js" />
+    <Content Include="Scripts\dist\icarus\STRING.js" />
     <Content Include="Scripts\dist\icarus\vendor.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
@@ -928,7 +927,6 @@
     <Content Include="Scripts\dist\icarus\controller\CONTROLLER.js.map" />
     <Content Include="Scripts\dist\icarus\controller\init.js.map" />
     <Content Include="Scripts\dist\icarus\controller\TOKEN.js.map" />
-    <Content Include="Scripts\dist\icarus\DomMethods.js.map" />
     <Content Include="Scripts\dist\icarus\enums\ALIGN.js.map" />
     <Content Include="Scripts\dist\icarus\enums\BUTTONTYPE.js.map" />
     <Content Include="Scripts\dist\icarus\enums\DATAELEMENTS.js.map" />
@@ -1032,7 +1030,7 @@
     <Content Include="Scripts\dist\icarus\model\EL\ul\console\CONSOLE.js.map" />
     <Content Include="Scripts\dist\icarus\model\EL\ul\UL.js.map" />
     <Content Include="Scripts\dist\icarus\model\MODEL.js.map" />
-    <Content Include="Scripts\dist\icarus\StringMethods.js.map" />
+    <Content Include="Scripts\dist\icarus\STRING.js.map" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>

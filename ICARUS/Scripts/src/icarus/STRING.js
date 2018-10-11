@@ -6,7 +6,7 @@
     @class
     @extends String
 */
-export default class STRING extends String {
+export default class STRING extends String { 
     /** Returns string as camelcase
         @static
         @see https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case

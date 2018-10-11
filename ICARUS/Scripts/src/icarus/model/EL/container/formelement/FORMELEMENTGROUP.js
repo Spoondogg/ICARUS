@@ -23,11 +23,10 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {}
-	/**
-	        Adds the array of input elements to this form element group
-	        @param {FORMELEMENT} inputs A list of inputs
-	        @returns {ThisType} Returns this FORMELEMENTGROUP
-		*/
+	/** Adds the given array of input elements to this form element group
+	    @param {FORMELEMENT} inputs A list of inputs
+	    @returns {ThisType} Returns this FORMELEMENTGROUP
+	*/
 	addInputElements(inputs) {
 		for (let i = 0; i < inputs.length; i++) {
 			let inp = null;
