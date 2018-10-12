@@ -1,23 +1,18 @@
-/**
-    @module
-*/
+/** @module */
 import MENU, { MODEL } from '../menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import SVG from '../../svg/SVG.js';
-/**
-    An expandable menu with clickable header that opens a container full of icons
+/** An expandable menu with clickable header that opens a container full of icons
     @class
     @extends MENU
 */
 export default class NAVHEADER extends MENU {
-	/**
-	    Construct a Nav Header.
+	/** Construct a Nav Header.
 	    @param {EL} node The object that the navHeader is appended to
 	    @param {MODEL} model Object model
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('navbar-header');
 		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
 		this.tabs = new MENU(this, new MODEL().set({ // Left aligned group
 			'name': 'tabs'
@@ -33,8 +28,7 @@ export default class NAVHEADER extends MENU {
 	addDefaultTab(label) {
 		let tab = this.tabs.addNavItem(new MODEL('pull-left').set({ // Add a default tab to show/hide the collapse
 			'anchor': new MODEL().set({
-				label,
-				'url': '#'
+				label
 			})
 		}));
 		tab.el.onclick = () => { // Toggle Body
@@ -63,11 +57,9 @@ export default class NAVHEADER extends MENU {
 	addOptionsMenu() {
 		try {
 			if (this.getContainer().getMainContainer().user !== 'Guest') {
-				this.toggle = this.tabs.addNavItem(new MODEL('pull-right').set({
+				this.toggle = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
 					'anchor': new MODEL().set({
-						'icon': ICONS.COG,
-						'label': '',
-						'url': '#'
+						'icon': ICONS.COG
 					})
 				}));
 				this.toggle.el.onclick = this.toggleCollapse.bind(this);
@@ -100,11 +92,10 @@ export default class NAVHEADER extends MENU {
 			}
 		}
 	}
-	/**
-		    Clears the Main sidebar is cleared and populated with
-		    a save form for this Container
-	        @returns {void}
-		*/
+	/** Clears the Main sidebar is cleared and populated with
+		a save form for this Container
+	    @returns {void}
+	*/
 	launchSidebarSave() {
 		try {
 			console.log('Long Clicked ' + this.tab.anchor.label);
@@ -118,10 +109,9 @@ export default class NAVHEADER extends MENU {
 			console.warn(e);
 		}
 	}
-	/**
-		    Show/Hide this.menu
-	        @returns {void}
-		 */
+	/**	Show/Hide this.menu
+	    @returns {void}
+	*/
 	toggleCollapse() {
 		$(this.menu.el).collapse('toggle');
 	}

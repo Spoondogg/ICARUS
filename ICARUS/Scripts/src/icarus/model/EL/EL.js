@@ -429,7 +429,7 @@ export default class EL extends MODEL {
 	/**
 	    Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
-	    @returns {EL} This EL
+	    @returns {ThisType} This node for chaining
 	*/
 	setInnerHTML(innerHTML = '') {
 		this.el.innerHTML = innerHTML;

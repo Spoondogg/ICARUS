@@ -5,7 +5,7 @@ import UL, { ANCHOR, ATTRIBUTES, EL, LI, MODEL } from '../../ul/UL.js';
 //import ARTICLE from '../../container/article/ARTICLE.js';
 import MENU from '../menu/MENU.js';
 /**
-    A navigation item that populates a Bootstrap 3 navbar.
+    A wide navigation button
     @description Nav items can be single buttons or dropdowns with nav items nested within them  
     @class
     @extends LI
@@ -17,7 +17,7 @@ export default class NAVITEM extends LI {
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.className = 'NAVITEM';
+		//this.className = 'NAVITEM';
 		this.addClass('nav-item');
 		this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
 		/* Add cases for each relevant constructor that inherited class does not have

@@ -15,10 +15,10 @@ export default class BUTTON extends EL {
 	    @param {string} glyphicon The glyphicon (optional)
 	    @param {string} buttonType The type of button ie: [button, reset, submit]
 	 */
-	constructor(node, label, glyphicon, buttonType) {
+	constructor(node, label, glyphicon, buttonType = 'BUTTON') {
 		super(node, 'BUTTON', new MODEL(new ATTRIBUTES({
 			'class': 'btn glyphicon',
-			'type': buttonType || 'BUTTON'
+			'type': buttonType
 		})));
 		this.icon = new GLYPHICON(this, label, glyphicon);
 	}

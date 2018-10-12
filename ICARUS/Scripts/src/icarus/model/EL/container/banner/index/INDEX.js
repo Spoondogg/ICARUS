@@ -1,37 +1,50 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER, { ATTRIBUTES, MODEL } from '../../CONTAINER.js'; // EL
 import BANNER from '../BANNER.js';
 import DIV from '../../../div/DIV.js';
 import HEADER from '../../../header/HEADER.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
+import MENU from '../../../nav/menu/MENU.js';
 import MENULIST from '../../menulist/MENULIST.js';
 import MODAL from '../../../modal/MODAL.js';
+import NAV from '../../../nav/NAV.js';
 import NAVITEMICON from '../../../nav/navitemicon/NAVITEMICON.js';
 import P from '../../../p/P.js';
-//import TOKEN from '../../formelement/forminput/TOKEN.js';
-/**
-    Contains a high level view of all objects owned by this user
+/** Contains a high level view of all objects owned by this user
     @class
     @extends BANNER
 */
 export default class INDEX extends BANNER {
-	/**
-	    Constructs a SECTION Container Element
+	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model	    
-	 */
+    */
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('index');
-		this.token = this.getMainContainer().getToken(); //model.data.token; // Required
+		this.token = this.getMainContainer().getToken();
 	}
 	construct() {
-		this.containerHeader = new HEADER(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+		//this.containerHeader = new HEADER(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+        //this.nav = new NAV(this.body.pane);
+        this.menu = new MENU(this.body.pane, new MODEL().set({
+            'label': 'INDEX'
+        }));
 		let elementList = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
-		for (let l = 0; l < elementList.length; l++) {
-			let thumb = new NAVITEMICON(this.body.pane, new MODEL().set({
+        for (let l = 0; l < elementList.length; l++) {
+            let thumb = this.menu.addNavItemIcon(new MODEL().set({
+                'anchor': new MODEL().set({
+                    'icon': ICONS[elementList[l].toUpperCase()],
+                    'label': elementList[l],
+                    'dataId': -1,
+                    'data': {
+                        'header': elementList[l],
+                        'p': '&nbsp;'
+                    }
+                })
+            })); 
+
+			/*let thumb = new NAVITEMICON(this.body.pane, new MODEL().set({
 				'anchor': new MODEL().set({
 					'icon': ICONS[elementList[l].toUpperCase()],
 					'label': elementList[l],
@@ -41,7 +54,7 @@ export default class INDEX extends BANNER {
 						'p': '&nbsp;'
 					}
 				})
-			}));
+			}));*/
 			this.addThumbButtonActions(elementList[l], thumb);
 		}
 	}

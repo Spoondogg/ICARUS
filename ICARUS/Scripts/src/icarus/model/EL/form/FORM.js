@@ -211,7 +211,6 @@ export default class FORM extends CONTAINER {
 		param {CONTAINER} master The master element whos state and id is to be updated
 	    @async
 	    @returns {Promise<object>} The results of the Form Post
-
 	*/
 	post() {
 		console.log(10, 'Posting values to server: ' + this.postUrl);
