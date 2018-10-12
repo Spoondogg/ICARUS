@@ -1,16 +1,11 @@
-/**
-    @module
-*/
-//import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+/** @module */
 import SPAN, { ATTRIBUTES, EL, MODEL } from '../span/SPAN.js';
-/**
-    A hyperlink / page anchor    
+/** A hyperlink / page anchor    
     @class
     @extends EL
 */
 export default class A extends EL {
-	/**
-	    Constructs a generic A (anchor) Element
+	/** Constructs a generic A (anchor) Element
 	    @constructs A
 	    @param {EL} node The object to contain this element
 	    @param {MODEL} model The object model
@@ -18,13 +13,11 @@ export default class A extends EL {
 	constructor(node, model) {
 		super(node, 'A', model);
 		this.href = model.attributes.href || '#';
-		this.label = new SPAN(this, new MODEL().set({
+        this.label = new SPAN(this, new MODEL('label').set({
 			'label': model.label
 		}));
-		//this.setInnerHTML(model.label);
 	}
-	/**
-	    Sets the target for this anchor
+	/** Sets the target for this anchor
 	    @param {string} target Target url
 	    @returns {void}
 	*/

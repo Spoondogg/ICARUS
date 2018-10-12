@@ -26,7 +26,7 @@ export default class CALLOUT extends CONTAINER {
 	construct() {
 		if (this.dataId > 0) {
 			if (this.data.icon) {
-				this.icon = new GLYPHICON(this.body.pane, '', this.data.icon);
+				this.icon = new GLYPHICON(this.body.pane, this.data.icon);
 			}
 			if (this.data.header) {
 				this.header = new HEADER(this.body.pane, new MODEL().set({

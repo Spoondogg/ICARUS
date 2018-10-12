@@ -8,13 +8,13 @@ import { ICONS } from '../../../enums/ICONS.js';
 export default class GLYPHICON extends SPAN {
 	/** Construct a Glyphicon
 	    @param {EL} node parent object
-	    @param {string} label The label
+	    param {string} label The label
 	    @param {string} glyphicon The bootstrap glyphicon or ICON enum
 	 */
-	constructor(node, label, glyphicon) {
+	constructor(node, glyphicon) {
 		super(node, new MODEL());
         this.addClass('icon glyphicon ' + glyphicon);
-		this.label = new SPAN(this, new MODEL('icon-label'), label);
+		//this.label = new SPAN(this, new MODEL('icon-label'), label);
 	}
 	/** Sets the ICON class to the given glyphicon
         @param {string} glyphicon The glyphicon name
@@ -24,4 +24,4 @@ export default class GLYPHICON extends SPAN {
 		this.el.className = glyphicon;
 	}
 }
-export { ICONS };
+export { ATTRIBUTES, ICONS, SPAN };

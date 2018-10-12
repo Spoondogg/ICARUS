@@ -13,16 +13,7 @@ export default class NAVITEMICON extends NAVITEM {
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('nav-item-icon');
+		//this.addClass('nav-item-icon');
 		this.el.setAttribute('title', model.anchor.label);
-		// this.anchor = model.anchor ? new ANCHOR(this, model.anchor) : null;
-	}
-	/** Add a NavItemGroup to this NavItem
-	    @param {MODEL} model NavBarNav model
-	    @returns {MENU} The newly created element
-	*/
-	addMenu(model) {
-		this.children.push(new MENU(this, model));
-		return this.children[this.children.length - 1];
 	}
 }

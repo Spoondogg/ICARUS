@@ -1,4 +1,4 @@
-/// <binding />
+/// <binding AfterBuild='_publish' />
 // #region Imports
 /** @module */
 import autoprefixer from 'autoprefixer';
