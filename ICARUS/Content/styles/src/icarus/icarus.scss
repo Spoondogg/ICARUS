@@ -25,9 +25,9 @@ $color-grey-dark: darken($color-grey, 25%);
 $color-grey-darker: darken($color-grey, 50%);
 $color-grey-light: lighten($color-grey, 25%);
 $color-grey-lighter: lighten($color-grey, 50%);
-$color-shadow-light: transparentize($color-black, .8); //rgba(0, 0, 0, .3);
-$color-shadow-neutral: transparentize($color-black, .5); // rgba(0, 0, 0, .5);
-$color-shadow-dark: transparentize($color-black, .2); //rgba(0, 0, 0, .8);
+$color-shadow-light: transparentize($color-black, .8);
+$color-shadow-neutral: transparentize($color-black, .5);
+$color-shadow-dark: transparentize($color-black, .2);
 $color-light-less: #efefef;
 $color-light: #eee;
 $color-light-more: #fafafa;
@@ -279,9 +279,8 @@ dialog {
 }
 nav {
     @extend %bevel-up;
-    background-color: #4a6879;
-    //margin: 0;
-    //padding: 0;
+    background-color: $color-primary;
+    font-size: $font-size-normal;
 
     .btn-group {
         > .dropdown-menu {
@@ -292,106 +291,98 @@ nav {
             }
         }
     }
-}
-.menu {
 
-    > header {
-        @extend %bevel-up;
-        @extend %clickable;
-        background-color: $color-dark;
-        color: $color-light;
-        padding: 0 .2em;
-        text-transform: uppercase;
+    .menu {
 
-        &:hover {
-            background-color: $color-dark-less;
-        }
-        // First ul after nav header
-        & ~ ul {
-            .nav {
-                background-color: $color-darker;
-            }
-        }
-    }
-
-    .list {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-
-        &.horizontal {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-
-            &.collapse {
-                height: 0;
-
-                &.in {
-                    height: 4em; //96px; //$navbar-height;
-                }
-            }
-
-            > .nav-item-icon {
-                display: inline-block;
-            }
-        }
-
-        .nav-item {
+        > header {
+            @extend %bevel-up;
             @extend %clickable;
             background-color: $color-dark;
-            border: 1px solid $color-grey-darker;
-            border-radius: .4em;
-            cursor: pointer;
-            float: left;
-            //height: $navbar-height; //$navbar-height - 10px;
-            line-height: $navbar-height - 1em;
-            list-style: none;
-            margin: 4px;
-            //min-height: $navbar-height; //$navbar-height - 10px;
-            padding: 0;
-
-            > a {
-                line-height: 1em;
-            }
+            color: $color-light;
+            padding: 0 .2em;
+            text-transform: uppercase;
 
             &:hover {
                 background-color: $color-dark-less;
             }
+            // First ul after nav header
+            & ~ ul {
+                .nav {
+                    background-color: $color-darker;
+                }
+            }
+        }
 
-            .nav-item-icon {
+        .list {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            &.horizontal {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+
+                &.collapse {
+                    height: 0;
+
+                    &.in {
+                        height: 4em; //96px; //$navbar-height;
+                    }
+                }
+
+                > .nav-item-icon {
+                    display: inline-block;
+                }
+            }
+
+            .icon-label {
+                @extend %noSelect;
+            }
+
+            .nav-item {
                 @extend %clickable;
-                background-color: $color-dark-less;
+                background-color: $color-shadow-neutral;
                 border: thin solid $color-grey-darker;
-                border-bottom: 3px solid $color-grey-dark;
                 border-radius: .4em;
+                cursor: pointer;
                 float: left;
-                height: 3em; // $icon-height;
+                line-height: $navbar-height - 1em;
                 list-style: none;
-                margin: 4px; //4px 4px 2em;
+                margin: 4px;
+                //padding: 0;
                 text-align: center;
-                width: 3em; //$icon-width;
+
+                &:hover {
+                    background-color: $color-shadow-light;
+                }
+
                 > a {
-                    color: $color-light; // #9d9d9d;
-                    //padding: 0;
+                    color: $color-light;
+                    //line-height: 1em;
+                    padding: 0 1em;
+
                     &:hover {
                         color: $color-light-more;
                     }
+                }
 
-                    > .icon {
-
-                        > .icon-label {
-                            //clear: both;
-                            display: block;
-                            //float: none;
-                            font-size: $font-size-small;
-                            line-height: 1.5em;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5em; //$icon-width;
+                &.nav-item-icon {
+                    > a {
+                        > .icon {
+                            > .icon-label {
+                                //clear: both;
+                                display: block;
+                                //float: none;
+                                font-size: $font-size-small;
+                                line-height: 1.5em;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-transform: uppercase;
+                                white-space: nowrap;
+                                width: 5em; //$icon-width;
+                            }
                         }
                     }
                 }
@@ -399,22 +390,8 @@ nav {
         }
     }
 }
-.icon-label {
-	@extend %noSelect;
-}
-// Classes
 
-// A wide button to toggle collapsed state of a Child Container
-.toggler {
-	@extend %bevel-up;
-	@extend %clickable;
-	background-color: $color-dark;
-	color: $color-light;
-	height: 6px;
-	&:hover {
-		background-color: $color-dark-less;
-	}
-}
+
 .icarus-container {
     margin: 0;
     padding: 0;

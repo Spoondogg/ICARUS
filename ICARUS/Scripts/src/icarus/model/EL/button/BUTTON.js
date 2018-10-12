@@ -1,10 +1,8 @@
-/**
-    @module
-*/
+/** @module */
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 import GLYPHICON from '../span/GLYPHICON.js';
-/**
-    A generic Bootstrap button    
+import SPAN from '../span/SPAN.js';
+/** A generic BUTTON Element with an Icon and Label
     @class
     @extends EL
 */
@@ -20,14 +18,14 @@ export default class BUTTON extends EL {
 			'class': 'btn glyphicon',
 			'type': buttonType
 		})));
-		this.icon = new GLYPHICON(this, label, glyphicon);
+        this.icon = new GLYPHICON(this, glyphicon);
+        this.label = new SPAN(this, new MODEL('button-label'), label);
 	}
-	/**
-		    Sets the label within the button to the given string
-		    @param {string} label A button label
-		    @param {string} glyphicon Glyphicon string or ICON.ENUM
-	        @returns {void}
-		 */
+	/** Sets the label within the button to the given string
+        @param {string} label A button label
+        @param {string} glyphicon Glyphicon string or ICON.ENUM
+        @returns {void}
+    */
 	setLabel(label, glyphicon) {
 		this.icon.label.setInnerHTML(label);
 		if (glyphicon) {
