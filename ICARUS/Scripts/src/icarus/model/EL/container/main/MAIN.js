@@ -40,8 +40,7 @@ export default class MAIN extends CONTAINER {
 		    @property {Url} url The browser url
 		*/
 		this.url = model.url;
-		/**
-		    A Sidebar for details and navigation
+		/** A Sidebar for details and navigation
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
@@ -52,9 +51,8 @@ export default class MAIN extends CONTAINER {
 	construct() {
         this.navBar.el.setAttribute('draggable', 'false');
         this.showNavBar();
-
 		if (this.user === 'Guest') {
-			this.btnLogin = this.navBar.header.tabs.addNavItem(
+			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(
 				new MODEL('pull-right').set({
 					'icon': ICONS.USER,
 					'anchor': new MODEL().set({
@@ -64,51 +62,43 @@ export default class MAIN extends CONTAINER {
 			this.btnLogin.el.onclick = this.login.bind(this);
 		}
 	}
-	/**
-	    Returns the Application Dev setting
+	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
 	*/
 	isDev() {
 		return this.dev;
 	}
-	/**
-	    Returns a friendly username for the current user (if exists)
+	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
 	getUser() {
 		return this.user;
 	}
-	/**
-	    Returns the MAIN Token
+	/** Returns the MAIN Token
 	    @returns {string} A Session Token
 	*/
 	getToken() {
 		return this.token;
 	}
-	/**
-	    Returns the MAIN Factory
+	/** Returns the MAIN Factory
 	    @returns {CONTAINERFACTORY} The Main Container Factory
 	*/
 	getFactory() {
 		return this.factory;
 	}
-	/**
-		    Add items to Options Dropdown Tab
-	        @returns {ThisType} Returns this MAIN for method chaining
-		 */
+	/** Add items to Options Dropdown Tab
+	    @returns {ThisType} Returns this MAIN for method chaining
+	*/
 	addNavOptions() {
-		if (this.navBar.header.menu) {
-			/** A NavItem that toggles the visibility of the Sidebar */
-			this.btnSidebar = this.navBar.header.tabs.addNavItem(new MODEL('pull-left').set({
+		if (this.navBar.menu.menu) {
+			this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set({
 				'anchor': new MODEL().set({
-					'icon': ICONS.SIDEBAR //,
-					//'label': '',
-					//'url': '#'					
+					'icon': ICONS.SIDEBAR		
 				})
 			}));
 			this.btnSidebar.el.onclick = this.toggleSidebar.bind(this);
-			$(this.btnSidebar.el).insertBefore(this.navBar.header.tab.el);
+			$(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
 			this.body.el.onclick = this.focusBody.bind(this); // Hide Sidebar when container body is focused
 			this.addDefaultMenuItems();
 		}
@@ -136,19 +126,19 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		let userMenu = this.navBar.header.menu.addMenu(new MODEL('horizontal collapse').set({
+		let userMenu = this.navBar.menu.menu.addMenu(new MODEL('horizontal collapse').set({
 			'name': 'USER',
 			'showHeader': 1,
 			'collapsed': 1
         }));
 
         this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
-			this.navBar.header.toggleCollapse();
+			this.navBar.menu.toggleCollapse();
 			this.logout();
         };
 
 		this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
-		let domMenu = this.navBar.header.menu.getGroup('DOM');
+		let domMenu = this.navBar.menu.menu.getGroup('DOM');
 		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
 			setTimeout(() => {
 				location.href = this.url.origin;
@@ -156,7 +146,7 @@ export default class MAIN extends CONTAINER {
 		};
 		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
 			this.toggleHeaders();
-			this.navBar.header.toggleCollapse();
+			this.navBar.menu.toggleCollapse();
 		};
 		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
 			this.loader.show();
@@ -167,7 +157,7 @@ export default class MAIN extends CONTAINER {
 				location.reload(true);
 			}, 1000);
 		};
-		let crudMenu = this.navBar.header.menu.getGroup('CRUD');
+		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
 		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = this.newMain.bind(this);		
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
@@ -221,7 +211,7 @@ export default class MAIN extends CONTAINER {
 		if ($(this.sidebar.el).hasClass('active')) {
 			this.sidebar.removeClass('active');
 		}
-		$(this.navBar.header.menu.el).collapse('hide');
+		$(this.navBar.menu.menu.el).collapse('hide');
 	}
 	/**
 		Loads the specified app id into the Main Container
@@ -365,30 +355,10 @@ export default class MAIN extends CONTAINER {
             FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
             FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
             FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
-            /*
-            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-                'typeId': INPUTTYPES.INPUT,
-                'type': 'Email',
-                'name': 'Email'
-            })).set({
-                'label': 'Username'
-            })),
-            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-                'typeId': INPUTTYPES.PASSWORD,
-                'type': 'Password',
-                'name': 'Password'
-            })).set({
-                'label': 'Password'
-            })),
-            FORMINPUT(form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-                'typeId': INPUTTYPES.CHECKBOX,
-                'type': 'Checkbox',
-                'name': 'rememberMe'
-            })).set({
-                'label': 'Remember Me'
-            }))
-            */
         ]);
+        form.afterSuccessfulPost = (payload, status) => {
+            this.ajaxRefreshIfSuccessful(payload, status)
+        };
         dialog.show();
     }
     /**

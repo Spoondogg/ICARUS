@@ -3,7 +3,7 @@
 */
 import NAVITEM, { MODEL } from '../navitem/NAVITEM.js';
 /**
-    A horizontal line that separates content inside a navbar dropdown menu
+    A horizontal line that separates content inside a vertical menu
     @class
     @extends NAVITEM
 */

@@ -97,7 +97,6 @@ namespace ICARUS.Controllers {
             }
         }
 
-
         /// <summary>
         /// GET: /Account/VerifyCode
         /// </summary>

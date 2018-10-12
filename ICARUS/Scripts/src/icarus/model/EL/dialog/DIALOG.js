@@ -6,6 +6,7 @@ import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
+import { ICONS } from '../../../enums/ICONS.js';
 /**
     An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
@@ -25,10 +26,9 @@ export default class DIALOG extends EL {
         super(document.body, 'DIALOG', model);
         document.body.insertBefore(this.el, document.body.firstChild);
 		this.header = new HEADER(this, new MODEL('modal-header'));
-		this.body = new DIV(this, new MODEL('modal-body'));
-		this.body.setInnerHTML(model.text);
+        this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FOOTER(this, new MODEL('modal-footer'));
-		this.btnClose = new BUTTON(this.footer, new MODEL('btn-block'));
+        this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
 		this.btnClose.el.onclick = () => {
 			this.close();
 		}

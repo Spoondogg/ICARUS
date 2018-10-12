@@ -144,7 +144,7 @@ export default class FORMINPUT extends FORMELEMENT {
         @returns {ThisType} Returns this object for method chaining
     */
 	setLabel(label) {
-		this.navBar.header.tab.anchor.setInnerHTML(label);
+		this.navBar.menu.tab.anchor.setInnerHTML(label);
 		this.label.setInnerHTML(label);
 		this.input.el.setAttribute('name', label);
 		return this;

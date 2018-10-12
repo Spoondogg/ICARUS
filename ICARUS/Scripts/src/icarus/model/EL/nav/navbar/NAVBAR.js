@@ -2,8 +2,7 @@
 import MODEL from '../../../MODEL.js';
 import NAV from '../NAV.js';
 import NAVHEADER from '../menu/NAVHEADER.js';
-/** A full width NAV Element with a NAVHEADER
-    A navbar can be hidden because it is collapseable
+/** A full width collapseable NAV Element
     @see https://getbootstrap.com/docs/3.3/components/#nav
     @class
     @extends NAV
@@ -15,8 +14,8 @@ export default class NAVBAR extends NAV {
 	 */
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('navbar collapse');
-		this.header = new NAVHEADER(this, new MODEL().set({
+        this.addClass('collapse');
+		this.menu = new NAVHEADER(this, new MODEL().set({
 			'label': node.label
 		}));
 	}
