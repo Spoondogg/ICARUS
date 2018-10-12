@@ -35,8 +35,8 @@ namespace ICARUS.Models.Icarus.Elements {
             Boolean isFixed = false, Boolean isInverted = false
         ) : base("NAV", new MODEL()) {
 
-            string className = "navbar";
-            className += (isFixed) ? " navbar-fixed-top" : " navbar-nav";
+            //string className = "navbar";
+            string className = (isFixed) ? " navbar-fixed-top" : "";
             className += (isInverted) ? " navbar-inverse" : "";
             this.attributes.Add("class", className);
 

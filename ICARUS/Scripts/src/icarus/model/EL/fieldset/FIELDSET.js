@@ -1,21 +1,19 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../container/CONTAINER.js';
 import LEGEND from '../legend/LEGEND.js';
-/**
-    Construct a Form Fieldset
+/** Construct a Form Fieldset
     @class
     @extends CONTAINER
 */
 export default class FIELDSET extends CONTAINER {
-	/**
-	    A field set / form-group that contains form elements within a section
+	/** A fieldset that contains form elements
 	    @param {FORM} node The parent object
 	    @param {MODEL} model The model
-	 */
+	*/
 	constructor(node, model) {
 		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-		this.addClass('form-group-container');
-		this.body.addClass('form-group'); // The expandable portion of the section  
+		//this.addClass('form-group-container');
+		//this.body.addClass('form-group'); // The expandable portion of the section  
 		this.populate(model.children);
 	}
 	construct() {

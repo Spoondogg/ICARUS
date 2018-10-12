@@ -41,15 +41,16 @@ $font-major: 'Raleway', sans-serif;
 $font-minor: 'Lato', sans-serif;
 $font-primary: 'Lato', sans-serif;
 $font-primary-weight: 300;
-$font-size-small: 10px;
-$font-size-normal: 16px;
-$navbar-height: 50px;
+$font-size-small: .5em;
+$font-size-normal: 1em;
+$font-size-large: 1.5em;
+$navbar-height: 4em; // 50px
 $sidebar-width: 80%;
 $transition-speed: .2s;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
-$icon-width: 64px;
-$icon-height: 64px;
+$icon-width: 4em; //64px;
+$icon-height: 4em; //64px;
 $jumbotron-bg-default: #008196;
 
 // Mixins: https://sass-lang.com/guide#topic-6-SCSS
@@ -180,40 +181,24 @@ $jumbotron-bg-default: #008196;
 .edit {
 	border: dashed 1px $color-white;
 }
-// DROPDOWN TAB
 .dropdown-tab {
 	width: 160px;
-	&>a {
+	> a {
 		display: block;
 		float: right;
 	}
-	&>.dropdown-toggle {
+	> .dropdown-toggle {
 		background-color: $color-grey-darker;
 		border-right: 1px solid $color-grey;
 	}
 }
-.navbar {
-	background-color: $color-dark;
-	border-radius: 0;
-    margin-bottom: 0;
-}
-.navbar-nav {
-	margin: 0;
-    padding: 0;
-    width: 100%;
-	&.horizontal {
-		>.nav-item {
-			clear: none;
-			width: auto;
-		}
-	}
-}
+
 body {
 	@include font-smoothing;
 	background-color: $color-dark-less; //$background-primary;
 	color: $color-primary;
 	font-family: $font-primary;
-	font-size: $font-size-normal;
+	font-size: 14px; //$font-size-normal;
 	font-weight: $font-primary-weight;
     overflow: hidden;
 	padding-top: $navbar-height;
@@ -292,37 +277,127 @@ dialog {
         background-color: $color-shadow-dark;
     }
 }
-nav,
-.nav {
-	@extend %bevel-up;
-	header {
-		@extend %bevel-up;
-		@extend %clickable;
-		background-color: $color-dark;
-		color: $color-light;
-		padding: 0 .2em;
-		text-transform: uppercase;
+nav {
+    @extend %bevel-up;
+    background-color: #4a6879;
+    //margin: 0;
+    //padding: 0;
 
-		&:hover {
-			background-color: $color-dark-less;
-		}
-		// First ul after nav header
-		&~ul {
-			.nav {
-				background-color: $color-darker;
-			}
-		}
-	}
+    .btn-group {
+        > .dropdown-menu {
+            > li {
+                color: $color-grey;
+                text-align: left;
+                text-decoration: none;
+            }
+        }
+    }
+}
+.menu {
 
-	.btn-group {
-		>.dropdown-menu {
-			>li {
-				color: $color-grey;
-				text-align: left;
-				text-decoration: none;
-			}
-		}
-	}
+    > header {
+        @extend %bevel-up;
+        @extend %clickable;
+        background-color: $color-dark;
+        color: $color-light;
+        padding: 0 .2em;
+        text-transform: uppercase;
+
+        &:hover {
+            background-color: $color-dark-less;
+        }
+        // First ul after nav header
+        & ~ ul {
+            .nav {
+                background-color: $color-darker;
+            }
+        }
+    }
+
+    .list {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+
+        &.horizontal {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            &.collapse {
+                height: 0;
+
+                &.in {
+                    height: 4em; //96px; //$navbar-height;
+                }
+            }
+
+            > .nav-item-icon {
+                display: inline-block;
+            }
+        }
+
+        .nav-item {
+            @extend %clickable;
+            background-color: $color-dark;
+            border: 1px solid $color-grey-darker;
+            border-radius: .4em;
+            cursor: pointer;
+            float: left;
+            //height: $navbar-height; //$navbar-height - 10px;
+            line-height: $navbar-height - 1em;
+            list-style: none;
+            margin: 4px;
+            //min-height: $navbar-height; //$navbar-height - 10px;
+            padding: 0;
+
+            > a {
+                line-height: 1em;
+            }
+
+            &:hover {
+                background-color: $color-dark-less;
+            }
+
+            .nav-item-icon {
+                @extend %clickable;
+                background-color: $color-dark-less;
+                border: thin solid $color-grey-darker;
+                border-bottom: 3px solid $color-grey-dark;
+                border-radius: .4em;
+                float: left;
+                height: 3em; // $icon-height;
+                list-style: none;
+                margin: 4px; //4px 4px 2em;
+                text-align: center;
+                width: 3em; //$icon-width;
+                > a {
+                    color: $color-light; // #9d9d9d;
+                    //padding: 0;
+                    &:hover {
+                        color: $color-light-more;
+                    }
+
+                    > .icon {
+
+                        > .icon-label {
+                            //clear: both;
+                            display: block;
+                            //float: none;
+                            font-size: $font-size-small;
+                            line-height: 1.5em;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            text-transform: uppercase;
+                            white-space: nowrap;
+                            width: 5em; //$icon-width;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 .icon-label {
 	@extend %noSelect;
@@ -496,92 +571,16 @@ main {
 		border-bottom: 1px solid $color-white;
 	}
 }
-.nav-item {
-	@extend %clickable;
-	background-color: $color-dark;
-	border: 1px solid $color-grey-darker;
-	border-radius: 5px;
-	cursor: pointer;
-	float: left;
-	height: $navbar-height - 10px;
-    list-style: none;
-	margin: 3px;
-	min-height: $navbar-height - 10px;
-	padding: 0;
-	&:hover {
-		background-color: $color-dark-less;
-	}
-}
-.nav-item-icon {
-	@extend %clickable;
-	background-color: $color-dark-less;
-	border: thin solid $color-grey-darker;
-	border-bottom: 3px solid $color-grey-dark;
-	border-radius: .6em;
-	float: left;
-	font-size: $font-size-small;
-	font-weight: bold;
-	height: $icon-height;
-	list-style: none;
-	margin: 4px 4px 2em;
-	text-align: center;
-	width: $icon-width;
 
-	> a {
-		color: $color-light; // #9d9d9d;
-		padding: 0;
-
-		&:hover {
-			color: $color-light-more;
-		}
-
-		>.icon {
-			font-size: 28px;
-			line-height: 62px;
-
-			>.icon-label {
-				clear: both;
-				display: block;
-				float: none;
-				font-size: 10px;
-				line-height: 20px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				text-transform: uppercase;
-				white-space: nowrap;
-				width: $icon-width;
-			}
-		}
-	}
-}
 //@media only screen and (max-width: 767px) {
 //768px = standard
 //}
 // Horizontal nav-bars should scroll horizontally in
 // order to avoid cases where the menu gets lost inside
 // the container
-@media only screen and (max-width: 768px) {
-	ul {
-		&.navbar-nav {
-			&.horizontal {
-				// Horizontal srolling for Mobile
-				display: flex;
-				flex-wrap: nowrap;
-				overflow-x: auto;
-				overflow-y: hidden;
-				& .collapse {
-					height: 0;
-					& .in {
-						height: auto;
-					}
-				}
-				>.nav-item-icon {
-					display: inline-block; // !important
-				}
-			}
-		}
-	}
-}
+//@media only screen and (max-width: 768px) {
+	
+//}
 
 .chat {
 	background-color: $color-light-more;
@@ -779,26 +778,6 @@ form {
 		}
 	}
 }
-.childGroup {
-	.form-group {
-		@include transition(height 800ms);
-		height: auto;
-		margin-bottom: 0;
-		padding: 0;
-		transition-delay: 300ms;
-	}
-}
-.form-group-container {
-	h1 {
-		@extend %bevel-down;
-		background-color: $color-dark-less;
-		color: $color-light;
-		font-size: 1em;
-		font-weight: bold;
-		padding: .2em .2em .4em;
-		text-transform: uppercase;
-	}
-}
 input,
 select,
 textarea {
@@ -821,18 +800,6 @@ input {
 			background-color: $color-red-deep;
 		}
 	}
-}
-.navbar-header {
-	width: 100%;
-}
-.navbar-header-label {
-	border: 0;
-	border-radius: 0;
-	line-height: 36px;
-}
-.nav-link {
-	color: $color-white;
-	cursor: pointer;
 }
 .menulist-menu {
 	border-bottom: 3px solid $color-grey-darker;
@@ -926,7 +893,7 @@ input {
 }
 .dropdown-menu {
 	ul {
-		&.navbar-nav {
+		&.menu {
 			border-bottom: 1px solid $color-white;
 		}
 	}
@@ -956,7 +923,7 @@ input {
 	background-color: $jumbotron-bg-default;
 	background-position: center top;
 	background-repeat: no-repeat;
-	background-size: cover; // !important
+	background-size: cover;
 	color: $color-white;
 	font-family: 'Raleway';
 	font-weight: 300;
@@ -969,7 +936,7 @@ input {
 	text-shadow: 1px 1px 4px $color-shadow-dark;
 	width: 100%;
 
-	>.screen {
+	> .screen {
 		@extend %gradient-vignette;
 		height: 100%;
 		position: absolute;
@@ -977,7 +944,7 @@ input {
 	}
 
 	h1 {
-		font-size: 40px;
+		font-size: $font-size-large;
 		padding: 0 6px;
 	}
 

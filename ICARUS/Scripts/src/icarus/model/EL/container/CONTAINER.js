@@ -230,7 +230,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {GROUP} A Menu Group
 	*/
 	addDomItems() {
-		let domGroup = this.navBar.header.menu.getGroup('DOM');
+		let domGroup = this.navBar.menu.menu.getGroup('DOM');
 		domGroup.addNavItemIcon(new MODEL().set({
 			'anchor': new MODEL().set({
 				'icon': ICONS.UP,
@@ -268,7 +268,7 @@ export default class CONTAINER extends GROUP {
         @returns {GROUP} A Menu Group
 	*/
 	addCrudItems() {
-		let crudGroup = this.navBar.header.menu.getGroup('CRUD');
+		let crudGroup = this.navBar.menu.menu.getGroup('CRUD');
 		crudGroup.addNavItemIcon(new MODEL().set({
 			'anchor': new MODEL().set({
 				'icon': ICONS.LOAD,
@@ -282,7 +282,7 @@ export default class CONTAINER extends GROUP {
 	        @returns {void}
 		 */
 	addNavBarDefaults() {
-		if (this.navBar.header.menu) {
+		if (this.navBar.menu.menu) {
 			//let domGroup = this.addDomItems();
 			this.addDomItems();
 			let crudGroup = this.addCrudItems();
@@ -308,7 +308,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	moveContainerUp() {
-		this.navBar.header.toggleCollapse();
+		this.navBar.menu.toggleCollapse();
 		this.moveUp();
 	}
 	/**
@@ -316,7 +316,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	moveContainerDown() {
-		this.navBar.header.toggleCollapse();
+		this.navBar.menu.toggleCollapse();
 		this.moveDown();
 	}
 	/**
@@ -327,12 +327,12 @@ export default class CONTAINER extends GROUP {
 	createWrappedSaveForm() {
 		this.btnSave.toggle('active');
 		if ($(this.btnSave.el).hasClass('active')) {
-			let node = this.navBar.header.menu.getGroup('CRUD').wrapper;
+			let node = this.navBar.menu.menu.getGroup('CRUD').wrapper;
 			this.btnSave.wrapper = new DIV(node, new MODEL(new ATTRIBUTES('collapse in wrapper')));
 			this.save(this.btnSave.wrapper, this);
 		} else {
 			console.log(0, 'Closing ' + this.className + '.save() form.');
-			let wrp = this.navBar.header.menu.getGroup('CRUD').el.nextElementSibling;
+			let wrp = this.navBar.menu.menu.getGroup('CRUD').el.nextElementSibling;
 			try {
 				$(wrp).collapse('toggle');
 				setTimeout(() => {
@@ -366,8 +366,8 @@ export default class CONTAINER extends GROUP {
 	        @returns {void}
 		*/
 	addConstructElementButton(className) {
-		if (this.navBar.header.menu) {
-			this.navBar.header.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
+		if (this.navBar.menu.menu) {
+			this.navBar.menu.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
 					'anchor': new MODEL().set({
 						'icon': ICONS[className],
 						'label': className //'Create ^'
@@ -380,7 +380,7 @@ export default class CONTAINER extends GROUP {
 				    @see https://developers.google.com/web/fundamentals/primers/promises
 				*/
 				() => {
-					this.navBar.header.toggleCollapse();
+					this.navBar.menu.toggleCollapse();
 					let promise = new Promise((resolve, reject) => {
 						console.log('Promise');
 						// do a thing, possibly async, then…
@@ -641,7 +641,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	setLabel(label) {
-		this.navBar.header.tab.anchor.setInnerHTML(label);
+		this.navBar.menu.tab.anchor.setInnerHTML(label);
 		this.label = label;
 	}
 	/**
@@ -657,7 +657,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
 	*/
 	toggleHeaders() {
-		$(this.el).find('.icarus-container nav.navbar-nav').toggle();
+		//$(this.el).find('.icarus-container nav.navbar-nav').toggle();
+        alert('CONTAINER.toggleHeaders()');
 	}
 	/**
         Updates the model
