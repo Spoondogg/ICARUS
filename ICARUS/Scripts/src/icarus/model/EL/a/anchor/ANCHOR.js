@@ -18,16 +18,15 @@ export default class ANCHOR extends A {
 	constructor(node, model) {
 		super(node, model);
 		if (model.icon) {
-			this.icon = new GLYPHICON(this, model.label ? model.label : '', model.icon);
-		} else {
-			this.setInnerHTML(this.el.innerHTML += model.label);
-		}
+            this.icon = new GLYPHICON(this, model.icon);
+            $(this.icon.el).insertBefore(this.label.el);
+		} //else {
+			//this.setInnerHTML(this.el.innerHTML += model.label);
+		//}
+        //if (model.label) {
+        //    this.label = new SPAN(this, model.label);
+        //}
+        
 	}
 }
-export {
-	A,
-	ATTRIBUTES,
-	EL,
-	GLYPHICON,
-	MODEL
-};
+export { A,	ATTRIBUTES,	EL,	GLYPHICON, MODEL };
