@@ -1,5 +1,5 @@
-/** @module */
-import CONTAINER, { ATTRIBUTES, MODEL } from '../../CONTAINER.js'; // EL
+/** @module  */
+import CONTAINER, { ATTRIBUTES, MODEL } from '../../CONTAINER.js';
 import BANNER from '../BANNER.js';
 import DIV from '../../../div/DIV.js';
 import HEADER from '../../../header/HEADER.js';
@@ -25,7 +25,8 @@ export default class INDEX extends BANNER {
     }
 	construct() {
 		this.menu = new MENU(this.body.pane, new MODEL().set({
-			'label': 'INDEX'
+            'label': 'INDEX',
+            'showHeader': 1
 		}));
 		let elementList = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
 		for (let l = 0; l < elementList.length; l++) {

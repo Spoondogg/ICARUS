@@ -589,9 +589,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\icon192.png" />
     <Content Include="Content\icon50.png" />
@@ -722,18 +719,6 @@
     <Content Include="LICENCE.md" />
     <Content Include="config\eslint.json" />
     <Content Include="package-lock.json" />
-    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.eot">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.woff">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\styles\src\fonts\glyphicons-halflings-regular.woff2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\styles\src\icarus\icarus.scss" />
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
