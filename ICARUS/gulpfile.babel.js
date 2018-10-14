@@ -12,10 +12,12 @@ import del from 'del';
 import doxygen from 'doxygen';
 import eslint from 'gulp-eslint';
 import gulp from 'gulp4';
+import gutil from 'gulp-util';
 import http from 'http';
 import jsdoc from 'gulp-jsdoc3';
 import merge from 'merge2';
 import mocha from 'gulp-mocha';
+import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
 import postcss from 'gulp-postcss';
 import postcssclean from 'postcss-clean'; // gulp-clean-css
@@ -90,8 +92,7 @@ export function $server_beautify() {
 }
 // #endregion
 // #region Styles
-/**
-    Parse SASS into CSS, append prefixes and minify (with sourcemap)
+/** Parse SASS into CSS, append prefixes and minify (with sourcemap)
     @see https://github.com/postcss/gulp-postcss
     @see https://github.com/postcss/autoprefixer#options
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
@@ -105,13 +106,14 @@ export function styles_build_src() {
         postcssfontsmoothing
     ];
     return gulp.src(paths.styles.src)
-        .pipe(plumber())
         .pipe(sourcemaps.init())
-        .pipe(sass())  //.pipe(sass().on('error', sass.logError))
-        /*.on('error', (err) => {
-            console.log(err.toString());
-            this.emit('end');
-        })*/
+        .pipe(sass()).on('error', (e) => {
+            console.log('Failed to transcode Sass', e);
+            done();
+        }).on('end', () => {
+            console.log(paths.styles.src + ' has been transcoded');
+            done();
+        })
         .pipe(rename({
             basename: 'icarus',
             suffix: '.min',
@@ -121,8 +123,7 @@ export function styles_build_src() {
         .pipe(sourcemaps.write('.')) //'.'
         .pipe(gulp.dest(paths.styles.dest));
 }
-/**
-    Creates CSS Dependencies from external
+/**  Creates CSS Dependencies from external
 */
 export function styles_build_vendor() {
     let bootstrap = request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css')
@@ -134,8 +135,8 @@ export function styles_build_vendor() {
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest(paths.styles.dest));
 }
-/**
-    Beautifies Sass Document
+/** Beautifies Sass Document
+    @returns {gulp} A gulp object
 */
 export function styles_beautify_src() {
     let config = require(paths.config.beautify);
@@ -143,11 +144,11 @@ export function styles_beautify_src() {
         .pipe(beautify(config))
         .pipe(gulp.dest('./'));
 }
-/**
-    Performs linting on Sass Stylesheet
+/** Performs linting on Sass Stylesheet
     @see https://github.com/sasstools/sass-lint/tree/master/docs/rules
     @see https://github.com/sasstools/gulp-sass-lint/blob/master/tests/.sass-lint.yml
     @see https://github.com/sasstools/gulp-sass-lint#optionsrules
+    @returns {gulp} A gulp object
 */
 export function styles_lint_src(done) {
     console.log('Linting Styles: ' + paths.styles.basefile);
@@ -165,22 +166,39 @@ export function styles_lint_src(done) {
 }
 // #endregion
 // #region Scripts
-export function scripts_build_src() {
+/** Error handling prevents gulp watch from stopping
+    @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
+    @see https://stackoverflow.com/questions/43474288/gulp-4-keep-watching-even-on-error
+    @see https://cameronspear.com/blog/how-to-handle-gulp-watch-errors-with-plumber/
+    @param {any} err An error
+ */
+function onError(err) {
+    notify.onError({
+        title: "Gulp error in " + err.plugin,
+        message: err.toString()
+    })(err);
+    gutil.beep();
+};
+/** Terses Scripts and creates appropriate Sourcemaps
+    @param {any} done Callback
+ */
+export function scripts_build_src(done) {
     console.log('Building Scripts: ' + paths.scripts.src);
     return gulp.src(paths.scripts.src, { base: paths.scripts.base })
-        .pipe(plumber())
+        .pipe(plumber({ errorHandler: onError }))
         .pipe(sourcemaps.init())
-        .pipe(terser())
-        /*.on('error', (err) => {
-            console.log(err.toString());
-            this.emit('end');
-        })*/
+        .pipe(terser()).on('error', (e) => {
+            console.log('Failed to terse Scripts');
+            done();
+        }).on('success', () => {
+            console.log(paths.scripts.src + ' has been successfully tersed');
+        }).on('end', () => {
+            done();
+        })
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.scripts.dest));
 }
-/**
-    Creates Javascript Dependencies inside Scripts/dist
-*/
+/** Creates Javascript Dependencies inside Scripts/dist */
 export function scripts_build_vendor() {
     let jquery = request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js'));
     let jqueryUI = request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js'));
@@ -208,13 +226,13 @@ export function scripts_lint_src(done) {
     console.log('Linting Scripts: ' + paths.scripts.src);
     let config = require(paths.config.eslint);
     return gulp.src(paths.scripts.src)
+        .pipe(plumber({ errorHandler: onError }))
         .pipe(eslint(config))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError()).on('error', (e) => {
             console.log('Failed to lint Javascript');
             done();
         }).on('end', () => {
-            // success
             done();
         });
 }

@@ -18,8 +18,8 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model The object model
 	 */
 	constructor(node, model) {
-        super(node, 'FORM', model, ['FIELDSET']);
-        this.addCase('FIELDSET', () => this.addFieldset(model));
+		super(node, 'FORM', model, ['FIELDSET']);
+		this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.tokenInput = new FORMINPUTTOKEN(this, new MODEL().set({ 'value': this.getToken() }));
 		this.setPostUrl('Form/Submit');
 		this.updateUrl = 'Form/Update';
@@ -28,16 +28,16 @@ export default class FORM extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {}
-    /** Constructs a Fieldset for this FORM
+	/** Constructs a Fieldset for this FORM
         @todo Verify that this overrides the initial fieldset
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
-    addFieldset(model) {
-        this.children.push(new FIELDSET(this.body.pane, model));
-        return this.addGroup(this.children[this.children.length - 1]);
-    }
-    /** Populates this form with a single fieldset and formelementgroup
+	addFieldset(model) {
+		this.children.push(new FIELDSET(this.body.pane, model));
+		return this.addGroup(this.children[this.children.length - 1]);
+	}
+	/** Populates this form with a single fieldset and formelementgroup
 	    @param {EL} node Parent node
 	    @param {boolean} hidden If true, form is hidden
 	    @returns {FORM} An empty form container
@@ -48,11 +48,10 @@ export default class FORM extends CONTAINER {
 		})).set({
 			'label': 'FORM'
 		}));
-        form.addFieldset(new MODEL()).addFormElementGroup(new MODEL());
-        /*let formElementGroup = fieldset.addFormElementGroup(
-            new MODEL().set({ 'label': 'FORMELEMENTGROUP' })
-        );*/
-
+		form.addFieldset(new MODEL()).addFormElementGroup(new MODEL());
+		/*let formElementGroup = fieldset.addFormElementGroup(
+		    new MODEL().set({ 'label': 'FORMELEMENTGROUP' })
+		);*/
 		/*form.fieldset = new FIELDSET(form.body.pane, new MODEL().set({
 			'label': 'FIELDSET'
 		}));*/
@@ -207,7 +206,6 @@ export default class FORM extends CONTAINER {
 	getFormPost() {
 		return this.validate().isValid ? new FORMPOST(this) : null;
 	}
-	
 	/** Creates an Input Model
 	    @param {string} element Element name
 	    @param {string} name Input name
@@ -226,56 +224,55 @@ export default class FORM extends CONTAINER {
 			label,
 			type
 		})
-    }
-
-    /** Post values to server.
+	}
+	/** Post values to server.
 		Posts the contents of the given Form Post to the specified url
 		and updates the given prompt.
 		param {CONTAINER} master The master element whos state and id is to be updated
 	    @async
 	    @returns {Promise<object>} The results of the Form Post
 	*/
-    post() {
-        console.log(10, 'Posting values to server: ' + this.postUrl);
-        let formPost = this.getFormPost();
-        if (formPost) {
-            this.lock();
-            //console.log('Posting to: ' + this.postUrl, formPost);
-            $.ajax({
-                url: this.postUrl,
-                type: 'POST',
-                data: formPost,
-                error(xhr, statusText, errorThrown) {
-                    console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
-                },
-                statusCode: {
-                    200(response) {
-                        console.log('StatusCode: 200', response.message, true);
-                    },
-                    201(response) {
-                        console.log('StatusCode: 201', response);
-                    },
-                    400(response) {
-                        console.log('StatusCode: 400', response);
-                    },
-                    403(response) {
-                        console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
-                        //app.login();
-                    },
-                    404(response) {
-                        console.log('StatusCode: 404', response);
-                    }
-                },
-                success: (payload) => {
-                    console.log('Posted results to server.', payload.message);
-                    this.unlock();
-                    this.afterSuccessfulPost(payload);
-                }
-            });
-        } else {
-            console.log(0, 'Post Failed to submit.  Values may be invalid.');
-            this.getMainContainer().loader.showConsole();
-        }
-    }
+	post() {
+		console.log(10, 'Posting values to server: ' + this.postUrl);
+		let formPost = this.getFormPost();
+		if (formPost) {
+			this.lock();
+			//console.log('Posting to: ' + this.postUrl, formPost);
+			$.ajax({
+				url: this.postUrl,
+				type: 'POST',
+				data: formPost,
+				error(xhr, statusText, errorThrown) {
+					console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
+				},
+				statusCode: {
+					200(response) {
+						console.log('StatusCode: 200', response.message, true);
+					},
+					201(response) {
+						console.log('StatusCode: 201', response);
+					},
+					400(response) {
+						console.log('StatusCode: 400', response);
+					},
+					403(response) {
+						console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
+						//app.login();
+					},
+					404(response) {
+						console.log('StatusCode: 404', response);
+					}
+				},
+				success: (payload) => {
+					console.log('Posted results to server.', payload.message);
+					this.unlock();
+					this.afterSuccessfulPost(payload);
+				}
+			});
+		} else {
+			console.log(0, 'Post Failed to submit.  Values may be invalid.');
+			this.getMainContainer().loader.showConsole();
+		}
+	}
 }
 export { ATTRIBUTES, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };
