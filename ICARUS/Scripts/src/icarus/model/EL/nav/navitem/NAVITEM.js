@@ -14,12 +14,11 @@ export default class NAVITEM extends LI {
 	constructor(node, model) {
 		super(node, new MODEL(model.attributes));
 		this.addClass('nav-item');
-        this.anchor = new ANCHOR(this, model);
-        this.addCase('MENU', () => this.addMenu(model));
-
-        if (model.label) {
-            this.el.setAttribute('title', model.label);
-        }
+		this.anchor = new ANCHOR(this, model);
+		this.addCase('MENU', () => this.addMenu(model));
+		if (model.label) {
+			this.el.setAttribute('title', model.label);
+		}
 	}
 	/** Add a {@link MENU} to this element
 	    @param {MODEL} model NavBarNav model

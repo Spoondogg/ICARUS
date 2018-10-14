@@ -22,10 +22,8 @@ export default class INDEX extends BANNER {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('index');
-	}
+    }
 	construct() {
-		//this.containerHeader = new HEADER(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
-		//this.nav = new NAV(this.body.pane);
 		this.menu = new MENU(this.body.pane, new MODEL().set({
 			'label': 'INDEX'
 		}));
