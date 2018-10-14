@@ -246,12 +246,11 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			console.log('Unable to retrieve FormPost.', e);
 		}
 	}
-	/**
-			Add the appropriate FORMELEMENT
-	        @param {Array} inputs An array of inputs
-			@todo Include other inputs such as SELECT and TEXTAREA
-	        @returns {void}
-		*/
+	/** Add the appropriate FORMELEMENT
+        @param {Array} inputs An array of inputs
+        @todo Include other inputs such as SELECT and TEXTAREA
+        @returns {void}
+    */
 	addInputs(inputs) {
 		if (inputs) {
 			for (let i = 0; i < inputs.length; i++) {
@@ -265,12 +264,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			}
 		}
 	}
-	/**
-		    Opens a Modal Form populated with an open version of the FormPost
-	        @returns {void}
-	        @todo This is just ridiculously long and needs to be cleaned up
-	        Create some methods!
-		 */
+	/** Opens a Modal Form populated with an open version of the FormPost
+        @returns {void}
+        @todo This is just ridiculously long and needs to be cleaned up
+    */
 	editAttributes() {
 		console.log('editattributes');
 		let id = parseInt(this.input.attributes.value);
@@ -297,9 +294,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 							this.createFormPostForm(inputs, data);
 						}
 					}
-					/* else {
-											console.log('Json Results empty');
-										}*/
 				} else {
 					console.log(0, 'An Exception Occurred', data.message);
 					this.getMainContainer().login();

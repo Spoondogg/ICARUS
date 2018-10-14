@@ -1,7 +1,6 @@
 /** @module */
-//import LI, { ANCHOR } from '../../li/LI.js';
-import MENU from '../menu/MENU.js';
-import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js';
+//import MENU from '../menu/MENU.js';
+import NAVITEM from '../navitem/NAVITEM.js'; //, { ANCHOR } 
 /** A clickable icon with label 
     @class
     @extends LI
@@ -13,7 +12,6 @@ export default class NAVITEMICON extends NAVITEM {
 	 */
 	constructor(node, model) {
 		super(node, model);
-		//this.addClass('nav-item-icon');
-		this.el.setAttribute('title', model.anchor.label);
+		this.addClass('nav-item-icon');
 	}
 }

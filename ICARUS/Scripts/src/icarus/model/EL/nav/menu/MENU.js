@@ -15,8 +15,8 @@ export default class MENU extends UL {
 	    @param {MODEL} model The json object representing this element        
 	 */
 	constructor(node, model) {
-        super(node, model);
-        this.addClass('list');
+		super(node, model);
+		this.addClass('list');
 		this.wrapper = new DIV(node, new MODEL('menu'));
 		if (model.showHeader) {
 			this.header = new HEADER(this.wrapper, new MODEL().set({
@@ -30,8 +30,8 @@ export default class MENU extends UL {
 			};
 		}
 		this.addCase('MENU', () => this.addMenu(model));
-        this.addCase('NAVITEM', () => this.addNavItem(model));
-        this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
+		this.addCase('NAVITEM', () => this.addNavItem(model));
+		this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
 		this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
 	}
 	/** Toggles the collapsed state of the 'COLLAPSE'
@@ -83,7 +83,7 @@ export default class MENU extends UL {
 	    @returns {NAVITEMICON} Nav Item with Anchor
 	*/
 	addNavItemIcon(model) {
-		this.children.push(new NAVITEMICON(this, model)); //model.url, model.label
+		this.children.push(new NAVITEMICON(this, model));
 		return this.addGroup(this.children[this.children.length - 1]);
 	}
 	/** Adds an array of Nav Items

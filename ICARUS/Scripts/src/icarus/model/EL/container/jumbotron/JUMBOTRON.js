@@ -54,17 +54,17 @@ export default class JUMBOTRON extends CONTAINER {
 		if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
 			try {
 				$.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), (data) => {
-                    try {
-                        let parsed = JSON.parse(data.model.jsonResults);
-                        //console.log('Parsed', parsed);
-                        for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
-                            if (parsed[p].name === 'base64') {
-                                this.body.pane.el.setAttribute('style', 'background: url(' + parsed[p].value + ');');
-                            }
-                        }
-                    } catch (ee) {
-                        console.log('Unable to load background image for JUMBOTRON', ee);
-                    }
+					try {
+						let parsed = JSON.parse(data.model.jsonResults);
+						//console.log('Parsed', parsed);
+						for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
+							if (parsed[p].name === 'base64') {
+								this.body.pane.el.setAttribute('style', 'background: url(' + parsed[p].value + ');');
+							}
+						}
+					} catch (ee) {
+						console.log('Unable to load background image for JUMBOTRON', ee);
+					}
 				});
 			} catch (e) {
 				console.log('Unable to retrieve FormPost.', e);

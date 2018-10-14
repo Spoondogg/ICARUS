@@ -23,10 +23,10 @@ export default class INDEXMAIN extends BANNER {
 		this.addClass('index-main');
 		this.page = 0;
 		this.pageLength = 6;
-        this.pageTotal = 0;
-        this.menu = new MENU(this, new MODEL().set({
-            'label': 'INDEX'
-        }));
+		this.pageTotal = 0;
+		this.menu = new MENU(this, new MODEL().set({
+			'label': 'INDEX'
+		}));
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
