@@ -1,19 +1,15 @@
-/**
-    @module
-*/
+/** @module */
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-/**
-    A grouping of list items
+/** A grouping of list items
     @class
     @extends EL
- */
+*/
 export default class GROUP extends EL {
-	/**
-	    Construct a group of NavItems
-	    @param {EL} node The element that will contain this object
-	    @param {string} element HTML Element 
-	    @param {MODEL} model The json object representing this element
-	*/
+	/** Construct a group of NavItems
+        @param {EL} node The element that will contain this object
+        @param {string} element HTML Element 
+        @param {MODEL} model The json object representing this element
+    */
 	constructor(node, element, model) {
 		super(node, element, model);
 		try {
@@ -26,28 +22,25 @@ export default class GROUP extends EL {
 		}
 		this.groups = {};
 	}
-	/**
-	    Retrieves the specified group
-	    @param {string} name Name of group
-	    @returns {GROUP} A group
-	 */
+	/** Retrieves the specified group
+        @param {string} name Name of group
+        @returns {GROUP} A group
+    */
 	getGroup(name) {
 		return this.groups[name];
 	}
-	/**
-	    Adds the given group to this.groups
-	    @param {GROUP} group A GROUP Element
-	    @returns {GROUP} The given group
-	 */
+	/** Adds the given group to this.groups
+        @param {GROUP} group A GROUP Element
+        @returns {GROUP} The given group
+    */
 	addGroup(group) {
 		this.groups[group.name] = group;
 		return this.groups[group.name];
 	}
-	/**
-	    Adds or Overrides the given group to this.groups
-	    @param {GROUP} group A GROUP Element
-	    @returns {GROUP} The given group
-	 */
+	/** Adds or Overrides the given group to this.groups
+        @param {GROUP} group A GROUP Element
+        @returns {GROUP} The given group
+    */
 	setGroup(group) {
 		if (typeof this.groups[name] === 'undefined') {
 			this.groups[group.name] = group;

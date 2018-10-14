@@ -14,7 +14,7 @@ export default class NAVBAR extends NAV {
 	 */
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('collapse');
+		this.addClass('collapse');
 		this.menu = new NAVHEADER(this, new MODEL().set({
 			'label': node.label
 		}));

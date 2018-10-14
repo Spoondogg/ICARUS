@@ -1,12 +1,12 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, DIALOG, ICONS, INPUTTYPES, MODEL } from '../CONTAINER.js';
+import CONTAINER, { DIALOG, ICONS, MODEL } from '../CONTAINER.js'; // ATTRIBUTES, INPUTTYPES
 //import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
-import FORMINPUT from '../formelement/forminput/FORMINPUT.js';
+//import FORMINPUT from '../formelement/forminput/FORMINPUT.js';
 import LOADER from '../../modal/loader/LOADER.js';
-import MENU from '../../nav/menu/MENU.js';
+//import MENU from '../../nav/menu/MENU.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
-import PROMPT from '../../modal/prompt/PROMPT.js';
+//import PROMPT from '../../modal/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
 /** A top level View that holds all other child Containers
@@ -24,17 +24,11 @@ export default class MAIN extends CONTAINER {
 		super(document.body, 'MAIN', model, ['ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
 		this.addClass('app').navBar.addClass('navbar-fixed-top');
 		this.body.pane.addClass('pane-tall');
-		/**
-		    @type {CONTAINERFACTORY}
-		*/
+		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
-		/**
-		    @type {LOADER}
-		*/
+		/** @type {LOADER} */
 		this.loader = model.loader;
-		/** A Security token
-		    @type {string}
-		*/
+		/** A Security token @type {string} */
 		this.token = model.token;
 		/** Browser Url
 		    @property {Url} url The browser url
@@ -49,16 +43,13 @@ export default class MAIN extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {
-        this.navBar.el.setAttribute('draggable', 'false');
-        this.showNavBar();
+		this.navBar.el.setAttribute('draggable', 'false');
+		this.showNavBar();
 		if (this.user === 'Guest') {
-			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(
-				new MODEL('pull-right').set({
-					'icon': ICONS.USER,
-					'anchor': new MODEL().set({
-						'icon': ICONS.USER
-					})
-				}));
+			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
+                'icon': ICONS.USER,
+                'label': 'LOG IN'
+			}));
 			this.btnLogin.el.onclick = this.login.bind(this);
 		}
 	}
@@ -75,12 +66,6 @@ export default class MAIN extends CONTAINER {
 	getUser() {
 		return this.user;
 	}
-	/** Returns the MAIN Token
-	    @returns {string} A Session Token
-	*/
-	getToken() {
-		return this.token;
-	}
 	/** Returns the MAIN Factory
 	    @returns {CONTAINERFACTORY} The Main Container Factory
 	*/
@@ -93,9 +78,7 @@ export default class MAIN extends CONTAINER {
 	addNavOptions() {
 		if (this.navBar.menu.menu) {
 			this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set({
-				'anchor': new MODEL().set({
-					'icon': ICONS.SIDEBAR		
-				})
+                'icon': ICONS.SIDEBAR
 			}));
 			this.btnSidebar.el.onclick = this.toggleSidebar.bind(this);
 			$(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
@@ -114,11 +97,9 @@ export default class MAIN extends CONTAINER {
 	 */
 	addNavItemIcon(menu, icon, label = '', url = '#') {
 		return menu.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				icon,
-				label,
-				url
-			})
+            icon,
+            label,
+            url
 		}))
 	}
 	/**
@@ -130,13 +111,11 @@ export default class MAIN extends CONTAINER {
 			'name': 'USER',
 			'showHeader': 1,
 			'collapsed': 1
-        }));
-
-        this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
+		}));
+		this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
 			this.navBar.menu.toggleCollapse();
 			this.logout();
-        };
-
+		};
 		this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
 		let domMenu = this.navBar.menu.menu.getGroup('DOM');
 		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
@@ -158,7 +137,7 @@ export default class MAIN extends CONTAINER {
 			}, 1000);
 		};
 		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
-		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = this.newMain.bind(this);		
+		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = this.newMain.bind(this);
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
@@ -201,12 +180,12 @@ export default class MAIN extends CONTAINER {
 	getMainContainer() {
 		return this;
 	}
-    /**
-        Sets the focus on the Main container body.  
-        This generally is used to hide elements such 
-        as a Sidebar, Modal or an EDIT pane
-        @returns {void}
-    */
+	/**
+	    Sets the focus on the Main container body.  
+	    This generally is used to hide elements such 
+	    as a Sidebar, Modal or an EDIT pane
+	    @returns {void}
+	*/
 	focusBody() {
 		if ($(this.sidebar.el).hasClass('active')) {
 			this.sidebar.removeClass('active');
@@ -333,6 +312,20 @@ export default class MAIN extends CONTAINER {
 	/** Log into the application using the given credentials
 		param {string} email Username / Email 
 		param {string} password Account Password
+
+        <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
+			<input name="__RequestVerificationToken" type="hidden" value="woot">
+            <div id="socialLoginList">
+			<p>
+			    <button type="submit"
+			        class="btn btn-default" id="Google"
+			        name="provider" value="Google"
+			        title="Log in using your Google account"
+			    >Google</button>
+			</p>
+			</div>
+		</form>
+
 	    @todo Consider handling email/password string or CREDENTIALS object
 	    @todo Create INPUT CHECKBOX called 'RememberMe'
 	    @todo Create BUTTON to launch 'Register as new User
@@ -340,106 +333,57 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() { //email, password
-        let dialog = new DIALOG(new MODEL().set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
-        let form = FORM.createEmptyForm(this.body.pane);
-        $(form.el).appendTo(dialog.body.el);
-        //form.show();
-        form.setPostUrl('/Account/Login');
-        form.id = 0;
-        form.label = 'Login';
-        form.el.setAttribute('id', 0);
-        form.el.setAttribute('class', 'login');
-        form.el.setAttribute('method', 'POST');
-        form.el.setAttribute('action', '#');
-        form.fieldset.formElementGroup.addInputElements([
-            FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
-            FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
-            FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
+		let dialog = new DIALOG(new MODEL().set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
+		let form = FORM.createEmptyForm(this.body.pane);
+		$(form.el).appendTo(dialog.body.el);
+		form.setPostUrl('/Account/Login');
+		form.id = 0;
+		form.label = 'Login';
+		form.el.setAttribute('id', 0);
+		form.el.setAttribute('class', 'login');
+		form.el.setAttribute('method', 'POST');
+		form.el.setAttribute('action', '#');
+        form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+			FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
+			FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
+			FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
         ]);
-        form.afterSuccessfulPost = (payload, status) => {
-            this.ajaxRefreshIfSuccessful(payload, status)
-        };
-        dialog.show();
-    }
-    /**
-        @deprecated
-        Outdated login form
-        @returns {void}
-    */
-    loginLegacy() {
-        this.prompt = new PROMPT('Log In', '', [], [], true);
-        this.prompt.addClass('prompt');
-        this.prompt.form.setPostUrl('/Account/Login');
-        this.prompt.form.el.setAttribute('class', 'login');
-        this.prompt.form.el.setAttribute('method', 'POST');
-        this.prompt.form.el.setAttribute('action', '#');
-        this.email = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-            'typeId': INPUTTYPES.INPUT,
-            'type': 'Email',
-            'name': 'Email'
-        })).set({
-            'label': 'Username',
-            'showHeader': 0
-        }));
-        this.password = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-            'typeId': INPUTTYPES.PASSWORD,
-            'type': 'Password',
-            'name': 'Password'
-        })).set({
-            'label': 'Password',
-            'showHeader': 0
-        }));
-        //this.prompt.form.footer.buttonGroup.children[0].el.style.display = 'none';
-		/**
-			Post the Login FormPost
-			If login successful, load the new User Session (Refresh Page)
-		    @returns {void}
-		*/
-        this.prompt.form.footer.buttonGroup.children[0].el.onclick = () => {
-            $.post('/Account/LogIn', $(this.prompt.form.el).serialize(), this.ajaxRefreshIfSuccessful);
-        };
-        this.prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+
+        form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+
+        /*
         // Create a new form to submit 3rd party logins
         this.externalLogin = this.createExternalLoginForm();
-        this.provider = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+        this.provider = new FORMINPUT(this.externalLogin.children[0].children[0].body.pane, new MODEL(new ATTRIBUTES({
             'type': 'hidden',
             'name': 'provider'
         })));
-        this.returnUrl = new FORMINPUT(this.externalLogin.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
+        this.returnUrl = new FORMINPUT(this.externalLogin.children[0].children[0].body.pane, new MODEL(new ATTRIBUTES({
             'type': 'hidden',
             'name': 'returnUrl'
         })));
         let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth');
         btnOAuth.el.onclick = function () {
             console.log(50, 'Launching OAuth2 Authenticator...');
-			/*
 			let returnUrl = this.url.origin + '/signin-google';
-			this.returnUrl.el.setAttribute('value', returnUrl);
-			            
+            this.returnUrl.el.setAttribute('value', returnUrl);
+            
 			let provider = 'Google';
-			this.provider.el.setAttribute('value', provider);
-			            
+			this.provider.el.setAttribute('value', provider);			            
 
-			let postUrl = '/Account/ExternalLogin?provider='
-				+ provider + '&returnUrl=' + encodeURI(returnUrl); 
-			*/
+            let postUrl = '/Account/ExternalLogin?provider=' +
+                provider + '&returnUrl=' + encodeURI(returnUrl); 
+			
             location.href = '/Account/ExternalLogin';
-			/****            
-			<form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
-			    <input name="__RequestVerificationToken" type="hidden" value="NUl4K_C0ubvHbrEeyfF19jddMf9-BZ-MTIuA33kSxdhMJoh5TEvV53sbv61vtRCp_vbWI2DQzFENnljDRpx2srlaBpQZQRsWZoKkLwSjTek1">                <div id="socialLoginList">
-			    <p>
-			        <button type="submit" 
-			            class="btn btn-default" id="Google" 
-			            name="provider" value="Google" 
-			            title="Log in using your Google account"
-			        >Google</button>
-			    </p>
-			    </div>
-			</form>
-			****/
+			
         };
-        this.prompt.show();
-    }
+        */
+
+		form.afterSuccessfulPost = (payload, status) => {
+			this.ajaxRefreshIfSuccessful(payload, status)
+		};
+		dialog.show();
+	}
 	/**
 	    Sets up the External Login Form
 	    @returns {FORM} An external login form

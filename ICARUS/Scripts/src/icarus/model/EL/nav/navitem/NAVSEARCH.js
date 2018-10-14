@@ -16,11 +16,7 @@ export default class NAVSEARCH extends NAVITEM {
 	    @param {EL} node Parent Node
 	 */
 	constructor(node) {
-		super(node, new MODEL().set({
-			'anchor': new MODEL().set({
-				'label': ''
-			})
-		}));
+        super(node, new MODEL());
 		this.form = new EL(this, 'FORM', new MODEL(new ATTRIBUTES({
 			'name': 'q',
 			'method': 'POST',

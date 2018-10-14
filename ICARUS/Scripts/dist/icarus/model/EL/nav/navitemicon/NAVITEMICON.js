@@ -1,2 +1,2 @@
-import MENU from"../menu/MENU.js";import NAVITEM,{ANCHOR}from"../navitem/NAVITEM.js";export default class NAVITEMICON extends NAVITEM{constructor(t,e){super(t,e),this.el.setAttribute("title",e.anchor.label)}}
+import NAVITEM from"../navitem/NAVITEM.js";export default class NAVITEMICON extends NAVITEM{constructor(s,t){super(s,t),this.addClass("nav-item-icon")}}
 //# sourceMappingURL=NAVITEMICON.js.map
