@@ -25,7 +25,7 @@ export default class SIDEBARMENU extends MENU { // NAVBAR
 			this.menu.addClass('in');
 		}.bind(this);
 		this.toggleButton = new NAVITEM(this, new MODEL(new ATTRIBUTES('toggle')).set({
-            'label': '<span class="caret"></span>'
+			'label': '<span class="caret"></span>'
 		}));
 		this.toggleButton.el.style.display = 'none';
 		this.toggleButton.anchor.addClass('toggle-wide noselect');

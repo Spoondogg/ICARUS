@@ -24,7 +24,7 @@ export default class NAVHEADER extends MENU {
 	*/
 	addDefaultTab(label) {
 		let tab = this.tabs.addNavItem(new MODEL('wide-tab').set({
-            label
+			label
 		}));
 		tab.el.onclick = () => { // Toggle Body
 			this.getContainer().toggleBody();
@@ -52,8 +52,8 @@ export default class NAVHEADER extends MENU {
 		try {
 			if (this.getContainer().getMainContainer().user !== 'Guest') {
 				this.toggle = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-                    'icon': ICONS.COG//,
-                    //'label': 'OPTIONS'
+					'icon': ICONS.COG //,
+					//'label': 'OPTIONS'
 				}));
 				this.toggle.el.onclick = this.toggleCollapse.bind(this);
 				this.menu = new MENU(this, new MODEL('collapse').set({ // Create the submenu to be toggled
@@ -63,8 +63,8 @@ export default class NAVHEADER extends MENU {
 				for (let oG = 0; oG < optionGroups.length; oG++) {
 					this.menu.addMenu(new MODEL('horizontal collapse').set({
 						'name': optionGroups[oG],
-                        'collapsed': 1, // Do not remove these!
-                        'showHeader': 1
+						'collapsed': 1, // Do not remove these!
+						'showHeader': 1
 					}));
 				}
 			}

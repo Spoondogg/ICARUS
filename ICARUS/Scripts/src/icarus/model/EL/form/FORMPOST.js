@@ -10,7 +10,7 @@ export default class FORMPOST {
 		this.id = form.id;
 		this.formId = form.id;
 		this.label = form.el.getAttribute('name');
-        this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
+		this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
 		this.message = '';
 	}
 	/** Serialize the form into a JSON object key/value

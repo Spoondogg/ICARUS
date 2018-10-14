@@ -47,8 +47,8 @@ export default class MAIN extends CONTAINER {
 		this.showNavBar();
 		if (this.user === 'Guest') {
 			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
-                'icon': ICONS.USER,
-                'label': 'LOG IN'
+				'icon': ICONS.USER,
+				'label': 'LOG IN'
 			}));
 			this.btnLogin.el.onclick = this.login.bind(this);
 		}
@@ -78,7 +78,7 @@ export default class MAIN extends CONTAINER {
 	addNavOptions() {
 		if (this.navBar.menu.menu) {
 			this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set({
-                'icon': ICONS.SIDEBAR
+				'icon': ICONS.SIDEBAR
 			}));
 			this.btnSidebar.el.onclick = this.toggleSidebar.bind(this);
 			$(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
@@ -97,9 +97,9 @@ export default class MAIN extends CONTAINER {
 	 */
 	addNavItemIcon(menu, icon, label = '', url = '#') {
 		return menu.addNavItemIcon(new MODEL().set({
-            icon,
-            label,
-            url
+			icon,
+			label,
+			url
 		}))
 	}
 	/**
@@ -343,15 +343,13 @@ export default class MAIN extends CONTAINER {
 		form.el.setAttribute('class', 'login');
 		form.el.setAttribute('method', 'POST');
 		form.el.setAttribute('action', '#');
-        form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
 			FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
 			FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
 			FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
-        ]);
-
-        form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-
-        /*
+		]);
+		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+		/*
         // Create a new form to submit 3rd party logins
         this.externalLogin = this.createExternalLoginForm();
         this.provider = new FORMINPUT(this.externalLogin.children[0].children[0].body.pane, new MODEL(new ATTRIBUTES({
@@ -378,7 +376,6 @@ export default class MAIN extends CONTAINER {
 			
         };
         */
-
 		form.afterSuccessfulPost = (payload, status) => {
 			this.ajaxRefreshIfSuccessful(payload, status)
 		};

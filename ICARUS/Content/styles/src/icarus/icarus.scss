@@ -31,7 +31,7 @@ $color-shadow-dark: transparentize($color-black, .2);
 $color-light-less: #efefef;
 $color-light: #eee;
 $color-light-more: #fafafa;
-$color-nav-background: rgb(42, 60, 92);
+$color-nav-background: #6e7880;
 $color-darker: rgb(16, 16, 16);
 $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
@@ -119,14 +119,14 @@ $jumbotron-bg-default: #008196;
 	user-select: none;
 }
 %horizontal-scroll {
-    // mobile only
-    @media only screen and (max-width: 767px) {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-    }
-    //@media only screen and (max-width: 768px) {    }
+	// mobile only
+	//@media only screen and (max-width: 767px) {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+	//}
+	//@media only screen and (max-width: 768px) {    }
 }
 /// The object can be clicked or tapped
 %clickable {
@@ -178,7 +178,7 @@ $jumbotron-bg-default: #008196;
 	$navheights: ($navbar-height * 2) - 1em;
 	height: calc(100vh - #{$navheights}); // Interpolate for calc https://stackoverflow.com/a/20236515/722785
 	overflow-y: auto; // !important
-    padding-bottom: 2em;
+	padding-bottom: 2em;
 }
 // Generic UI tweaks
 .noSelect {
@@ -287,141 +287,141 @@ dialog {
 	}
 }
 nav {
-    @extend %bevel-up;
-    background-color: $color-nav-background;
-    font-size: $font-size-normal;
-    height: $navbar-height;
+	@extend %bevel-up;
+	background-color: $color-nav-background;
+	font-size: $font-size-normal;
+	height: $navbar-height;
 
-    .btn-group {
-        > .dropdown-menu {
-            > li {
-                color: $color-grey;
-                text-align: left;
-                text-decoration: none;
-            }
-        }
-    }
+	.btn-group {
+		>.dropdown-menu {
+			>li {
+				color: $color-grey;
+				text-align: left;
+				text-decoration: none;
+			}
+		}
+	}
 
-    .menu {
-        background-color: $color-nav-background;
+	.menu {
+		background-color: $color-nav-background;
 
-        > header {
-            @extend %bevel-up;
-            @extend %clickable;
-            background-color: $color-shadow-neutral;
-            color: $color-light;
-            padding: 0 .2em;
-            text-transform: uppercase;
+		>header {
+			@extend %bevel-up;
+			@extend %clickable;
+			background-color: $color-shadow-neutral;
+			color: $color-light;
+			padding: 0 .2em;
+			text-transform: uppercase;
 
-            &:hover {
-                background-color: $color-shadow-light;
-            }
-            // First ul after nav header
-            & ~ ul {
-                .nav {
-                    background-color: $color-darker;
-                }
-            }
-        }
+			&:hover {
+				background-color: $color-shadow-dark;
+			}
+			// First ul after nav header
+			&~ul {
+				.nav {
+					background-color: $color-darker;
+				}
+			}
+		}
 
-        .list {
-            margin: 0;
-            padding: 0;
-            width: 100%;
+		.list {
+			margin: 0;
+			padding: 0;
+			width: 100%;
 
-            &.tabs {
-                .wide-tab {
-                    text-align: center;
-                    width: calc(100% - 8em);
-                }
-            }
+			&.tabs {
+				.wide-tab {
+					text-align: center;
+					width: calc(100% - 8em);
+				}
+			}
 
-            &.horizontal {
-                @extend %horizontal-scroll;
+			&.horizontal {
+				@extend %horizontal-scroll;
 
-                &.collapse {
-                    height: 0;
+				&.collapse {
+					height: 0;
 
-                    &.in {
-                        height: 4em; //96px; //$navbar-height;
-                    }
-                }
+					&.in {
+						height: 4em; //96px; //$navbar-height;
+					}
+				}
 
-                > .nav-item-icon {
-                    display: inline-block;
+				>.nav-item-icon {
+					display: inline-block;
 
-                    > a {
-                        display: block;
-                        width: 8em;
+					>a {
+						display: block;
+						width: 8em;
 
-                        span {
-                            float: left;
-                            line-height: inherit;
+						span {
+							float: left;
+							line-height: inherit;
 
 
-                            &.text {
-                                overflow: hidden;
-                                padding: 0 .3em;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                width: 5em;
-                            }
-                        }
-                    }
-                }
-            }
+							&.text {
+								overflow: hidden;
+								padding: 0 .3em;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+								width: 5em;
+							}
+						}
+					}
+				}
+			}
 
-            .icon-label {
-                @extend %noSelect;
-            }
+			.icon-label {
+				@extend %noSelect;
+			}
 
-            .nav-item {
-                @extend %clickable;
-                background-color: $color-shadow-neutral;
-                border: thin solid $color-grey-darker;
-                border-radius: .4em;
-                cursor: pointer;
-                float: left;
-                line-height: $navbar-height - 1em;
-                list-style: none;
-                margin: 4px;
-                //padding: 0;
-                //text-align: center;
-                &:hover {
-                    background-color: $color-shadow-light;
-                }
+			.nav-item {
+				@extend %clickable;
+				background-color: $color-shadow-neutral;
+				border: thin solid $color-grey-darker;
+				border-radius: .4em;
+				cursor: pointer;
+				float: left;
+				line-height: $navbar-height - 1em;
+				list-style: none;
+				margin: 4px;
+				//padding: 0;
+				//text-align: center;
+				&:hover {
+					background-color: $color-shadow-light;
+				}
 
-                > a {
-                    color: $color-light;
-                    //line-height: 1em;
-                    padding: 0 1em;
+				>a {
+					color: $color-light;
+					//line-height: 1em;
+					padding: 0 1em;
 
-                    &:hover {
-                        color: $color-light-more;
-                    }
-                }
+					&:hover {
+						color: $color-light-more;
+					}
+				}
 
-                &.nav-item-icon {
-                    > a {
-                        > .icon {
-                            > .icon-label {
-                                //clear: both;
-                                display: block;
-                                //float: none;
-                                font-size: $font-size-small;
-                                line-height: 1.5em;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                text-transform: uppercase;
-                                white-space: nowrap;
-                                width: 5em; //$icon-width;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+				&.nav-item-icon {
+					>a {
+						>.icon {
+							>.icon-label {
+								//clear: both;
+								display: block;
+								//float: none;
+								font-size: $font-size-small;
+								line-height: 1.5em;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								text-transform: uppercase;
+								white-space: nowrap;
+								width: 5em; //$icon-width;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 
@@ -517,7 +517,7 @@ main {
 	align-items: stretch;
 	display: flex;
 
-    // The pane within the Main container should fill the remaining screen space
+	// The pane within the Main container should fill the remaining screen space
 	>.container-body {
 		>.pane {
 			@extend %pane-tall;
@@ -705,54 +705,54 @@ main {
 	padding: 1em;
 }
 footer {
-    @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
-    background-color: $color-grey-dark;
-    border-top: 1px solid $color-grey-light;
-    color: $color-white;
-    font-size: smaller;
-    line-height: $navbar-height - 1em;
-    padding: 15px;
+	@include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
+	background-color: $color-grey-dark;
+	border-top: 1px solid $color-grey-light;
+	color: $color-white;
+	font-size: smaller;
+	line-height: $navbar-height - 1em;
+	padding: 15px;
 
-    > .container {
-        margin: .4em auto;
-    }
+	>.container {
+		margin: .4em auto;
+	}
 
-    > cite {
-        float: right;
-        line-height: 16px;
-        text-align: right;
+	>cite {
+		float: right;
+		line-height: 16px;
+		text-align: right;
 
-        a {
-            color: $color-white;
-            text-decoration: underline;
+		a {
+			color: $color-white;
+			text-decoration: underline;
 
-            &:hover {
-                color: $color-blue-lighter;
-            }
-        }
-    }
+			&:hover {
+				color: $color-blue-lighter;
+			}
+		}
+	}
 
-    &.stickyfooter {
-        @extend %bevel-up;
-        @include transition($transition-default);
-        bottom: 0;
-        height: $navbar-height;
-        padding: 0;
-        position: fixed;
+	&.stickyfooter {
+		@extend %bevel-up;
+		@include transition($transition-default);
+		bottom: 0;
+		height: $navbar-height;
+		padding: 0;
+		position: fixed;
 
-        &.active {
-            height: $navbar-height * 5;
-        }
+		&.active {
+			height: $navbar-height * 5;
+		}
 
-        textarea {
-            border-radius: 5px;
-            color: $color-black;
-            height: 180px;
-            line-height: normal;
-            margin: 1em;
-            width: calc(100% - 25px);
-        }
-    }
+		textarea {
+			border-radius: 5px;
+			color: $color-black;
+			height: 180px;
+			line-height: normal;
+			margin: 1em;
+			width: calc(100% - 25px);
+		}
+	}
 }
 form {
 	@extend %bevel-up;

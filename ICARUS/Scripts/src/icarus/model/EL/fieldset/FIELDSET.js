@@ -12,8 +12,8 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-        super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-        this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
+		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
+		this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
 		//this.addClass('form-group-container');
 		//this.body.addClass('form-group'); // The expandable portion of the section  
 		this.populate(model.children);
@@ -24,15 +24,15 @@ export default class FIELDSET extends CONTAINER {
 				this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
 			}
 		}
-    }
-    /** Constructs a Form Element Group for this Fieldset
+	}
+	/** Constructs a Form Element Group for this Fieldset
         @todo Verify that this overrides the initial case constructor
 	    @param {MODEL} model Object model
 	    @returns {FORMELEMENTGROUP} A Form Fieldset element
 	*/
-    addFormElementGroup(model) {
-        this.children.push(new FORMELEMENTGROUP(this.body.pane, model));
-        return this.addGroup(this.children[this.children.length - 1]);
-    }
+	addFormElementGroup(model) {
+		this.children.push(new FORMELEMENTGROUP(this.body.pane, model));
+		return this.addGroup(this.children[this.children.length - 1]);
+	}
 }
 export { ATTRIBUTES, EL, MODEL };

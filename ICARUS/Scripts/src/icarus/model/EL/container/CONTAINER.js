@@ -59,13 +59,13 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
-    }
-    /** Retrieves the token value from the DOM Meta tags
+	}
+	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token
 	*/
-    getToken() {
-        return document.getElementsByTagName('meta').token.content;
-    }
+	getToken() {
+		return document.getElementsByTagName('meta').token.content;
+	}
 	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    @param {EL} node The parent container to hold the save menu
@@ -237,24 +237,24 @@ export default class CONTAINER extends GROUP {
 	addDomItems() {
 		let domGroup = this.navBar.menu.menu.getGroup('DOM');
 		domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.UP,
-            'label': 'UP'
+			'icon': ICONS.UP,
+			'label': 'UP'
 		})).el.onclick = this.moveContainerUp.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.DOWN,
-            'label': 'DOWN'
+			'icon': ICONS.DOWN,
+			'label': 'DOWN'
 		})).el.onclick = this.moveContainerDown.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.REFRESH,
-            'label': 'REFRESH'
+			'icon': ICONS.REFRESH,
+			'label': 'REFRESH'
 		})).el.onclick = this.refresh.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.DELETE,
-            'label': 'REMOVE'
+			'icon': ICONS.DELETE,
+			'label': 'REMOVE'
 		})).el.onclick = this.remove.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.EXCLAMATION,
-            'label': 'DELETE'
+			'icon': ICONS.EXCLAMATION,
+			'label': 'DELETE'
 		})).el.onclick = this.disable.bind(this);
 		return domGroup;
 	}
@@ -264,8 +264,8 @@ export default class CONTAINER extends GROUP {
 	addCrudItems() {
 		let crudGroup = this.navBar.menu.menu.getGroup('CRUD'); // Retrieves the CRUD Menu
 		crudGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.LOAD,
-            'label': 'LOAD'
+			'icon': ICONS.LOAD,
+			'label': 'LOAD'
 		})).el.onclick = this.load.bind(this);
 		return crudGroup;
 	}
@@ -279,13 +279,13 @@ export default class CONTAINER extends GROUP {
 			let crudGroup = this.addCrudItems();
 			// Add items to Options Dropdown Tab
 			this.btnSave = crudGroup.addNavItemIcon(new MODEL().set({
-                'icon': ICONS.SAVE,
-                'label': 'SAVE'
+				'icon': ICONS.SAVE,
+				'label': 'SAVE'
 			}));
 			this.btnSave.el.onclick = this.createWrappedSaveForm.bind(this);
 			this.btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
-                'icon': ICONS.SAVE,
-                'label': 'QUICKSAVE'
+				'icon': ICONS.SAVE,
+				'label': 'QUICKSAVE'
 			}));
 			this.btnQuickSave.el.onclick = this.quickSave.bind(this);
 		}
@@ -355,8 +355,8 @@ export default class CONTAINER extends GROUP {
 	addConstructElementButton(className) {
 		if (this.navBar.menu.menu) {
 			this.navBar.menu.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
-                    'icon': ICONS[className],
-                    'label': className //'Create ^'
+					'icon': ICONS[className],
+					'label': className //'Create ^'
 				})).el.onclick =
 				/**
 					Makes a Promise to perform Container.create() with the
