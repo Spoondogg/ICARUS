@@ -14,22 +14,17 @@ export default class NAVHEADER extends MENU {
 	constructor(node, model) {
 		super(node, model);
 		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
-		this.tabs = new MENU(this, new MODEL().set({ // Left aligned group
-			'name': 'tabs'
-		}));
+		this.tabs = new MENU(this, new MODEL('tabs'));
 		this.tab = this.addDefaultTab(model.label);
 		this.addOptionsMenu();
 	}
-	/**
-	    Adds the default toggle tab button to this Nav Header
+	/** Adds the default toggle tab for this MENU
 	    @param {string} label The tab label
 	    @returns {NAVITEM} A Default Tab
 	*/
 	addDefaultTab(label) {
-		let tab = this.tabs.addNavItem(new MODEL('pull-left').set({ // Add a default tab to show/hide the collapse
-			'anchor': new MODEL().set({
-				label
-			})
+		let tab = this.tabs.addNavItem(new MODEL('wide-tab').set({
+            label
 		}));
 		tab.el.onclick = () => { // Toggle Body
 			this.getContainer().toggleBody();
@@ -48,19 +43,17 @@ export default class NAVHEADER extends MENU {
 		};
 		return tab;
 	}
-	/**
-		    Adds the Options/Config menu to the NavHeader.
-	        Adds a right aligned tab to show/hide the Options Menu
-	        @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
-		    @returns {void}
-		*/
+	/** Adds the Options/Config menu to the NavHeader.
+        Adds a right aligned tab to show/hide the Options Menu
+        @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+        @returns {void}
+    */
 	addOptionsMenu() {
 		try {
 			if (this.getContainer().getMainContainer().user !== 'Guest') {
 				this.toggle = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-					'anchor': new MODEL().set({
-						'icon': ICONS.COG
-					})
+                    'icon': ICONS.COG//,
+                    //'label': 'OPTIONS'
 				}));
 				this.toggle.el.onclick = this.toggleCollapse.bind(this);
 				this.menu = new MENU(this, new MODEL('collapse').set({ // Create the submenu to be toggled
@@ -70,8 +63,8 @@ export default class NAVHEADER extends MENU {
 				for (let oG = 0; oG < optionGroups.length; oG++) {
 					this.menu.addMenu(new MODEL('horizontal collapse').set({
 						'name': optionGroups[oG],
-						'showHeader': 1,
-						'collapsed': 1
+                        'collapsed': 1, // Do not remove these!
+                        'showHeader': 1
 					}));
 				}
 			}

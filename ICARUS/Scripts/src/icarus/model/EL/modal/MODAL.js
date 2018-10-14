@@ -20,8 +20,8 @@ export default class MODAL extends CONTAINER {
 		super(document.body, new MODEL(new ATTRIBUTES({
 			'class': 'modal fade in',
 			'role': 'dialog'
-		})));		
-        if (vertical) { // Vertical alignment helper div where required
+		})));
+		if (vertical) { // Vertical alignment helper div where required
 			this.alignHelper = new DIV(this, new MODEL('vertical-alignment-helper'));
 		}
 		// Dialog inside vertical align helper if set to vertical align

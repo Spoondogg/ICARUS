@@ -11,11 +11,11 @@ export default class A extends EL {
 	    @param {MODEL} model The object model
 	 */
 	constructor(node, model) {
-		super(node, 'A', model);
+		super(node, 'A', new MODEL());
 		this.href = model.attributes.href || '#';
-        this.label = new SPAN(this, new MODEL('label').set({
-			'label': model.label
-		}));
+		/*this.label = new SPAN(this, new MODEL('label').set({
+            'label': model.label || '' //
+		}));*/
 	}
 	/** Sets the target for this anchor
 	    @param {string} target Target url

@@ -8,6 +8,6 @@ export const INPUTTYPES = {
 	DATE: 3,
 	DATETIME: 4,
 	HIDDEN: 5,
-    PASSWORD: 6,
-    CHECKBOX: 7
+	PASSWORD: 6,
+	CHECKBOX: 7
 };

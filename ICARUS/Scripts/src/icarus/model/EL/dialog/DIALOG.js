@@ -23,12 +23,12 @@ export default class DIALOG extends EL {
 	    @param {MODEL} model The object model
 	 */
 	constructor(model) {
-        super(document.body, 'DIALOG', model);
-        document.body.insertBefore(this.el, document.body.firstChild);
+		super(document.body, 'DIALOG', model);
+		document.body.insertBefore(this.el, document.body.firstChild);
 		this.header = new HEADER(this, new MODEL('modal-header'));
-        this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
+		this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FOOTER(this, new MODEL('modal-footer'));
-        this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
+		this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
 		this.btnClose.el.onclick = () => {
 			this.close();
 		}
@@ -38,9 +38,9 @@ export default class DIALOG extends EL {
 	    @returns {void}
 	*/
 	show(delay = 0) {
-        setTimeout(() => {
-            this.el.showModal();
-        }, delay);
+		setTimeout(() => {
+			this.el.showModal();
+		}, delay);
 	}
 	/** Hides the modal
         @param {number} delay Millisecond delay until dialog is closed
@@ -48,12 +48,12 @@ export default class DIALOG extends EL {
 	    @returns {void}
 	*/
 	close(delay = 0, preserve = false) {
-        setTimeout(() => {
-            this.el.close();
-            if (!preserve) {
-                this.destroy();
-            }
-        }, delay);
+		setTimeout(() => {
+			this.el.close();
+			if (!preserve) {
+				this.destroy();
+			}
+		}, delay);
 	}
 }
 export { ATTRIBUTES, DIV, EL, MODEL };

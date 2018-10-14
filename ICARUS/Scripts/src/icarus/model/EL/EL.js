@@ -29,7 +29,7 @@ export default class EL extends MODEL {
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
 		this.factory = null;
-		this.children = children ? children : []; // Contains an array of child element models
+		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
 		this.make(node, model, innerHTML);
 		//this.merge(model);

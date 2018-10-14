@@ -11,6 +11,6 @@ export default class NAV extends EL {
 	 */
 	constructor(node, model) {
 		super(node, 'NAV', model);
-        //this.addClass('nav navbar navbar-inverse');
+		//this.addClass('nav navbar navbar-inverse');
 	}
 }

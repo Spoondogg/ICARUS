@@ -1,29 +1,19 @@
 /** @module */
-import FORM from '../form/FORM.js';
-//import FORMINPUTTOKEN from '../formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
-/**
-    Represents the data object to be submitted to the server for validation.
+/** Represents a standardized data object that can be POSTed and validated
     @class    
 */
 export default class FORMPOST {
-	/**
+	/** Constructs a FORMPOST for the given form
 	    @param {FORM} form The form that generated this FORMPOST
-	 */
+    */
 	constructor(form) {
-		/**
-		    The form token
-		    @type {string}
-		*/
-		//this.token = form.getToken(); //TOKEN.getToken().value; // __RequestVerificationToken
 		this.id = form.id;
-        this.formId = form.id;
+		this.formId = form.id;
 		this.label = form.el.getAttribute('name');
-		// An ordered array of key/value pairs as they appear in the FORM
-		this.results = form.getResultsAsArray();
+        this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
 		this.message = '';
 	}
-	/**
-	    Serialize the form into a JSON object key/value
+	/** Serialize the form into a JSON object key/value
 	    @returns {object} Form Results as an Object
 	*/
 	getResultsAsObject() {

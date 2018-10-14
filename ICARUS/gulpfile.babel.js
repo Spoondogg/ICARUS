@@ -16,6 +16,7 @@ import http from 'http';
 import jsdoc from 'gulp-jsdoc3';
 import merge from 'merge2';
 import mocha from 'gulp-mocha';
+import plumber from 'gulp-plumber';
 import postcss from 'gulp-postcss';
 import postcssclean from 'postcss-clean'; // gulp-clean-css
 import postcssfontsmoothing from 'postcss-font-smoothing';
@@ -33,8 +34,7 @@ import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
 // #endregion
 // #region Config
-/**
-    @description An ES6 Gulpfile for Gulp4
+/** An ES6 Gulpfile for Gulp4
     @see https://www.npmjs.com/package/gulp4#real-version-400-alpha2 
     @see https://github.com/wprig/wprig/wiki/Updating-to-Gulp-4
     @see https://www.liquidlight.co.uk/blog/article/how-do-i-update-to-gulp-4/
@@ -94,6 +94,7 @@ export function $server_beautify() {
     Parse SASS into CSS, append prefixes and minify (with sourcemap)
     @see https://github.com/postcss/gulp-postcss
     @see https://github.com/postcss/autoprefixer#options
+    @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
 export function styles_build_src() {
     console.log('Building Styles: ' + paths.styles.src);
@@ -104,8 +105,13 @@ export function styles_build_src() {
         postcssfontsmoothing
     ];
     return gulp.src(paths.styles.src)
-        .pipe(sourcemaps.init())        
+        .pipe(plumber())
+        .pipe(sourcemaps.init())
         .pipe(sass())  //.pipe(sass().on('error', sass.logError))
+        /*.on('error', (err) => {
+            console.log(err.toString());
+            this.emit('end');
+        })*/
         .pipe(rename({
             basename: 'icarus',
             suffix: '.min',
@@ -162,8 +168,13 @@ export function styles_lint_src(done) {
 export function scripts_build_src() {
     console.log('Building Scripts: ' + paths.scripts.src);
     return gulp.src(paths.scripts.src, { base: paths.scripts.base })
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(terser())
+        /*.on('error', (err) => {
+            console.log(err.toString());
+            this.emit('end');
+        })*/
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.scripts.dest));
 }
@@ -293,8 +304,7 @@ export function scripts_publish(dev = true) {
     return gulp.src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 }
-/**
-    Publishes 'src' and 'dist' Style folders
+/** Publishes 'src' and 'dist' Style folders
     @param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
@@ -303,9 +313,7 @@ export function styles_publish() {
     return gulp.src([paths.styles.baseglob, '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 }
-/**
-    Publishes Scripts and Styles to the dev server
-*/
+/** Publishes Scripts and Styles to the dev server */
 export function _publish() {
     return gulp.series(
         scripts_publish,
@@ -346,8 +354,7 @@ const _lint = gulp.series(
     scripts_lint_src,
     styles_lint_src
 );
-/** 
-    Beautifies 'src' Styles and Scripts, then performs linting.
+/** Beautifies 'src' Styles and Scripts, then performs linting.
     If lint returns no errors, the target environment is cleaned
     and 'dist' is built
  */
@@ -361,9 +368,7 @@ const _build = gulp.series(
     scripts_build_vendor
 );
 
-/** 
-    Lint, Build on Success, then publish
- */
+/** Lint, Build on Success, then publish */
 const scripts_lintbuildpublish = gulp.series(
     (done) => {
         console.log('\n\n\n==== scripts_lintbuildpublish BEGIN ====');

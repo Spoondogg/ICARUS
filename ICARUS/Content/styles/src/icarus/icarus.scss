@@ -31,6 +31,7 @@ $color-shadow-dark: transparentize($color-black, .2);
 $color-light-less: #efefef;
 $color-light: #eee;
 $color-light-more: #fafafa;
+$color-nav-background: rgb(42, 60, 92);
 $color-darker: rgb(16, 16, 16);
 $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
@@ -117,6 +118,16 @@ $jumbotron-bg-default: #008196;
 	cursor: default;
 	user-select: none;
 }
+%horizontal-scroll {
+    // mobile only
+    @media only screen and (max-width: 767px) {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    //@media only screen and (max-width: 768px) {    }
+}
 /// The object can be clicked or tapped
 %clickable {
 	cursor: pointer;
@@ -129,9 +140,6 @@ $jumbotron-bg-default: #008196;
 	$color-two: $color-blue-deep;
 	background-image: radial-gradient(ellipse farthest-corner at left center, $color-one 0%, $color-two 100%);
 }
-/*
-    background: radial-gradient(ellipse at center,#0000 0,#1010102e 60%,#00000047 100%);
-*/
 %gradient-vignette {
 	background: radial-gradient(ellipse at center,
 		$color-shadow-light 0%,
@@ -167,9 +175,10 @@ $jumbotron-bg-default: #008196;
 }
 /// A content window that is the height of the page, minus header and footer
 %pane-tall {
-	$navheights: ($navbar-height * 2) + 3; // 1.5 pixels (one top, one bottom and fuzz)
+	$navheights: ($navbar-height * 2) - 1em;
 	height: calc(100vh - #{$navheights}); // Interpolate for calc https://stackoverflow.com/a/20236515/722785
 	overflow-y: auto; // !important
+    padding-bottom: 2em;
 }
 // Generic UI tweaks
 .noSelect {
@@ -183,11 +192,11 @@ $jumbotron-bg-default: #008196;
 }
 .dropdown-tab {
 	width: 160px;
-	> a {
+	>a {
 		display: block;
 		float: right;
 	}
-	> .dropdown-toggle {
+	>.dropdown-toggle {
 		background-color: $color-grey-darker;
 		border-right: 1px solid $color-grey;
 	}
@@ -195,56 +204,56 @@ $jumbotron-bg-default: #008196;
 
 body {
 	@include font-smoothing;
-	background-color: $color-dark-less; //$background-primary;
+	background-color: $color-red; //$color-dark-less; //$background-primary;
 	color: $color-primary;
 	font-family: $font-primary;
 	font-size: 14px; //$font-size-normal;
 	font-weight: $font-primary-weight;
-    overflow: hidden;
+	overflow: hidden;
 	padding-top: $navbar-height;
 }
 button {
-    :disabled {
-        background-color: $color-red-deep;
-    }
+	:disabled {
+		background-color: $color-red-deep;
+	}
 
-    > .icon {
-        color: $color-black;
-    }
+	>.icon {
+		color: $color-black;
+	}
 
-    .glyphicon {
-        .icon-label {
-            color: $color-black;
-            text-transform: uppercase;
-        }
-    }
+	.glyphicon {
+		.icon-label {
+			color: $color-black;
+			text-transform: uppercase;
+		}
+	}
 }
 div {
-    .btn-group {
-        .btn {
-            &:hover {
-                background-color: $color-blue-light;
-            }
-        }
-    }
+	.btn-group {
+		.btn {
+			&:hover {
+				background-color: $color-blue-light;
+			}
+		}
+	}
 }
 .btn {
-    &.glyphicon {
-        .icon-label {
-            color: $color-black;
-            font-family: sans-serif;
-            padding: 0 0 0 4px;
-            text-transform: uppercase;
-            top: -3px;
-        }
-    }
+	&.glyphicon {
+		.icon-label {
+			color: $color-black;
+			font-family: sans-serif;
+			padding: 0 0 0 4px;
+			text-transform: uppercase;
+			top: -3px;
+		}
+	}
 }
 .btn-block {
-    border-bottom: 2px solid $color-grey-dark;
-    border-left: 0;
-    border-radius: 0;
-    border-right: 0;
-    border-top: 1px solid $color-blue-light;
+	border-bottom: 2px solid $color-grey-dark;
+	border-left: 0;
+	border-radius: 0;
+	border-right: 0;
+	border-top: 1px solid $color-blue-light;
 }
 h1,
 h2,
@@ -257,30 +266,31 @@ h6 {
 	font-weight: $font-primary-weight;
 }
 h2 {
-    input {
-        &[type='number'] {
-            display: block;
-            float: right;
-            text-align: right;
-            width: 70px;
-        }
-    }
+	input {
+		&[type='number'] {
+			display: block;
+			float: right;
+			text-align: right;
+			width: 70px;
+		}
+	}
 }
 dialog {
-    border: 0;
-    border-radius: .6rem;
-    box-shadow: 0 0 1em $color-black;
-    margin: 1em;
-    padding: 0;
+	border: 0;
+	border-radius: .6rem;
+	box-shadow: 0 0 1em $color-black;
+	margin: 1em;
+	padding: 0;
 
-    &::backdrop {
-        background-color: $color-shadow-dark;
-    }
+	&::backdrop {
+		background-color: $color-shadow-dark;
+	}
 }
 nav {
     @extend %bevel-up;
-    background-color: $color-primary;
+    background-color: $color-nav-background;
     font-size: $font-size-normal;
+    height: $navbar-height;
 
     .btn-group {
         > .dropdown-menu {
@@ -293,17 +303,18 @@ nav {
     }
 
     .menu {
+        background-color: $color-nav-background;
 
         > header {
             @extend %bevel-up;
             @extend %clickable;
-            background-color: $color-dark;
+            background-color: $color-shadow-neutral;
             color: $color-light;
             padding: 0 .2em;
             text-transform: uppercase;
 
             &:hover {
-                background-color: $color-dark-less;
+                background-color: $color-shadow-light;
             }
             // First ul after nav header
             & ~ ul {
@@ -318,11 +329,15 @@ nav {
             padding: 0;
             width: 100%;
 
+            &.tabs {
+                .wide-tab {
+                    text-align: center;
+                    width: calc(100% - 8em);
+                }
+            }
+
             &.horizontal {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                overflow-y: hidden;
+                @extend %horizontal-scroll;
 
                 &.collapse {
                     height: 0;
@@ -334,6 +349,25 @@ nav {
 
                 > .nav-item-icon {
                     display: inline-block;
+
+                    > a {
+                        display: block;
+                        width: 8em;
+
+                        span {
+                            float: left;
+                            line-height: inherit;
+
+
+                            &.text {
+                                overflow: hidden;
+                                padding: 0 .3em;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                width: 5em;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -352,8 +386,7 @@ nav {
                 list-style: none;
                 margin: 4px;
                 //padding: 0;
-                text-align: center;
-
+                //text-align: center;
                 &:hover {
                     background-color: $color-shadow-light;
                 }
@@ -393,36 +426,36 @@ nav {
 
 
 .icarus-container {
-    margin: 0;
-    padding: 0;
-    width: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
 
-    .panel {
-        background-color: adjust-color($color-black, $alpha: .5);
-    }
+	.panel {
+		background-color: adjust-color($color-black, $alpha: .5);
+	}
 
-    > .container-body {
-        background-color: $color-light;
-        width: 100%;
+	>.container-body {
+		background-color: $color-light;
+		width: 100%;
 
-        .pane {
-            @include transition($transition-default);
-            @include no-scroll-bar;
-            width: 100%;
-        }
-    }
+		.pane {
+			@include transition($transition-default);
+			@include no-scroll-bar;
+			width: 100%;
+		}
+	}
 }
 
 .index-main {
-	> .container-body {
-		> header {
+	>.container-body {
+		>header {
 			@extend %bevel-up;
 			background-color: $color-dark;
 			color: $color-light;
 			padding: 0 .5em;
 			text-transform: uppercase;
 		}
-		> .banner {
+		>.banner {
 			border-top: 0;
 			height: 528px;
 			max-height: 528px;
@@ -481,51 +514,44 @@ nav {
 	}
 }
 main {
-    align-items: stretch;
-    display: flex;
+	align-items: stretch;
+	display: flex;
 
-
-    & > .navbar-wrapper {
-        // This toggler would be appended to document.body
-        & > .toggler {
-            display: none;
-        }
-    }
     // The pane within the Main container should fill the remaining screen space
-    > .container-body {
-        > .pane {
-            @extend %pane-tall;
-        }
-    }
-    // A left aligned Container for the MAIN UI
-    aside {
-        &.sidebar {
-            @extend %pane-tall;
-            @include boxShadow(0, 0, 3px, 0, $color-black);
-            @include no-scroll-bar;
-            @include transition($transition-default);
-            background-color: transparentize($color-black, .2);
-            margin-left: -100%; /// !important
-            position: absolute;
-            top: $navbar-height;
-            width: $sidebar-width; // !important
-            z-index: 999;
+	>.container-body {
+		>.pane {
+			@extend %pane-tall;
+		}
+	}
+	// A left aligned Container (sidebar) for the MAIN UI
+	aside {
+		&.sidebar {
+			@extend %pane-tall;
+			@include boxShadow(0, 0, 3px, 0, $color-black);
+			@include no-scroll-bar;
+			@include transition($transition-default);
+			background-color: transparentize($color-black, .2);
+			margin-left: -100%; /// !important
+			position: absolute;
+			top: $navbar-height;
+			width: $sidebar-width; // !important
+			z-index: 999;
 
-            &.active {
-                margin-left: 0;
-            }
-            // Each embedded list gets smaller
-            ul {
-                li {
-                    ul {
-                        @include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
-                        font-size: 90%;
-                        text-indent: 1em;
-                    }
-                }
-            }
-        }
-    }
+			&.active {
+				margin-left: 0;
+			}
+			// Each embedded list gets smaller
+			ul {
+				li {
+					ul {
+						@include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
+						font-size: 90%;
+						text-indent: 1em;
+					}
+				}
+			}
+		}
+	}
 }
 .banner {
 	@extend %bevel-up;
@@ -540,24 +566,8 @@ main {
 		font-size: 3em;
 	}
 }
-.navbar-collapse {
-	clear: both;
-	padding: 0;
-	&.in {
-		@include boxShadow(0, 2px, 4px, 0, $color-black);
-		border-bottom: 1px solid $color-white;
-	}
-}
 
-//@media only screen and (max-width: 767px) {
-//768px = standard
-//}
-// Horizontal nav-bars should scroll horizontally in
-// order to avoid cases where the menu gets lost inside
-// the container
-//@media only screen and (max-width: 768px) {
-	
-//}
+
 
 .chat {
 	background-color: $color-light-more;
@@ -695,51 +705,55 @@ main {
 	padding: 1em;
 }
 footer {
-	@include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
-	background-color: $color-grey-dark;
-	border-top: 1px solid $color-grey-light;
-	color: $color-white;
-	font-size: smaller;
-	line-height: 32px;
-	padding: 15px;
-	>.container {
-		margin: .4em auto;
-	}
-	>cite {
-		float: right;
-		line-height: 16px;
-		text-align: right;
-		a {
-			color: $color-white;
-			text-decoration: underline;
-			&:hover {
-				color: $color-blue-lighter;
-			}
-		}
-	}
+    @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
+    background-color: $color-grey-dark;
+    border-top: 1px solid $color-grey-light;
+    color: $color-white;
+    font-size: smaller;
+    line-height: $navbar-height - 1em;
+    padding: 15px;
+
+    > .container {
+        margin: .4em auto;
+    }
+
+    > cite {
+        float: right;
+        line-height: 16px;
+        text-align: right;
+
+        a {
+            color: $color-white;
+            text-decoration: underline;
+
+            &:hover {
+                color: $color-blue-lighter;
+            }
+        }
+    }
+
+    &.stickyfooter {
+        @extend %bevel-up;
+        @include transition($transition-default);
+        bottom: 0;
+        height: $navbar-height;
+        padding: 0;
+        position: fixed;
+
+        &.active {
+            height: $navbar-height * 5;
+        }
+
+        textarea {
+            border-radius: 5px;
+            color: $color-black;
+            height: 180px;
+            line-height: normal;
+            margin: 1em;
+            width: calc(100% - 25px);
+        }
+    }
 }
-.stickyfooter {
-	@extend %bevel-up;
-	@include transition($transition-default);
-	background-color: $color-dark;
-	bottom: 0;
-	height: $navbar-height; //4em; /* Footer must be fixed height */
-	padding: 0;
-	position: fixed;
-	$height: $navbar-height * 5;
-	&.active {
-		height: $height;
-	}
-	textarea {
-		border-radius: 5px;
-		color: $color-black;
-		height: 180px;
-		line-height: normal;
-		margin: 1em;
-		width: calc(100% - 25px);
-	}
-}
-// FORM
 form {
 	@extend %bevel-up;
 	.login {
@@ -913,7 +927,7 @@ input {
 	text-shadow: 1px 1px 4px $color-shadow-dark;
 	width: 100%;
 
-	> .screen {
+	>.screen {
 		@extend %gradient-vignette;
 		height: 100%;
 		position: absolute;

@@ -27,7 +27,7 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	 */
 	constructor(node, element, model = new MODEL().set({
-		element, 
+		element,
 		'name': element || '',
 		'label': element,
 		'shared': 1
@@ -51,8 +51,7 @@ export default class CONTAINER extends GROUP {
 		this.construct();
 		//}
 	}
-	/** 
-		Abstract construct method throws an error if not declared 
+	/** Abstract construct method throws an error if not declared 
 		@abstract
 	    @returns {void}
 	*/
@@ -60,7 +59,13 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
-	}
+    }
+    /** Retrieves the token value from the DOM Meta tags
+	    @returns {string} A request verification token
+	*/
+    getToken() {
+        return document.getElementsByTagName('meta').token.content;
+    }
 	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    @param {EL} node The parent container to hold the save menu
@@ -232,55 +237,41 @@ export default class CONTAINER extends GROUP {
 	addDomItems() {
 		let domGroup = this.navBar.menu.menu.getGroup('DOM');
 		domGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.UP,
-				'label': 'UP'
-			})
+            'icon': ICONS.UP,
+            'label': 'UP'
 		})).el.onclick = this.moveContainerUp.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.DOWN,
-				'label': 'DOWN'
-			})
+            'icon': ICONS.DOWN,
+            'label': 'DOWN'
 		})).el.onclick = this.moveContainerDown.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.REFRESH,
-				'label': 'REFRESH'
-			})
+            'icon': ICONS.REFRESH,
+            'label': 'REFRESH'
 		})).el.onclick = this.refresh.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.DELETE,
-				'label': 'REMOVE'
-			})
+            'icon': ICONS.DELETE,
+            'label': 'REMOVE'
 		})).el.onclick = this.remove.bind(this);
 		domGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.EXCLAMATION,
-				'label': 'DELETE'
-			})
+            'icon': ICONS.EXCLAMATION,
+            'label': 'DELETE'
 		})).el.onclick = this.disable.bind(this);
 		return domGroup;
 	}
-	/**
-	    Adds the CRUD Nav Items
+	/** Adds the CRUD Nav Items
         @returns {GROUP} A Menu Group
 	*/
 	addCrudItems() {
-		let crudGroup = this.navBar.menu.menu.getGroup('CRUD');
+		let crudGroup = this.navBar.menu.menu.getGroup('CRUD'); // Retrieves the CRUD Menu
 		crudGroup.addNavItemIcon(new MODEL().set({
-			'anchor': new MODEL().set({
-				'icon': ICONS.LOAD,
-				'label': 'LOAD'
-			})
+            'icon': ICONS.LOAD,
+            'label': 'LOAD'
 		})).el.onclick = this.load.bind(this);
 		return crudGroup;
 	}
-	/**
-		    Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
-	        @returns {void}
-		 */
+	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
+        @returns {void}
+    */
 	addNavBarDefaults() {
 		if (this.navBar.menu.menu) {
 			//let domGroup = this.addDomItems();
@@ -288,17 +279,13 @@ export default class CONTAINER extends GROUP {
 			let crudGroup = this.addCrudItems();
 			// Add items to Options Dropdown Tab
 			this.btnSave = crudGroup.addNavItemIcon(new MODEL().set({
-				'anchor': new MODEL().set({
-					'icon': ICONS.SAVE,
-					'label': 'SAVE'
-				})
+                'icon': ICONS.SAVE,
+                'label': 'SAVE'
 			}));
 			this.btnSave.el.onclick = this.createWrappedSaveForm.bind(this);
 			this.btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
-				'anchor': new MODEL().set({
-					'icon': ICONS.SAVE,
-					'label': 'QUICKSAVE'
-				})
+                'icon': ICONS.SAVE,
+                'label': 'QUICKSAVE'
 			}));
 			this.btnQuickSave.el.onclick = this.quickSave.bind(this);
 		}
@@ -368,10 +355,8 @@ export default class CONTAINER extends GROUP {
 	addConstructElementButton(className) {
 		if (this.navBar.menu.menu) {
 			this.navBar.menu.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
-					'anchor': new MODEL().set({
-						'icon': ICONS[className],
-						'label': className //'Create ^'
-					})
+                    'icon': ICONS[className],
+                    'label': className //'Create ^'
 				})).el.onclick =
 				/**
 					Makes a Promise to perform Container.create() with the
@@ -403,18 +388,15 @@ export default class CONTAINER extends GROUP {
 				};
 		}
 	}
-	/**
-		    Performs addCase() for the given Element within a 
-		    Container of an element that extends Container
-
-		    Sets the constructor callback for this element
-		    and adds respective button to this container
-
-		    @param {string} className ie SECTION or FORM
-		    @param {boolean} addButton If false, no button is created
-
-	        @returns {void}
-		*/
+	/** Performs addCase() for the given Element within a 
+        Container of an element that extends Container
+        Sets the constructor callback for this element
+        and adds respective button to this container
+        @param {string} className ie SECTION or FORM
+        @param {boolean} addButton If false, no button is created
+        @todo Verify if inline function can be shorthand
+        @returns {void}
+    */
 	addContainerCase(className, addButton = true) {
 		try {
 			if (typeof this.getMainContainer() !== 'undefined') {
@@ -434,12 +416,11 @@ export default class CONTAINER extends GROUP {
 			console.warn(this.className + ': Unable to add Container Case', e);
 		}
 	}
-	/**
-		    Overrides EL.open();
-		    Opens the CONTAINER up for editing.  This should create a link
-		    between the object on the server and its client side representation
-	        @returns {void}
-		*/
+	/** Overrides EL.open();
+        Opens the CONTAINER up for editing.  This should create a link
+        between the object on the server and its client side representation
+        @returns {void}
+    */
 	open() {
 		try {
 			this.status = STATUS.OPEN;
@@ -451,12 +432,11 @@ export default class CONTAINER extends GROUP {
 			console.log('Unable to open parent.', e);
 		}
 	}
-	/**
-		    Closes the CONTAINER up for editing.  This should create a link
-		    between the object on the server and its client side representation
-		    and update accordingly
-	        @returns {void}
-		*/
+	/** Closes the CONTAINER up for editing.  This should create a link
+        between the object on the server and its client side representation
+        and update accordingly
+        @returns {void}
+    */
 	close() {
 		console.log('Locking ' + this.element + '(' + this.getId() + ')');
 		this.status = STATUS.CLOSED;
@@ -475,15 +455,13 @@ export default class CONTAINER extends GROUP {
 		this.header.options.el.setAttribute('disabled', 'disabled');
 		console.log('Locked');
 	}
-	/**
-	    Returns the CONTAINER's name attribute
+	/** Returns the CONTAINER's name attribute
 	    @returns {string} Container name
 	*/
 	getId() {
 		return this.el.getAttribute('id');
 	}
-	/**
-	    Sets the CONTAINER's ID
+	/** Sets the CONTAINER's ID
 	    @param {number} id Container database Id
 	    @returns {void}
 	*/
@@ -493,15 +471,13 @@ export default class CONTAINER extends GROUP {
 		this.data.id = id;
 		this.attributes.id = id;
 	}
-	/**
-	    Returns the CONTAINER's name attribute
+	/** Returns the CONTAINER's name attribute
 	    @returns {string} Container name
 	*/
 	getName() {
 		return this.el.getAttribute('name');
 	}
-	/**
-	    Sets the name of this element to the given value.
+	/** Sets the name of this element to the given value.
 	    @param {string} name The name to be set
 	    @returns {void}
 	*/
@@ -509,8 +485,7 @@ export default class CONTAINER extends GROUP {
 		this.el.setAttribute('name', name);
 		this.model.name = name;
 	}
-	/**
-	    Collapses the container's body
+	/** Collapses the container's body
 	    @returns {boolean} true if hidden
 	    @returns {void}
 	*/
@@ -523,8 +498,7 @@ export default class CONTAINER extends GROUP {
 			return false;
 		}
 	}
-	/**
-        Expands the container's body
+	/** Expands the container's body
         @returns {void}
     */
 	expand() {
@@ -534,15 +508,13 @@ export default class CONTAINER extends GROUP {
 			console.warn(e);
 		}
 	}
-	/**
-        Toggles the collapsed state of the container's body
+	/** Toggles the collapsed state of the container's body
         @returns {void}
     */
 	toggleBody() {
 		$(this.body.el).collapse('toggle');
 	}
-	/**
-        An abstract load method for a CONTAINER
+	/** An abstract load method for a CONTAINER
         @abstract
         @throws {AbstractMethodError} Throws an AbstractMethodError if no load method specified
         @returns {void}
@@ -550,8 +522,7 @@ export default class CONTAINER extends GROUP {
 	load() {
 		throw new AbstractMethodError('CONTAINER{' + this.className + '}.load() : Abstract method ' + this.className + '.load() not implemented.');
 	}
-	/**
-	     Generates an array of subsection Ids for this Container
+	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
 	 */
 	getSubSections() {
@@ -565,15 +536,13 @@ export default class CONTAINER extends GROUP {
 		}
 		return subsections;
 	}
-	/**
-	    Returns the parent container for this container or null if it does not exist
+	/** Returns the parent container for this container or null if it does not exist
 	    @returns {CONTAINER} The parent container for this container
 	*/
 	getContainer() {
 		return this.container;
 	}
-	/**
-	    Returns the MAIN container
+	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container
 	    @throws Will throw an error 
 	*/
@@ -593,8 +562,7 @@ export default class CONTAINER extends GROUP {
 			//throw e;
 		}
 	}
-	/**
-	    Retrieves the application {@link PROMPT}
+	/** Retrieves the application {@link PROMPT}
 	    @returns {PROMPT} The application prompt
 	    @throws Will throw an error if unable to retrieve the application prompt
 	*/
@@ -606,8 +574,7 @@ export default class CONTAINER extends GROUP {
 			throw e;
 		}
 	}
-	/**
-	    Attempts to have the direct parent Container of this Container perform
+	/** Attempts to have the direct parent Container of this Container perform
 	    a QuickSave
 	    @returns {Boolean} Returns true if successful
 	*/
@@ -619,8 +586,7 @@ export default class CONTAINER extends GROUP {
 			return false;
 		}
 	}
-	/**
-		Actions performed after this container is saved
+	/** Actions performed after this container is saved
 		@param {EL} node Parent node
 		@param {EL} caller This
 	    @returns {void}
@@ -628,15 +594,13 @@ export default class CONTAINER extends GROUP {
 	afterSuccessfulPost(node, caller) {
 		console.log(100, 'Successful Post', node, caller);
 	}
-	/**
-	    Returns the label for this section
+	/** Returns the label for this section
 	    @returns {string} The label
 	*/
 	getLabel() {
 		return this.header.getLabel();
 	}
-	/**
-		Sets the label of this element to the given value.
+	/** Sets the label of this element to the given value.
 		@param {string} label The name to be set
 	    @returns {void}
 	*/
@@ -644,35 +608,21 @@ export default class CONTAINER extends GROUP {
 		this.navBar.menu.tab.anchor.setInnerHTML(label);
 		this.label = label;
 	}
-	/**
-		Sets the subsection array to the given value
+	/** Sets the subsection array to the given value
 		@param {array} subsections Sub Section UID array
 	    @returns {void}
 	*/
 	setSubSections(subsections) {
 		this.model.subsections = subsections;
 	}
-	/**
-        Toggles visibility of any child Container Headers
+	/** Toggles visibility of any child Container Headers
         @returns {void}
 	*/
 	toggleHeaders() {
 		//$(this.el).find('.icarus-container nav.navbar-nav').toggle();
-        alert('CONTAINER.toggleHeaders()');
+		alert('CONTAINER.toggleHeaders()');
 	}
-	/**
-        Updates the model
-        @param {any} payload Data returned by server
-        @returns {void}
-	*/
-	//updateModel() { //payload
-	//console.log('updatemodel');
-	//this.setName(payload.name);
-	//this.setLabel(payload.label);
-	//this.setSubSections(payload.subsections);
-	//}
-	/**
-        Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
+	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
         @returns {void}
     */
@@ -697,8 +647,7 @@ export default class CONTAINER extends GROUP {
 			console.log('Unable to disable this ' + this.element, e);
 		}
 	}
-	/**
-        Typically this function is used within JQuery posts.
+	/** Typically this function is used within JQuery posts.
         If the results are a Payload and its status is "success",
         the page is reloaded.
         @param {object} payload A post payload
@@ -719,8 +668,7 @@ export default class CONTAINER extends GROUP {
 			console.log('Login Failed.  Unable to POST results to server with status: "' + status + '"', payload);
 		}
 	}
-	/**
-        Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
+	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
         @returns {void}
     */
@@ -750,13 +698,13 @@ export default class CONTAINER extends GROUP {
 			console.log('Unable to disable this ' + this.element, e);
 		}
         */
-    }
-    /** Creates a DATEOBJECT using this Container's dateCreated attribute
-        @returns {DATEOBJECT} An easy to use date object
-    */
-    getDateCreated() {
-        return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
-    }
+	}
+	/** Creates a DATEOBJECT using this Container's dateCreated attribute
+	    @returns {DATEOBJECT} An easy to use date object
+	*/
+	getDateCreated() {
+		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
+	}
 }
 export { ATTRIBUTES, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
 /* eslint-enable max-lines */
