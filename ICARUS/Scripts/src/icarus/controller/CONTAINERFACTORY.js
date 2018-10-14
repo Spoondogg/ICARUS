@@ -27,7 +27,7 @@ import LISTITEM from '../model/el/container/list/listitem/LISTITEM.js';
 import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
-import PARAGRAPH from '../model/el/container/paragraph/PARAGRAPH.js';
+//import PARAGRAPH from '../model/el/container/paragraph/PARAGRAPH.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 import THUMBNAIL from '../model/el/container/banner/thumbnail/THUMBNAIL.js';
@@ -141,9 +141,9 @@ export default class CONTAINERFACTORY {
 				case 'OPTION':
 					obj = new OPTION(span, result.model);
 					break;
-				case 'PARAGRAPH':
-					obj = new PARAGRAPH(span, result.model);
-					break;
+				//case 'PARAGRAPH':
+				//	obj = new PARAGRAPH(span, result.model);
+				//	break;
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
 					break;
