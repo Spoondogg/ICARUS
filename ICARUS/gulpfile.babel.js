@@ -97,7 +97,7 @@ export function $server_beautify() {
     @see https://github.com/postcss/autoprefixer#options
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
-export function styles_build_src() {
+export function styles_build_src(done) {
     console.log('Building Styles: ' + paths.styles.src);
     let plugins = [
         autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
@@ -134,6 +134,23 @@ export function styles_build_vendor() {
         .pipe(buffer())
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest(paths.styles.dest));
+}
+/** Retrieves font dependencies from external (CDN) and saves locally (src,dist)
+    @see https://cdnjs.com/libraries/twitter-bootstrap/3.3.7
+*/
+export function fonts_build_vendor(done) {
+    let dirs = ['src', 'dist'];
+    let filetypes = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
+    filetypes.forEach((type) => {
+        let file = request(
+            'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.' + type
+        );
+        dirs.forEach((dir) => {
+            file.pipe(source('glyphicons-halflings-regular.' + type))
+                .pipe(gulp.dest('Content/styles/' + dir + '/fonts'));
+        });
+    });
+    done();
 }
 /** Beautifies Sass Document
     @returns {gulp} A gulp object
@@ -219,8 +236,7 @@ export function scripts_beautify_src() {
         .pipe(beautify(config))
         .pipe(gulp.dest('./'));
 }
-/**
-    Lint the Scripts 'src' files
+/** Lint the Scripts 'src' files
 */
 export function scripts_lint_src(done) {
     console.log('Linting Scripts: ' + paths.scripts.src);
@@ -382,6 +398,7 @@ const _build = gulp.series(
     _clean,
     styles_build_src,
     styles_build_vendor,
+    fonts_build_vendor,
     scripts_build_src,
     scripts_build_vendor
 );
