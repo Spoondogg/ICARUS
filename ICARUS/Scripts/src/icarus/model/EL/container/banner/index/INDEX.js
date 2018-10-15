@@ -24,8 +24,9 @@ export default class INDEX extends BANNER {
 		this.addClass('index');
     }
 	construct() {
-		this.menu = new MENU(this.body.pane, new MODEL().set({
+        this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
             'label': 'INDEX',
+            'collapsed': 1,
             'showHeader': 1
 		}));
 		let elementList = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
@@ -42,8 +43,7 @@ export default class INDEX extends BANNER {
 			this.addThumbButtonActions(elementList[l], thumb);
 		}
 	}
-	/**
-	    Posts to the given element and retrieves a list of available instances, 
+	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
 	    @param {string} element The name of the element 
 	    @param {NAVITEMICON} thumb A NAVITEMICON that represents the given element

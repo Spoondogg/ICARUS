@@ -4,8 +4,8 @@
 */
 import CONTAINER from '../CONTAINER.js';
 /**
-    A horizontal container designed to be
-    populated with self contained objects
+    A horizontal container with a fixed height and independent scrolling
+    designed to be populated with enclosed Containers like Cards, Buttons or NavItemIcons
     @class
     @extends CONTAINER
 */
@@ -21,9 +21,7 @@ export default class BANNER extends CONTAINER {
 		this.populate(model.children);
 	}
 	construct() {}
-	/**
-	    Returns the parent container for this container or null if it does not exist
-	    @method
+	/** Returns the parent container for this container or null if it does not exist
 	    @returns {CONTAINER} The parent container for this container
 	*/
 	getContainer() {
