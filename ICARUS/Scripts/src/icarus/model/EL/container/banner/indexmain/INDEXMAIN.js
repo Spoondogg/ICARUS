@@ -4,12 +4,10 @@ import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-//import IFRAME from '../../iframe/IFRAME.js';
 import MENU from '../../../nav/menu/MENU.js';
-//import MODAL from '../../../modal/MODAL.js';
 import MODEL from '../../../../MODEL.js';
 import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
-/** Contains a high level view of all MAIN Objects available to this user
+/** Contains a list of THUMBNAILS for each MAIN Container available to this user
     @class
     @extends BANNER
 */
@@ -82,10 +80,6 @@ export default class INDEXMAIN extends BANNER {
         thumb.el.onclick = () => {
             this.launchMain(obj.id, obj.label);
         };
-        //thumb.buttonGroup.removeClass('btn-block');
-        //thumb.button.el.onclick = () => {
-        //    this.launchMain(obj.id, obj.label);
-        //};
         return thumb;
     }
 	/** Creates a Pagination Footer
@@ -104,19 +98,12 @@ export default class INDEXMAIN extends BANNER {
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
 	}
-    /** Opens the given Main Id in a new window
+    /** Opens the given Main Container
 		@param {number} id Main Container Id
 	    @returns {void}
 	*/
     launchMain(id) {
-        //this.getMainContainer().load(id);
-        let returnUrl = this.url.searchParams.get('ReturnUrl');
-        if (returnUrl) {
-            returnUrl = this.url.origin + returnUrl;
-            location.href = returnUrl;
-        }
-        $.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
-        return this;
+        this.getMainContainer().load(id);
     }
     /** Loads the page
 	    @param {number} page Page to load
