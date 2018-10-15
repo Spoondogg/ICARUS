@@ -7,8 +7,6 @@ import { ICONS } from '../../../../../enums/ICONS.js';
 import MENU from '../../../nav/menu/MENU.js';
 import MENULIST from '../../menulist/MENULIST.js';
 import MODAL from '../../../modal/MODAL.js';
-//import NAV from '../../../nav/NAV.js';
-//import NAVITEMICON from '../../../nav/navitemicon/NAVITEMICON.js';
 import P from '../../../p/P.js';
 /** Contains a high level view of all objects owned by this user
     @class
@@ -29,19 +27,20 @@ export default class INDEX extends BANNER {
             'collapsed': 1,
             'showHeader': 1
 		}));
-		let elementList = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
-		for (let l = 0; l < elementList.length; l++) {
-			let thumb = this.menu.addNavItemIcon(new MODEL().set({
-                'icon': ICONS[elementList[l].toUpperCase()],
-                'label': elementList[l],
-                'dataId': -1,
-                'data': {
-                    'header': elementList[l],
-                    'p': '&nbsp;'
-                }
-			}));
-			this.addThumbButtonActions(elementList[l], thumb);
-		}
+        ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY']
+        .forEach((element) => {
+            this.addThumbButtonActions(element,
+                this.menu.addNavItemIcon(new MODEL().set({
+                    'icon': ICONS[element.toUpperCase()],
+                    'label': element,
+                    'dataId': -1,
+                    'data': {
+                        'header': element,
+                        'p': '&nbsp;'
+                    }
+                }))
+            );
+        });
 	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
@@ -63,8 +62,7 @@ export default class INDEX extends BANNER {
 			}
 		});
 	}
-	/**
-        Creates the Modal that contains the list of objects for preview
+	/** Creates the Modal that contains the list of objects for preview
         @todo Consider paging these results
         @param {string} header Header text
         @param {string} p paragraph

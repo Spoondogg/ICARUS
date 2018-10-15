@@ -16,16 +16,17 @@ export default class TOKEN extends EL {
 	/** Generates a Request Verification Token element if 
 		one exists in the DOM. (Usually a hidden input)
 	    The token value is appended to the current document's metatags
+        @see https://hacks.mozilla.org/2015/05/es6-in-depth-destructuring/ 
 		@returns {HTMLElement} An input element
 	*/
 	static setToken() {
 		try {
-			let token = document.getElementsByName('__RequestVerificationToken');
-            token[0].parentNode.removeChild(token[0]);
-            console.log('Token.value', token[0]);
-            document.getElementsByTagName('meta').token.content = token[0].value;
+            let [token] = document.getElementsByName('__RequestVerificationToken');
+			token.parentNode.removeChild(token);
+			console.log('Token.value', token);
+			document.getElementsByTagName('meta').token.content = token.value;
 			//this.removeTokenFromDom(token);
-            return token[0];
+			return token;
 		} catch (e) {
 			throw new TokenError('Unable to retrieve or set the token', e.message);
 		}

@@ -1,26 +1,20 @@
-/**
-    @module
-*/
+/** @module */
 import FORMINPUT, { ATTRIBUTES, EL, FORMELEMENT, MODEL } from '../../formelement/forminput/FORMINPUT.js';
 import DIV from '../../../div/DIV.js';
 import FORM from '../../../form/FORM.js';
 import INPUT from '../../../input/INPUT.js';
 import MODAL from '../../../modal/MODAL.js';
 import SPAN from '../../../span/SPAN.js';
-/**
-    Represents an INPUT element inside a group of form elements
-    
+/** Represents an INPUT element inside a group of form elements    
     @description A FormPost Input acts as a special input that is populated
     with the Form Post Editor.
     The FormPostInput initially displays an individual INPUT, but can
     retrieve a secondary sub-form based on the input's value (aka: FormPost Id)
-
     @class
     @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
-	/**
-	    Constructs an INPUT element
+	/** Constructs an INPUT element
 	    @param {EL} node Parent
 	    @param {MODEL} model The model
 	 */
@@ -28,10 +22,9 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		super(node, 'DIV', model);
 		this.createInput();
 	}
-	/**
-		    Creates an Input Group with an INPUT element inside of it. 
-	        @returns {void}
-		*/
+	/** Creates an Input Group with an INPUT element inside of it. 
+        @returns {void}
+    */
 	createInput() {
 		this.inputGroup = new DIV(this.body.pane, new MODEL(new ATTRIBUTES('input-group')));
 		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
@@ -50,16 +43,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			this.newAttributes(this.getContainer(), this.attributes.name, this);
 		};
 	}
-	/**
-		     Sets the id of the original FormPostInput to the given value
-		     @param {number} id Id to set
-	         @returns {void}
-		 */
+	/** Sets the id of the original FormPostInput to the given value
+        @param {number} id Id to set
+        @returns {void}
+    */
 	updateInput(id) {
 		this.input.el.value = id;
 	}
-	/**
-	    Returns the default Input array
+	/** Returns the default Input array
 	    @param {object} data Payload
 	    @returns {Array} An array of INPUT models
 	*/
@@ -82,8 +73,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			})
 		];
 	}
-	/**
-	    Append inputs from the given model
+	/** Append inputs from the given model
 	    @param {Array} inputs An array of inputs
 	    @param {Array} model An array of input models
 	    @returns {Array} An array of inputs
@@ -98,15 +88,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		return inputs;
 	}
-	/**
-		     Opens a Modal Form populated with an open version of the FormPost
-		     @param {CONTAINER} container The container that this belongs to
-		     @param {string} dataIdLabel The key (dataId or attributesId) to add object to
-		     @param {MODEL} model Model
-	         async
-	         return {Promise<string>}
-	         @returns {void}         
-		 */
+	/** Opens a Modal Form populated with an open version of the FormPost
+        @param {CONTAINER} container The container that this belongs to
+        @param {string} dataIdLabel The key (dataId or attributesId) to add object to
+        @param {MODEL} model Model
+        @async
+        return {Promise<string>}
+        @returns {void}         
+    */
 	newAttributes(container, dataIdLabel, model) {
 		try { // Generate new FormPost            
 			$.getJSON('/FORMPOST/Get/0', (data) => {
@@ -117,9 +106,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				if (dataIdLabel === 'dataId') { // Append additional dataElements
 					if (container.dataElements.length > 0) {
 						this.appendAdditionalModelInputs(inputs, container.dataElements);
-						//for (let i = 0; i < container.dataElements.length; i++) {
-						//	inputs.push(container.dataElements[i]);
-						//}
 					}
 				}
 				if (dataIdLabel === 'descriptionId') {
@@ -303,14 +289,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			console.log(0, 'Unable to retrieve FormPost.', e);
 		}
 	}
-	/**
-	    Iterates through the parsed json results and creates
-	    a collection of INPUTS
+	/** Iterates through the parsed json results and creates
+	    a collection of INPUTS with associated parameters
 	    Appends parsed inputs to the given INPUT array
 	    @param {object} parsed A json object converted to an object
-	    @param {any} container This Container
-	    @param {any} inputs An array of inputs
-	    @returns {Array} An array of inputs
+	    @param {CONTAINER} container This Container
+	    @param {Array<MODEL>} inputs An array of inputs
+	    @returns {Array<MODEL>} An array of input models
 	*/
 	createInputArray(parsed, container, inputs) {
 		/*for (let i = 0; i < parsed.length; i++) {
@@ -333,41 +318,48 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				}));
 			}
         }*/
-
-        parsed.forEach((inp) => {
-            if (inp.name !== 'id') {
-                let value = null;
-                let param = container[inp.name];
-                if (param) {
-                    if (param.el) {
-                        value = param.el.innerHTML;
-                    }
-                } else {
-                    value = inp.value; //inp[value];
-                }
+        parsed.forEach(({ name, value }) => {            
+            if (name !== 'id') {
                 inputs.push(new MODEL(new ATTRIBUTES({
-                    'name': inp.name,
-                    value //inp.value
+                    name,
+                    'value': this.getContainerProperty(container) || value
                 })).set({
                     'element': 'INPUT',
-                    'label': inp.name
+                    'label': name
                 }));
             }
         });
-
 		return inputs;
-	}
+    }
+    /**
+        Retrieves the set value of the given attribute from the form
+        @param {CONTAINER} container Container to assess
+        @param {string} name Parameter name
+        @returns {string} Parameter value
+    */
+    getContainerProperty(container, name) {
+        let param = container[name];
+        let value = null;
+        if (param) {
+            if (param.el) {
+                value = param.el.innerHTML;
+            }
+        }
+        return value;
+    }
+
 	/**
 	    Attempts to destroy the form post form
 	    @throws Throws an error if the form does not exist
-	    @returns {void}
+	    @returns {ThisType} This for chaining
 	*/
 	destroyForm() {
 		try {
 			this.form.destroy();
 		} catch (e) {
 			console.warn('Unable to destroy pre-existing form', e);
-		}
+        }
+        return this;
 	}
 	/**
 	    Creates an empty form and populates with any given inputs
