@@ -1,32 +1,36 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL, STRING } from '../../CONTAINER.js';
+//import CONTAINER, { ATTRIBUTES, EL, MODEL, STRING } from '../../CONTAINER.js';
+import NAVITEM, { ATTRIBUTES, EL, MODEL } from '../../../nav/navitem/NAVITEM.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import HEADER from '../../../header/header.js';
-import { ICONS } from '../../../../../enums/ICONS.js';
+//import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
 import MODAL from '../../../modal/MODAL.js';
 import P from '../../../p/P.js';
+import STRING from '../../../../../STRING.js';
 /** Jumbotron with centered icon and text
     @class
     @extends CONTAINER
 */
-export default class THUMBNAIL extends CONTAINER {
+export default class THUMBNAIL extends NAVITEM { //CONTAINER {
 	/** Constructs a Bootstrap Jumbotron.
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model
     */
 	constructor(node, model) {
-		super(node, 'DIV', model);
-		this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0'); // Override icarus-container 
-		this.body.pane.addClass('thumbnail');
+		//super(node, 'DIV', model);
+        super(node, model);
+		//this.setClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0'); // Override icarus-container 
+        this.addClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0'); // Override icarus-container 
+		//this.body.pane.addClass('thumbnail');
 	}
 	construct() {
 		this.image = new IMG(this.body.pane, new MODEL());
 		this.header = new HEADER(this.body.pane, new MODEL().set({ 'label': this.data.header }));
 		this.p = new P(this.body.pane, new MODEL(), new STRING(this.data.p).truncate(128));
 		this.buttonGroup = new BUTTONGROUP(this.body.pane, 'btn-block');
-		this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
-		this.button.addClass('btn-block');
+		//this.button = this.buttonGroup.addButton('', ICONS.CHEVRON_RIGHT);
+		//this.button.addClass('btn-block');
 		if (this.dataId > 0 || this.dataId === -1) {
 			let parsed = null;
 			if (this.data.img) {
@@ -39,7 +43,10 @@ export default class THUMBNAIL extends CONTAINER {
 								if (data.model.jsonResults) {
 									parsed = JSON.parse(data.model.jsonResults);
 									// Extract the base64 values and create an image
-									let img = {};
+                                    let img = {};
+                                    //parsed.forEach((obj) => {
+                                        //img[obj.name] = obj.value;
+                                    //});
 									for (let p = 0; p < parsed.length; p++) {
 										img[parsed[p].name] = parsed[p].value;
 									}

@@ -20,12 +20,12 @@ export default class TOKEN extends EL {
 	*/
 	static setToken() {
 		try {
-			let token = document.getElementsByName('__RequestVerificationToken')[0];
-			token.parentNode.removeChild(token);
-			console.log('Token.value', token);
-			document.getElementsByTagName('meta').token.content = token.value;
+			let token = document.getElementsByName('__RequestVerificationToken');
+            token[0].parentNode.removeChild(token[0]);
+            console.log('Token.value', token[0]);
+            document.getElementsByTagName('meta').token.content = token[0].value;
 			//this.removeTokenFromDom(token);
-			return token;
+            return token[0];
 		} catch (e) {
 			throw new TokenError('Unable to retrieve or set the token', e.message);
 		}
