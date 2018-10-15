@@ -313,7 +313,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @returns {Array} An array of inputs
 	*/
 	createInputArray(parsed, container, inputs) {
-		for (let i = 0; i < parsed.length; i++) {
+		/*for (let i = 0; i < parsed.length; i++) {
 			let inp = parsed[i];
 			if (inp.name !== 'id') {
 				let value = null;
@@ -332,7 +332,29 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 					'label': inp.name
 				}));
 			}
-		}
+        }*/
+
+        parsed.forEach((inp) => {
+            if (inp.name !== 'id') {
+                let value = null;
+                let param = container[inp.name];
+                if (param) {
+                    if (param.el) {
+                        value = param.el.innerHTML;
+                    }
+                } else {
+                    value = inp.value; //inp[value];
+                }
+                inputs.push(new MODEL(new ATTRIBUTES({
+                    'name': inp.name,
+                    value //inp.value
+                })).set({
+                    'element': 'INPUT',
+                    'label': inp.name
+                }));
+            }
+        });
+
 		return inputs;
 	}
 	/**

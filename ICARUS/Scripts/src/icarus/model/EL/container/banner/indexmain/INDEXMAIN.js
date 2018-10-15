@@ -4,9 +4,9 @@ import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import IFRAME from '../../iframe/IFRAME.js';
+//import IFRAME from '../../iframe/IFRAME.js';
 import MENU from '../../../nav/menu/MENU.js';
-import MODAL from '../../../modal/MODAL.js';
+//import MODAL from '../../../modal/MODAL.js';
 import MODEL from '../../../../MODEL.js';
 import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
 /** Contains a high level view of all MAIN Objects available to this user
@@ -14,7 +14,10 @@ import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
     @extends BANNER
 */
 export default class INDEXMAIN extends BANNER {
-	/** Constructs a SECTION Container Element
+	/** Constructs a banner with a header affixed outside of the Container's pane
+        Contents are paged and pagination exists in the footer
+        @todo Contents should be grouped in 3's or 4's and cycled through by swiping
+        @todo Preload / Stream contents
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
 	 */
@@ -24,44 +27,28 @@ export default class INDEXMAIN extends BANNER {
 		this.page = 0;
 		this.pageLength = 6;
 		this.pageTotal = 0;
-		this.menu = new MENU(this, new MODEL().set({
-			'label': 'INDEX'
-		}));
+		this.menu = new MENU(this, new MODEL().set({ 'label': 'INDEX' }));
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
-		//$(this.pagination.el).insertBefore(this.body.pane.el);
 		this.footer = new FOOTER(this, new MODEL());
 		$(this.pagination.el).insertAfter(this.body.pane.el);
 		this.loadPage(this.page);
 	}
-	/**
-		    Constructs the INDEXMAIN Container
-	        @returns {void}
-		*/
+	/** Constructs the INDEXMAIN Container
+        @returns {void}
+    */
 	construct() {
 		if (!isNaN(this.page)) {
 			console.log('Retrieving page ' + this.page);
-			//let token = TOKEN.getToken();
 			$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-				'__RequestVerificationToken': this.getMainContainer().token // this.token.value
+				'__RequestVerificationToken': this.getMainContainer().token
 			}, (payload, status) => {
 				if (status === 'success') {
-					this.pageTotal = payload.total;
-					for (let l = 0; l < payload.list.length; l++) {
-						let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
-							'label': payload.list[l].label,
-							'dataId': -1,
-							'data': {
-								'header': payload.list[l].label,
-								'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']'
-							}
-						}));
-						thumb.buttonGroup.removeClass('btn-block');
-						thumb.button.el.onclick = () => {
-							this.launchMain(payload.list[l].id, payload.list[l].label);
-						};
-					}
+                    this.pageTotal = payload.total;
+                    payload.list.forEach((obj) => {
+                        this.createThumbnail(obj, payload.className);
+                    });
 					if (!this.pagination.buttonGroup.loaded) {
 						console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
@@ -77,10 +64,30 @@ export default class INDEXMAIN extends BANNER {
 				}
 			});
 		}
-		/*else {
-			let note = new P(this.body.pane, new MODEL(), 'No Containers Exist');
-		}*/
-	}
+    }
+    /** Creates a Thumbnail
+        @param {any} obj The Thumbnail model
+        @param {string} name The name to launch
+        @returns {THUMBNAIL} A thumbnail
+    */
+    createThumbnail(obj, name) {
+        let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
+            'label': obj.label,
+            'dataId': -1,
+            'data': {
+                'header': obj.label,
+                'p': 'Launch ' + obj.label + ' (' + obj.id + ')<br>' + name + '[' + obj.index + ']'
+            }
+        }));
+        thumb.el.onclick = () => {
+            this.launchMain(obj.id, obj.label);
+        };
+        //thumb.buttonGroup.removeClass('btn-block');
+        //thumb.button.el.onclick = () => {
+        //    this.launchMain(obj.id, obj.label);
+        //};
+        return thumb;
+    }
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A pagination Footer
 	*/
@@ -97,7 +104,21 @@ export default class INDEXMAIN extends BANNER {
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
 	}
-	/** Loads the page
+    /** Opens the given Main Id in a new window
+		@param {number} id Main Container Id
+	    @returns {void}
+	*/
+    launchMain(id) {
+        //this.getMainContainer().load(id);
+        let returnUrl = this.url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            returnUrl = this.url.origin + returnUrl;
+            location.href = returnUrl;
+        }
+        $.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
+        return this;
+    }
+    /** Loads the page
 	    @param {number} page Page to load
 	    @returns {void}
 	*/
@@ -127,45 +148,14 @@ export default class INDEXMAIN extends BANNER {
 			console.log('No next pages to display');
 		}
 	}
-	/**
-		    Loads the previous page
-	        @returns {void}
-		*/
+	/** Loads the previous page
+        @returns {void}
+    */
 	prevPage() {
 		if (this.page > 0) {
 			this.loadPage(this.page - 1);
 		} else {
 			console.log('No previous pages to display');
 		}
-	}
-	/** Opens the given Main Id in a new window
-		@param {number} id Main Container Id
-		@param {string} label Main Container Label
-	    @returns {void}
-	*/
-	launchMain(id, label) {
-		console.log('Launch Index IFrame Modal');
-		this.modal = new MODAL(label);
-		this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
-			'label': 'iframe',
-			'dataId': -1,
-			'data': {
-				'src': this.getMainContainer().url.origin + '/' + id
-			}
-		}));
-		this.iframe.frame.el.setAttribute('src', this.getMainContainer().url.origin + '/' + id);
-		this.modal.show();
-	}
-	/** Creates the Modal that contains an iFrame with the given page loaded
-		@todo Consider paging these results
-	    @returns {void}
-	*/
-	launchModal() {
-		console.log('Launch Index IFrame Modal');
-		this.modal = new MODAL(this.data.header);
-		this.iframe = new IFRAME(this.modal.container.body.pane, new MODEL().set({
-			'label': 'iframe'
-		}));
-		this.modal.show();
 	}
 }

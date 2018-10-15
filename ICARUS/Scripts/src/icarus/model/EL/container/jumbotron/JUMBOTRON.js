@@ -1,15 +1,9 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 import HEADER from '../../header/HEADER.js';
-import HR from '../../hr/HR.js';
 import P from '../../p/P.js';
-/**
-    A full width Container with a fixed height
-    @description A lightweight, flexible component that can optionally extend the entire 
-    viewport to showcase key content on your site.
+/** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
     @class
     @extends CONTAINER
@@ -28,25 +22,26 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	construct() {
 		if (this.dataId > 0) {
-			this.screen = new DIV(this.body.pane, new MODEL(new ATTRIBUTES('screen')));
-			if (this.data.screencolor && this.data.screencolor !== '.') {
-				this.screen.el.setAttribute('style', 'background-color: ' + this.data.screencolor + ';');
-			}
-			this.header = new HEADER(this.screen, new MODEL().set({
-				'label': this.data.header
-			}), 1);
-			if (this.data.p) {
-				if (this.data.p.length > 0) {
-					this.hr = new HR(this.screen, new MODEL());
-					this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
-				}
-			}
+			this.screen = new DIV(this.body.pane, new MODEL('screen'));
+            this.setScreenColor();
+			this.header = new HEADER(this.screen, new MODEL().set({ 'label': this.data.header }));
+            this.createTextblock();
 			this.loadBgImage();
-			if (this.data.bgcolor && this.data.bgcolor !== '.') {
-				this.body.pane.el.style.backgroundColor = this.data.bgcolor;
-			}
+            this.setBgColor();
 		}
-	}
+    }
+    /** Creates the primary textblock for this Jumbotron 
+        @returns {void}
+    */
+    createTextblock() {
+        try {
+            if (this.data.p.length > 0) {
+                this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
+            }
+        } catch (e) {
+            console.log('Unable to create textblock', e);
+        }
+    }
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
         @returns {Promise<boolean>} Returns true on success
     */
@@ -56,10 +51,10 @@ export default class JUMBOTRON extends CONTAINER {
 				$.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), (data) => {
 					try {
 						let parsed = JSON.parse(data.model.jsonResults);
-						//console.log('Parsed', parsed);
 						for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
 							if (parsed[p].name === 'base64') {
-								this.body.pane.el.setAttribute('style', 'background: url(' + parsed[p].value + ');');
+                                this.body.pane.el.setAttribute('style', 'background: url(' + parsed[p].value + ');');
+                                break;
 							}
 						}
 					} catch (ee) {
@@ -70,6 +65,22 @@ export default class JUMBOTRON extends CONTAINER {
 				console.log('Unable to retrieve FormPost.', e);
 			}
 		}
-	}
+    }
+    /** Sets the background color of the jumbotron pane 
+        @returns {void}
+    */
+    setBgColor() {
+        if (this.data.bgcolor && this.data.bgcolor !== '.') {
+            this.body.pane.el.style.backgroundColor = this.data.bgcolor;
+        }
+    }
+    /** Sets the screen background color 
+        @returns {void}
+    */
+    setScreenColor() {
+        if (this.data.screencolor && this.data.screencolor !== '.') {
+            this.screen.el.setAttribute('style', 'background-color: ' + this.data.screencolor + ';');
+        }
+    }
 }
 export { ATTRIBUTES, EL, MODEL };

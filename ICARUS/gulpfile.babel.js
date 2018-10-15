@@ -123,7 +123,7 @@ export function styles_build_src(done) {
         .pipe(sourcemaps.write('.')) //'.'
         .pipe(gulp.dest(paths.styles.dest));
 }
-/**  Creates CSS Dependencies from external
+/** Creates CSS Dependencies from external
 */
 export function styles_build_vendor() {
     let bootstrap = request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css')
