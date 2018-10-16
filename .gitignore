@@ -28,6 +28,7 @@ Documentation/
 Scripts/dist/**/*
 Scripts/deprec/**/*
 Content/Images/**/*
+.src/**/*
 
 
 # Visual Studio 2015 cache/options directory
