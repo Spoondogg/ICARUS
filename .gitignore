@@ -22,12 +22,22 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-# ICARUS Build Folders to Ignore
+############################### ICARUS BEGIN #########################################
 ICARUS.code-workspace
 Documentation/
-Scripts/dist
-api/
-Content/Images/jac
+**/.deprec
+Content/Images/**/*
+**/.bin
+Scripts/deprec
+Properties
+Properties/**/*
+packages
+package-lock.json
+ICARUS.code-workspace
+ICARUS/.bin
+ICARUS/.deprec
+package-lock.json
+############################### ICARUS END ###########################################
 
 
 # Visual Studio 2015 cache/options directory
