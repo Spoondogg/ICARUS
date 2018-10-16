@@ -25,9 +25,9 @@ bld/
 # ICARUS Build Folders to Ignore
 ICARUS.code-workspace
 Documentation/
-Scripts/dist
-api/
-Content/Images/jac
+Scripts/dist/**/*
+Scripts/deprec/**/*
+Content/Images/**/*
 
 
 # Visual Studio 2015 cache/options directory

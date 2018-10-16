@@ -98,7 +98,7 @@ export function $server_beautify() {
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
 export function styles_build_src(done) {
-    console.log('Building Styles: ' + paths.styles.src);
+    console.log(' - Building Styles: ' + paths.styles.src);
     let plugins = [
         autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
         postcsstouchcallout,
@@ -108,10 +108,10 @@ export function styles_build_src(done) {
     return gulp.src(paths.styles.src)
         .pipe(sourcemaps.init())
         .pipe(sass()).on('error', (e) => {
-            console.log('Failed to transcode Sass', e);
+            console.log(' - Failed to transcode Sass', e);
             done();
         }).on('end', () => {
-            console.log(paths.styles.src + ' has been transcoded');
+            console.log(' - ' + paths.styles.src + ' has been transcoded');
             done();
         })
         .pipe(rename({
@@ -168,16 +168,16 @@ export function styles_beautify_src() {
     @returns {gulp} A gulp object
 */
 export function styles_lint_src(done) {
-    console.log('Linting Styles: ' + paths.styles.basefile);
+    console.log(' - Linting Styles: ' + paths.styles.basefile);
     let config = require(paths.config.sasslint);
     return gulp.src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
         .pipe(sasslint(config))
         .pipe(sasslint.format())
         .pipe(sasslint.failOnError()).on('error', (e) => {
-            console.log('Failed to lint Sass');
+            console.log(' - Failed to lint Sass');
             done();
         }).on('end', () => {
-            console.log(paths.styles.basefile + ' has been linted');
+            console.log(' - ' + paths.styles.basefile + ' has been linted');
             done();
         });
 }
@@ -200,15 +200,15 @@ function onError(err) {
     @param {any} done Callback
  */
 export function scripts_build_src(done) {
-    console.log('Building Scripts: ' + paths.scripts.src);
+    console.log(' - Building Scripts: ' + paths.scripts.src);
     return gulp.src(paths.scripts.src, { base: paths.scripts.base })
         .pipe(plumber({ errorHandler: onError }))
         .pipe(sourcemaps.init())
         .pipe(terser()).on('error', (e) => {
-            console.log('Failed to terse Scripts');
+            console.log(' - Failed to terse Scripts');
             done();
         }).on('success', () => {
-            console.log(paths.scripts.src + ' has been successfully tersed');
+            console.log(' - ' + paths.scripts.src + ' has been successfully tersed');
         }).on('end', () => {
             done();
         })
@@ -239,14 +239,14 @@ export function scripts_beautify_src() {
 /** Lint the Scripts 'src' files
 */
 export function scripts_lint_src(done) {
-    console.log('Linting Scripts: ' + paths.scripts.src);
+    console.log(' - Linting Scripts: ' + paths.scripts.src);
     let config = require(paths.config.eslint);
     return gulp.src(paths.scripts.src)
         .pipe(plumber({ errorHandler: onError }))
         .pipe(eslint(config))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError()).on('error', (e) => {
-            console.log('Failed to lint Javascript');
+            console.log(' - Failed to lint Javascript');
             done();
         }).on('end', () => {
             done();
@@ -334,7 +334,7 @@ const _clean = () => del([
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function scripts_publish(dev = true) {
-    console.log('Publishing Scripts: ' + paths.scripts.buildglob); // 'Scripts/**/**.*'
+    console.log(' - Publishing Scripts: ' + paths.scripts.buildglob); // 'Scripts/**/**.*'
     return gulp.src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 }
@@ -343,7 +343,7 @@ export function scripts_publish(dev = true) {
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function styles_publish() {
-    console.log('Publishing Styles: ' + paths.styles.baseglob);
+    console.log(' - Publishing Styles: ' + paths.styles.baseglob);
     return gulp.src([paths.styles.baseglob, '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 }

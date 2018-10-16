@@ -12,7 +12,7 @@ namespace ICARUS.Models.Icarus.Elements {
     public class Payload {
 
         /// <summary>
-        /// The class name of the model that is being sent/recieved
+        /// The class name of the model that is being sent/recieved (ie: FORMPOST)
         /// </summary>
         public string className;
 
