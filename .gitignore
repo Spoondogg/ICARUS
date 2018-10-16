@@ -27,14 +27,16 @@ ICARUS.code-workspace
 Documentation/
 .deprec
 Content/Images/**/*
-.bin
+**/.bin
 Scripts/deprec
-Properties/
+Properties
+Properties/**/*
 packages
 package-lock.json
 ICARUS.code-workspace
 ICARUS/.bin
 ICARUS/.deprec
+package-lock.json
 ############################### ICARUS END ###########################################
 
 # Visual Studio 2015 cache/options directory

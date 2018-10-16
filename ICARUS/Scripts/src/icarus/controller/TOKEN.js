@@ -21,7 +21,7 @@ export default class TOKEN extends EL {
 	*/
 	static setToken() {
 		try {
-            let [token] = document.getElementsByName('__RequestVerificationToken');
+			let [token] = document.getElementsByName('__RequestVerificationToken');
 			token.parentNode.removeChild(token);
 			console.log('Token.value', token);
 			document.getElementsByTagName('meta').token.content = token.value;
