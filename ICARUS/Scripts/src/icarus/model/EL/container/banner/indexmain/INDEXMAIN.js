@@ -43,10 +43,10 @@ export default class INDEXMAIN extends BANNER {
 				'__RequestVerificationToken': this.getMainContainer().token
 			}, (payload, status) => {
 				if (status === 'success') {
-                    this.pageTotal = payload.total;
-                    payload.list.forEach((obj) => {
-                        this.createThumbnail(obj, payload.className);
-                    });
+					this.pageTotal = payload.total;
+					payload.list.forEach((obj) => {
+						this.createThumbnail(obj, payload.className);
+					});
 					if (!this.pagination.buttonGroup.loaded) {
 						console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
@@ -62,26 +62,26 @@ export default class INDEXMAIN extends BANNER {
 				}
 			});
 		}
-    }
-    /** Creates a Thumbnail
-        @param {any} obj The Thumbnail model
-        @param {string} name The name to launch
-        @returns {THUMBNAIL} A thumbnail
-    */
-    createThumbnail(obj, name) {
-        let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
-            'label': obj.label,
-            'dataId': -1,
-            'data': {
-                'header': obj.label,
-                'p': 'Launch ' + obj.label + ' (' + obj.id + ')<br>' + name + '[' + obj.index + ']'
-            }
-        }));
-        thumb.el.onclick = () => {
-            this.launchMain(obj.id, obj.label);
-        };
-        return thumb;
-    }
+	}
+	/** Creates a Thumbnail
+	    @param {any} obj The Thumbnail model
+	    @param {string} name The name to launch
+	    @returns {THUMBNAIL} A thumbnail
+	*/
+	createThumbnail(obj, name) {
+		let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
+			'label': obj.label,
+			'dataId': -1,
+			'data': {
+				'header': obj.label,
+				'p': 'Launch ' + obj.label + ' (' + obj.id + ')<br>' + name + '[' + obj.index + ']'
+			}
+		}));
+		thumb.el.onclick = () => {
+			this.launchMain(obj.id, obj.label);
+		};
+		return thumb;
+	}
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A pagination Footer
 	*/
@@ -98,14 +98,14 @@ export default class INDEXMAIN extends BANNER {
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
 	}
-    /** Opens the given Main Container
+	/** Opens the given Main Container
 		@param {number} id Main Container Id
 	    @returns {void}
 	*/
-    launchMain(id) {
-        this.getMainContainer().load(id);
-    }
-    /** Loads the page
+	launchMain(id) {
+		this.getMainContainer().load(id);
+	}
+	/** Loads the page
 	    @param {number} page Page to load
 	    @returns {void}
 	*/

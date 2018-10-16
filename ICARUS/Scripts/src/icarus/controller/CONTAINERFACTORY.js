@@ -141,9 +141,9 @@ export default class CONTAINERFACTORY {
 				case 'OPTION':
 					obj = new OPTION(span, result.model);
 					break;
-				//case 'PARAGRAPH':
-				//	obj = new PARAGRAPH(span, result.model);
-				//	break;
+					//case 'PARAGRAPH':
+					//	obj = new PARAGRAPH(span, result.model);
+					//	break;
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
 					break;
