@@ -1,2 +1,0 @@
-import{ALIGN}from"../../../enums/ALIGN.js";import BUTTONGROUP from"../group/buttongroup/BUTTONGROUP.js";import FOOTER from"../footer/FOOTER.js";import{SIZE}from"../../../enums/SIZE.js";export default class FORMFOOTER extends FOOTER{constructor(o,t){super(o,t),this.el.className="btn-group-justified form-footer",this.buttonGroup=new BUTTONGROUP(this,null,ALIGN.VERTICAL,SIZE.MED)}}
-//# sourceMappingURL=FORMFOOTER.js.map

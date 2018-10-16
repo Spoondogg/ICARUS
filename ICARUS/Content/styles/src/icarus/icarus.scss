@@ -471,39 +471,39 @@ nav {
 }
 
 .index-main {
-	>.container-body {
-		background-color: darken($color-grey-dark, 5%);
+    > .container-body {
+        background-color: $color-grey-dark;
 
-		>header {
-			@extend %bevel-up;
-			background-color: $color-dark;
-			color: $color-light;
-			padding: 0 .5em;
-			text-transform: uppercase;
-		}
+        > header {
+            @extend %bevel-up;
+            background-color: $color-dark;
+            color: $color-light;
+            padding: 0 .5em;
+            text-transform: uppercase;
+        }
 
-		>.banner {
-			@extend %horizontal-center;
-			border-bottom: 0;
-			border-left: 2px solid $color-darker;
-			border-right: 2px solid $color-darker;
-			border-top: 0;
-			height: 30em;
-			//margin: 0 auto;
-			max-height: 528px;
-			//max-width: $max-width;
-			overflow-y: auto;
-		}
-	}
+        > .banner {
+            @extend %horizontal-center;
+            border-bottom: 0;
+            border-left: 2px solid $color-darker;
+            border-right: 2px solid $color-darker;
+            border-top: 0;
+            //height: 30em;
+            //margin: 0 auto;
+            //max-height: 528px; 
+            //max-width: $max-width;
+            overflow-y: auto;
+        }
+    }
 
-	.pagination {
-		//footer.pagination
-		border-radius: 0;
-		margin: 0;
-		padding: .5em;
-		text-align: center;
-		width: 100%;
-	}
+    .pagination {
+        //footer.pagination
+        border-radius: 0;
+        margin: 0;
+        padding: .5em;
+        text-align: center;
+        width: 100%;
+    }
 }
 main {
 	align-items: stretch;

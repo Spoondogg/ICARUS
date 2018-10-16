@@ -27,10 +27,10 @@ import LISTITEM from '../model/el/container/list/listitem/LISTITEM.js';
 import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
+import NAVTHUMBNAIL from '../model/el/container/banner/thumbnail/THUMBNAIL.js';
 //import PARAGRAPH from '../model/el/container/paragraph/PARAGRAPH.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
-import THUMBNAIL from '../model/el/container/banner/thumbnail/THUMBNAIL.js';
 //import TOKEN from '../model/el/container/formelement/forminput/TOKEN.js';
 import WORD from '../model/el/container/word/WORD.js';
 /**
@@ -151,7 +151,7 @@ export default class CONTAINERFACTORY {
 					obj = new TEXTBLOCK(span, result.model);
 					break;
 				case 'THUMBNAIL':
-					obj = new THUMBNAIL(span, result.model);
+					obj = new NAVTHUMBNAIL(span, result.model);
 					break;
 				case 'UL':
 					obj = new UL(span, result.model);

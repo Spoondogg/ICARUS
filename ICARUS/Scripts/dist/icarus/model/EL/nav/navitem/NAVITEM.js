@@ -1,2 +1,0 @@
-import UL,{ANCHOR,ATTRIBUTES,EL,LI,MODEL}from"../../ul/UL.js";import MENU from"../menu/MENU.js";export default class NAVITEM extends LI{constructor(t,e){super(t,new MODEL(e.attributes)),this.addClass("nav-item"),this.anchor=new ANCHOR(this,e),this.addCase("MENU",()=>this.addMenu(e)),e.label&&this.el.setAttribute("title",e.label)}addMenu(t){return this.children.push(new MENU(this,t)),this.children[this.children.length-1]}}export{ANCHOR,ATTRIBUTES,EL,LI,MENU,MODEL,UL};
-//# sourceMappingURL=NAVITEM.js.map

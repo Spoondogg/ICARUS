@@ -1,2 +1,0 @@
-import EL,{ATTRIBUTES,MODEL}from"../EL.js";import GLYPHICON from"../span/GLYPHICON.js";import SPAN from"../span/SPAN.js";export default class BUTTON extends EL{constructor(s,t,e,n="BUTTON"){super(s,"BUTTON",new MODEL(new ATTRIBUTES({class:"btn glyphicon",type:n}))),this.icon=new GLYPHICON(this,e),this.label=new SPAN(this,new MODEL("button-label"),t)}setLabel(s,t){this.icon.label.setInnerHTML(s),t&&this.icon.setIcon(t)}}
-//# sourceMappingURL=BUTTON.js.map

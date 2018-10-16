@@ -1,2 +1,0 @@
-import CONTAINER,{ATTRIBUTES,EL,INPUTTYPES,MODEL}from"../CONTAINER.js";import LABEL from"../../label/LABEL.js";export default class FORMELEMENT extends CONTAINER{constructor(t,e,s){s.hasSidebar=0,super(t,"DIV",s),this.addClass("form-element"),this.label=null}construct(){this.label=new LABEL(this.body.pane,this.label||this.attributes.name||"__NoLabel")}}export{ATTRIBUTES,EL,INPUTTYPES,LABEL,MODEL};
-//# sourceMappingURL=FORMELEMENT.js.map

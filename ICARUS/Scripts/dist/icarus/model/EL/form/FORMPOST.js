@@ -1,2 +1,0 @@
-export default class FORMPOST{constructor(e){this.id=e.id,this.formId=e.id,this.label=e.el.getAttribute("name"),this.results=e.getResultsAsArray(),this.message=""}getResultsAsObject(){let e={};try{this.results.forEach(t=>{void 0===e[t.name]?e[t.name]=t.value||"":(e[t.name].push||(e[t.name]=[e[t.name]]),e[t.name].push(t.value||""))})}catch(e){console.warn("Unable to parse FormPost into an object",e)}return e}}
-//# sourceMappingURL=FORMPOST.js.map
