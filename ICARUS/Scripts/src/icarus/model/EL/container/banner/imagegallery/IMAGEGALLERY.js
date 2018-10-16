@@ -1,20 +1,15 @@
-/**
-    @module
-*/
+/** @module */
 import BUTTONGROUP, { BUTTON, MODEL } from '../../../group/buttongroup/BUTTONGROUP.js';
 import BANNER from '../BANNER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import NAVTHUMBNAIL from '../thumbnail/THUMBNAIL.js';
-//import TOKEN from '../../formelement/input/TOKEN.js';
-/**
-    Contains a high level view of all objects owned by this user
+import NAVTHUMBNAIL from '../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+/** Contains a high level view of all objects owned by this user
     @class
     @extends BANNER
 */
 export default class IMAGEGALLERY extends BANNER {
-	/**
-	    Constructs a SECTION Container Element
+	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
 	 */
@@ -24,17 +19,14 @@ export default class IMAGEGALLERY extends BANNER {
 		this.page = 0;
 		this.pageLength = 6;
 		this.pageTotal = 0;
-		this.header = new HEADER(this, new MODEL().set({
-			'label': 'Image Gallery'
-		}));
+		this.header = new HEADER(this, new MODEL().set({ 'label': 'Image Gallery' }));
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
 		this.footer = new FOOTER(this, new MODEL());
 		$(this.pagination.el).insertAfter(this.body.pane.el);
 		this.loadPage(this.page);
 	}
-	/**
-	    Creates a Pagination button group as a footer
+	/** Creates a Pagination button group as a footer
 	    @returns {FOOTER} A pagination footer
 	*/
 	createPaginationFooter() {
