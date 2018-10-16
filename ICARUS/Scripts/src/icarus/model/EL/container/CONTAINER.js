@@ -620,7 +620,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	toggleHeaders() {
 		//$(this.el).find('.icarus-container nav.navbar-nav').toggle();
-		console.log('TODO: CONTAINER.toggleHeaders()');
+		alert('CONTAINER.toggleHeaders()');
 	}
 	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database

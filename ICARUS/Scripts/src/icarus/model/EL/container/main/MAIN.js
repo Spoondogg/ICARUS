@@ -192,9 +192,12 @@ export default class MAIN extends CONTAINER {
 		}
 		$(this.navBar.menu.menu.el).collapse('hide');
 	}
-	/** Loads the specified app id into the Main Container
+	/**
+		Loads the specified app id into the Main Container
+
 	    @todo Prompt the user for an Id to load
 	    @todo create a simple application browser to retrieve a MAIN
+
 		@param {number} id App Id to load
 		@returns {MAIN} This MAIN
 	*/
