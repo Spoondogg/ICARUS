@@ -701,6 +701,10 @@
     <Content Include="Scripts\src\icarus\model\el\span\GLYPHICON.js" />
     <Content Include="Scripts\src\icarus\model\el\span\SPAN.js" />
     <Content Include="Scripts\src\icarus\model\el\svg\SVG.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\TABLE.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\COLUMN.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\ROW.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\TGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\textarea\TEXTAREA.js" />
     <Content Include="Scripts\src\icarus\model\el\ul\console\CONSOLE.js" />
     <Content Include="Scripts\src\icarus\model\el\ul\UL.js" />
@@ -722,6 +726,10 @@
     <Content Include="config\beautify.json" />
     <Content Include="config\sasslint.json" />
     <Content Include="config\doxygen.json" />
+    <None Include="Dockerfile" />
+    <None Include=".dockerignore">
+      <DependentUpon>Dockerfile</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />

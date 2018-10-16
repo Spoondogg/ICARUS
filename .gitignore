@@ -25,21 +25,14 @@ bld/
 ############################### ICARUS BEGIN #########################################
 ICARUS.code-workspace
 Documentation/
-deprec
 Content/Images/**/*
-**/.bin
 Scripts/deprec
 Properties
-Properties/**/*
-packages
 package-lock.json
 ICARUS.code-workspace
-ICARUS/.bin
-ICARUS/deprec
-ICARUS/deprec/*
-package-lock.json
 .gitignore
 .gitattributes
+"Web.Debug.config"
 ############################### ICARUS END ###########################################
 
 
