@@ -1,2 +1,0 @@
-import FORMELEMENT,{ATTRIBUTES,EL,LABEL,MODEL}from"../FORMELEMENT.js";import TEXTAREA from"../../../textarea/TEXTAREA.js";export default class FORMTEXTAREA extends FORMELEMENT{constructor(E,t){super(E,"DIV",t),this.input=new TEXTAREA(this.body.pane,new MODEL(new ATTRIBUTES({class:"form-control",name:t.attributes.name})),t.attributes.value||"")}construct(){}}export{ATTRIBUTES,EL,LABEL,MODEL,TEXTAREA};
-//# sourceMappingURL=FORMTEXTAREA.js.map

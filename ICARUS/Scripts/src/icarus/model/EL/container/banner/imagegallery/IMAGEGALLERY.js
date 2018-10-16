@@ -5,7 +5,7 @@ import BUTTONGROUP, { BUTTON, MODEL } from '../../../group/buttongroup/BUTTONGRO
 import BANNER from '../BANNER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
+import NAVTHUMBNAIL from '../thumbnail/THUMBNAIL.js';
 //import TOKEN from '../../formelement/input/TOKEN.js';
 /**
     Contains a high level view of all objects owned by this user
@@ -69,7 +69,7 @@ export default class IMAGEGALLERY extends BANNER {
 				if (status === 'success') {
 					this.pageTotal = payload.total;
 					for (let l = 0; l < payload.list.length; l++) {
-						let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
+						let thumb = new NAVTHUMBNAIL(this.body.pane, new MODEL().set({
 							'label': payload.list[l].label,
 							'dataId': -1,
 							'data': {

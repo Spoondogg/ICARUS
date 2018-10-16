@@ -8,7 +8,7 @@ import STRING from '../../../../../STRING.js';
     @class
     @extends CONTAINER
 */
-export default class THUMBNAIL extends NAVITEM { //CONTAINER {
+export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 	/** Constructs a Bootstrap Jumbotron
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model

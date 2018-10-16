@@ -6,7 +6,7 @@ import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import MENU from '../../../nav/menu/MENU.js';
 import MODEL from '../../../../MODEL.js';
-import THUMBNAIL from '../thumbnail/THUMBNAIL.js';
+import NAVTHUMBNAIL from '../thumbnail/THUMBNAIL.js';
 /** Contains a list of THUMBNAILS for each MAIN Container available to this user
     @class
     @extends BANNER
@@ -44,8 +44,8 @@ export default class INDEXMAIN extends BANNER {
 			}, (payload, status) => {
 				if (status === 'success') {
 					this.pageTotal = payload.total;
-					payload.list.forEach((obj) => {
-						this.createThumbnail(obj, payload.className);
+					payload.list.forEach((model) => {
+						this.createThumbnail(model, payload.className);
 					});
 					if (!this.pagination.buttonGroup.loaded) {
 						console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
@@ -63,22 +63,23 @@ export default class INDEXMAIN extends BANNER {
 			});
 		}
 	}
-	/** Creates a Thumbnail
-	    @param {any} obj The Thumbnail model
+	/** Creates a Thumbnail that launches its respective MAIN
+	    @param {any} model The Thumbnail model
 	    @param {string} name The name to launch
-	    @returns {THUMBNAIL} A thumbnail
+	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-	createThumbnail(obj, name) {
-		let thumb = new THUMBNAIL(this.body.pane, new MODEL().set({
-			'label': obj.label,
+    createThumbnail(model) {
+        //this.menu.addNavThumbnail
+		let thumb = new NAVTHUMBNAIL(this.body.pane.menu.list, new MODEL().set({
+			'label': model.label,
 			'dataId': -1,
 			'data': {
-				'header': obj.label,
-				'p': 'Launch ' + obj.label + ' (' + obj.id + ')<br>' + name + '[' + obj.index + ']'
+				'header': model.label,
+				'p': 'Launch ' + model.label + ' (' + model.id + ')[' + model.index + ']'
 			}
 		}));
 		thumb.el.onclick = () => {
-			this.launchMain(obj.id, obj.label);
+			this.launchMain(model.id, model.label);
 		};
 		return thumb;
 	}

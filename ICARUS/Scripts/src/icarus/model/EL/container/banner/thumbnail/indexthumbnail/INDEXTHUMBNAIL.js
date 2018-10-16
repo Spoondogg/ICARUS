@@ -4,15 +4,14 @@ import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
 import MENULIST from '../../../menulist/MENULIST.js';
 import MODAL from '../../../../modal/MODAL.js';
+import NAVTHUMBNAIL from '../THUMBNAIL.js';
 import P from '../../../../p/P.js';
-//import STRING from '../../../../../../STRING.js';
-import THUMBNAIL from '../THUMBNAIL.js';
 /** A thumbnail with a preview window and a list of Containers 
     that can be loaded into the preview
     @class
-    @extends THUMBNAIL
+    @extends NAVTHUMBNAIL
 */
-export default class INDEXTHUMBNAIL extends THUMBNAIL {
+export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a Bootstrap Jumbotron
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model

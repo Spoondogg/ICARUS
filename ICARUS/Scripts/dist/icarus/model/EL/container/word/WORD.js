@@ -1,2 +1,0 @@
-import CONTAINER from"../CONTAINER.js";import HEADER from"../../header/HEADER.js";import MODEL from"../../../MODEL.js";export default class WORD extends CONTAINER{constructor(e,t){super(e,"DIV",t)}construct(){this.dataId>0?(console.log(this),this.header=new HEADER(this.body.pane,(new MODEL).set({label:this.data.value}),1)):(console.log(this),this.header=new HEADER(this.body.pane,(new MODEL).set({label:"Unknown"}),1))}}
-//# sourceMappingURL=WORD.js.map

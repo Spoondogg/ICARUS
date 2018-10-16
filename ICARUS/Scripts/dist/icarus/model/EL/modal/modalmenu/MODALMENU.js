@@ -1,2 +1,0 @@
-import MENU,{ATTRIBUTES,MODEL}from"../../nav/menu/MENU.js";import MODAL from"../MODAL.js";export default class MODALMENU extends MODAL{constructor(e,n,t,s){super(e,n,s),this.addClass("prompt"),this.container.addContainerCase("MENU"),this.menu=new MENU(this.container.body.pane,new MODEL(new ATTRIBUTES("navbar-inverse")).set({name:"menu"})),this.menu.populate(t)}}
-//# sourceMappingURL=MODALMENU.js.map
