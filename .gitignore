@@ -31,8 +31,8 @@ Properties
 packages
 package-lock.json
 ICARUS.code-workspace
-.gitignore
-.gitattributes
+#.gitignore
+#.gitattributes
 "Web.Debug.config"
 Scripts/dist/**/*
 Content/styles/dist
@@ -275,3 +275,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/ICARUS/Scripts/dist/icarus
