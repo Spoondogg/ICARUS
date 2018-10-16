@@ -31,10 +31,10 @@ Content/Images/**/*
 Scripts/deprec
 Properties/
 packages
-.gitignore
-.gitattributes
 package-lock.json
 ICARUS.code-workspace
+ICARUS/.bin
+ICARUS/.deprec
 ############################### ICARUS END ###########################################
 
 # Visual Studio 2015 cache/options directory
