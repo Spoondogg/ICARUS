@@ -1,5 +1,5 @@
 /** @module */
-import EL from '../../EL.js';
+import ROW, { COLUMN, EL, MODEL } from './row/ROW.js';
 /** A TABLE GROUP (TGROUP) element: ie: THEAD, TBODY, TFOOT */
 export default class TGROUP extends EL {
 	/** Constructs a table group element
@@ -12,14 +12,16 @@ export default class TGROUP extends EL {
         this.addRows(model.rows);
     }
     /** Creates a row and appends to this
+        @param {MODEL} model The row model
         @returns {ROW} The row
     */
     addRow(model) {
-        this.rows.push(new ROW(this, model);
+        this.rows.push(new ROW(this, model));
         return this.rows[this.children.length - 1];
-    };
+    }
     /** Adds groups to the table
         @param {Array<TGROUP>} rows An array of groups
+        @returns {void}
     */
     addRows(rows) {
         rows.forEach((row) => {
@@ -27,3 +29,4 @@ export default class TGROUP extends EL {
         });
     }
 }
+export { COLUMN, EL, MODEL }

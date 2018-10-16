@@ -1,1 +1,0 @@
-{"version":3,"sources":["enums/METHOD.js"],"names":["METHOD","DEFAULT","POST","GET","PUT"],"mappings":"OAKO,MAAMA,OAAS,CACrBC,QAAS,OACTC,KAAM,OACNC,IAAK,MACLC,IAAK","file":"METHOD.js","sourcesContent":["/**\r\n    Form methods\r\n    @readonly\r\n    @enum {string}\r\n*/\r\nexport const METHOD = {\r\n\tDEFAULT: 'POST',\r\n\tPOST: 'POST',\r\n\tGET: 'GET',\r\n\tPUT: 'PUT'\r\n};"]}
