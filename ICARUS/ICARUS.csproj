@@ -597,7 +597,6 @@
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
-    <Content Include="Documentation\index.html" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
@@ -788,7 +787,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include=".deprec\" />
     <Folder Include="App_Data\" />
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
