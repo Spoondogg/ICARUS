@@ -715,7 +715,6 @@
     <Content Include="package.json" />
     <Content Include="config\jsdoc.json" />
     <Content Include="index.md" />
-    <Content Include="LICENCE.md" />
     <Content Include="config\eslint.json" />
     <Content Include="package-lock.json" />
     <Content Include="Content\styles\src\icarus\icarus.scss" />
