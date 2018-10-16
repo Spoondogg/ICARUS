@@ -3,7 +3,6 @@ using Owin;
 
 [assembly: OwinStartupAttribute(typeof(ICARUS.Startup))]
 namespace ICARUS {
-
     public partial class Startup {
         /// <summary>
         /// http://scottdorman.github.io/2016/03/17/integrating-asp.net-core-dependency-injection-in-mvc-4/
