@@ -28,11 +28,15 @@ Documentation/
 Content/Images/**/*
 Scripts/deprec
 Properties
+packages
 package-lock.json
 ICARUS.code-workspace
 .gitignore
 .gitattributes
 "Web.Debug.config"
+Scripts/dist/**/*
+Content/styles/dist
+Content/styles/src/fonts
 ############################### ICARUS END ###########################################
 
 

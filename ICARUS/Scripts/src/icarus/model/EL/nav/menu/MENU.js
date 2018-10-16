@@ -4,6 +4,7 @@ import DIV from '../../div/DIV.js';
 import HEADER from '../../header/HEADER.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
+import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 /** A collapseable list of Nav Items
     @class
@@ -31,7 +32,8 @@ export default class MENU extends UL {
 		}
 		this.addCase('MENU', () => this.addMenu(model));
 		this.addCase('NAVITEM', () => this.addNavItem(model));
-		this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
+        this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
+        this.addCase('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
 		this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
 	}
 	/** Toggles the collapsed state of the 'COLLAPSE'
@@ -85,7 +87,15 @@ export default class MENU extends UL {
 	addNavItemIcon(model) {
 		this.children.push(new NAVITEMICON(this, model));
 		return this.addGroup(this.children[this.children.length - 1]);
-	}
+    }
+    /** Constructs a Nav Item Thumbnail
+        @param {MODEL} model The model
+        @returns {NAVITEMTHUMBNAIL} A nav item with a thumbnail
+    */
+    addNavThumbnail(model) {
+        this.children.push(new NAVITEMTHUMBNAIL(this, model));
+        return this.addGroup(this.children[this.children.length - 1]);
+    }
 	/** Adds an array of Nav Items
         @param {Array} navItems An array of NAVITEM
         @returns {void}

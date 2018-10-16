@@ -6,7 +6,7 @@ import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import MENU from '../../../nav/menu/MENU.js';
 import MODEL from '../../../../MODEL.js';
-import NAVTHUMBNAIL from '../thumbnail/THUMBNAIL.js';
+import NAVTHUMBNAIL from '../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 /** Contains a list of THUMBNAILS for each MAIN Container available to this user
     @class
     @extends BANNER
@@ -69,7 +69,7 @@ export default class INDEXMAIN extends BANNER {
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail(model) {
-        //this.menu.addNavThumbnail
+        this.menu.addNavThumbnail(model);
 		let thumb = new NAVTHUMBNAIL(this.body.pane.menu.list, new MODEL().set({
 			'label': model.label,
 			'dataId': -1,

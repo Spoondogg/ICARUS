@@ -633,7 +633,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\index\INDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\NAVTHUMBNAIL.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navitem\navthumbnail\NAVTHUMBNAIL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHAT.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINER.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERBODY.js" />
