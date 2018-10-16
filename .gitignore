@@ -25,7 +25,7 @@ bld/
 ############################### ICARUS BEGIN #########################################
 ICARUS.code-workspace
 Documentation/
-**/.deprec
+**/.deprec/**
 Content/Images/**/*
 **/.bin
 Scripts/deprec
