@@ -30,6 +30,7 @@ Content/Images/**/*
 .bin
 Scripts/deprec
 Properties/
+packages
 .gitignore
 .gitattributes
 package-lock.json
