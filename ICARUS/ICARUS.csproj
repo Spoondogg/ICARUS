@@ -714,7 +714,6 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="config\jsdoc.json" />
-    <Content Include="index.md" />
     <Content Include="config\eslint.json" />
     <Content Include="package-lock.json" />
     <Content Include="Content\styles\src\icarus\icarus.scss" />
@@ -776,7 +775,6 @@
     <Content Include="Views\Account\LogOff.cshtml" />
     <Content Include="Views\Account\ExternalLogin.cshtml" />
     <Content Include="Views\Shared\_Globals.cshtml" />
-    <Content Include="toc.yml" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>

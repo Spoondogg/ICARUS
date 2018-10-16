@@ -318,36 +318,35 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				}));
 			}
         }*/
-        parsed.forEach(({ name, value }) => {            
-            if (name !== 'id') {
-                inputs.push(new MODEL(new ATTRIBUTES({
-                    name,
-                    'value': this.getContainerProperty(container) || value
-                })).set({
-                    'element': 'INPUT',
-                    'label': name
-                }));
-            }
-        });
+		parsed.forEach(({ name, value }) => {
+			if (name !== 'id') {
+				inputs.push(new MODEL(new ATTRIBUTES({
+					name,
+					'value': this.getContainerProperty(container) || value
+				})).set({
+					'element': 'INPUT',
+					'label': name
+				}));
+			}
+		});
 		return inputs;
-    }
-    /**
-        Retrieves the set value of the given attribute from the form
-        @param {CONTAINER} container Container to assess
-        @param {string} name Parameter name
-        @returns {string} Parameter value
-    */
-    getContainerProperty(container, name) {
-        let param = container[name];
-        let value = null;
-        if (param) {
-            if (param.el) {
-                value = param.el.innerHTML;
-            }
-        }
-        return value;
-    }
-
+	}
+	/**
+	    Retrieves the set value of the given attribute from the form
+	    @param {CONTAINER} container Container to assess
+	    @param {string} name Parameter name
+	    @returns {string} Parameter value
+	*/
+	getContainerProperty(container, name) {
+		let param = container[name];
+		let value = null;
+		if (param) {
+			if (param.el) {
+				value = param.el.innerHTML;
+			}
+		}
+		return value;
+	}
 	/**
 	    Attempts to destroy the form post form
 	    @throws Throws an error if the form does not exist
@@ -358,8 +357,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			this.form.destroy();
 		} catch (e) {
 			console.warn('Unable to destroy pre-existing form', e);
-        }
-        return this;
+		}
+		return this;
 	}
 	/**
 	    Creates an empty form and populates with any given inputs

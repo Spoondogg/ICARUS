@@ -20,27 +20,24 @@ export default class INDEX extends BANNER {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('index');
-    }
+	}
 	construct() {
-        this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
-            'label': 'INDEX',
-            'collapsed': 1,
-            'showHeader': 1
+		this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
+			'label': 'INDEX',
+			'collapsed': 1,
+			'showHeader': 1
 		}));
-        ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY']
-        .forEach((element) => {
-            this.addThumbButtonActions(element,
-                this.menu.addNavItemIcon(new MODEL().set({
-                    'icon': ICONS[element.toUpperCase()],
-                    'label': element,
-                    'dataId': -1,
-                    'data': {
-                        'header': element,
-                        'p': '&nbsp;'
-                    }
-                }))
-            );
-        });
+		['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
+			this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
+				'icon': ICONS[element.toUpperCase()],
+				'label': element,
+				'dataId': -1,
+				'data': {
+					'header': element,
+					'p': '&nbsp;'
+				}
+			})));
+		});
 	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
