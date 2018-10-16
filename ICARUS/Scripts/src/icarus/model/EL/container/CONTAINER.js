@@ -622,12 +622,21 @@ export default class CONTAINER extends GROUP {
 		//$(this.el).find('.icarus-container nav.navbar-nav').toggle();
 		console.log('TODO: CONTAINER.toggleHeaders()');
 	}
-	/** Creates a DIALOG and if user permits, deletes this CONTAINER from the DOM.
+	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
         @returns {void}
     */
 	remove() {
 		try {
+			/*
+			let dialog = new PROMPT(label, text, [], [], true); // label, text, buttons, inputs, vertical            
+			dialog.form.footer.buttonGroup.children[0].setLabel('Remove', ICONS.REMOVE);
+			dialog.form.footer.buttonGroup.children[0].el.onclick = () => {
+				this.destroy();
+				this.prompt.hide();
+			};
+			dialog.show();
+			*/
 			let dialog = new DIALOG(new MODEL().set({
 				'label': 'Remove ' + this.className + '{' + this.element + '}[' + this.id + ']',
 				'text': 'Remove ' + this.className + ' from ' + this.node.node.node.className + '?',
@@ -638,12 +647,15 @@ export default class CONTAINER extends GROUP {
 			console.log('Unable to disable this ' + this.element, e);
 		}
 	}
-	/** Refreshes the page if the results of the POST are a Payload with a "status" of "success"
+	/** Typically this function is used within JQuery posts.
+        If the results are a Payload and its status is "success",
+        the page is reloaded.
         @param {object} payload A post payload
         @param {any} status Result status
         @returns {void} 
     */
 	ajaxRefreshIfSuccessful(payload, status) {
+		//console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
 		if (payload.result) { //!== 0 
 			let url = new URL(window.location.href);
 			let returnUrl = url.searchParams.get('ReturnUrl');
@@ -653,7 +665,7 @@ export default class CONTAINER extends GROUP {
 				location.reload(true);
 			}
 		} else {
-			console.log('Unable to POST results to server (' + status + ')', payload);
+			console.log('Login Failed.  Unable to POST results to server with status: "' + status + '"', payload);
 		}
 	}
 	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.

@@ -1,5 +1,5 @@
 /** @module */
-/** Represents a standardized data object (PAYLOAD) that can be POSTed and validated
+/** Represents a standardized data object that can be POSTed and validated
     @class    
 */
 export default class FORMPOST {
