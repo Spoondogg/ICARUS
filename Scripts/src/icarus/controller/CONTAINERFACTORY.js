@@ -7,7 +7,7 @@ import ARTICLE from '../model/el/article/ARTICLE.js';
 import BANNER from '../model/el/container/banner/BANNER.js';
 import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
-import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js'; // banners are dumb
+import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
 //import CONTAINER from '../model/el/container/CONTAINER.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';

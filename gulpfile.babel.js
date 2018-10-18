@@ -98,7 +98,7 @@ export function $server_beautify() {
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
 export function styles_build_src(done) {
-    console.log('Building Styles: ' + paths.styles.src);
+    console.log(' - Building Styles: ' + paths.styles.src);
     let plugins = [
         autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
         postcsstouchcallout,
@@ -108,10 +108,10 @@ export function styles_build_src(done) {
     return gulp.src(paths.styles.src)
         .pipe(sourcemaps.init())
         .pipe(sass()).on('error', (e) => {
-            console.log('Failed to transcode Sass', e);
+            console.log(' - Failed to transcode Sass', e);
             done();
         }).on('end', () => {
-            console.log(paths.styles.src + ' has been transcoded');
+            console.log(' - ' +paths.styles.src + ' has been transcoded');
             done();
         })
         .pipe(rename({

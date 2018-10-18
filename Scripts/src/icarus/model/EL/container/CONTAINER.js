@@ -194,8 +194,7 @@ export default class CONTAINER extends GROUP {
 		}
 		return this;
 	}
-	/**
-	    Moves this element DOWN one slot
+	/** Moves this element DOWN one slot
 	    @returns {ThisType} This Container
 	*/
 	moveDown() {
@@ -212,26 +211,23 @@ export default class CONTAINER extends GROUP {
 		}
 		return this;
 	}
-	/**
-		    Empties the Container Pane and reconstructs its contents 
-		    based on the current model
-	        @returns {void}
-		*/
+	/** Empties the Container Pane and reconstructs its contents 
+        based on the current model
+        @returns {void}
+    */
 	refresh() {
 		console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
 		this.body.pane.empty();
 		this.construct();
 		this.populate(this.body.pane.children);
 	}
-	/**
-		    Shows the Container NavBar
-	        @returns {void}
-		*/
+	/** Shows the Container NavBar
+        @returns {void}
+    */
 	showNavBar() {
 		$(this.navBar.el).collapse('show');
 	}
-	/**
-	    Adds default items to the DOM Menu
+	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
 	*/
 	addDomItems() {
