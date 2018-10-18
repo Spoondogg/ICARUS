@@ -546,10 +546,11 @@ namespace ICARUS.Controllers {
         public async Task<ActionResult> LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             //return RedirectToAction("Index", "Home");
-            return Json(new {
+            /*return Json(new {
                 state = 1,
                 status = "success"
-            }, JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);*/
+            return Json(new Payload(1, "Successfully logged in"), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
