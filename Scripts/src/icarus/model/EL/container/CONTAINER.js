@@ -651,8 +651,8 @@ export default class CONTAINER extends GROUP {
         @returns {void} 
     */
 	ajaxRefreshIfSuccessful(payload, status) {
-		//console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
-		if (payload.result) { //!== 0 
+		console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
+		if (payload.result === 'success') { //!== 0 
 			let url = new URL(window.location.href);
 			let returnUrl = url.searchParams.get('ReturnUrl');
 			if (returnUrl) {

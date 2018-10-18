@@ -203,15 +203,13 @@ export default class EL extends MODEL {
 			console.log('EL{' + this.className + '}.getMainContainer() error', this);
 		}
 	}
-	/**
-		    Acts like a switch statement, performing actions from the given list of callbacks.
-		    This is used because constructor functions persist across the inheritance chain,
-		    whereas an actual SWITCH statement would be overridden on each inheritted class.
-		    @see https://stackoverflow.com/a/35769291/722785
-	    
-		    @param {MODEL} model The object model for the element to be created
-		    @returns {EL} Constructed Element
-		 */
+	/** Acts like a switch statement, performing actions from the given list of callbacks.
+        This is used because constructor functions persist across the inheritance chain,
+        whereas an actual SWITCH statement would be overridden on each inheritted class.
+        @see https://stackoverflow.com/a/35769291/722785	    
+        @param {MODEL} model The object model for the element to be created
+        @returns {EL} Constructed Element
+    */
 	create(model) {
 		let result = null;
 		try {
@@ -310,19 +308,17 @@ export default class EL extends MODEL {
 	    @returns {EL} This EL
 	*/
 	destroy(delay = 300) {
-		try {
-			setTimeout(function() {
-				this.el.parentNode.removeChild(this.el);
-			}.bind(this), delay);
-			try {
-				let i = this.node.children.indexOf(this);
-				this.node.children.splice(i, 1);
-			} catch (ee) {
-				console.log('Unable to remove ' + this.element + ' from node.children');
-			}
-		} catch (e) {
-			console.log('Unable to destroy this ' + this.element, e);
-		}
+        setTimeout(() => {
+            try {
+                this.el.parentNode.removeChild(this.el);
+                this.node.children.splice(this.node.children.indexOf(this), 1);
+            } catch (ee) {
+                if (ee.name !== 'TypeError') {
+                    console.log('Unable to destroy this ' + this.element, ee);
+                    throw ee;
+                }
+            }
+        }, delay);
 		return this;
 	}
 	/**

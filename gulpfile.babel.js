@@ -1,4 +1,4 @@
-/// <binding AfterBuild='_publish' />
+/// <binding />
 // #region Imports
 /** @module */
 import autoprefixer from 'autoprefixer';
@@ -131,6 +131,7 @@ export function styles_build_vendor() {
     let animate = request('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css')
         .pipe(source('animate.css'));
     return merge(bootstrap, animate)
+        .pipe(plumber({ errorHandler: onError }))
         .pipe(buffer())
         .pipe(concat('vendor.css'))
         .pipe(gulp.dest(paths.styles.dest));
@@ -168,16 +169,16 @@ export function styles_beautify_src() {
     @returns {gulp} A gulp object
 */
 export function styles_lint_src(done) {
-    console.log('Linting Styles: ' + paths.styles.basefile);
+    console.log(' - Linting Styles: ' + paths.styles.basefile);
     let config = require(paths.config.sasslint);
     return gulp.src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
         .pipe(sasslint(config))
         .pipe(sasslint.format())
         .pipe(sasslint.failOnError()).on('error', (e) => {
-            console.log('Failed to lint Sass');
+            console.log(' - Failed to lint Sass');
             done();
         }).on('end', () => {
-            console.log(paths.styles.basefile + ' has been linted');
+            console.log(' - ' + paths.styles.basefile + ' has been linted');
             done();
         });
 }
@@ -200,12 +201,12 @@ function onError(err) {
     @param {any} done Callback
  */
 export function scripts_build_src(done) {
-    console.log('Building Scripts: ' + paths.scripts.src);
+    console.log(' - Building Scripts: ' + paths.scripts.src);
     return gulp.src(paths.scripts.src, { base: paths.scripts.base })
         .pipe(plumber({ errorHandler: onError }))
         .pipe(sourcemaps.init())
         .pipe(terser()).on('error', (e) => {
-            console.log('Failed to terse Scripts');
+            console.log(' - Failed to terse Scripts');
             done();
         }).on('success', () => {
             console.log(paths.scripts.src + ' has been successfully tersed');
@@ -216,16 +217,25 @@ export function scripts_build_src(done) {
         .pipe(gulp.dest(paths.scripts.dest));
 }
 /** Creates Javascript Dependencies inside Scripts/dist */
-export function scripts_build_vendor() {
+export function scripts_build_vendor(done) {
+
     let jquery = request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js'));
     let jqueryUI = request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js'));
     let jqueryValidate = request('https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js').pipe(source('jqueryValidate.js'));
     //let modernizr = request('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js').pipe(source('modernizr.js'));
     let bootstrap = request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js').pipe(source('bootstrap.js'));
     return merge(jquery, jqueryUI, jqueryValidate, /*modernizr,*/ bootstrap)
+        .pipe(plumber({ errorHandler: onError }))
         .pipe(buffer())
         .pipe(concat('vendor.js'))
-        .pipe(gulp.dest(paths.scripts.dest));
+        .pipe(gulp.dest(paths.scripts.dest)).on('error', (e) => {
+            console.log(' - Failed to publish vendor Scripts');
+            done();
+        }).on('success', () => {
+            console.log('Vendor scripts have been successfully published');
+        }).on('end', () => {
+            done();
+        })
 }
 /**
     ES6 Beautification
@@ -239,14 +249,14 @@ export function scripts_beautify_src() {
 /** Lint the Scripts 'src' files
 */
 export function scripts_lint_src(done) {
-    console.log('Linting Scripts: ' + paths.scripts.src);
+    console.log(' - Linting Scripts: ' + paths.scripts.src);
     let config = require(paths.config.eslint);
     return gulp.src(paths.scripts.src)
         .pipe(plumber({ errorHandler: onError }))
         .pipe(eslint(config))
         .pipe(eslint.format())
         .pipe(eslint.failAfterError()).on('error', (e) => {
-            console.log('Failed to lint Javascript');
+            console.log(' - Failed to lint Javascript');
             done();
         }).on('end', () => {
             done();
@@ -334,7 +344,7 @@ const _clean = () => del([
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function scripts_publish(dev = true) {
-    console.log('Publishing Scripts: ' + paths.scripts.buildglob); // 'Scripts/**/**.*'
+    console.log(' - Publishing Scripts: ' + paths.scripts.buildglob); // 'Scripts/**/**.*'
     return gulp.src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 }
@@ -343,13 +353,16 @@ export function scripts_publish(dev = true) {
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
 */
 export function styles_publish() {
-    console.log('Publishing Styles: ' + paths.styles.baseglob);
+    console.log(' - Publishing Styles: ' + paths.styles.baseglob);
     return gulp.src([paths.styles.baseglob, '!**.(yml|md)'])
         .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 }
 /** Publishes Scripts and Styles to the dev server */
 export function _publish() {
     return gulp.series(
+        scripts_build_vendor,
+        styles_build_vendor,
+        //fonts_build_vendor,
         scripts_publish,
         styles_publish
     );

@@ -15,7 +15,8 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
     */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0');
+		//this.addClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0');
+        this.addClass('thumbnail');
 		this.image = new IMG(this.anchor, new MODEL());
 		$(this.image.el).insertBefore(this.anchor.label.el);
 		this.header = new HEADER(this.anchor, new MODEL().set({ 'label': model.label }));
