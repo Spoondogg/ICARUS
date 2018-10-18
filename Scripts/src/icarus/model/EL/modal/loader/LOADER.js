@@ -22,7 +22,7 @@ export default class LOADER extends DIALOG {
 			label,
 			text
 		}));
-		this.addClass('loader'); // modal-loader
+		this.addClass('loader');
 		//this.el.setAttribute('name', 'LOADER');
 		this.progress = new DIV(this.body, new MODEL(new ATTRIBUTES('progress')));
 		this.progressBar = new PROGRESSBAR(this.progress, new MODEL());

@@ -18,8 +18,8 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 		this.addClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0');
 		this.image = new IMG(this.anchor, new MODEL());
 		$(this.image.el).insertBefore(this.anchor.label.el);
-		this.header = new HEADER(this.anchor, new MODEL().set({ 'label': 'thumbnailheader' }));
-		this.p = new P(this.anchor, new MODEL(), new STRING('thumbnaildescription').truncate(128));
+		this.header = new HEADER(this.anchor, new MODEL().set({ 'label': model.label }));
+		this.p = new P(this.anchor, new MODEL(), new STRING(model.description || 'N/A').truncate(128));
 		this.fetchImage();
 	}
 	/** Retrieve a FormPost for the given MAIN and sets this image source

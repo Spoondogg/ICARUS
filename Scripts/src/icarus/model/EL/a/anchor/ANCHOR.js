@@ -19,7 +19,7 @@ export default class ANCHOR extends A {
 		} //else {
 		//this.setInnerHTML(this.el.innerHTML += model.label);
 		//}
-		this.label = new SPAN(this, new MODEL('text'), model.label || '');
+		this.label = new SPAN(this, new MODEL('label'), model.label || '');
 	}
 }
 export { A, ATTRIBUTES, EL, GLYPHICON, MODEL };

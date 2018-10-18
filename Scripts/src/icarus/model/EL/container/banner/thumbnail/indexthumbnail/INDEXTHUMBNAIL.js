@@ -4,7 +4,7 @@ import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
 import MENULIST from '../../../menulist/MENULIST.js';
 import MODAL from '../../../../modal/MODAL.js';
-import NAVTHUMBNAIL from '../THUMBNAIL.js';
+import NAVTHUMBNAIL from '../../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import P from '../../../../p/P.js';
 /** A thumbnail with a preview window and a list of Containers 
     that can be loaded into the preview
@@ -19,8 +19,6 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 	constructor(node, model) {
 		super(node, model);
 		this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
-		//this.construct();
-		//this.populate(model.children);
 	}
 	/** Creates the Modal that contains the list of objects for preview
         @todo Consider paging these results
@@ -57,10 +55,9 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		}));
 		return this.modal;
 	}
-	/**
-		    Adds NavItems for each data list
-	        @returns {void}
-		*/
+	/** Adds NavItems for each data list
+        @returns {void}
+    */
 	addDataListNavItems() {
 		for (let li = 0; li < this.data.list.length; li++) {
 			let title = this.data.list[li].label + ' (' + this.data.listClass + '[' + this.data.list[li].id + '])';
@@ -72,15 +69,12 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 			};
 		}
 	}
-	/**
-	        Creates a modal and loads the specified container
-	        @param {number} delay Delay in milliseconds
-	        param {string} title Modal Title
-	        param {EL} node Modal node to append to
-	        @param {string} className Object class name
-	        @param {number} id Object id
-	        @returns {void}
-		*/
+	/** Creates a modal and loads the specified container
+        @param {number} delay Delay in milliseconds
+        @param {string} className Object class name
+        @param {number} id Object id
+        @returns {void}
+    */
 	launchPreview(delay = 500, className, id) { //title = 'Preview', // node
 		setTimeout(() => {
 			$.getJSON('/' + className + '/Get/' + id, (result) => {
@@ -89,9 +83,9 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 			});
 		}, delay);
 		/**
-		            Get a list of Parents for this Container
-		            @returns {void}
-		        */
+		    Get a list of Parents for this Container
+		    @returns {void}
+		*/
 		setTimeout(() => {
 			$.getJSON('/' + className + '/GetContainerParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
