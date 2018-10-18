@@ -26,11 +26,14 @@ export default class INDEXMAIN extends BANNER {
         /** @param {number} page The current page */
         this.page = 0;
         /** @param {number} pageLength The number of items per page */
-        this.pageLength = 12;
+        this.pageLength = 6;
         /** @param {number} pageTotal The total number of available pages */
         this.pageTotal = 0;
         /** @param {number} maxNavItems The maximum number of pages to cache */
-        this.maxNavItems = this.pageLength * 6; 
+        this.maxNavItems = 18; // 3 pages worth of NavItems
+
+        this.isLoading = false;
+
         this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
         this.addEvents();        
 
@@ -42,6 +45,7 @@ export default class INDEXMAIN extends BANNER {
 		this.loadPage(this.page);
 	}
 	/** Constructs the INDEXMAIN Container
+        @todo This should be able to create PageIndexes for ALL Container types, not just MAIN
         @returns {void}
     */
 	construct() {
@@ -50,10 +54,9 @@ export default class INDEXMAIN extends BANNER {
 			$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
 				'__RequestVerificationToken': this.getMainContainer().token
 			}, (payload, status) => {
-				if (status === 'success') {
+                if (status === 'success') {
+                    this.isLoading = true;
                     this.pageTotal = payload.total;
-                    
-
 					payload.list.forEach((model) => {
                         this.createThumbnail(model, payload.className).el.onclick = () => {
                             this.launchMain(model.id, model.label);
@@ -71,6 +74,7 @@ export default class INDEXMAIN extends BANNER {
                         this.pagination.buttonGroup.loaded = true;
                         this.pagination.buttonGroup.children[0].addClass('active');
                     }
+                    this.isLoading = false;
                     this.purgeList();
 				}
 			});
@@ -83,8 +87,12 @@ export default class INDEXMAIN extends BANNER {
         this.body.pane.el.onscroll = () => {
             if (this.body.pane.el.scrollTop > 10) {
                 if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
-                    console.log('Scrolled to bottom. Loading previous page if exists');
-                    this.nextPage();
+                    if (!this.isLoading) {
+                        this.isLoading = true;
+                        console.log('Scrolled to bottom. Loading next page if exists');
+                        this.nextPage();
+                        this.isLoading = false;
+                    }
                 }
             }
             /*if (this.body.pane.el.scrollTop === 0 && this.page > 1) {
@@ -179,26 +187,31 @@ export default class INDEXMAIN extends BANNER {
         @returns {void}
     */
     prevPage() {
-        console.log('nextpage', this.page - 1, this.pageLength);
+        console.log('prevPage', this.page - 1, this.pageLength);
+        this.isLoading = true;
 		if (this.page > 0) {
             this.loadPage(this.page - 1);
             this.scrollToActiveButton();
 		} else {
 			console.log('No previous pages to display');
-		}
+        }
+        this.isLoading = false;
     }
     /** Purges NavItems from the MENU when they exceed @see {maxNavItems}
         @returns {void}
     */
-    purgeList() {
-        try {
+    purgeList() {        
+        if (!this.isLoading) {
+            console.log('Purging...');
+            this.isLoading = true;
             while (this.menu.children.length > this.maxNavItems) {
                 this.menu.children[0].destroy();
+                this.menu.children.shift();
             }
-        } catch (e) {
-            if (e.name !== 'TypeError') {
-                throw e;
-            }
+            this.isLoading = false;
+            console.log('Success');
+        } else {
+            console.log(' DELAYING PURGE!@!!!!!!! ');
         }
     }
     /** Scrolls the Pagination Buttongroup to the active button
