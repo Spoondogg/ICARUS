@@ -37,7 +37,7 @@ namespace ICARUS.Models.Icarus.Elements {
 
             //string className = "navbar";
             string className = (isFixed) ? " navbar-fixed-top" : "";
-            className += (isInverted) ? " navbar-inverse" : "";
+            //className += (isInverted) ? " navbar-inverse" : "";
             this.attributes.Add("class", className);
 
             //this.label = label;

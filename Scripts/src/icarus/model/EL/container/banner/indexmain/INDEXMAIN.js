@@ -2,6 +2,7 @@
 import BANNER from '../BANNER.js';
 import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+import DIV from '../../../div/DIV.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import MENU from '../../../nav/menu/MENU.js';
@@ -15,16 +16,24 @@ export default class INDEXMAIN extends BANNER {
         Contents are paged and pagination exists in the footer
         @todo Contents should be grouped in 3's or 4's and cycled through by swiping
         @todo Preload / Stream contents
+        @see https://stackoverflow.com/questions/15181286/how-to-implement-an-endless-infinite-scroll-within-a-div-in-javascript-jquery
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
 	 */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('index-main');
-		this.page = 0;
-		this.pageLength = 6;
-		this.pageTotal = 0;
-		this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+        this.addClass('index-main');
+        /** @param {number} page The current page */
+        this.page = 0;
+        /** @param {number} pageLength The number of items per page */
+        this.pageLength = 12;
+        /** @param {number} pageTotal The total number of available pages */
+        this.pageTotal = 0;
+        /** @param {number} maxNavItems The maximum number of pages to cache */
+        this.maxNavItems = this.pageLength * 6; 
+        this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+        this.addEvents();        
+
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
@@ -42,54 +51,78 @@ export default class INDEXMAIN extends BANNER {
 				'__RequestVerificationToken': this.getMainContainer().token
 			}, (payload, status) => {
 				if (status === 'success') {
-					this.pageTotal = payload.total;
+                    this.pageTotal = payload.total;
+                    
+
 					payload.list.forEach((model) => {
-                        let thumb = this.createThumbnail(model, payload.className);
-                        thumb.el.onclick = () => {
+                        this.createThumbnail(model, payload.className).el.onclick = () => {
                             this.launchMain(model.id, model.label);
                         };
 					});
 					if (!this.pagination.buttonGroup.loaded) {
-						//console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-						//console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
-                        pageCount.forEach((index) => {
-                            let btn = this.pagination.buttonGroup.addButton(index + 1);
-                            btn.el.onclick = () => {
-                                this.loadPage(index);
-                            };
-                        });
-                        /*
                         for (let p = 0; p < this.pageCount; p++) {
-							let btn = this.pagination.buttonGroup.addButton(p + 1);
-							btn.el.onclick = () => {
-								this.loadPage(p);
+							this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
+                                this.menu.empty();
+                                this.loadPage(p);
+                                return false;
 							};
 						}
-                        */
-						this.pagination.buttonGroup.loaded = true;
-					}
+                        this.pagination.buttonGroup.loaded = true;
+                        this.pagination.buttonGroup.children[0].addClass('active');
+                    }
+                    this.purgeList();
 				}
 			});
-		}
-	}
+        }
+    }
+    /** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
+        @returns {void}
+    */
+    addEvents() {
+        this.body.pane.el.onscroll = () => {
+            if (this.body.pane.el.scrollTop > 10) {
+                if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
+                    console.log('Scrolled to bottom. Loading previous page if exists');
+                    this.nextPage();
+                }
+            }
+            /*if (this.body.pane.el.scrollTop === 0 && this.page > 1) {
+                setTimeout(() => {
+                    if (this.body.pane.el.scrollTop === 0) {
+                        console.log('Scrolled to top. Loading previous page if exists');
+                        this.prevPage();
+                    }
+                }, 300);
+                
+            }*/
+        };
+
+        this.body.pane.el.onmouseenter = () => {
+            console.log('Moused over body.pane');
+            this.body.pane.addClass('showNav');
+        };
+
+        this.body.pane.el.onmouseleave = () => {
+            console.log('Moused out of body.pane');
+            this.body.pane.removeClass('showNav');
+        };
+    }
 	/** Creates a Thumbnail that launches its respective MAIN
-	    @param {any} model The Thumbnail model
+	    @param {MODEL} model The Thumbnail model
+        @param {string} model.label The Thumbnail label
+        @param {string} model.description A brief description that can be truncated
 	    @param {string} name The name to launch
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail(model) {
+    createThumbnail({ label, description }) {
         return this.menu.addNavThumbnail(new MODEL().set({
-            'label': model.label,
-            'dataId': -1,
-            'data': {
-                'header': model.label,
-                'p': 'Launch ' + model.label + ' (' + model.id + ')[' + model.index + ']'
-            }
+            label,
+            description
         }));
 	}
 	/** Creates a Pagination Footer
-	    @returns {FOOTER} A pagination Footer
+	    @returns {FOOTER} A Footer with a buttongroup for pagination
 	*/
 	createPaginationFooter() {
 		let pagination = new FOOTER(this, new MODEL('pagination'));
@@ -118,15 +151,14 @@ export default class INDEXMAIN extends BANNER {
 	loadPage(page) {
 		try {
 			this.header.setInnerHTML('Page ' + (page + 1));
-			let buttons = this.pagination.buttonGroup.el.children;
+            let buttons = this.pagination.buttonGroup.el.children;
 			for (let b = 0; b < buttons.length; b++) {
 				$(buttons[b]).removeClass('active');
 			}
-			$(buttons[page]).addClass('active');
-			//this.body.pane.empty();
-            this.menu.empty();
+            $(buttons[page]).addClass('active');
+            //this.menu.empty();
 			this.page = page;
-			this.construct();
+            this.construct();
 		} catch (e) {
 			console.log('Unable to load page.', e);
 		}
@@ -134,9 +166,11 @@ export default class INDEXMAIN extends BANNER {
 	/** Loads the next page in sequence
 	    @returns {void}
 	*/
-	nextPage() {
+    nextPage() {
+        console.log('nextpage', this.page + 1, this.pageLength);
 		if (this.pageTotal > this.page * this.pageLength + 1) {
-			this.loadPage(this.page + 1);
+            this.loadPage(this.page + 1);
+            this.scrollToActiveButton();
 		} else {
 			console.log('No next pages to display');
 		}
@@ -144,11 +178,41 @@ export default class INDEXMAIN extends BANNER {
 	/** Loads the previous page
         @returns {void}
     */
-	prevPage() {
+    prevPage() {
+        console.log('nextpage', this.page - 1, this.pageLength);
 		if (this.page > 0) {
-			this.loadPage(this.page - 1);
+            this.loadPage(this.page - 1);
+            this.scrollToActiveButton();
 		} else {
 			console.log('No previous pages to display');
 		}
-	}
+    }
+    /** Purges NavItems from the MENU when they exceed @see {maxNavItems}
+        @returns {void}
+    */
+    purgeList() {
+        try {
+            while (this.menu.children.length > this.maxNavItems) {
+                this.menu.children[0].destroy();
+            }
+        } catch (e) {
+            if (e.name !== 'TypeError') {
+                throw e;
+            }
+        }
+    }
+    /** Scrolls the Pagination Buttongroup to the active button
+        @returns {void}
+    */
+    scrollToActiveButton() {
+        try {
+            $(this.pagination.buttonGroup.el).animate({
+                scrollLeft: $(this.pagination.buttonGroup.children[this.page].el).position().left
+            }, 200);
+        } catch (e) {
+            if (e.name !== 'TypeError') {
+                throw e;
+            }
+        }
+    }
 }

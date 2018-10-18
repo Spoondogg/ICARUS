@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ATTRIBUTES, MODEL } from '../../nav/menu/MENU.js';
+import MENU, { MODEL } from '../../nav/menu/MENU.js';
 import MODAL from '../MODAL.js';
 /** A modal prompt.
     @description Creates a modal and displays a text well and any buttons that have
@@ -17,8 +17,7 @@ export default class MODALMENU extends MODAL {
 		super(label, text, vertical);
 		this.addClass('prompt');
 		this.container.addContainerCase('MENU');
-		this.menu = new MENU(this.container.body.pane, new MODEL(new ATTRIBUTES('navbar-inverse')).set({
-			//'className': 'MENU',
+        this.menu = new MENU(this.container.body.pane, new MODEL().set({ // 'navbar-inverse'
 			'name': 'menu'
 		}));
 		this.menu.populate(children);

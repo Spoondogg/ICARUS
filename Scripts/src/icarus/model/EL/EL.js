@@ -348,14 +348,14 @@ export default class EL extends MODEL {
 		this.attributes.class = prevClass + ' ' + className;
 		return this;
 	}
-	/**
-	    Revoves the given class name from the element's list of classes
+	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
 	    @returns {EL} Returns this element for chaining purposes
 	*/
 	removeClass(className) {
 		$(this.el).removeClass(className);
-		this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+        //this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+        this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
 		return this;
 	}
 	/**

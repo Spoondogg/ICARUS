@@ -20,7 +20,7 @@ export default class IMG extends EL {
 				this.el.ondblclick = this.edit.bind(this);
 			}
 		} catch (e) {
-			console.warn('IMG does not have a MAIN Container', e);
+			//console.warn('IMG does not have a MAIN Container', e);
 		}
 	}
 }

@@ -11,7 +11,8 @@ export default class GROUP extends EL {
         @param {MODEL} model The json object representing this element
     */
 	constructor(node, element, model) {
-		super(node, element, model);
+        super(node, element, model);
+        //this.setAttribute('role', 'group');
 		try {
 			if (model.name) {
 				this.name = model.name; // Required
