@@ -652,7 +652,7 @@ export default class CONTAINER extends GROUP {
     */
 	ajaxRefreshIfSuccessful(payload, status) {
 		console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
-		if (payload.result === 'success') { //!== 0 
+		if (payload.result === 1) { //!== 0 
 			let url = new URL(window.location.href);
 			let returnUrl = url.searchParams.get('ReturnUrl');
 			if (returnUrl) {
@@ -661,7 +661,7 @@ export default class CONTAINER extends GROUP {
 				location.reload(true);
 			}
 		} else {
-			console.log('Login Failed.  Unable to POST results to server with status: "' + status + '"', payload);
+			console.log('Unable to POST results to server with status: "' + status + '"', payload);
 		}
 	}
 	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
