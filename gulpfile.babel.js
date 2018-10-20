@@ -5,6 +5,9 @@ import autoprefixer from 'autoprefixer';
 import babel from 'gulp-babel';
 import beautify from 'gulp-jsbeautifier';
 import buffer from 'gulp-buffer';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import chromedriver from 'chromedriver';
 import cleancss from 'gulp-clean-css';
 import concat from 'gulp-concat';
 import connect from 'connect';
@@ -15,15 +18,19 @@ import gulp from 'gulp4';
 import gutil from 'gulp-util';
 import http from 'http';
 import jsdoc from 'gulp-jsdoc3';
+import Launcher from 'webdriverio/build/lib/launcher';
 import merge from 'merge2';
 import mocha from 'gulp-mocha';
+import mochaChrome from 'gulp-mocha-chrome';
 import notify from 'gulp-notify';
+import path from 'path';
 import plumber from 'gulp-plumber';
 import postcss from 'gulp-postcss';
 import postcssclean from 'postcss-clean'; // gulp-clean-css
 import postcssfontsmoothing from 'postcss-font-smoothing';
 import postcsstouchcallout from 'postcss-touch-callout';
 import postcssmomentumscrolling from 'postcss-momentum-scrolling';
+import puppeteer from 'puppeteer';
 import uglify from 'gulp-uglify';
 import rename from 'gulp-rename';
 import request from 'request';
@@ -34,6 +41,7 @@ import servestatic from 'serve-static';
 import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
+import webdriver from 'selenium-webdriver';
 // #endregion
 // #region Config
 /** An ES6 Gulpfile for Gulp4
@@ -319,7 +327,7 @@ export function document_api() {
 /**
     Creates a static server at localhost:9000 to host Documentation
 */
-export function document_server() {
+export function _server_document() {
     return new Promise((resolve, reject) => {
         let docs = connect().use(servestatic('Documentation'));
         http.createServer(docs).listen(9000);
@@ -328,9 +336,224 @@ export function document_server() {
 }
 // #endregion
 // #region Tests 
-export function _test() {
-    return gulp.src(paths.tests.src, { read: false })
-        .pipe(mocha({ reporter: 'spec' }))
+
+export function _test_mochaChrome(done) {
+
+    //const stream = mochaPhantomJS();
+    //stream.write({ path: 'http://localhost:8000/index.html' });
+    //stream.end();
+    //return stream;
+
+    // @see https://github.com/shellscape/gulp-mocha-chrome
+    return gulp.src(['./Scripts/test/fixtures/index2.html'])
+        .pipe(plumber({ errorHandler: onError }))
+        .pipe(mochaChrome({ reporter: 'spec' })).on('error', (e) => {
+            console.log(' - Failed to test');
+            done();
+        }).on('success', () => {
+            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
+        }).on('end', () => {
+            done();
+        });;
+}
+
+/** Performs Mocha/Chai Testing via Headless Chrome (Puppeteer)
+    @param {any} done Callback function
+*/
+export function _test_puppeteer(done) {
+    let chai = require('chai');
+    let expect = chai.expect
+    let Mocha = require('mocha');
+    let path = require('path');
+
+    // Instantiate a Mocha instance.
+    
+    
+    puppeteer.launch({ headless: false }).then((browser, mocha) => {
+        browser.newPage().then((page, mocha) => {
+            page.setViewport({
+                width: 767, height: 800
+            });
+            page.goto('http://localhost:8052').then(() => {                    
+
+                console.log(' - Loaded index.html');
+
+                /*
+                mocha.describe('DOM', () => {
+                    it('has the expected page title', () => {
+                        expect(document.title).to.equal('ICARUS Testing');
+                    });
+                    it('has the expected token metadata', () => {
+                        expect(document.getElementsByTagName('meta').token.content).is.not.empty;
+                    });
+                });
+                */
+                let mocha = new Mocha({
+                    ui: 'bdd',
+                    reporter: 'spec'
+                });
+                mocha.addFile('./Scripts/test/fixtures/tests.js');
+
+                mocha.run();
+                    
+
+                //const title = 
+
+                /*const text = page.evaluate(() => {
+                    browser.getTitle()
+                });*/
+
+                    
+                browser.close();
+
+                done();
+            });
+        });
+    });
+
+    
+    /*
+    return new Promise((resolve, reject) => {
+        let browser = puppeteer.launch({ headless: false });
+        resolve();
+    });
+    */
+
+}
+
+export function _test_mochaphantomjs(done) {
+    const stream = mochaChrome();
+    stream.write({ path: 'http://localhost:8052/index.html' });
+    stream.end();
+    return stream;
+}
+
+export function _test(done) {
+    /*
+    console.log('========= TEST =========');
+
+    //const stream = mochaChrome();
+    //stream.write({ path: 'http://localhost:9001/index.html' });
+    //stream.end();
+    //return stream; 
+
+    //const { expect } = chai;
+    //puppeteer.launch();
+    //newPage().goto('http://localhost:9001');
+    puppeteer.launch().then((browser) => {
+        const page = browser.newPage();
+        page.goto('http://localhost:9001/index.html');
+
+        console.log(' - Loaded index.html');
+        describe('fixture', () => {
+            it('has the expected page title', () => {
+                //browser.url('http://localhost:9001/index.html');
+                //chai.expect(document.title).to.equal('End-to-End Testing');
+
+                const text = page.evaluate(() => {
+                    document.title
+                })
+                chai.expect(text).to.equal('End-to-End Testing')
+            })
+        });
+
+        browser.close();
+    });
+
+    */
+
+    /*
+    return gulp.src('')
+        .pipe(plumber({ errorHandler: onError }))
+        .pipe(mochaChrome({ reporter: 'spec', })).on('error', (e) => {
+            console.log(' - Failed to test');
+            done();
+        }).on('success', () => {
+            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
+        }).on('end', () => {
+            done();
+        });
+        */
+    /*return gulp.src(paths.tests.src, { read: false })
+        .pipe(plumber({ errorHandler: onError }))
+        .pipe(mocha({ reporter: 'spec' })).on('error', (e) => {
+            console.log(' - Failed to test');
+            done();
+        }).on('success', () => {
+            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
+        }).on('end', () => {
+            done();
+        });*/
+
+
+    //let httpServer;
+    //const app = connect().use(servestatic('Scripts/test/fixtures'));
+    //let httpServer = http.createServer(app).listen(9001, done);
+
+    //const { expect } = require('chai');
+    //const puppeteer = require('puppeteer');
+
+    //puppeteer.launch().newPage().goto('http://localhost:9001');
+
+
+
+    //let browser = puppeteer.launch();
+    //let page = browser.newPage();
+    //page.goto('http://localhost:9001');
+
+    // Closing the page
+    //await page.close();
+
+    /*
+    describe('fixture', (done) => {
+        before(async function () {
+            browser = await puppeteer.launch();
+            page = await browser.newPage();
+        });
+
+        it('has the expected page title', () => {
+            browser.url('index.html');
+            assert.equal(browser.getTitle(), 'End-to-End Testing');
+        });
+    });
+    */
+
+    /*
+    // @see https://codeburst.io/end-to-end-testing-with-headless-chrome-api-d564cb4150c3
+    describe('First tests with puppeteer:', function () {
+        // Define global variables
+        let browser;
+        let page;
+
+        before(async function () {
+            browser = await puppeteer.launch();
+            page = await browser.newPage();
+        })
+
+        beforeEach(async function () {
+            page = await browser.newPage();
+            await page.goto('http://localhost:9000')
+        })
+
+        afterEach(async function () {
+            await page.close();
+        })
+
+        after(async function () {
+            await browser.close();
+        })
+    });
+    */
+}
+/** Creates a static server at localhost:9001 to host tests
+    @returns {Promise<resolve>} Promise 
+*/
+export function _server_test() {
+    return new Promise((resolve, reject) => {
+        let tests = connect().use(servestatic('Scripts/test/fixtures'));
+        http.createServer(tests).listen(9001);
+        resolve();
+    });
 }
 // #endregion
 // #region Publish

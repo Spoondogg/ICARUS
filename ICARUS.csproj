@@ -710,6 +710,21 @@
     <Content Include="Scripts\src\icarus\model\el\ul\UL.js" />
     <Content Include="Scripts\src\icarus\model\MODEL.js" />
     <Content Include="Scripts\src\icarus\STRING.js" />
+    <Content Include="Scripts\test\fixtures\index2.html" />
+    <Content Include="Scripts\test\fixtures\index.html" />
+    <Content Include="Scripts\test\fixtures\init.js" />
+    <Content Include="Scripts\test\fixtures\run.js" />
+    <Content Include="Scripts\test\fixtures\setup.js" />
+    <Content Include="Scripts\test\fixtures\tests.js" />
+    <Content Include="Scripts\test\fixtures\test-dom.js" />
+    <Content Include="Scripts\test\fixtures\test-globals.js" />
+    <Content Include="Scripts\test\specs\has-token.js" />
+    <Content Include="Scripts\test\specs\test-ui.js" />
+    <Content Include="Scripts\test\wdio.conf.js" />
+    <Content Include="Scripts\test\_dep\page-title.js" />
+    <Content Include="Scripts\test\_dep\palindrome.js" />
+    <Content Include="Scripts\test\specs\page-title.js" />
+    <Content Include="Scripts\test\_dep\testpalindrome.js" />
     <Content Include="service-worker.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -796,6 +811,7 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
+    <Folder Include="Scripts\test\errors\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -30,7 +30,7 @@ export default class INDEXMAIN extends BANNER {
         /** @param {number} pageTotal The total number of available pages */
         this.pageTotal = 0;
         /** @param {number} maxNavItems The maximum number of pages to cache */
-        this.maxNavItems = 18; // 3 pages worth of NavItems
+        this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
 
         this.isLoading = false;
 
@@ -61,7 +61,9 @@ export default class INDEXMAIN extends BANNER {
                         this.createThumbnail(model, payload.className).el.onclick = () => {
                             this.launchMain(model.id, model.label);
                         };
-					});
+                    });
+                    this.isLoading = false;
+                    this.purgeList();
 					if (!this.pagination.buttonGroup.loaded) {
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
                         for (let p = 0; p < this.pageCount; p++) {
@@ -74,8 +76,7 @@ export default class INDEXMAIN extends BANNER {
                         this.pagination.buttonGroup.loaded = true;
                         this.pagination.buttonGroup.children[0].addClass('active');
                     }
-                    this.isLoading = false;
-                    this.purgeList();
+                    
 				}
 			});
         }
@@ -89,7 +90,7 @@ export default class INDEXMAIN extends BANNER {
                 if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
                     if (!this.isLoading) {
                         this.isLoading = true;
-                        console.log('Scrolled to bottom. Loading next page if exists');
+                        //console.log('Scrolled to bottom. Loading next page if exists');
                         this.nextPage();
                         this.isLoading = false;
                     }
@@ -175,7 +176,7 @@ export default class INDEXMAIN extends BANNER {
 	    @returns {void}
 	*/
     nextPage() {
-        console.log('nextpage', this.page + 1, this.pageLength);
+        //console.log('nextpage', this.page + 1, this.pageLength);
 		if (this.pageTotal > this.page * this.pageLength + 1) {
             this.loadPage(this.page + 1);
             this.scrollToActiveButton();
@@ -187,7 +188,7 @@ export default class INDEXMAIN extends BANNER {
         @returns {void}
     */
     prevPage() {
-        console.log('prevPage', this.page - 1, this.pageLength);
+        //console.log('prevPage', this.page - 1, this.pageLength);
         this.isLoading = true;
 		if (this.page > 0) {
             this.loadPage(this.page - 1);
@@ -202,16 +203,17 @@ export default class INDEXMAIN extends BANNER {
     */
     purgeList() {        
         if (!this.isLoading) {
-            console.log('Purging...');
+            //console.log('Purging', this.menu.children.length, this.maxNavItems);
             this.isLoading = true;
             while (this.menu.children.length > this.maxNavItems) {
-                this.menu.children[0].destroy();
-                this.menu.children.shift();
+                this.menu.children.shift().destroy();
             }
             this.isLoading = false;
-            console.log('Success');
+            //console.log('Success', this.menu.children.length, this.maxNavItems);
         } else {
-            console.log(' DELAYING PURGE!@!!!!!!! ');
+            setTimeout(() => {
+                console.log('Delay purge');
+            }, 1000);
         }
     }
     /** Scrolls the Pagination Buttongroup to the active button
