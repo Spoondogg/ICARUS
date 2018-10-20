@@ -311,7 +311,8 @@ export default class EL extends MODEL {
         setTimeout(() => {
             try {
                 this.el.parentNode.removeChild(this.el);
-                this.node.children.splice(this.node.children.indexOf(this), 1);
+                //this.node.children.splice(this.node.children.indexOf(this), 1);
+                //this.node.children.shift();
             } catch (ee) {
                 if (ee.name !== 'TypeError') {
                     console.log('Unable to destroy this ' + this.element, ee);

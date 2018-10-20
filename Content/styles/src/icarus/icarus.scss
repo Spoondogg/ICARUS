@@ -42,6 +42,7 @@ $font-major: 'Raleway', sans-serif;
 $font-minor: 'Lato', sans-serif;
 $font-primary: 'Lato', sans-serif;
 $font-primary-weight: 300;
+$font-size-base: 10pt;
 $font-size-small: .5em;
 $font-size-normal: 1em;
 $font-size-large: 1.5em;
@@ -221,14 +222,14 @@ $jumbotron-bg-default: #008196;
 	}
 }
 body {
-	@include font-smoothing;
-	background-color: $color-red; //$color-dark-less; //$background-primary;
-	color: $color-primary;
-	font-family: $font-primary;
-	font-size: 14px; //$font-size-normal;
-	font-weight: $font-primary-weight;
-	overflow: hidden;
-	padding-top: $navbar-height;
+    @include font-smoothing;
+    background-color: $color-dark-less; //$background-primary;
+    color: $color-primary;
+    font-family: $font-primary;
+    font-size: $font-size-base; //$font-size-normal;
+    font-weight: $font-primary-weight;
+    overflow: hidden;
+    padding-top: $navbar-height;
 }
 button {
 	:disabled {

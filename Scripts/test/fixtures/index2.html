@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="token" content="woot" />
+    <link rel="stylesheet" href="../../../node_modules/mocha/mocha.css" />
+    <title>ICARUS Testing</title>
+</head>
+<body>
+
+    <!-- BODY -->
+    <input name="__RequestVerificationToken" type="hidden" value="sample_token" />
+    <h1 id="header">Hello Worlds</h1>
+    <!-- BODY End -->
+
+    <!-- MOCHA -->
+    <script src="../../../node_modules/mocha/mocha.js"></script>
+    <script src="../../../node_modules/chai/chai.js"></script>
+    <script>
+        mocha.setup('bdd');
+        expect = chai.expect;
+    </script>
+    <script src="tests.js"></script>
+    <script>
+        mocha.checkLeaks();
+        mocha.run();
+    </script>
+    <!-- MOCHA End -->
+
+</body>
+</html>
