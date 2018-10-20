@@ -357,6 +357,70 @@ export function _test_mochaChrome(done) {
         });;
 }
 
+export function _test_puppeteer2(done) {
+    const puppeteer = require('puppeteer');
+    const Mocha = require('mocha');    
+    const { expect } = require('chai');
+    const _ = require('lodash');
+    const globalVariables = _.pick(global, ['browser', 'expect']);
+    
+    // puppeteer options
+    const opts = {
+        headless: false,
+        //slowMo: 100,
+        timeout: 10000
+    };
+
+    // expose variables
+    let before = (done) => {
+        global.expect = expect;
+        global.browser = puppeteer.launch(opts).then(
+            (brwsr) => {
+                browser = brwsr;
+                done();
+            }
+        );
+    };
+
+    // close browser and reset global variables
+    let after = () => {
+        browser.close();
+        global.browser = globalVariables.browser;
+        global.expect = globalVariables.expect;
+    };
+
+    // This works.
+    before(() => {
+
+        let mocha = new Mocha({
+            ui: 'bdd',
+            reporter: 'spec'
+        });
+        mocha.addFile('./Scripts/test/fixtures/tests.js');
+        
+        console.log('Running Mocha');
+        mocha.run().on('end', () => {
+            console.log('Running after()');
+            after();
+            done();
+        });
+    });
+    
+    // Instantiate a Mocha instance.
+
+
+
+
+    /*
+    return new Promise((resolve, reject) => {
+        let browser = puppeteer.launch({ headless: false });
+        resolve();
+    });
+    */
+
+
+}
+
 /** Performs Mocha/Chai Testing via Headless Chrome (Puppeteer)
     @param {any} done Callback function
 */
@@ -366,15 +430,19 @@ export function _test_puppeteer(done) {
     let Mocha = require('mocha');
     let path = require('path');
 
+    let browser = null;
+    let page = null;
     // Instantiate a Mocha instance.
     
     
-    puppeteer.launch({ headless: false }).then((browser, mocha) => {
-        browser.newPage().then((page, mocha) => {
+    puppeteer.launch({ headless: false, timeout: 10000 }).then((brwsr) => {
+        browser = brwsr;
+        browser.newPage().then((pg) => {
+            page = pg;
             page.setViewport({
                 width: 767, height: 800
             });
-            page.goto('http://localhost:8052').then(() => {                    
+            pg.goto('http://localhost:8052').then(() => {                    
 
                 console.log(' - Loaded index.html');
 
@@ -404,7 +472,7 @@ export function _test_puppeteer(done) {
                 });*/
 
                     
-                browser.close();
+                brwsr.close();
 
                 done();
             });
