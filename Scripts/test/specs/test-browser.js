@@ -1,13 +1,4 @@
-﻿/*
-let chai = require('chai');
-let { expect } = require('chai');
-let Mocha = require('mocha');
-let mocha = new Mocha({
-    ui: 'bdd',
-    reporter: 'list'
-});
-*/
-/** Various tests for the DOM using index2.html
+﻿/** Various tests for the DOM using mochaChrome
 console.log(this);
 describe('DOM', () => {
     it('has the expected page title', () => {
@@ -23,7 +14,7 @@ describe('LOGIN', () => {
         expect(document.getElementById('header').innerHTML).to.equal('Hello World');
     });
 });*/
-describe('sample test', () => {
+describe('Browser', () => {
     it('should launch the browser', (done) => {
         browser
             .version()
@@ -35,20 +26,6 @@ describe('sample test', () => {
                 done();
             })
     });
-    /*
-    it('should open the localhost', () => {
-        browser.newPage().then((page) => {
-            page.goto('http://localhost:8052').then(() => {
-                page.title((title) => {
-                    console.log(' - Launched localhost: ' + title);
-
-                });
-            });
-        });
-    });
-    */
-
-   // done();
 });
 /*
 describe('sample test', function () {
