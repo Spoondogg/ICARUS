@@ -75,7 +75,7 @@ describe('Page', () => {
                         expect(title).to.eql('spoonMEDIA');
                         done();
                     }, (reject) => {
-                        console.log(' - Failed to retrieve title');
+                        console.log('\t - Failed to retrieve title');
                         expect(1).to.eql(0);
                         done();
                     });
@@ -84,11 +84,20 @@ describe('Page', () => {
         });
     });
 
+    it('has the expected token metadata', (done) => {
+        //expect(document.getElementsByTagName('meta').token.content).is.not.empty;
+        pg.$eval('meta[name=token]', el => el.content).then((val) => {
+            console.log('\t - token', val);
+            expect(val).to.not.be.empty;
+            done();
+        });
+    });
+
     const ELEMENT_SELECTOR = 'main';
     it('should have a "' + ELEMENT_SELECTOR + '" element with an id of "1"', (done) => {
         takeScreenshot(pg, 'page-main-id').then(() => {
             pg.$eval(ELEMENT_SELECTOR, el => el.id).then((val) => {
-                console.log('id', val);
+                console.log('\t - id', val);
                 expect(val).to.eql('1');
                 done();
             });
