@@ -14,6 +14,7 @@ import connect from 'connect';
 import del from 'del';
 import doxygen from 'doxygen';
 import eslint from 'gulp-eslint';
+import fs from 'file-system';
 import gulp from 'gulp4';
 import gutil from 'gulp-util';
 import http from 'http';
@@ -356,138 +357,53 @@ export function _test_mochaChrome(done) {
             done();
         });;
 }
-
-export function _test_puppeteer2(done) {
+/** Performs Mocha/Chai Testing via Headless Chrome (Puppeteer)
+    @param {any} done Callback function
+    @see https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically
+*/
+export function _test_puppeteer(done) {
     const puppeteer = require('puppeteer');
-    const Mocha = require('mocha');    
+    const Mocha = require('mocha'); 
+    const fs = require('fs');
+    const path = require('path');
+
     const { expect } = require('chai');
     const _ = require('lodash');
     const globalVariables = _.pick(global, ['browser', 'expect']);
     
     // puppeteer options
     const opts = {
-        headless: false,
+        ui: 'bdd',
+        reporter: 'spec',
+        headless: true,
         //slowMo: 100,
-        timeout: 10000
+        timeout: 60000 // One minute to pass all tests
     };
 
     // expose variables
-    let before = (done) => {
-        global.expect = expect;
-        global.browser = puppeteer.launch(opts).then(
-            (brwsr) => {
-                browser = brwsr;
-                done();
-            }
-        );
-    };
-
-    // close browser and reset global variables
-    let after = () => {
-        browser.close();
-        global.browser = globalVariables.browser;
-        global.expect = globalVariables.expect;
-    };
-
-    // This works.
-    before(() => {
-
-        let mocha = new Mocha({
-            ui: 'bdd',
-            reporter: 'spec'
-        });
-        mocha.addFile('./Scripts/test/fixtures/tests.js');
-        
-        console.log('Running Mocha');
-        mocha.run().on('end', () => {
-            console.log('Running after()');
-            after();
-            done();
-        });
-    });
-    
-    // Instantiate a Mocha instance.
-
-
-
-
-    /*
-    return new Promise((resolve, reject) => {
-        let browser = puppeteer.launch({ headless: false });
-        resolve();
-    });
-    */
-
-
-}
-
-/** Performs Mocha/Chai Testing via Headless Chrome (Puppeteer)
-    @param {any} done Callback function
-*/
-export function _test_puppeteer(done) {
-    let chai = require('chai');
-    let expect = chai.expect
-    let Mocha = require('mocha');
-    let path = require('path');
-
-    let browser = null;
-    let page = null;
-    // Instantiate a Mocha instance.
-    
-    
-    puppeteer.launch({ headless: false, timeout: 10000 }).then((brwsr) => {
+    global.expect = expect;
+    global.browser = puppeteer.launch(opts).then((brwsr) => {
         browser = brwsr;
-        browser.newPage().then((pg) => {
-            page = pg;
-            page.setViewport({
-                width: 767, height: 800
-            });
-            pg.goto('http://localhost:8052').then(() => {                    
-
-                console.log(' - Loaded index.html');
-
-                /*
-                mocha.describe('DOM', () => {
-                    it('has the expected page title', () => {
-                        expect(document.title).to.equal('ICARUS Testing');
-                    });
-                    it('has the expected token metadata', () => {
-                        expect(document.getElementsByTagName('meta').token.content).is.not.empty;
-                    });
-                });
-                */
-                let mocha = new Mocha({
-                    ui: 'bdd',
-                    reporter: 'spec'
-                });
-                mocha.addFile('./Scripts/test/fixtures/tests.js');
-
-                mocha.run();
-                    
-
-                //const title = 
-
-                /*const text = page.evaluate(() => {
-                    browser.getTitle()
-                });*/
-
-                    
-                brwsr.close();
-
+        let mocha = new Mocha(opts);
+        mocha
+            //.addFile('./Scripts/test/specs/test-browser.js')
+            .addFile('./Scripts/test/specs/test-page.js')
+            .run(/*(failures) => {
+                process.exitCode = failures ? 1 : 0;  // exit with non-zero status if there were failures
+            }*/).on('end', () => {
+                console.log('MOCHA End');
+                //brwsr.close();
+                global.expect = globalVariables.expect;
+                global.browser = globalVariables.browser;
+                console.log('MOCHA End Complete');
                 done();
             });
-        });
+        done();
     });
 
-    
-    /*
-    return new Promise((resolve, reject) => {
-        let browser = puppeteer.launch({ headless: false });
-        resolve();
-    });
-    */
-
+    done();
 }
+
 
 export function _test_mochaphantomjs(done) {
     const stream = mochaChrome();
