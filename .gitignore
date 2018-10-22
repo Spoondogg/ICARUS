@@ -35,6 +35,7 @@ ICARUS.code-workspace
 #.gitattributes
 "Web.Debug.config"
 Scripts/dist/**/*
+Scripts/test/screens
 Content/styles/dist
 Content/styles/src/fonts
 ############################### ICARUS END ###########################################

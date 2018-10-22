@@ -41,12 +41,12 @@ function takeScreenshot(page, label) {
             page.screenshot({ path: './Scripts/test/screens/test-' + testCount + '-' + label + '.png' }).then((r) => {
                 str = '\t - Screenshot ' + testCount;
                 testCount++;
-                return resolve(str);
+                resolve(str);
             });
             
         } catch (e) {
-            str = '\t - Failed to take screenshot ' + testCount
-            return reject(str);
+            str = '\t - Failed to take screenshot ' + testCount;
+            reject(str);
         }        
     });    
 }
@@ -68,17 +68,17 @@ describe('Browser', () => {
 describe('Page', () => {    
     it('should open the appropriate page (localhost)', (done) => {
         browser.newPage().then((page) => {
-            takeScreenshot(page, 'page');
             page.goto('http://localhost:8052').then(() => {
                 pg = page;
-                console.log(takeScreenshot(pg, 'page'));
-                page.title().then((title) => {
-                    expect(title).to.eql('spoonMEDIA');
-                    done();
-                }, (reject) => {
-                    console.log(' - Failed to retrieve title');
-                    expect(1).to.eql(0);
-                    done();
+                takeScreenshot(pg, 'page-launch').then(() => {
+                    page.title().then((title) => {
+                        expect(title).to.eql('spoonMEDIA');
+                        done();
+                    }, (reject) => {
+                        console.log(' - Failed to retrieve title');
+                        expect(1).to.eql(0);
+                        done();
+                    });
                 });
             });
         });
@@ -86,20 +86,22 @@ describe('Page', () => {
 
     const ELEMENT_SELECTOR = 'main';
     it('should have a "' + ELEMENT_SELECTOR + '" element with an id of "1"', (done) => {
-        //takeScreenshot(pg, 'page');
-        pg.$eval(ELEMENT_SELECTOR, el => el.id).then((val) => {
-            console.log('id', val);
-            expect(val).to.eql('1');
-            done();
+        takeScreenshot(pg, 'page-main-id').then(() => {
+            pg.$eval(ELEMENT_SELECTOR, el => el.id).then((val) => {
+                console.log('id', val);
+                expect(val).to.eql('1');
+                done();
+            });
         });
     });
 
     it('should have a "' + ELEMENT_SELECTOR + '" with class "icarus-container"', (done) => {
-        //takeScreenshot(pg, 'page');
-        pg.$eval(ELEMENT_SELECTOR, el => el.className).then((val) => {
-            console.log('class', val);
-            expect(val).to.eql('icarus-container');
-            done();
+        takeScreenshot(pg, 'page-main-class').then(() => {
+            pg.$eval(ELEMENT_SELECTOR, el => el.className).then((val) => {
+                console.log('class', val);
+                expect(val).to.eql('icarus-container');
+                done();
+            });
         });
     });
 });
