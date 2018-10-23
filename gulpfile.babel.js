@@ -66,7 +66,7 @@ const paths = {
         buildglob: 'Scripts/**/**.*',
         base: 'Scripts/src/icarus',
         baseglob: './Scripts/src/**/**.js',
-        src: 'Scripts/src/icarus/**/*.js',
+        src: ['Scripts/src/icarus/**/*.js','Scripts/test/**/*.js'],
         dest: 'Scripts/dist/icarus'
     },
     serverside: {
@@ -387,7 +387,7 @@ export function _test_puppeteer(done) {
         let mocha = new Mocha(opts);
         mocha
             //.addFile('./Scripts/test/specs/test-browser.js')
-            .addFile('./Scripts/test/specs/test-page.js')
+            .addFile('./Scripts/test/specs/test-ui.js')
             .run(/*(failures) => {
                 process.exitCode = failures ? 1 : 0;  // exit with non-zero status if there were failures
             }*/).on('end', () => {
@@ -583,6 +583,7 @@ export function _publish() {
 export function _watch() {
     _watch_scripts();
     _watch_styles();
+    //_watch_tests();
 }
 /**
     Watches Styles for changes and performs linting
