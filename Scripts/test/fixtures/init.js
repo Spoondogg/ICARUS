@@ -14,5 +14,5 @@ import APP from '../../controller/APP.js';
 */
 //var app = new APP(id, user, dev).showLoginPrompt().main.load(id);
 //var app = new APP(1, 'Guest', true).showLoginPrompt().main.load(id);
-var app = new APP(1, 'Guest', true);
+const app = new APP(1, 'Guest', true);
 //var jt = new JUMBOTRON(document.body, new MODEL());

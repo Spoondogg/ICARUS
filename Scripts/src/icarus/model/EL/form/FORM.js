@@ -20,11 +20,13 @@ export default class FORM extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'FORM', model, ['FIELDSET']);
 		this.addCase('FIELDSET', () => this.addFieldset(model));
-		this.tokenInput = new FORMINPUTTOKEN(this, new MODEL().set({ 'value': this.getToken() }));
+        this.tokenInput = new FORMINPUTTOKEN(this)); //, new MODEL().set({ 'value': this.getToken() })
 		this.setPostUrl('Form/Submit');
 		this.updateUrl = 'Form/Update';
 		this.footer = new FORMFOOTER(this.body, new MODEL());
-		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE).el.onclick = this.post.bind(this);
+        this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = () => {
+            this.post();
+            return false;
 		this.populate(model.children);
 	}
 	construct() {}
