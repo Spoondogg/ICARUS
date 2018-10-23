@@ -2,7 +2,6 @@
 import BANNER from '../BANNER.js';
 import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
-import DIV from '../../../div/DIV.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import MENU from '../../../nav/menu/MENU.js';
@@ -202,18 +201,16 @@ export default class INDEXMAIN extends BANNER {
         @returns {void}
     */
     purgeList() {        
-        if (!this.isLoading) {
-            //console.log('Purging', this.menu.children.length, this.maxNavItems);
+        if (this.isLoading) {
+            setTimeout(() => {
+                console.log('Delay purge');
+            }, 1000);            
+        } else {
             this.isLoading = true;
             while (this.menu.children.length > this.maxNavItems) {
                 this.menu.children.shift().destroy();
             }
             this.isLoading = false;
-            //console.log('Success', this.menu.children.length, this.maxNavItems);
-        } else {
-            setTimeout(() => {
-                console.log('Delay purge');
-            }, 1000);
         }
     }
     /** Scrolls the Pagination Buttongroup to the active button

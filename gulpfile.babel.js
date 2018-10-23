@@ -66,7 +66,7 @@ const paths = {
         buildglob: 'Scripts/**/**.*',
         base: 'Scripts/src/icarus',
         baseglob: './Scripts/src/**/**.js',
-        src: ['Scripts/src/icarus/**/*.js','Scripts/test/**/*.js'],
+        src: ['Scripts/src/icarus/**/*.js'],
         dest: 'Scripts/dist/icarus'
     },
     serverside: {
@@ -78,7 +78,13 @@ const paths = {
         dest: 'build/img/'
     },
     tests: {
-        src: 'Scripts/test/specs/**/*.js'
+        src: 'Scripts/test/specs/**/*.js',
+        //buildglob: 'Scripts/test/**/**.*',
+        base: 'Scripts/test',
+        baseglob: 'Scripts/test/specs/**/*.js'
+    },
+    tasks: {
+        src: 'gulpfile.babel.js'
     },
     server: {
         dev: 'I://iis/dev/',
@@ -91,6 +97,10 @@ const paths = {
         sasslint: './config/sasslint.json'
     }
 };
+
+// @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+gulp.slurped = false;
+
 // #endregion
 // #region ServerSide
 export function $server_beautify() {
@@ -337,31 +347,38 @@ export function _server_document() {
 }
 // #endregion
 // #region Tests 
-
-export function _test_mochaChrome(done) {
-
-    //const stream = mochaPhantomJS();
-    //stream.write({ path: 'http://localhost:8000/index.html' });
-    //stream.end();
-    //return stream;
-
-    // @see https://github.com/shellscape/gulp-mocha-chrome
-    return gulp.src(['./Scripts/test/fixtures/index2.html'])
+/** Lint the Test files */
+export function tests_lint_src(done) {
+    console.log(' - Linting Tests: ' + paths.tests.src);
+    let config = require(paths.config.eslint);
+    return gulp.src(paths.tests.src)
         .pipe(plumber({ errorHandler: onError }))
-        .pipe(mochaChrome({ reporter: 'spec' })).on('error', (e) => {
-            console.log(' - Failed to test');
+        .pipe(eslint(config))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError()).on('error', (e) => {
+            console.log(' - Failed to lint Tests');
             done();
-        }).on('success', () => {
-            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
         }).on('end', () => {
             done();
-        });;
+        });
 }
-/** Performs Mocha/Chai Testing via Headless Chrome (Puppeteer)
+/** Lint Tests */
+const tests_lint = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== tests_lint BEGIN ====');
+        done();
+    },
+    tests_lint_src,
+    (done) => {
+        console.log('\n\n\n==== tests_lint END ====');
+        done();
+    }
+);
+/** UI and Behavior testing using Puppeteer and Mocha
     @param {any} done Callback function
     @see https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically
 */
-export function _test_puppeteer(done) {
+export function _test_ui(done) {
     const puppeteer = require('puppeteer');
     const Mocha = require('mocha'); 
     const fs = require('fs');
@@ -370,10 +387,14 @@ export function _test_puppeteer(done) {
     const { expect } = require('chai');
     const _ = require('lodash');
     const globalVariables = _.pick(global, ['browser', 'expect']);
-    
+
+    // Clear out old screenshots
+    del(['Scripts/test/screens/**/*']);
+
     // puppeteer options
     const opts = {
         ui: 'bdd',
+        bail: true,
         reporter: 'spec',
         headless: true,
         //slowMo: 100,
@@ -402,132 +423,6 @@ export function _test_puppeteer(done) {
     });
 
     done();
-}
-
-
-export function _test_mochaphantomjs(done) {
-    const stream = mochaChrome();
-    stream.write({ path: 'http://localhost:8052/index.html' });
-    stream.end();
-    return stream;
-}
-
-export function _test(done) {
-    /*
-    console.log('========= TEST =========');
-
-    //const stream = mochaChrome();
-    //stream.write({ path: 'http://localhost:9001/index.html' });
-    //stream.end();
-    //return stream; 
-
-    //const { expect } = chai;
-    //puppeteer.launch();
-    //newPage().goto('http://localhost:9001');
-    puppeteer.launch().then((browser) => {
-        const page = browser.newPage();
-        page.goto('http://localhost:9001/index.html');
-
-        console.log(' - Loaded index.html');
-        describe('fixture', () => {
-            it('has the expected page title', () => {
-                //browser.url('http://localhost:9001/index.html');
-                //chai.expect(document.title).to.equal('End-to-End Testing');
-
-                const text = page.evaluate(() => {
-                    document.title
-                })
-                chai.expect(text).to.equal('End-to-End Testing')
-            })
-        });
-
-        browser.close();
-    });
-
-    */
-
-    /*
-    return gulp.src('')
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(mochaChrome({ reporter: 'spec', })).on('error', (e) => {
-            console.log(' - Failed to test');
-            done();
-        }).on('success', () => {
-            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
-        }).on('end', () => {
-            done();
-        });
-        */
-    /*return gulp.src(paths.tests.src, { read: false })
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(mocha({ reporter: 'spec' })).on('error', (e) => {
-            console.log(' - Failed to test');
-            done();
-        }).on('success', () => {
-            console.log(' - ' + paths.scripts.src + ' has been successfully tested');
-        }).on('end', () => {
-            done();
-        });*/
-
-
-    //let httpServer;
-    //const app = connect().use(servestatic('Scripts/test/fixtures'));
-    //let httpServer = http.createServer(app).listen(9001, done);
-
-    //const { expect } = require('chai');
-    //const puppeteer = require('puppeteer');
-
-    //puppeteer.launch().newPage().goto('http://localhost:9001');
-
-
-
-    //let browser = puppeteer.launch();
-    //let page = browser.newPage();
-    //page.goto('http://localhost:9001');
-
-    // Closing the page
-    //await page.close();
-
-    /*
-    describe('fixture', (done) => {
-        before(async function () {
-            browser = await puppeteer.launch();
-            page = await browser.newPage();
-        });
-
-        it('has the expected page title', () => {
-            browser.url('index.html');
-            assert.equal(browser.getTitle(), 'End-to-End Testing');
-        });
-    });
-    */
-
-    /*
-    // @see https://codeburst.io/end-to-end-testing-with-headless-chrome-api-d564cb4150c3
-    describe('First tests with puppeteer:', function () {
-        // Define global variables
-        let browser;
-        let page;
-
-        before(async function () {
-            browser = await puppeteer.launch();
-            page = await browser.newPage();
-        })
-
-        beforeEach(async function () {
-            page = await browser.newPage();
-            await page.goto('http://localhost:9000')
-        })
-
-        afterEach(async function () {
-            await page.close();
-        })
-
-        after(async function () {
-            await browser.close();
-        })
-    });
-    */
 }
 /** Creates a static server at localhost:9001 to host tests
     @returns {Promise<resolve>} Promise 
@@ -576,36 +471,82 @@ export function _publish() {
 }
 // #endregion
 // #region Watch
-/**
-    Watches Scripts and Styles and builds on change
+/** Watches Scripts and Styles and builds on change
     @see https://gist.github.com/jeromecoupe/0b807b0c1050647eb340360902c3203a
 */
-export function _watch() {
-    _watch_scripts();
-    _watch_styles();
-    //_watch_tests();
+export function watch_tasks() {
+    gulp.watch('gulpfile.babel.js', tasks_lint_src);
 }
-/**
-    Watches Styles for changes and performs linting
+export function tasks_lint_src(done) {
+    console.log(' - Linting Tasks: ' + paths.tasks.src);
+    let config = require(paths.config.eslint);
+    return gulp.src(paths.tasks.src)
+        .pipe(plumber({ errorHandler: onError }))
+        .pipe(eslint(config))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError()).on('error', (e) => {
+            console.log(' - Failed to lint Tasks');
+            done();
+        }).on('end', () => {
+            done();
+        });
+}
+/** Lint Tests */ 
+const tasks_lint = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== tasks_lint BEGIN ====');
+        done();
+    },
+    tasks_lint_src,
+    (done) => {
+        console.log('\n\n\n==== tasks_lint END ====');
+        done();
+    }
+);
+// https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+export function slurp() {
+    if (!gulp.slurped) {
+        watch_scripts();
+        watch_styles();
+        watch_tests();
+        watch_tasks();
+        gulp.slurped = true;
+    }
+}
+/** Looping watch that reloads when gulpfile is changed 
+    @returns {void}
 */
-export function _watch_styles() {
+export function watch() {
+    slurp();
+}
+
+/** Watches Styles for changes and performs linting 
+    @returns {Promise} A gulp watcher
+*/
+export function watch_styles() {
     gulp.watch(paths.styles.basefile, styles_lintbuildpublish); // styles_lint_src
 }
-/**
-    Watches Styles for changes and performs linting
+/** Watches Styles for changes and performs linting 
+    @returns {Promise} A gulp watcher
 */
-export function _watch_scripts() {
+const watch_scripts = () => {
     gulp.watch(paths.scripts.baseglob, scripts_lintbuildpublish); //scripts_lintbuildpublish, scripts_lint_src
+}
+/** Watches Tests for changes and performs linting 
+    @returns {Promise} A gulp watcher
+*/
+const watch_tests = () => {
+    gulp.watch(paths.tests.baseglob, tests_lint_src); //scripts_lintbuildpublish, scripts_lint_src
 }
 // #endregion
 // #region Maintenance
 /** Beautifies Scripts and Styles */
-const _beautify = gulp.series(
+const beautification = gulp.series(
     scripts_beautify_src,
     styles_beautify_src
 );
 /** Lints Scripts and Styles */
-const _lint = gulp.series(
+const lint = gulp.series(
     scripts_lint_src,
     styles_lint_src
 );
@@ -613,9 +554,9 @@ const _lint = gulp.series(
     If lint returns no errors, the target environment is cleaned
     and 'dist' is built
  */
-const _build = gulp.series(
-    _beautify,
-    _lint,
+const build = gulp.series(
+    beautification,
+    lint,
     _clean,
     styles_build_src,
     styles_build_vendor,
@@ -637,7 +578,7 @@ const scripts_lintbuildpublish = gulp.series(
     (done) => {
         console.log('\n\n\n==== scripts_lintbuildpublish END ====');
         done();
-    },
+    }
 );
 /** 
     Lint, Build on Success, then publish
@@ -653,12 +594,10 @@ const styles_lintbuildpublish = gulp.series(
     (done) => {
         console.log('\n\n\n==== styles_lintbuildpublish END ====');
         done();
-    },
+    }
 );
-/**
-    Compiles documentation for Scripts, Styles and API
-*/
-const _document = gulp.series(
+/** Compiles documentation for Scripts, Styles and API */
+const build_documentation = gulp.series(
     (done) => {
         console.log('\n\n\n==== _document ====');
         done();
@@ -669,6 +608,6 @@ const _document = gulp.series(
 );
 // #endregion
 // #region Exports
-export { _beautify, _build, _clean, _lint, scripts_lintbuildpublish, styles_lintbuildpublish };
-export default _build;
+export { beautification, build, _clean, lint, scripts_lintbuildpublish, styles_lintbuildpublish };
+export default build;
 // #endregion
