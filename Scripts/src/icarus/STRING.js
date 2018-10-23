@@ -37,7 +37,7 @@ export default class STRING extends String {
 	    @returns {string} A string truncated to the given length
 	*/
 	truncate(length = 100, ending = '...') {
-		return this.length > length ? this.substring(0, length - ending.length) + ending : this; //.valueOf()
+		return this.length > length ? this.valueOf().substring(0, length - ending.length) + ending : this.valueOf(); //.valueOf()
 	}
 	/** Pad with zeroes
 	    @param {number} num The original number to be padded

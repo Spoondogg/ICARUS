@@ -60,12 +60,6 @@ export default class CONTAINER extends GROUP {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
 	}
-	/** Retrieves the token value from the DOM Meta tags
-	    @returns {string} A request verification token
-	*/
-	getToken() {
-		return document.getElementsByTagName('meta').token.content;
-	}
 	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    @param {EL} node The parent container to hold the save menu

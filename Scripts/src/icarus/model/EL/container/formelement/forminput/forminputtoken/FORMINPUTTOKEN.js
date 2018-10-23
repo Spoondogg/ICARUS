@@ -13,7 +13,7 @@ export default class FORMINPUTTOKEN extends INPUT {
 		super(node, new MODEL(new ATTRIBUTES({
 			'type': 'HIDDEN',
 			'name': '__RequestVerificationToken', //model.attributes.name || 
-			'value': document.getElementsByTagName('meta').token.content //model.value
+			'value': this.getToken() // document.getElementsByTagName('meta').token.content //model.value
 		})));
 	}
 }
