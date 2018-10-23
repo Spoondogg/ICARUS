@@ -713,12 +713,7 @@
     <Content Include="Scripts\test\fixtures\index2.html" />
     <Content Include="Scripts\test\fixtures\index.html" />
     <Content Include="Scripts\test\fixtures\init.js" />
-    <Content Include="Scripts\test\fixtures\run.js" />
-    <Content Include="Scripts\test\fixtures\setup.js" />
     <Content Include="Scripts\test\specs\test-ui.js" />
-    <Content Include="Scripts\test\fixtures\test-dom.js" />
-    <Content Include="Scripts\test\fixtures\test-globals.js" />
-    <Content Include="Scripts\test\wdio.conf.js" />
     <Content Include="service-worker.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

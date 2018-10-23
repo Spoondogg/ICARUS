@@ -1,0 +1,2 @@
+exports.config={specs:["./Scripts/test/specs/**/*.js"],exclude:[],maxInstances:10,capabilities:[{maxInstances:5,browserName:"firefox"}],sync:!0,logLevel:"silent",coloredLogs:!0,screenshotPath:"./Scripts/test/errors/",baseUrl:"http://localhost:9001",waitforTimeout:1e4,connectionRetryTimeout:9e4,connectionRetryCount:3,services:[],framework:"mocha",reporters:["spec"],mochaOpts:{ui:"bdd"}};
+//# sourceMappingURL=wdio.conf.js.map
