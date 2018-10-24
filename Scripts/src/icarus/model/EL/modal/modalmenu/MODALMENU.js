@@ -17,7 +17,7 @@ export default class MODALMENU extends MODAL {
 		super(label, text, vertical);
 		this.addClass('prompt');
 		this.container.addContainerCase('MENU');
-        this.menu = new MENU(this.container.body.pane, new MODEL().set({ // 'navbar-inverse'
+		this.menu = new MENU(this.container.body.pane, new MODEL().set({ // 'navbar-inverse'
 			'name': 'menu'
 		}));
 		this.menu.populate(children);

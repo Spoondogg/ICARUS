@@ -14,7 +14,7 @@ import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
     @extends CONTAINER
 */
 export default class MAIN extends CONTAINER {
-	/** Constructs a MAIN Container and populates the DOM
+	/** Constructs a MAIN Container and populates the DOM 
 	    with any relevant elements
 	    @constructor
 	    @param {MODEL} model APP model
@@ -22,8 +22,8 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
-        //this.addClass('app')
-        this.navBar.addClass('navbar-fixed-top');
+		//this.addClass('app')
+		this.navBar.addClass('navbar-fixed-top');
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
@@ -32,7 +32,7 @@ export default class MAIN extends CONTAINER {
 		/** A Security token @type {string} */
 		this.token = model.token;
 		/** Browser Url
-		    @property {Url} url The browser url
+		    @property {Url} url The browser url --
 		*/
 		this.url = model.url;
 		/** A Sidebar for details and navigation

@@ -65,15 +65,15 @@ export default class STRING extends String {
 	guid() {
 		const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
 		return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
-    }
-    /** Tests for a palindrome
-        @param {string} input Text
-        @returns {boolean} True if palindrome
-    */
-    isPalindrome() {
-        if (this.length > 0) {
-            return this.toLowerCase() === this.toLowerCase().split('').reverse().join('');
-        }
-        return false;
-    }
+	}
+	/** Tests for a palindrome
+	    @param {string} input Text
+	    @returns {boolean} True if palindrome
+	*/
+	isPalindrome() {
+		if (this.length > 0) {
+			return this.toLowerCase() === this.toLowerCase().split('').reverse().join('');
+		}
+		return false;
+	}
 }

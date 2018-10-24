@@ -12,10 +12,10 @@ export default class FORMINPUTTOKEN extends INPUT {
 	constructor(node) { // model
 		super(node, new MODEL(new ATTRIBUTES({
 			'type': 'HIDDEN',
-            'name': '__RequestVerificationToken',
-            'value': document.getElementsByTagName('meta').token.content
-        })));
-        //this.el.setAttribute('value', this.getToken()); // document.getElementsByTagName('meta').token.content //model.value
+			'name': '__RequestVerificationToken',
+			'value': document.getElementsByTagName('meta').token.content
+		})));
+		//this.el.setAttribute('value', this.getToken()); // document.getElementsByTagName('meta').token.content //model.value
 	}
 }
 export { ATTRIBUTES, EL, MODEL };

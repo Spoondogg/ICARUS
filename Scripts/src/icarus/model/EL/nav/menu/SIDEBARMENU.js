@@ -18,7 +18,7 @@ export default class SIDEBARMENU extends MENU { // NAVBAR
 	constructor(node, model) {
 		super(node, model);
 		//this.wrapper.addClass('sidebar');
-        this.addClass('sidebar collapse'); //active navbar-inverse 
+		this.addClass('sidebar collapse'); //active navbar-inverse 
 		this.search = new NAVSEARCH(this);
 		this.search.el.style.display = 'none';
 		this.search.inputGroup.q.el.onkeypress = function() {

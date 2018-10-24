@@ -7,9 +7,9 @@ export default class COLUMN extends EL {
         @param {MODEL} model The model
     */
 	constructor(node, model) {
-        super(node, model.group === 'THEAD' ? 'TH' : 'TD', model);
-        this.type = model.type;
-        this.value = model.value;
-    }
+		super(node, model.group === 'THEAD' ? 'TH' : 'TD', model);
+		this.type = model.type;
+		this.value = model.value;
+	}
 }
 export { EL, MODEL }
