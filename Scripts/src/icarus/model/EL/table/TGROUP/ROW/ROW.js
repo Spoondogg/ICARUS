@@ -7,26 +7,26 @@ export default class ROW extends EL {
         @param {MODEL} model The model
     */
 	constructor(node, model) {
-        super(node, 'TR', model);
-        this.columns = []; // Array<COLUMN>
-        this.addColumns(model.columns);
-    }
-    /** Creates a column and appends to group/row
-        @param {MODEL} model The row model
-        @returns {COLUMN} A Column
-    */
-    addColumn(model) {
-        this.columns.push(new COLUMN(this, model));
-        return this.columns[this.columns.length - 1];
-    }
-    /** Adds columns to the row
-        @param {Array<COLUMN>} columns An array of columns
-        @returns {void}
-    */
-    addColumns(columns) {
-        columns.forEach((col) => {
-            this.addColumn(col);
-        });
-    }
+		super(node, 'TR', model);
+		this.columns = []; // Array<COLUMN>
+		this.addColumns(model.columns);
+	}
+	/** Creates a column and appends to group/row
+	    @param {MODEL} model The row model
+	    @returns {COLUMN} A Column
+	*/
+	addColumn(model) {
+		this.columns.push(new COLUMN(this, model));
+		return this.columns[this.columns.length - 1];
+	}
+	/** Adds columns to the row
+	    @param {Array<COLUMN>} columns An array of columns
+	    @returns {void}
+	*/
+	addColumns(columns) {
+		columns.forEach((col) => {
+			this.addColumn(col);
+		});
+	}
 }
 export { COLUMN, EL, MODEL }

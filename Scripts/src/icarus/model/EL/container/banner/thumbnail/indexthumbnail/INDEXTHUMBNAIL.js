@@ -17,8 +17,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
         @param {MODEL} model Object Model
     */
 	constructor(node, model) {
-        super(node, model);
-        this.addClass('indexthumbnail');
+		super(node, model);
+		this.addClass('indexthumbnail');
 		//this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
 	}
 	/** Creates the Modal that contains the list of objects for preview
