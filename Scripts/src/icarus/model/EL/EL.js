@@ -58,66 +58,66 @@ export default class EL extends MODEL {
 			//} 
 		}
 		return this.el;
-    }
-    /**
+	}
+	/**
 	    Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
 	    @returns {EL} Returns this element for chaining purposes
 	*/
-    addClass(className) {
-        $(this.el).addClass(className);
-        let prevClass = this.attributes.class || '';
-        //this.attributes['class'] = prevClass += ' ' + className;
-        //this.attributes.class = prevClass += ' ' + className;
-        this.attributes.class = prevClass + ' ' + className;
-        return this;
-    }
-    /** Creates a textarea input and populates with this element's contents
-        @returns {void}
-    */
-    edit() {
-        try {
-            let footer = this.getMainContainer().stickyFooter;
-            this.addClass('edit');
-            this.status = STATUS.LOCKED;
-            this.editor = new EL(footer, 'TEXTAREA', new MODEL(new ATTRIBUTES({
-                'value': this.el.innerHTML
-            })), this.el.innerHTML);
-            this.editor.el.onkeyup = function () {
-                this.el.innerHTML = this.editor.el.value;
-            }.bind(this);
-            this.editor.el.onblur = function () {
-                try {
-                    this.getContainer().data[this.className.toLowerCase()] = this.editor.el.value;
-                    this.editor.destroy();
-                    this.removeClass('edit');
-                    if (this.getContainer().quickSave(true)) {
-                        this.getMainContainer().stickyFooter.hide();
-                    }
-                } catch (e) {
-                    throw e;
-                }
-            }.bind(this);
-            this.editor.el.focus();
-            footer.show();
-            event.stopPropagation();
-        } catch (ee) {
-            console.log(ee);
-        }
-    }
+	addClass(className) {
+		$(this.el).addClass(className);
+		let prevClass = this.attributes.class || '';
+		//this.attributes['class'] = prevClass += ' ' + className;
+		//this.attributes.class = prevClass += ' ' + className;
+		this.attributes.class = prevClass + ' ' + className;
+		return this;
+	}
+	/** Creates a textarea input and populates with this element's contents
+	    @returns {void}
+	*/
+	edit() {
+		try {
+			let footer = this.getMainContainer().stickyFooter;
+			this.addClass('edit');
+			this.status = STATUS.LOCKED;
+			this.editor = new EL(footer, 'TEXTAREA', new MODEL(new ATTRIBUTES({
+				'value': this.el.innerHTML
+			})), this.el.innerHTML);
+			this.editor.el.onkeyup = function() {
+				this.el.innerHTML = this.editor.el.value;
+			}.bind(this);
+			this.editor.el.onblur = function() {
+				try {
+					this.getContainer().data[this.className.toLowerCase()] = this.editor.el.value;
+					this.editor.destroy();
+					this.removeClass('edit');
+					if (this.getContainer().quickSave(true)) {
+						this.getMainContainer().stickyFooter.hide();
+					}
+				} catch (e) {
+					throw e;
+				}
+			}.bind(this);
+			this.editor.el.focus();
+			footer.show();
+			event.stopPropagation();
+		} catch (ee) {
+			console.log(ee);
+		}
+	}
 	/** Calls the edit method for this.el on double click
 	    @todo Consider applying this method from the caller
 	    @returns {void}
 	*/
-    enableEdit() {
-        try {
-            if (this.getMainContainer().getDev()) {
-                this.el.ondblclick = this.edit.bind(this);
-            }
-        } catch (e) {
-            console.log('EL{' + this.className + '}.getMainContainer() error', this);
-        }
-    }
+	enableEdit() {
+		try {
+			if (this.getMainContainer().getDev()) {
+				this.el.ondblclick = this.edit.bind(this);
+			}
+		} catch (e) {
+			console.log('EL{' + this.className + '}.getMainContainer() error', this);
+		}
+	}
 	/** Retrieve an {@link EL} based on its __proto__
         @description Recursively iterates through parent nodes until an object with the given prototype is found
         @param {string} value The value to search for within this key
@@ -164,7 +164,7 @@ export default class EL extends MODEL {
 				throw e;
 			}
 		}
-    }
+	}
 	/** Sets the parent container for this Nav Header if it does not exist,
 	    then returns it or null
 	    @returns {CONTAINER} The parent container for this container
@@ -175,7 +175,7 @@ export default class EL extends MODEL {
 				this.container = this.getProtoTypeByClass('CONTAINER');
 				return this.container;
 			}
-			return this.container;			
+			return this.container;
 		} catch (e) {
 			console.log(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
@@ -193,14 +193,13 @@ export default class EL extends MODEL {
 				//throw e;
 			}
 		}
-    }
-    /** Retrieves the token value from the DOM Meta tags
+	}
+	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token
 	*/
-    getToken() {
-        return document.getElementsByTagName('meta').token.content;
-    }
-	
+	getToken() {
+		return document.getElementsByTagName('meta').token.content;
+	}
 	/** Acts like a switch statement, performing actions from the given list of callbacks.
         This is used because constructor functions persist across the inheritance chain,
         whereas an actual SWITCH statement would be overridden on each inheritted class.
@@ -306,18 +305,18 @@ export default class EL extends MODEL {
 	    @returns {EL} This EL
 	*/
 	destroy(delay = 300) {
-        setTimeout(() => {
-            try {
-                this.el.parentNode.removeChild(this.el);
-                //this.node.children.splice(this.node.children.indexOf(this), 1);
-                //this.node.children.shift();
-            } catch (ee) {
-                if (ee.name !== 'TypeError') {
-                    console.log('Unable to destroy this ' + this.element, ee);
-                    throw ee;
-                }
-            }
-        }, delay);
+		setTimeout(() => {
+			try {
+				this.el.parentNode.removeChild(this.el);
+				//this.node.children.splice(this.node.children.indexOf(this), 1);
+				//this.node.children.shift();
+			} catch (ee) {
+				if (ee.name !== 'TypeError') {
+					console.log('Unable to destroy this ' + this.element, ee);
+					throw ee;
+				}
+			}
+		}, delay);
 		return this;
 	}
 	/** Override this element's class with the given value
@@ -328,22 +327,21 @@ export default class EL extends MODEL {
 		this.el.className = className;
 		this.attributes.class = className;
 		return this;
-    }
-    /** Retrieves the container (if exists) and sets it
-        @returns {void}
-    */
-    setContainer() {
-        this.container = this.getProtoTypeByClass('CONTAINER');
-    }
-	
+	}
+	/** Retrieves the container (if exists) and sets it
+	    @returns {void}
+	*/
+	setContainer() {
+		this.container = this.getProtoTypeByClass('CONTAINER');
+	}
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
 	    @returns {EL} Returns this element for chaining purposes
 	*/
 	removeClass(className) {
 		$(this.el).removeClass(className);
-        //this.attributes.set('class', this.attributes.get('class').replace(className, ''));
-        this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
+		//this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+		this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
 		return this;
 	}
 	/**

@@ -1,6 +1,8 @@
 ﻿/** Tests are inline scripts and should be written as such */
+/* eslint-disable no-undef */
+/* eslint-disable max-lines-per-function */
 // #region Imports
-import STRING from '../../src/icarus/STRING.js';
+//import STRING from '../../src/icarus/STRING.js';
 // #endregion
 // #region Variables and Methods
 const USERNAME = 'ryan@spoonmedia.ca';
@@ -8,7 +10,7 @@ const PASSWORD = '***REMOVED***';
 
 let testCount = 0;
 let page = null;
-let success = true;
+//let success = true;
 /** Captures a screenshot from the browser
     @param {string} label Screenshot label
     @returns {Promise<void>} Promise to create a screenshot
@@ -18,7 +20,7 @@ const screenshot = function(label) {
         try {
             page.screenshot({
                 path: './Scripts/test/screens/test-' + label + '-' + testCount + '.png'
-            }).then((r) => {
+            }).then(() => {
                 testCount++;
                 resolve();
             });
@@ -71,102 +73,122 @@ afterEach('After', (done) => {
 /** Performs Browser related Testing */
 describe('Initialize Browser', () => {
     it('should launch the browser', (done) => {
-         browser
+        browser
             .version()
             .then((v) => {
                 console.log('\t - Chrome Version: ' + v);
                 expect(true);
                 done();
-            })
+            });
     });
 });
 /** Performs Page related Testing */
+
 describe('Initialize Page', () => {
-    it('should open the appropriate page (localhost)', (done) => {
-        let title = null;
+    it('should open the appropriate page (localhost)', (done) => {  
         try {
             browser.newPage().then((p) => {
+                page = p;
                 p.goto('http://localhost:8052').then(() => {
-                    page = p;
                     p.title().then((t) => {
-                        title = t;
-                        //expect(t).to.eql('spoonMEDIA');
-                        //done();
+                        console.log('\t - Loaded page: ' + t);
+                        expect(t).to.eql('spoonMEDIA');
+                        done();
                     });
                 });
             });
         } catch (e) {
-            success = false;
+            done(e);
         }
     });
 
+    // Check that a token exists
     it('has the expected token metadata', (done) => {
-        page.evaluate(() => {            
-            let token = null;
-            try {
-                token = document.querySelector('meta[name=token]').content;
-            } catch (e) {
-                success = false;
-            }
-            expect(token !== null);
-            done();
-        });
-        /*page.$eval('meta[name=token]', (el) => el.content).then((val) => {
-            expect(val).is.not.empty;
-            done();
-        });*/
+        try {
+            page.$eval('meta[name=token]', (el) => el.content).then((val) => {
+                expect(val).to.not.equal(null);
+                done();
+            });
+        } catch (e) {
+            done(e);
+        }
     });
-    
+
+
     it('should have a $(main) with an id of "1"', (done) => {
-        page.$eval('main', (el) => el.id).then((val) => {
-            expect(val).to.eql('1');
-            done();
-        });
+        try {
+            page.$eval('main', (el) => el.id).then((val) => {
+                expect(val).to.eql('1');
+                done();
+            });
+        } catch (e) {
+            done(e);
+        }
     });
     
     it('should have a $(main) with class "icarus-container"', (done) => {
-        page.$eval('main', (el) => el.className).then((val) => {
-            expect(val).to.eql('icarus-container');
-            done();
-        });
+        try {
+            page.$eval('main', (el) => el.className).then((val) => {
+                expect(val).to.eql('icarus-container');
+                done();
+            });
+        } catch (e) {
+            done(e);
+        }
     });
 });
 
 /** Logs a User into the application */
 describe('Log In', () => {
 
+    // Check that no one is logged in
+    it('has an empty "user" meta tag', (done) => {
+        try {
+            page.$eval('meta[name=user]', (el) => el.content).then((val) => {
+                expect(val).to.equal('');
+                done();
+            });
+        } catch (e) {
+            done(e);
+        }
+    });
+    
     // Launch login form
     it('should have a login button that can be clicked by the user', (done) => {        
         try {
-            page.$eval('main.icarus-container .menu .list .tabs li.pull-right', (li) => {
-                li.click();
+            page.$eval('main.icarus-container .menu .list .tabs li.pull-right', (li) => li.click()).then(() => {
+                expect(true);
+                done();
             });
         } catch (e) {
-            success = false;
+            done(e);
         }
-        expect(success); //.to.be.true;
-        done();
     });
-
-    // Populate inputs
+    
+    // Populate inputs 
     it('should have "Email" and "Password" input elements', (done) => {        
         try {
-            page.evaluate((a, b) => {
-                let frm = document.querySelector('form.login');
-                frm.querySelector('input[name=Email]').value = USERNAME;
-                frm.querySelector('input[name=Password]').value = PASSWORD;
+            page.$eval('form.login', (form) => frm).then((formElements) => {
+                console.log('Len: ' + formElements.length);
+                formElements.Email.value = USERNAME;
+                formElements.Password.value = PASSWORD;
+
+                //let frm = document.querySelector('form.login');
+                //frm.querySelector('input[name=Email]').value = USERNAME;
+                //frm.querySelector('input[name=Password]').value = PASSWORD;
+                expect(true);
+                done();
             });
         } catch (e) {
-            success = false;
+            done(e);
         }
-        expect(success); //.to.be.true;
-        done();
     });
 
+    /**********************
     // Simple verification that no one is logged in
     it('should have a meta tag named "user" with the default value of "guest"', (done) => {
         try {
-            page.evaluate((a, b) => {
+            page.evaluate(() => {
                 success = document.getElementsByTagName('meta').token.content === 'Guest';
             });
         } catch (e) {
@@ -198,17 +220,8 @@ describe('Log In', () => {
         expect(1).to.eql(0);
         done();
     });
-
-    /* Example of waitFor
-    it('should have a single content section', async function () {
-        const BODY_SELECTOR = '.main-content';
-
-        await page.waitFor(BODY_SELECTOR);
-
-        expect(await page.$$(BODY_SELECTOR)).to.have.lengthOf(1);
-    });
-    */
-
-    // 
+    **********************/
 });
 // #endregion
+/* eslint-enable no-undef */
+/* eslint-enable max-lines-per-function */

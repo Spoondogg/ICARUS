@@ -21,21 +21,18 @@ export default class INDEXMAIN extends BANNER {
 	 */
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('index-main');
-        /** @param {number} page The current page */
-        this.page = 0;
-        /** @param {number} pageLength The number of items per page */
-        this.pageLength = 6;
-        /** @param {number} pageTotal The total number of available pages */
-        this.pageTotal = 0;
-        /** @param {number} maxNavItems The maximum number of pages to cache */
-        this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
-
-        this.isLoading = false;
-
-        this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
-        this.addEvents();        
-
+		this.addClass('index-main');
+		/** @param {number} page The current page */
+		this.page = 0;
+		/** @param {number} pageLength The number of items per page */
+		this.pageLength = 6;
+		/** @param {number} pageTotal The total number of available pages */
+		this.pageTotal = 0;
+		/** @param {number} maxNavItems The maximum number of pages to cache */
+		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
+		this.isLoading = false;
+		this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+		this.addEvents();
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
@@ -53,69 +50,66 @@ export default class INDEXMAIN extends BANNER {
 			$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
 				'__RequestVerificationToken': this.getMainContainer().token
 			}, (payload, status) => {
-                if (status === 'success') {
-                    this.isLoading = true;
-                    this.pageTotal = payload.total;
+				if (status === 'success') {
+					this.isLoading = true;
+					this.pageTotal = payload.total;
 					payload.list.forEach((model) => {
-                        this.createThumbnail(model, payload.className).el.onclick = () => {
-                            this.launchMain(model.id, model.label);
-                        };
-                    });
-                    this.isLoading = false;
-                    this.purgeList();
+						this.createThumbnail(model, payload.className).el.onclick = () => {
+							this.launchMain(model.id, model.label);
+						};
+					});
+					this.isLoading = false;
+					this.purgeList();
 					if (!this.pagination.buttonGroup.loaded) {
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-                        for (let p = 0; p < this.pageCount; p++) {
+						for (let p = 0; p < this.pageCount; p++) {
 							this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-                                this.menu.empty();
-                                this.loadPage(p);
-                                return false;
+								this.menu.empty();
+								this.loadPage(p);
+								return false;
 							};
 						}
-                        this.pagination.buttonGroup.loaded = true;
-                        this.pagination.buttonGroup.children[0].addClass('active');
-                    }
-                    
+						this.pagination.buttonGroup.loaded = true;
+						this.pagination.buttonGroup.children[0].addClass('active');
+					}
 				}
 			});
-        }
-    }
-    /** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
-        @returns {void}
-    */
-    addEvents() {
-        this.body.pane.el.onscroll = () => {
-            if (this.body.pane.el.scrollTop > 10) {
-                if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
-                    if (!this.isLoading) {
-                        this.isLoading = true;
-                        //console.log('Scrolled to bottom. Loading next page if exists');
-                        this.nextPage();
-                        this.isLoading = false;
-                    }
-                }
-            }
-            /*if (this.body.pane.el.scrollTop === 0 && this.page > 1) {
-                setTimeout(() => {
-                    if (this.body.pane.el.scrollTop === 0) {
-                        console.log('Scrolled to top. Loading previous page if exists');
-                        this.prevPage();
-                    }
-                }, 300);
-                
-            }*/
-        };
-
-        this.body.pane.el.onmouseenter = () => {
-            console.log('Moused over body.pane');
-            this.body.pane.addClass('showNav');
-        };
-
-        this.body.pane.el.onmouseleave = () => {
-            console.log('Moused out of body.pane');
-            this.body.pane.removeClass('showNav');
-        };
-    }
+		}
+	}
+	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
+	    @returns {void}
+	*/
+	addEvents() {
+		this.body.pane.el.onscroll = () => {
+			if (this.body.pane.el.scrollTop > 10) {
+				if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
+					if (!this.isLoading) {
+						this.isLoading = true;
+						//console.log('Scrolled to bottom. Loading next page if exists');
+						this.nextPage();
+						this.isLoading = false;
+					}
+				}
+			}
+			/*if (this.body.pane.el.scrollTop === 0 && this.page > 1) {
+			    setTimeout(() => {
+			        if (this.body.pane.el.scrollTop === 0) {
+			            console.log('Scrolled to top. Loading previous page if exists');
+			            this.prevPage();
+			        }
+			    }, 300);
+			    
+			}*/
+		};
+		this.body.pane.el.onmouseenter = () => {
+			console.log('Moused over body.pane');
+			this.body.pane.addClass('showNav');
+		};
+		this.body.pane.el.onmouseleave = () => {
+			console.log('Moused out of body.pane');
+			this.body.pane.removeClass('showNav');
+		};
+	}
 	/** Creates a Thumbnail that launches its respective MAIN
 	    @param {MODEL} model The Thumbnail model
         @param {string} model.label The Thumbnail label
@@ -123,11 +117,11 @@ export default class INDEXMAIN extends BANNER {
 	    @param {string} name The name to launch
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail({ label, description }) {
-        return this.menu.addNavThumbnail(new MODEL().set({
-            label,
-            description
-        }));
+	createThumbnail({ label, description }) {
+		return this.menu.addNavThumbnail(new MODEL().set({
+			label,
+			description
+		}));
 	}
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A Footer with a buttongroup for pagination
@@ -159,14 +153,14 @@ export default class INDEXMAIN extends BANNER {
 	loadPage(page) {
 		try {
 			this.header.setInnerHTML('Page ' + (page + 1));
-            let buttons = this.pagination.buttonGroup.el.children;
+			let buttons = this.pagination.buttonGroup.el.children;
 			for (let b = 0; b < buttons.length; b++) {
 				$(buttons[b]).removeClass('active');
 			}
-            $(buttons[page]).addClass('active');
-            //this.menu.empty();
+			$(buttons[page]).addClass('active');
+			//this.menu.empty();
 			this.page = page;
-            this.construct();
+			this.construct();
 		} catch (e) {
 			console.log('Unable to load page.', e);
 		}
@@ -174,11 +168,11 @@ export default class INDEXMAIN extends BANNER {
 	/** Loads the next page in sequence
 	    @returns {void}
 	*/
-    nextPage() {
-        //console.log('nextpage', this.page + 1, this.pageLength);
+	nextPage() {
+		//console.log('nextpage', this.page + 1, this.pageLength);
 		if (this.pageTotal > this.page * this.pageLength + 1) {
-            this.loadPage(this.page + 1);
-            this.scrollToActiveButton();
+			this.loadPage(this.page + 1);
+			this.scrollToActiveButton();
 		} else {
 			console.log('No next pages to display');
 		}
@@ -186,45 +180,45 @@ export default class INDEXMAIN extends BANNER {
 	/** Loads the previous page
         @returns {void}
     */
-    prevPage() {
-        //console.log('prevPage', this.page - 1, this.pageLength);
-        this.isLoading = true;
+	prevPage() {
+		//console.log('prevPage', this.page - 1, this.pageLength);
+		this.isLoading = true;
 		if (this.page > 0) {
-            this.loadPage(this.page - 1);
-            this.scrollToActiveButton();
+			this.loadPage(this.page - 1);
+			this.scrollToActiveButton();
 		} else {
 			console.log('No previous pages to display');
-        }
-        this.isLoading = false;
-    }
-    /** Purges NavItems from the MENU when they exceed @see {maxNavItems}
-        @returns {void}
-    */
-    purgeList() {        
-        if (this.isLoading) {
-            setTimeout(() => {
-                console.log('Delay purge');
-            }, 1000);            
-        } else {
-            this.isLoading = true;
-            while (this.menu.children.length > this.maxNavItems) {
-                this.menu.children.shift().destroy();
-            }
-            this.isLoading = false;
-        }
-    }
-    /** Scrolls the Pagination Buttongroup to the active button
-        @returns {void}
-    */
-    scrollToActiveButton() {
-        try {
-            $(this.pagination.buttonGroup.el).animate({
-                scrollLeft: $(this.pagination.buttonGroup.children[this.page].el).position().left
-            }, 200);
-        } catch (e) {
-            if (e.name !== 'TypeError') {
-                throw e;
-            }
-        }
-    }
+		}
+		this.isLoading = false;
+	}
+	/** Purges NavItems from the MENU when they exceed @see {maxNavItems}
+	    @returns {void}
+	*/
+	purgeList() {
+		if (this.isLoading) {
+			setTimeout(() => {
+				console.log('Delay purge');
+			}, 1000);
+		} else {
+			this.isLoading = true;
+			while (this.menu.children.length > this.maxNavItems) {
+				this.menu.children.shift().destroy();
+			}
+			this.isLoading = false;
+		}
+	}
+	/** Scrolls the Pagination Buttongroup to the active button
+	    @returns {void}
+	*/
+	scrollToActiveButton() {
+		try {
+			$(this.pagination.buttonGroup.el).animate({
+				scrollLeft: $(this.pagination.buttonGroup.children[this.page].el).position().left
+			}, 200);
+		} catch (e) {
+			if (e.name !== 'TypeError') {
+				throw e;
+			}
+		}
+	}
 }

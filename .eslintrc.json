@@ -65,7 +65,7 @@
     "func-call-spacing": "error",
     "func-name-matching": "error",
     "func-names": "off",
-    "func-style": "error",
+    "func-style": "warn",
     "function-paren-newline": "off",
     "generator-star-spacing": "error",
     "global-require": "off",
