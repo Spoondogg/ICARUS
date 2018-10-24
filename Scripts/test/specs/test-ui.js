@@ -168,36 +168,17 @@ describe('Log In', () => {
     // Populate inputs 
     it('should have "Email" and "Password" input elements', (done) => {        
         try {
-            page.$eval('form.login', (form) => frm).then((formElements) => {
-                console.log('Len: ' + formElements.length);
-                formElements.Email.value = USERNAME;
-                formElements.Password.value = PASSWORD;
-
-                //let frm = document.querySelector('form.login');
-                //frm.querySelector('input[name=Email]').value = USERNAME;
-                //frm.querySelector('input[name=Password]').value = PASSWORD;
-                expect(true);
-                done();
-            });
+            page.evaluate((user, pass) => {
+                document.querySelector('input[name=Email]').value = user;
+                document.querySelector('input[name=Password]').value = pass;                
+            }, USERNAME, PASSWORD); 
+            expect(true);
+            done();
         } catch (e) {
             done(e);
         }
     });
-
-    /**********************
-    // Simple verification that no one is logged in
-    it('should have a meta tag named "user" with the default value of "guest"', (done) => {
-        try {
-            page.evaluate(() => {
-                success = document.getElementsByTagName('meta').token.content === 'Guest';
-            });
-        } catch (e) {
-            success = 0;
-        }
-        expect(success); //.to.be.true;
-        done();
-    });
-
+    
     // Submit login form
     it('should allow the user to attempt to log', (done) => {
         try {
@@ -208,19 +189,24 @@ describe('Log In', () => {
                     console.log('Load Complete');
                 });
             });
+            expect(true);
+            done();
         } catch (e) {
-            success = 0;
+            done(e);
         }
-        expect(success); //.to.be.true;
-        done();
     });
 
-    // Simple verification that user is now logged in
+    // Simple verification that user is now logged in .
     it('should have a "user" meta tag with a value of "' + USERNAME + '"', (done) => {
-        expect(1).to.eql(0);
-        done();
+        try {
+            page.$eval('meta[name=user]', (el) => el.content).then((val) => {
+                expect(val).to.equal(USERNAME);
+                done();
+            }, USERNAME);
+        } catch (e) {
+            done(e);
+        }
     });
-    **********************/
 });
 // #endregion
 /* eslint-enable no-undef */

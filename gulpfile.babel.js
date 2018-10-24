@@ -137,15 +137,27 @@ const $server_beautify = () => {
 // #endregion
 // #region Styles
 /** Parse SASS into CSS, append prefixes and minify (with sourcemap)
-    @param {any} done Callback
+    param {any} done Callback
     @returns {Promise} Gulp promise
     @see https://github.com/postcss/gulp-postcss
     @see https://github.com/postcss/autoprefixer#options
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
-export const styles_build_src = (done) => {
-    console.log(' - Building Styles: ' + paths.styles.src);
-    let plugins = [
+export const styles_build_src = () => gulp
+    .src(paths.styles.src)
+    .pipe(sourcemaps.init())
+    .pipe(sass()).on('error', (e) => {
+        console.log(' - Failed to transcode Sass', e);
+        //done();
+    })/*.on('end', () => {
+        console.log(' - ' + paths.styles.src + ' has been transcoded');
+        done();
+    })*/
+    .pipe(rename({
+        basename: 'icarus',
+        suffix: '.min'
+    }))
+    .pipe(postcss([
         autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
@@ -153,53 +165,42 @@ export const styles_build_src = (done) => {
         postcsstouchcallout,
         postcssmomentumscrolling,
         postcssfontsmoothing
-    ];
-    return gulp.src(paths.styles.src)
-        .pipe(sourcemaps.init())
-        .pipe(sass()).on('error', (e) => {
-            console.log(' - Failed to transcode Sass', e);
-            done();
-        }).on('end', () => {
-            console.log(' - ' + paths.styles.src + ' has been transcoded');
-            done();
-        })
-        .pipe(rename({
-            basename: 'icarus',
-            suffix: '.min'
-        }))
-        .pipe(postcss(plugins))
-        .pipe(cleancss({ /*compatibility: 'ie8'*/ }))
-        .pipe(sourcemaps.write('.')) //'.'
-        .pipe(gulp.dest(paths.styles.dest));
-}
+    ]))
+    .pipe(cleancss({ /*compatibility: 'ie8'*/ }))
+    .pipe(sourcemaps.write('.')) //'.'
+    .pipe(gulp.dest(paths.styles.dest));
+
 /** Creates CSS Dependencies from external
     @returns {Promise} Gulp promise
 */
-export const styles_build_vendor = () => {
-    let bootstrap = request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css')
-        .pipe(source('bootstrap.css'));
-    let animate = request('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css')
-        .pipe(source('animate.css'));
-    return merge(bootstrap, animate)
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(buffer())
-        .pipe(concat('vendor.css'))
-        .pipe(gulp.dest(paths.styles.dest));
-}
+export const styles_build_vendor = () => merge(
+        request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css')
+        .pipe(source('bootstrap.css')),
+
+        request('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css')
+        .pipe(source('animate.css'))
+    )
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(buffer())
+    .pipe(concat('vendor.css'))
+    .pipe(gulp.dest(paths.styles.dest));
+
 /** Retrieves font dependencies from external (CDN) and saves locally (src,dist)
     @param {any} done Callback
     @returns {void} 
     @see https://cdnjs.com/libraries/twitter-bootstrap/3.3.7
 */
 export const fonts_build_vendor = (done) => {
-    let dirs = ['src', 'dist'];
-    let filetypes = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
-    filetypes.forEach((type) => {
-        let file = request(
+    //let dirs = ['src', 'dist'];
+    //let filetypes = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
+    ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach((type) => {
+        /*let file = request(
             'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.' + type
-        );
-        dirs.forEach((dir) => {
-            file.pipe(source('glyphicons-halflings-regular.' + type))
+        );*/
+        ['src', 'dist'].forEach((dir) => {
+            request(
+                'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.' + type
+            ).pipe(source('glyphicons-halflings-regular.' + type))
                 .pipe(gulp.dest('Content/styles/' + dir + '/fonts'));
         });
     });
@@ -208,12 +209,11 @@ export const fonts_build_vendor = (done) => {
 /** Beautifies Sass Document
     @returns {gulp} A gulp object
 */
-export const styles_beautify_src = () => {
-    let config = require(paths.config.beautify);
-    return gulp.src(paths.styles.src, { base: './' })
-        .pipe(beautify(config))
-        .pipe(gulp.dest('./'));
-}
+export const styles_beautify_src = () => gulp
+    .src(paths.styles.src, { base: './' })
+    .pipe(beautify(require(paths.config.beautify)))
+    .pipe(gulp.dest('./'));
+
 /** Performs linting on Sass Stylesheet
     @param {any} done Callback
     @returns {gulp} A gulp object
@@ -221,20 +221,15 @@ export const styles_beautify_src = () => {
     @see https://github.com/sasstools/gulp-sass-lint/blob/master/tests/.sass-lint.yml
     @see https://github.com/sasstools/gulp-sass-lint#optionsrules
 */
-export const styles_lint_src = (done) => {
-    console.log(' - Linting Styles: ' + paths.styles.basefile);
-    let config = require(paths.config.sasslint);
-    return gulp.src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
-        .pipe(sasslint(config))
-        .pipe(sasslint.format())
-        .pipe(sasslint.failOnError()).on('error', (e) => {
-            console.log(' - Failed to lint Sass');
-            done(e);
-        }).on('end', () => {
-            console.log(' - ' + paths.styles.basefile + ' has been linted');
-            done();
-        });
-}
+export const styles_lint_src = () => gulp
+    .src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
+    .pipe(sasslint(require(paths.config.sasslint)))
+    .pipe(sasslint.format())
+    .pipe(sasslint.failOnError()).on('error', (e) => {
+        console.log(' - Failed to lint Sass', e);
+        //done(e);
+    });
+
 // #endregion
 // #region Scripts
 
@@ -242,73 +237,63 @@ export const styles_lint_src = (done) => {
     @param {any} done Callback
     @returns {Promise} Gulp promise
  */
-export const scripts_build_src = (done) => {
-    console.log(' - Building Scripts: ' + paths.scripts.src);
-    return gulp.src(paths.scripts.src, { base: paths.scripts.base })
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(sourcemaps.init())
-        .pipe(terser()).on('error', (e) => {
-            console.log(' - Failed to terse Scripts');
-            done(e);
-        }).on('success', () => {
-            console.log(paths.scripts.src + ' has been successfully tersed');
-        }).on('end', () => {
-            done();
-        })
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(paths.scripts.dest));
-}
+export const scripts_build_src = () => gulp
+    .src(paths.scripts.src, { base: paths.scripts.base })
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(sourcemaps.init())
+    .pipe(terser()).on('error', (e) => {
+        console.log(' - Failed to terse Scripts', e);
+        //done(e);
+    }).on('success', () => {
+        console.log(paths.scripts.src + ' has been successfully tersed');
+    })/*.on('end', () => {
+        done();
+    })*/
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.scripts.dest));
+
 /** Creates Javascript Dependencies inside Scripts/dist 
     @param {any} done Callback
     @returns {Promise} Gulp promise
 */
-export const scripts_build_vendor = (done) => {
+export const scripts_build_vendor = () => merge(
+        request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js')),
+        request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js')),
+        request('https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js').pipe(source('jqueryValidate.js')),
+        request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js').pipe(source('bootstrap.js'))
+    )
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(buffer())
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest(paths.scripts.dest)).on('error', (e) => {
+        console.log(' - Failed to publish vendor Scripts', e);
+        //done(e);
+    }).on('success', () => {
+        console.log('Vendor scripts have been successfully published');
+    });
 
-    let jquery = request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js'));
-    let jqueryUI = request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js'));
-    let jqueryValidate = request('https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js').pipe(source('jqueryValidate.js'));
-    //let modernizr = request('https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js').pipe(source('modernizr.js'));
-    let bootstrap = request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js').pipe(source('bootstrap.js'));
-    return merge(jquery, jqueryUI, jqueryValidate, /*modernizr,*/ bootstrap)
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(buffer())
-        .pipe(concat('vendor.js'))
-        .pipe(gulp.dest(paths.scripts.dest)).on('error', (e) => {
-            console.log(' - Failed to publish vendor Scripts');
-            done(e);
-        }).on('success', () => {
-            console.log('Vendor scripts have been successfully published');
-        }).on('end', () => {
-            done();
-        })
-}
 /** ES6 Beautification
     @returns {Promise} Gulp promise
 */
-export const scripts_beautify_src = () => {
-    let config = require(paths.config.beautify);
-    return gulp.src(paths.scripts.src, { base: './' })
-        .pipe(beautify(config))
-        .pipe(gulp.dest('./'));
-}
+export const scripts_beautify_src = () => gulp
+    .src(paths.scripts.src, { base: './' })
+    .pipe(beautify(require(paths.config.beautify)))
+    .pipe(gulp.dest('./'));
+
 /** Lint the Scripts 'src' files
-    @param {any} done Callback
+    @param {any} done Callback 
     @returns {Promise} Gulp promise
 */
-export const scripts_lint_src = (done) => {
-    console.log(' - Linting Scripts: ' + paths.scripts.src);
-    let config = require(paths.config.eslint);
-    return gulp.src(paths.scripts.src)
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(eslint(config))
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError()).on('error', (e) => {
-            console.log(' - Failed to lint Javascript');
-            done(e);
-        }).on('end', () => {
-            done();
-        });
-}
+export const scripts_lint_src = () => gulp
+    .src(paths.scripts.src)
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(eslint(require(paths.config.eslint)))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError()).on('error', (e) => {
+        console.log(' - Failed to lint Javascript', e);
+       // done(e);
+    });
+
 // #endregion
 // #region Images
 /** Optimize images
@@ -325,29 +310,30 @@ function images() {
 /** Generates Style documentation using Sassdoc
     @returns {Promise} Gulp promise
 */
-export const document_styles = () => gulp.src(paths.styles.src).pipe(sassdoc({
-    dest: 'Documentation/sassdoc',
-    verbose: true,
-    display: {
-        access: ['public', 'private'],
-        alias: true,
-        watermark: true
-    },
-    groups: {
-        'undefined': 'Ungrouped',
-        foo: 'Foo group',
-        bar: 'Bar group'
-    },
-    basePath: 'https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Content/css/icarus/scss/'
-}));
+export const document_styles = () => gulp
+    .src(paths.styles.src)
+    .pipe(sassdoc({
+        dest: 'Documentation/sassdoc',
+        verbose: true,
+        display: {
+            access: ['public', 'private'],
+            alias: true,
+            watermark: true
+        },
+        groups: {
+            'undefined': 'Ungrouped',
+            foo: 'Foo group',
+            bar: 'Bar group'
+        },
+        basePath: 'https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Content/css/icarus/scss/'
+    }));
 /** Generates Script documentation using JSDoc3
     @returns {Promise} Gulp promise
 */
-export const document_scripts = () => {
-    var cfg = require('./config/jsdoc.json');
-    return gulp.src(paths.styles.src, { read: false })
-        .pipe(jsdoc(cfg));
-}
+export const document_scripts = () => gulp
+    .src(paths.styles.src, { read: false })
+    .pipe(jsdoc(require('./config/jsdoc.json')));
+
 /** Generate C# Documentation using Doxygen
     @see https://stackoverflow.com/questions/36897877/gulp-error-the-following-tasks-did-not-complete-did-you-forget-to-signal-async
     @returns {Promise} Async promise
@@ -373,20 +359,17 @@ export const serve_documentation = () => new Promise((resolve) => {
     @param {any} done Callback
     @returns {Promise} A gulp promise
 */
-export const tests_lint_src = (done) => {
-    console.log(' - Linting Mocha Tests: ' + paths.tests.src);
-    let config = require(paths.config.eslint);
-    return gulp.src(paths.tests.src)
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(eslint(config))
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError()).on('error', (e) => {
-            console.log(' - Failed to lint Tests');
-            done(e);
-        }).on('end', () => {
-            done();
-        });
-}
+export const tests_lint_src = (done) => gulp.src(paths.tests.src)
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(eslint(require(paths.config.eslint)))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError()).on('error', (e) => {
+        console.log(' - Failed to lint Tests');
+        done(e);
+    }).on('end', () => {
+        done();
+    });
+
 /** Lint Tests 
 const tests_lint = gulp.series(
     (done) => {
@@ -496,20 +479,15 @@ export const publish = gulp.series(
     @param {any} done callback
     @returns {gulp} A gulp 
 */
-export const tasks_lint_src = (done) => {
-    console.log(' - Linting Gulp Tasks: ' + paths.tasks.src);
-    let config = require(paths.config.eslint);
-    return gulp.src(paths.tasks.src)
-        .pipe(plumber({ errorHandler: onError }))
-        .pipe(eslint(config))
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError()).on('error', (e) => {
-            console.log(' - Failed to lint Tasks', e);
-            done();
-        }).on('end', () => {
-            done();
-        });
-}
+export const tasks_lint_src = () => gulp
+    .src(paths.tasks.src)
+    .pipe(plumber({ errorHandler: onError }))
+    .pipe(eslint(require(paths.config.eslint)))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError()).on('error', (e) => {
+        console.log(' - Failed to lint Tasks', e);
+    });
+
 /** Lint Tasks 
 const tasks_lint = gulp.series(
     (done) => {
