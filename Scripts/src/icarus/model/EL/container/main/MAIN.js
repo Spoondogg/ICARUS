@@ -32,7 +32,7 @@ export default class MAIN extends CONTAINER {
 		/** A Security token @type {string} */
 		this.token = model.token;
 		/** Browser Url
-		    @property {Url} url The browser url --
+		    @property {Url} url The browser url
 		*/
 		this.url = model.url;
 		/** A Sidebar for details and navigation
