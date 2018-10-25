@@ -1,15 +1,9 @@
-/**
-    @namespace ICARUS
-*/
-/**
-    @module 
-*/
+/** @namespace ICARUS */
+/** @module */
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 import CONTROLLER from './CONTROLLER.js';
 import TOKEN from './TOKEN.js';
-//import CONTAINER from '../model/el/container/CONTAINER.js';
-/**
-    An Application Controller
+/** An Application Controller
     @class
     @extends CONTROLLER
     @memberof ICARUS
@@ -17,9 +11,8 @@ import TOKEN from './TOKEN.js';
     Constructs the main Application Controller and initializes the MAIN Container
     This should be instantiated during the init phase of the html document
 */
-export default class APP extends CONTROLLER { // extends CONTROLLER
-	/**
-		Constructs an Application
+export default class APP extends CONTROLLER {
+	/** Constructs an Application
 		@param {number} id The unique application id
 		@param {string} user A friendly username for the current user
 		@param {boolean} dev If true, dev-options are enabled
