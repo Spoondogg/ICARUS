@@ -148,11 +148,11 @@ export const styles_build_src = () => gulp
     .pipe(sourcemaps.init())
     .pipe(sass()).on('error', (e) => {
         console.log(' - Failed to transcode Sass', e);
-        //done();
-    })/*.on('end', () => {
+        done(e);
+    }).on('end', () => {
         console.log(' - ' + paths.styles.src + ' has been transcoded');
         done();
-    })*/
+    })
     .pipe(rename({
         basename: 'icarus',
         suffix: '.min'
@@ -291,7 +291,7 @@ export const scripts_lint_src = () => gulp
     .pipe(eslint.format())
     .pipe(eslint.failAfterError()).on('error', (e) => {
         console.log(' - Failed to lint Javascript', e);
-       // done(e);
+        done(e);
     });
 
 // #endregion
@@ -487,7 +487,6 @@ export const tasks_lint_src = () => gulp
     .pipe(eslint.failAfterError()).on('error', (e) => {
         console.log(' - Failed to lint Tasks', e);
     });
-
 /** Lint Tasks 
 const tasks_lint = gulp.series(
     (done) => {
@@ -508,7 +507,7 @@ const beautification = gulp.series(
     styles_beautify_src
 );
 /** Lints Scripts and Styles */
-const lint = gulp.series(
+const lintification = gulp.series(
     scripts_lint_src,
     styles_lint_src
 );
@@ -518,7 +517,7 @@ const lint = gulp.series(
  */
 const build = gulp.series(
     beautification,
-    lint,
+    lintification,
     clean_dist,
     styles_build_src,
     styles_build_vendor,
@@ -533,7 +532,6 @@ const scripts_lintbuildpublish = gulp.series(
         console.log('\n\n\n==== scripts_lintbuildpublish BEGIN ====');
         done();
     },
-    //scripts_beautify_src,
     scripts_lint_src,
     scripts_build_src,
     scripts_publish,
@@ -559,12 +557,6 @@ const styles_lintbuildpublish = gulp.series(
         done();
     }
 );
-/** Watches Styles for changes and performs linting 
-    @returns {Promise} A gulp watcher
-*/
-export const watch_styles = () => {
-    gulp.watch(paths.styles.basefile, styles_lintbuildpublish); // styles_lint_src
-}
 /** Compiles documentation for Scripts, Styles and API 
 const build_documentation = gulp.series(
     (done) => {
@@ -575,7 +567,6 @@ const build_documentation = gulp.series(
     document_styles,
     document_api
 );*/
-
 /** Performs watch tasks within a container that can be reset
     @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
     @returns {void}
@@ -598,7 +589,7 @@ export const watch = () => {
 }
 // #endregion
 // #region Exports
-export { beautification, build, clean_dist, lint, scripts_lintbuildpublish, styles_lintbuildpublish };
+export { beautification, build, clean_dist, lintification, scripts_lintbuildpublish, styles_lintbuildpublish };
 export default build;
 // #endregion
 /* eslint-enable max-lines */
