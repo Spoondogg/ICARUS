@@ -438,12 +438,14 @@ export default class MAIN extends CONTAINER {
     */
 	registerExternal() { // email
 		console.log('Register External Login');
-		/*this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
+		/*
+        this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
 		this.prompt.form.destroy();
 		let tmp = new DIV(this.prompt.container.body.pane, new MODEL());
 		$(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
 		tmp.destroy();
-		this.prompt.show();*/
+		this.prompt.show();
+        */
 	}
 }
 export { LOADER, MODEL, NAVITEMICON };
