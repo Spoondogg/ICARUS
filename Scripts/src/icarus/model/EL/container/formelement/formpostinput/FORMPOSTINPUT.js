@@ -26,7 +26,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         @returns {void}
     */
 	createInput() {
-		this.inputGroup = new DIV(this.body.pane, new MODEL(new ATTRIBUTES('input-group')));
+		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
 		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
 			'class': 'form-control',
 			'name': this.attributes.name,
@@ -35,10 +35,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		})));
 		this.form = null;
 		if (this.attributes.value > 0 || this.value > 0) {
-			this.btnEdit = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'EDIT1');
+			this.btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
 			this.btnEdit.el.onclick = this.editFormPost.bind(this);
 		}
-		this.btnNew = new SPAN(this.inputGroup, new MODEL(new ATTRIBUTES('input-group-addon')), 'NEW1');
+		this.btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
 		this.btnNew.el.onclick = () => {
 			this.newAttributes(this.getContainer(), this.attributes.name, this);
 		};
