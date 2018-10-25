@@ -47,7 +47,6 @@ import terser from 'gulp-terser';
 //import webdriver from 'selenium-webdriver';
 // #endregion Imports
 // #region Variables
-
 /** Error handling prevents gulp watch from stopping
     @param {any} err An error
     @returns {void}
@@ -62,9 +61,7 @@ const onError = (err) => {
     })(err);
     gutil.beep();
 }
-// #endregion
-// #endregion Head
-
+// #endregion Variables
 // #region Config
 /** An ES6 Gulpfile for Gulp4
     @see https://www.npmjs.com/package/gulp4#real-version-400-alpha2 
@@ -81,7 +78,7 @@ const paths = {
         base: 'Content/styles/src/icarus',
         basefile: './Content/styles/src/icarus/icarus.scss',
         dest: 'Content/styles/dist/icarus',
-        src: 'Content/styles/src/icarus/**/*.scss'        
+        src: 'Content/styles/src/icarus/**/*.scss'
     },
     scripts: {
         buildglob: 'Scripts/**/**.*',
@@ -111,18 +108,19 @@ const paths = {
         dev: 'I://iis/dev/',
         prod: 'I://iis/icarus/'
     },
-    config: {        
-        beautify: './config/beautify.json',        
+    config: {
+        beautify: './config/beautify.json',
         doxygen: './config/doxygen.json',
         eslint: './config/eslint.json',
         sasslint: './config/sasslint.json'
     }
 };
-
-// @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+/** Indicates if the file has been slurped
+    @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+*/
 gulp.slurped = false;
-
-// #endregion
+// #endregion Config
+// #endregion Head
 // #region ServerSide
 /** Performs beautification on server side source code
     @param {any} done Callback
@@ -349,9 +347,9 @@ const document_api = () => new Promise((resolve) => {
     @returns {Promise} Promise to create a server
 */
 const serve_documentation = () => new Promise((resolve) => {
-    let docs = connect().use(servestatic('Documentation'));
-    http.createServer(docs).listen(9000);
-    resolve(docs);
+    let server = connect().use(servestatic('Documentation'));
+    http.createServer(server).listen(9000);
+    resolve(server);
 });
 // #endregion
 // #region Tests 
@@ -377,8 +375,8 @@ const tests_lint_src = () => gulp.src(paths.tests.src)
 */
 export const test_api = (done) => {
     console.log(' - Testing API');
-    let server = serve_documentation();
-    done();
+    let server = server_test();
+    done(server);
 };
 /** UI and Behavior testing using Puppeteer and Mocha
     @param {any} done Callback function
@@ -418,14 +416,14 @@ export const test_ui = (done) => {
             //process.exitCode = failures ? 1 : 0;
             if (failures) {
                 console.warn('Some tests failed');
-                brwsr.close();
+                //brwsr.close();
                 done();
             } else {
                 console.log('Test completed');
             }
         }).on('error', () => {
             console.log('MOCHA Errors occurred');
-            brwsr.close();
+            //brwsr.close();
             done();
         }).on('end', () => {
             console.log('MOCHA End');
@@ -443,9 +441,9 @@ export const test_ui = (done) => {
     @returns {Promise<resolve>} Promise 
 */
 const server_test = () => new Promise((resolve) => {
-    let tests = connect().use(servestatic('Scripts/test/fixtures'));
-    http.createServer(tests).listen(9001);
-    resolve();
+    let server = connect().use(servestatic('Scripts/test/fixtures'));
+    http.createServer(server).listen(9001);
+    resolve(server);
 });
 // #endregion
 // #region Publish
