@@ -1,8 +1,10 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL } from '../CONTAINER.js';
+import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
 import IMG from '../../img/IMG.js';
+import STRONG from '../../strong/STRONG.js';
 /** A Chat Window
     @class
     @extends CONTAINER
@@ -17,7 +19,6 @@ export default class CHAT extends CONTAINER {
 		super(node, 'DIV', model, []);
 		this.addClass('chat');
 		this.user = this.getMainContainer().getUser();
-		//this.conversation = new EL(this.body.pane, 'DIV', new MODEL('conversation'));
 		this.form = FORM.createEmptyForm(this.body.pane);
 		this.form.el.style = 'height:68px;background-color:#5a5a5a;';
 		$(this.form.el).insertAfter(this.body.pane.el);
@@ -33,17 +34,20 @@ export default class CHAT extends CONTAINER {
 		];
 		this.form.fieldset.formElementGroup.addInputElements(inputs);
 		this.form.setPostUrl('CHAT/Talk');
-		/*
-		    Show the Payload response
+		/** Show the Payload response
+            @param {Payload} payload The payload
+            @returns {void}
+            @todo Rewrite without function call, instead just call setTimeout with a Payload parameter
+            @todo this.form.afterSuccessfulPost = setTimeout(this.addStatement('ICARUS', payload.message), 1000, payload);
+            @todo Needs testing
 		*/
 		this.form.afterSuccessfulPost = function(payload) {
-			//console.log(payload);
 			setTimeout(() => {
 				this.addStatement('ICARUS', payload.message);
 			}, 1000);
-		}.bind(this);
+        }.bind(this);
 		this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
-		console.log('Chat Input', this.chatInput);
+		console.log('Chat Input', this.chatInput); 
 		this.chatInput.el.onkeypress = this.postStatement.bind(this);
 	}
 	/** Posts the chat statement to the server and handles any responses
@@ -63,6 +67,7 @@ export default class CHAT extends CONTAINER {
         @param {string} username User name
         @param {string} string Statement
         @returns {EL} The statement object
+        @todo Consider creating a STATEMENT EL
     */
 	addStatement(username, string) {
 		let statement = new DIV(this.body.pane, new MODEL('statement'));
@@ -84,7 +89,7 @@ export default class CHAT extends CONTAINER {
 		$(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
 		return statement;
 	}
-	construct() {
+	construct() { 
 		setTimeout(() => {
 			this.addStatement('ICARUS', 'Hello ' + this.user);
 		}, 2000);
