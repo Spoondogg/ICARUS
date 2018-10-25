@@ -12,3 +12,4 @@ export default class CARET extends SPAN {
 		super(node, new MODEL('caret'));
 	}
 }
+export { ATTRIBUTES, MODEL };

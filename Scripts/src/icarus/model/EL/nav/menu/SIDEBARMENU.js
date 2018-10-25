@@ -1,7 +1,5 @@
-/**
-    @module
-*/
-import MENU, { ATTRIBUTES, MODEL } from './MENU.js';
+/** @module */
+import MENU, { MODEL } from './MENU.js'; //ATTRIBUTES
 import NAVSEARCH, { NAVITEM } from '../navitem/NAVSEARCH.js';
 /** A vertical navitemgroup with a search panel
     @class

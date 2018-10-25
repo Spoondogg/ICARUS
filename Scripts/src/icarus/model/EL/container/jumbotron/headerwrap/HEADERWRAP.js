@@ -1,5 +1,5 @@
 /** @module */
-import JUMBOTRON, { ATTRIBUTES, MODEL } from '../JUMBOTRON.js';
+import JUMBOTRON, { MODEL } from '../JUMBOTRON.js'; // ATTRIBUTES
 import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/HEADER.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
@@ -10,9 +10,9 @@ import P from '../../../p/P.js';
 */
 export default class HEADERWRAP extends JUMBOTRON {
 	/** Constructs a Header with clearfix
-	    @param {CONTAINER} node The model
-	    @param {MODEL} model Object Model
-	 */
+        @param {CONTAINER} node The model
+        @param {MODEL} model Object Model
+    */
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('headerwrap');

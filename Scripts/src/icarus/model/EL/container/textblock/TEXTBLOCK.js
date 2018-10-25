@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, DATAELEMENTS, EL, MODEL } from '../CONTAINER.js';
+import CONTAINER, { DATAELEMENTS, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 import P from '../../p/P.js';
 /** Textblock Constructor

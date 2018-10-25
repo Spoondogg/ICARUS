@@ -1,5 +1,6 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL } from '../../../CONTAINER.js';
+import DIV from '../../../../div/DIV.js';
 import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
 import MENULIST from '../../../menulist/MENULIST.js';
@@ -45,11 +46,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
 			'style': 'height:auto;'
 		})), this.data.p);
-		this.modal.container.previewNotes = new EL(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES({
-			'class': 'preview-notes'
-		})), '');
-		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('preview')), [this.data.listClass.toUpperCase()]);
-		//this.modal.container.preview.el.setAttribute('style', 'height:400px;max-height:400px;overflow-y:auto;');
+		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL('preview-notes'), '');
+		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'), [this.data.listClass.toUpperCase()]);
 		this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL('index-thumbnail-menulist').set({
 			'name': 'preview-list',
 			'label': this.data.listClass + '(s)'
@@ -83,8 +81,7 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 				this.modal.container.preview.create(result.model);
 			});
 		}, delay);
-		/**
-		    Get a list of Parents for this Container
+		/** Get a list of Parents for this Container
 		    @returns {void}
 		*/
 		setTimeout(() => {
