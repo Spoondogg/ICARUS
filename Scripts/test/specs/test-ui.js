@@ -61,14 +61,12 @@ beforeEach('Before', (done) => {
         done();
     });
 });
-
 afterEach('After', (done) => {
     screenshot('page-after').then(() => {
         done();
     });
 });
 // #endregion
-// #region 
 // #region Tests
 /** Performs Browser related Testing */
 describe('Initialize Browser', () => {
@@ -221,8 +219,7 @@ describe('Log In', () => {
     });
 });
 
-/**
-    Each CONTAINER should have its own unique test case,
+/** Each CONTAINER should have its own unique test case,
     but right now I'm creating a TEMPLATE for a function
 */
 describe('Verify CONTAINER(s)', () => {
