@@ -3,28 +3,25 @@
 */
 import MENU, { ATTRIBUTES, MODEL } from './MENU.js';
 import NAVSEARCH, { NAVITEM } from '../navitem/NAVSEARCH.js';
-/**
-    A vertical navitemgroup with a search panel
+/** A vertical navitemgroup with a search panel
     @class
     @extends MENU
  */
-export default class SIDEBARMENU extends MENU { // NAVBAR
-	/**
-		    A vertical navitemgroup with a search panel
-		    @param {CONTAINERBODY} node The CONTAINERBODY to contain the sidebar
-		    @param {MODEL} model The text that is displayed within the footer
-	        @todo NAVSEARCH needs improvement
-		 */
+export default class SIDEBARMENU extends MENU {
+	/** A vertical navitemgroup with a search panel
+        @param {CONTAINERBODY} node The CONTAINERBODY to contain the sidebar
+        @param {MODEL} model The text that is displayed within the footer
+        @todo NAVSEARCH needs improvement
+    */
 	constructor(node, model) {
 		super(node, model);
-		//this.wrapper.addClass('sidebar');
-		this.addClass('sidebar collapse'); //active navbar-inverse 
+		this.addClass('sidebar collapse');
 		this.search = new NAVSEARCH(this);
 		this.search.el.style.display = 'none';
 		this.search.inputGroup.q.el.onkeypress = function() {
 			this.menu.addClass('in');
 		}.bind(this);
-		this.toggleButton = new NAVITEM(this, new MODEL(new ATTRIBUTES('toggle')).set({
+		this.toggleButton = new NAVITEM(this, new MODEL('toggle').set({
 			'label': '<span class="caret"></span>'
 		}));
 		this.toggleButton.el.style.display = 'none';
@@ -34,12 +31,10 @@ export default class SIDEBARMENU extends MENU { // NAVBAR
 			'name': 'document-map'
 		}));
 	}
-	/**
-		    Show / Hide the Document Map Menu
-	        @returns {void}
-		*/
+	/** Show / Hide the Document Map Menu
+        @returns {void}
+    */
 	toggleDocumentMap() {
-		//this.menu.toggle('in');
 		$(this.menu.el).collapse('toggle');
 	}
 }

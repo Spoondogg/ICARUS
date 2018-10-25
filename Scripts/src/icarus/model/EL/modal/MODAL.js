@@ -32,8 +32,8 @@ export default class MODAL extends CONTAINER {
 		if (text) {
 			this.well = new WELL(this.content, new MODEL(), text);
 		}
-		//this.container = new CONTAINER(this.content, 'DIV', new MODEL(new ATTRIBUTES('modal-body')).set({
-		this.body = new DIV(this.content, new MODEL(new ATTRIBUTES('modal-body')));
+		//this.container = new CONTAINER(this.content, 'DIV', new MODEL('modal-body').set({
+		this.body = new DIV(this.content, new MODEL('modal-body'));
 		// Footer : Contains options to save or cancel out of form
 		this.footer = new FOOTER(this.content, new MODEL('modal-footer'));
 		this.footer.btnClose = new BUTTON(this.footer, new MODEL(new ATTRIBUTES({

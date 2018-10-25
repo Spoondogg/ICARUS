@@ -305,7 +305,7 @@ export default class CONTAINER extends GROUP {
 		this.btnSave.toggle('active');
 		if ($(this.btnSave.el).hasClass('active')) {
 			let node = this.navBar.menu.menu.getGroup('CRUD').wrapper;
-			this.btnSave.wrapper = new DIV(node, new MODEL(new ATTRIBUTES('collapse in wrapper')));
+			this.btnSave.wrapper = new DIV(node, new MODEL('collapse in wrapper'));
 			this.save(this.btnSave.wrapper, this);
 		} else {
 			console.log(0, 'Closing ' + this.className + '.save() form.');

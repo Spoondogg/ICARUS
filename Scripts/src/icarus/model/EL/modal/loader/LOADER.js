@@ -24,7 +24,7 @@ export default class LOADER extends DIALOG {
 		}));
 		this.addClass('loader');
 		//this.el.setAttribute('name', 'LOADER');
-		this.progress = new DIV(this.body, new MODEL(new ATTRIBUTES('progress')));
+		this.progress = new DIV(this.body, new MODEL('progress'));
 		this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
 		this.console = new CONSOLE(this.body, new MODEL(new ATTRIBUTES({
 			'class': 'console collapse in',
