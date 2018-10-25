@@ -1,14 +1,11 @@
-/**
-    @module
-*/
+/** @module */
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
-/**
-    An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
+/** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
     @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog
@@ -17,8 +14,7 @@ import { ICONS } from '../../../enums/ICONS.js';
     @see https://keithjgrant.com/posts/2018/01/meet-the-new-dialog-element/
 */
 export default class DIALOG extends EL {
-	/**
-	    Constructs a generic DIALOG Element
+	/** Constructs a generic DIALOG Element
 	    @constructs DIALOG
 	    @param {MODEL} model The object model
 	 */
