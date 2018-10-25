@@ -288,16 +288,13 @@ const scripts_lint_src = () => gulp
     .pipe(eslint.format()).on('error', (e) => {
         console.log(' - Failed to lint Javascript', e);
     }).on('end', () => {
-        console.log(' - Successfully linted Javascript');
+        console.log(' - Javascript linting complete');
     });
-    //.pipe(eslint.failAfterError())
-
 // #endregion
 // #region Images
 /** Optimize images
     @see https://www.npmjs.com/package/gulp4#incremental-builds 
     @returns {Promise} Gulp promise
-
 function images() {
     return gulp.src(paths.images.src, { since: gulp.lastRun(images) })
         .pipe(imagemin({ optimizationLevel: 5 }))
@@ -331,7 +328,6 @@ const document_styles = () => gulp
 const document_scripts = () => gulp
     .src(paths.styles.src, { read: false })
     .pipe(jsdoc(require('./config/jsdoc.json')));
-
 /** Generate C# Documentation using Doxygen
     @see https://stackoverflow.com/questions/36897877/gulp-error-the-following-tasks-did-not-complete-did-you-forget-to-signal-async
     @returns {Promise} Async promise
@@ -360,15 +356,19 @@ const serve_documentation = () => new Promise((resolve) => {
 const tests_lint_src = () => gulp.src(paths.tests.src)
     .pipe(plumber({ errorHandler: onError }))
     .pipe(eslint(require(paths.config.eslint)))
-    .pipe(eslint.format()).on('error', (e) => {
-        console.log(e, ' - Failed to lint Tests');
-        //done();
+    .pipe(eslint.format()).on('error', () => {
+        console.log(' - Failed to lint Tests');
     }).on('end', () => {
-        console.log(' - Successfully linted Tests');
-        //done();
+        console.log(' - Test linting complete');
     });
-    //.pipe(eslint.failAfterError())
-
+/** Creates a static server at localhost:9001 to host tests
+    @returns {Promise<resolve>} Promise 
+*/
+const server_test = () => new Promise((resolve) => {
+    let server = connect().use(servestatic('Scripts/test/fixtures'));
+    http.createServer(server).listen(9001);
+    resolve(server);
+});
 /** API Related testing fixtures
     @param {any} done Callback
     @returns {Promise<done>} Callback
@@ -388,7 +388,6 @@ export const test_ui = (done) => {
     const Mocha = require('mocha'); 
     //const fs = require('fs');
     //const path = require('path'); 
-
     const { expect } = require('chai');
     const _ = require('lodash');
     const globalVariables = _.pick(global, ['browser', 'expect']);
@@ -415,11 +414,10 @@ export const test_ui = (done) => {
             console.log('Checking for failures');
             //process.exitCode = failures ? 1 : 0;
             if (failures) {
-                console.warn('Some tests failed');
-                //brwsr.close();
+                console.warn(' - MOCHA Tests failed');
                 done();
             } else {
-                console.log('Test completed');
+                console.log(' - MOCHA Test completed');
             }
         }).on('error', () => {
             console.log('MOCHA Errors occurred');
@@ -437,14 +435,6 @@ export const test_ui = (done) => {
     });
     done();
 }
-/** Creates a static server at localhost:9001 to host tests
-    @returns {Promise<resolve>} Promise 
-*/
-const server_test = () => new Promise((resolve) => {
-    let server = connect().use(servestatic('Scripts/test/fixtures'));
-    http.createServer(server).listen(9001);
-    resolve(server);
-});
 // #endregion
 // #region Publish
 /** Deletes contents of dist folders 
@@ -459,7 +449,6 @@ export const clean_dist = () => del(['Scripts/dist/', 'Content/styles/dist/']);
 const scripts_publish = () => gulp
     .src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
     .pipe(gulp.dest(paths.server.dev + 'Scripts'));
-
 /** Publishes 'src' and 'dist' Style folders
     @param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
@@ -468,7 +457,6 @@ const scripts_publish = () => gulp
 const styles_publish = () => gulp
     .src([paths.styles.baseglob, '!**.(yml|md)'])
     .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
-
 /** Publishes Scripts and Styles to the dev server 
     @param {any} done Callback
     @returns {gulp} A gulp series
@@ -503,7 +491,6 @@ const tasks_lint = () => gulp
     .pipe(eslint.format()).on('error', () => {
         console.log(' - Failed to lint Tasks');
     });
-    //.pipe(eslint.failAfterError())
 // #endregion
 // #region Maintenance
 /** Beautifies Scripts and Styles */ 
