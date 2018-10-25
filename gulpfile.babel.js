@@ -410,30 +410,18 @@ export const test_ui = (done) => {
     global.browser = Puppeteer.launch(opts).then((brwsr) => {
         browser = brwsr;
         let m = new Mocha(opts);
-        m.addFile('./Scripts/test/specs/test-ui.js').run((failures) => { // exit with non-zero status if there were failures
-            console.log('Checking for failures');
-            //process.exitCode = failures ? 1 : 0;
-            if (failures) {
-                console.warn(' - MOCHA Tests failed');
-                done();
-            } else {
-                console.log(' - MOCHA Test completed');
-            }
-        }).on('error', () => {
-            console.log('MOCHA Errors occurred');
-            //brwsr.close();
-            done();
+        m.addFile('./Scripts/test/specs/test-ui.js').run().on('error', () => {
+            console.log(' - MOCHA Tests failed');
         }).on('end', () => {
-            console.log('MOCHA End');
-            //brwsr.close();
+            console.log(' - MOCHA Test completed');
             global.expect = globalVariables.expect;
             global.browser = globalVariables.browser;
             console.log('MOCHA End Complete');
             done();
         });
-        done();
+        //done();
     });
-    done();
+    //done();
 }
 // #endregion
 // #region Publish
@@ -484,12 +472,14 @@ export const publification = gulp.series(
 */
 const tasks_lint = () => gulp
     .src(paths.tasks.src).on('end', () => {
-        console.log(' = Linting Tasks');
+        console.log(' - Linting Tasks');
     })
     .pipe(plumber({ errorHandler: onError }))
     .pipe(eslint(require(paths.config.eslint)))
     .pipe(eslint.format()).on('error', () => {
         console.log(' - Failed to lint Tasks');
+    }).on('end', () => {
+        console.log(' - Task linting complete');
     });
 // #endregion
 // #region Maintenance
