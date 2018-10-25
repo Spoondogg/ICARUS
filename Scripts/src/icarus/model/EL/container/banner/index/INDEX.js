@@ -82,7 +82,7 @@ export default class INDEX extends BANNER {
 		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
 			'class': 'preview-notes'
 		})), '');
-		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL(new ATTRIBUTES('preview')),
+		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'),
 			[listClass.toUpperCase()]);
 		this.modal.container.preview.el.setAttribute('style', 'height:400px;max-height:400px;overflow-y:auto;');
 		this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
