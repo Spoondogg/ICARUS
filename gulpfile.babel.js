@@ -143,15 +143,14 @@ const $server_beautify = () => {
     @see https://github.com/postcss/autoprefixer#options
     @see https://scotch.io/tutorials/prevent-errors-from-crashing-gulp-watch#toc-prevent-errors-from-breaking-tasks
 */
-export const styles_build_src = () => gulp
+const styles_build_src = () => gulp
     .src(paths.styles.src)
     .pipe(sourcemaps.init())
     .pipe(sass()).on('error', (e) => {
         console.log(' - Failed to transcode Sass', e);
-        done(e);
+        //done(e);
     }).on('end', () => {
         console.log(' - ' + paths.styles.src + ' has been transcoded');
-        done();
     })
     .pipe(rename({
         basename: 'icarus',
@@ -173,7 +172,7 @@ export const styles_build_src = () => gulp
 /** Creates CSS Dependencies from external
     @returns {Promise} Gulp promise
 */
-export const styles_build_vendor = () => merge(
+const styles_build_vendor = () => merge(
         request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css')
         .pipe(source('bootstrap.css')),
 
@@ -190,7 +189,7 @@ export const styles_build_vendor = () => merge(
     @returns {void} 
     @see https://cdnjs.com/libraries/twitter-bootstrap/3.3.7
 */
-export const fonts_build_vendor = (done) => {
+const fonts_build_vendor = (done) => {
     //let dirs = ['src', 'dist'];
     //let filetypes = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
     ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach((type) => {
@@ -209,7 +208,7 @@ export const fonts_build_vendor = (done) => {
 /** Beautifies Sass Document
     @returns {gulp} A gulp object
 */
-export const styles_beautify_src = () => gulp
+const styles_beautify_src = () => gulp
     .src(paths.styles.src, { base: './' })
     .pipe(beautify(require(paths.config.beautify)))
     .pipe(gulp.dest('./'));
@@ -221,7 +220,7 @@ export const styles_beautify_src = () => gulp
     @see https://github.com/sasstools/gulp-sass-lint/blob/master/tests/.sass-lint.yml
     @see https://github.com/sasstools/gulp-sass-lint#optionsrules
 */
-export const styles_lint_src = () => gulp
+const styles_lint_src = () => gulp
     .src(paths.styles.basefile) // './Content/styles/src/icarus/icarus.scss'
     .pipe(sasslint(require(paths.config.sasslint)))
     .pipe(sasslint.format())
@@ -237,7 +236,7 @@ export const styles_lint_src = () => gulp
     @param {any} done Callback
     @returns {Promise} Gulp promise
  */
-export const scripts_build_src = () => gulp
+const scripts_build_src = () => gulp
     .src(paths.scripts.src, { base: paths.scripts.base })
     .pipe(plumber({ errorHandler: onError }))
     .pipe(sourcemaps.init())
@@ -256,7 +255,7 @@ export const scripts_build_src = () => gulp
     @param {any} done Callback
     @returns {Promise} Gulp promise
 */
-export const scripts_build_vendor = () => merge(
+const scripts_build_vendor = () => merge(
         request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js')),
         request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js')),
         request('https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js').pipe(source('jqueryValidate.js')),
@@ -275,7 +274,7 @@ export const scripts_build_vendor = () => merge(
 /** ES6 Beautification
     @returns {Promise} Gulp promise
 */
-export const scripts_beautify_src = () => gulp
+const scripts_beautify_src = () => gulp
     .src(paths.scripts.src, { base: './' })
     .pipe(beautify(require(paths.config.beautify)))
     .pipe(gulp.dest('./'));
@@ -284,15 +283,16 @@ export const scripts_beautify_src = () => gulp
     @param {any} done Callback 
     @returns {Promise} Gulp promise
 */
-export const scripts_lint_src = () => gulp
+const scripts_lint_src = () => gulp
     .src(paths.scripts.src)
     .pipe(plumber({ errorHandler: onError }))
     .pipe(eslint(require(paths.config.eslint)))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError()).on('error', (e) => {
+    .pipe(eslint.format()).on('error', (e) => {
         console.log(' - Failed to lint Javascript', e);
-        done(e);
+    }).on('end', () => {
+        console.log(' - Successfully linted Javascript');
     });
+    //.pipe(eslint.failAfterError())
 
 // #endregion
 // #region Images
@@ -310,7 +310,7 @@ function images() {
 /** Generates Style documentation using Sassdoc
     @returns {Promise} Gulp promise
 */
-export const document_styles = () => gulp
+const document_styles = () => gulp
     .src(paths.styles.src)
     .pipe(sassdoc({
         dest: 'Documentation/sassdoc',
@@ -330,7 +330,7 @@ export const document_styles = () => gulp
 /** Generates Script documentation using JSDoc3
     @returns {Promise} Gulp promise
 */
-export const document_scripts = () => gulp
+const document_scripts = () => gulp
     .src(paths.styles.src, { read: false })
     .pipe(jsdoc(require('./config/jsdoc.json')));
 
@@ -338,7 +338,7 @@ export const document_scripts = () => gulp
     @see https://stackoverflow.com/questions/36897877/gulp-error-the-following-tasks-did-not-complete-did-you-forget-to-signal-async
     @returns {Promise} Async promise
 */
-export const document_api = () => new Promise((resolve) => {
+const document_api = () => new Promise((resolve) => {
     doxygen.downloadVersion().then(() => {
         doxygen.createConfig(paths.config.doxygen); // config, 
         doxygen.run(paths.config.doxygen);
@@ -348,7 +348,7 @@ export const document_api = () => new Promise((resolve) => {
 /** Creates a static server at localhost:9000 to host Documentation
     @returns {Promise} Promise to create a server
 */
-export const serve_documentation = () => new Promise((resolve) => {
+const serve_documentation = () => new Promise((resolve) => {
     let docs = connect().use(servestatic('Documentation'));
     http.createServer(docs).listen(9000);
     resolve();
@@ -357,31 +357,28 @@ export const serve_documentation = () => new Promise((resolve) => {
 // #region Tests 
 /** Lint the Test files 
     @param {any} done Callback
-    @returns {Promise} A gulp promise
+    @returns {gulp} A gulp promise
 */
-export const tests_lint_src = (done) => gulp.src(paths.tests.src)
+const tests_lint_src = () => gulp.src(paths.tests.src)
     .pipe(plumber({ errorHandler: onError }))
     .pipe(eslint(require(paths.config.eslint)))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError()).on('error', (e) => {
-        console.log(' - Failed to lint Tests');
-        done(e);
+    .pipe(eslint.format()).on('error', (e) => {
+        console.log(e, ' - Failed to lint Tests');
+        //done();
     }).on('end', () => {
-        done();
+        console.log(' - Successfully linted Tests');
+        //done();
     });
+    //.pipe(eslint.failAfterError())
 
-/** Lint Tests 
-const tests_lint = gulp.series(
-    (done) => {
-        console.log('\n\n\n==== tests_lint BEGIN ====');
-        done();
-    },
-    tests_lint_src,
-    (done) => {
-        console.log('\n\n\n==== tests_lint END ====');
-        done();
-    }
-);*/
+/** API Related testing fixtures
+    @param {any} done Callback
+    @returns {Promise<done>} Callback
+*/
+export const test_api = (done) => {
+    console.log(' - Testing API');
+    done();
+};
 /** UI and Behavior testing using Puppeteer and Mocha
     @param {any} done Callback function
     @see https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically
@@ -410,14 +407,26 @@ export const test_ui = (done) => {
         timeout: 60000 // One minute to pass all tests
     };
 
-    // expose variables
+    // expose variables - The browser should be available to all tests that need it
     global.expect = expect;
     global.browser = Puppeteer.launch(opts).then((brwsr) => {
         browser = brwsr;
         let m = new Mocha(opts);
-        m.addFile('./Scripts/test/specs/test-ui.js').run(/*(failures) => {
-            process.exitCode = failures ? 1 : 0;  // exit with non-zero status if there were failures
-        }*/).on('end', () => {
+        m.addFile('./Scripts/test/specs/test-ui.js').run((failures) => { // exit with non-zero status if there were failures
+            console.log('Checking for failures');
+            //process.exitCode = failures ? 1 : 0;
+            if (failures) {
+                console.warn('Some tests failed');
+                brwsr.close();
+                done();
+            } else {
+                console.log('Test completed');
+            }
+        }).on('error', () => {
+            console.log('MOCHA Errors occurred');
+            brwsr.close();
+            done();
+        }).on('end', () => {
             console.log('MOCHA End');
             //brwsr.close();
             global.expect = globalVariables.expect;
@@ -442,14 +451,14 @@ export const server_test = () => new Promise((resolve) => {
 /** Deletes contents of dist folders 
     @returns {void}
 */
-const clean_dist = () => del(['Scripts/dist/', 'Content/styles/dist/']);
+export const clean_dist = () => del(['Scripts/dist/', 'Content/styles/dist/']);
 /**
     Publishes 'src' and 'dist' Script folders
     param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
     @returns {gulp} A gulp promise
 */
-export const scripts_publish = () => gulp
+const scripts_publish = () => gulp
     .src(['Scripts/**/**.*', '!**/deprec/**/**.*', '!**/test/**/**.*', '!**.(yml|md)'])
     .pipe(gulp.dest(paths.server.dev + 'Scripts'));
 
@@ -458,7 +467,7 @@ export const scripts_publish = () => gulp
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
     @returns {gulp} A gulp promise
 */
-export const styles_publish = () => gulp
+const styles_publish = () => gulp
     .src([paths.styles.baseglob, '!**.(yml|md)'])
     .pipe(gulp.dest(paths.server.dev + 'Content/styles'));
 
@@ -466,64 +475,123 @@ export const styles_publish = () => gulp
     @param {any} done Callback
     @returns {gulp} A gulp series
 */
-export const publish = gulp.series(
+export const publification = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== publish BEGIN ====');
+        done();
+    },
     scripts_build_vendor,
     styles_build_vendor,
-    //fonts_build_vendor,
+    fonts_build_vendor,
     scripts_publish,
-    styles_publish
+    styles_publish,
+    (done) => {
+        console.log('\n\n\n==== publish END ====');
+        done();
+    }
 );
 // #endregion
 // #region Watch
-/** Performs linting on Gulpfile
+/** Performs linting on Gulpfile 
     @param {any} done callback
     @returns {gulp} A gulp 
 */
-export const tasks_lint_src = () => gulp
-    .src(paths.tasks.src)
+const tasks_lint = () => gulp
+    .src(paths.tasks.src).on('end', () => {
+        console.log(' = Linting Tasks');
+    })
     .pipe(plumber({ errorHandler: onError }))
     .pipe(eslint(require(paths.config.eslint)))
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError()).on('error', (e) => {
-        console.log(' - Failed to lint Tasks', e);
+    .pipe(eslint.format()).on('error', () => {
+        console.log(' - Failed to lint Tasks');
     });
-/** Lint Tasks 
-const tasks_lint = gulp.series(
-    (done) => {
-        console.log('\n\n\n==== tasks_lint BEGIN ====');
-        done();
-    },
-    tasks_lint_src,
-    (done) => {
-        console.log('\n\n\n==== tasks_lint END ====');
-        done();
-    }
-);*/
+    //.pipe(eslint.failAfterError())
 // #endregion
 // #region Maintenance
-/** Beautifies Scripts and Styles */
+/** Beautifies Scripts and Styles */ 
 const beautification = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== beautification BEGIN ====');
+        done();
+    },
     scripts_beautify_src,
-    styles_beautify_src
+    styles_beautify_src,
+    (done) => {
+        console.log('\n\n\n==== beautification END ====');
+        done();
+    }
 );
 /** Lints Scripts and Styles */
-const lintification = gulp.series(
+export const lintification = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== lintification BEGIN ====');
+        done();
+    },
     scripts_lint_src,
-    styles_lint_src
+    styles_lint_src,
+    tasks_lint,
+    (done) => {
+        console.log('\n\n\n==== lintification END ====');
+        done();
+    }
+);
+
+export const documentation = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== documentation BEGIN ====');
+        done();
+    },
+    document_scripts,
+    document_styles,
+    document_api,
+    serve_documentation,
+    (done) => {
+        console.log('\n\n\n==== documentation END ====');
+        done();
+    }
+);
+export const stylification = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== stylification BEGIN ====');
+        done();
+    },
+    // styles_lint_src,
+    (done) => {
+        console.log('\n\n\n==== stylification END ====');
+        done();
+    }
+);
+
+export const scriptification = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== stylification BEGIN ====');
+        done();
+    },
+    scripts_build_src,
+    scripts_build_vendor,
+    (done) => {
+        console.log('\n\n\n==== stylification END ====');
+        done();
+    }
 );
 /** Beautifies 'src' Styles and Scripts, then performs linting.
     If lint returns no errors, the target environment is cleaned
     and 'dist' is built
  */
-const build = gulp.series(
+export const build = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== build BEGIN ====');
+        done();
+    },
     beautification,
     lintification,
     clean_dist,
-    styles_build_src,
-    styles_build_vendor,
-    fonts_build_vendor,
-    scripts_build_src,
-    scripts_build_vendor
+    stylification,
+    scriptification,
+    (done) => {
+        console.log('\n\n\n==== build END ====');
+        done();
+    }
 );
 
 /** Lint, Build on Success, then publish */
@@ -536,14 +604,13 @@ const scripts_lintbuildpublish = gulp.series(
     scripts_build_src,
     scripts_publish,
     test_ui,
+    test_api,
     (done) => {
         console.log('\n\n\n==== scripts_lintbuildpublish END ====');
         done();
     }
 );
-/** 
-    Lint, Build on Success, then publish
- */
+/** Lint, Build on Success, then publish */
 const styles_lintbuildpublish = gulp.series(
     (done) => {
         console.log('\n\n\n==== styles_lintbuildpublish BEGIN ====');
@@ -557,40 +624,44 @@ const styles_lintbuildpublish = gulp.series(
         done();
     }
 );
-/** Compiles documentation for Scripts, Styles and API 
-const build_documentation = gulp.series(
-    (done) => {
-        console.log('\n\n\n==== _document ====');
-        done();
-    },
-    document_scripts,
-    document_styles,
-    document_api
-);*/
+
 /** Performs watch tasks within a container that can be reset
     @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
     @returns {void}
 */
 const slurp = () => {
-    if (!gulp.slurped) {
-        gulp.watch(paths.scripts.baseglob, scripts_lintbuildpublish); //watch_scripts();        
-        //gulp.watch(paths.scripts.baseglob, test_ui); // 
-        gulp.watch(paths.styles.basefile, styles_lintbuildpublish); //watch_styles();
-        gulp.watch(paths.tests.baseglob, tests_lint_src); //watch_tests();
-        gulp.watch('gulpfile.babel.js', tasks_lint_src); // watch_tasks();
-        gulp.slurped = true;
+    try {
+        if (!gulp.slurped) {
+            gulp.watch(paths.scripts.baseglob, scripts_lintbuildpublish).on('error', () => {
+                console.log('Unable to lintbuildpublish scripts');
+            }); //watch_scripts();  
+
+
+            //gulp.watch(paths.scripts.baseglob, test_ui); // 
+            gulp.watch(paths.styles.basefile, styles_lintbuildpublish).on('error', () => {
+                console.log('Unable to lintbuildpublish styles');
+            }); //watch_styles();
+
+            gulp.watch(paths.tests.baseglob, tests_lint_src).on('error', () => {
+                console.log('Unable to lint tests');
+            }); //watch_tests();
+            gulp.watch('gulpfile.babel.js', tasks_lint).on('error', () => {
+                console.log('Unable to lint gulpfile');
+            }); // watch_tasks();
+            gulp.slurped = true;    
+            console.log('Slurped');
+        }
+    } catch (e) {
+        console.log('Choked.  Slurp failed.', e);
     }
 }
-/** Looping watch that reloads when gulpfile is changed 
+/** Looping watch that reloads when gulpfile is changed  
     @returns {void}
 */
 export const watch = () => {
+    console.log('Slurping...');
     slurp();
 }
-// #endregion
-// #region Exports
-export { beautification, build, clean_dist, lintification, scripts_lintbuildpublish, styles_lintbuildpublish };
-export default build;
 // #endregion
 /* eslint-enable max-lines */
 /* eslint-enable no-undef */

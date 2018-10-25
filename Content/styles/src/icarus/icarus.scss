@@ -277,15 +277,23 @@ h2 {
 	}
 }
 dialog {
-	border: 0;
-	border-radius: .6rem;
-	box-shadow: 0 0 1em $color-black;
-	margin: 1em;
-	padding: 0;
+    border: 0;
+    border-radius: .6rem;
+    box-shadow: 0 0 1em $color-black;
+    margin: 1em;
+    padding: 0;
 
-	&::backdrop {
-		background-color: $color-shadow-dark;
-	}
+    &.dialog-login {
+        float: right;
+        left: calc(100% - 270px);
+        position: absolute;
+        top: 2em;
+        width: 250px;
+    }
+
+    &::backdrop {
+        background-color: $color-shadow-dark;
+    }
 }
 nav {
 	@extend %bevel-up;
@@ -434,19 +442,38 @@ footer {
 	}
 }
 form {
-	@extend %bevel-up;
-	.login {
-		input,
-		label {
-			text-align: center;
-		}
-	}
-	footer {
-		&.form-footer {
-			background-color: transparent;
-			padding: 0;
-		}
-	}
+    @extend %bevel-up;
+
+    .login {
+        input,
+        label {
+            text-align: center;
+        }
+    }
+
+    footer {
+        &.form-footer {
+            background-color: transparent;
+            padding: 0;
+
+            .btn-group-vertical {
+                button {
+
+                    &:first-child {
+                        &:not(:last-child) {
+                            border-radius: 0;
+                        }
+                    }
+
+                    &:last-child {
+                        &:not(:first-child) { // override vendor
+                            border-radius: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 input,
 select,
@@ -1250,29 +1277,30 @@ table {
 		color: $color-blue-lighter;
 	}
 }
+.form-footer,
 .modal-footer {
-	padding: 0;
+    padding: 0;
 
-	.btn {
-		@include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
-		background-color: $color-grey-light;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		border-color: $color-grey-light;
-		border-top: 1px solid $color-grey;
-		color: $color-grey-darker;
-		cursor: pointer;
-		font-weight: bold;
-		text-shadow: 0 -1px 1px $color-grey;
-		text-transform: uppercase;
+    button {
+        @include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
+        background-color: $color-grey-light;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-color: $color-grey-light;
+        border-top: 1px solid $color-grey;
+        color: $color-grey-darker;
+        cursor: pointer;
+        font-weight: bold;
+        text-shadow: 0 -1px 1px $color-grey;
+        text-transform: uppercase;
 
-		&:hover {
-			@include transition(color 400ms);
-			@include transition(background-color 400ms);
-			background-color: $color-blue-light;
-			color: $color-secondary-neutral;
-		}
-	}
+        &:hover {
+            @include transition(color 400ms);
+            @include transition(background-color 400ms);
+            background-color: $color-blue-light;
+            color: $color-secondary-neutral;
+        }
+    }
 }
 .noSelect {
 	@extend %noSelect;

@@ -4,7 +4,7 @@
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
 import TOGGLEBUTTON, { BUTTON } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
-import { SIZE } from '../../../../enums/SIZE.js';
+//import { SIZE } from '../../../../enums/SIZE.js';
 /**
     A container for Buttons
     @class
@@ -16,9 +16,9 @@ export default class BUTTONGROUP extends GROUP {
 	    @param {EL} node The parent
 	    @param {string} className Optional className to be appended to default class
 	    @param {string} align ALIGN.enum
-	    @param {string} size SIZE.enum
+	    param {string} size SIZE.enum
 	 */
-	constructor(node, className, align, size) {
+    constructor(node, className, align) { //size
 		let attributes = new ATTRIBUTES('btn-group');
 		attributes.set('role', 'group');
 		super(node, 'DIV', new MODEL(attributes));
@@ -28,7 +28,6 @@ export default class BUTTONGROUP extends GROUP {
 		if (align === ALIGN.VERTICAL) {
 			this.addClass('btn-group-vertical');
 		}
-		this.addClass('btn-group-' + size ? size : SIZE.EXTRA_SMALL);
 		/* Add cases for each relevant constructor that inherited class does not have */
 		this.addCase('BUTTON', () => this.addButton('BUTTON'));
 		this.addCase('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
