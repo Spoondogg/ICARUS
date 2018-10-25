@@ -655,7 +655,7 @@
     <Content Include="Scripts\src\icarus\model\el\form\FORMPOST.js" />
     <Content Include="Scripts\src\icarus\model\el\form\forms\LogoutForm.js" />
     <Content Include="Scripts\src\icarus\model\el\form\forms\RegistrationForm.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\iframe\IFRAME.js" />
+    <Content Include="Scripts\src\icarus\model\el\iframe\IFRAME.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
     <Content Include="Scripts\src\icarus\model\el\container\list\LIST.js" />

@@ -17,3 +17,4 @@ export default class LABEL extends EL {
 		this.setInnerHTML(name);
 	}
 }
+export { ATTRIBUTES, EL, MODEL };
