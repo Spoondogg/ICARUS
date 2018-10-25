@@ -1,18 +1,13 @@
-/**
-    @module
-*/
+/** @module */
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
 import TOGGLEBUTTON, { BUTTON } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
-//import { SIZE } from '../../../../enums/SIZE.js';
-/**
-    A container for Buttons
+/** A container for Buttons
     @class
     @extends GROUP
 */
 export default class BUTTONGROUP extends GROUP {
-	/**
-	    Constructs a Button Group
+	/** Constructs a Button Group
 	    @param {EL} node The parent
 	    @param {string} className Optional className to be appended to default class
 	    @param {string} align ALIGN.enum
@@ -32,8 +27,7 @@ export default class BUTTONGROUP extends GROUP {
 		this.addCase('BUTTON', () => this.addButton('BUTTON'));
 		this.addCase('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
 	}
-	/**
-	    Creates a button and adds it to this button group, then adds it to the buttons array
+	/** Creates a button and adds it to this button group, then adds it to the buttons array
 	    @param {string} label The label
 	    @param {string} glyphicon icon,
 	    @param {string} buttonType button type
@@ -45,8 +39,7 @@ export default class BUTTONGROUP extends GROUP {
 		this.children.push(btn);
 		return this.children[this.children.length - 1];
 	}
-	/**
-	    Createa a toggle button with a corresponding dropdown menu
+	/** Createa a toggle button with a corresponding dropdown menu
 	    @param {string} label The label
 	    @param {string} glyphicon The icon
 	    @param {string} buttonType The button type
