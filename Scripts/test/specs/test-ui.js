@@ -83,7 +83,6 @@ describe('Initialize Browser', () => {
     });
 });
 /** Performs Page related Testing */
-
 describe('Initialize Page', () => {
     it('should open the appropriate page (localhost)', (done) => {  
         try {
@@ -113,7 +112,6 @@ describe('Initialize Page', () => {
             done(e);
         }
     });
-
 
     it('should have a $(main) with an id of "1"', (done) => {
         try {
@@ -203,6 +201,30 @@ describe('Log In', () => {
                 expect(val).to.equal(USERNAME);
                 done();
             }, USERNAME);
+        } catch (e) {
+            done(e);
+        }
+    });
+});
+
+describe('Verify INDEX and INDEXMAIN', () => {
+    it('INDEX loaded correctly', (done) => {
+        try {
+            page.$eval('div.index', (el) => el.className).then((val) => {
+                expect(val).to.equal('icarus-container index');
+                done();
+            });
+        } catch (e) {
+            done(e);
+        }
+    });
+
+    it('INDEXMAIN loaded correctly', (done) => {
+        try {
+            page.$eval('div.index-main', (el) => el.className).then((val) => {
+                expect(val).to.equal('icarus-container index-main');
+                done();
+            });
         } catch (e) {
             done(e);
         }
