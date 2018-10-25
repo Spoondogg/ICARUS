@@ -351,7 +351,7 @@ const document_api = () => new Promise((resolve) => {
 const serve_documentation = () => new Promise((resolve) => {
     let docs = connect().use(servestatic('Documentation'));
     http.createServer(docs).listen(9000);
-    resolve();
+    resolve(docs);
 });
 // #endregion
 // #region Tests 
@@ -377,6 +377,7 @@ const tests_lint_src = () => gulp.src(paths.tests.src)
 */
 export const test_api = (done) => {
     console.log(' - Testing API');
+    let server = serve_documentation();
     done();
 };
 /** UI and Behavior testing using Puppeteer and Mocha
@@ -441,7 +442,7 @@ export const test_ui = (done) => {
 /** Creates a static server at localhost:9001 to host tests
     @returns {Promise<resolve>} Promise 
 */
-export const server_test = () => new Promise((resolve) => {
+const server_test = () => new Promise((resolve) => {
     let tests = connect().use(servestatic('Scripts/test/fixtures'));
     http.createServer(tests).listen(9001);
     resolve();
@@ -452,8 +453,7 @@ export const server_test = () => new Promise((resolve) => {
     @returns {void}
 */
 export const clean_dist = () => del(['Scripts/dist/', 'Content/styles/dist/']);
-/**
-    Publishes 'src' and 'dist' Script folders
+/** Publishes 'src' and 'dist' Script folders
     param {boolean} dev If true, push 'src' along with 'dist'
     @todo dev pushes 'src' and 'dist', while prod only has 'dist'
     @returns {gulp} A gulp promise
@@ -562,6 +562,19 @@ export const stylification = gulp.series(
     }
 );
 
+export const test = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== test BEGIN ====');
+        done();
+    },
+    test_ui,
+    //test_api,
+    (done) => {
+        console.log('\n\n\n==== test END ====');
+        done();
+    }
+);
+
 export const scriptification = gulp.series(
     (done) => {
         console.log('\n\n\n==== stylification BEGIN ====');
@@ -603,8 +616,7 @@ const scripts_lintbuildpublish = gulp.series(
     scripts_lint_src,
     scripts_build_src,
     scripts_publish,
-    test_ui,
-    test_api,
+    test,
     (done) => {
         console.log('\n\n\n==== scripts_lintbuildpublish END ====');
         done();
