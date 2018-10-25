@@ -73,13 +73,18 @@ afterEach('After', (done) => {
 /** Performs Browser related Testing */
 describe('Initialize Browser', () => {
     it('should launch the browser', (done) => {
-        browser
-            .version()
-            .then((v) => {
-                console.log('\t - Chrome Version: ' + v);
-                expect(true);
-                done();
-            });
+        try {
+            browser
+                .version()
+                .then((v) => {
+                    console.log('\t - Chrome Version: ' + v);
+                    expect(true);
+                    done();
+                });
+        } catch (e) {
+            expect(false);
+            done(e);
+        }
     });
 });
 /** Performs Page related Testing */
@@ -97,6 +102,7 @@ describe('Initialize Page', () => {
                 });
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -109,6 +115,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -120,6 +127,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -131,6 +139,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -147,6 +156,7 @@ describe('Log In', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -159,6 +169,7 @@ describe('Log In', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -173,6 +184,7 @@ describe('Log In', () => {
             expect(true);
             done();
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -190,6 +202,7 @@ describe('Log In', () => {
             expect(true);
             done();
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -202,12 +215,17 @@ describe('Log In', () => {
                 done();
             }, USERNAME);
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
 });
 
-describe('Verify INDEX and INDEXMAIN', () => {
+/**
+    Each CONTAINER should have its own unique test case,
+    but right now I'm creating a TEMPLATE for a function
+*/
+describe('Verify CONTAINER(s)', () => {
     it('INDEX loaded correctly', (done) => {
         try {
             page.$eval('div.index', (el) => el.className).then((val) => {
@@ -215,6 +233,7 @@ describe('Verify INDEX and INDEXMAIN', () => {
                 done();
             });
         } catch (e) {
+            expect(false);
             done(e);
         }
     });
@@ -223,10 +242,29 @@ describe('Verify INDEX and INDEXMAIN', () => {
         try {
             page.$eval('div.index-main', (el) => el.className).then((val) => {
                 expect(val).to.equal('icarus-container index-main');
+                done(); 
+            });
+        } catch (e) {
+            expect(false);
+            done();
+        }
+    });
+
+    it('INDEXMAIN ul.list loaded correctly', (done) => {
+        try {
+            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).then((val) => {
+                console.log('VAL: ' + val);
+                expect(val).to.equal('nav-item thumbnail');
+                done();
+            }).on('error', () => {
+                console.log('Page Eval Error');
+                expect(false);
                 done();
             });
         } catch (e) {
-            done(e);
+            //done(e); 
+            expect(false);
+            done();
         }
     });
 });

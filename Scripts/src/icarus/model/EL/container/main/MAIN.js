@@ -326,7 +326,6 @@ export default class MAIN extends CONTAINER {
 			</p>
 			</div>
 		</form>
-
 	    @todo Consider handling email/password string or CREDENTIALS object
 	    @todo Create INPUT CHECKBOX called 'RememberMe'
 	    @todo Create BUTTON to launch 'Register as new User
@@ -334,7 +333,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() { //email, password
-		let dialog = new DIALOG(new MODEL().set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
+		let dialog = new DIALOG(new MODEL('dialog-login').set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
 		let form = FORM.createEmptyForm(this.body.pane);
 		$(form.el).appendTo(dialog.body.el);
 		form.setPostUrl('/Account/Login');
