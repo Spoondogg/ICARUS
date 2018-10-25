@@ -7,7 +7,7 @@
 // #region Variables and Methods
 const USERNAME = 'ryan@spoonmedia.ca';
 const PASSWORD = 'wisdomCouragePower52!';
-
+//const RECORD = false; // If true, screenshots are taken before and after each test step
 let testCount = 0;
 let page = null;
 //let success = true;
@@ -18,12 +18,16 @@ let page = null;
 const screenshot = function(label) {
     return new Promise((resolve, reject) => {
         try {
-            page.screenshot({
-                path: './Scripts/test/screens/test-' + label + '-' + testCount + '.png'
-            }).then(() => {
-                testCount++;
-                resolve();
-            });
+            //if (RECORD) {
+                page.screenshot({
+                    path: './Scripts/test/screens/test-' + label + '-' + testCount + '.png'
+                }).then(() => {
+                    testCount++;
+                    resolve();
+                });
+            //} else {
+            //    resolve();
+            //}
         } catch (e) {
             console.log('\t - Failed to take screenshot ' + testCount + ', ' + label);
             reject(e);
@@ -76,11 +80,11 @@ describe('Initialize Browser', () => {
                 .version()
                 .then((v) => {
                     console.log('\t - Chrome Version: ' + v);
-                    expect(true);
+                    expect(true).to.equal(true);
                     done();
                 });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -100,7 +104,7 @@ describe('Initialize Page', () => {
                 });
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -113,7 +117,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -125,7 +129,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -137,7 +141,7 @@ describe('Initialize Page', () => {
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -154,7 +158,7 @@ describe('Log In', () => {
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -163,11 +167,11 @@ describe('Log In', () => {
     it('should have a login button that can be clicked by the user', (done) => {        
         try {
             page.$eval('main.icarus-container .menu .list .tabs li.pull-right', (li) => li.click()).then(() => {
-                expect(true);
+                expect(true).to.equal(true);
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -179,10 +183,10 @@ describe('Log In', () => {
                 document.querySelector('input[name=Email]').value = user;
                 document.querySelector('input[name=Password]').value = pass;                
             }, USERNAME, PASSWORD); 
-            expect(true);
+            expect(true).to.equal(true);
             done();
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -197,10 +201,10 @@ describe('Log In', () => {
                     console.log('Load Complete');
                 });
             });
-            expect(true);
+            expect(true).to.equal(true);
             done();
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -213,7 +217,7 @@ describe('Log In', () => {
                 done();
             }, USERNAME);
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -230,7 +234,7 @@ describe('Verify CONTAINER(s)', () => {
                 done();
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done(e);
         }
     });
@@ -242,7 +246,7 @@ describe('Verify CONTAINER(s)', () => {
                 done(); 
             });
         } catch (e) {
-            expect(false);
+            expect(false).to.equal(true);
             done();
         }
     });
@@ -253,16 +257,16 @@ describe('Verify CONTAINER(s)', () => {
                 console.log('VAL: ' + val);
                 expect(val).to.equal('nav-item thumbnail');
                 done();
-            }).on('error', () => {
-                console.log('Page Eval Error');
-                expect(false);
-                done();
             });
         } catch (e) {
-            //done(e); 
-            expect(false);
+            expect(false).to.equal(true);
             done();
         }
+    });
+
+    it('TEST FAIL', (done) => {      
+        expect(false).to.equal(true);
+        done();        
     });
 });
 // #endregion

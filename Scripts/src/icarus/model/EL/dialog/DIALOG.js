@@ -17,7 +17,7 @@ export default class DIALOG extends EL {
 	/** Constructs a generic DIALOG Element
 	    @constructs DIALOG
 	    @param {MODEL} model The object model
-	 */
+	*/
 	constructor(model) {
 		super(document.body, 'DIALOG', model);
 		document.body.insertBefore(this.el, document.body.firstChild);
