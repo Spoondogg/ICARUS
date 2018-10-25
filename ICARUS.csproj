@@ -623,9 +623,12 @@
     <Content Include="Scripts\src\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\src\icarus\model\el\a\A.js" />
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
+    <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\src\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
     <Content Include="Scripts\src\icarus\model\el\article\ARTICLE.js" />
+    <Content Include="Scripts\src\icarus\model\el\blockquote\BLOCKQUOTE.js" />
+    <Content Include="Scripts\src\icarus\model\el\cite\CITE.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\BANNER.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\callout\CALLOUT.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
