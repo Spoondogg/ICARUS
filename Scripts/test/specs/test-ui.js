@@ -253,7 +253,11 @@ describe('Verify CONTAINER(s)', () => {
 
     it('INDEXMAIN ul.list loaded correctly', (done) => {
         try {
-            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).then((val) => {
+            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).on('error', () => {
+                console.log(' - The query did not return any results');
+                expect(false).to.equal(true);
+                done();
+            }).then((val) => {
                 console.log('VAL: ' + val);
                 expect(val).to.equal('nav-item thumbnail');
                 done();

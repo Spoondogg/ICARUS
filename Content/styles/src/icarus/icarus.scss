@@ -937,44 +937,48 @@ table {
 	padding: .3em;
 }
 .jumbotron {
-	@extend %noSelect;
-	//@extend %bevel-down;
-	@extend %gradient-vignette;
-	background-color: $jumbotron-bg-default;
-	background-position: center top;
-	background-repeat: no-repeat;
-	background-size: cover;
-	color: $color-white;
-	font-family: 'Raleway';
-	font-weight: 300;
-	line-height: 2em;
-	margin: 0;
-	min-height: 420px;
-	overflow-y: hidden;
-	padding: 0;
-	position: relative;
-	text-align: center;
-	//text-shadow: 1px 1px 4px $color-shadow-dark;
-	width: 100%;
+    @extend %noSelect;
+    //@extend %bevel-down;
+    @extend %gradient-vignette;
+    background-color: $jumbotron-bg-default;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: $color-white;
+    font-family: 'Raleway';
+    font-weight: 300;
+    line-height: 2em;
+    margin: 0;
+    min-height: 420px;
+    overflow-y: hidden;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    //text-shadow: 1px 1px 4px $color-shadow-dark;
+    width: 100%;
+    //@media only screen and (max-width: 768px) {}
+    > .screen {
+        @extend %gradient-vignette;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+    }
 
-	>.screen {
-		@extend %gradient-vignette;
-		height: 100%;
-		position: absolute;
-		width: 100%;
-	}
+    header {
+        font-size: $font-size-extralarge;
+        line-height: 3em;
+        padding: 0 6px;
+    }
 
-	header {
-		font-size: $font-size-extralarge;
-		line-height: 3em;
-		padding: 0 6px;
-	}
+    p {
+        @extend %horizontal-center;
+        font-weight: normal;
+        padding: 0 2em;
 
-	p {
-		@extend %horizontal-center;
-		font-weight: normal;
-		padding: 0 2em;
-	}
+        @media only screen and (max-width: 767px) {
+            font-size: 1.2em;
+        }
+    }
 }
 .list-group {
 	.list-group-item {
