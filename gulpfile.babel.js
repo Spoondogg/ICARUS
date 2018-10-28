@@ -384,6 +384,8 @@ export const test_api = (done) => {
     @returns {Promise} Promise to launch Mocha and Puppeteer
 */
 export const test_ui = (done) => {
+
+
     const Puppeteer = require('puppeteer');
     const Mocha = require('mocha'); 
     //const fs = require('fs');
@@ -410,8 +412,9 @@ export const test_ui = (done) => {
     global.browser = Puppeteer.launch(opts).then((brwsr) => {
         browser = brwsr;
         let m = new Mocha(opts);
-        m.addFile('./Scripts/test/specs/test-ui.js').run().on('error', () => {
+        m.addFile('./Scripts/test/specs/test-ui.js').run().on('error', (e) => {
             console.log(' - MOCHA Tests failed');
+            onError(e);
         }).on('end', () => {
             console.log(' - MOCHA Test completed');
             global.expect = globalVariables.expect;
@@ -419,9 +422,7 @@ export const test_ui = (done) => {
             console.log('MOCHA End Complete');
             done();
         });
-        //done();
     });
-    //done();
 }
 // #endregion
 // #region Publish
