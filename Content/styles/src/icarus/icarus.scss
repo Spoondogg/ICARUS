@@ -49,7 +49,8 @@ $font-size-large: 1.5em;
 $font-size-extralarge: 2.5em;
 $navbar-height: 4em; // 50px
 $sidebar-width: 80%;
-$max-width: 768px;
+$max-width-desktop: 768px;
+$max-width-mobile: 767px;
 $thumbnail-height: 10em;
 $transition-speed: .2s;
 $transition-motion: ease-in-out;
@@ -124,13 +125,13 @@ $jumbotron-bg-default: #008196;
 }
 %horizontal-scroll {
 	// mobile only
-	//@media only screen and (max-width: 767px) {
+	//@media only screen and (max-width: $max-width-mobile) {
 	display: flex;
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	overflow-y: hidden;
 	//}
-	//@media only screen and (max-width: 768px) {    }
+	//@media only screen and (max-width: $max-width-desktop) {    }
 }
 /// The object can be clicked or tapped
 %clickable {
@@ -160,7 +161,7 @@ $jumbotron-bg-default: #008196;
 	float: none;
 	margin-left: auto;
 	margin-right: auto;
-	max-width: $max-width;
+	max-width: $max-width-desktop;
 }
 /// A commonly used bevel to offset rows
 %bevel {
@@ -573,8 +574,8 @@ table {
 	@extend %noSelect;
 	//background-color: $color-light-more;
 	//padding: 1.4em 0;
-	//@media only screen and (max-width: 767px) {   }
-	@media only screen and (max-width: 768px) {
+	//@media only screen and (max-width: $max-width-mobile) {   }
+	@media only screen and (max-width: $max-width-desktop) {
 		height: 21em;
 		overflow-y: auto;
 	}
@@ -898,8 +899,8 @@ table {
 			@extend %horizontal-center;
 			height: $thumbnail-height * 3 + 2em;
 
-			//@media only screen and (max-width: 767px) {}
-			@media only screen and (max-width: 768px) {
+			//@media only screen and (max-width: $max-width-mobile) {}
+			@media only screen and (max-width: $max-width-desktop) {
 				height: $thumbnail-height * 2 + 1em;
 			}
 			//border-bottom: 0;
@@ -908,7 +909,7 @@ table {
 			//border-top: 0;
 			//margin: 0 auto;
 			//max-height: 528px;
-			//max-width: $max-width;
+			//max-width: $max-width-desktop;
 			overflow-y: auto;
 			//> .menu {
 			//  > .list {
@@ -956,7 +957,7 @@ table {
     text-align: center;
     //text-shadow: 1px 1px 4px $color-shadow-dark;
     width: 100%;
-    //@media only screen and (max-width: 768px) {}
+
     > .screen {
         @extend %gradient-vignette;
         height: 100%;
@@ -975,9 +976,10 @@ table {
         font-weight: normal;
         padding: 0 2em;
 
-        @media only screen and (max-width: 767px) {
+        @media only screen and (max-width: $max-width-mobile) {
             font-size: 1.2em;
         }
+        //@media only screen and (max-width: $max-width-desktop) {}
     }
 }
 .list-group {
@@ -1032,8 +1034,8 @@ table {
 
 		&.horizontal {
 			@extend %horizontal-scroll;
-			//@media only screen and (max-width: 767px) {}
-			//@media only screen and (max-width: 768px) {}
+			//@media only screen and (max-width: $max-width-mobile) {}
+			//@media only screen and (max-width: $max-width-desktop) {}
 			@include no-scroll-bar;
 
 			&.collapse {
@@ -1372,8 +1374,8 @@ table {
 	padding: 0;
 	width: calc(50% - 1em);
 
-	//@media only screen and (max-width: 767px) {    }
-	@media only screen and (max-width: 768px) {
+	//@media only screen and (max-width: $max-width-mobile) {    }
+	@media only screen and (max-width: $max-width-desktop) {
 		border-radius: 0;
 		margin: 0;
 		width: 100%;

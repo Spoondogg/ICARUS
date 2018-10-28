@@ -216,9 +216,9 @@ describe('Log In', () => {
                 expect(val).to.equal(USERNAME);
                 done();
             }, USERNAME);
-        } catch (e) {
+        } catch () { //e
             expect(false).to.equal(true);
-            done(e);
+            done(); //e
         }
     });
 });
