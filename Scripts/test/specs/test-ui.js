@@ -216,9 +216,9 @@ describe('Log In', () => {
                 expect(val).to.equal(USERNAME);
                 done();
             }, USERNAME);
-        } catch () { //e
+        } catch (e) { //e
             expect(false).to.equal(true);
-            done(); //e
+            done(e); //e
         }
     });
 });
@@ -247,16 +247,16 @@ describe('Verify CONTAINER(s)', () => {
             });
         } catch (e) {
             expect(false).to.equal(true);
-            done();
+            done(e);
         }
     });
 
     it('INDEXMAIN ul.list loaded correctly', (done) => {
         try {
-            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).on('error', () => {
+            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
                 console.log(' - The query did not return any results');
                 expect(false).to.equal(true);
-                done();
+                done(e);
             }).then((val) => {
                 console.log('VAL: ' + val);
                 expect(val).to.equal('nav-item thumbnail');
@@ -264,7 +264,7 @@ describe('Verify CONTAINER(s)', () => {
             });
         } catch (e) {
             expect(false).to.equal(true);
-            done();
+            done(e);
         }
     });
 
