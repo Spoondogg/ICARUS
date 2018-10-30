@@ -33,7 +33,7 @@ export default class DIALOG extends EL {
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {void}
 	*/
-	show(delay = 0) {
+	expand(delay = 0) {
 		setTimeout(() => {
 			this.el.showModal();
 		}, delay);

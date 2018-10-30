@@ -6,7 +6,7 @@ import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
-/** Constructs an Icarus Form Object
+/** An Icarus Form Object
     @description An FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
@@ -18,16 +18,18 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model The object model
 	 */
 	constructor(node, model) {
-		super(node, 'FORM', model, ['FIELDSET']);
+        super(node, 'FORM', model, ['FIELDSET']);
+        //this.el.setAttribute('onsubmit', 'return false;');
 		this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
 		this.setPostUrl('Form/Submit');
 		this.updateUrl = 'Form/Update';
 		this.footer = new FORMFOOTER(this.body, new MODEL());
-		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = () => {
-			this.post();
+        this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
+            e.preventDefault();
+            this.post();
 			return false;
-		};
+        };        
 		this.populate(model.children);
 	}
 	construct() {}
@@ -125,7 +127,8 @@ export default class FORM extends CONTAINER {
 	setInvalid(element) {
 		this.payload.isValid = false;
 		element.focus();
-		element.setAttribute('data-valid', this.payload.isValid);
+        element.setAttribute('data-valid', this.payload.isValid);
+        console.log(element.name + ' is invalid', element);
 		$(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
 	}
 	/** Validate the current form and return true if form is valid
@@ -140,16 +143,19 @@ export default class FORM extends CONTAINER {
 			isValid: true,
 			formName: this.el.name
 		};
+		// For loop outperforms forEach because of break;
+		// @see https://thejsguy.com/2016/07/30/javascript-for-loop-vs-array-foreach.html
 		for (let e = 0; e < this.el.elements.length; e++) {
 			switch (this.el.elements[e].type) {
+				case 'hidden':
 				case 'input':
 				case 'text':
-				case 'email':
+                case 'email':
 				case 'tel':
 				case 'password':
 					if (this.el.elements[e].checkValidity()) { // HTML5 Validation
 						if (this.el.elements[e].value === '') {
-							this.setInvalid(this.el.elements[e]);
+                            this.setInvalid(this.el.elements[e]);
 						} else {
 							$(this.el.elements[e]).removeClass('invalid');
 							this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
@@ -159,7 +165,17 @@ export default class FORM extends CONTAINER {
 						console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
 						this.setInvalid(this.el.elements[e]);
 						break;
-					}
+                    }
+                case 'number':
+                    if (this.el.elements[e].checkValidity()) { // HTML5 Validation
+                        $(this.el.elements[e]).removeClass('invalid');
+                        this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
+                        break;
+                    } else {
+                        console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
+                        this.setInvalid(this.el.elements[e]);
+                        break;
+                    }
 				case 'checkbox':
 					if (this.el.elements[e].required) {
 						if (!this.el.elements[e].checked) {
@@ -177,7 +193,7 @@ export default class FORM extends CONTAINER {
 					}
 					break;
 				default:
-					console.warn('Unable to validate unidentified form element type.');
+					console.warn('Unable to validate unidentified form element type.', this.el.elements[e].type, this.el.elements[e].value);
 			}
 		}
 		console.log('Validation Result: ' + this.payload.isValid);
@@ -199,7 +215,7 @@ export default class FORM extends CONTAINER {
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
 	getResultsAsArray() {
-		console.log('FORM.getResultsAsArray()');
+		console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
 		return $(this.el).serializeArray();
 	}
 	/**
@@ -209,25 +225,6 @@ export default class FORM extends CONTAINER {
 	getFormPost() {
 		return this.validate().isValid ? new FORMPOST(this) : null;
 	}
-	/** Creates an Input Model
-	    @param {string} element Element name
-	    @param {string} name Input name
-	    @param {string} label Label to display
-	    @param {string} value Value of input
-	    @param {string} type The input type
-	    @returns {MODEL} An input model
-	 */
-	static createInputModel(element, name, label, value = '', type = 'TEXT') {
-		return new MODEL(new ATTRIBUTES({
-			name,
-			value,
-			'type': type === 'FORMPOSTINPUT' ? 'NUMBER' : type
-		})).set({
-			element,
-			label,
-			type
-		})
-	}
 	/** Post values to server.
 		Posts the contents of the given Form Post to the specified url
 		and updates the given prompt.
@@ -235,9 +232,10 @@ export default class FORM extends CONTAINER {
 	    @async
 	    @returns {Promise<object>} The results of the Form Post
 	*/
-	post() {
+    post() {        
 		console.log(10, 'Posting values to server: ' + this.postUrl);
-		let formPost = this.getFormPost();
+        let formPost = this.getFormPost();
+        console.log('FormPost', formPost);
 		if (formPost) {
 			this.lock();
 			//console.log('Posting to: ' + this.postUrl, formPost);
@@ -274,7 +272,7 @@ export default class FORM extends CONTAINER {
 			});
 		} else {
 			console.log(0, 'Post Failed to submit.  Values may be invalid.');
-			this.getMainContainer().loader.showConsole();
+			//this.getMainContainer().loader.showConsole();
 		}
 	}
 }

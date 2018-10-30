@@ -58,6 +58,7 @@ $transition-default: all $transition-speed $transition-motion;
 $icon-width: 4em; //64px;
 $icon-height: 4em; //64px;
 $jumbotron-bg-default: #008196;
+$jumbotron-height: 420px;
 
 // Mixins: https://sass-lang.com/guide#topic-6-SCSS
 @mixin transition($property) {
@@ -278,23 +279,27 @@ h2 {
 	}
 }
 dialog {
-    border: 0;
-    border-radius: .6rem;
-    box-shadow: 0 0 1em $color-black;
-    margin: 1em;
-    padding: 0;
+	border: 0;
+	border-radius: .6rem;
+	box-shadow: 0 0 1em $color-black;
+	margin: 1em;
+	padding: 0;
 
-    &.dialog-login {
-        float: right;
-        left: calc(100% - 270px);
-        position: absolute;
-        top: 2em;
-        width: 250px;
-    }
+	&.dialog-login {
+		float: right;
+		left: calc(100% - 270px);
+		position: absolute;
+		top: 2em;
+		width: 250px;
+	}
 
-    &::backdrop {
-        background-color: $color-shadow-dark;
-    }
+	&::backdrop {
+		background-color: $color-shadow-dark;
+	}
+
+	.modal-body {
+		max-height: calc(100vh - 80px);
+	}
 }
 nav {
 	@extend %bevel-up;
@@ -443,38 +448,39 @@ footer {
 	}
 }
 form {
-    @extend %bevel-up;
+	@extend %bevel-up;
 
-    .login {
-        input,
-        label {
-            text-align: center;
-        }
-    }
+	.login {
+		input,
+		label {
+			text-align: center;
+		}
+	}
 
-    footer {
-        &.form-footer {
-            background-color: transparent;
-            padding: 0;
+	footer {
+		&.form-footer {
+			background-color: transparent;
+			padding: 0;
 
-            .btn-group-vertical {
-                button {
+			.btn-group-vertical {
+				button {
 
-                    &:first-child {
-                        &:not(:last-child) {
-                            border-radius: 0;
-                        }
-                    }
+					&:first-child {
+						&:not(:last-child) {
+							border-radius: 0;
+						}
+					}
 
-                    &:last-child {
-                        &:not(:first-child) { // override vendor
-                            border-radius: 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
+					&:last-child {
+						&:not(:first-child) {
+							// override vendor
+							border-radius: 0;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 input,
 select,
@@ -938,49 +944,49 @@ table {
 	padding: .3em;
 }
 .jumbotron {
-    @extend %noSelect;
-    //@extend %bevel-down;
-    @extend %gradient-vignette;
-    background-color: $jumbotron-bg-default;
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: $color-white;
-    font-family: 'Raleway';
-    font-weight: 300;
-    line-height: 2em;
-    margin: 0;
-    min-height: 420px;
-    overflow-y: hidden;
-    padding: 0;
-    position: relative;
-    text-align: center;
-    //text-shadow: 1px 1px 4px $color-shadow-dark;
-    width: 100%;
+	@extend %noSelect;
+	//@extend %bevel-down;
+	@extend %gradient-vignette;
+	background-color: $jumbotron-bg-default;
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: $color-white;
+	font-family: 'Raleway';
+	font-weight: 300;
+	height: $jumbotron-height;
+	line-height: 2em;
+	margin: 0;
+	overflow-y: hidden;
+	padding: 0;
+	//position: relative;
+	text-align: center;
+	//text-shadow: 1px 1px 4px $color-shadow-dark;
+	width: 100%;
 
-    > .screen {
-        @extend %gradient-vignette;
-        height: 100%;
-        position: absolute;
-        width: 100%;
-    }
+	>.screen {
+		@extend %gradient-vignette;
+		height: $jumbotron-height;
+		//position: absolute;
+		width: 100%;
+	}
 
-    header {
-        font-size: $font-size-extralarge;
-        line-height: 3em;
-        padding: 0 6px;
-    }
+	header {
+		font-size: $font-size-extralarge;
+		line-height: 3em;
+		padding: 0 6px;
+	}
 
-    p {
-        @extend %horizontal-center;
-        font-weight: normal;
-        padding: 0 2em;
+	p {
+		@extend %horizontal-center;
+		font-weight: normal;
+		padding: 0 2em;
 
-        @media only screen and (max-width: $max-width-mobile) {
-            font-size: 1.2em;
-        }
-        //@media only screen and (max-width: $max-width-desktop) {}
-    }
+		@media only screen and (max-width: $max-width-mobile) {
+			font-size: 1.2em;
+		}
+		//@media only screen and (max-width: $max-width-desktop) {}
+	}
 }
 .list-group {
 	.list-group-item {
@@ -1285,28 +1291,28 @@ table {
 }
 .form-footer,
 .modal-footer {
-    padding: 0;
+	padding: 0;
 
-    button {
-        @include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
-        background-color: $color-grey-light;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        border-color: $color-grey-light;
-        border-top: 1px solid $color-grey;
-        color: $color-grey-darker;
-        cursor: pointer;
-        font-weight: bold;
-        text-shadow: 0 -1px 1px $color-grey;
-        text-transform: uppercase;
+	button {
+		@include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
+		background-color: $color-grey-light;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		border-color: $color-grey-light;
+		border-top: 1px solid $color-grey;
+		color: $color-grey-darker;
+		cursor: pointer;
+		font-weight: bold;
+		text-shadow: 0 -1px 1px $color-grey;
+		text-transform: uppercase;
 
-        &:hover {
-            @include transition(color 400ms);
-            @include transition(background-color 400ms);
-            background-color: $color-blue-light;
-            color: $color-secondary-neutral;
-        }
-    }
+		&:hover {
+			@include transition(color 400ms);
+			@include transition(background-color 400ms);
+			background-color: $color-blue-light;
+			color: $color-secondary-neutral;
+		}
+	}
 }
 .noSelect {
 	@extend %noSelect;

@@ -13,7 +13,7 @@ export default class BUTTONGROUP extends GROUP {
 	    @param {string} align ALIGN.enum
 	    param {string} size SIZE.enum
 	 */
-    constructor(node, className, align) { //size
+	constructor(node, className, align) { //size
 		let attributes = new ATTRIBUTES('btn-group');
 		attributes.set('role', 'group');
 		super(node, 'DIV', new MODEL(attributes));

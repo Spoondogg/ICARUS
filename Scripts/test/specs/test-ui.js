@@ -39,15 +39,20 @@ const screenshot = function(label) {
 /** Instantiates the Browser before any test are ran */
 before('BeforeAll', (done) => {
     console.log('Instantiate Browser and Launch Page');
-    browser.newPage().then((p) => {
-        p.goto('http://localhost:8052').then(() => {
-            page = p;
-            console.log('Loading Page...');
-            p.waitFor('main').then(() => {
-                done();
+    try {
+        browser.newPage().then((p) => {
+            p.goto('http://localhost:8052').then(() => {
+                page = p;
+                console.log('Loading Page...');
+                p.waitFor('main').then(() => {
+                    done();
+                });
             });
         });
-    });
+    } catch (e) {
+        console.log('Unable to instantiate browser', e);
+        throw e;
+    }
 });
 /** Closes the Browser after all tests are ran */
 after('AfterAll', (done) => {

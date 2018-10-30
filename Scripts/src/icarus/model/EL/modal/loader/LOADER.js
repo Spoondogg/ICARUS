@@ -57,7 +57,7 @@ export default class LOADER extends DIALOG {
 				console.log(text);
 			}
 			if (show) {
-				this.show();
+				this.expand();
 				if (value === 100) {
 					this.close();
 				}

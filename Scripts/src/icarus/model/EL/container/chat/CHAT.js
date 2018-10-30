@@ -45,9 +45,9 @@ export default class CHAT extends CONTAINER {
 			setTimeout(() => {
 				this.addStatement('ICARUS', payload.message);
 			}, 1000);
-        }.bind(this);
+		}.bind(this);
 		this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
-		console.log('Chat Input', this.chatInput); 
+		console.log('Chat Input', this.chatInput);
 		this.chatInput.el.onkeypress = this.postStatement.bind(this);
 	}
 	/** Posts the chat statement to the server and handles any responses
@@ -89,7 +89,7 @@ export default class CHAT extends CONTAINER {
 		$(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
 		return statement;
 	}
-	construct() { 
+	construct() {
 		setTimeout(() => {
 			this.addStatement('ICARUS', 'Hello ' + this.user);
 		}, 2000);

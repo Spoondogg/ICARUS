@@ -30,7 +30,7 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		console.log('Launch Index Thumbnail Modal');
 		this.addModal();
 		this.addDataListNavItems();
-		this.modal.show();
+		this.modal.expand();
 	}
 	/** Creates a MODAL and populates its Container with a Header, Image and various details
         @returns {MODAL} A Thumbnail MODAL

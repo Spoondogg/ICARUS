@@ -14,6 +14,6 @@ export default class FORMFOOTER extends FOOTER {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('btn-group-justified form-footer');
-        this.buttonGroup = new BUTTONGROUP(this, null, ALIGN.VERTICAL); // Left aligned button group SIZE.MED
+		this.buttonGroup = new BUTTONGROUP(this, null, ALIGN.VERTICAL); // Left aligned button group SIZE.MED
 	}
 }
