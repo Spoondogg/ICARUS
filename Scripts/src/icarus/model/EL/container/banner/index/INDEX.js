@@ -100,7 +100,7 @@ export default class INDEX extends BANNER {
 				this.launchPreview(500, listClass, list[li].id); // title, this.modal.container.preview.body.pane,
 			};
 		}
-		this.modal.show();
+		this.modal.expand();
 	}
 	/**
 	        Creates a modal and loads the specified container

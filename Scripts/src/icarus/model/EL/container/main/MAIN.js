@@ -1,5 +1,6 @@
 /** @module */
 import CONTAINER, { DIALOG, ICONS, MODEL } from '../CONTAINER.js';
+import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
 import LOADER from '../../modal/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
@@ -22,6 +23,7 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
+        
 		/** @type {LOADER} */
 		this.loader = model.loader;
 		/** A Security token @type {string} */
@@ -34,7 +36,12 @@ export default class MAIN extends CONTAINER {
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
-		this.addNavOptions();
+        this.addNavOptions();
+
+        this.save = model.factory.save;
+        this.quickSave = model.factory.quickSave;
+        this.quickSaveFormPost = model.factory.quickSaveFormPost;
+
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
 		this.populate(model.children);
 	}
@@ -122,7 +129,7 @@ export default class MAIN extends CONTAINER {
 			this.navBar.menu.toggleCollapse();
 		};
 		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
-			this.loader.show();
+			this.loader.expand();
 			this.loader.showConsole();
 		};
 		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
@@ -144,20 +151,22 @@ export default class MAIN extends CONTAINER {
 			    In order to avoid popup blocking, the user must 
 			    manually click to be redirected or launch a new
 			    page in this window
-						
+			*/
 			let url = '/' + payload.model.id;
-			let prompt = new PROMPT('New Page', 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>');
-			let button = prompt.form.footer.buttonGroup.children[0];
-			button.setLabel('Open in new Window?');
-			button.el.onclick = () => {
+            let dialog = new DIALOG(new MODEL().set({
+                label: 'New Page'
+            }));
+            dialog.form = FORM.createEmptyForm(dialog.body);
+            //dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
+			dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 				window.open(url, '_blank');
-				prompt.hide(300, true);
+				dialog.hide(300, true);
 			};
-			prompt.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
+			dialog.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
 				location.href = url;
-				prompt.hide(300, true);
+				dialog.hide(300, true);
 			};
-			prompt.show();*/
+			dialog.expand();
 			return true;
 		});
 	}
@@ -330,9 +339,9 @@ export default class MAIN extends CONTAINER {
 		form.el.setAttribute('method', 'POST');
 		form.el.setAttribute('action', '#');
 		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-			FORM.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
-			FORM.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
-			FORM.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
+			form.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
+			form.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
+			form.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
 		]);
 		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 		/* Create a new form to submit 3rd party logins
@@ -363,7 +372,7 @@ export default class MAIN extends CONTAINER {
 		form.afterSuccessfulPost = (payload, status) => {
 			this.ajaxRefreshIfSuccessful(payload, status)
 		};
-		dialog.show();
+		dialog.expand();
 	}
 	/** Sets up the External Login Form
 	    @returns {FORM} An external login form
@@ -382,8 +391,8 @@ export default class MAIN extends CONTAINER {
 		this.loader.showConsole();
 		this.loader.log(50, 'MAIN.logout(); Logging out...', true);
 		$.post('/Account/LogOff', {
-			'__RequestVerificationToken': this.token
-		}, this.ajaxRefreshIfSuccessful, "json");
+			'__RequestVerificationToken': this.getToken() //.token
+		}, this.ajaxRefreshIfSuccessful, 'json');
 	}
 	/** Log into the application using the given credentials
         @param {string} email Username / Email 
@@ -448,4 +457,4 @@ export default class MAIN extends CONTAINER {
         */
 	}
 }
-export { LOADER, MODEL, NAVITEMICON };
+export { CONTAINERFACTORY, LOADER, MODEL, NAVITEMICON };

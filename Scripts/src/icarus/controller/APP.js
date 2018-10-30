@@ -17,7 +17,7 @@ export default class APP extends CONTROLLER {
 		@param {string} user A friendly username for the current user
 		@param {boolean} dev If true, dev-options are enabled
 		@param {number} recursionLimit Limits recursion depth 
-	    @param {CONTAINERFACTORY} factory The container constructor factory
+	    param {CONTAINERFACTORY} factory The container constructor factory
 	*/
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100) {
 		super(id, user, dev, recursionLimit, 'Icarus', '0.5.20181002', TOKEN.setToken().value, new CONTAINERFACTORY());

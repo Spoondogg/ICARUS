@@ -1,8 +1,7 @@
-/**
-    @module 
-*/
+/** @module */
 import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
+//import DIALOG from '../model/EL/dialog/DIALOG.js';
 import WATERMARK from '../helper/WATERMARK.js';
 /**
     @class
@@ -12,17 +11,16 @@ import WATERMARK from '../helper/WATERMARK.js';
     This should be instantiated during the init phase of the html document
 */
 export default class CONTROLLER extends MODEL {
-	/**
-		    Constructs an Application
-		    @param {number} id The unique application id
-		    @param {string} user A friendly username
-		    @param {boolean} dev If true, dev-options are enabled
-		    @param {number} recursionLimit The maximum number of recursive loops before an error is thrown
-	        @param {string} name The application name
-	        @param {string} version The application version
-	        @param {string} token The session token
-	        @param {CONTAINERFACTORY} factory The container constructor factory 
-	*/
+	/** Constructs an Application
+        @param {number} id The unique application id
+        @param {string} user A friendly username
+        @param {boolean} dev If true, dev-options are enabled
+        @param {number} recursionLimit The maximum number of recursive loops before an error is thrown
+        @param {string} name The application name
+        @param {string} version The application version
+        @param {string} token The session token
+        @param {CONTAINERFACTORY} factory The container constructor factory 
+    */
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token, factory) { // eslint-disable-line max-params
 		super().set({
 			id,

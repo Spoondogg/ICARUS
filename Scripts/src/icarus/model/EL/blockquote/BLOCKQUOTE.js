@@ -11,7 +11,7 @@ export default class BLOCKQUOTE extends EL {
 	    @param {string} innerHtml The object contents (html)
 	 */
 	constructor(node, model, innerHtml) {
-        super(node, 'BLOCKQUOTE', model, innerHtml);
+		super(node, 'BLOCKQUOTE', model, innerHtml);
 	}
 }
 export { ATTRIBUTES, EL, MODEL };

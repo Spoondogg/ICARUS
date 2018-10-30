@@ -8,7 +8,7 @@ import BANNER from '../model/el/container/banner/BANNER.js';
 import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
 import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
-//import CONTAINER from '../model/el/container/CONTAINER.js';
+import CONTAINER from '../model/el/container/CONTAINER.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
@@ -146,7 +146,10 @@ export default class CONTAINERFACTORY {
 					//	break;
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
-					break;
+                    break;
+                //case 'SPAN':
+                  //  obj = new SPAN(span, result.model);
+                    //break;
 				case 'TEXTBLOCK':
 					obj = new TEXTBLOCK(span, result.model);
 					break;
@@ -167,7 +170,8 @@ export default class CONTAINERFACTORY {
 				// Inject CRUD actions and dependencies
 				//obj.factory = this;
 				obj.save = this.save;
-				//obj.quickSaveFormPost = this.quickSaveFormPost;
+                obj.quickSave = this.quickSave;
+                obj.quickSaveFormPost = this.quickSaveFormPost;
 				// Overwrite span with 
 				span.el.parentNode.replaceChild(obj.el, span.el);
 			} catch (e) {
@@ -178,29 +182,8 @@ export default class CONTAINERFACTORY {
 			return node.children[index];
 		});
 	}
-	/* eslint-enable max-lines-per-function, complexity
-	/**
-	    Restore Container View to defaults and refresh parent Container
-	    @param {CONTAINER} container The container to restore
-	    @returns {void}
-	 */
-	refreshParentContainer(container) {
-		try {
-			container.getMainContainer().focusBody();
-			container.getMainContainer().loader.hide();
-		} catch (e) {
-			console.log(e);
-		}
-		try {
-			container.getContainer().refresh();
-		} catch (e) {
-			//console.log('Unable to reload Container);
-			//location.reload(true);
-			container.getMainContainer().refresh();
-		}
-	}
-	/**
-	    Saves the state of the given Container
+	/* eslint-enable max-lines-per-function, complexity */
+	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    @param {EL} node The parent container to hold the save menu
         @param {CONTAINER} container The Container to save
@@ -208,18 +191,17 @@ export default class CONTAINERFACTORY {
 	    @returns {void}
 	*/
 	save(node, container) {
-		//let subsections = container.getSubSections(); // Populate subsections with elements in this body
-		let form = FORM.createEmptyForm(node, false).addClass('saveContainer').setPostUrl(container.className + '/Set');
-		form.fieldset.formElementGroup.addInputElements(this.createContainerInputs(form, container));
+		let form = FORM.createEmptyForm(node, false);
+		form.addClass('saveContainer').setPostUrl(container.className + '/Set');
+		form.children[0].children[0].addInputElements(container.createContainerInputs());
 		form.afterSuccessfulPost = () => {
+			console.log('Successful post');
 			container.setLabel(form.el.elements.label.value);
-			this.refreshParentContainer(container);
+			container.refreshParentContainer(container);
 		};
-		$(node.el).collapse('show');
-		//return form;
 	}
 	/**
-	    If dataId or attributesId exists, extract the appropriate values
+	    If dataId or attributesId exists, extract the appropriate values and save
 	    @param {number} modelId The object's unique identifier
 	    @param {object} data The object to be saved
 	    @returns {void}
@@ -258,43 +240,23 @@ export default class CONTAINERFACTORY {
 	 */
 	quickSave(container, noPrompt = false) {
 		/* eslint-disable-next-line no-alert */
-		if (noPrompt || confirm('Quick Save ' + this.className + '(' + container.id + ') : ' + container.label + ' ?')) {
+        if (noPrompt || confirm('Quick Save ' + this.className + '(' + this.id + ') : ' + this.label + ' ?')) {
 			//console.log(this.className + '.save()', this);
 			// Populate subsections with elements in this body
 			//let subsections = container.getSubSections();
 			let form = FORM.createEmptyForm(container, true);
-			form.fieldset.formElementGroup.addInputElements(this.createContainerInputs(form, container));
+			form.children[0].children[0].addInputElements(form.createContainerInputs());
 			form.setPostUrl(container.className + '/Set');
 			form.post();
 			form.afterSuccessfulPost = () => {
 				container.setLabel(form.el.elements.label.value);
 				form.destroy();
 				container.quickSaveFormPost(container.dataId, container.data);
-				container.quickSaveFormPost(container.attributesId, container.attributes);
+                container.quickSaveFormPost(container.attributesId, container.attributes);
 			};
 			return true;
 		}
 	}
-	/**
-	    Creates the default Container Inputs for CRUD Actions
-	    @param {FORM} form A crud form
-	    @param {CONTAINER} container The specified container for crud actions
-	    @returns {Array<MODEL>} An array of input models
-	*/
-	createContainerInputs(form, container) {
-		let subsections = container.getSubSections();
-		return [
-			form.createInputModel('INPUT', 'element', 'element', container.get('element')),
-			form.createInputModel('INPUT', 'id', 'ID', container.get('id').toString()).set({ 'id': 0 }),
-			form.createInputModel('INPUT', 'label', 'Label', typeof container.get('label') === 'object' ? container.get('label').el.innerHTML.toString() : container.get('label').toString()),
-			form.createInputModel('INPUT', 'subsections', 'SubSections', subsections.length > 0 ? subsections.toString() : '0'),
-			form.createInputModel('INPUT', 'status', 'Status', container.get('status').toString(), 'NUMBER'),
-			form.createInputModel('BUTTON', 'dataId', 'dataId', container.get('dataId').toString(), 'FORMPOSTINPUT'),
-			form.createInputModel('BUTTON', 'attributesId', 'attributesId', container.get('attributesId').toString(), 'FORMPOSTINPUT'),
-			form.createInputModel('BUTTON', 'descriptionId', 'descriptionId', container.get('descriptionId').toString(), 'FORMPOSTINPUT'),
-			form.createInputModel('BUTTON', 'shared', 'shared', container.get('shared').toString(), 'NUMBER')
-		];
-	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export { ATTRIBUTES, CONTAINER, EL, MODEL };
 /* eslint-enable */

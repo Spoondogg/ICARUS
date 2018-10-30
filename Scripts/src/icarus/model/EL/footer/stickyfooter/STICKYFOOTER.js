@@ -21,7 +21,7 @@ export default class STICKYFOOTER extends FOOTER {
 	    Expands the footer to include context menu
 	    @returns {STICKYFOOTER} This Stickyfooter
 	*/
-	show() {
+	expand() {
 		this.addClass('active');
 		return this;
 	}
