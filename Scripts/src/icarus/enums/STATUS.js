@@ -1,5 +1,4 @@
-/**
-    Element status for any state changes
+/** Element status for any state changes
     @readonly
     @enum {number}
 */

@@ -1,19 +1,15 @@
-/**
-    A Prompt Modal module
-    @module
-*/
+/** @module */
+import DIALOG, { MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
 import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
-import MODAL from '../MODAL.js';
-/**
-    A modal prompt
+/** A Dialog that prompts the user for input
     @description Creates a modal and displays a text well and any included buttons
     @class
-    @extends MODAL
+    @extends DIALOG
 */
-export default class PROMPT extends MODAL {
-	/**
+export default class PROMPT extends DIALOG {
+	/** Constructs a PROMPT
 	    @param {string} label The label
 	    @param {string} text The html text that is displayed in the prompt's well
 	    @param {array} buttons Array of [label, glyphicon, buttonType]
@@ -21,16 +17,19 @@ export default class PROMPT extends MODAL {
 	    @param {boolean} vertical If true, prompt is vertically centered
 	 */
 	constructor(label, text, buttons, inputs, vertical) {
-		super(label, text, vertical);
+        super(new MODEL().set({
+            label,
+            text,
+            vertical
+        }));
 		this.addClass('prompt');
-		this.form = FORM.createEmptyForm(this.container.body.pane, false);
+		this.form = FORM.createEmptyForm(this.body, false);
 		this.form.prompt = this;
 		this.promptInputs = [];
 		this.addInputs(inputs);
 		this.addButtons(buttons);
 	}
-	/**
-	    Adds the provided inputs to the prompt
+	/** Adds the provided inputs to the prompt
 	    @param {Array} inputs An array of inputs
 	    @returns {void}
 	*/
@@ -41,16 +40,15 @@ export default class PROMPT extends MODAL {
 				let inp = null;
 				if (inputs[i].type === 'FORMPOSTINPUT') {
 					//DEBUG.log('FORMPOSTINPUT');
-					this.promptInputs.push(new FORMPOSTINPUT(this.formElementGroup.body.pane, inputs[i]));
+					this.promptInputs.push(new FORMPOSTINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
 				} else {
-					this.promptInputs.push(new FORMINPUT(this.formElementGroup.body.pane, inputs[i]));
+                    this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
 				}
-				this.formElementGroup.children.push(inp);
+                this.form.children[0].children[0].children.push(inp);
 			}
 		}
 	}
-	/**
-	    Adds the provided buttons to the prompt
+	/** Adds the provided buttons to the prompt
 	    @param {Array} buttons An array of buttons
 	    @returns {void}
 	*/
@@ -62,4 +60,4 @@ export default class PROMPT extends MODAL {
 		}
 	}
 }
-export { MODAL };
+export { DIALOG };

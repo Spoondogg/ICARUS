@@ -1,17 +1,13 @@
-/**
-    @module
-*/
+/** @module */
 import DIALOG, { ATTRIBUTES, DIV, MODEL } from '../../dialog/DIALOG.js';
 import CONSOLE from '../../ul/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
-/**
-    A Loader type modal.
+/** A Dialog showing loading details
     @class
     @extends DIALOG
 */
 export default class LOADER extends DIALOG {
-	/**
-        Constructs a dialog that displays loading details
+	/** Constructs a LOADER dialog
         @param {number} value Percentage complete (integer)
         @param {string} label The header text for this modal	    
         @param {string} text Text that appears in modal's well
@@ -39,8 +35,7 @@ export default class LOADER extends DIALOG {
 		}
 		this.log(value);
 	}
-	/**
-		Sets the progress bar status
+	/** Sets the progress bar status
 		@param {number} value Percentage as integer (ie: 50 means 50%).
 		@param {string} text Text displayed inside progress bar.  
 	    @param {boolean} show If true, the log will be displayed
@@ -57,7 +52,7 @@ export default class LOADER extends DIALOG {
 				console.log(text);
 			}
 			if (show) {
-				this.expand();
+				this.show();
 				if (value === 100) {
 					this.close();
 				}
@@ -66,15 +61,13 @@ export default class LOADER extends DIALOG {
 			console.log('Unable to find loader');
 		}
 	}
-	/**
-        Shows the Loader Console
+	/** Shows the Loader Console
         @returns {void}
     */
 	showConsole() {
 		$(this.console.el).collapse('show');
 	}
-	/**
-        Hides the Loader Console
+	/** Hides the Loader Console
         @returns {void}
     */
 	hideConsole() {

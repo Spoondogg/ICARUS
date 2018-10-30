@@ -1,9 +1,6 @@
-/**
-    @module
-*/
+/** @module */
 import EL from '../../EL.js';
-/**
-    A Bootstrap Progress Bar 
+/** A Bootstrap Progress Bar 
     @class
     @extends EL
 */

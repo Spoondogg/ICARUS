@@ -145,60 +145,70 @@ export default class FORM extends CONTAINER {
 		};
 		// For loop outperforms forEach because of break;
 		// @see https://thejsguy.com/2016/07/30/javascript-for-loop-vs-array-foreach.html
-		for (let e = 0; e < this.el.elements.length; e++) {
-			switch (this.el.elements[e].type) {
-				case 'hidden':
+        for (let e = 0; e < this.el.elements.length; e++) {
+            let element = this.el.elements[e];
+            switch (element.type) {
+                case 'hidden':
 				case 'input':
 				case 'text':
                 case 'email':
 				case 'tel':
-				case 'password':
-					if (this.el.elements[e].checkValidity()) { // HTML5 Validation
-						if (this.el.elements[e].value === '') {
-                            this.setInvalid(this.el.elements[e]);
-						} else {
-							$(this.el.elements[e]).removeClass('invalid');
-							this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
-						}
-						break;
-					} else {
-						console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
-						this.setInvalid(this.el.elements[e]);
-						break;
-                    }
+                case 'password':
+                    this.validateString(element);
+                    break;
                 case 'number':
-                    if (this.el.elements[e].checkValidity()) { // HTML5 Validation
-                        $(this.el.elements[e]).removeClass('invalid');
-                        this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
+                    if (element.checkValidity()) { // HTML5 Validation
+                        $(element).removeClass('invalid');
+                        element.setAttribute('data-valid', this.payload.isValid);
                         break;
                     } else {
-                        console.log(this.el.elements[e].name + ' -- isValid: ' + this.el.elements[e].checkValidity());
-                        this.setInvalid(this.el.elements[e]);
+                        console.log(element.name + ' -- isValid: ' + element.checkValidity());
+                        this.setInvalid(element);
                         break;
                     }
 				case 'checkbox':
-					if (this.el.elements[e].required) {
-						if (!this.el.elements[e].checked) {
-							this.setInvalid(this.el.elements[e]);
+                    if (element.required) {
+                        if (!element.checked) {
+                            this.setInvalid(element);
 							break;
 						}
 					}
 					break;
 				case 'select-one':
-					if (this.el.elements[e].selectedIndex === 0) {
-						this.setInvalid(this.el.elements[e]);
+                    if (element.selectedIndex === 0) {
+                        this.setInvalid(element);
 					} else {
-						$(this.el.elements[e]).removeClass('invalid');
-						this.el.elements[e].setAttribute('data-valid', this.payload.isValid);
+                        $(element).removeClass('invalid');
+                        element.setAttribute('data-valid', this.payload.isValid);
 					}
 					break;
 				default:
-					console.warn('Unable to validate unidentified form element type.', this.el.elements[e].type, this.el.elements[e].value);
+                    console.warn('Unable to validate unidentified form element type.', element.type, element.value);
 			}
 		}
 		console.log('Validation Result: ' + this.payload.isValid);
 		return this.payload;
-	}
+    }
+    /** Validates the given element as a STRING using HTML5 validation
+        @param {HTMLElement} element The Input element
+        @see https://www.w3schools.com/js/js_validation_api.asp
+        @returns {element} The element for chaining
+    */
+    validateString(element) {
+        if (element.checkValidity()) {
+            if (element.value === '') {
+                this.setInvalid(element);
+            } else {
+                $(element).removeClass('invalid');
+                element.setAttribute('data-valid', this.payload.isValid);
+            }
+        } else {
+            console.log(element.name + ' -- isValid: ' + element.checkValidity());
+            this.setInvalid(element);
+        }
+        return element;
+    }
+
 	/** Resets the form and any validation notifications.
         @returns {void}
 	*/
@@ -210,16 +220,14 @@ export default class FORM extends CONTAINER {
 		}
 		this.el.reset();
 	}
-	/**
-	    Serialize the form into an array
+	/** Serialize the form into an array
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
 	getResultsAsArray() {
 		console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
 		return $(this.el).serializeArray();
 	}
-	/**
-	    If valid, Returns a FormPost based on values in this form
+	/** If valid, Returns a FormPost based on values in this form
 	    @returns {FormPost} A FormPost Object
 	*/
 	getFormPost() {
@@ -232,48 +240,49 @@ export default class FORM extends CONTAINER {
 	    @async
 	    @returns {Promise<object>} The results of the Form Post
 	*/
-    post() {        
-		console.log(10, 'Posting values to server: ' + this.postUrl);
-        let formPost = this.getFormPost();
-        console.log('FormPost', formPost);
-		if (formPost) {
-			this.lock();
-			//console.log('Posting to: ' + this.postUrl, formPost);
-			$.ajax({
-				url: this.postUrl,
-				type: 'POST',
-				data: formPost,
-				error(xhr, statusText, errorThrown) {
-					console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
-				},
-				statusCode: {
-					200(response) {
-						console.log('StatusCode: 200', response.message, true);
-					},
-					201(response) {
-						console.log('StatusCode: 201', response);
-					},
-					400(response) {
-						console.log('StatusCode: 400', response);
-					},
-					403(response) {
-						console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
-						//app.login();
-					},
-					404(response) {
-						console.log('StatusCode: 404', response);
-					}
-				},
-				success: (payload) => {
-					console.log('Posted results to server.', payload.message);
-					this.unlock();
-					this.afterSuccessfulPost(payload);
-				}
-			});
-		} else {
-			console.log(0, 'Post Failed to submit.  Values may be invalid.');
-			//this.getMainContainer().loader.showConsole();
-		}
+    post() {
+        return new Promise((resolve, reject) => {
+            console.log(10, 'Posting values to server: ' + this.postUrl);
+            let formPost = this.getFormPost();
+            console.log('FormPost', formPost);
+            if (formPost) {
+                this.lock();
+                $.ajax({
+                    url: this.postUrl,
+                    type: 'POST',
+                    data: formPost,
+                    error(xhr, statusText, errorThrown) {
+                        console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
+                    },
+                    statusCode: {
+                        200(response) {
+                            console.log('StatusCode: 200', response.message, true);
+                        },
+                        201(response) {
+                            console.log('StatusCode: 201', response);
+                        },
+                        400(response) {
+                            console.log('StatusCode: 400', response);
+                        },
+                        403(response) {
+                            console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
+                        },
+                        404(response) {
+                            console.log('StatusCode: 404', response);
+                        }
+                    },
+                    success: (payload) => {
+                        console.log('Posted results to server.', payload.message);
+                        this.unlock();
+                        this.afterSuccessfulPost(payload);
+                        resolve(payload);
+                    }
+                });
+            } else {
+                console.log(0, 'Post Failed to submit.  Values may be invalid.');
+                reject(new Error('Post Failed to submit.  Values may be invalid.'));
+            }
+        });
 	}
 }
 export { ATTRIBUTES, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };
