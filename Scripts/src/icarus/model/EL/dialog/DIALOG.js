@@ -1,6 +1,7 @@
 /** @module */
+import BUTTONGROUP, { ALIGN, BUTTON } from '../group/buttongroup/BUTTONGROUP.js';
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import BUTTON from '../button/BUTTON.js';
+//import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
@@ -23,17 +24,18 @@ export default class DIALOG extends EL {
 		document.body.insertBefore(this.el, document.body.firstChild);
 		this.header = new HEADER(this, new MODEL('modal-header'));
 		this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
-		this.footer = new FOOTER(this, new MODEL('modal-footer'));
-		this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
-		this.btnClose.el.onclick = () => {
-			this.close();
-		}
+        this.footer = new FOOTER(this, new MODEL('modal-footer'));
+        this.buttonGroup = new BUTTONGROUP(this.footer, null, ALIGN.VERTICAL);
+        this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
+        this.btnClose.el.onclick = () => {
+            this.close();
+        }
 	}
 	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {void}
 	*/
-	expand(delay = 0) {
+	show(delay = 0) {
 		setTimeout(() => {
 			this.el.showModal();
 		}, delay);

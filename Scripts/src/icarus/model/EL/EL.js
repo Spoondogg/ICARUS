@@ -1,20 +1,15 @@
-/**
-    @module
-*/
+/** @module */
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import { HtmlElement } from '../../enums/HtmlElement.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
-/**
-    Generic Element Constructor  
-    @description An abstract html element class
+/** A Generic HTML Element
     @class
     @extends MODEL
 */
 export default class EL extends MODEL {
-	/**
-	    Constructs a generic html element
+	/** Constructs a generic html element
 	    @param {EL} node The object to contain this element
 	    @param {string} element The HTML tag that is used for this element
 	    @param {MODEL} model A set of key/value pairs for this element's model
@@ -31,24 +26,27 @@ export default class EL extends MODEL {
 		this.factory = null;
 		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
-		this.make(node, model, innerHTML);
+        this.el = document.createElement(this.element);
+        this.make(this.el, node, model, innerHTML);
 		//this.merge(model);
 		//this.setInnerHTML(innerHTML);
 	}
-	/**
-	    Create the HTML element in the DOM, appended to the given node
+	/** Create the HTML element in the DOM, appended to the given node
 	    @description Append the element to its parent and set its inner HTML (when available)
+        @param {HTMLElement} el The HTML Element
 	    @param {EL} node Parent node to append to
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {EL} This element
 	 */
-	make(node, model, innerHTML) {
+	make(el, node, model, innerHTML) {
 		try {
 			if (node === document.body) {
-				this.el = node.appendChild(document.createElement(this.element));
+				//this.el = node.appendChild(document.createElement(this.element));
+                node.appendChild(el);
 			} else {
-				this.el = node.el.appendChild(document.createElement(this.element));
+				//this.el = node.el.appendChild(document.createElement(this.element));
+                node.el.appendChild(el);
 			}
 			this.merge(model);
 			this.setInnerHTML(innerHTML);
@@ -57,18 +55,15 @@ export default class EL extends MODEL {
 			throw e;
 			//} 
 		}
-		return this.el;
+		return el;
 	}
-	/**
-	    Adds the given class name to the element's list of classes
+	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
 	    @returns {EL} Returns this element for chaining purposes
 	*/
 	addClass(className) {
 		$(this.el).addClass(className);
 		let prevClass = this.attributes.class || '';
-		//this.attributes['class'] = prevClass += ' ' + className;
-		//this.attributes.class = prevClass += ' ' + className;
 		this.attributes.class = prevClass + ' ' + className;
 		return this;
 	}
@@ -88,10 +83,11 @@ export default class EL extends MODEL {
 			}.bind(this);
 			this.editor.el.onblur = function() {
 				try {
-					this.getContainer().data[this.className.toLowerCase()] = this.editor.el.value;
+                    let container = this.getContainer();
+                    container.data[this.className.toLowerCase()] = this.editor.el.value;
 					this.editor.destroy();
 					this.removeClass('edit');
-					if (this.getContainer().quickSave(true)) {
+                    if (container.quickSave(container, true)) {
 						this.getMainContainer().stickyFooter.hide();
 					}
 				} catch (e) {
@@ -219,22 +215,19 @@ export default class EL extends MODEL {
 		}
 		return result;
 	}
-	/**
-		    Add a case to the creator EL.create();
-		    @param {string} className The Icarus Class name that this callback is meant to construct
-		    @param {Function} fn Function to call (should accept model)
-	        @returns {void}
-		*/
+	/** Add a case to the creator EL.create();
+        @param {string} className The Icarus Class name that this callback is meant to construct
+        @param {Function} fn Function to call (should accept model)
+        @returns {void}
+    */
 	addCase(className, fn) {
 		this.callbacks[className] = [];
 		this.callbacks[className].push(fn);
 	}
-	/**
-		    Combines the given model with this model, overriding initial values
-		    with given ones
-		    @param {MODEL} model A generic MODEL object
-	        @returns {void}
-		 */
+	/** Combines the given model with this model, overriding initial values with given ones
+        @param {MODEL} model A generic MODEL object
+        @returns {void}
+    */
 	merge(model) {
 		if (typeof model === 'object') {
 			for (let prop in model) {
@@ -248,8 +241,7 @@ export default class EL extends MODEL {
 			console.log('EL.merge(): Given model is not a valid object');
 		}
 	}
-	/**
-	    Iterates through attributes and sets accordingly
+	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
 	    @param {object} attributes A set of key/value pairs
 	    @returns {void}
@@ -263,8 +255,7 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-	/**
-	    Opens the ELEMENT up for editing.  This should create a link
+	/** Opens the ELEMENT up for editing.  This should create a link
 	    between the object on the server and its client side representation
 	    @returns {EL} This EL
 	*/
@@ -278,8 +269,7 @@ export default class EL extends MODEL {
 		}
 		return this;
 	}
-	/**
-	    Closes the EL up for editing.  <br>This should create a link
+	/** Closes the EL up for editing.  <br>This should create a link
 	    between the object on the server and its client side representation
 	    and update accordingly
 	    @returns {EL} This EL
@@ -289,8 +279,7 @@ export default class EL extends MODEL {
 		//this.el.setAttribute('data-status', 'closed');
 		return this;
 	}
-	/**
-	    Empties contents of node element
+	/** Empties contents of node element
 	    @returns {EL} This EL
 	*/
 	empty() {
@@ -299,24 +288,24 @@ export default class EL extends MODEL {
 		}
 		return this;
 	}
-	/**
-	    Removes this element from the DOM
+	/** Removes this element from the DOM
 	    @param {number} delay Millisecond delay
 	    @returns {EL} This EL
 	*/
-	destroy(delay = 300) {
-		setTimeout(() => {
-			try {
-				this.el.parentNode.removeChild(this.el);
-				//this.node.children.splice(this.node.children.indexOf(this), 1);
-				//this.node.children.shift();
-			} catch (ee) {
-				if (ee.name !== 'TypeError') {
-					console.log('Unable to destroy this ' + this.element, ee);
-					throw ee;
-				}
-			}
-		}, delay);
+    destroy(delay = 300) {
+        setTimeout(() => {
+            try {
+                this.el.parentNode.removeChild(this.el);
+                //this.node.children.splice(this.node.children.indexOf(this), 1);
+                //this.node.children.shift();
+            } catch (ee) {
+                if (ee.name !== 'TypeError') {
+                    console.log('Unable to destroy this ' + this.element, ee);
+                    throw ee;
+                }
+            }
+        }, delay);
+		
 		return this;
 	}
 	/** Override this element's class with the given value
@@ -344,40 +333,35 @@ export default class EL extends MODEL {
 		this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
 		return this;
 	}
-	/**
-	    Shows this Element
+	/** Shows this Element
 	    @returns {EL} This EL
 	*/
-	expand() {
+	show() {
 		this.el.style.display = 'block';
 		return this;
 	}
-	/**
-	    Hides this Element
+	/** Hides this Element
 	    @returns {EL} This EL
 	*/
 	hide() {
 		this.el.style.display = 'none';
 		return this;
 	}
-	/**
-	    Adds 'active' to this element's classes
+	/** Adds 'active' to this element's classes
 	    @returns {EL} This EL
-	 */
+    */
 	activate() {
 		$(this.el).addClass('active');
 		return this;
 	}
-	/**
-	    Removes 'active' from this element's classes
+	/** Removes 'active' from this element's classes
 	    @returns {EL} This EL
-	 */
+    */
 	deactivate() {
 		$(this.el).removeClass('active');
 		return this;
 	}
-	/**
-	    Toggles the 'active' class on this element
+	/** Toggles the 'active' class on this element
 	    @param {string} className Optionally toggle this class
 	    @returns {EL} This EL
 	*/
@@ -389,21 +373,15 @@ export default class EL extends MODEL {
 		}
 		return this;
 	}
-	/**
-	    Create all children elements in the order that
-	    they were pushed into provided array
+	/** Creates given elements as children of this element
 	    @param {array} children Array of children object models to be constructed
 	    @returns {EL} This EL
 	*/
 	populate(children) {
 		if (children) {
 			console.log(this.className + '.populate(' + children.length + ');');
-			try {
-				//let denom = children.length;
-				//let progress = 0; // 0 to 100      
+			try {    
 				for (let c = 0; c < children.length; c++) {
-					//progress = Math.round((c + 1) / denom * 100);
-					//console.log(progress, this.className+'.populate('+(c+1)+'/'+denom+')');
 					this.create(children[c]);
 				}
 			} catch (e) {
@@ -412,8 +390,7 @@ export default class EL extends MODEL {
 		}
 		return this;
 	}
-	/**
-	    Sets the inner HTML of this element
+	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
 	    @returns {ThisType} This node for chaining
 	*/
@@ -421,8 +398,7 @@ export default class EL extends MODEL {
 		this.el.innerHTML = innerHTML;
 		return this;
 	}
-	/**
-	    Scrolls page to the top of this element
+	/** Scrolls page to the top of this element
 	    @param {number} speed Millisecond duration
 	    @returns {EL} This EL
 	*/

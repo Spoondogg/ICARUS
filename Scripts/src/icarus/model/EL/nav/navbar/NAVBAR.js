@@ -35,7 +35,7 @@ export default class NAVBAR extends NAV {
     /** Expands the NAV
         @returns {void}
     */
-    expand() {
+    show() {
         try {
             $(this.el).collapse('show');
         } catch (e) {

@@ -681,11 +681,11 @@
     <Content Include="Scripts\src\icarus\model\el\input\INPUT.js" />
     <Content Include="Scripts\src\icarus\model\el\label\LABEL.js" />
     <Content Include="Scripts\src\icarus\model\el\li\LI.js" />
-    <Content Include="Scripts\src\icarus\model\el\modal\loader\LOADER.js" />
-    <Content Include="Scripts\src\icarus\model\el\modal\loader\PROGRESSBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\loader\LOADER.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\loader\PROGRESSBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
-    <Content Include="Scripts\src\icarus\model\el\modal\prompt\PROMPT.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\NAVHEADER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\SIDEBARMENU.js" />

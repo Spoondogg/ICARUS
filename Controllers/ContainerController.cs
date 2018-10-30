@@ -380,7 +380,6 @@ namespace ICARUS.Controllers {
             }
         }
 
-
         /// <summary>
         /// Asynchrounously set the given object's active state to false if the user is the 
         /// author of this object.

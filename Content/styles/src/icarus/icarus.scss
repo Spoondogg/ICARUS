@@ -305,7 +305,7 @@ nav {
 	@extend %bevel-up;
 	background-color: $color-nav-background;
 	font-size: $font-size-normal;
-	height: $navbar-height;
+	min-height: $navbar-height;
 
 	.btn-group {
 		>.dropdown-menu {
@@ -944,49 +944,49 @@ table {
 	padding: .3em;
 }
 .jumbotron {
-	@extend %noSelect;
-	//@extend %bevel-down;
-	@extend %gradient-vignette;
-	background-color: $jumbotron-bg-default;
-	background-position: center top;
-	background-repeat: no-repeat;
-	background-size: cover;
-	color: $color-white;
-	font-family: 'Raleway';
-	font-weight: 300;
-	height: $jumbotron-height;
-	line-height: 2em;
-	margin: 0;
-	overflow-y: hidden;
-	padding: 0;
-	//position: relative;
-	text-align: center;
-	//text-shadow: 1px 1px 4px $color-shadow-dark;
-	width: 100%;
+    @extend %noSelect;
 
-	>.screen {
-		@extend %gradient-vignette;
-		height: $jumbotron-height;
-		//position: absolute;
-		width: 100%;
-	}
 
-	header {
-		font-size: $font-size-extralarge;
-		line-height: 3em;
-		padding: 0 6px;
-	}
+    .pane {
 
-	p {
-		@extend %horizontal-center;
-		font-weight: normal;
-		padding: 0 2em;
 
-		@media only screen and (max-width: $max-width-mobile) {
-			font-size: 1.2em;
-		}
-		//@media only screen and (max-width: $max-width-desktop) {}
-	}
+        > .screen {
+            //@extend %bevel-down;
+            @extend %gradient-vignette;
+            background-color: $jumbotron-bg-default;
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: $color-white;
+            font-family: 'Raleway';
+            font-weight: 300;
+            height: $jumbotron-height;
+            line-height: 2em;
+            margin: 0;
+            overflow-y: hidden;
+            padding: 0;
+            text-align: center;
+            //text-shadow: 1px 1px 4px $color-shadow-dark;
+            width: 100%;
+
+            header {
+                font-size: $font-size-extralarge;
+                line-height: 3em;
+                padding: 0 6px;
+            }
+
+            p {
+                @extend %horizontal-center;
+                font-weight: normal;
+                padding: 0 2em;
+
+                @media only screen and (max-width: $max-width-mobile) {
+                    font-size: 1.2em;
+                }
+                //@media only screen and (max-width: $max-width-desktop) {}
+            }
+        }
+    }
 }
 .list-group {
 	.list-group-item {
@@ -996,136 +996,137 @@ table {
 	}
 }
 .menu {
-	background-color: $color-nav-background;
+    background-color: $color-nav-background;    
 
-	>header {
-		@extend %bevel-up;
-		@extend %clickable;
-		background-color: darken($color-nav-background, 25%);
-		color: $color-light;
-		padding: 0 .2em;
-		text-transform: uppercase;
+    > header {
+        @extend %bevel-up;
+        @extend %clickable;
+        background-color: darken($color-nav-background, 25%);
+        color: $color-light;
+        padding: 0 .2em;
+        text-transform: uppercase;
 
-		&:hover {
-			background-color: lighten($color-nav-background, 25%);
-		}
-		// First ul after nav header
-		&~ul {
-			.nav {
-				background-color: darken($color-nav-background, 50%);
-			}
-		}
-	}
+        &:hover {
+            background-color: lighten($color-nav-background, 25%);
+        }
+        // First ul after nav header
+        & ~ ul {
+            .nav {
+                background-color: darken($color-nav-background, 50%);
+            }
+        }
+    }
 
-	.list {
-		margin: 0;
-		padding: 0;
-		width: 100%;
+    >.list {
+        margin: 0;
+        padding: 0;
+        //position: absolute;
+        width: 100%;
 
-		&.tabs {
-			display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-			.nav-item {
-				flex-basis: 3em;
-				//flex-grow: 1;
-				height: $navbar-height;
-			}
+        &.tabs {
+            display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+            .nav-item {
+                flex-basis: 3em;
+                //flex-grow: 1;
+                height: $navbar-height;
+            }
 
-			.wide-tab {
-				flex-basis: auto;
-				flex-grow: 2;
-				text-align: center;
-				//width: calc(100% - 8em);
-			}
-		}
+            .wide-tab {
+                flex-basis: auto;
+                flex-grow: 2;
+                text-align: center;
+                //width: calc(100% - 8em);
+            }
+        }
 
-		&.horizontal {
-			@extend %horizontal-scroll;
-			//@media only screen and (max-width: $max-width-mobile) {}
-			//@media only screen and (max-width: $max-width-desktop) {}
-			@include no-scroll-bar;
+        &.horizontal {
+            @extend %horizontal-scroll;
+            //@media only screen and (max-width: $max-width-mobile) {}
+            //@media only screen and (max-width: $max-width-desktop) {}
+            @include no-scroll-bar;
 
-			&.collapse {
-				height: 0;
+            &.collapse {
+                height: 0;
 
-				&.in {
-					height: 4em; //96px; //$navbar-height;
-				}
-			}
+                &.in {
+                    height: 4em; //96px; //$navbar-height;
+                }
+            }
 
-			>.nav-item-icon {
-				display: inline-block;
+            > .nav-item-icon {
+                display: inline-block;
 
-				>a {
-					display: block;
-					width: 8em;
+                > a {
+                    display: block;
+                    width: 8em;
 
-					span {
-						float: left;
-						line-height: inherit;
+                    span {
+                        float: left;
+                        line-height: inherit;
 
 
-						&.label {
-							overflow: hidden;
-							padding: 0 .3em;
-							text-overflow: ellipsis;
-							text-transform: uppercase;
-							white-space: nowrap;
-							width: 5em;
-						}
-					}
-				}
-			}
-		}
+                        &.label {
+                            overflow: hidden;
+                            padding: 0 .3em;
+                            text-overflow: ellipsis;
+                            text-transform: uppercase;
+                            white-space: nowrap;
+                            width: 5em;
+                        }
+                    }
+                }
+            }
+        }
 
-		.icon-label {
-			@extend %noSelect;
-		}
+        .icon-label {
+            @extend %noSelect;
+        }
 
-		.nav-item {
-			@extend %clickable;
-			background-color: $color-shadow-neutral;
-			border: thin solid $color-grey-darker;
-			cursor: pointer;
-			float: left;
-			line-height: $navbar-height - 1em;
-			list-style: none;
-			//margin: 4px 0;
-			//padding: 0;
-			//text-align: center;
-			&:hover {
-				background-color: $color-shadow-light;
-			}
+        .nav-item {
+            @extend %clickable;
+            background-color: $color-shadow-neutral;
+            border: thin solid $color-grey-darker;
+            cursor: pointer;
+            float: left;
+            line-height: $navbar-height - 1em;
+            list-style: none;
+            //margin: 4px 0;
+            //padding: 0;
+            //text-align: center;
+            &:hover {
+                background-color: $color-shadow-light;
+            }
 
-			>a {
-				color: $color-light;
-				//line-height: 1em;
-				padding: 0 1em;
+            > a {
+                color: $color-light;
+                //line-height: 1em;
+                padding: 0 1em;
 
-				&:hover {
-					color: $color-light-more;
-				}
-			}
+                &:hover {
+                    color: $color-light-more;
+                }
+            }
 
-			&.nav-item-icon {
-				>a {
-					>.icon {
-						>.icon-label {
-							//clear: both;
-							display: block;
-							//float: none;
-							font-size: $font-size-small;
-							line-height: 1.5em;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							text-transform: uppercase;
-							white-space: nowrap;
-							width: 5em; //$icon-width;
-						}
-					}
-				}
-			}
-		}
-	}
+            &.nav-item-icon {
+                > a {
+                    > .icon {
+                        > .icon-label {
+                            //clear: both;
+                            display: block;
+                            //float: none;
+                            font-size: $font-size-small;
+                            line-height: 1.5em;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            text-transform: uppercase;
+                            white-space: nowrap;
+                            width: 5em; //$icon-width;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 .menulist-menu {
 	border-bottom: 3px solid $color-grey-darker;

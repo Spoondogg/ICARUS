@@ -1,5 +1,6 @@
 /** @module */
 import FORMINPUT, { ATTRIBUTES, EL, FORMELEMENT, MODEL } from '../../formelement/forminput/FORMINPUT.js';
+import CONTAINER from '../../CONTAINER.js';
 import DIV from '../../../div/DIV.js';
 import FORM from '../../../form/FORM.js';
 import INPUT from '../../../input/INPUT.js';
@@ -123,27 +124,26 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			console.log(0, 'Unable to retrieve FormPost.', e);
 		}
 	}
-	/**
-	        Executes on successful form post
-	        @param {object} data Json payload
-	        @param {CONTAINER} container This parent container
-	        @see https://developers.google.com/web/fundamentals/primers/promises
-			@see https://scotch.io/tutorials/javascript-promises-for-dummies
-			@see http://usejsdoc.org/tags-async.html
-	        @async
-			@returns {Promise<boolean>} Returns true if Promise is resolved
-	    */
+	/** Executes on successful form post
+        @param {object} data Json payload
+        @param {CONTAINER} container This parent container
+        @see https://developers.google.com/web/fundamentals/primers/promises
+        @see https://scotch.io/tutorials/javascript-promises-for-dummies
+        @see http://usejsdoc.org/tags-async.html
+        @async
+        @returns {Promise<boolean>} Returns true if Promise is resolved
+    */
 	successfulFormPost(data, container) {
 		this.updateInput(data.model.id);
-		let promise = new Promise((resolve, reject) => {
+        let promise = new Promise((resolve) => { // reject
 			//console.log('Promise: Saving parent form');
-			if (container.quickSave(true)) {
+			//if (container.quickSave(container, true)) {
 				//resolve('QuickSaved');
+                container.save(container, container, true)
 				resolve(true);
-			} else {
+			//} else {
 				//reject(Error('Failed to QuickSave'));
-				reject(Error('Failed to QuickSave'));
-			}
+			//}
 		});
 		promise.then((result) => {
 			//console.log('Promise success', result);
@@ -224,7 +224,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 						console.log('Json Results empty');
 					}
 				} else {
-					this.prompt = new MODAL('Exception', data.message).expand();
+					this.prompt = new MODAL('Exception', data.message).show();
 					this.getMainContainer().login();
 				}
 			});
@@ -391,4 +391,4 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export { ATTRIBUTES, CONTAINER, EL, MODEL };

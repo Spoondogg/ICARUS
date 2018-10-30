@@ -9,6 +9,7 @@ import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
 import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../model/el/container/CONTAINER.js';
+import DIALOG from '../model/el/dialog/DIALOG.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
@@ -147,9 +148,9 @@ export default class CONTAINERFACTORY {
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
                     break;
-                //case 'SPAN':
-                  //  obj = new SPAN(span, result.model);
-                    //break;
+                case 'SPAN':
+                    obj = new SPAN(span, result.model);
+                    break;
 				case 'TEXTBLOCK':
 					obj = new TEXTBLOCK(span, result.model);
 					break;
@@ -170,7 +171,7 @@ export default class CONTAINERFACTORY {
 				// Inject CRUD actions and dependencies
 				//obj.factory = this;
 				obj.save = this.save;
-                obj.quickSave = this.quickSave;
+                //obj.quickSave = this.quickSave;
                 obj.quickSaveFormPost = this.quickSaveFormPost;
 				// Overwrite span with 
 				span.el.parentNode.replaceChild(obj.el, span.el);
@@ -185,20 +186,40 @@ export default class CONTAINERFACTORY {
 	/* eslint-enable max-lines-per-function, complexity */
 	/** Saves the state of the given Container
         @description Generates an empty form, populates with current state and posts to appropriate setter
-	    @param {EL} node The parent container to hold the save menu
-        @param {CONTAINER} container The Container to save
+	    param {EL} node The parent container to hold the save menu
+        param {CONTAINER} container The Container to save
+        @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
         @todo Rearrange signature to (container, node) and consider defaulting to a hidden? modal
 	    @returns {void}
 	*/
-	save(node, container) {
-		let form = FORM.createEmptyForm(node, false);
-		form.addClass('saveContainer').setPostUrl(container.className + '/Set');
-		form.children[0].children[0].addInputElements(container.createContainerInputs());
-		form.afterSuccessfulPost = () => {
+    save(noPrompt = false) { // 
+        console.log(this.className + '.save()', noPrompt);
+        let dialog = new DIALOG(new MODEL().set({
+            label: 'Save ' + this.className
+        }));
+        dialog.form = FORM.createEmptyForm(dialog.body, false);
+        dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
+        dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+        dialog.form.afterSuccessfulPost = () => {
 			console.log('Successful post');
-			container.setLabel(form.el.elements.label.value);
-			container.refreshParentContainer(container);
-		};
+            this.setLabel(dialog.form.el.elements.label.value);
+            //node.close();
+            //form.destroy();
+            //container.quickSaveFormPost(container.dataId, container.data);
+            //container.quickSaveFormPost(container.attributesId, container.attributes);
+			//container.refreshParentContainer(container);
+        };
+        /* eslint-disable-next-line no-alert */
+        if (noPrompt) {
+            console.log(
+                'Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label
+            );
+            dialog.form.post();
+            dialog.close();
+        } else {
+            console.log('Showing save form dialog');
+            dialog.show()
+        }
 	}
 	/**
 	    If dataId or attributesId exists, extract the appropriate values and save
@@ -231,16 +252,15 @@ export default class CONTAINERFACTORY {
 			console.log('No modelId provided');
 		}*/
 	}
-	/**
-	    Displays a prompt that performs a save of the container, it's 
+	/** Displays a prompt that performs a save of the container, it's 
 	    attributes and any data objects associated with it.
         @param {CONTAINER} container The Container to save
 	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
 	    @returns {BOOLEAN} True if successful
-	 */
+	*/
 	quickSave(container, noPrompt = false) {
 		/* eslint-disable-next-line no-alert */
-        if (noPrompt || confirm('Quick Save ' + this.className + '(' + this.id + ') : ' + this.label + ' ?')) {
+        if (noPrompt || confirm('Quick Save ' + container.className + '(' + container.id + ') : ' + container.label + ' ?')) {
 			//console.log(this.className + '.save()', this);
 			// Populate subsections with elements in this body
 			//let subsections = container.getSubSections();
