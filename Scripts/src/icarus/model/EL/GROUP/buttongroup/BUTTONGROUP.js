@@ -50,4 +50,4 @@ export default class BUTTONGROUP extends GROUP {
 		return this.children[this.children.length - 1];
 	}
 }
-export { ATTRIBUTES, BUTTON, EL, MODEL, TOGGLEBUTTON };
+export { ALIGN, ATTRIBUTES, BUTTON, EL, MODEL, TOGGLEBUTTON };

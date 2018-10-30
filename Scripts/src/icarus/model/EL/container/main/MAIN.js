@@ -2,7 +2,7 @@
 import CONTAINER, { DIALOG, ICONS, MODEL } from '../CONTAINER.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
-import LOADER from '../../modal/loader/LOADER.js';
+import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
@@ -23,8 +23,7 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
-        
-		/** @type {LOADER} */
+        /** @type {LOADER} */
 		this.loader = model.loader;
 		/** A Security token @type {string} */
 		this.token = model.token;
@@ -39,7 +38,7 @@ export default class MAIN extends CONTAINER {
         this.addNavOptions();
 
         this.save = model.factory.save;
-        this.quickSave = model.factory.quickSave;
+        //this.quickSave = model.factory.quickSave;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
 
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
@@ -129,7 +128,7 @@ export default class MAIN extends CONTAINER {
 			this.navBar.menu.toggleCollapse();
 		};
 		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
-			this.loader.expand();
+			this.loader.show();
 			this.loader.showConsole();
 		};
 		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
@@ -166,7 +165,7 @@ export default class MAIN extends CONTAINER {
 				location.href = url;
 				dialog.hide(300, true);
 			};
-			dialog.expand();
+			dialog.show();
 			return true;
 		});
 	}
@@ -372,7 +371,7 @@ export default class MAIN extends CONTAINER {
 		form.afterSuccessfulPost = (payload, status) => {
 			this.ajaxRefreshIfSuccessful(payload, status)
 		};
-		dialog.expand();
+		dialog.show();
 	}
 	/** Sets up the External Login Form
 	    @returns {FORM} An external login form
