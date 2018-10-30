@@ -81,7 +81,7 @@ export default class MODAL extends CONTAINER {
 	/** Reveal the modal
 	    @returns {ThisType} Returns MODAL for method chaining
 	*/
-	show() {
+	expand() {
 		$(this.el).modal('show');
 		return this;
 	}

@@ -18,5 +18,28 @@ export default class NAVBAR extends NAV {
 		this.menu = new NAVHEADER(this, new MODEL().set({
 			'label': node.label
 		}));
-	}
+    }
+    /** Collapses the NAV
+	    @returns {boolean} true if hidden
+	    @returns {void}
+	*/
+    collapse() {
+        try {
+            $(this.el).collapse('hide');
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+    /** Expands the NAV
+        @returns {void}
+    */
+    expand() {
+        try {
+            $(this.el).collapse('show');
+        } catch (e) {
+            console.warn(e);
+        }
+    }
 }

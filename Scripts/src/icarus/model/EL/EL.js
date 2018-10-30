@@ -348,7 +348,7 @@ export default class EL extends MODEL {
 	    Shows this Element
 	    @returns {EL} This EL
 	*/
-	show() {
+	expand() {
 		this.el.style.display = 'block';
 		return this;
 	}
@@ -397,7 +397,7 @@ export default class EL extends MODEL {
 	*/
 	populate(children) {
 		if (children) {
-			//console.log(this.className + '.populate(' + children.length + ');');
+			console.log(this.className + '.populate(' + children.length + ');');
 			try {
 				//let denom = children.length;
 				//let progress = 0; // 0 to 100      

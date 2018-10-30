@@ -57,7 +57,7 @@ export default class MENU extends UL {
 	/** Expands the container's body
         @returns {void}
     */
-	show() {
+	expand() {
 		try {
 			$(this.collapse.el).collapse('show');
 		} catch (e) {

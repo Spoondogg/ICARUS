@@ -224,7 +224,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 						console.log('Json Results empty');
 					}
 				} else {
-					this.prompt = new MODAL('Exception', data.message).show();
+					this.prompt = new MODAL('Exception', data.message).expand();
 					this.getMainContainer().login();
 				}
 			});

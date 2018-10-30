@@ -96,7 +96,6 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(2, e, "An exception occurred trying to log in"));
             }
         }
-
         /// <summary>
         /// GET: /Account/VerifyCode
         /// </summary>
@@ -117,7 +116,6 @@ namespace ICARUS.Controllers {
                 RememberMe = rememberMe
             });
         }
-
         /// <summary>
         /// POST: /Account/VerifyCode
         /// </summary>
@@ -151,7 +149,6 @@ namespace ICARUS.Controllers {
                     return View(model);
             }
         }
-
         /// <summary>
         /// GET: /Account/Register
         /// </summary>
@@ -161,7 +158,6 @@ namespace ICARUS.Controllers {
             ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
             return View();
         }
-
         /*
         /// <summary>
         /// Attempts to register the given user 
@@ -201,7 +197,6 @@ namespace ICARUS.Controllers {
             return View(model);
         }
         */
-
         /// <summary>
         /// Attempts to register the given user 
         /// POST: /Account/Register
@@ -321,9 +316,7 @@ namespace ICARUS.Controllers {
         }
 
         // POST: /Account/ResetPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
             if (!ModelState.IsValid) {
                 return View(model);
@@ -550,7 +543,7 @@ namespace ICARUS.Controllers {
                 state = 1,
                 status = "success"
             }, JsonRequestBehavior.AllowGet);*/
-            return Json(new Payload(1, "Successfully logged in"), JsonRequestBehavior.AllowGet);
+            return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

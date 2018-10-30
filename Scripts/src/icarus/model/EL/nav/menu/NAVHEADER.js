@@ -50,7 +50,8 @@ export default class NAVHEADER extends MENU {
     */
 	addOptionsMenu() {
 		try {
-			if (this.getContainer().getMainContainer().user !== 'Guest') {
+			//if (this.getContainer().getMainContainer().user !== 'Guest') {
+			if (document.getElementsByTagName('meta').user.content !== 'Guest') {
 				this.toggle = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
 					'icon': ICONS.COG //,
 					//'label': 'OPTIONS'

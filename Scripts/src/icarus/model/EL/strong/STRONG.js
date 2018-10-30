@@ -11,7 +11,7 @@ export default class STRONG extends EL {
 	    @param {string} innerHtml The object contents (html)
 	 */
 	constructor(node, model, innerHtml) {
-        super(node, 'STRONG', model, innerHtml);
+		super(node, 'STRONG', model, innerHtml);
 	}
 }
 export { ATTRIBUTES, EL, MODEL };
