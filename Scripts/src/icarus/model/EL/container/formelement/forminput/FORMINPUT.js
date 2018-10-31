@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 //import PROMPT from '../../../modal/prompt/PROMPT.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
@@ -183,4 +183,4 @@ export default class FORMINPUT extends FORMELEMENT {
 		return this;
 	}
 }
-export { ATTRIBUTES, EL, FORMELEMENT, INPUTTYPES, MODEL };
+export { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, INPUTTYPES, MODEL };

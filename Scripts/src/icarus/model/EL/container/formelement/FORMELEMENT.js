@@ -41,4 +41,4 @@ export default class FORMELEMENT extends CONTAINER {
 		this.label = new LABEL(this.body.pane, this.label || this.attributes.name || '__NoLabel');
 	}
 }
-export { ATTRIBUTES, EL, INPUTTYPES, LABEL, MODEL }; //CONTAINER
+export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL }; //CONTAINER
