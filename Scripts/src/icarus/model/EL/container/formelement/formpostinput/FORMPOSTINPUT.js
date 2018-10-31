@@ -1,6 +1,8 @@
 /** @module */
-import FORMINPUT, { ATTRIBUTES, EL, FORMELEMENT, MODEL } from '../../formelement/forminput/FORMINPUT.js';
-import CONTAINER from '../../CONTAINER.js';
+import FORMINPUT, { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, MODEL } from '../../formelement/forminput/FORMINPUT.js';
+//import CONTAINER from '../../CONTAINER.js';
+import { DATAELEMENTS } from '../../../../../enums/DATAELEMENTS.js';
+import DIALOG from '../../../dialog/DIALOG.js';
 import DIV from '../../../div/DIV.js';
 import FORM from '../../../form/FORM.js';
 import INPUT from '../../../input/INPUT.js';
@@ -21,12 +23,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	 */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.createInput();
+		this.createInput(model.container);
 	}
 	/** Creates an Input Group with an INPUT element inside of it. 
+        @param {CONTAINER} container The container
         @returns {void}
     */
-	createInput() {
+	createInput(container) {
 		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
 		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
 			'class': 'form-control',
@@ -40,9 +43,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			this.btnEdit.el.onclick = this.editFormPost.bind(this);
 		}
 		this.btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
-		this.btnNew.el.onclick = () => {
-			this.newAttributes(this.getContainer(), this.attributes.name, this);
-		};
+        this.btnNew.el.onclick = () => this.newAttributes(container, this.attributes.name, this);
 	}
 	/** Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
@@ -78,6 +79,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @param {Array} inputs An array of inputs
 	    @param {Array} model An array of input models
 	    @returns {Array} An array of inputs
+        @see DATAELEMENTS DataElements contains arrays for each Container
 	*/
 	appendAdditionalModelInputs(inputs, model) {
 		try { // Append any model inputs if they exist
@@ -89,40 +91,50 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		return inputs;
 	}
-	/** Opens a Modal Form populated with an open version of the FormPost
-        @param {CONTAINER} container The container that this belongs to
-        @param {string} dataIdLabel The key (dataId or attributesId) to add object to
-        @param {MODEL} model Model
+	/** Opens a Form within a dialog, populated with the state of the given container
+        @param {CONTAINER} container The container who's state these attributes represent
+        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
+        @param {MODEL} model Model 
         @async
         return {Promise<string>}
         @returns {void}         
     */
-	newAttributes(container, dataIdLabel, model) {
-		try { // Generate new FormPost            
-			$.getJSON('/FORMPOST/Get/0', (data) => {
-				let inputs = this.defaultInputArray(data);
-				this.appendAdditionalModelInputs(inputs, model.inputs);
-				this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
-				container[dataIdLabel] = data.model.id;
-				if (dataIdLabel === 'dataId') { // Append additional dataElements
-					if (container.dataElements.length > 0) {
-						this.appendAdditionalModelInputs(inputs, container.dataElements);
-					}
-				}
-				if (dataIdLabel === 'descriptionId') {
-					inputs.push(new MODEL(new ATTRIBUTES({
-						'name': 'description',
-						'type': 'text'
-					})).set({
-						'element': 'TEXTAREA',
-						'label': 'description'
-					}));
-				}
-				this.createForm(inputs); //data
-			});
-		} catch (e) {
-			console.log(0, 'Unable to retrieve FormPost.', e);
-		}
+    newAttributes(container, dataIdLabel, model) {
+        return new Promise((resolve, reject) => {
+            console.log('newAttributes', container, dataIdLabel, model);
+            try { // Generate new FormPost            
+                $.getJSON('/FORMPOST/Get/0', (data) => {
+                    let inputs = this.defaultInputArray(data);
+                    //inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS.JUMBOTRON); // model.inputs
+                    this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
+
+
+                    //container[dataIdLabel] = data.model.id;
+                    if (dataIdLabel === 'dataId') { // Append additional dataElements
+                        if (DATAELEMENTS.JUMBOTRON.length > 0) {
+                            inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS.JUMBOTRON);
+                        }
+                    }
+
+                    if (dataIdLabel === 'descriptionId') {
+                        inputs.push(new MODEL(new ATTRIBUTES({
+                            'name': 'description',
+                            'type': 'text'
+                        })).set({
+                            'element': 'TEXTAREA',
+                            'label': 'description'
+                        }));
+                    }
+                    let dialog = this.createFormDialog(inputs); //data 
+                    dialog.show();
+                    this.form = dialog.form;
+                    resolve(this.form);
+                });
+            } catch (e) {
+                console.log(0, 'Unable to retrieve FormPost.', e);
+                reject(e);
+            }
+        });
 	}
 	/** Executes on successful form post
         @param {object} data Json payload
@@ -157,29 +169,31 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			return err; //console.log('promise fail', err);
 		});
 	}
-	/**
-		    Constructs an empty FORM (id 3:formpost) and populates
-		    with given inputs
-		    @param {Array} inputs An array of inputs
-	        param {object} data Payload
-		    @returns {void}
-		*/
-	createForm(inputs) { //data
-		this.form = FORM.createEmptyForm(this.body.pane);
-		this.form.id = 3; //console.log('formpostinput: 3');
-		this.form.el.setAttribute('id', 3);
-		this.form.prompt = this;
-		this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty();
-		this.addFormElementGroupContainerCase(['INPUT', 'SELECT', 'TEXTAREA']);
-		this.addInputs(inputs);
+	/** Constructs an empty FORM (id 3:formpost) and populates with given inputs
+        @param {Array} inputs An array of inputs
+        param {object} data Payload
+        @returns {DIALOG} A Dialog with a form
+    */
+    createFormDialog(inputs) { //data
+        let dialog = new DIALOG(new MODEL().set({
+            label: 'Create FormPost Form'
+        }));
+        console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
+        dialog.form = FORM.createEmptyForm(dialog.body);
+        dialog.form.id = 3; //console.log('formpostinput: 3');
+        dialog.form.el.setAttribute('id', 3);
+        dialog.form.prompt = this;
+        //dialog.form.children[0].children[0].navBar.header.menu.getGroup('ELEMENTS').empty();
+        //this.addFormElementGroupContainerCase(['INPUT', 'SELECT', 'TEXTAREA']);
+        this.addInputs(inputs, dialog.form);
 		//this.form.fieldset.formElementGroup.toggleHeaders();
-		this.form.setPostUrl('FormPost/Set');
-		this.form.afterSuccessfulPost = () => {
+        dialog.form.setPostUrl('FormPost/Set');
+        dialog.form.afterSuccessfulPost = () => {
 			this.successfulFormPost()
-		};
+        };
+        return dialog;
 	}
-	/**
-	    Creates an array of inputs that have been parsed
+	/** Creates an array of inputs that have been parsed
 	    @param {any} parsed A parsed payload
 	    @param {Array} inputs An array of inputs
 	    @returns {Array} An array of inputs
@@ -198,13 +212,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		return inputs;
 	}
-	/**
-		    Edits an existing FormPost
-		    param {ARRAY} inputArray Array of inputs
-	        @returns {void}
-		 */
+	/** Edits an existing FormPost
+        param {ARRAY} inputArray Array of inputs
+        @returns {void}
+    */
 	editFormPost() { // If given value is an integer, assume this is the FormPostId, otherwise, retrieve the formpost
-		let inputs = [
+        console.log('editFormPost()');
+        let inputs = this.defaultInputArray(); /* [
 			new MODEL(new ATTRIBUTES({
 				'name': 'id',
 				'value': this.input.attributes.value
@@ -213,13 +227,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				'type': 'FORMPOST',
 				'label': 'id'
 			})
-		];
+		];*/
 		try { // Test to see if the formpost can be retrieved
 			$.getJSON('/FORMPOST/Get/' + this.input.attributes.value, (data) => { // If access granted...				
 				if (data.model) {
 					if (data.model.jsonResults) {
 						inputs = this.createInputArrayHtmlDecoded(JSON.parse(data.model.jsonResults), inputs);
-						this.createForm(inputs); //data
+                        let dialog = this.createFormDialog(inputs); //data
+                        dialog.show();
 					} else {
 						console.log('Json Results empty');
 					}
@@ -234,19 +249,20 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	}
 	/** Add the appropriate FORMELEMENT
         @param {Array} inputs An array of inputs
+        @param {FORM} form A Form
         @todo Include other inputs such as SELECT and TEXTAREA
         @returns {void}
     */
-	addInputs(inputs) {
+	addInputs(inputs, form) {
 		if (inputs) {
 			for (let i = 0; i < inputs.length; i++) {
 				let inp = null;
 				if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].data.type === 'FORMPOSTINPUT' || inputs[i].attributes.type === 'FORMPOSTINPUT') {
-					inp = new FORMPOSTINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+					inp = new FORMPOSTINPUT(form.children[0].children[0].body.pane, inputs[i]);
 				} else {
-					inp = new FORMINPUT(this.form.fieldset.formElementGroup.body.pane, inputs[i]);
+                    inp = new FORMINPUT(form.children[0].children[0].body.pane, inputs[i]);
 				}
-				this.form.fieldset.formElementGroup.children.push(inp);
+                form.children[0].children[0].children.push(inp);
 			}
 		}
 	}
@@ -277,7 +293,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 						} else {
 							inputs = this.createInputArray(JSON.parse(data.model.jsonResults), this.getContainer(), inputs);
 							this.destroyForm();
-							this.createFormPostForm(inputs, data);
+                            let dialog = this.createFormPostForm(inputs, data);
+                            dialog.show();
 						}
 					}
 				} else {
@@ -366,29 +383,35 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @param {object} data Payload for FORMPOST/Get
 	    @returns {FORM} A form representing this form post
 	*/
-	createFormPostForm(inputs, data) {
-		this.form = FORM.createEmptyForm();
-		this.form.label = 'Modify';
-		this.form.fieldset.formElementGroup.label = 'Attributes';
-		this.form.fieldset.formElementGroup.navBar.header.menu.getGroup('ELEMENTS').empty(); // Empty out and populate with Form Elements only    
+    createFormPostForm(inputs, data) {
+        console.log('FORMPOSTINPUT.createFormPostForm()', inputs, data);
+        let dialog = new DIALOG(new MODEL().set({
+            label: 'Create FormPost Form'
+        }));
+        dialog.form = FORM.createEmptyForm(dialog.body);
+        dialog.form.label = 'Modify';
+        dialog.form.children[0].children[0].label = 'Attributes';
+        dialog.form.children[0].children[0].navBar.header.menu.getGroup('ELEMENTS').empty(); // Empty out and populate with Form Elements only    
 		this.addFormElementGroupContainerCase(['INPUT', 'SELECT', 'TEXTAREA']);
-		this.addInputs(inputs);
-		this.form.fieldset.formElementGroup.toggleHeaders(); // Show headers so that inputs can be modified
-		this.form.setPostUrl('FormPost/Set');
-		this.form.afterSuccessfulPost = () => { //console.log(100, 'Updated Attributes');            
+		this.addInputs(inputs, dialog.form);
+        dialog.form.children[0].children[0].toggleHeaders(); // Show headers so that inputs can be modified
+        dialog.form.setPostUrl('FormPost/Set');
+        dialog.form.afterSuccessfulPost = () => { //console.log(100, 'Updated Attributes');            
 			this.updateInput(data.model.id);
 		};
-		return this.form;
+        return dialog;
 	}
-	/**
-	    Adds a Container Case for each item in the list
+	/** Adds a Container Case for each item in the list
 	    @param {any} arr An array of INPUT Types (ie: INPUT, SELECT, TEXTAREA)
 	    @returns {void}
 	*/
-	addFormElementGroupContainerCase(arr) {
-		for (let i = 0; i < arr.length; i++) {
-			this.form.fieldset.formElementGroup.addContainerCase(arr[i]);
-		}
+    addFormElementGroupContainerCase(arr) {
+        arr.forEach((c) => {
+            this.form.children[0].children[0].addContainerCase(c);
+        });
+		/*for (let i = 0; i < arr.length; i++) {
+            this.form.children[0].children[0].addContainerCase(arr[i]);
+		}*/
 	}
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };
