@@ -33,25 +33,40 @@ export default class DIALOG extends EL {
 	}
 	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown
-	    @returns {void}
+	    @returns {Promise} Callback on successful display of dialog
 	*/
 	show(delay = 0) {
-		setTimeout(() => {
-			this.el.showModal();
-		}, delay);
+        return new Promise((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    this.el.showModal();
+                    resolve();
+                }, delay);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Hides the modal
         @param {number} delay Millisecond delay until dialog is closed
         @param {boolean} preserve If true, element is not deleted
-	    @returns {void}
+	    @returns {Promise} Callback on successful close
 	*/
 	close(delay = 0, preserve = false) {
-		setTimeout(() => {
-			this.el.close();
-			if (!preserve) {
-				this.destroy();
-			}
-		}, delay);
+        return new Promise((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    this.el.close();
+                    if (!preserve) {
+                        this.destroy().then(() => {
+                            resolve();
+                        });
+                    }
+                }, delay);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }
 export { ATTRIBUTES, DIV, EL, MODEL };

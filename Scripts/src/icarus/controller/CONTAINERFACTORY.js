@@ -188,46 +188,50 @@ export default class CONTAINERFACTORY {
         @description Generates an empty form, populates with current state and posts to appropriate setter
 	    param {EL} node The parent container to hold the save menu
         param {CONTAINER} container The Container to save
-        @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
-        @todo Rearrange signature to (container, node) and consider defaulting to a hidden? modal
-	    @returns {void}
+        @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
+	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
     save(noPrompt = false) { // 
-        console.log(this.className + '.save()', noPrompt);
-        let dialog = new DIALOG(new MODEL().set({
-            label: 'Save ' + this.className
-        }));
-        dialog.form = FORM.createEmptyForm(dialog.body, false);
-        dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
-        dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
-        dialog.form.afterSuccessfulPost = () => {
-			console.log('Successful post');
-            this.setLabel(dialog.form.el.elements.label.value);
-            //node.close();
-            //form.destroy();
-            //container.quickSaveFormPost(container.dataId, container.data);
-            //container.quickSaveFormPost(container.attributesId, container.attributes);
-			//container.refreshParentContainer(container);
-        };
-        /* eslint-disable-next-line no-alert */
-        if (noPrompt) {
-            console.log(
-                'Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label
-            );
-            dialog.form.post();
-            dialog.close();
-        } else {
-            console.log('Showing save form dialog');
-            dialog.show()
-        }
+        return new Promise((resolve) => {
+            console.log(this.className + '.save()', noPrompt);
+            let dialog = new DIALOG(new MODEL().set({
+                label: 'Save ' + this.className
+            }));
+            dialog.form = FORM.createEmptyForm(dialog.body, false);
+            dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
+            dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+            dialog.form.afterSuccessfulPost = (payload) => {
+                console.log('Successful post', payload);
+                this.setLabel(dialog.form.el.elements.label.value);
+                //node.close();
+                //form.destroy();
+                this.quickSaveFormPost(this.dataId, this.data);
+                this.quickSaveFormPost(this.attributesId, this.attributes);
+                //container.refreshParentContainer(container);
+                console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
+                resolve();
+            };
+            /* eslint-disable-next-line no-alert */
+            if (noPrompt) {
+                console.log(
+                    'Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label
+                );
+                dialog.form.post().then(() => {
+                    dialog.close();
+                });
+            } else {
+                console.log('Showing save form dialog');
+                dialog.show();
+            }
+        });
 	}
-	/**
-	    If dataId or attributesId exists, extract the appropriate values and save
+	/** If dataId or attributesId exists, extract the appropriate values and save
 	    @param {number} modelId The object's unique identifier
 	    @param {object} data The object to be saved
 	    @returns {void}
 	*/
-	quickSaveFormPost(modelId, data) { //console.log('QuickSaveFormPost:' + modelId, data);
+    quickSaveFormPost(modelId, data) {
+        console.log('QuickSaveFormPost', modelId, data);
 		if (modelId > 0) {
 			//console.log(50, 'Saving FormPost: ' + modelId);
 			let form = FORM.createEmptyForm(this, true);
@@ -240,7 +244,7 @@ export default class CONTAINERFACTORY {
 					inputs.push(this.createInputModel('INPUT', key, key, this.htmlEncode(data[key])));
 				}
 			}
-			form.fieldset.formElementGroup.addInputElements(inputs);
+			form.children[0].children[0].addInputElements(inputs);
 			form.setPostUrl('FormPost/Set');
 			form.post();
 			form.afterSuccessfulPost = () => {
@@ -257,9 +261,9 @@ export default class CONTAINERFACTORY {
         @param {CONTAINER} container The Container to save
 	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
 	    @returns {BOOLEAN} True if successful
-	*/
+	
 	quickSave(container, noPrompt = false) {
-		/* eslint-disable-next-line no-alert */
+		// eslint-disable-next-line no-alert //
         if (noPrompt || confirm('Quick Save ' + container.className + '(' + container.id + ') : ' + container.label + ' ?')) {
 			//console.log(this.className + '.save()', this);
 			// Populate subsections with elements in this body
@@ -276,7 +280,7 @@ export default class CONTAINERFACTORY {
 			};
 			return true;
 		}
-	}
+	}*/
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };
 /* eslint-enable */
