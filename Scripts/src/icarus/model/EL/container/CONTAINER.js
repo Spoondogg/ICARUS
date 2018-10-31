@@ -362,7 +362,8 @@ export default class CONTAINER extends GROUP {
 				'icon': ICONS.SAVE,
 				'label': 'SAVE'
 			}));
-			this.btnSave.el.onclick = this.createSaveFormDialog.bind(this);
+            this.btnSave.el.onclick = () => this.save();
+            //this.createSaveFormDialog.bind(this);
             /*
             this.btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
 				'icon': ICONS.SAVE,
@@ -381,7 +382,7 @@ export default class CONTAINER extends GROUP {
                 'icon': ICONS.SAVE,
                 'label': 'QUICKSAVE'
             }));
-            this.btnQuickSave.el.onclick = this.createSaveFormDialog.bind(this);
+            this.btnQuickSave.el.onclick = () => this.save(true); //this.createSaveFormDialog.bind(this);
 		}
 	}
 	/** Moves the Container up one slot in the DOM
@@ -407,7 +408,7 @@ export default class CONTAINER extends GROUP {
 		let dialog = new DIALOG(new MODEL().set({
 			label: 'Save ' + this.className
 		}));
-		this.save(dialog.body, this, false);
+        this.getMainContainer().factory.save(false); // dialog.body, this, 
 		dialog.show();
 	}
 	/** Performs JQuery's ajax method to the given url.
@@ -708,11 +709,17 @@ export default class CONTAINER extends GROUP {
                 dialog.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
                     //let container = this.node.node.node.node;
                     console.log('Remove', this);
-                    this.destroy();
-
-                    this.node.node.node.node.save(this.node.node.node.node, this.node.node.node.node, false);
-                    dialog.close();
-                    resolve();
+                    this.destroy().then(() => {
+                        try {
+                            this.node.node.node.node.save(true).then(() => {
+                                dialog.close().then(() => {
+                                    resolve();
+                                });
+                            }); // this.node.node.node.node, this.node.node.node.node, 
+                        } catch (ee) {
+                            reject(ee);
+                        }
+                    });
                 };
                 dialog.show();
             } catch (e) {

@@ -23,7 +23,7 @@ export default class EL extends MODEL {
 		this.className = this.constructor.name;
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
-		this.factory = null;
+		//this.factory = null;
 		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
         this.el = document.createElement(this.element);
@@ -31,13 +31,12 @@ export default class EL extends MODEL {
 		//this.merge(model);
 		//this.setInnerHTML(innerHTML);
 	}
-	/** Create the HTML element in the DOM, appended to the given node
-	    @description Append the element to its parent and set its inner HTML (when available)
+	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
         @param {HTMLElement} el The HTML Element
 	    @param {EL} node Parent node to append to
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
-	    @returns {EL} This element
+	    @returns {HTMLElement} This element
 	 */
 	make(el, node, model, innerHTML) {
 		try {
@@ -59,7 +58,7 @@ export default class EL extends MODEL {
 	}
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
-	    @returns {EL} Returns this element for chaining purposes
+	    @returns {ThisType} Returns this element for chaining purposes
 	*/
 	addClass(className) {
 		$(this.el).addClass(className);
@@ -290,23 +289,25 @@ export default class EL extends MODEL {
 	}
 	/** Removes this element from the DOM
 	    @param {number} delay Millisecond delay
-	    @returns {EL} This EL
+	    @returns {Promise} Callback on successful destroy()
 	*/
     destroy(delay = 300) {
-        setTimeout(() => {
-            try {
-                this.el.parentNode.removeChild(this.el);
-                //this.node.children.splice(this.node.children.indexOf(this), 1);
-                //this.node.children.shift();
-            } catch (ee) {
-                if (ee.name !== 'TypeError') {
-                    console.log('Unable to destroy this ' + this.element, ee);
-                    throw ee;
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                try {
+                    this.el.parentNode.removeChild(this.el);
+                    //this.node.children.splice(this.node.children.indexOf(this), 1);
+                    //this.node.children.shift();
+                    resolve();
+                } catch (ee) {
+                    if (ee.name !== 'TypeError') {
+                        console.log('Unable to destroy this ' + this.element, ee);
+                        //throw ee;
+                        reject(ee);
+                    }
                 }
-            }
-        }, delay);
-		
-		return this;
+            }, delay);
+        });
 	}
 	/** Override this element's class with the given value
         @param {string} className A class
