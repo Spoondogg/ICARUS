@@ -63,7 +63,10 @@ export default class CONTAINER extends GROUP {
 		
 		this.updateUrl = this.element + '/Set'; // model.className should be the actual value, no?                
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
-        this.navBar = this.createDraggableNavBar();
+        this.navBar = new NAVBAR(this, new MODEL().set({
+            label: this.label // model.label
+        }));
+        this.createDraggableNavBar();
         //if (this.status === STATUS.DEFAULT) {
         //if (model.showHeader ) {
         //this.navBar.show();
@@ -191,21 +194,17 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Drag containers by their NavBars
 	    @see https://www.w3schools.com/jsref/event_ondrag.asp
-	    param {string} label The header text
-	    @returns {NAVBAR} A draggable navbar
+	    @returns {void}
 	*/
 	createDraggableNavBar() {
-		let navBar = new NAVBAR(this, new MODEL().set({
-			label: this.label // model.label
-		}));
-		navBar.el.setAttribute('draggable', true);
-		navBar.el.ondragstart = (ev) => {
+		this.navBar.el.setAttribute('draggable', true);
+        this.navBar.el.ondragstart = (ev) => {
 			console.log('Dragging Container: ' + this.className + '(' + this.id + ') ' + this.label);
 			this.collapse();
 			ev.dataTransfer.setData("Container", this.id);
 		};
 		// Drop the Container
-		navBar.el.ondrop = (ev) => {
+        this.navBar.el.ondrop = (ev) => {
 			console.log('Dropping onto Container: ' + this.className + '(' + this.id + ')');
 			ev.preventDefault();
 			let container = $(document.getElementById(ev.dataTransfer.getData("Container")));
@@ -220,14 +219,13 @@ export default class CONTAINER extends GROUP {
 			//console.log('You should save your changes');
 		};
 		// Allow drop on this Container
-		navBar.el.ondragover = (ev) => {
+        this.navBar.el.ondragover = (ev) => {
 			//console.log('Dragging over ' + this.className + '(' + this.id + ')');
 			ev.preventDefault();
 		};
-		navBar.el.ondragend = () => { //this.navBar.el.ondragend = (ev) => {
+        this.navBar.el.ondragend = () => { //this.navBar.el.ondragend = (ev) => {
 			// Drag Ending
 		};
-		return navBar;
 	}
 	/**
 	    HTML Encode the given value.
