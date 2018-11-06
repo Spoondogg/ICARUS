@@ -20,30 +20,36 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	/** Constructs an INPUT element
 	    @param {EL} node Parent
 	    @param {MODEL} model The model
-	 */
+    */
 	constructor(node, model) {
-		super(node, 'DIV', model);
+        super(node, 'DIV', model);
+        console.log('FormPostInput', model, model.container);
 		this.createInput(model.container);
 	}
 	/** Creates an Input Group with an INPUT element inside of it. 
         @param {CONTAINER} container The container
         @returns {void}
     */
-	createInput(container) {
+    createInput(container) {
+        console.log('CreateInput', container);
 		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
 		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
-			'class': 'form-control',
-			'name': this.attributes.name,
-			'value': this.attributes.value,
-			'type': this.attributes.type || 'text'
+			class: 'form-control',
+			name: this.attributes.name,
+			value: this.attributes.value,
+			type: this.attributes.type || 'text'
 		})));
 		this.form = null;
 		if (this.attributes.value > 0 || this.value > 0) {
 			this.btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
-			this.btnEdit.el.onclick = this.editFormPost.bind(this);
+            this.btnEdit.el.onclick = () => this.editFormPost(); // .bind(this)
 		}
 		this.btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
-        this.btnNew.el.onclick = () => this.newAttributes(container, this.attributes.name, this);
+        this.btnNew.el.onclick = () => {
+            let className = this.input.el.form.className.value;
+            console.log('THIS FORM', className);
+            this.newAttributes(className, this.attributes.name, this);
+        }
 	}
 	/** Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
@@ -59,20 +65,23 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	defaultInputArray(data) {
 		return [
 			new MODEL(new ATTRIBUTES({
-				'name': 'shared',
-				'value': data.model.shared
-			})).set({
-				'element': 'INPUT',
-				'label': 'shared',
-				'value': '1'
+				name: 'shared',
+                value: data.model.shared || 0,
+                type: 'NUMBER'
+            })).set({
+                showNav: 0,
+				element: 'INPUT',
+				label: 'shared'
 			}),
 			new MODEL(new ATTRIBUTES({
-				'name': 'id',
-				'value': data.model.id
-			})).set({
-				'element': 'INPUT',
-				'label': 'id'
-			})
+				name: 'id',
+                value: data.model.id,
+                type: 'NUMBER'
+            })).set({
+                showNav: 0,
+				element: 'INPUT',
+				label: 'id'
+            })
 		];
 	}
 	/** Append inputs from the given model
@@ -92,37 +101,31 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		return inputs;
 	}
 	/** Opens a Form within a dialog, populated with the state of the given container
-        @param {CONTAINER} container The container who's state these attributes represent
+        @param {CONTAINER} className The container who's state these attributes represent
         @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
         @param {MODEL} model Model 
-        @async
-        return {Promise<string>}
-        @returns {void}         
+        @returns {Promise<string>} Promise to create a new FormPost Object and retrieve its ID
     */
-    newAttributes(container, dataIdLabel, model) {
+    newAttributes(className, dataIdLabel, model) {
+        console.log('New Data Attributes Form', className, dataIdLabel, model, this);
         return new Promise((resolve, reject) => {
-            console.log('newAttributes', container, dataIdLabel, model);
+            console.log('newAttributes', className, dataIdLabel, model);
             try { // Generate new FormPost            
                 $.getJSON('/FORMPOST/Get/0', (data) => {
                     let inputs = this.defaultInputArray(data);
-                    //inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS.JUMBOTRON); // model.inputs
                     this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
-
-
-                    //container[dataIdLabel] = data.model.id;
+                    
                     if (dataIdLabel === 'dataId') { // Append additional dataElements
-                        if (DATAELEMENTS.JUMBOTRON.length > 0) {
-                            inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS.JUMBOTRON);
-                        }
+                        inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className]);
                     }
 
                     if (dataIdLabel === 'descriptionId') {
                         inputs.push(new MODEL(new ATTRIBUTES({
-                            'name': 'description',
-                            'type': 'text'
+                            name: 'description',
+                            type: 'text'
                         })).set({
-                            'element': 'TEXTAREA',
-                            'label': 'description'
+                            element: 'TEXTAREA',
+                            label: 'description'
                         }));
                     }
                     let dialog = this.createFormDialog(inputs); //data 
@@ -147,15 +150,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	successfulFormPost(data, container) {
 		this.updateInput(data.model.id);
+        /*
         let promise = new Promise((resolve) => { // reject
-			//console.log('Promise: Saving parent form');
-			//if (container.quickSave(container, true)) {
-				//resolve('QuickSaved');
-                container.save(container, container, true)
-				resolve(true);
-			//} else {
-				//reject(Error('Failed to QuickSave'));
-			//}
+			container.save(true) //container, container, 
+			resolve(true);
 		});
 		promise.then((result) => {
 			//console.log('Promise success', result);
@@ -168,6 +166,17 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			console.log('promise fail', err);
 			return err; //console.log('promise fail', err);
 		});
+        */
+        return container.save(true).then((result) => {
+            let cc = container.getProtoTypeByClass('CONTAINER');
+            if (cc !== null) {
+                cc.refresh();
+            }
+            return result;
+        }, (err) => {
+            console.log('promise fail', err);
+            return err;
+        });
 	}
 	/** Constructs an empty FORM (id 3:formpost) and populates with given inputs
         @param {Array} inputs An array of inputs
@@ -348,8 +357,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		});
 		return inputs;
 	}
-	/**
-	    Retrieves the set value of the given attribute from the form
+	/** Retrieves the set value of the given attribute from the form
 	    @param {CONTAINER} container Container to assess
 	    @param {string} name Parameter name
 	    @returns {string} Parameter value
@@ -364,8 +372,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		return value;
 	}
-	/**
-	    Attempts to destroy the form post form
+	/** Attempts to destroy the form post form
 	    @throws Throws an error if the form does not exist
 	    @returns {ThisType} This for chaining
 	*/
@@ -377,8 +384,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		return this;
 	}
-	/**
-	    Creates an empty form and populates with any given inputs
+	/** Creates an empty form and populates with any given inputs
 	    @param {Array} inputs An array of INPUTS
 	    @param {object} data Payload for FORMPOST/Get
 	    @returns {FORM} A form representing this form post

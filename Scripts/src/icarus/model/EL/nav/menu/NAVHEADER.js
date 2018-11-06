@@ -53,21 +53,17 @@ export default class NAVHEADER extends MENU {
 			//if (this.getContainer().getMainContainer().user !== 'Guest') {
 			if (document.getElementsByTagName('meta').user.content !== 'Guest') {
 				this.toggle = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-					'icon': ICONS.COG //,
-					//'label': 'OPTIONS'
+					icon: ICONS.COG
 				}));
 				this.toggle.el.onclick = this.toggleCollapse.bind(this);
 				this.menu = new MENU(this, new MODEL('collapse').set({ // Create the submenu to be toggled
-					'name': 'menu'
+					name: 'menu'
 				}));
-				let optionGroups = ['ELEMENTS', 'CRUD', 'DOM']; //'USER' // Add Default OPTIONS groupings as HORIZONTAL menus
-				for (let oG = 0; oG < optionGroups.length; oG++) {
-					this.menu.addMenu(new MODEL('horizontal collapse').set({
-						'name': optionGroups[oG],
-						'collapsed': 1, // Do not remove these!
-						'showHeader': 1
-					}));
-				}
+                ['ELEMENTS', 'CRUD', 'DOM'].forEach((opt) => this.menu.addMenu(new MODEL('horizontal collapse').set({
+                    name: opt,
+                    collapsed: 1, // Do not remove these!
+                    showHeader: 1
+                })));
 			}
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');

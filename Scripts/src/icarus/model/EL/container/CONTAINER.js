@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
 /** @module */
+import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../group/GROUP.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import CONTAINERBODY from './CONTAINERBODY.js';
-import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 //import DIV from '../div/DIV.js';
@@ -31,12 +31,28 @@ export default class CONTAINER extends GROUP {
     constructor(node, element, model = new MODEL(), containerList = []) {
 		super(node, element, model); //console.log('CONTAINER{' + this.className + '}');
 		this.addClass('icarus-container'); //this.isContainer = 1;
-		this.dataElements = DATAELEMENTS[this.className];
-		this.attrElements = [];
-		this.attributesId = model.attributesId || 0;
-		this.dataId = model.dataId || 0;
-		this.descriptionId = model.descriptionId || 0;
         this.id = model.id || 0;
+
+        // Set reusable data model(s)
+        this.dataId = model.dataId || 0;
+
+        /** @type {Array<MODEL>} An array of MODELs */
+        this.dataElements = []; 
+        try {
+            DATAELEMENTS.CONTAINER.forEach((m) => this.dataElements.push(m));
+            DATAELEMENTS[this.className].forEach((m) => this.dataElements.push(m));
+        } catch (e) {
+            console.warn('Unable to retrieve dataElements for ' + this.className);
+        }
+        console.log(this.className + '.dataElements[]', this.dataElements);
+
+        // Set reusable attribute model(s)
+        this.attributesId = model.attributesId || 0;
+        this.attrElements = [];
+
+        // Set reusable description model(s)
+		this.descriptionId = model.descriptionId || 0;        
+
         if (model.id) { // Needed for save hooks
             this.el.setAttribute('id', model.id);
         }
@@ -49,7 +65,10 @@ export default class CONTAINER extends GROUP {
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
         this.navBar = this.createDraggableNavBar();
         //if (this.status === STATUS.DEFAULT) {
-            this.navBar.show();
+        //if (model.showHeader ) {
+        //this.navBar.show();
+        //} else {
+        //this.navBar.collapse();
         //}
 		this.body = new CONTAINERBODY(this, model);
 		this.addNavBarDefaults();
@@ -68,44 +87,26 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
-	}
-	/** Creates an Input Model
-	    @param {string} element Element name
-	    @param {string} name Input name
-	    @param {string} label Label to display
-	    @param {string} value Value of input
-	    @param {string} type The input type
-	    @returns {MODEL} An input model
-	 */
-	createInputModel(element, name, label, value = '', type = 'TEXT') {
-		return new MODEL(new ATTRIBUTES({
-			name,
-			value,
-			'type': type === 'FORMPOSTINPUT' ? 'NUMBER' : type
-		})).set({
-			element,
-			label,
-			type
-		})
-	}
+    }
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
 	    param {CONTAINER} container The specified container for crud actions
 	    @returns {Array<MODEL>} An array of input models
 	*/
     createContainerInputs() {
-        console.log('createContainerInputs()');
+        console.log(this.className + '.createContainerInputs()', this);
         let subsections = this.getSubSections();
         console.log('subsections', subsections);
 		return [
-			this.createInputModel('INPUT', 'element', 'element', this.element),
-			this.createInputModel('INPUT', 'id', 'ID', this.id, 'NUMBER'),
-			this.createInputModel('INPUT', 'label', 'Label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString()),
-			this.createInputModel('INPUT', 'subsections', 'SubSections', subsections.length > 0 ? subsections.toString() : '0'),
-			this.createInputModel('INPUT', 'status', 'Status', this.status.toString(), 'NUMBER'),
-			this.createInputModel('BUTTON', 'dataId', 'dataId', this.dataId.toString(), 'FORMPOSTINPUT'),
-			this.createInputModel('BUTTON', 'attributesId', 'attributesId', this.attributesId.toString(), 'FORMPOSTINPUT'),
-			this.createInputModel('BUTTON', 'descriptionId', 'descriptionId', this.descriptionId.toString(), 'FORMPOSTINPUT'),
-			this.createInputModel('BUTTON', 'shared', 'shared', this.shared.toString(), 'NUMBER')
+            createInputModel('INPUT', 'className', 'className', this.className),
+            createInputModel('INPUT', 'element', 'element', this.element),
+			createInputModel('INPUT', 'id', 'ID', this.id, 'NUMBER'),
+			createInputModel('INPUT', 'label', 'Label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString()),
+			createInputModel('INPUT', 'subsections', 'SubSections', subsections.length > 0 ? subsections.toString() : '0'),
+			createInputModel('INPUT', 'status', 'Status', this.status.toString(), 'NUMBER'),
+			createInputModel('BUTTON', 'dataId', 'dataId', this.dataId.toString(), 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'attributesId', 'attributesId', this.attributesId.toString(), 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'descriptionId', 'descriptionId', this.descriptionId.toString(), 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'shared', 'shared', this.shared.toString(), 'NUMBER')
 		];
 	}
 	/** Saves the state of the given Container
@@ -113,7 +114,6 @@ export default class CONTAINER extends GROUP {
 	    param {EL} node The parent container to hold the save menu
         param {CONTAINER} container The Container to save
         @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
-        @todo Rearrange signature to (container, node) and consider defaulting to a hidden? modal
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 	    @returns {Promise} A Promise to save this Container
@@ -122,17 +122,6 @@ export default class CONTAINER extends GROUP {
         console.log(this.className + '.save()', noPrompt); // node, container, 
 		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save() not implemented.');
 	}
-	/** Displays a prompt that performs a save of the container, it's 
-	    attributes and any data objects associated with it.
-        @param {CONTAINER} container The Container to save
-	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
-        @abstract
-	    @returns {BOOLEAN} True if successful
-    
-	quickSave(container, noPrompt = false) {
-		console.log(container, noPrompt);
-		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.quickSave() not implemented.');
-    }*/
     /** If dataId or attributesId exists, extract the appropriate values and save
 	    @param {number} modelId The object's unique identifier
 	    @param {object} data The object to be saved
@@ -178,15 +167,16 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	setDefaultVisibility(model) {
-		this.show(); // Collapse or Expand Body Pane
-		if (model.dataId > 0) {
-			if (model.data.collapsed) {
-				this.collapse();
-			}
-			if (model.data.showNavBar) {
-				this.showNavBar();
-			}
-		}
+        if (model.collapsed) {
+            this.collapse();
+        } else {
+            this.show(); // Collapse or Expand Body Pane
+        }
+        if (model.showNav === 0) {
+            this.navBar.hide();
+        } else {
+            this.navBar.show();
+        }        
 	}
 	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names
@@ -302,12 +292,6 @@ export default class CONTAINER extends GROUP {
 		this.body.pane.empty();
 		this.construct();
 		this.populate(this.body.pane.children);
-	}
-	/** Shows the Container NavBar
-        @returns {void}
-    */
-	showNavBar() {
-		$(this.navBar.el).collapse('show');
 	}
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
@@ -603,9 +587,9 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
-	 */
+    */
     getSubSections() {
-        console.log('getSubsections()');
+        console.log(this.className + 'getSubsections()', this);
 		let id = null;
 		let subsections = [];
 		for (let c = 0; c < this.body.pane.el.children.length; c++) {
@@ -702,9 +686,7 @@ export default class CONTAINER extends GROUP {
         return new Promise((resolve, reject) => {
             try {
                 let dialog = new DIALOG(new MODEL().set({
-                    'label': 'Remove ' + this.className + '{' + this.element + '}[' + this.id + ']'
-                    //'text': 'Remove ' + this.className + ' from ' + this.node.node.node.node.className + '?',
-                    //'token': this.getMainContainer().getToken()
+                    label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + ']'
                 }));
                 dialog.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
                     //let container = this.node.node.node.node;
@@ -787,5 +769,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { ATTRIBUTES, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
+export { ATTRIBUTES, createInputModel, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
 /* eslint-enable max-lines */

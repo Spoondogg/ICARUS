@@ -16,7 +16,6 @@ export default class JUMBOTRON extends CONTAINER {
 	constructor(node, model) {
         super(node, 'DIV', model);
         this.addClass('jumbotron');
-		//this.body.pane.addClass('jumbotron');
 	}
 	/** Override abstract method
         @returns {void}
