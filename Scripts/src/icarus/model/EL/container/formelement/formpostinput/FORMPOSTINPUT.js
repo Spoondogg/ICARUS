@@ -1,7 +1,6 @@
 /** @module */
+import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
 import FORMINPUT, { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, MODEL } from '../../formelement/forminput/FORMINPUT.js';
-//import CONTAINER from '../../CONTAINER.js';
-import { DATAELEMENTS } from '../../../../../enums/DATAELEMENTS.js';
 import DIALOG from '../../../dialog/DIALOG.js';
 import DIV from '../../../div/DIV.js';
 import FORM from '../../../form/FORM.js';
@@ -63,25 +62,9 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @returns {Array} An array of INPUT models
 	*/
 	defaultInputArray(data) {
-		return [
-			new MODEL(new ATTRIBUTES({
-				name: 'shared',
-                value: data.model.shared || 0,
-                type: 'NUMBER'
-            })).set({
-                showNav: 0,
-				element: 'INPUT',
-				label: 'shared'
-			}),
-			new MODEL(new ATTRIBUTES({
-				name: 'id',
-                value: data.model.id,
-                type: 'NUMBER'
-            })).set({
-                showNav: 0,
-				element: 'INPUT',
-				label: 'id'
-            })
+        return [
+            createInputModel('INPUT', 'shared', 'shared', '-1', 'NUMBER'),
+            createInputModel('INPUT', 'id', 'id', data.model.id, 'NUMBER')
 		];
 	}
 	/** Append inputs from the given model
