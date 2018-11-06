@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { DATAELEMENTS, MODEL } from '../CONTAINER.js';
+import CONTAINER, { MODEL } from '../CONTAINER.js'; // DATAELEMENTS
 import DIV from '../../div/DIV.js';
 import P from '../../p/P.js';
 /** Textblock Constructor
@@ -13,13 +13,11 @@ export default class TEXTBLOCK extends CONTAINER {
 	    @param {EL} node The object to contain this element
 	    @param {MODEL} model The textblock
 	    param {number} depth The heirarchy for header elements, classes etc
-	 */
+    */
 	constructor(node, model) { // depth
 		super(node, 'DIV', model);
 		this.addClass('textblock');
 		this.body.pane.addClass('container'); // col-lg-offset-2 col-lg-8
-		//this.dataElements = ['text'];
-		this.dataElements = DATAELEMENTS.TEXTBLOCK;
 		this.row = new DIV(this.body.pane, new MODEL('row'));
 		this.col = new DIV(this.row, new MODEL('col-lg-offset-2 col-lg-8'));
 		if (model.dataId > 0) {

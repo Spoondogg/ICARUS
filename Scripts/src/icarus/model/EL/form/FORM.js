@@ -1,7 +1,7 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
-//import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
@@ -24,7 +24,9 @@ export default class FORM extends CONTAINER {
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
 		this.setPostUrl('Form/Submit');
 		this.updateUrl = 'Form/Update';
-		this.footer = new FORMFOOTER(this.body, new MODEL());
+        this.footer = new FORMFOOTER(this.body, new MODEL().set({
+            align: ALIGN.VERTICAL
+        }));
         this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
             e.preventDefault();
             this.post();
@@ -49,20 +51,16 @@ export default class FORM extends CONTAINER {
 	*/
 	static createEmptyForm(node, hidden = false) {
 		let form = new FORM(node, new MODEL(new ATTRIBUTES({
-			'style': hidden ? 'display:none;' : ''
+			style: hidden ? 'display:none;' : ''
 		})).set({
-			'label': 'FORM'
+            label: 'FORM',
+            showNav: 0
 		}));
-		form.addFieldset(new MODEL()).addFormElementGroup(new MODEL());
-		/*let formElementGroup = fieldset.addFormElementGroup(
-		    new MODEL().set({ 'label': 'FORMELEMENTGROUP' })
-		);*/
-		/*form.fieldset = new FIELDSET(form.body.pane, new MODEL().set({
-			'label': 'FIELDSET'
-		}));*/
-		//form.fieldset.formElementGroup = new FORMELEMENTGROUP(form.fieldset.body.pane, new MODEL().set({
-		//	'label': 'FORMELEMENTGROUP'
-		//}));
+        form.addFieldset(new MODEL().set({
+            showNav: 0
+        })).addFormElementGroup(new MODEL().set({
+            showNav: 0
+        }));
 		return form;
 	}
 	/**

@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { DIALOG, ICONS, MODEL } from '../CONTAINER.js';
+import CONTAINER, { DIALOG, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
 import LOADER from '../../dialog/loader/LOADER.js';
@@ -27,9 +27,7 @@ export default class MAIN extends CONTAINER {
 		this.loader = model.loader;
 		/** A Security token @type {string} */
 		this.token = model.token;
-		/** Browser Url
-		    @property {Url} url The browser url
-		*/
+		/** Browser Url @type {Url} url The browser url */
 		this.url = model.url;
 		/** A Sidebar for details and navigation
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
@@ -37,7 +35,7 @@ export default class MAIN extends CONTAINER {
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
         this.addNavOptions();
 
-        this.save = model.factory.save;
+        this.save = this.factory.save;
         //this.quickSave = model.factory.quickSave;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
 
@@ -46,11 +44,11 @@ export default class MAIN extends CONTAINER {
 	}
 	construct() {
 		this.navBar.el.setAttribute('draggable', 'false');
-		this.showNavBar();
+        this.navBar.show();
 		if (this.user === 'Guest') {
 			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
-				'icon': ICONS.USER,
-				'label': 'LOG IN'
+				icon: ICONS.USER
+				//label: 'LOG IN'
 			}));
 			this.btnLogin.el.onclick = this.login.bind(this);
 		}
@@ -108,9 +106,9 @@ export default class MAIN extends CONTAINER {
 	*/
 	addDefaultMenuItems() {
 		let userMenu = this.navBar.menu.menu.addMenu(new MODEL('horizontal collapse').set({
-			'name': 'USER',
-			'showHeader': 1,
-			'collapsed': 1
+			name: 'USER',
+			showHeader: 1,
+			collapsed: 1
 		}));
 		this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
 			this.navBar.menu.toggleCollapse();
@@ -307,7 +305,6 @@ export default class MAIN extends CONTAINER {
 	/** Log into the application using the given credentials
 		param {string} email Username / Email 
 		param {string} password Account Password
-
         <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
 			<input name="__RequestVerificationToken" type="hidden" value="woot">
             <div id="socialLoginList">
@@ -338,9 +335,9 @@ export default class MAIN extends CONTAINER {
 		form.el.setAttribute('method', 'POST');
 		form.el.setAttribute('action', '#');
 		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-			form.createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
-			form.createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
-			form.createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
+			createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
+			createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
+			createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
 		]);
 		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 		/* Create a new form to submit 3rd party logins

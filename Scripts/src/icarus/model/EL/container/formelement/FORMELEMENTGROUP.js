@@ -1,22 +1,18 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
 import FORMINPUT from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
-/**
-    A container made up of a group of form elements
+/** A container made up of a group of form elements
     @class
     @extends CONTAINER
 */
 export default class FORMELEMENTGROUP extends CONTAINER {
-	/**
-	    Constructs a Form Element Group
+	/** Constructs a Form Element Group
 	    @param {EL} node The parent
 	    @param {MODEL} model datamodel
-	 */
+    */
 	constructor(node, model) {
 		super(node, 'DIV', model, ['INPUT', 'SELECT', 'TEXTAREA']);
 		this.addClass('form-element-group');
