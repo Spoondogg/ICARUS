@@ -103,13 +103,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     }
 
                     if (dataIdLabel === 'descriptionId') {
-                        inputs.push(new MODEL(new ATTRIBUTES({
-                            name: 'description',
-                            type: 'text'
-                        })).set({
-                            element: 'TEXTAREA',
-                            label: 'description'
-                        }));
+                        inputs.push(createInputModel('TEXTAREA', 'description'));
                     }
                     let dialog = this.createFormDialog(inputs); //data 
                     dialog.show();
@@ -132,7 +126,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         @returns {Promise<boolean>} Returns true if Promise is resolved
     */
 	successfulFormPost(data, container) {
-		this.updateInput(data.model.id);
+        this.updateInput(data.model.id);
         /*
         let promise = new Promise((resolve) => { // reject
 			container.save(true) //container, container, 
@@ -180,8 +174,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         this.addInputs(inputs, dialog.form);
 		//this.form.fieldset.formElementGroup.toggleHeaders();
         dialog.form.setPostUrl('FormPost/Set');
-        dialog.form.afterSuccessfulPost = () => {
-			this.successfulFormPost()
+        dialog.form.afterSuccessfulPost = (payload) => {
+            //this.successfulFormPost()
+            console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', payload);
+            dialog.close();
         };
         return dialog;
 	}
@@ -193,13 +189,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	createInputArrayHtmlDecoded(parsed, inputs) {
 		for (let i = 0; i < parsed.length; i++) {
 			if (parsed[i].name !== 'id') {
-				inputs.push(new MODEL(new ATTRIBUTES({
-					'name': parsed[i].name,
-					'value': this.htmlDecode(parsed[i].value) || ''
-				})).set({
-					'element': 'INPUT',
-					'label': parsed[i].name
-				}));
+                inputs.push(createInputModel('INPUT', parsed[i].name, parsed[i].name, this.htmlDecode(parsed[i].value) || ''));
 			}
 		}
 		return inputs;
@@ -210,16 +200,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	editFormPost() { // If given value is an integer, assume this is the FormPostId, otherwise, retrieve the formpost
         console.log('editFormPost()');
-        let inputs = this.defaultInputArray(); /* [
-			new MODEL(new ATTRIBUTES({
-				'name': 'id',
-				'value': this.input.attributes.value
-			})).set({
-				'element': 'INPUT',
-				'type': 'FORMPOST',
-				'label': 'id'
-			})
-		];*/
+        let inputs = [createInputModel('INPUT', 'id', 'id', this.input.attributes.value, 'FORMPOST')];
 		try { // Test to see if the formpost can be retrieved
 			$.getJSON('/FORMPOST/Get/' + this.input.attributes.value, (data) => { // If access granted...				
 				if (data.model) {
