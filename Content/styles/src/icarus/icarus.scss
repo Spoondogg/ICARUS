@@ -290,9 +290,9 @@ dialog {
     border-radius: .6rem;
     box-shadow: 0 0 1em $color-black;
     margin: 1em auto;
-    width: calc(100% - 1em);
     padding: 0;
     top: 0;
+    width: calc(100% - 1em);
 
     &.dialog-login {
         float: right;
@@ -306,7 +306,7 @@ dialog {
         background-color: $color-shadow-dark;
     }
 
-    header, nav {
+    header {
         &.modal-header {
             background-color: $color-grey-dark;
             font-weight: bolder;
@@ -556,6 +556,10 @@ label {
 
 	&.invalid {
 		color: $color-red;
+
+        & + input {
+            background-color: $color-red;
+        }
 	}
 }
 table {

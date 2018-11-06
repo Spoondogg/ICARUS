@@ -166,6 +166,7 @@ export default class CONTAINERFACTORY {
 			try {
 				// Inject CRUD actions and dependencies
 				//obj.factory = this;
+                obj.container = obj.getProtoTypeByClass('CONTAINER');
 				obj.save = this.save;
                 //obj.quickSave = this.quickSave;
                 obj.quickSaveFormPost = this.quickSaveFormPost;
@@ -201,13 +202,12 @@ export default class CONTAINERFACTORY {
             dialog.form.afterSuccessfulPost = (payload) => {
                 console.log('Successful post', payload);
                 this.setLabel(dialog.form.el.elements.label.value);
-                //node.close();
                 //form.destroy();
-                this.quickSaveFormPost(this.dataId, this.data);
-                this.quickSaveFormPost(this.attributesId, this.attributes);
+                //this.quickSaveFormPost(this.dataId, this.data);
+                //this.quickSaveFormPost(this.attributesId, this.attributes);
                 //container.refreshParentContainer(container);
                 console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
-                resolve();
+                resolve(dialog.close());
             };
             /* eslint-disable-next-line no-alert */
             if (noPrompt) {

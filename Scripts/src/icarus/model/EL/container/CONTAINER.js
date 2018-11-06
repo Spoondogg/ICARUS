@@ -175,11 +175,16 @@ export default class CONTAINER extends GROUP {
         } else {
             this.show(); // Collapse or Expand Body Pane
         }
-        if (model.showNav === 0) {
+        if (model.showNav < 1) {
             this.navBar.hide();
         } else {
             this.navBar.show();
-        }        
+        }   
+        /*if (model.showNav) {
+            this.navBar.show();
+        } else {
+            this.navBar.hide();            
+        } */
 	}
 	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names
@@ -684,18 +689,15 @@ export default class CONTAINER extends GROUP {
         return new Promise((resolve, reject) => {
             try {
                 let dialog = new DIALOG(new MODEL().set({
-                    label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + ']'
+                    label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className
                 }));
-                dialog.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
-                    //let container = this.node.node.node.node;
+                dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
                     console.log('Remove', this);
                     this.destroy().then(() => {
                         try {
-                            this.node.node.node.node.save(true).then(() => {
-                                dialog.close().then(() => {
-                                    resolve();
-                                });
-                            }); // this.node.node.node.node, this.node.node.node.node, 
+                            this.container.save(true).then(() => {
+                                resolve(dialog.close());
+                            });
                         } catch (ee) {
                             reject(ee);
                         }
