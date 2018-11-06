@@ -1,11 +1,11 @@
 /** @module */
-import BUTTONGROUP, { ALIGN, BUTTON } from '../group/buttongroup/BUTTONGROUP.js';
+//import BUTTONGROUP, { ALIGN, BUTTON } from '../group/buttongroup/BUTTONGROUP.js';
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-//import BUTTON from '../button/BUTTON.js';
+import FORMFOOTER, { ALIGN, BUTTON } from '../form/FORMFOOTER.js'; // , { ALIGN, BUTTON }
 import DIV from '../div/DIV.js';
-import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
+import NAVBAR from '../nav/navbar/NAVBAR.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
@@ -22,14 +22,23 @@ export default class DIALOG extends EL {
 	constructor(model) {
 		super(document.body, 'DIALOG', model);
 		document.body.insertBefore(this.el, document.body.firstChild);
-		this.header = new HEADER(this, new MODEL('modal-header'));
-		this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
-        this.footer = new FOOTER(this, new MODEL('modal-footer'));
-        this.buttonGroup = new BUTTONGROUP(this.footer, null, ALIGN.VERTICAL);
-        this.btnClose = new BUTTON(this.footer, 'CLOSE', ICONS.CLOSE).addClass('btn-block');
-        this.btnClose.el.onclick = () => {
-            this.close();
-        }
+
+        this.header = new HEADER(this, new MODEL('modal-header').set({
+            label: model.label
+        }));
+
+        this.navBar = new NAVBAR(this, new MODEL().set({
+            label: this.label // model.label
+        }));
+        this.navBar.show();
+
+        this.header.btnClose = new BUTTON(this.header, 'x');
+        this.header.btnClose.el.onclick = () => this.close(300);
+        this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
+        this.footer = new FORMFOOTER(this, new MODEL('modal-footer').set({
+            align: ALIGN.VERTICAL
+        }));
+        this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close(300);
 	}
 	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown

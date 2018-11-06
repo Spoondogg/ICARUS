@@ -1,6 +1,6 @@
 /** @module */
+import BUTTONGROUP, { BUTTON } from '../group/buttongroup/BUTTONGROUP.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
-import BUTTONGROUP from '../group/buttongroup/BUTTONGROUP.js';
 import FOOTER from '../footer/FOOTER.js';
 /** A generic footer that should be placed at the bottom of content
     @class
@@ -13,7 +13,8 @@ export default class FORMFOOTER extends FOOTER {
 	*/
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('btn-group-justified form-footer');
-		this.buttonGroup = new BUTTONGROUP(this, null, ALIGN.VERTICAL); // Left aligned button group SIZE.MED
+		//this.addClass('btn-group-justified form-footer');
+		this.buttonGroup = new BUTTONGROUP(this, null, model.align); // Left aligned button group SIZE.MED
 	}
 }
+export { ALIGN, BUTTON, BUTTONGROUP, FOOTER };

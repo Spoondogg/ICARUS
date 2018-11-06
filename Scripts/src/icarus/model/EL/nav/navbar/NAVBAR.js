@@ -16,7 +16,7 @@ export default class NAVBAR extends NAV {
 		super(node, model);
 		this.addClass('collapse');
 		this.menu = new NAVHEADER(this, new MODEL().set({
-			'label': node.label
+			label: node.label
 		}));
     }
     /** Collapses the NAV
@@ -43,3 +43,4 @@ export default class NAVBAR extends NAV {
         }
     }
 }
+export { NAVHEADER };

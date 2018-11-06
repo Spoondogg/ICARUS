@@ -34,21 +34,17 @@ import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 //import TOKEN from '../model/el/container/formelement/forminput/TOKEN.js';
 import WORD from '../model/el/container/word/WORD.js';
-/**
-    Constructs various Containers and returns them to be appended
+/** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
  */
 export default class CONTAINERFACTORY {
 	/* eslint-disable max-lines-per-function, complexity */
-	/**
-	    Gets this Container from the database via ajax GET request.
+	/** Gets this Container from the database via ajax GET request.
 	    Retrieves object model and returns the container.
-
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
-
 	    @param {MODEL} node Parent node (Generally append to node.body.pane)
 	    @param {string} className Container Constructor Name
 	    @param {number} id Container UId
@@ -195,9 +191,11 @@ export default class CONTAINERFACTORY {
         return new Promise((resolve) => {
             console.log(this.className + '.save()', noPrompt);
             let dialog = new DIALOG(new MODEL().set({
-                label: 'Save ' + this.className
+                label: 'Save ' + this.className,
+                container: this
             }));
             dialog.form = FORM.createEmptyForm(dialog.body, false);
+            dialog.form.container = this;
             dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
             dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
             dialog.form.afterSuccessfulPost = (payload) => {
@@ -256,31 +254,6 @@ export default class CONTAINERFACTORY {
 			console.log('No modelId provided');
 		}*/
 	}
-	/** Displays a prompt that performs a save of the container, it's 
-	    attributes and any data objects associated with it.
-        @param {CONTAINER} container The Container to save
-	    @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
-	    @returns {BOOLEAN} True if successful
-	
-	quickSave(container, noPrompt = false) {
-		// eslint-disable-next-line no-alert //
-        if (noPrompt || confirm('Quick Save ' + container.className + '(' + container.id + ') : ' + container.label + ' ?')) {
-			//console.log(this.className + '.save()', this);
-			// Populate subsections with elements in this body
-			//let subsections = container.getSubSections();
-			let form = FORM.createEmptyForm(container, true);
-			form.children[0].children[0].addInputElements(form.createContainerInputs());
-			form.setPostUrl(container.className + '/Set');
-			form.post();
-			form.afterSuccessfulPost = () => {
-				container.setLabel(form.el.elements.label.value);
-				form.destroy();
-				container.quickSaveFormPost(container.dataId, container.data);
-                container.quickSaveFormPost(container.attributesId, container.attributes);
-			};
-			return true;
-		}
-	}*/
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };
 /* eslint-enable */

@@ -3,7 +3,7 @@ import DIALOG, { MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
 import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
-/** A Dialog that prompts the user for input
+/** A Dialog with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
     @class
     @extends DIALOG
@@ -15,7 +15,7 @@ export default class PROMPT extends DIALOG {
 	    @param {array} buttons Array of [label, glyphicon, buttonType]
 	    @param {array} inputs Array of inputs
 	    @param {boolean} vertical If true, prompt is vertically centered
-	 */
+    */
 	constructor(label, text, buttons, inputs, vertical) {
         super(new MODEL().set({
             label,
