@@ -335,9 +335,9 @@ export default class MAIN extends CONTAINER {
 		form.el.setAttribute('method', 'POST');
 		form.el.setAttribute('action', '#');
 		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-			createInputModel('INPUT', 'Email', 'Email / Username', '', 'EMAIL'),
-			createInputModel('INPUT', 'Password', 'Password', '', 'PASSWORD'),
-			createInputModel('INPUT', 'RememberMe', 'Remember Me', '', 'CHECKBOX')
+            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 		]);
 		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 		/* Create a new form to submit 3rd party logins

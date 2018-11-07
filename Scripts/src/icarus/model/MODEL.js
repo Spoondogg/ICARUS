@@ -38,7 +38,16 @@ export default class MODEL {
 			}
 		}
 		return this;
-	}
+    }
+    /** Sets a property (or a collection of properties) for this Model's ATTRIBUTES
+	    @param {string} key Name of property || An object containing key/value pairs
+	    @param {any} value Value for property
+	    @returns {MODEL} The object MODEL
+	*/
+    setAttribute(key, value) {
+        this.attributes.set(key, value);
+        return this;
+    }
 	/** Gets a property from this MODEL
 	    @param {string} key Name of property
 	    @returns {any} The value of the given key
@@ -49,6 +58,17 @@ export default class MODEL {
 		} catch (e) {
 			console.log('Unable to get property "' + key + '" of this MODEL.', e);
 		}
-	}
+    }
+    /** Gets a property from this Model's ATTRIBUTES
+	    @param {string} key Name of property
+	    @returns {any} The value of the given key
+	*/
+    getAttribute(key) {
+        try {
+            return this.attributes[key];
+        } catch (e) {
+            console.log('Unable to get property "' + key + '" of this MODEL.ATTRIBUTES', e);
+        }
+    }
 }
 export { ATTRIBUTES };

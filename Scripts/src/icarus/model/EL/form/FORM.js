@@ -76,10 +76,10 @@ export default class FORM extends CONTAINER {
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
-		try {
-			for (let i = 0; i < this.children.length; i++) {
-				this.children[i].el.disabled = true;
-			}
+        try {
+            this.children.forEach((ch) => {
+                ch.el.disabled = true;
+            });
 			return true;
 		} catch (e) {
 			console.log('Unable to lock this form');
