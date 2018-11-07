@@ -5,17 +5,19 @@ import MODEL from '../model/MODEL.js';
 /** Instantiates an INPUT MODEL
     @param {string} element Element name
     @param {string} name Input name
-    @param {string} label Label to display
     @param {string} value Value of input
+    @param {string} label Label to display
     @param {string} type The input type
+    @param {boolean} readonly If true, element is readonly
     @param {number} showNav If 1, NavBar is shown
     @returns {MODEL} An input model
 */
-export const createInputModel = (element, name, label = name, value = '', type = 'TEXT', showNav = 0) => new MODEL(
+export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0) => new MODEL(
     new ATTRIBUTES({
         name,
         value,
-        type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type
+        type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
+        readonly
     })
 ).set({
     showNav,
@@ -35,8 +37,8 @@ export const DATAELEMENTS = {
     ARTICLE: [createInputModel('INPUT', 'header', 'header', 'Article Header')],
     CALLOUT: [
         createInputModel('INPUT', 'icon'),
-        createInputModel('INPUT', 'header', 'header', 'Header'),
-        createInputModel('INPUT', 'p', 'p', 'Text')
+        createInputModel('INPUT', 'header', 'Header'),
+        createInputModel('INPUT', 'p', 'Text')
     ],
     CONTAINER: [createInputModel('INPUT', 'showNav', 'showNav', '1', 'NUMBER')],
     DICTIONARY: [createInputModel('INPUT', 'language')],
@@ -50,15 +52,17 @@ export const DATAELEMENTS = {
     INDEXMAIN: [],
     INPUT: [
         createInputModel('INPUT', 'showNav', 'showNav', '-1', 'NUMBER'),
-        createInputModel('INPUT', 'type', 'type', 'TEXT'),
-        createInputModel('INPUT', 'name', 'name', 'Text Input'),
-        createInputModel('INPUT', 'value', 'value', 'Text Value')
+        createInputModel('INPUT', 'type', 'TEXT'),
+        createInputModel('INPUT', 'name', 'Text Input'),
+        createInputModel('INPUT', 'value', 'Text Value')
     ],
     JUMBOTRON: [
-        createInputModel('INPUT', 'header', 'header', 'JT Header'),
+        createInputModel('INPUT', 'header', 'JT Header'),
         createInputModel('INPUT', 'p'),
-        //createInputModel('BUTTON', 'bgimage', 'bgimage', 0, 'FORMPOSTINPUT'),
-        new MODEL(new ATTRIBUTES({
+        createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT').set({
+            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+        }),
+        /*new MODEL(new ATTRIBUTES({
             name: 'bgimage',
             type: 'NUMBER',
             value: '-1'
@@ -67,44 +71,38 @@ export const DATAELEMENTS = {
             label: 'bgimage',
             type: 'FORMPOSTINPUT',
             showNav: 0,
-            inputs: [
-                createInputModel('INPUT', 'file', 'file', null, 'FILE')
-                /*new MODEL(new ATTRIBUTES({
-                    name: 'file',
-                    type: 'file'
-                })).set({
-                    element: 'INPUT',
-                    label: 'file'
-                })*/
-            ]
-        }),
-        createInputModel('INPUT', 'screencolor', 'screencolor', '.'),
-        createInputModel('INPUT', 'bgcolor', 'bgcolor', '.')
+            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+        }),*/
+        createInputModel('INPUT', 'screencolor', '.'),
+        createInputModel('INPUT', 'bgcolor', '.')
     ],	
 	LIST: [],
-    LISTITEM: [createInputModel('INPUT', 'p', 'p', 'Text')],	
+    LISTITEM: [createInputModel('INPUT', 'p', 'Text')],	
     MAIN: [],
-    PARAGRAPH: [createInputModel('INPUT', 'p', 'p', 'Paragraph Text')],
+    PARAGRAPH: [createInputModel('INPUT', 'p', 'Paragraph Text')],
     SECTION: [createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')],
     SIDEBAR: [],
-    TEXTBLOCK: [createInputModel('INPUT', 'text', 'text', 'Text')],
-	THUMBNAIL: [
-		new MODEL(new ATTRIBUTES({
+    TEXTBLOCK: [createInputModel('INPUT', 'text', 'Text')],
+    THUMBNAIL: [
+        createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT').set({
+            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+        }),
+		/*new MODEL(new ATTRIBUTES({
 			name: 'img',
 			type: 'NUMBER'
 		})).set({
 			element: 'BUTTON',
 			label: 'img',
 			type: 'FORMPOSTINPUT',
-            inputs: [createInputModel('INPUT', 'file', 'file', null, 'FILE')]
-        }),
-        createInputModel('INPUT', 'header', 'header', 'Header'),
-        createInputModel('INPUT', 'p', 'p', 'Text'),
+            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+        }),*/
+        createInputModel('INPUT', 'header', 'Header'),
+        createInputModel('INPUT', 'p', 'Text'),
         createInputModel('INPUT', 'bgImage')
 	],
     WORD: [
         createInputModel('INPUT', 'language'),
-        createInputModel('INPUT', 'typeId', 'typeId', '-1', 'NUMBER'),
+        createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER'),
         createInputModel('INPUT', 'value'),
         createInputModel('INPUT', 'definition')
     ]

@@ -31,16 +31,19 @@ export default class FORMINPUT extends FORMELEMENT {
 		let val = this.attributes.value || this.data.value;
 		this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
 			class: 'form-control',
-			type: this.attributes.type || this.data.type || 'TEXT',
+            type: this.attributes.type || 'TEXT', // || this.data.type
 			list: nm + '-options',
 			name: nm,
 			value: val || ''
 		})));
-		if (this.data.type === 'file' || this.attributes.type === 'image' || this.attributes.type === 'file') {
+        if (this.attributes.type === 'FILE' || this.attributes.type === 'IMAGE') {
 			this.createSubForm();
 		} else {
 			this.addInputOptions();
-		}
+        }
+        if (this.attributes.readonly) {
+            this.input.el.setAttribute('readonly', 'readonly');
+        }
 		return this.input;
 	}
 	/** Add any preset options to the datalist

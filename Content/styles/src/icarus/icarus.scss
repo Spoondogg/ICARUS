@@ -314,6 +314,18 @@ dialog {
             line-height: 3em;
             padding: 0 .5em;
             text-transform: uppercase;
+
+            button {
+                background-color: transparent;
+                color: $color-white;
+                float: right;
+                font-weight: bold;
+                line-height: 1.5em;
+
+                &:hover {
+                    color: $color-light-less;
+                }
+            }
         }
     }
 

@@ -26,7 +26,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	addInputElements(inputs) {
 		for (let i = 0; i < inputs.length; i++) {
 			let inp = null;
-			if (inputs[i].type === 'FORMPOSTINPUT' || inputs[i].attributes.type === 'FORMPOSTINPUT') {
+            if (inputs[i].type === 'FORMPOSTINPUT') { //  || inputs[i].attributes.type === 'FORMPOSTINPUT'
 				inp = new FORMPOSTINPUT(this.body.pane, inputs[i]);
 			} else {
 				switch (inputs[i].element) {

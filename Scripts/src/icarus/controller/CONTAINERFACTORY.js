@@ -205,7 +205,7 @@ export default class CONTAINERFACTORY {
                 //form.destroy();
                 //this.quickSaveFormPost(this.dataId, this.data);
                 //this.quickSaveFormPost(this.attributesId, this.attributes);
-                //container.refreshParentContainer(container);
+                this.refreshParentContainer();
                 console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
                 resolve(dialog.close());
             };
