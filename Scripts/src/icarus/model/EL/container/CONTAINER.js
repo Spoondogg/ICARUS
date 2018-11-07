@@ -99,17 +99,17 @@ export default class CONTAINER extends GROUP {
         console.log(this.className + '.createContainerInputs()', this);
         let subsections = this.getSubSections();
         console.log('subsections', subsections);
-		return [
-            createInputModel('INPUT', 'className', 'className', this.className),
-            createInputModel('INPUT', 'element', 'element', this.element),
-			createInputModel('INPUT', 'id', 'ID', this.id, 'NUMBER'),
-			createInputModel('INPUT', 'label', 'Label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString()),
-			createInputModel('INPUT', 'subsections', 'SubSections', subsections.length > 0 ? subsections.toString() : '0'),
-			createInputModel('INPUT', 'status', 'Status', this.status.toString(), 'NUMBER'),
-			createInputModel('BUTTON', 'dataId', 'dataId', this.dataId.toString(), 'FORMPOSTINPUT'),
-			createInputModel('BUTTON', 'attributesId', 'attributesId', this.attributesId.toString(), 'FORMPOSTINPUT'),
-			createInputModel('BUTTON', 'descriptionId', 'descriptionId', this.descriptionId.toString(), 'FORMPOSTINPUT'),
-			createInputModel('BUTTON', 'shared', 'shared', this.shared.toString(), 'NUMBER')
+        return [
+            createInputModel('INPUT', 'className', this.className).setAttribute('readonly', true),
+            createInputModel('INPUT', 'element', this.element).setAttribute('readonly', true),
+            createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER').setAttribute('readonly', true),
+            createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
+            createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections').setAttribute('readonly', true),
+            createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'),
+            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT').setAttribute('readonly', true),
+            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT').setAttribute('readonly', true),
+            createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT').setAttribute('readonly', true),
+            createInputModel('BUTTON', 'shared', this.shared.toString(), 'shared', 'NUMBER')
 		];
 	}
 	/** Saves the state of the given Container
@@ -292,9 +292,11 @@ export default class CONTAINER extends GROUP {
     */
 	refresh() {
 		console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
-		this.body.pane.empty();
+        this.body.pane.empty();
+        let children = this.body.pane.children;
+        this.body.pane.children = [];
 		this.construct();
-		this.populate(this.body.pane.children);
+		this.populate(children);
 	}
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
