@@ -44,7 +44,7 @@ export default class CONTAINER extends GROUP {
         } catch (e) {
             console.warn('Unable to retrieve dataElements for ' + this.className);
         }
-        console.log(this.className + '.dataElements[]', this.dataElements);
+        //console.log(this.className + '.dataElements[]', this.dataElements);
 
         // Set reusable attribute model(s)
         this.attributesId = model.attributesId || 0;
@@ -100,16 +100,16 @@ export default class CONTAINER extends GROUP {
         let subsections = this.getSubSections();
         console.log('subsections', subsections);
         return [
-            createInputModel('INPUT', 'className', this.className).setAttribute('readonly', true),
-            createInputModel('INPUT', 'element', this.element).setAttribute('readonly', true),
-            createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER').setAttribute('readonly', true),
+            createInputModel('INPUT', 'className', this.className, 'className', 'HIDDEN', true),
+            createInputModel('INPUT', 'element', this.element, 'element', 'HIDDEN', true),
+            createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
             createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
-            createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections').setAttribute('readonly', true),
-            createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'),
-            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT').setAttribute('readonly', true),
-            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT').setAttribute('readonly', true),
-            createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT').setAttribute('readonly', true),
-            createInputModel('BUTTON', 'shared', this.shared.toString(), 'shared', 'NUMBER')
+            createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'HIDDEN', true),
+            createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'), // should be dropdown
+            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
+            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
+            createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT'),
+            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
 		];
 	}
 	/** Saves the state of the given Container
@@ -191,7 +191,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	addDefaultContainers(containerList) {
-		let defaultContainers = ['IFRAME', 'FORM', 'LIST', 'MENULIST', 'JUMBOTRON', 'BANNER', 'PARAGRAPH', 'CHAT'];
+        let defaultContainers = ['FORM', 'LIST', 'MENULIST', 'JUMBOTRON', 'BANNER', 'TEXTBLOCK', 'CHAT', 'IFRAME'];
 		containerList.splice(2, 0, ...defaultContainers);
 		for (let c = 0; c < containerList.length; c++) {
 			this.addContainerCase(containerList[c]);
@@ -293,7 +293,7 @@ export default class CONTAINER extends GROUP {
 	refresh() {
 		console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
         this.body.pane.empty();
-        let children = this.body.pane.children;
+        const [...children] = this.body.pane.children;
         this.body.pane.children = [];
 		this.construct();
 		this.populate(children);

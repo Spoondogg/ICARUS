@@ -30,7 +30,8 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 				inp = new FORMPOSTINPUT(this.body.pane, inputs[i]);
 			} else {
 				switch (inputs[i].element) {
-					case 'TEXTAREA':
+                    case 'TEXTAREA':
+                        console.log('TEXTAREA');
 						inp = new FORMTEXTAREA(this.body.pane, inputs[i]);
 						break;
 					case 'SELECT':

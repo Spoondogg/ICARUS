@@ -1,7 +1,6 @@
 /** @module */
 import CONTAINER, { MODEL } from '../CONTAINER.js'; // DATAELEMENTS
 import DIV from '../../div/DIV.js';
-import P from '../../p/P.js';
 /** Textblock Constructor
     @description A TEXTBLOCK is essentially a DIV that is designed to contain
     rich text (paragraph and span with formatting attributes) and images.
@@ -16,13 +15,19 @@ export default class TEXTBLOCK extends CONTAINER {
     */
 	constructor(node, model) { // depth
 		super(node, 'DIV', model);
-		this.addClass('textblock');
-		this.body.pane.addClass('container'); // col-lg-offset-2 col-lg-8
-		this.row = new DIV(this.body.pane, new MODEL('row'));
-		this.col = new DIV(this.row, new MODEL('col-lg-offset-2 col-lg-8'));
-		if (model.dataId > 0) {
-			this.text = new P(this.col, model.data, model.data.text);
-		}
-		this.populate(model.children);
-	}
+        this.addClass('textblock');
+
+    }
+    /** Override abstract method
+        @returns {void}
+    */
+    construct() {
+        if (this.dataId > 0) {
+            this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
+            this.text.el.onclick = () => {
+                console.log('Clicked text', this);
+                console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
+            };
+        }
+    }
 }
