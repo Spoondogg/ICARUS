@@ -12,7 +12,10 @@ import MODEL from '../model/MODEL.js';
     @param {number} showNav If 1, NavBar is shown
     @returns {MODEL} An input model
 */
-export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0) => new MODEL(
+export const createInputModel = (
+    element, name, value = '', label = name, type = 'TEXT',
+    readonly = false, showNav = 0, ...attr
+) => new MODEL(
     new ATTRIBUTES({
         name,
         value,
@@ -24,7 +27,7 @@ export const createInputModel = (element, name, value = '', label = name, type =
     element,
     label,
     type
-});
+}).setAttribute(attr);
 /* eslint-enable max-params */
 /** Stores the default DATA ELEMENTS collections for each Class
     This belongs on the database or within a config 
@@ -46,6 +49,7 @@ export const DATAELEMENTS = {
     FORM: [],
     FORMELEMENT: [createInputModel('INPUT', 'showNav', 'showNav', '1', 'NUMBER')],
     FORMELEMENTGROUP: [],
+    FORMINPUT: [],
     FORMPOST: [],
     FORMPOSTINPUT: [],
     INDEX: [],
@@ -58,23 +62,12 @@ export const DATAELEMENTS = {
     ],
     JUMBOTRON: [
         createInputModel('INPUT', 'header', 'JT Header'),
-        createInputModel('INPUT', 'p'),
-        createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT').set({
-            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+        createInputModel('TEXTAREA', 'p', 'JT Textarea'),
+        createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
         }),
-        /*new MODEL(new ATTRIBUTES({
-            name: 'bgimage',
-            type: 'NUMBER',
-            value: '-1'
-        })).set({
-            element: 'BUTTON',
-            label: 'bgimage',
-            type: 'FORMPOSTINPUT',
-            showNav: 0,
-            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
-        }),*/
-        createInputModel('INPUT', 'screencolor', '.'),
-        createInputModel('INPUT', 'bgcolor', '.')
+        createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
+        createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
     ],	
 	LIST: [],
     LISTITEM: [createInputModel('INPUT', 'p', 'Text')],	
@@ -84,25 +77,16 @@ export const DATAELEMENTS = {
     SIDEBAR: [],
     TEXTBLOCK: [createInputModel('INPUT', 'text', 'Text')],
     THUMBNAIL: [
-        createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT').set({
+        createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
             inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
         }),
-		/*new MODEL(new ATTRIBUTES({
-			name: 'img',
-			type: 'NUMBER'
-		})).set({
-			element: 'BUTTON',
-			label: 'img',
-			type: 'FORMPOSTINPUT',
-            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
-        }),*/
-        createInputModel('INPUT', 'header', 'Header'),
+		createInputModel('INPUT', 'header', 'Header'),
         createInputModel('INPUT', 'p', 'Text'),
         createInputModel('INPUT', 'bgImage')
 	],
     WORD: [
         createInputModel('INPUT', 'language'),
-        createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER'),
+        createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
         createInputModel('INPUT', 'value'),
         createInputModel('INPUT', 'definition')
     ]
