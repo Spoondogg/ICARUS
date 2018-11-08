@@ -1,11 +1,9 @@
 /** @module */
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
-//import PROMPT from '../../../modal/prompt/PROMPT.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
 import INPUT from '../../../input/INPUT.js';
-//import STRING from '../../../../../STRING.js';
 /** Represents an INPUT for an Icarus Form
     @class
     @extends FORMELEMENT
@@ -14,7 +12,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	/** Constructs a FORMINPUT element
 	    @param {EL} node Parent
 	    @param {MODEL} model The model
-	 */
+    */
 	constructor(node, model) {
 		console.log('FORMINPUT');
 		super(node, 'DIV', model);
@@ -27,23 +25,44 @@ export default class FORMINPUT extends FORMELEMENT {
         @todo This should use a factory constructor pattern to create specific input types
     */
 	createInput() {
-		let nm = this.attributes.name || this.data.name;
-		let val = this.attributes.value || this.data.value;
+        let nm = this.attributes.name; // || this.data.name;
+        let val = this.attributes.value; // || this.data.value;
 		this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
 			class: 'form-control',
             type: this.attributes.type || 'TEXT', // || this.data.type
-			list: nm + '-options',
+            list: this.attributes.name + '-options',
 			name: nm,
 			value: val || ''
-		})));
+        })));
+
+        switch (this.attributes.type) {
+            case 'HIDDEN':
+                this.collapse();
+                break;
+            case 'CHECKBOX':
+                console.log('CHECKBOX');
+                this.input.el.checked = this.attributes.value > 0;
+
+                this.input.el.onchange = () => {
+                    this.attributes.value = this.input.el.checked ? 1 : -1;
+                    this.input.el.value = this.input.el.checked ? 1 : -1;
+                }
+
+                break;
+            default:
+                // 'TEXT'
+        }
+
         if (this.attributes.type === 'FILE' || this.attributes.type === 'IMAGE') {
 			this.createSubForm();
 		} else {
 			this.addInputOptions();
         }
+
         if (this.attributes.readonly) {
-            this.input.el.setAttribute('readonly', 'readonly');
+            this.input.el.readOnly = true; //.setAttribute('readonly', 'readonly');
         }
+
 		return this.input;
 	}
 	/** Add any preset options to the datalist
@@ -74,43 +93,36 @@ export default class FORMINPUT extends FORMELEMENT {
 			this.dimY.input.el.setAttribute('value', this.img.el.naturalHeight);
 		};
 		this.base64 = new FORMTEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMTEXTAREA
-			'name': 'base64'
-			//'label': 'base64'
+			name: 'base64'
 		}).set({
-			'name': 'base64'
-			//'label': 'base64'
+			name: 'base64'
 		})));
 		this.fileName = new FORMINPUT(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMINPUT
-			'name': 'filename',
-			'label': 'base64'
+			name: 'filename',
+			label: 'base64'
 		}).set({
-			'name': 'filename'
-			//'label': 'filename'
+			name: 'filename'
 		})));
 		this.fileType = new FORMINPUT(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMINPUT
-			'name': 'fileType',
-			'label': 'base64'
+			name: 'fileType',
+			label: 'base64'
 		}).set({
-			'name': 'fileType'
-			//'label': 'fileType'
+			name: 'fileType'
 		})));
 		this.fileSize = new FORMINPUT(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMINPUT
-			'name': 'fileSize'
+			name: 'fileSize'
 		}).set({
-			'name': 'fileSize'
-			//'label': 'fileSize'
+			name: 'fileSize'
 		})));
 		this.dimX = new FORMINPUT(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMINPUT
-			'name': 'dimX'
+			name: 'dimX'
 		}).set({
-			'name': 'dimX'
-			//'label': 'dimX'
+			name: 'dimX'
 		})));
 		this.dimY = new FORMINPUT(this.body.pane, new MODEL(new ATTRIBUTES({ //FORMINPUT
-			'name': 'dimY'
+			name: 'dimY'
 		}).set({
-			'name': 'dimY'
-			//'label': 'dimY'
+			name: 'dimY'
 		})));
 		this.input.el.onchange = this.readURL.bind(this);
 	}
@@ -152,18 +164,14 @@ export default class FORMINPUT extends FORMELEMENT {
 		this.input.el.setAttribute('name', label);
 		return this;
 	}
-	/**
-		    Adds an option to this input element
-	        
-	        @todo Consider how to share these lists with the entire application rather than
-		    reduntantly load the same data over and over again.  
-	        Perhaps there should be an OPT-LIST object inside MAIN
-		    
-		    @param {string} label The label
-		    @param {string} value The value
-
-	        @returns {ThisType} Returns this object for method chaining
-		*/
+	/** Adds an option to this input element	        
+        @todo Consider how to share these lists with the entire application rather than
+        reduntantly load the same data over and over again.  
+        Perhaps there should be an OPT-LIST object inside MAIN		    
+        @param {string} label The label
+        @param {string} value The value
+        @returns {ThisType} Returns this object for method chaining
+    */
 	addOption(label, value) {
 		/*if (typeof label === 'undefined' || typeof value === 'undefined') {
 			try {

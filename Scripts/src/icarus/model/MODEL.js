@@ -44,7 +44,7 @@ export default class MODEL {
 	    @param {any} value Value for property
 	    @returns {MODEL} The object MODEL
 	*/
-    setAttribute(key, value) {
+    setAttribute(key, value = null) {
         this.attributes.set(key, value);
         return this;
     }

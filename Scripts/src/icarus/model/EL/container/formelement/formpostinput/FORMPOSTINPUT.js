@@ -5,7 +5,7 @@ import DIALOG from '../../../dialog/DIALOG.js';
 import DIV from '../../../div/DIV.js';
 import FORM from '../../../form/FORM.js';
 import INPUT from '../../../input/INPUT.js';
-import MODAL from '../../../modal/MODAL.js';
+//import MODAL from '../../../modal/MODAL.js';
 import SPAN from '../../../span/SPAN.js';
 /** Represents an INPUT element inside a group of form elements    
     @description A FormPost Input acts as a special input that is populated
@@ -22,32 +22,34 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	constructor(node, model) {
         super(node, 'DIV', model);
-        console.log('FormPostInput', model, model.container);
-		this.createInput(model.container);
+        this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
+        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+            class: 'form-control',
+            name: this.attributes.name,
+            value: this.attributes.value,
+            type: this.attributes.type || 'TEXT',
+            readonly: true
+        })));
+        this.form = null;
+        //console.log('FormPostInput', model, model.container);
+        this.createInput(); // model.container
 	}
 	/** Creates an Input Group with an INPUT element inside of it. 
-        @param {CONTAINER} container The container
+        param {CONTAINER} container The container
         @returns {void}
     */
-    createInput(container) {
-        console.log('CreateInput', container);
-		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
-		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
-			class: 'form-control',
-			name: this.attributes.name,
-			value: this.attributes.value,
-			type: this.attributes.type || 'text'
-		})));
-        this.form = null;
-
+    createInput() { // container
+        if (this.attributes.type === 'HIDDEN') {
+            this.collapse();
+        }
         if (this.attributes.readonly) {
             this.input.el.setAttribute('readonly', 'readonly');
         }
+        if (this.attributes.value > 0) { //  || this.value > 0
+            let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
+            btnEdit.el.onclick = () => this.editAttributes();
+        }
 
-		if (this.attributes.value > 0 || this.value > 0) {
-			this.btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
-            this.btnEdit.el.onclick = () => this.editFormPost(); // .bind(this)
-		}
 		this.btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
         this.btnNew.el.onclick = () => {
             let className = this.input.el.form.className.value;
@@ -68,8 +70,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	*/
 	defaultInputArray(data) {
         return [
-            createInputModel('INPUT', 'shared', '-1', 'shared', 'NUMBER'),
-            createInputModel('INPUT', 'id', data.model.id, 'id', 'NUMBER')
+            createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
+            createInputModel('INPUT', 'shared', data.model.shared, 'shared', 'CHECKBOX')
 		];
 	}
 	/** Append inputs from the given model
@@ -102,6 +104,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                 $.getJSON('/FORMPOST/Get/0', (data) => {
                     let inputs = this.defaultInputArray(data);
                     this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
+
+                    console.warn('APPEND ME', data);
                     
                     if (dataIdLabel === 'dataId') { // Append additional dataElements
                         inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className]);
@@ -166,46 +170,59 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         @returns {DIALOG} A Dialog with a form
     */
     createFormDialog(inputs) { //data
-        let dialog = new DIALOG(new MODEL().set({
-            label: 'Create FormPost Form'
-        }));
-        console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
-        dialog.form = FORM.createEmptyForm(dialog.body);
-        dialog.form.id = 3; //console.log('formpostinput: 3');
-        dialog.form.el.setAttribute('id', 3);
-        dialog.form.prompt = this;
-        //dialog.form.children[0].children[0].navBar.header.menu.getGroup('ELEMENTS').empty();
-        //this.addFormElementGroupContainerCase(['INPUT', 'SELECT', 'TEXTAREA']);
-        this.addInputs(inputs, dialog.form);
-		//this.form.fieldset.formElementGroup.toggleHeaders();
-        dialog.form.setPostUrl('FormPost/Set');
-        dialog.form.afterSuccessfulPost = (payload) => {
-            //this.successfulFormPost()
-            console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', payload);
-            dialog.close();
-        };
-        return dialog;
+        return new Promise((resolve, reject) => {
+            try {
+                let dialog = new DIALOG(new MODEL().set({
+                    label: 'Create FormPost Form'
+                }));
+                console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
+                dialog.form = FORM.createEmptyForm(dialog.body);
+                dialog.form.id = 3; //console.log('formpostinput: 3');
+                dialog.form.el.setAttribute('id', 3);
+                dialog.form.prompt = this;
+                this.addInputs(inputs, dialog.form);
+                dialog.form.setPostUrl('FormPost/Set');
+                dialog.form.afterSuccessfulPost = (payload) => {
+                    //this.successfulFormPost()
+                    console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', payload);
+                    dialog.close();
+                };
+                //return dialog;
+                resolve(dialog.show());
+            } catch (e) {
+                reject(e);
+            } 
+        });
+        
+        
 	}
 	/** Creates an array of inputs that have been parsed
 	    @param {any} parsed A parsed payload
 	    @param {Array} inputs An array of inputs
 	    @returns {Array} An array of inputs
-	*/
+	
 	createInputArrayHtmlDecoded(parsed, inputs) {
 		for (let i = 0; i < parsed.length; i++) {
-			if (parsed[i].name !== 'id') {
+			//if (parsed[i].name !== 'id') {
                 inputs.push(createInputModel('INPUT', parsed[i].name, this.htmlDecode(parsed[i].value) || ''));
-			}
+			//}
 		}
 		return inputs;
-	}
+	}*/
 	/** Edits an existing FormPost
         param {ARRAY} inputArray Array of inputs
         @returns {void}
-    */
+    
 	editFormPost() { // If given value is an integer, assume this is the FormPostId, otherwise, retrieve the formpost
-        console.log('editFormPost()');
-        let inputs = [createInputModel('INPUT', 'id', this.input.attributes.value, 'id', 'FORMPOST')];
+        console.log('editFormPost(' + this.input.el.form.className.value + ')');
+
+        //let inputs = this.defaultInputArray();
+        //let inputs = [
+           // createInputModel('INPUT', 'shared', this.shared, 'shared', 'CHECKBOX'),
+            //createInputModel('INPUT', 'id', this.input.attributes.value, 'id', 'FORMPOST', true)
+        //];
+        let inputs = [];
+
 		try { // Test to see if the formpost can be retrieved
 			$.getJSON('/FORMPOST/Get/' + this.input.attributes.value, (data) => { // If access granted...				
 				if (data.model) {
@@ -224,7 +241,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		} catch (e) {
 			console.log('Unable to retrieve FormPost.', e);
 		}
-	}
+	}*/
 	/** Add the appropriate FORMELEMENT
         @param {Array} inputs An array of inputs
         @param {FORM} form A Form
@@ -234,46 +251,69 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	addInputs(inputs, form) {
 		if (inputs) {
 			for (let i = 0; i < inputs.length; i++) {
-				let inp = null;
-                if (inputs[i].type === 'FORMPOSTINPUT') { //  || inputs[i].attributes.type === 'FORMPOSTINPUT' // inputs[i].data.type === 'FORMPOSTINPUT'
-					inp = new FORMPOSTINPUT(form.children[0].children[0].body.pane, inputs[i]);
-				} else {
-                    inp = new FORMINPUT(form.children[0].children[0].body.pane, inputs[i]);
+                let inp = null;
+                switch (inputs[i].type) {
+                    case 'FORMPOSTINPUT':
+                        inp = new FORMPOSTINPUT(form.children[0].children[0].body.pane, inputs[i]);
+                        break;
+                    default:
+                        inp = new FORMINPUT(form.children[0].children[0].body.pane, inputs[i]);
                 }
                 form.children[0].children[0].children.push(inp);
 			}
 		}
 	}
 	/** Opens a Modal Form populated with an open version of the FormPost
-        @returns {void}
-        @todo This is just ridiculously long and needs to be cleaned up
+        @returns {Promise} Promise to create an edit form for this object
     */
 	editAttributes() {
-		console.log('editattributes');
-		let id = parseInt(this.input.attributes.value);
-        let inputs = [createInputModel('INPUT', 'id', id, 'id', 'FORMPOST')];
-		// Test to see if the formpost can be retrieved
-		try {
-			$.getJSON('/FORMPOST/Get/' + id, (data) => {
-				if (data.model) { // If access granted...
-					if (data.model.jsonResults) {
-						if (typeof container === 'undefined') {
-							console.log('Unable to retrieve parent container');
-						} else {
-							inputs = this.createInputArray(JSON.parse(data.model.jsonResults), this.getContainer(), inputs);
-							this.destroyForm();
-                            let dialog = this.createFormPostForm(inputs, data);
-                            dialog.show();
-						}
-					}
-				} else {
-					console.log(0, 'An Exception Occurred', data.message);
-					this.getMainContainer().login();
-				}
-			});
-		} catch (e) {
-			console.log(0, 'Unable to retrieve FormPost.', e);
-		}
+        return new Promise(
+            (resolve, reject) => {
+                try { // Generate new FormPost            
+                    $.getJSON('/FORMPOST/Get/' + this.input.attributes.value, (data) => { // If access granted...
+                        if (data.model) {
+                            let inputs = this.defaultInputArray(data);
+                            this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
+
+                            switch (this.attributes.name) {
+                                case 'dataId':
+                                    inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[this.input.el.form.elements.className.value]);
+                                    break;
+                                case 'descriptionId':
+                                    inputs.push(createInputModel('TEXTAREA', 'description'));
+                                    break;
+                                default:
+                                    console.log('Unidentified attribute name', this.attributes.name);
+                            }
+
+                            if (data.model.jsonResults) { // loop through data.model and set values accordingly
+                                let i = 0;
+                                let jsonResults = JSON.parse(data.model.jsonResults);
+                                console.log('data.model', data.model);
+                                console.log('INPUTS', inputs);
+                                console.log('JSONRESULTS', jsonResults);
+                                jsonResults.forEach((inp) => {
+                                    //console.log('INP[' + i + ']', inp);
+                                    inputs[i].attributes.value = inp.value;
+                                    i++;
+                                });
+                            } else {
+                                console.log('Json Results empty');
+                            }
+
+                            let dialog = this.createFormDialog(inputs);
+                            this.form = dialog.form;
+                            resolve(this.form);
+                        } else {
+                            reject(this.getMainContainer().login());
+                        }
+                    });
+                } catch (e) {
+                    console.log(0, 'Unable to retrieve FormPost.', e);
+                    reject(e);
+                }
+            }
+        );
 	}
 	/** Iterates through the parsed json results and creates
 	    a collection of INPUTS with associated parameters
@@ -284,30 +324,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @returns {Array<MODEL>} An array of input models
 	*/
 	createInputArray(parsed, container, inputs) {
-		/*for (let i = 0; i < parsed.length; i++) {
-			let inp = parsed[i];
-			if (inp.name !== 'id') {
-				let value = null;
-				if (container[inp.name]) {
-					if (container[inp.name].el) {
-						value = container[inp.name].el.innerHTML;
-					}
-				} else {
-					value = inp.value;
-				}
-				inputs.push(new MODEL(new ATTRIBUTES({
-					'name': inp.name,
-					value //inp.value
-				})).set({
-					'element': 'INPUT',
-					'label': inp.name
-				}));
-			}
-        }*/
 		parsed.forEach(({ name, value }) => {
-			if (name !== 'id') {
+			//if (name !== 'id') {
                 inputs.push(createInputModel('INPUT', name, this.getContainerProperty(container) || value));
-			}
+			//}
 		});
 		return inputs;
 	}
