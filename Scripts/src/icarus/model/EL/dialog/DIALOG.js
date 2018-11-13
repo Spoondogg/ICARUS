@@ -20,7 +20,9 @@ export default class DIALOG extends EL {
 	    @param {MODEL} model The object model
 	*/
 	constructor(model) {
-		super(document.body, 'DIALOG', model);
+        super(document.body, 'DIALOG', model);
+        this.container = model.container;
+
 		document.body.insertBefore(this.el, document.body.firstChild);
 		this.header = new HEADER(this, new MODEL('modal-header').set({
 			label: model.label
@@ -73,6 +75,18 @@ export default class DIALOG extends EL {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Overrides CONTAINER logic for DIALOG
+        @returns {CONTAINER} The DIALOG Container (MAIN)
+    */
+    getContainer() {
+        return this.container;
+    }
+    /** Overrides CONTAINER logic for DIALOG
+        @returns {CONTAINER} The DIALOG Container (MAIN)
+    */
+    getMainContainer() {
+        return this.container;
+    }
 }
 export { ATTRIBUTES, DIV, EL, MODEL };

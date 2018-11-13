@@ -171,7 +171,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		return new Promise((resolve, reject) => {
 			try {
 				let dialog = new DIALOG(new MODEL().set({
-					label: 'Create FormPost Form'
+                    label: 'Create FormPost Form',
+                    container: this.getMainContainer()
 				}));
 				console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
 				dialog.form = FORM.createEmptyForm(dialog.body);
@@ -361,7 +362,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	createFormPostForm(inputs, data) {
 		console.log('FORMPOSTINPUT.createFormPostForm()', inputs, data);
 		let dialog = new DIALOG(new MODEL().set({
-			label: 'Create FormPost Form'
+            label: 'Create FormPost Form',
+            container: this.getMainContainer()
 		}));
 		dialog.form = FORM.createEmptyForm(dialog.body);
 		dialog.form.label = 'Modify';

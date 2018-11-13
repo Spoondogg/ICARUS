@@ -16,6 +16,7 @@ export default class TOKEN extends EL {
 	/** Generates a Request Verification Token element if 
 		one exists in the DOM. (Usually a hidden input)
 	    The token value is appended to the current document's metatags
+        and the original element is removed from the DOM
         @see https://hacks.mozilla.org/2015/05/es6-in-depth-destructuring/ 
 		@returns {HTMLElement} An input element
 	*/
@@ -23,26 +24,10 @@ export default class TOKEN extends EL {
 		try {
 			let [token] = document.getElementsByName('__RequestVerificationToken');
 			token.parentNode.removeChild(token);
-			console.log('Token.value', token);
 			document.getElementsByTagName('meta').token.content = token.value;
-			//this.removeTokenFromDom(token);
 			return token;
 		} catch (e) {
 			throw new TokenError('Unable to retrieve or set the token', e.message);
-		}
-	}
-	/** Remove the Request Verification Token HTML Input from the DOM
-        @param {Element} token The request verification token element
-	    @returns {boolean} Returns true if the token was removed
-	    @throws Throw an error if token input element cannot be removed from the DOM
-	*/
-	removeTokenFromDom(token) {
-		try {
-			token.parentNode.removeChild(token);
-			return true;
-		} catch (e) {
-			console.warn('Failed to remove TOKEN from BODY');
-			//throw e;
 		}
 	}
 }
