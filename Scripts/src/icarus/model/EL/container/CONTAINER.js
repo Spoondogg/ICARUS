@@ -352,15 +352,16 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Adds a button to the options menu that promises to construct the given CONTAINER name
         @param {string} className CONTAINER class name to construct
-        @returns {void}
+        @returns {NAVITEMICON} Clickable Nav Item 
     */
     addConstructContainerButton(className) {        
         try {
             let group = this.navBar.menu.menu.getGroup('ELEMENTS');
-            let items = this.createNavItems([className], group);
-            items[className].el.onclick = () => this.create(new MODEL(className).set({
+            let item = this.createNavItem(className, group);
+            item.el.onclick = () => this.create(new MODEL(className).set({
 				className
-			})); //.then(() => this.save(true));
+            })); //.then(() => this.save(true));
+            return item;
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
