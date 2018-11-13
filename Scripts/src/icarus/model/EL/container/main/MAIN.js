@@ -23,7 +23,7 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
-        /** @type {LOADER} */
+		/** @type {LOADER} */
 		this.loader = model.loader;
 		/** A Security token @type {string} */
 		this.token = model.token;
@@ -33,18 +33,16 @@ export default class MAIN extends CONTAINER {
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
-        this.addNavOptions();
-
-        this.save = this.factory.save;
-        //this.quickSave = model.factory.quickSave;
-        this.quickSaveFormPost = model.factory.quickSaveFormPost;
-
+		this.addNavOptions();
+		this.save = this.factory.save;
+		//this.quickSave = model.factory.quickSave;
+		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
 		this.populate(model.children);
 	}
 	construct() {
 		this.navBar.el.setAttribute('draggable', 'false');
-        this.navBar.show();
+		this.navBar.show();
 		if (this.user === 'Guest') {
 			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
 				icon: ICONS.USER
@@ -150,11 +148,11 @@ export default class MAIN extends CONTAINER {
 			    page in this window
 			*/
 			let url = '/' + payload.model.id;
-            let dialog = new DIALOG(new MODEL().set({
-                label: 'New Page'
-            }));
-            dialog.form = FORM.createEmptyForm(dialog.body);
-            //dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
+			let dialog = new DIALOG(new MODEL().set({
+				label: 'New Page'
+			}));
+			dialog.form = FORM.createEmptyForm(dialog.body);
+			//dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
 			dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 				window.open(url, '_blank');
 				dialog.hide(300, true);
@@ -335,9 +333,9 @@ export default class MAIN extends CONTAINER {
 		form.el.setAttribute('method', 'POST');
 		form.el.setAttribute('action', '#');
 		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+			createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+			createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+			createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 		]);
 		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 		/* Create a new form to submit 3rd party logins

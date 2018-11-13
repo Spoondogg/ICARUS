@@ -15,19 +15,18 @@ export default class TEXTBLOCK extends CONTAINER {
     */
 	constructor(node, model) { // depth
 		super(node, 'DIV', model);
-        this.addClass('textblock');
-
-    }
-    /** Override abstract method
-        @returns {void}
-    */
-    construct() {
-        if (this.dataId > 0) {
-            this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
-            this.text.el.onclick = () => {
-                console.log('Clicked text', this);
-                console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
-            };
-        }
-    }
+		this.addClass('textblock');
+	}
+	/** Override abstract method
+	    @returns {void}
+	*/
+	construct() {
+		if (this.dataId > 0) {
+			this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
+			this.text.el.onclick = () => {
+				console.log('Clicked text', this);
+				console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
+			};
+		}
+	}
 }

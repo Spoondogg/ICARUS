@@ -14,8 +14,8 @@ export default class JUMBOTRON extends CONTAINER {
         @param {MODEL} model Object Model        
     */
 	constructor(node, model) {
-        super(node, 'DIV', model);
-        this.addClass('jumbotron');
+		super(node, 'DIV', model);
+		this.addClass('jumbotron');
 	}
 	/** Override abstract method
         @returns {void}
@@ -24,7 +24,7 @@ export default class JUMBOTRON extends CONTAINER {
 		if (this.dataId > 0) {
 			this.screen = new DIV(this.body.pane, new MODEL('screen'));
 			this.setScreenColor();
-			this.header = new HEADER(this.screen, new MODEL().set({ 'label': this.data.header }));
+			this.header = new HEADER(this.screen, new MODEL().set({ label: this.data.header }));
 			this.createTextblock();
 			this.loadBgImage();
 			this.setBgColor();
@@ -37,6 +37,10 @@ export default class JUMBOTRON extends CONTAINER {
 		try {
 			if (this.data.p.length > 0) {
 				this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
+				this.p.el.onclick = () => {
+					console.log('Clicked text', this);
+					console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
+				};
 			}
 		} catch (e) {
 			console.log('Unable to create textblock', e);

@@ -21,58 +21,58 @@ import STRING from '../../../STRING.js';
     @extends GROUP
 */
 export default class CONTAINER extends GROUP {
-    /* eslint-disable max-statements */
+	/* eslint-disable max-statements */
 	/** @constructs CONTAINER
 	    @param {EL} node The element to contain the section
 	    @param {string} element HTML element
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	 */
-    constructor(node, element, model = new MODEL(), containerList = []) {
+	constructor(node, element, model = new MODEL(), containerList = []) {
 		super(node, element, model); //console.log('CONTAINER{' + this.className + '}');
 		this.addClass('icarus-container'); //this.isContainer = 1;
-        this.id = model.id || 0;
-
-        // Set reusable data model(s)
-        this.dataId = model.dataId || 0;
-
-        /** @type {Array<MODEL>} An array of MODELs */
-        this.dataElements = []; 
+		this.id = model.id || 0;
+		// Set reusable data model(s)
+		this.dataId = model.dataId || 0;
+		/** @type {Array<MODEL>} An array of Input MODELs */
+		this.dataElements = [];
+		try {
+			DATAELEMENTS.CONTAINER.data.forEach((m) => this.dataElements.push(m));
+			DATAELEMENTS[this.className].data.forEach((m) => this.dataElements.push(m));
+		} catch (e) {
+			console.warn('Unable to retrieve dataElements for ' + this.className);
+		}
+		// Set reusable attribute model(s)
+        this.attributesId = model.attributesId || 0;
+        /** @type {Array<MODEL>} An array of Input MODELs */
+        this.attrElements = [];
         try {
-            DATAELEMENTS.CONTAINER.forEach((m) => this.dataElements.push(m));
-            DATAELEMENTS[this.className].forEach((m) => this.dataElements.push(m));
+            DATAELEMENTS.CONTAINER.attributes.forEach((m) => this.attrElements.push(m));
+            DATAELEMENTS[this.className].attributes.forEach((m) => this.attrElements.push(m));
         } catch (e) {
             console.warn('Unable to retrieve dataElements for ' + this.className);
         }
-        //console.log(this.className + '.dataElements[]', this.dataElements);
-
-        // Set reusable attribute model(s)
-        this.attributesId = model.attributesId || 0;
-        this.attrElements = [];
-
-        // Set reusable description model(s)
-		this.descriptionId = model.descriptionId || 0;        
-
-        if (model.id) { // Needed for save hooks
-            this.el.setAttribute('id', model.id);
-        }
+		// Set reusable description model(s)
+		this.descriptionId = model.descriptionId || 0;
+		if (model.id) { // Needed for save hooks
+			this.el.setAttribute('id', model.id);
+		}
 		this.label = model.label || element;
 		this.name = model.name || element;
-        this.shared = model.shared || 1;
-        this.status = model.status || STATUS.DEFAULT;
-		
+		this.shared = model.shared || 1;
+		this.status = model.status || STATUS.DEFAULT;
 		this.updateUrl = this.element + '/Set'; // model.className should be the actual value, no?                
-        this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
-        this.navBar = new NAVBAR(this, new MODEL().set({
-            label: this.label // model.label
-        }));
-        this.createDraggableNavBar();
-        //if (this.status === STATUS.DEFAULT) {
-        //if (model.showHeader ) {
-        //this.navBar.show();
-        //} else {
-        //this.navBar.collapse();
-        //}
+		this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
+		this.navBar = new NAVBAR(this, new MODEL().set({
+			label: this.label // model.label
+		}));
+		this.createDraggableNavBar();
+		//if (this.status === STATUS.DEFAULT) {
+		//if (model.showHeader ) {
+		//this.navBar.show();
+		//} else {
+		//this.navBar.collapse();
+		//}
 		this.body = new CONTAINERBODY(this, model);
 		this.addNavBarDefaults();
 		this.addDefaultContainers(containerList);
@@ -80,8 +80,8 @@ export default class CONTAINER extends GROUP {
 		//if (this.className !== 'CONTAINER') {
 		this.construct();
 		//}
-    }
-    /* eslint-enable max-statements */
+	}
+	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
 		@abstract
 	    @returns {void}
@@ -90,26 +90,26 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
-    }
+	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
 	    param {CONTAINER} container The specified container for crud actions
 	    @returns {Array<MODEL>} An array of input models
 	*/
-    createContainerInputs() {
-        console.log(this.className + '.createContainerInputs()', this);
-        let subsections = this.getSubSections();
-        console.log('subsections', subsections);
-        return [
-            createInputModel('INPUT', 'className', this.className, 'className', 'HIDDEN', true),
-            createInputModel('INPUT', 'element', this.element, 'element', 'HIDDEN', true),
-            createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
-            createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'HIDDEN', true),
-            createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'), // should be dropdown
-            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT'),
-            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
+	createContainerInputs() {
+		console.log(this.className + '.createContainerInputs()', this);
+		let subsections = this.getSubSections();
+		console.log('subsections', subsections);
+		return [
+			createInputModel('INPUT', 'className', this.className, 'className', 'HIDDEN', true),
+			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
+			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
+			createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
+			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'HIDDEN', true),
+			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'), // should be dropdown
+			createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT'),
+			createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
 		];
 	}
 	/** Saves the state of the given Container
@@ -121,19 +121,19 @@ export default class CONTAINER extends GROUP {
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 	    @returns {Promise} A Promise to save this Container
 	*/
-    save(noPrompt = false) { // node, container = this, 
-        console.log(this.className + '.save()', noPrompt); // node, container, 
+	save(noPrompt = false) { // node, container = this, 
+		console.log(this.className + '.save()', noPrompt); // node, container, 
 		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save() not implemented.');
 	}
-    /** If dataId or attributesId exists, extract the appropriate values and save
+	/** If dataId or attributesId exists, extract the appropriate values and save
 	    @param {number} modelId The object's unique identifier
 	    @param {object} data The object to be saved
 	    @returns {void}
 	*/
-    quickSaveFormPost(modelId, data) {
-        console.log(modelId, data);
-        throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');
-    }
+	quickSaveFormPost(modelId, data) {
+		console.log(modelId, data);
+		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');
+	}
 	/** Restore Container View to defaults and refresh parent Container
 	    @param {CONTAINER} container The container to restore
 	    @returns {void}
@@ -152,46 +152,43 @@ export default class CONTAINER extends GROUP {
 			//location.reload(true);
 			this.getMainContainer().refresh();
 		}
-    }
-    /** Restore Container View to defaults and refresh parent Container
-	    @param {CONTAINER} container The container to restore
+	}
+	/** Saves this Container's parent Container
+	    param {CONTAINER} container The container to restore
+        @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
 	    @returns {void}
     */
-    saveParentContainer() {
-        console.log('Saving parent container', this.getContainer());
-        try {
-            this.getContainer().save(false); // dialog.body, this.getContainer(), 
-        } catch (e) {
-            console.log('Unable to save parent Container', e);
-        }
-    }
+	saveParentContainer(noPrompt = false) {
+		console.log('Saving parent container', this.getContainer());
+		try {
+			this.getContainer().save(noPrompt); // false // dialog.body, this.getContainer(), 
+		} catch (e) {
+			console.log('Unable to save parent Container', e);
+		}
+	}
 	/** The default visibility state for menus and collapseable content
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @returns {void}
 	*/
 	setDefaultVisibility(model) {
-        if (model.collapsed) {
-            this.collapse();
-        } else {
-            this.show(); // Collapse or Expand Body Pane
-        }
-        if (model.showNav < 1) {
-            this.navBar.hide();
-        } else {
-            this.navBar.show();
-        }   
-        /*if (model.showNav) {
-            this.navBar.show();
-        } else {
-            this.navBar.hide();            
-        } */
+		if (model.collapsed) {
+			this.collapse();
+		} else {
+			this.show(); // Collapse or Expand Body Pane
+		}
+		if (model.showNav < 1) {
+			this.navBar.hide();
+		} else {
+			this.navBar.show();
+		}
 	}
 	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names
 	    @returns {void}
 	*/
 	addDefaultContainers(containerList) {
-        let defaultContainers = ['FORM', 'LIST', 'MENULIST', 'JUMBOTRON', 'BANNER', 'TEXTBLOCK', 'CHAT', 'IFRAME'];
+        // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
+        let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
 		containerList.splice(2, 0, ...defaultContainers);
 		for (let c = 0; c < containerList.length; c++) {
 			this.addContainerCase(containerList[c]);
@@ -203,52 +200,43 @@ export default class CONTAINER extends GROUP {
 	*/
 	createDraggableNavBar() {
 		this.navBar.el.setAttribute('draggable', true);
-        this.navBar.el.ondragstart = (ev) => {
+		this.navBar.el.ondragstart = (ev) => {
 			console.log('Dragging Container: ' + this.className + '(' + this.id + ') ' + this.label);
 			this.collapse();
 			ev.dataTransfer.setData("Container", this.id);
 		};
 		// Drop the Container
-        this.navBar.el.ondrop = (ev) => {
+		this.navBar.el.ondrop = (ev) => {
 			console.log('Dropping onto Container: ' + this.className + '(' + this.id + ')');
 			ev.preventDefault();
 			let container = $(document.getElementById(ev.dataTransfer.getData("Container")));
 			container.insertBefore(this.el);
 			container.collapse('show');
-			/*
-			setTimeout(function () {
-			    console.log('QuickSaving drop recipient parent ' + this.className + '(' + this.id + ')');
-			    this.getProtoTypeByClass('CONTAINER').quickSave(false); // QuickSave Parent
-			}.bind(this), 500);
-			*/
-			//console.log('You should save your changes');
 		};
 		// Allow drop on this Container
-        this.navBar.el.ondragover = (ev) => {
+		this.navBar.el.ondragover = (ev) => {
 			//console.log('Dragging over ' + this.className + '(' + this.id + ')');
 			ev.preventDefault();
 		};
-        this.navBar.el.ondragend = () => { //this.navBar.el.ondragend = (ev) => {
+		this.navBar.el.ondragend = () => { //this.navBar.el.ondragend = (ev) => {
 			// Drag Ending
 		};
 	}
-	/**
-	    HTML Encode the given value.
+	/** HTML Encode the given value.
 	    Create a in-memory div, set it's inner text(which jQuery automatically encodes
 	    then grab the encoded contents back out.  The div never exists on the page.
 	    @todo This really should just be an extention of the String class
 	    @param {string} value The string to be html encoded
 	    @returns {text} An html encoded string
-	 */
+    */
 	htmlEncode(value) {
 		return $('<div/>').text(value).html();
 	}
-	/**
-	    Decodes an HTML encoded value back into HTML string
+	/** Decodes an HTML encoded value back into HTML string
 	    @todo This really should just be an extention of the String class
 	    @param {string} value An html encoded string
 	    @returns {string} A string that was previously html encoded
-	 */
+    */
 	htmlDecode(value) {
 		return $('<div/>').html(value).text();
 	}
@@ -256,7 +244,6 @@ export default class CONTAINER extends GROUP {
 	    @returns {ThisType} This Container
 	*/
 	moveUp() {
-		console.log('Move Up');
 		let node = $(this.el);
 		if (node.prev().length > 0) {
 			node.animate({ height: 'toggle' }, 300);
@@ -273,7 +260,6 @@ export default class CONTAINER extends GROUP {
 	    @returns {ThisType} This Container
 	*/
 	moveDown() {
-		console.log('Move Down');
 		let node = $(this.el);
 		if (node.next().length > 0) {
 			node.animate({ height: 'toggle' }, 300);
@@ -292,9 +278,9 @@ export default class CONTAINER extends GROUP {
     */
 	refresh() {
 		console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
-        this.body.pane.empty();
-        const [...children] = this.body.pane.children;
-        this.body.pane.children = [];
+		this.body.pane.empty();
+		const [...children] = this.body.pane.children;
+		this.body.pane.children = [];
 		this.construct();
 		this.populate(children);
 	}
@@ -304,27 +290,27 @@ export default class CONTAINER extends GROUP {
 	addDomItems() {
 		let domGroup = this.navBar.menu.menu.getGroup('DOM');
 		domGroup.addNavItemIcon(new MODEL().set({
-			'icon': ICONS.UP,
-			'label': 'UP'
-		})).el.onclick = this.moveContainerUp.bind(this);
+			icon: ICONS.UP,
+			label: 'UP'
+		})).el.onclick = () => this.moveContainerUp();
 		domGroup.addNavItemIcon(new MODEL().set({
-			'icon': ICONS.DOWN,
-			'label': 'DOWN'
-		})).el.onclick = this.moveContainerDown.bind(this);
+			icon: ICONS.DOWN,
+			label: 'DOWN'
+		})).el.onclick = () => this.moveContainerDown();
 		domGroup.addNavItemIcon(new MODEL().set({
-			'icon': ICONS.REFRESH,
-			'label': 'REFRESH'
-		})).el.onclick = this.refresh.bind(this);
-        domGroup.addNavItemIcon(new MODEL().set({
-            'icon': ICONS.DELETE,
-            'label': 'REMOVE'
-        })).el.onclick = () => this.remove().then(() => {
-            console.log('WOOT: REMOVAL COMPLETE');
-        });
+			icon: ICONS.REFRESH,
+			label: 'REFRESH'
+		})).el.onclick = () => this.refresh();
 		domGroup.addNavItemIcon(new MODEL().set({
-			'icon': ICONS.EXCLAMATION,
-			'label': 'DELETE'
-		})).el.onclick = this.disable.bind(this);
+			icon: ICONS.DELETE,
+			label: 'REMOVE'
+		})).el.onclick = () => this.remove().then(() => {
+			console.log('WOOT: REMOVAL COMPLETE');
+		});
+		domGroup.addNavItemIcon(new MODEL().set({
+			icon: ICONS.EXCLAMATION,
+			label: 'DELETE'
+		})).el.onclick = () => this.disable();
 		return domGroup;
 	}
 	/** Adds the CRUD Nav Items
@@ -333,45 +319,38 @@ export default class CONTAINER extends GROUP {
 	addCrudItems() {
 		let crudGroup = this.navBar.menu.menu.getGroup('CRUD'); // Retrieves the CRUD Menu
 		crudGroup.addNavItemIcon(new MODEL().set({
-			'icon': ICONS.LOAD,
-			'label': 'LOAD'
-		})).el.onclick = this.load.bind(this);
+			icon: ICONS.LOAD,
+			label: 'LOAD'
+		})).el.onclick = () => this.load();
 		return crudGroup;
 	}
-	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Menu
+	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Dropdown Menu
         @returns {void}
     */
 	addNavBarDefaults() {
 		if (this.navBar.menu.menu) {
-			//let domGroup = this.addDomItems();
 			this.addDomItems();
 			let crudGroup = this.addCrudItems();
-			// Add items to Options Dropdown Tab
-			this.btnSave = crudGroup.addNavItemIcon(new MODEL().set({
-				'icon': ICONS.SAVE,
-				'label': 'SAVE'
-			}));
-            this.btnSave.el.onclick = () => this.save();
-            //this.createSaveFormDialog.bind(this);
-            /*
-            this.btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
-				'icon': ICONS.SAVE,
-				'label': 'QUICKSAVE'
-			}));
-            this.btnQuickSave.el.onclick = () => {
-                let dialog = new DIALOG(new MODEL().set({
-                    label: 'QuickSave'
-                }));
-                if (this.quickSave(this)) {
-                    dialog.close();
-                }
-            }
-            */
-            this.btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
-                'icon': ICONS.SAVE,
-                'label': 'QUICKSAVE'
+
+            let btnSave = crudGroup.addNavItemIcon(new MODEL().set({
+                icon: ICONS.SAVE,
+                label: 'SAVE'
             }));
-            this.btnQuickSave.el.onclick = () => this.save(true); //this.createSaveFormDialog.bind(this);
+            btnSave.el.onclick = () => this.save();
+            btnSave.el.onmouseup = () => {
+                crudGroup.toggleCollapse();
+                this.navBar.menu.toggleCollapse();
+            };
+
+            let btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
+                icon: ICONS.SAVE,
+                label: 'QUICKSAVE'
+            }));
+            btnQuickSave.el.onclick = () => this.save(true);
+            btnQuickSave.el.onmouseup = () => {
+                crudGroup.toggleCollapse();
+                this.navBar.menu.toggleCollapse();
+            };
 		}
 	}
 	/** Moves the Container up one slot in the DOM
@@ -391,22 +370,22 @@ export default class CONTAINER extends GROUP {
 	/** Creates a save form for this Container and places it in a wrapper
 		inside the CRUD Group
 	    @returns {void}
-	*/
+	
 	createSaveFormDialog() {
 		console.log('Create Save Dialog');
 		let dialog = new DIALOG(new MODEL().set({
 			label: 'Save ' + this.className
 		}));
-        this.getMainContainer().factory.save(false); // dialog.body, this, 
+		this.getMainContainer().factory.save(false); // dialog.body, this, 
 		dialog.show();
-	}
+	}*/
 	/** Performs JQuery's ajax method to the given url.
 	    @param {string} url Target url
 	    @param {string} type HTTP Method (GET,PUT,POST,DELETE)
 	    @param {FormPost} formPost Data to be sent to the server
 	    param {function} success Function to be called on success
 	    @returns {{}} payload
-	*/
+	
 	ajax(url, type, formPost) { // success
 		return $.ajax({
 			url,
@@ -415,45 +394,27 @@ export default class CONTAINER extends GROUP {
 			data: formPost,
 			success: (result) => result
 		});
-	}
-	/** Adds the Construct 'element' button to the options menu
-        @param {string} className Element constructor class name
+	}*/
+	/** Adds a button to the options menu that promises to construct the given CONTAINER name
+        @param {string} className CONTAINER class name to construct
         @returns {void}
     */
-	addConstructElementButton(className) {
-		if (this.navBar.menu.menu) {
+	addConstructContainerButton(className) {
+		try {
 			this.navBar.menu.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
-					'icon': ICONS[className],
-					'label': className //'Create ^'
+					icon: ICONS[className],
+					label: className //'Create ^'
 				})).el.onclick =
 				/** Makes a Promise to perform Container.create() with the
 					response (MODEL) and performs a QuickSave on the parent Container
 				    @see https://scotch.io/tutorials/javascript-promises-for-dummies
 				    @see https://developers.google.com/web/fundamentals/primers/promises
 				*/
-				() => {
-					this.navBar.menu.toggleCollapse();
-					let promise = new Promise((resolve, reject) => {
-						console.log('Promise');
-						// do a thing, possibly async, then…
-						let result = this.create(new MODEL().set({
-							className
-						}));
-						console.log('Promise', result);
-						if (result === null) {
-							reject(Error('Failed to create element'));
-						} else {
-							resolve(result); // Successfully created Element
-						}
-					});
-					promise.then((result) => {
-						console.log('promise success', result);
-						//this.quickSave(this);
-                        this.save(this.node, this, true);
-					}, (err) => {
-						console.log('promise fail', err); // Error: "It broke"
-					});
-				};
+				() => this.create(new MODEL(className).set({
+					className
+				})); //.then(() => this.save(true));
+		} catch (e) {
+			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
 	}
 	/** Performs addCase() for the given Element within a 
@@ -468,16 +429,16 @@ export default class CONTAINER extends GROUP {
 	addContainerCase(className, addButton = true) {
 		try {
 			if (typeof this.getMainContainer() !== 'undefined') {
-				this.addCase(className, function(model) {
-					console.log(this.className + ': CALLING CASE: ' + className);
-					try {
-						return this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0);
-					} catch (ee) {
-						console.warn('Unable to retrieve factory for Container Case', ee);
-					}
-				}.bind(this)); // CONTAINERFACTORY
+                this.addCase(className, (model) => {
+                    //console.log(this.className + ': CALLING CASE: ' + className);
+                    try {
+                        return this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0);
+                    } catch (ee) {
+                        console.warn('Unable to retrieve factory for Container Case', ee);
+                    }
+                });
 				if (addButton) {
-					this.addConstructElementButton(className);
+					this.addConstructContainerButton(className);
 				}
 			}
 		} catch (e) {
@@ -593,18 +554,16 @@ export default class CONTAINER extends GROUP {
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
     */
-    getSubSections() {
-        console.log(this.className + 'getSubsections()', this);
+	getSubSections() {
+		console.log(this.className + '.getSubsections()', this);
 		let id = null;
 		let subsections = [];
 		for (let c = 0; c < this.body.pane.el.children.length; c++) {
-        //for (let c = 0; c < this.children.length; c++) {
-			//id = parseInt(this.children[c].id);
-            id = parseInt(this.body.pane.el.children[c].id);
+			id = parseInt(this.body.pane.el.children[c].id);
 			if (!isNaN(id)) {
 				subsections.push(id);
 			}
-		}
+        }
 		return subsections;
 	}
 	/** Returns the parent container for this container or null if it does not exist
@@ -639,8 +598,8 @@ export default class CONTAINER extends GROUP {
 	*/
 	quickSaveParent() {
 		try {
-            //return this.container.quickSave(this.container, false);
-            return this.container.save(this, this.container, false);
+			//return this.container.quickSave(this.container, false);
+			return this.container.save(this, this.container, false);
 		} catch (e) {
 			console.log('Container.QuickSaveParent() No parent exists');
 			return false;
@@ -687,30 +646,30 @@ export default class CONTAINER extends GROUP {
         Optionally, this should also delete the object from the database
         @returns {Promise} A promise to remove the element from the DOM
     */
-    remove() {
-        return new Promise((resolve, reject) => {
-            try {
-                let dialog = new DIALOG(new MODEL().set({
-                    label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className
-                }));
-                dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
-                    console.log('Remove', this);
-                    this.destroy().then(() => {
-                        try {
-                            this.container.save(true).then(() => {
-                                resolve(dialog.close());
-                            });
-                        } catch (ee) {
-                            reject(ee);
-                        }
-                    });
-                };
-                dialog.show();
-            } catch (e) {
-                console.log('Unable to disable this ' + this.element, e);
-                reject(e);
-            }
-        });
+	remove() {
+		return new Promise((resolve, reject) => {
+			try {
+				let dialog = new DIALOG(new MODEL().set({
+					label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className
+				}));
+				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
+					console.log('Remove', this);
+					this.destroy().then(() => {
+						try {
+							this.container.save(true).then(() => {
+								resolve(dialog.close());
+							});
+						} catch (ee) {
+							reject(ee);
+						}
+					});
+				};
+				dialog.show();
+			} catch (e) {
+				console.log('Unable to disable this ' + this.element, e);
+				reject(e);
+			}
+		});
 	}
 	/** Typically this function is used within JQuery posts.
         If the results are a Payload and its status is "success",

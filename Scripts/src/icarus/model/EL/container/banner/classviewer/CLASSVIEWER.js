@@ -34,26 +34,26 @@ export default class CLASSVIEWER extends BANNER {
 		this.form = FORM.createEmptyForm(this.body.pane);
 		let inputs = [
 			new MODEL(new ATTRIBUTES({ // // SHOULD BE A SELECT
-				'name': 'classType',
-				'value': this.classType,
-				'readonly': 'readonly'
+				name: 'classType',
+				value: this.classType,
+				readonly: 'readonly'
 			})).set({
-				'element': 'INPUT',
-				'label': 'Class Type'
+				element: 'INPUT',
+				label: 'Class Type'
 			})
 		];
 		this.form.fieldset.formElementGroup.addInputElements(inputs);
 		/** @todo Remove inline style */
 		this.menulist = new MENULIST(this.body.pane, new MODEL(new ATTRIBUTES({
-			'style': 'max-height:200px;overflow-y:auto;'
+			style: 'max-height:200px;overflow-y:auto;'
 		})).set({
-			'name': 'preview-list',
-			'label': this.data.listClass + '(s)'
+			name: 'preview-list',
+			label: this.data.listClass + '(s)'
 		}));
 		let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
 		for (let m = 0; m < methods.length; m++) {
 			this.menulist.menu.addNavItem(new MODEL().set({
-				'label': this.classType + '.' + methods[m] + '()'
+				label: this.classType + '.' + methods[m] + '()'
 			})).el.onclick = () => {
 				window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]);
 			};

@@ -15,35 +15,35 @@ export default class NAVHEADER extends MENU {
 		super(node, model);
 		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
 		this.tabs = new MENU(this, new MODEL('tabs'));
-        this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set({
-            label: model.label
-        }));
-        this.addDefaultTab();
-        this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-            icon: ICONS.COG
-        }));
-        this.menu = new MENU(this, new MODEL('collapse').set({
-            name: 'menu'
-        }));
-        this.optionsTab.el.onclick = () => this.toggleCollapse();
+		this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set({
+			label: model.label
+		}));
+		this.addDefaultTab();
+		this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
+			icon: ICONS.COG
+		}));
+		this.menu = new MENU(this, new MODEL('collapse').set({
+			name: 'menu'
+		}));
+		this.optionsTab.el.onclick = () => this.toggleCollapse();
 		this.addOptionsMenu();
 	}
 	/** Adds the default toggle tab for this MENU
 	    param {string} label The tab label
 	    @returns {void}
 	*/
-	addDefaultTab() {		
-        this.tab.el.onclick = () => { // Toggle Body
+	addDefaultTab() {
+		this.tab.el.onclick = () => { // Toggle Body
 			this.getContainer().toggleBody();
 		};
-        this.tab.pressTimer = null; // Simulate LONG CLICK to edit the label
-        this.tab.el.onmousedown = (ev) => {
+		this.tab.pressTimer = null; // Simulate LONG CLICK to edit the label
+		this.tab.el.onmousedown = (ev) => {
 			this.tab.pressTimer = window.setTimeout(() => {
 				this.launchSidebarSave();
 				ev.stopPropagation();
 			}, 1000);
 		};
-        this.tab.el.onmouseup = (ev) => {
+		this.tab.el.onmouseup = (ev) => {
 			clearTimeout(this.tab.pressTimer);
 			ev.stopPropagation();
 			return false;
@@ -59,11 +59,11 @@ export default class NAVHEADER extends MENU {
 		try {
 			//if (this.getContainer().getMainContainer().user !== 'Guest') {
 			if (document.getElementsByTagName('meta').user.content !== 'Guest') {
-                ['ELEMENTS', 'CRUD', 'DOM'].forEach((opt) => this.menu.addMenu(new MODEL('horizontal collapse').set({
-                    name: opt,
-                    collapsed: 1, // Do not remove these!
-                    showHeader: 1
-                })));
+				['ELEMENTS', 'CRUD', 'DOM'].forEach((opt) => this.menu.addMenu(new MODEL('horizontal collapse').set({
+					name: opt,
+					collapsed: 1, // Do not remove these!
+					showHeader: 1
+				})));
 			}
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');

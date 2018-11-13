@@ -19,7 +19,7 @@ export default class GROUP extends EL {
 				this.el.setAttribute('name', model.name);
 			}
 		} catch (e) {
-			console.log('Why is this happening? GROUP.js', this, e);
+			console.log('An error occurred while constructing this GROUP', this, e);
 		}
 		this.groups = {};
 	}

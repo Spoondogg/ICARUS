@@ -12,21 +12,16 @@ import MODEL from '../model/MODEL.js';
     @param {number} showNav If 1, NavBar is shown
     @returns {MODEL} An input model
 */
-export const createInputModel = (
-    element, name, value = '', label = name, type = 'TEXT',
-    readonly = false, showNav = 0, ...attr
-) => new MODEL(
-    new ATTRIBUTES({
-        name,
-        value,
-        type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
-        readonly
-    })
-).set({
-    showNav,
-    element,
-    label,
-    type
+export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0, ...attr) => new MODEL(new ATTRIBUTES({
+	name,
+	value,
+	type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
+	readonly
+})).set({
+	showNav,
+	element,
+	label,
+	type
 }).setAttribute(attr);
 /* eslint-enable max-params */
 /** Stores the default DATA ELEMENTS collections for each Class
@@ -37,57 +32,142 @@ export const createInputModel = (
     @enum {any}
 */
 export const DATAELEMENTS = {
-    ARTICLE: [createInputModel('INPUT', 'header', 'header', 'Article Header')],
-    CALLOUT: [
-        createInputModel('INPUT', 'icon'),
-        createInputModel('INPUT', 'header', 'Header'),
-        createInputModel('INPUT', 'p', 'Text')
-    ],
-    CONTAINER: [createInputModel('INPUT', 'showNav', 'showNav', '1', 'NUMBER')],
-    DICTIONARY: [createInputModel('INPUT', 'language')],
-    FIELDSET: [],
-    FORM: [],
-    FORMELEMENT: [createInputModel('INPUT', 'showNav', 'showNav', '1', 'NUMBER')],
-    FORMELEMENTGROUP: [],
-    FORMINPUT: [],
-    FORMPOST: [],
-    FORMPOSTINPUT: [],
-    INDEX: [],
-    INDEXMAIN: [],
-    INPUT: [
-        createInputModel('INPUT', 'showNav', 'showNav', '-1', 'NUMBER'),
-        createInputModel('INPUT', 'type', 'TEXT'),
-        createInputModel('INPUT', 'name', 'Text Input'),
-        createInputModel('INPUT', 'value', 'Text Value')
-    ],
-    JUMBOTRON: [
-        createInputModel('INPUT', 'header', 'JT Header'),
-        createInputModel('TEXTAREA', 'p', 'JT Textarea'),
-        createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
-        }),
-        createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
-        createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
-    ],	
-	LIST: [],
-    LISTITEM: [createInputModel('INPUT', 'p', 'Text')],	
-    MAIN: [],
-    PARAGRAPH: [createInputModel('INPUT', 'p', 'Paragraph Text')],
-    SECTION: [createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')],
-    SIDEBAR: [],
-    TEXTBLOCK: [createInputModel('INPUT', 'text', 'Text')],
-    THUMBNAIL: [
-        createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-            inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
-        }),
-		createInputModel('INPUT', 'header', 'Header'),
-        createInputModel('INPUT', 'p', 'Text'),
-        createInputModel('INPUT', 'bgImage')
-	],
-    WORD: [
-        createInputModel('INPUT', 'language'),
-        createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
-        createInputModel('INPUT', 'value'),
-        createInputModel('INPUT', 'definition')
-    ]
+    ARTICLE: {
+        data: [createInputModel('INPUT', 'header')],
+        attributes: []
+    },
+    CALLOUT: {
+        data: [
+            createInputModel('INPUT', 'icon'),
+            createInputModel('INPUT', 'header', 'Header'),
+            createInputModel('INPUT', 'p', 'Text')
+        ],
+        attributes: []
+    },
+    CONTAINER: {
+        data: [createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER')],
+        attributes: []
+    },
+    DICTIONARY: {
+        data: [createInputModel('INPUT', 'language')],
+        attributes: []
+    },
+    FIELDSET: {
+        data: [],
+        attributes: []
+    },
+    FORM: {
+        data: [],
+        attributes: []
+    },
+    FORMELEMENT: {
+        data: [
+            createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+            createInputModel('INPUT', 'type', 'TEXT'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'value', '')
+        ],
+        attributes: [
+            createInputModel('INPUT', 'name', 'text-input'),
+            createInputModel('INPUT', 'value', 'woot')
+        ]
+    },
+    FORMELEMENTGROUP: {
+        data: [],
+        attributes: []
+    },
+    FORMINPUT: {
+        data: [
+            createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+            createInputModel('INPUT', 'type', 'TEXT'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'value', '')
+        ],
+        attributes: [createInputModel('INPUT', 'woot', '')]
+    },
+    FORMPOST: {
+        data: [],
+        attributes: []
+    },
+    FORMPOSTINPUT: {
+        data: [],
+        attributes: []
+    },
+    INDEX: {
+        data: [],
+        attributes: []
+    },
+    INDEXMAIN: {
+        data: [],
+        attributes: []
+    },
+    INPUT: {
+        data: [
+            createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+            createInputModel('INPUT', 'type', 'TEXT'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'value', 'Text Value')
+        ],
+        attributes: []
+    },
+    JUMBOTRON: {
+        data: [
+            createInputModel('INPUT', 'header', 'JT Header'),
+            createInputModel('TEXTAREA', 'p', 'JT Textarea'),
+            createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+                inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
+            }),
+            createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
+            createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
+        ],
+        attributes: []
+    },
+    LIST: {
+        data: [],
+        attributes: []
+    },
+    LISTITEM: {
+        data: [createInputModel('INPUT', 'p', 'Text')],
+        attributes: []
+    },
+    MAIN: {
+        data: [],
+        attributes: []
+    },
+    PARAGRAPH: {
+        data: [createInputModel('INPUT', 'p', 'Paragraph Text')],
+        attributes: []
+    },
+    SECTION: {
+        data: [createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')],
+        attributes: []
+    },
+    SIDEBAR: {
+        data: [],
+        attributes: []
+    },
+    TEXTBLOCK: {
+        data: [createInputModel('INPUT', 'text', 'Text')],
+        attributes: []
+    },
+    THUMBNAIL: {
+        data: [
+            createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+                inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+            }),
+            createInputModel('INPUT', 'header', 'Header'),
+            createInputModel('INPUT', 'p', 'Text'),
+            createInputModel('INPUT', 'bgImage')
+        ],
+        attributes: []
+    },
+    WORD: {
+        data: [
+            createInputModel('INPUT', 'language'),
+            createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
+            createInputModel('INPUT', 'value'),
+            createInputModel('INPUT', 'definition')
+        ],
+        attributes: []
+    }
 };

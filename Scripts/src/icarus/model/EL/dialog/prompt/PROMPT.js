@@ -17,11 +17,11 @@ export default class PROMPT extends DIALOG {
 	    @param {boolean} vertical If true, prompt is vertically centered
     */
 	constructor(label, text, buttons, inputs, vertical) {
-        super(new MODEL().set({
-            label,
-            text,
-            vertical
-        }));
+		super(new MODEL().set({
+			label,
+			text,
+			vertical
+		}));
 		this.addClass('prompt');
 		this.form = FORM.createEmptyForm(this.body, false);
 		this.form.prompt = this;
@@ -42,9 +42,9 @@ export default class PROMPT extends DIALOG {
 					//DEBUG.log('FORMPOSTINPUT');
 					this.promptInputs.push(new FORMPOSTINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
 				} else {
-                    this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
+					this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
 				}
-                this.form.children[0].children[0].children.push(inp);
+				this.form.children[0].children[0].children.push(inp);
 			}
 		}
 	}

@@ -72,8 +72,11 @@ namespace ICARUS.Controllers {
         public DbSet<FORMELEMENTGROUP> FormElementGroups { get; set; }
         public object FormElementGroup { get; internal set; }
 
-        public DbSet<FormElement> FormElements { get; set; }
+        public DbSet<FORMELEMENT> FormElements { get; set; }
         public object FormElement { get; internal set; }
+
+        public DbSet<FORMINPUT> FormInputs { get; set; }
+        public object FormInput { get; internal set; }
 
         public DbSet<Input> Inputs { get; set; }
         public object Input { get; internal set; }
@@ -171,7 +174,8 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
             this.dbSets.Add("FormElementGroup", FormElementGroups);
-            this.dbSets.Add("FormElement", FormElements);
+            this.dbSets.Add("FORMELEMENT", FormElements);
+            this.dbSets.Add("FORMINPUT", FormInputs);
             this.dbSets.Add("Input", Inputs);
             this.dbSets.Add("Select", Selects);
             this.dbSets.Add("TextArea", TextAreas);

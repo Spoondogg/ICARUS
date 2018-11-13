@@ -12,21 +12,21 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-        this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
-        this.legend = new LEGEND(this.body.pane, new MODEL().set({
-            label: model.label
-        }));
-        $(this.legend.el).insertBefore(this.body.pane.el);
+		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']); //'FORMELEMENTGROUP'
+		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
+		this.legend = new LEGEND(this.body.pane, new MODEL().set({
+			label: model.label
+		}));
+		$(this.legend.el).insertBefore(this.body.pane.el);
 		//this.addClass('form-group-container');
 		//this.body.addClass('form-group'); // The expandable portion of the section  
 		this.populate(model.children);
 	}
 	construct() {
 		if (this.dataId > 0) {
-			if (this.label) {
-				this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
-			}
+			//if (this.label) {
+			//	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
+			//}
 		}
 	}
 	/** Constructs a Form Element Group for this Fieldset

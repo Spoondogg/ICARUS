@@ -26,8 +26,8 @@ export default class EL extends MODEL {
 		//this.factory = null;
 		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
-        this.el = document.createElement(this.element);
-        this.make(this.el, node, model, innerHTML);
+		this.el = document.createElement(this.element);
+		this.make(this.el, node, model, innerHTML);
 		//this.merge(model);
 		//this.setInnerHTML(innerHTML);
 	}
@@ -42,10 +42,10 @@ export default class EL extends MODEL {
 		try {
 			if (node === document.body) {
 				//this.el = node.appendChild(document.createElement(this.element));
-                node.appendChild(el);
+				node.appendChild(el);
 			} else {
 				//this.el = node.el.appendChild(document.createElement(this.element));
-                node.el.appendChild(el);
+				node.el.appendChild(el);
 			}
 			this.merge(model);
 			this.setInnerHTML(innerHTML);
@@ -82,11 +82,11 @@ export default class EL extends MODEL {
 			}.bind(this);
 			this.editor.el.onblur = function() {
 				try {
-                    let container = this.getContainer();
-                    container.data[this.className.toLowerCase()] = this.editor.el.value;
+					let container = this.getContainer();
+					container.data[this.className.toLowerCase()] = this.editor.el.value;
 					this.editor.destroy();
 					this.removeClass('edit');
-                    if (container.quickSave(container, true)) {
+					if (container.quickSave(container, true)) {
 						this.getMainContainer().stickyFooter.hide();
 					}
 				} catch (e) {
@@ -200,19 +200,19 @@ export default class EL extends MODEL {
         whereas an actual SWITCH statement would be overridden on each inheritted class.
         @see https://stackoverflow.com/a/35769291/722785	    
         @param {MODEL} model The object model for the element to be created
-        @returns {EL} Constructed Element
+        @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
-		let result = null;
-		try {
-			this.callbacks[model.className].forEach((fn) => {
-				result = fn(model);
-			});
-		} catch (e) {
-			console.log(0, this.className + '.create(): No constructor exists for className "' + model.className + '"', e);
-			return false;
-		}
-		return result;
+		//console.log('EL.create()', model);
+		return new Promise((resolve, reject) => {
+			try {
+				let result = this.callbacks[model.className].forEach((fn) => fn(model));
+				resolve(result);
+			} catch (e) {
+				console.warn(0, this.className + '.create(): No constructor exists for className "' + model.className + '"', e);
+				reject(e);
+			}
+		});
 	}
 	/** Add a case to the creator EL.create();
         @param {string} className The Icarus Class name that this callback is meant to construct
@@ -220,6 +220,12 @@ export default class EL extends MODEL {
         @returns {void}
     */
 	addCase(className, fn) {
+		/*try {
+            this.callbacks[className].push(fn);
+        } catch (e) {
+            this.callbacks[className] = [fn];
+            //this.callbacks[className].push(fn);
+        }*/
 		this.callbacks[className] = [];
 		this.callbacks[className].push(fn);
 	}
@@ -291,23 +297,23 @@ export default class EL extends MODEL {
 	    @param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
-    destroy(delay = 300) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                try {
-                    this.el.parentNode.removeChild(this.el);
-                    //this.node.children.splice(this.node.children.indexOf(this), 1);
-                    //this.node.children.shift();
-                    resolve();
-                } catch (ee) {
-                    if (ee.name !== 'TypeError') {
-                        console.log('Unable to destroy this ' + this.element, ee);
-                        //throw ee;
-                        reject(ee);
-                    }
-                }
-            }, delay);
-        });
+	destroy(delay = 300) {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				try {
+					this.el.parentNode.removeChild(this.el);
+					//this.node.children.splice(this.node.children.indexOf(this), 1);
+					//this.node.children.shift();
+					resolve();
+				} catch (ee) {
+					if (ee.name !== 'TypeError') {
+						console.log('Unable to destroy this ' + this.element, ee);
+						//throw ee;
+						reject(ee);
+					}
+				}
+			}, delay);
+		});
 	}
 	/** Override this element's class with the given value
         @param {string} className A class
@@ -380,11 +386,12 @@ export default class EL extends MODEL {
 	*/
 	populate(children) {
 		if (children) {
-			console.log(this.className + '.populate(' + children.length + ');');
-			try {    
-				for (let c = 0; c < children.length; c++) {
+			console.log(this.className + '.populate(' + children.length + ');', children);
+			try {
+				children.forEach((c) => this.create(c));
+				/*for (let c = 0; c < children.length; c++) {
 					this.create(children[c]);
-				}
+				}*/
 			} catch (e) {
 				console.log(e);
 			}
