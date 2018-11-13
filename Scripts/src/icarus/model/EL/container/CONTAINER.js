@@ -283,136 +283,84 @@ export default class CONTAINER extends GROUP {
 		this.body.pane.children = [];
 		this.construct();
 		this.populate(children);
-	}
+    }
+    /** Closes parent menus
+        @param {GROUP} group Menu Group
+        @returns {void}
+    */
+    closeMenus(group) {
+        group.toggleCollapse();
+        this.navBar.menu.toggleCollapse();
+    }
+    /** Creates a NavItem that closes its menu on mouseup
+        @param {string} className className
+        @param {GROUP} group The NavItem Group to add items to (ie: CRUD, DOM)
+        @returns {NAVITEMICON} An object containing NavItems
+    */
+    createNavItem(className, group) {
+        let item = group.addNavItemIcon(new MODEL().set({
+            icon: ICONS[className],
+            label: className
+        }));
+        item.el.onmouseup = () => this.closeMenus(group);
+        return item;
+    }
+    /** Creates a collection of NavItems that close Menus on mouseup
+        @param {Array<string>} arr List of NavItem labels
+        @param {GROUP} group The NavItem Group to add items to (ie: CRUD, DOM)
+        @returns {any} An object containing NavItems
+    */
+    createNavItems(arr, group) {
+        let items = {};
+        arr.forEach((i) => {
+            items[i] = this.createNavItem(i, group);
+        });
+        return items;
+    }
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
 	*/
 	addDomItems() {
-		let domGroup = this.navBar.menu.menu.getGroup('DOM');
-		domGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.UP,
-			label: 'UP'
-		})).el.onclick = () => this.moveContainerUp();
-		domGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.DOWN,
-			label: 'DOWN'
-		})).el.onclick = () => this.moveContainerDown();
-		domGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.REFRESH,
-			label: 'REFRESH'
-		})).el.onclick = () => this.refresh();
-		domGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.DELETE,
-			label: 'REMOVE'
-		})).el.onclick = () => this.remove().then(() => {
-			console.log('WOOT: REMOVAL COMPLETE');
-		});
-		domGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.EXCLAMATION,
-			label: 'DELETE'
-		})).el.onclick = () => this.disable();
-		return domGroup;
-	}
-	/** Adds the CRUD Nav Items
+        let group = this.navBar.menu.menu.getGroup('DOM');
+        let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE'], group);
+        items.UP.el.onclick = () => this.up();
+        items.DOWN.el.onclick = () => this.down();
+        items.REFRESH.el.onclick = () => this.refresh();
+        items.REMOVE.el.onclick = () => this.remove();
+        items.DELETE.el.onclick = () => this.disable();
+		return group;
+    }
+    /** Adds the CRUD Nav Items
         @returns {GROUP} A Menu Group
 	*/
-	addCrudItems() {
-		let crudGroup = this.navBar.menu.menu.getGroup('CRUD'); // Retrieves the CRUD Menu
-		crudGroup.addNavItemIcon(new MODEL().set({
-			icon: ICONS.LOAD,
-			label: 'LOAD'
-		})).el.onclick = () => this.load();
-		return crudGroup;
-	}
+    addCrudItems() {
+        let group = this.navBar.menu.menu.getGroup('CRUD');
+        let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], group);
+        items.LOAD.el.onclick = () => this.load();
+        items.SAVEAS.el.onclick = () => this.save();
+        items.SAVE.el.onclick = () => this.save(true);
+        return group;
+    }
 	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Dropdown Menu
         @returns {void}
     */
 	addNavBarDefaults() {
 		if (this.navBar.menu.menu) {
 			this.addDomItems();
-			let crudGroup = this.addCrudItems();
-
-            let btnSave = crudGroup.addNavItemIcon(new MODEL().set({
-                icon: ICONS.SAVE,
-                label: 'SAVE'
-            }));
-            btnSave.el.onclick = () => this.save();
-            btnSave.el.onmouseup = () => {
-                crudGroup.toggleCollapse();
-                this.navBar.menu.toggleCollapse();
-            };
-
-            let btnQuickSave = crudGroup.addNavItemIcon(new MODEL().set({
-                icon: ICONS.SAVE,
-                label: 'QUICKSAVE'
-            }));
-            btnQuickSave.el.onclick = () => this.save(true);
-            btnQuickSave.el.onmouseup = () => {
-                crudGroup.toggleCollapse();
-                this.navBar.menu.toggleCollapse();
-            };
+            this.addCrudItems();
 		}
 	}
-	/** Moves the Container up one slot in the DOM
-	    @returns {void}
-	*/
-	moveContainerUp() {
-		this.navBar.menu.toggleCollapse();
-		this.moveUp();
-	}
-	/** Moves the Container down one slot in the DOM
-	    @returns {void}
-	*/
-	moveContainerDown() {
-		this.navBar.menu.toggleCollapse();
-		this.moveDown();
-	}
-	/** Creates a save form for this Container and places it in a wrapper
-		inside the CRUD Group
-	    @returns {void}
-	
-	createSaveFormDialog() {
-		console.log('Create Save Dialog');
-		let dialog = new DIALOG(new MODEL().set({
-			label: 'Save ' + this.className
-		}));
-		this.getMainContainer().factory.save(false); // dialog.body, this, 
-		dialog.show();
-	}*/
-	/** Performs JQuery's ajax method to the given url.
-	    @param {string} url Target url
-	    @param {string} type HTTP Method (GET,PUT,POST,DELETE)
-	    @param {FormPost} formPost Data to be sent to the server
-	    param {function} success Function to be called on success
-	    @returns {{}} payload
-	
-	ajax(url, type, formPost) { // success
-		return $.ajax({
-			url,
-			type, //ie: POST
-			async: true,
-			data: formPost,
-			success: (result) => result
-		});
-	}*/
 	/** Adds a button to the options menu that promises to construct the given CONTAINER name
         @param {string} className CONTAINER class name to construct
         @returns {void}
     */
-	addConstructContainerButton(className) {
-		try {
-			this.navBar.menu.menu.getGroup('ELEMENTS').addNavItemIcon(new MODEL().set({
-					icon: ICONS[className],
-					label: className //'Create ^'
-				})).el.onclick =
-				/** Makes a Promise to perform Container.create() with the
-					response (MODEL) and performs a QuickSave on the parent Container
-				    @see https://scotch.io/tutorials/javascript-promises-for-dummies
-				    @see https://developers.google.com/web/fundamentals/primers/promises
-				*/
-				() => this.create(new MODEL(className).set({
-					className
-				})); //.then(() => this.save(true));
+    addConstructContainerButton(className) {        
+        try {
+            let group = this.navBar.menu.menu.getGroup('ELEMENTS');
+            let items = this.createNavItems([className], group);
+            items[className].el.onclick = () => this.create(new MODEL(className).set({
+				className
+			})); //.then(() => this.save(true));
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
@@ -444,7 +392,21 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			console.warn(this.className + ': Unable to add Container Case', e);
 		}
-	}
+    }
+    /** Moves the Container up one slot in the DOM
+	    @returns {void}
+	*/
+    up() {
+        this.navBar.menu.toggleCollapse();
+        this.moveUp();
+    }
+	/** Moves the Container down one slot in the DOM
+	    @returns {void}
+	*/
+    down() {
+        this.navBar.menu.toggleCollapse();
+        this.moveDown();
+    }
 	/** Overrides EL.open();
         Opens the CONTAINER up for editing.  This should create a link
         between the object on the server and its client side representation

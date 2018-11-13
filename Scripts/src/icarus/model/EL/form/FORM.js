@@ -76,31 +76,32 @@ export default class FORM extends CONTAINER {
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
-		try {
-			this.children.forEach((ch) => {
-				ch.el.disabled = true;
-			});
-			return true;
-		} catch (e) {
-			console.log('Unable to lock this form');
-			throw e;
-		}
+		this.children.forEach((ch) => {
+            try {
+                ch.el.disabled = true;
+                console.log('Locked element', ch);
+            } catch (e) {
+                console.log('Unable to lock element', ch);
+                //throw e;
+            }
+		});
+		return true;
 	}
 	/** Enables all fieldsets within this form
 	    @returns {boolean} Returns true if successful
 	*/
-	unlock() {
-		for (let i = 0; i < this.children.length; i++) {
-			try {
-				this.children[i].el.disabled = false;
-			} catch (e) {
-				if (e instanceof TypeError) {
-					console.warn('Unable to lock "' + this.children[i].element + '"');
-				} else {
-					throw e;
-				}
-			}
-		}
+    unlock() {
+        this.children.forEach((i) => {
+            try {
+                i.el.disabled = false;
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    console.warn('Unable to unlock "' + i.element + '"');
+                } else {
+                    throw e;
+                }
+            }
+        });
 	}
 	/** HTML encodes all form element values
 	    @returns {void}
