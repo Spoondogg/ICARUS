@@ -15,7 +15,7 @@ export default class MAIN extends CONTAINER {
 	    with any relevant elements
 	    @constructor
 	    @param {MODEL} model APP model
-	 */
+    */
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
@@ -33,7 +33,10 @@ export default class MAIN extends CONTAINER {
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
-		this.addNavOptions();
+        this.addNavOptions();
+        /** The active container has access to keybindings */
+        this.activeContainer = null;
+
 		this.save = this.factory.save;
 		//this.quickSave = model.factory.quickSave;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
@@ -149,7 +152,8 @@ export default class MAIN extends CONTAINER {
 			*/
 			let url = '/' + payload.model.id;
 			let dialog = new DIALOG(new MODEL().set({
-				label: 'New Page'
+                label: 'New Page',
+                container: this
 			}));
 			dialog.form = FORM.createEmptyForm(dialog.body);
 			//dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
@@ -322,7 +326,10 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() { //email, password
-		let dialog = new DIALOG(new MODEL('dialog-login').set({ 'text': 'Log In' })); //'token': this.getMainContainer().getToken()
+        let dialog = new DIALOG(new MODEL('dialog-login').set({
+            text: 'Log In',
+            container: this
+        })); //'token': this.getMainContainer().getToken()
 		let form = FORM.createEmptyForm(this.body.pane);
 		$(form.el).appendTo(dialog.body.el);
 		form.setPostUrl('/Account/Login');

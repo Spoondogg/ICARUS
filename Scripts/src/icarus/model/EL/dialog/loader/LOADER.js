@@ -11,12 +11,14 @@ export default class LOADER extends DIALOG {
         @param {number} value Percentage complete (integer)
         @param {string} label The header text for this modal	    
         @param {string} text Text that appears in modal's well
+        @param {CONTAINER} container Parent Container
     */
-	constructor(value = 0, label = '', text = '') {
+	constructor(value = 0, label = '', text = '', container = null) {
 		super(new MODEL().set({
 			value,
 			label,
-			text
+            text,
+            container
 		}));
 		this.addClass('loader');
 		//this.el.setAttribute('name', 'LOADER');

@@ -20,7 +20,8 @@ export default class PROMPT extends DIALOG {
 		super(new MODEL().set({
 			label,
 			text,
-			vertical
+            vertical,
+            container: null
 		}));
 		this.addClass('prompt');
 		this.form = FORM.createEmptyForm(this.body, false);
@@ -30,33 +31,34 @@ export default class PROMPT extends DIALOG {
 		this.addButtons(buttons);
 	}
 	/** Adds the provided inputs to the prompt
-	    @param {Array} inputs An array of inputs
+	    @param {Array<MODEL>} inputs An array of inputs
 	    @returns {void}
 	*/
 	addInputs(inputs) {
-		if (inputs) {
-			for (let i = 0; i < inputs.length; i++) {
-				//DEBUG.log('inputs[' + i + ']: ' + inputs[i].type);
-				let inp = null;
-				if (inputs[i].type === 'FORMPOSTINPUT') {
-					//DEBUG.log('FORMPOSTINPUT');
-					this.promptInputs.push(new FORMPOSTINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
-				} else {
-					this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, inputs[i]));
-				}
-				this.form.children[0].children[0].children.push(inp);
-			}
+        if (inputs) {
+            inputs.forEach((i) => this.addInput(i));
 		}
-	}
+    }
+    /** Adds the input to the PROMPT 
+        @param {MODEL} input An input model
+        @returns {void} 
+    */
+    addInput(input) {
+        let inp = null;
+        if (input.type === 'FORMPOSTINPUT') {
+            this.promptInputs.push(new FORMPOSTINPUT(this.form.children[0].children[0].body.pane, input));
+        } else {
+            this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, input));
+        }
+        this.form.children[0].children[0].children.push(inp);
+    }
 	/** Adds the provided buttons to the prompt
 	    @param {Array} buttons An array of buttons
 	    @returns {void}
 	*/
 	addButtons(buttons) {
-		if (buttons) {
-			for (let b = 0; b < buttons.length; b++) {
-				this.form.footer.buttonGroup.addButton(buttons[b][0], buttons[b][1], buttons[b][2]);
-			}
+        if (buttons) {
+            buttons.forEach((btn) => this.form.footer.buttonGroup.addButton(btn[0], btn[1], btn[2]));
 		}
 	}
 }
