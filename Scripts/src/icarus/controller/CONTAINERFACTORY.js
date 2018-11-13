@@ -232,12 +232,12 @@ export default class CONTAINERFACTORY {
 			};
 			/* eslint-disable-next-line no-alert */
 			if (noPrompt) {
-				console.log('Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label);
+                //console.log('Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label);
 				dialog.form.post().then(() => {
 					dialog.close();
-				});
+                });
 			} else {
-				console.log('Showing save form dialog');
+				//console.log('Showing save form dialog');
 				dialog.show();
 			}
 		});

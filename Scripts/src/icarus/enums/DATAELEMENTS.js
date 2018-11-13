@@ -83,7 +83,10 @@ export const DATAELEMENTS = {
             createInputModel('INPUT', 'name', 'Text Input'),
             createInputModel('INPUT', 'value', '')
         ],
-        attributes: [createInputModel('INPUT', 'woot', '')]
+        attributes: [
+            createInputModel('INPUT', 'name', 'text-input'),
+            createInputModel('INPUT', 'value', 'woot')
+        ]
     },
     FORMPOST: {
         data: [],
