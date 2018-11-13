@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 namespace ICARUS.Models.Icarus.Elements {
-
     /// <summary>
     /// A Bootstrap Jumbotron is a large banner style element, typically 
     /// located at the top of the page.
@@ -19,8 +17,7 @@ namespace ICARUS.Models.Icarus.Elements {
             label = "JUMBOTRON"
         }) {
 
-        } 
-
+        }
         /// <summary>
         /// Constructs an ARTICLE with the given id and label attributes already set
         /// </summary>

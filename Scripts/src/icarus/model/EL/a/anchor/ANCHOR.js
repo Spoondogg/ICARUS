@@ -15,10 +15,7 @@ export default class ANCHOR extends A {
 		super(node, model);
 		if (model.icon) {
 			this.icon = new GLYPHICON(this, model.icon);
-			//$(this.icon.el).insertBefore(this.label.el);
-		} //else {
-		//this.setInnerHTML(this.el.innerHTML += model.label);
-		//}
+		}
 		this.label = new SPAN(this, new MODEL('label'), model.label || '');
 	}
 }

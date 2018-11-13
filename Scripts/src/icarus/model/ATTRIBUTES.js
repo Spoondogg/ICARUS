@@ -57,22 +57,22 @@ export default class ATTRIBUTES { // extends Map
 		/*if (typeof value !== 'undefined' && value !== null) {
 			this[key] = value || '';
         }*/
-        //this[key] = typeof value !== 'undefined' && value !== null ? value : '';
-        //return this;
-        if (typeof key === 'string') {
-            try {
-                this[key] = typeof value !== 'undefined' && value !== null ? value : '';
-                return this;
-            } catch (e) {
-                console.log('Unable to set attribute of this ATTRIBUTES');
-                throw e;
-            }
-        }
-        for (let prop in key) {
-            if (typeof prop === 'string') {
-                this[prop] = key[prop];
-            }
-        }
-        return this;
+		//this[key] = typeof value !== 'undefined' && value !== null ? value : '';
+		//return this;
+		if (typeof key === 'string') {
+			try {
+				this[key] = typeof value !== 'undefined' && value !== null ? value : '';
+				return this;
+			} catch (e) {
+				console.log('Unable to set attribute of this ATTRIBUTES');
+				throw e;
+			}
+		}
+		for (let prop in key) {
+			if (typeof prop === 'string') {
+				this[prop] = key[prop];
+			}
+		}
+		return this;
 	}
 }

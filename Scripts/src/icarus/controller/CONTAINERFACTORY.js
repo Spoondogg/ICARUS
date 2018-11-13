@@ -15,9 +15,8 @@ import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
 import FORMELEMENTGROUP from '../model/el/container/formelement/FORMELEMENTGROUP.js';
 import FORMINPUT from '../model/el/container/formelement/forminput/FORMINPUT.js';
+import FORMPOSTINPUT from '../model/el/container/formelement/formpostinput/FORMPOSTINPUT.js';
 import FORMTEXTAREA from '../model/el/container/formelement/formtextarea/FORMTEXTAREA.js';
-//import FORMPOSTINPUT from '../model/el/container/formelement/formpostinput/FORMPOSTINPUT.js';
-import IFRAME from '../model/el/container/iframe/IFRAME.js';
 import IMAGEGALLERY from '../model/el/container/banner/imagegallery/IMAGEGALLERY.js';
 import INDEX from '../model/el/container/banner/index/INDEX.js';
 import INDEXMAIN from '../model/el/container/banner/indexmain/INDEXMAIN.js';
@@ -29,7 +28,6 @@ import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../model/el/nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
-//import PARAGRAPH from '../model/el/container/paragraph/PARAGRAPH.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 //import TOKEN from '../model/el/container/formelement/forminput/TOKEN.js';
@@ -81,6 +79,28 @@ export default class CONTAINERFACTORY {
 				case 'FIELDSET':
 					obj = new FIELDSET(span, result.model);
 					break;
+				case 'FORMELEMENT':
+					//obj = new FORMELEMENT(span, result.model);
+					//break;
+					if (result.model.type === 'FORMPOSTINPUT') {
+						obj = new FORMPOSTINPUT(span, result.model);
+					} else {
+						switch (result.model.element) {
+							case 'TEXTAREA':
+								obj = new FORMTEXTAREA(span, result.model);
+								break;
+							case 'SELECT':
+								obj = new FORMSELECT(span, result.model);
+								break;
+							case 'INPUT':
+								obj = new FORMINPUT(span, result.model);
+								break;
+							default:
+								obj = new FORMINPUT(span, result.model);
+								break;
+						}
+					}
+					break;
 				case 'FORMELEMENTGROUP':
 					obj = new FORMELEMENTGROUP(span, result.model);
 					break;
@@ -96,9 +116,9 @@ export default class CONTAINERFACTORY {
 				case 'FORMTEXTAREA':
 					obj = new FORMTEXTAREA(span, result.model);
 					break;
-				case 'IFRAME':
-					obj = new IFRAME(span, result.model);
-					break;
+				//case 'IFRAME':
+					//obj = new IFRAME(span, result.model);
+					//break;
 				case 'IMAGEGALLERY':
 					obj = new IMAGEGALLERY(span, result.model);
 					break;
@@ -143,10 +163,10 @@ export default class CONTAINERFACTORY {
 					//	break;
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
-                    break;
-                case 'SPAN':
-                    obj = new SPAN(span, result.model);
-                    break;
+					break;
+				case 'SPAN':
+					obj = new SPAN(span, result.model);
+					break;
 				case 'TEXTBLOCK':
 					obj = new TEXTBLOCK(span, result.model);
 					break;
@@ -160,16 +180,17 @@ export default class CONTAINERFACTORY {
 					obj = new WORD(span, result.model);
 					break;
 				default:
-					obj = new EL(span, result.model);
+					//obj = new EL(span, result.model);
+					throw Error('No constructor exists for CONTAINER{' + className + '}');
 			}
 			node.children[index] = obj;
 			try {
 				// Inject CRUD actions and dependencies
 				//obj.factory = this;
-                obj.container = obj.getProtoTypeByClass('CONTAINER');
+				obj.container = obj.getProtoTypeByClass('CONTAINER');
 				obj.save = this.save;
-                //obj.quickSave = this.quickSave;
-                obj.quickSaveFormPost = this.quickSaveFormPost;
+				//obj.quickSave = this.quickSave;
+				obj.quickSaveFormPost = this.quickSaveFormPost;
 				// Overwrite span with 
 				span.el.parentNode.replaceChild(obj.el, span.el);
 			} catch (e) {
@@ -188,48 +209,46 @@ export default class CONTAINERFACTORY {
         @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
-    save(noPrompt = false) { // 
-        return new Promise((resolve) => {
-            console.log(this.className + '.save()', noPrompt);
-            let dialog = new DIALOG(new MODEL().set({
-                label: 'Save ' + this.className,
-                container: this
-            }));
-            dialog.form = FORM.createEmptyForm(dialog.body, false);
-            dialog.form.container = this;
-            dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
-            dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
-            dialog.form.afterSuccessfulPost = (payload) => {
-                console.log('Successful post', payload);
-                this.setLabel(dialog.form.el.elements.label.value);
-                //form.destroy();
-                //this.quickSaveFormPost(this.dataId, this.data);
-                //this.quickSaveFormPost(this.attributesId, this.attributes);
-                this.refreshParentContainer();
-                console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
-                resolve(dialog.close());
-            };
-            /* eslint-disable-next-line no-alert */
-            if (noPrompt) {
-                console.log(
-                    'Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label
-                );
-                dialog.form.post().then(() => {
-                    dialog.close();
-                });
-            } else {
-                console.log('Showing save form dialog');
-                dialog.show();
-            }
-        });
+	save(noPrompt = false) { // 
+		return new Promise((resolve) => {
+			console.log(this.className + '.save()', noPrompt);
+			let dialog = new DIALOG(new MODEL().set({
+				label: 'Save ' + this.className,
+				container: this
+			}));
+			dialog.form = FORM.createEmptyForm(dialog.body, false);
+			dialog.form.container = this;
+			dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
+			dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+			dialog.form.afterSuccessfulPost = (payload) => {
+				console.log('Successful post', payload);
+				this.setLabel(dialog.form.el.elements.label.value);
+				//form.destroy();
+				//this.quickSaveFormPost(this.dataId, this.data);
+				//this.quickSaveFormPost(this.attributesId, this.attributes);
+				//this.refreshParentContainer();
+				console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
+				resolve(dialog.close());
+			};
+			/* eslint-disable-next-line no-alert */
+			if (noPrompt) {
+				console.log('Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label);
+				dialog.form.post().then(() => {
+					dialog.close();
+				});
+			} else {
+				console.log('Showing save form dialog');
+				dialog.show();
+			}
+		});
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save
 	    @param {number} modelId The object's unique identifier
 	    @param {object} data The object to be saved
 	    @returns {void}
 	*/
-    quickSaveFormPost(modelId, data) {
-        console.log('QuickSaveFormPost', modelId, data);
+	quickSaveFormPost(modelId, data) {
+		console.log('QuickSaveFormPost', modelId, data);
 		if (modelId > 0) {
 			//console.log(50, 'Saving FormPost: ' + modelId);
 			let form = FORM.createEmptyForm(this, true);

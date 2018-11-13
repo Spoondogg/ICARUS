@@ -14,8 +14,14 @@ export default class FORMINPUT extends FORMELEMENT {
 	    @param {MODEL} model The model
     */
 	constructor(node, model) {
-		console.log('FORMINPUT');
-		super(node, 'DIV', model);
+        super(node, 'DIV', model);
+        this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+            class: 'form-control',
+            type: model.attributes.type || 'TEXT', // || this.data.type
+            list: model.attributes.name + '-options',
+            name: model.attributes.name,
+            value: model.attributes.value || ''
+        })));
 		this.createInput();
 	}
 	/** Creates an INPUT Element
@@ -24,45 +30,29 @@ export default class FORMINPUT extends FORMELEMENT {
         @todo file, text, number, email, phone (html5 inputs) 
         @todo This should use a factory constructor pattern to create specific input types
     */
-	createInput() {
-        let nm = this.attributes.name; // || this.data.name;
-        let val = this.attributes.value; // || this.data.value;
-		this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
-			class: 'form-control',
-            type: this.attributes.type || 'TEXT', // || this.data.type
-            list: this.attributes.name + '-options',
-			name: nm,
-			value: val || ''
-        })));
-
-        switch (this.attributes.type) {
-            case 'HIDDEN':
-                this.collapse();
-                break;
-            case 'CHECKBOX':
-                console.log('CHECKBOX');
-                this.input.el.checked = this.attributes.value > 0;
-
-                this.input.el.onchange = () => {
-                    this.attributes.value = this.input.el.checked ? 1 : -1;
-                    this.input.el.value = this.input.el.checked ? 1 : -1;
-                }
-
-                break;
-            default:
-                // 'TEXT'
-        }
-
-        if (this.attributes.type === 'FILE' || this.attributes.type === 'IMAGE') {
+	createInput() {		
+		switch (this.attributes.type) {
+			case 'HIDDEN':
+				this.collapse();
+				break;
+			case 'CHECKBOX':
+				this.input.el.checked = this.attributes.value > 0;
+				this.input.el.onchange = () => {
+					this.attributes.value = this.input.el.checked ? 1 : -1;
+					this.input.el.value = this.input.el.checked ? 1 : -1;
+				}
+				break;
+			default:
+				// 'TEXT'
+		}
+		if (this.attributes.type === 'FILE' || this.attributes.type === 'IMAGE') {
 			this.createSubForm();
 		} else {
 			this.addInputOptions();
-        }
-
-        if (this.attributes.readonly) {
-            this.input.el.readOnly = true; //.setAttribute('readonly', 'readonly');
-        }
-
+		}
+		if (this.attributes.readonly) {
+			this.input.el.readOnly = true;
+		}
 		return this.input;
 	}
 	/** Add any preset options to the datalist
@@ -71,12 +61,13 @@ export default class FORMINPUT extends FORMELEMENT {
 	addInputOptions() {
 		this.options = [];
 		this.datalist = new DATALIST(this.node, new MODEL(new ATTRIBUTES({
-			'id': this.attributes.name + '-options'
+			id: this.attributes.name + '-options'
 		})));
-		if (Array.isArray(this.options)) {
-			for (let o = 0; o < this.options.length; o++) {
+        if (Array.isArray(this.options)) {
+            this.options.forEach((o) => this.addOption(o.value));
+			/*for (let o = 0; o < this.options.length; o++) {
 				this.addOption(this.options[o].value);
-			}
+			}*/
 		}
 	}
 	/** Create an empty subform, similar to a data/attributes object to 
@@ -153,16 +144,6 @@ export default class FORMINPUT extends FORMELEMENT {
 		} catch (e) {
 			throw e;
 		}
-	}
-	/** Sets the label of this element to the given value.
-        @param {string} label The name to be set
-        @returns {ThisType} Returns this object for method chaining
-    */
-	setLabel(label) {
-		this.navBar.menu.tab.anchor.setInnerHTML(label);
-		this.label.setInnerHTML(label);
-		this.input.el.setAttribute('name', label);
-		return this;
 	}
 	/** Adds an option to this input element	        
         @todo Consider how to share these lists with the entire application rather than

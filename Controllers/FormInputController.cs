@@ -10,31 +10,26 @@ using System.Web.Mvc;
 using ICARUS.Models;
 using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements;
-
 namespace ICARUS.Controllers {
-
     /// <summary>
     /// Handles loading of web forms.  Requires authorization
     /// </summary>
-    public class FormElementController : ContainerController {
-
-        public FormElementController() : base("FORMELEMENT") {
+    public class FormInputController : ContainerController {
+        public FormInputController() : base("FORMINPUT") {
 
         }
-
         /// <summary>
-        /// Instantiate a Container using Main defaults
+        /// Instantiate a FORMINPUT using defaults
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new FORMELEMENT()
-                : new FORMELEMENT(formPost);
+                ? new FORMINPUT()
+                : new FORMINPUT(formPost);
 
             obj.setAuthorId(User.Identity.Name);
             return obj;
         }
-
         /// <summary>
         /// Select a single element
         /// </summary>
@@ -42,9 +37,8 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            return ctx.FormElements.AsQueryable().Single(FilterById(id));
+            return ctx.FormInputs.AsQueryable().Single(FilterById(id));
         }
-
         /// <summary>
         /// Select a single element
         /// </summary>
@@ -52,7 +46,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.FormElements.Where(FilterAllowed());
+            return ctx.FormInputs.Where(FilterAllowed());
         }
     }    
 }
