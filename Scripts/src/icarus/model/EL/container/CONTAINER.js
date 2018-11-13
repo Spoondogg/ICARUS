@@ -613,7 +613,8 @@ export default class CONTAINER extends GROUP {
 		return new Promise((resolve, reject) => {
 			try {
 				let dialog = new DIALOG(new MODEL().set({
-					label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className
+                    label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className,
+                    container: this.getMainContainer()
 				}));
 				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
 					console.log('Remove', this);

@@ -32,9 +32,17 @@ export default class FORM extends CONTAINER {
 			this.post();
 			return false;
 		};
-		this.populate(model.children);
+        this.populate(model.children);
+
+        // Set focused container for relevant keyBindings
+        this.el.addEventListener('focusin', () => {
+            this.getContainer().getMainContainer().activeContainer = this;
+        });
+        this.el.addEventListener('focusout', () => {
+            this.getContainer().getMainContainer().activeContainer = null;
+        });
 	}
-	construct() {}
+    construct() { }
 	/** Constructs a Fieldset for this FORM
         @todo Verify that this overrides the initial fieldset
 	    @param {MODEL} model Object model
@@ -121,15 +129,59 @@ export default class FORM extends CONTAINER {
 	}
 	/** Flags the given element as invalid 
 		@param {any} element The form element
-	    @returns {void}
+	    @returns {boolean} Returns false;
 	*/
 	setInvalid(element) {
 		this.payload.isValid = false;
 		element.focus();
 		element.setAttribute('data-valid', this.payload.isValid);
-		console.log(element.name + ' is invalid', element);
-		$(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
-	}
+        console.log(element.name + ' is invalid', element);
+        $(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
+        return false;
+    }
+    /** Flags the given element as valid 
+		@param {any} element The form element
+	    @returns {boolean} Returns true
+	*/
+    setValid(element) {
+        $(element).removeClass('invalid');
+        element.setAttribute('data-valid', this.payload.isValid);
+        return true;
+    }
+    /** Validates the given element as a STRING using HTML5 validation
+	    @param {HTMLElement} element The Input element
+	    @returns {boolean} True if valid
+	*/
+    validateString(element) {
+        let isValid = true;
+        if (element.checkValidity()) {
+            isValid = element.value === '' ? this.setInvalid(element) : this.setValid(element);
+        } 
+        return isValid;
+    }
+    /** Simple number validation
+        @param {HTMLElement} element The Input element
+        @returns {boolean} True if valid
+    */
+    validateNumber(element) {
+        return element.checkValidity() ? this.setValid(element) : this.setInvalid(element);
+    }
+    /** Simple SELECT validation
+        @param {HTMLElement} element The Input element
+        @returns {boolean} True if valid
+    */
+    validateSelect(element) {
+        return element.selectedIndex > 0 ? this.setValid(element) : this.setInvalid(element);
+    }
+    /** Simple CHECKBOX validation
+        @param {HTMLElement} element The Input element
+        @returns {boolean} True if valid
+    */
+    validateCheckbox(element) {
+        if (element.required) {
+            return element.checked ? this.setValid(element) : this.setInvalid(element);
+        }
+    }
 	/** Validate the current form and return true if form is valid
 	    Note that this is a simple form of validation that occurs on the
 	    client side and should not be used as a substitution for
@@ -155,57 +207,24 @@ export default class FORM extends CONTAINER {
 				case 'password':
 					this.validateString(element);
 					break;
-				case 'number':
-					if (element.checkValidity()) { // HTML5 Validation
-						$(element).removeClass('invalid');
-						element.setAttribute('data-valid', this.payload.isValid);
-						break;
-					} else {
-						console.log(element.name + ' -- isValid: ' + element.checkValidity());
-						this.setInvalid(element);
-						break;
-					}
+                case 'number':
+                    this.validateNumber(element, this.payload);
+                    break;
 				case 'checkbox':
-					if (element.required) {
-						if (!element.checked) {
-							this.setInvalid(element);
-							break;
-						}
-					}
+                    this.validateCheckbox(element, this.payload);
 					break;
-				case 'select-one':
-					if (element.selectedIndex === 0) {
-						this.setInvalid(element);
-					} else {
-						$(element).removeClass('invalid');
-						element.setAttribute('data-valid', this.payload.isValid);
-					}
-					break;
+                case 'select-one':
+                    this.validateSelect(element, this.payload);
+                    break;
+                case 'fieldset':
+                case 'submit':
+                    break;
 				default:
 					console.warn('Unable to validate unidentified form element type.', element.type, element.value);
 			}
 		}
 		console.log('Validation Result: ' + this.payload.isValid);
 		return this.payload;
-	}
-	/** Validates the given element as a STRING using HTML5 validation
-	    @param {HTMLElement} element The Input element
-	    @see https://www.w3schools.com/js/js_validation_api.asp
-	    @returns {element} The element for chaining
-	*/
-	validateString(element) {
-		if (element.checkValidity()) {
-			if (element.value === '') {
-				this.setInvalid(element);
-			} else {
-				$(element).removeClass('invalid');
-				element.setAttribute('data-valid', this.payload.isValid);
-			}
-		} else {
-			console.log(element.name + ' -- isValid: ' + element.checkValidity());
-			this.setInvalid(element);
-		}
-		return element;
 	}
 	/** Resets the form and any validation notifications.
         @returns {void}
@@ -240,10 +259,9 @@ export default class FORM extends CONTAINER {
 	*/
 	post() {
 		return new Promise((resolve, reject) => {
-			console.log(10, 'Posting values to server: ' + this.postUrl);
 			let formPost = this.getFormPost();
-			console.log('FormPost', formPost);
-			if (formPost) {
+            if (formPost) {
+                console.log(10, 'Posting values to server: ' + this.postUrl, formPost);
 				this.lock();
 				$.ajax({
 					url: this.postUrl,
@@ -277,7 +295,6 @@ export default class FORM extends CONTAINER {
 					}
 				});
 			} else {
-				console.log(0, 'Post Failed to submit.  Values may be invalid.');
 				reject(new Error('Post Failed to submit.  Values may be invalid.'));
 			}
 		});

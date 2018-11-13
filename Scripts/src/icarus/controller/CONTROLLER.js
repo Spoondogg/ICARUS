@@ -3,12 +3,11 @@ import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 //import DIALOG from '../model/EL/dialog/DIALOG.js';
 import WATERMARK from '../helper/WATERMARK.js';
-/**
+/** An Application Class
+    @description Constructs the Application Controller and initializes the MAIN Container
+    This should be instantiated during the init phase of the html document
     @class
     @extends MODEL
-    @description An Application Class
-    Constructs the Application Controller and initializes the MAIN Container
-    This should be instantiated during the init phase of the html document
 */
 export default class CONTROLLER extends MODEL {
 	/** Constructs an Application
@@ -32,72 +31,77 @@ export default class CONTROLLER extends MODEL {
 			token,
 			factory
 		});
-		//this.factory = new CONTAINERFACTORY();
 		this.watermark = new WATERMARK();
-		/**
-				    @property {string} name The application name
-		        
-				this.name = name;*/
-		/**
-				    @property {string} version The application version
-		        
-				this.version = version;*/
-		/**
-				    @property {string} token The session security token
-		        
-				this.token = token;*/
-		/**
-		    @property {Url} url An Url object
-		*/
+		/** @property {string} name The application name
+        this.name = name;*/
+		/** @property {string} version The application version
+        this.version = version;*/
+		/** @property {string} token The session security token
+		this.token = token;*/
+		/** @property {Url} url An Url object */
 		this.url = new URL(window.location.href);
-		/**
-		    @property {boolean} debug If true, debug outputs are shown
-		*/
+		/** @property {boolean} debug If true, debug outputs are shown */
 		this.debug = true;
-		/**
-				    @property {number} recursionLimit The maximum amount of recursion before throwing an error
-		        
-				this.recursionLimit = recursionLimit;*/
-		/**
-		    @property {string} returnUrl If a ReturnUrl is provided, redirect to that Url
-		*/
+		/** @property {number} recursionLimit The maximum amount of recursion before throwing an error		        
+        this.recursionLimit = recursionLimit;*/
+		/** @property {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
 		this.returnUrl = this.url.searchParams.get('ReturnUrl');
 		if (this.returnUrl) {
 			this.returnUrl = this.url.origin + this.returnUrl;
 			location.href = this.returnUrl;
 		}
-		/**
-		    @property {LOADER} loader The default loader modal
-		*/
+		/** @property {LOADER} loader The default loader modal */
 		this.loader = new LOADER('Loading', 'Loading', 100);
 		this.loader.log(100, 'Launching application...', true);
-		/**
-			@property {PROMPT} prompt A dialog prompting the user for input
+		/** @property {PROMPT} prompt A dialog prompting the user for input
 			@type {PROMPT}
 			@todo There should never be more than one prompt in the DOM.
 		    @todo Create a queue to hold multiple prompts
 		*/
 		this.prompt = null;
-		/**
-		    @property {MAIN} main The MAIN Container
-		*/
-		this.main = new MAIN(new MODEL().set({
-			id,
-			user,
-			dev,
-			factory,
-			token,
-			'label': '', //this.name + ' : ' + this.version,
-			'loader': this.loader,
-			//'token': this.token,
-			'url': this.url,
-			'debug': this.debug,
-			'recursionLimit': this.recursionLimit
-		}));
+		/** @property {MAIN} main The MAIN Container */
+		this.main = new MAIN(this);
 		if (user === 'Guest') {
 			this.showLoginPrompt();
-		}
-	}
+        }
+
+        // Add key bindings
+        this.keyBindings();
+    }
+    /** Sets application keybindings
+        @returns {void}
+        @see https://stackoverflow.com/a/14180949/722785
+    */
+    keyBindings() {
+        window.addEventListener('keydown', (event) => {
+            if (event.ctrlKey || event.metaKey) {
+                switch (String.fromCharCode(event.which).toLowerCase()) {
+                    case 's':
+                        event.preventDefault();
+                        console.log('ctrl-s', this.main.activeContainer);
+                        try {
+                            if (this.main.activeContainer.className === 'FORM') {
+                                this.main.activeContainer.post();
+                            }
+                        } catch (e) {
+                            console.log('Failed keyBinding', e);
+                        }
+                        break;
+                    case 'f':
+                        event.preventDefault();
+                        console.log('ctrl-f', this.main.activeContainer);
+                        break;
+                    case 'g':
+                        event.preventDefault();
+                        console.log('ctrl-g', this.main.activeContainer);
+                        break;
+                    default:
+                        //
+                }
+            }
+        });
+    }
+
 	/**
 	    Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
