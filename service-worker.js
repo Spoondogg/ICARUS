@@ -1,9 +1,4 @@
-﻿/**
-    A collection of scripts, stylesheets and images that can be cached
-    @see https://developers.google.com/web/fundamentals/primers/service-workers/
-    @see https://developers.google.com/web/fundamentals/web-app-manifest/
-*/
-var CACHE_NAME = 'icarus-cache-v1';
+﻿var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
     'https://fonts.googleapis.com/css?family=Lato|Raleway',
     '/Scripts/dist/icarus/vendor.js',
@@ -17,38 +12,55 @@ var urlsToCache = [
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'
 ];
+/*
+// inside service worker script
+self.onerror = (message) => {
+    console.log(message);
+};
+*/
 
+// Service Worker error handling
+// @see https://stackoverflow.com/questions/37736322/how-does-global-error-handling-work-in-service-workers
+self.addEventListener('error', (e) => {
+    console.log('Service Worker Error', e);
+});
+
+// Perform install steps
 //https://developers.google.com/web/fundamentals/app-install-banners/
-self.addEventListener('install', function (event) {
-    // Perform install steps
+self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(function (cache) {
+            .then((cache) => {
                 console.log('Opened cache');
                 return cache.addAll(urlsToCache);
+            }).catch((err) => {
+                console.log('Service Worker: Failed to open cache');
+                return null;
             })
     );
 });
 
-
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
-            .then(function (response) {
+            .then((response) => {
                 // Cache hit - return response
                 if (response) {
                     return response;
                 }
                 return fetch(event.request);
-            }));
+            })).catch((err) => {
+                console.log('Service Worker: Failed to fetch');
+                return null;
+            });
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', (event) => {
     var cacheWhitelist = ['icarus-cache-v1'];
     event.waitUntil(
-        caches.keys().then(function (cacheNames) {
+        caches.keys().then((cacheNames) => {
             return Promise.all(
-                cacheNames.map(function (cacheName) {
+                cacheNames.map((cacheName) => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
                         return caches.delete(cacheName);
                     }
