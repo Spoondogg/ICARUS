@@ -163,6 +163,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
+    <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
     <Compile Include="Controllers\WordController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
@@ -501,6 +502,10 @@
     <Compile Include="Migrations\201808281954057_2018-08-28__001.Designer.cs">
       <DependentUpon>201808281954057_2018-08-28__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811120455060_20181111__001.cs" />
+    <Compile Include="Migrations\201811120455060_20181111__001.Designer.cs">
+      <DependentUpon>201811120455060_20181111__001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -518,6 +523,7 @@
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
     <Compile Include="Models\Icarus\Elements\BANNER.cs" />
     <Compile Include="Models\Icarus\Elements\HEADER.cs" />
+    <Compile Include="Models\Icarus\Form\FORMINPUT.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
     <Compile Include="Models\Icarus\Form\Input.cs" />
@@ -1028,6 +1034,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808281954057_2018-08-28__001.resx">
       <DependentUpon>201808281954057_2018-08-28__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811120455060_20181111__001.resx">
+      <DependentUpon>201811120455060_20181111__001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -6,14 +6,14 @@ export default class FORMPOST {
 	/** Constructs a FORMPOST for the given form
 	    @param {FORM} form The form that generated this FORMPOST
     */
-    constructor(form) {
-        this.id = form.id;
+	constructor(form) {
+		this.id = form.id;
 		this.formId = form.id;
 		this.label = form.el.getAttribute('name');
 		this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
-        this.message = '';
-        /* eslint-disable-next-line no-underscore-dangle */
-        this.__RequestVerificationToken = this.results[this.results.length - 1].value;
+		this.message = '';
+		/* eslint-disable-next-line no-underscore-dangle */
+		this.__RequestVerificationToken = this.results[this.results.length - 1].value;
 	}
 	/** Serialize the form into a JSON object key/value
 	    @returns {object} Form Results as an Object

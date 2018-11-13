@@ -6,22 +6,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 namespace ICARUS.Models {
     /// <summary>
-    /// A SELECT Element (INPUT, SELECT etc)
+    /// A Form Input
     /// </summary>
-    public class Select : Container {
+    public class FORMINPUT : Container {
         /// <summary>
-        /// Generic SELECT Constructor for Entity
+        /// Generic FORMINPUT Constructor for Entity
         /// </summary>
-        public Select() : base("SELECT", new MODEL() {
-            label = "SELECT"
+        public FORMINPUT() : base("DIV", new MODEL() {
+            label = "FORMINPUT"
         }) {
-            this.className = "SELECT";
+
         }
         /// <summary>
-        /// Constructs an SELECT with the given id and label attributes already set
+        /// Constructs an FORMINPUT with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public Select(FormPost formPost) : base("SELECT", formPost) {
+        public FORMINPUT(FormPost formPost) : base("FORMINPUT", formPost) {
 
         }
     }

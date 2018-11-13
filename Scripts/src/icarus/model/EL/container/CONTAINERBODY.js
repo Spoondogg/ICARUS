@@ -25,15 +25,6 @@ export default class CONTAINERBODY extends DIV {
 		this.pane.el.addEventListener('touchmove', this.handleTouchMove, { passive: true });
 		this.xDown = null;
 		this.yDown = null;
-		/*if (dev) {
-		    this.pane.el.ondblclick = function (e) {
-		        //node.toggleSidebar();
-		        console.log('Launch Editor for ' + node.className + '(' + node.id + ')');
-		        $(node.navBar.header.menu.el).collapse('show');
-		        node.btnSave.el.click();
-		        e.stopPropagation(); // Prevent parent double click()
-		    };
-		}*/
 	}
 	/**
 		     Sets start coordinates

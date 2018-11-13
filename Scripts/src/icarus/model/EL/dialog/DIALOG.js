@@ -22,39 +22,36 @@ export default class DIALOG extends EL {
 	constructor(model) {
 		super(document.body, 'DIALOG', model);
 		document.body.insertBefore(this.el, document.body.firstChild);
-
-        this.header = new HEADER(this, new MODEL('modal-header').set({
-            label: model.label
-        }));
-
-        this.navBar = new NAVBAR(this, new MODEL().set({
-            label: this.label // model.label
-        }));
-        this.navBar.show();
-
-        this.header.btnClose = new BUTTON(this.header, 'x');
-        this.header.btnClose.el.onclick = () => this.close(300);
-        this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
-        this.footer = new FORMFOOTER(this, new MODEL('modal-footer').set({
-            align: ALIGN.VERTICAL
-        }));
-        this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close(300);
+		this.header = new HEADER(this, new MODEL('modal-header').set({
+			label: model.label
+		}));
+		this.navBar = new NAVBAR(this, new MODEL().set({
+			label: this.label // model.label
+		}));
+		//this.navBar.show();
+		this.header.btnClose = new BUTTON(this.header, 'x');
+		this.header.btnClose.el.onclick = () => this.close(300);
+		this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
+		this.footer = new FORMFOOTER(this, new MODEL().set({
+			align: ALIGN.VERTICAL
+		}));
+		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close(300);
 	}
 	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {Promise} Callback on successful display of dialog
 	*/
 	show(delay = 0) {
-        return new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    this.el.showModal();
-                    resolve();
-                }, delay);
-            } catch (e) {
-                reject(e);
-            }
-        });
+		return new Promise((resolve, reject) => {
+			try {
+				setTimeout(() => {
+					this.el.showModal();
+					resolve();
+				}, delay);
+			} catch (e) {
+				reject(e);
+			}
+		});
 	}
 	/** Hides the modal
         @param {number} delay Millisecond delay until dialog is closed
@@ -62,20 +59,20 @@ export default class DIALOG extends EL {
 	    @returns {Promise} Callback on successful close
 	*/
 	close(delay = 0, preserve = false) {
-        return new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    this.el.close();
-                    if (!preserve) {
-                        this.destroy().then(() => {
-                            resolve();
-                        });
-                    }
-                }, delay);
-            } catch (e) {
-                reject(e);
-            }
-        });
+		return new Promise((resolve, reject) => {
+			try {
+				setTimeout(() => {
+					this.el.close();
+					if (!preserve) {
+						this.destroy().then(() => {
+							resolve();
+						});
+					}
+				}, delay);
+			} catch (e) {
+				reject(e);
+			}
+		});
 	}
 }
 export { ATTRIBUTES, DIV, EL, MODEL };

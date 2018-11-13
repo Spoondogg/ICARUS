@@ -9,15 +9,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ICARUS.Models.Icarus.Elements.Attributes;
-
 namespace ICARUS.Models {
-
     /// <summary>
     /// A generic Icarus Form.  Icarus Forms are used to collect abstract data objects
     /// that may need to be transformed into tables or accessed via XQuery
     /// </summary>
     public class FORM : Container {
-
         /// <summary>
         /// Generic Form Constructor
         /// </summary>
@@ -26,7 +23,6 @@ namespace ICARUS.Models {
         }) {
 
         }
-
         /// <summary>
         /// Generic Form Constructor
         /// </summary>

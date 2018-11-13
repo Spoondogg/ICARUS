@@ -4,28 +4,24 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
-
 namespace ICARUS.Models {
-
     /// <summary>
     /// A Form Element (INPUT, SELECT etc)
     /// </summary>
-    public class FormElement : Container {
-
+    public class FORMELEMENT : Container {
         /// <summary>
-        /// Generic FormElement Constructor for Entity
+        /// Generic FORMELEMENT Constructor for Entity
         /// </summary>
-        public FormElement() : base("FORMELEMENT", new MODEL() {
+        public FORMELEMENT() : base("DIV", new MODEL() {
             label = "FORMELEMENT"
         }) {
 
         }
-
         /// <summary>
-        /// Constructs an FormElement with the given id and label attributes already set
+        /// Constructs an FORMELEMENT with the given id and label attributes already set
         /// </summary>
         /// <param name="formPost"></param>
-        public FormElement(FormPost formPost) : base("FORMELEMENT", formPost) {
+        public FORMELEMENT(FormPost formPost) : base("FORMELEMENT", formPost) {
 
         }
     }
