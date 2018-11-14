@@ -179,9 +179,7 @@ namespace ICARUS.Controllers {
 
             } else {
                 string message = User.Identity.Name + ", You do not have permission to access this " + this.className;
-                return Json(new Payload(
-                    0, new Exception(message)
-, message), JsonRequestBehavior.AllowGet);
+                return Json(new Payload(0, new Exception(message), message), JsonRequestBehavior.AllowGet);
             }
         }
 

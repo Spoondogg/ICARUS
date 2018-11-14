@@ -30,7 +30,6 @@ namespace ICARUS.Controllers {
             posts = posts.OrderBy(p => p.formId).ThenByDescending(p => p.dateCreated);
             return Json(posts.ToList());
         }
-
         /// <summary>
         /// Creates an Empty Formpost and returns the model
         /// </summary>
@@ -40,21 +39,20 @@ namespace ICARUS.Controllers {
             formPost.id = 0;
             formPost.formId = 0;
             formPost.authorId = User.Identity.Name;
-            //formPost.label = "FormPost";
             formPost.status = 1;
             formPost.dateCreated = DateTime.UtcNow;
             formPost.dateLastModified = DateTime.UtcNow;
             formPost.results = new List<FormValue>();
             formPost.xmlResults = "<root></root>";
             formPost.resultsToXml();
-            //formPost.jsonResults = "";
-
             return formPost;
-        }
-        
+        }        
+        /// <summary>
+        /// Create an empty FormPost representing this
+        /// </summary>
+        /// <returns></returns>
         public override async Task<ActionResult> Create() {
             try {
-
                 var model = createEmptyFormPost();
 
                 // Save the object
@@ -68,27 +66,23 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
 
             } catch (Exception e) {
-                return Json(new Payload(
-                        0,
-                    e
-,
+                return Json(new Payload(0, e,
                     "Unable to create new instance of " +
                         this.className + "()\n" + e.ToString() + "\n\n" +
                         e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
         }
-
-
+        /// <summary>
+        /// Create a FORMPOST using the given posted values
+        /// https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
+        /// </summary>
+        /// <param name="formPost"></param>
+        /// <returns></returns>
         public override async Task<ActionResult> Create(FormPost formPost) {
-            // TODO: Determine if form is new or update 
-            // (Are we editing an existing post or creating a new one?)
-
             // Set formPost attributes where applicable
             formPost.formId = formPost.id;
             formPost.authorId = User.Identity.Name;
-            //formPost.label = "FormPost";
-            // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
             formPost.dateCreated = DateTime.UtcNow;
             formPost.dateLastModified = DateTime.UtcNow;
             formPost.resultsToXml();
@@ -96,21 +90,19 @@ namespace ICARUS.Controllers {
 
             // Attempt to save the form to the database
             try {
-
                 // Save the object
                 getObjectDbContext().FormPosts.Add(formPost);
                 int success = getObjectDbContext().SaveChanges();
-                
-                // Return the success response along with the email message body
-                return Json(new {
-                    text = "success: " + success,
-                    message = formPost.getMessage(),
-                    formPost = formPost
-                });
+
+                // Return the success response
+                return Json(new Payload(
+                    1, "FORMPOST", formPost,
+                    formPost.getMessage()
+                ));
 
             } catch (Exception e) {
                 // Return the form for debugging
-                return Json(new { text = "fail", message = e.Message, form = formPost, exception = e.ToString() });
+                return Json(new Payload(0, e, e.Message)); //new Exception(e.Message)
             }
         }
 
@@ -147,8 +139,6 @@ namespace ICARUS.Controllers {
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
                 int shared = formPost.parseInt("shared", 0);
-                //string label = formPost.label;
-
 
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
@@ -163,8 +153,7 @@ namespace ICARUS.Controllers {
                 int result = 0;
                 model.xmlResults = formPost.xmlResults;
                 model.jsonResults = formPost.jsonResults;
-                model.formId = formPost.formId; // id;
-                //model.label = label;
+                model.formId = formPost.formId;
                 model.shared = shared;
 
                 // Save the object
@@ -174,17 +163,13 @@ namespace ICARUS.Controllers {
 
                 // Return the success response along with the message body
                 return Json(new Payload(
-                    1, "FORMPOST", model,
-                    "Successfully set FORMPOST (" + model.id + "," + id + ")"
-                ), JsonRequestBehavior.AllowGet);
+                    1, "FORMPOST", model, "Successfully set FORMPOST (" + model.id + "," + id + ")"
+                )); //, JsonRequestBehavior.AllowGet
 
             } catch (Exception e) {
-                return Json(
-                    new Payload(
-                        0, e, 
-                        "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()
-                    ), JsonRequestBehavior.AllowGet
-                );
+                return Json(new Payload(
+                    0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()
+                )); // JsonRequestBehavior.AllowGet
             }
         }
     }
