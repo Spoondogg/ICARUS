@@ -557,13 +557,13 @@ export const test = gulp.series(
 
 export const scriptification = gulp.series(
     (done) => {
-        console.log('\n\n\n==== stylification BEGIN ====');
+        console.log('\n\n\n==== scriptification BEGIN ====');
         done();
     },
     scripts_build_src,
     scripts_build_vendor,
     (done) => {
-        console.log('\n\n\n==== stylification END ====');
+        console.log('\n\n\n==== scriptification END ====');
         done();
     }
 );

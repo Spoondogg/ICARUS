@@ -16,7 +16,7 @@ export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
 	    @param {CONTAINER} node The parent object
 	    @param {MODEL} model The object model
-	 */
+	*/
 	constructor(node, model) {
 		super(node, 'FORM', model, ['FIELDSET']); //
 		//this.el.setAttribute('onsubmit', 'return false;');
@@ -36,10 +36,18 @@ export default class FORM extends CONTAINER {
 
         // Set focused container for relevant keyBindings
         this.el.addEventListener('focusin', () => {
-            this.getContainer().getMainContainer().activeContainer = this;
+            try {
+                this.getContainer().getMainContainer().activeContainer = this;
+            } catch (e) {
+                console.log('Unable to set activeContainer', this);
+            }
         });
         this.el.addEventListener('focusout', () => {
-            this.getContainer().getMainContainer().activeContainer = null;
+            try {
+                this.getContainer().getMainContainer().activeContainer = null;
+            } catch (e) {
+                console.log('Unable to remove activeContainer', this);
+            }
         });
 	}
     construct() { }
@@ -71,8 +79,7 @@ export default class FORM extends CONTAINER {
 		}));
 		return form;
 	}
-	/**
-        Sets the POST url for this form
+	/** Sets the POST url for this form
         @param {string} url Target url
         @returns {ThisType} Returns this form
     */
@@ -84,13 +91,23 @@ export default class FORM extends CONTAINER {
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
-		this.children.forEach((ch) => {
+		this.children.forEach((i) => {
             try {
-                ch.el.disabled = true;
-                console.log('Locked element', ch);
+                switch (i.className) {
+                    case 'FIELDSET':
+                        break;
+                    default:
+                        i.el.disabled = true;
+                        console.log('Locked element', i);
+                        break;
+                }
             } catch (e) {
-                console.log('Unable to lock element', ch);
-                //throw e;
+                if (e instanceof TypeError) {
+                    console.warn('Unable to lock ', i, e);
+                } else {
+                    throw e;
+                }
+                
             }
 		});
 		return true;
@@ -101,7 +118,13 @@ export default class FORM extends CONTAINER {
     unlock() {
         this.children.forEach((i) => {
             try {
-                i.el.disabled = false;
+                switch (i.className) {
+                    case 'FIELDSET':
+                        break;
+                    default:
+                        i.el.disabled = false;
+                        break;
+                }                
             } catch (e) {
                 if (e instanceof TypeError) {
                     console.warn('Unable to unlock "' + i.element + '"');
@@ -115,8 +138,8 @@ export default class FORM extends CONTAINER {
 	    @returns {void}
 	*/
 	htmlEncodeValues() {
-		try {
-			for (let e = 0; e < this.el.elements.length; e++) {
+        try {
+            for (let e = 0; e < this.el.elements.length; e++) {
 				//console.log('Encode type: ' + this.el.elements[e].type);
 				if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
 					this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
@@ -230,18 +253,18 @@ export default class FORM extends CONTAINER {
         @returns {void}
 	*/
 	reset() {
-		console.log('Resetting form[' + this.el.name + ']');
-		for (let e = 0; e < this.el.elements.length; e++) {
-			this.el.elements[e].removeAttribute('data-valid');
-			$(this.el.elements[e].previousSibling).removeClass('invalid');
-		}
+        console.log('Resetting form[' + this.el.name + ']');
+        this.el.elements.forEach((e) => {
+            e.removeAttribute('data-valid');
+            $(e.previousSibling).removeClass('invalid');
+        });
 		this.el.reset();
 	}
 	/** Serialize the form into an array
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
 	getResultsAsArray() {
-		console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
+		//console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
 		return $(this.el).serializeArray();
 	}
 	/** If valid, Returns a FormPost based on values in this form
@@ -288,7 +311,7 @@ export default class FORM extends CONTAINER {
 						}
 					},
 					success: (payload) => {
-						console.log('Posted results to server.', payload.message);
+						//console.log('Posted results to server.', payload.message);
 						this.unlock();
 						this.afterSuccessfulPost(payload);
 						resolve(payload);
