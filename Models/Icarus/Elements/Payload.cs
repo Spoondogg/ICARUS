@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -75,13 +76,31 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="message"></param>
         public Payload(int result, Exception exception, string message = "") {
             this.result = result;
-            this.message = message += "<br><br><span class='bold'>Exception Details:</span><br>" + exception.Data.ToString(); ;
+            this.message = message += "\n\nException Details:\n" + exception.Data.ToString(); ;
             this.exception = exception.Message;
-            //this.exceptionData = exception.Data;
+        }
+
+        /// <summary>
+        /// Construct a Payload for cases where an exception message is returned
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="exception"></param>
+        /// <param name="message"></param>
+        public Payload(int result, DbEntityValidationException exception, string message = "") {
+            this.result = result;
+            this.message = message; // += "\n\nException Details:\n" + exception.Data.ToString(); ;
+            this.exception = exception.Message;
+            this.innerException = "";
             try {
-                this.innerException = exception.InnerException.ToString();
-            } catch(Exception e) {
-                this.innerException = null;
+                foreach (var eve in exception.EntityValidationErrors) {
+                    foreach (var ve in eve.ValidationErrors) {
+                        //this.innerException += "\n ==> - Property: " + ve.PropertyName + ", Error: " + ve.ErrorMessage;
+                        this.innerException += "\n ==> " + ve.PropertyName + ": " + ve.ErrorMessage;
+                        this.message += "\n ==> " + ve.PropertyName + ": " + ve.ErrorMessage;
+                    }
+                }
+            } catch (Exception e) {
+                this.innerException = "Failed to parse InnerException";
             }
         }
     }

@@ -203,6 +203,9 @@ namespace ICARUS.Models.Icarus {
             return i;
         }
 
+        /// <summary>
+        /// Creates a new XML Document and populates with this.xmlResults
+        /// </summary>
         public void setXml() {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(this.xmlResults);
