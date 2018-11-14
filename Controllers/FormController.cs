@@ -58,7 +58,7 @@ namespace ICARUS.Controllers {
 
         /// <summary>
         /// POST's the IcarusForm FORMPOST results to the server
-        /// POST: FormElement/Submit
+        /// POST: Form/Submit
         /// </summary>
         /// <param name="collection">POSTed values</param>
         /// <returns></returns>
@@ -71,8 +71,8 @@ namespace ICARUS.Controllers {
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
             formPost.dateCreated = DateTime.UtcNow;
 
-            formPost.setXml();
-            formPost.resultsToXml();
+            //formPost.setXml();
+            //formPost.resultsToXml();
 
             // Attempt to save the form to the database
             try {

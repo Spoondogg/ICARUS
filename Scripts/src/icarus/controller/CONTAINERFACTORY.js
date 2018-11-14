@@ -262,7 +262,7 @@ export default class CONTAINERFACTORY {
 				}
 			}
 			form.children[0].children[0].addInputElements(inputs);
-			form.setPostUrl('FormPost/Set');
+			form.setAction('FormPost/Set');
 			form.post();
 			form.afterSuccessfulPost = () => {
 				form.destroy();
