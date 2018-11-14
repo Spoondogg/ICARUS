@@ -22,7 +22,7 @@ export default class FORM extends CONTAINER {
 		//this.el.setAttribute('onsubmit', 'return false;');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
-		this.setPostUrl('Form/Submit');
+		this.setAction('Form/Submit');
 		this.updateUrl = 'Form/Update';
 		this.footer = new FORMFOOTER(this.body, new MODEL().set({
 			align: ALIGN.VERTICAL
@@ -79,14 +79,21 @@ export default class FORM extends CONTAINER {
 		}));
 		return form;
 	}
-	/** Sets the POST url for this form
+	/** Sets this form's ACTION attribute
         @param {string} url Target url
         @returns {ThisType} Returns this form
     */
-	setPostUrl(url) {
-		this.postUrl = url;
+	setAction(url = 'FORM/SUBMIT') {
+        //this.postUrl = url;
+        this.attributes.action = url;
 		return this;
-	}
+    }
+    /** Gets this form's ACTION attribute
+        @returns {string} Returns this form's action
+    */
+    getAction() {
+        return this.attributes.action || 'FORM/SUBMIT';
+    }
 	/** Disables all fieldsets within this form
 	    @returns {boolean} Returns true if successful
 	*/
@@ -284,10 +291,10 @@ export default class FORM extends CONTAINER {
 		return new Promise((resolve, reject) => {
 			let formPost = this.getFormPost();
             if (formPost) {
-                console.log(10, 'Posting values to server: ' + this.postUrl, formPost);
+                console.log(10, 'Posting values to ' + this.getAction(), formPost);
 				this.lock();
 				$.ajax({
-					url: this.postUrl,
+                    url: this.getAction(),
 					type: 'POST',
 					data: formPost,
 					error(xhr, statusText, errorThrown) {
