@@ -51,24 +51,23 @@ export default class IMAGEGALLERY extends BANNER {
 		$.post(postUrl, {
 				'__RequestVerificationToken': this.getMainContainer().token //token.value
 			},
-			/**
-						    Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
-						    @param {any} payload The POST payload
-						    @param {any} status The POST status
-			                @returns {void}
-						*/
+			/** Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
+				@param {any} payload The POST payload
+				@param {any} status The POST status
+			    @returns {void}
+			*/
 			(payload, status) => {
 				if (status === 'success') {
 					this.pageTotal = payload.total;
 					for (let l = 0; l < payload.list.length; l++) {
 						let thumb = new NAVTHUMBNAIL(this.body.pane, new MODEL().set({
-							'label': payload.list[l].label,
-							'dataId': -1,
-							'data': {
-								'header': payload.list[l].label,
-								'p': 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']',
-								'img': payload.list[l].id,
-								'showImageDetails': true
+							label: payload.list[l].label,
+							dataId: -1,
+							data: {
+								header: payload.list[l].label,
+								p: 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']',
+								img: payload.list[l].id,
+								showImageDetails: true
 							}
 						}));
 						if (payload.list[l].id === 0) {

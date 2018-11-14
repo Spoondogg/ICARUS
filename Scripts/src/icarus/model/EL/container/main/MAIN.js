@@ -332,7 +332,7 @@ export default class MAIN extends CONTAINER {
         })); //'token': this.getMainContainer().getToken()
 		let form = FORM.createEmptyForm(this.body.pane);
 		$(form.el).appendTo(dialog.body.el);
-		form.setPostUrl('/Account/Login');
+		form.setAction('/Account/Login');
 		form.id = 0;
 		form.label = 'Login';
 		form.el.setAttribute('id', 0);

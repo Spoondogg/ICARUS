@@ -33,7 +33,7 @@ export default class CHAT extends CONTAINER {
 			})
 		];
 		this.form.fieldset.formElementGroup.addInputElements(inputs);
-		this.form.setPostUrl('CHAT/Talk');
+		this.form.setAction('CHAT/Talk');
 		/** Show the Payload response
             @param {Payload} payload The payload
             @returns {void}
