@@ -218,7 +218,7 @@ export default class CONTAINERFACTORY {
 			}));
 			dialog.form = FORM.createEmptyForm(dialog.body, false);
 			dialog.form.container = this;
-			dialog.form.addClass('saveContainer').setPostUrl(this.className + '/Set');
+            dialog.form.addClass('saveContainer').setAction(this.className + '/Set');
 			dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
 			dialog.form.afterSuccessfulPost = (payload) => {
 				console.log('Successful post', payload);
@@ -258,7 +258,7 @@ export default class CONTAINERFACTORY {
 				if (Reflect.call(data, key)) { // if (Object.prototype.hasOwnProperty.call(data, key)) {
 					//console.log('Key', key);
 					//console.log('Value', this.htmlEncode(data[key]));
-					inputs.push(this.createInputModel('INPUT', key, key, this.htmlEncode(data[key])));
+					inputs.push(this.createInputModel('INPUT', key, this.htmlEncode(data[key])));
 				}
 			}
 			form.children[0].children[0].addInputElements(inputs);

@@ -12,6 +12,11 @@ var urlsToCache = [
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'
 ];
+
+/*
+    @see https://developers.google.com/web/fundamentals/primers/service-workers/
+    @see https://developers.google.com/web/fundamentals/web-app-manifest/
+*/
 /*
 // inside service worker script
 self.onerror = (message) => {
@@ -25,9 +30,9 @@ self.addEventListener('error', (e) => {
     console.log('Service Worker Error', e);
 });
 
-// Perform install steps
 //https://developers.google.com/web/fundamentals/app-install-banners/
 self.addEventListener('install', (event) => {
+    // Perform install steps
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -40,6 +45,7 @@ self.addEventListener('install', (event) => {
     );
 });
 
+
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
@@ -49,10 +55,7 @@ self.addEventListener('fetch', (event) => {
                     return response;
                 }
                 return fetch(event.request);
-            })).catch((err) => {
-                console.log('Service Worker: Failed to fetch');
-                return null;
-            });
+            }));
 });
 
 self.addEventListener('activate', (event) => {

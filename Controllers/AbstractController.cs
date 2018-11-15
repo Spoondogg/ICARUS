@@ -72,6 +72,7 @@ namespace ICARUS.Controllers {
         /// Asynchrounously create the object on the database and return an instance of
         /// it to the user as a JSON object model
         /// </summary>
+        /// <param name="formPost">Posted values</param>
         /// <returns></returns>
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Dev,Admin")]
         public abstract Task<ActionResult> Create(FormPost formPost);

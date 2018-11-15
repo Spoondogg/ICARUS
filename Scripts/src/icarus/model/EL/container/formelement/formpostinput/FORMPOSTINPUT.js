@@ -180,7 +180,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				dialog.form.el.setAttribute('id', 3);
 				dialog.form.prompt = this;
 				this.addInputs(inputs, dialog.form);
-				dialog.form.setPostUrl('FormPost/Set');
+				dialog.form.setAction('FormPost/Set');
 				dialog.form.afterSuccessfulPost = (payload) => {
 					//this.successfulFormPost()
 					console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', payload);
@@ -326,7 +326,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		this.addFormElementGroupContainerCase(['INPUT', 'SELECT', 'TEXTAREA']);
 		this.addInputs(inputs, dialog.form);
 		dialog.form.children[0].children[0].toggleHeaders(); // Show headers so that inputs can be modified
-		dialog.form.setPostUrl('FormPost/Set');
+		dialog.form.setAction('FormPost/Set');
 		dialog.form.afterSuccessfulPost = () => { //console.log(100, 'Updated Attributes');            
 			this.updateInput(data.model.id);
 		};

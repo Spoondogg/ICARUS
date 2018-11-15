@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
@@ -102,6 +103,19 @@ namespace ICARUS.Models.Icarus.Elements {
             } catch (Exception e) {
                 this.innerException = "Failed to parse InnerException";
             }
+        }
+
+        /// <summary>
+        /// Construct a Payload for cases where an exception message is returned
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="exception"></param>
+        /// <param name="message"></param>
+        public Payload(int result, DbUpdateException exception, string message = "") {
+            this.result = result;
+            this.message = message; // += "\n\nException Details:\n" + exception.Data.ToString(); ;
+            this.exception = exception.Message;
+            this.innerException = exception.InnerException.ToString();
         }
     }
 }

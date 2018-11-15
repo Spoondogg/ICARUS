@@ -22,8 +22,7 @@ export default class FORM extends CONTAINER {
 		//this.el.setAttribute('onsubmit', 'return false;');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
-		this.setAction('Form/Submit');
-		this.updateUrl = 'Form/Update';
+        this.setAction('FORM/SUBMIT');
 		this.footer = new FORMFOOTER(this.body, new MODEL().set({
 			align: ALIGN.VERTICAL
 		}));
@@ -83,7 +82,7 @@ export default class FORM extends CONTAINER {
         @param {string} url Target url
         @returns {ThisType} Returns this form
     */
-	setAction(url = 'FORM/SUBMIT') {
+    setAction(url = 'FORM/SUBMIT') {
         //this.postUrl = url;
         this.attributes.action = url;
 		return this;
