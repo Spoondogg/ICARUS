@@ -35,8 +35,8 @@ namespace ICARUS.Controllers {
                 ? new MAIN()
                 : new MAIN(formPost);
             
-            obj.dateCreated = DateTime.UtcNow;
-            obj.dateLastModified = DateTime.UtcNow;
+            obj.dateCreated = DateTime.UtcNow.ToLocalTime();
+            obj.dateLastModified = DateTime.UtcNow.ToLocalTime();
 
             obj.setAuthorId(User.Identity.Name);
             return obj;

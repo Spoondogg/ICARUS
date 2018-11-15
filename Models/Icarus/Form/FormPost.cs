@@ -27,9 +27,10 @@ namespace ICARUS.Models.Icarus {
         /// </summary>
         [Range(0, int.MaxValue)]
         public int formId { get; set; }
-        
+
         /// <summary>
         /// The DateTime that this element was created
+        /// [Required, DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         /// </summary>
         [Required]
         public DateTime dateCreated { get; set; }

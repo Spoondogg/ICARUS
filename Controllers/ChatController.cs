@@ -70,8 +70,8 @@ namespace ICARUS.Controllers {
             formPost.authorId = User.Identity.Name;
             //formPost.label = "Sentence";
             // https://stackoverflow.com/questions/114983/given-a-datetime-object-how-do-i-get-an-iso-8601-date-in-string-format
-            formPost.dateCreated = DateTime.UtcNow;
-            formPost.dateLastModified = DateTime.UtcNow;
+            formPost.dateCreated = DateTime.UtcNow.ToLocalTime();
+            formPost.dateLastModified = DateTime.UtcNow.ToLocalTime();
 
             // Lets add some metadata to the post
             var message = new StringBuilder();
@@ -233,8 +233,8 @@ namespace ICARUS.Controllers {
                 formPost.authorId = User.Identity.Name;
                 //formPost.label = "Word";
                 formPost.status = 1;
-                formPost.dateCreated = DateTime.UtcNow;
-                formPost.dateLastModified = DateTime.UtcNow;
+                formPost.dateCreated = DateTime.UtcNow.ToLocalTime();
+                formPost.dateLastModified = DateTime.UtcNow.ToLocalTime();
                 formPost.results = new List<FormValue>();
                 formPost.results.Add(new FormValue("value", word));
                 formPost.resultsToXml();

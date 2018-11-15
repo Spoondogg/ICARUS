@@ -11,14 +11,15 @@ using System.Threading.Tasks;
 using ICARUS.Models.Icarus.Elements;
 using System.Threading;
 using System.Xml;
+using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
+using System.Net.Mail;
 
 namespace ICARUS.Controllers {
     public class FormPostController : AbstractController {
-
         public FormPostController() : base("FormPost") {
 
         }
-
         /// <summary>
         /// GET: FormPosts sorted descending by timestamp
         /// </summary>
@@ -40,8 +41,8 @@ namespace ICARUS.Controllers {
             formPost.formId = 0;
             formPost.authorId = User.Identity.Name;
             formPost.status = 1;
-            formPost.dateCreated = DateTime.UtcNow;
-            formPost.dateLastModified = DateTime.UtcNow;
+            formPost.dateCreated = DateTime.UtcNow.ToLocalTime();
+            formPost.dateLastModified = DateTime.UtcNow.ToLocalTime();
             formPost.results = new List<FormValue>();
             formPost.xmlResults = "<root></root>";
             formPost.resultsToXml();
@@ -82,17 +83,18 @@ namespace ICARUS.Controllers {
         public override async Task<ActionResult> Create(FormPost formPost) {
             // Set formPost attributes where applicable
             formPost.formId = formPost.id;
+            formPost.id = 0; // Id will be appended
             formPost.authorId = User.Identity.Name;
-            formPost.dateCreated = DateTime.UtcNow;
-            formPost.dateLastModified = DateTime.UtcNow;
+            formPost.dateCreated = DateTime.UtcNow.ToLocalTime();
+            formPost.dateLastModified = DateTime.UtcNow.ToLocalTime();
             formPost.resultsToXml();
-            //formPost.jsonResults = "";
 
             // Attempt to save the form to the database
             try {
                 // Save the object
                 getObjectDbContext().FormPosts.Add(formPost);
                 int success = getObjectDbContext().SaveChanges();
+                //this.sendEmail(success, formPost);
 
                 // Return the success response
                 return Json(new Payload(
@@ -100,12 +102,49 @@ namespace ICARUS.Controllers {
                     formPost.getMessage()
                 ));
 
+            // Why are you handling exceptions within the Payload..?  Derp.
+            } catch (DbUpdateException e) {
+                var message = e.Message;
+                return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
+            } catch (DbEntityValidationException e) {
+                var message = e.Message;
+                return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
             } catch (Exception e) {
-                // Return the form for debugging
-                return Json(new Payload(0, e, e.Message)); //new Exception(e.Message)
+                var message = e.Message;
+                return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
             }
         }
+        /// <summary>
+        /// Sends the FormPost as an email
+        /// </summary>
+        /// <param name="success"></param>
+        /// <param name="formPost"></param>
+        private void sendEmail(int success, FormPost formPost) {
+            // Send an email in a seperate thread so as not to hold up the form
+            // https://stackoverflow.com/questions/363377/how-do-i-run-a-simple-bit-of-code-in-a-new-thread
+            if (success == 1) {
+                new Thread(async () => {
+                    // http://www.mikesdotnetting.com/article/268/how-to-send-email-in-asp-net-mvc
+                    // Construct the message
+                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(User.Identity.Name));
+                    message.From = new MailAddress(User.Identity.Name);
+                    message.Subject = "Form ID: " + formPost.id;
+                    message.Body = string.Format(
+                        body, User.Identity.Name, User.Identity.Name,
+                        "Success: " + success + "\n\n" + formPost.getMessage()
+                    );
+                    message.IsBodyHtml = true;
 
+                    // Send the email asynchronously
+                    using (var smtp = new SmtpClient()) {
+                        await smtp.SendMailAsync(message);
+                    }
+
+                }).Start();
+            }
+        }
         /// <summary>
         /// Constructs the object and returns as Json
         /// </summary>
@@ -126,7 +165,6 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(0, new Exception(message), message), JsonRequestBehavior.AllowGet);
             }
         }
-
         /// <summary>
         /// Sets the value of the target object based on the given formPost values
         /// </summary>
@@ -134,7 +172,6 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override async Task<ActionResult> Set(FormPost formPost) {
             try {
-
                 // Extract values from FormPost
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
@@ -162,14 +199,13 @@ namespace ICARUS.Controllers {
                 result = ctx.SaveChanges();
 
                 // Return the success response along with the message body
-                return Json(new Payload(
-                    1, "FORMPOST", model, "Successfully set FORMPOST (" + model.id + "," + id + ")"
-                )); //, JsonRequestBehavior.AllowGet
+                return Json(new Payload(1, "FORMPOST", model, "Successfully set FORMPOST (" + model.id + "," + id + ")")); //, JsonRequestBehavior.AllowGet
 
+            } catch (DbEntityValidationException e) {
+                var message = e.Message;
+                return Json(new Payload(0, e, "DbEntityValidationException: " + formPost.getMessage() + "\n\n" + e.Message));
             } catch (Exception e) {
-                return Json(new Payload(
-                    0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString()
-                )); // JsonRequestBehavior.AllowGet
+                return Json(new Payload(0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString())); // JsonRequestBehavior.AllowGet
             }
         }
     }

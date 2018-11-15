@@ -313,10 +313,7 @@ namespace ICARUS.Controllers {
                 return Json(model);
             } catch (Exception e) {
                 return Json(
-                    new Payload(
-                        0,
-                        e
-,
+                    new Payload(0, e,
                         "Unable to create new instance of " +
                         this.className + "()\n" + e.ToString() + "\n\n" +
                         e.Message.ToString()), JsonRequestBehavior.AllowGet
@@ -348,7 +345,7 @@ namespace ICARUS.Controllers {
                         model.status = 1;
 
                         model.updateContainerModel(formPost);
-                        model.dateLastModified = DateTime.UtcNow;
+                        model.dateLastModified = DateTime.UtcNow.ToLocalTime();
 
                         // Save the object
                         db.dbSets[this.className].Add(model); // ctx.Containers.Add(model);
@@ -421,7 +418,7 @@ namespace ICARUS.Controllers {
                         int result = 0;
                         if (model != null) {
                             model.status = -1;
-                            model.dateLastModified = DateTime.UtcNow;
+                            model.dateLastModified = DateTime.UtcNow.ToLocalTime();
                             //model.updateContainerModel(formPost);
 
                             // Save the object

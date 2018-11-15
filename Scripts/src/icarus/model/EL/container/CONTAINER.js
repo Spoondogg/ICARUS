@@ -60,8 +60,7 @@ export default class CONTAINER extends GROUP {
 		this.label = model.label || element;
 		this.name = model.name || element;
 		this.shared = model.shared || 1;
-		this.status = model.status || STATUS.DEFAULT;
-		this.updateUrl = this.element + '/Set'; // model.className should be the actual value, no?                
+		this.status = model.status || STATUS.DEFAULT;           
 		this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
 		this.navBar = new NAVBAR(this, new MODEL().set({
 			label: this.label // model.label

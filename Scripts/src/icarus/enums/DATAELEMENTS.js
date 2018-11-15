@@ -58,7 +58,10 @@ export const DATAELEMENTS = {
     },
     FORM: {
         data: [],
-        attributes: []
+        attributes: [
+            createInputModel('INPUT', 'method', 'POST'),
+            createInputModel('INPUT', 'action', 'FORM/SUBMIT')
+        ]
     },
     FORMELEMENT: {
         data: [
