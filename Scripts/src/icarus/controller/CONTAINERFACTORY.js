@@ -47,144 +47,148 @@ export default class CONTAINERFACTORY {
 	    @returns {CONTAINER} A newly constructed container
 	*/
 	get(node, className, id) {
-		//console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
-		let span = new SPAN(node, new MODEL());
-		let index = node.children.push(span); // Reserve the slot in the array        
-		return $.getJSON('/' + className + '/Get/' + id, (result) => {
-			let obj = null;
-			switch (className) {
-				case 'ARTICLE':
-					obj = new ARTICLE(span, result.model);
-					break;
-				case 'BANNER':
-					obj = new BANNER(span, result.model);
-					break;
-				case 'CALLOUT':
-					obj = new CALLOUT(span, result.model);
-					break;
-				case 'CHAT':
-					obj = new CHAT(span, result.model);
-					break;
-				case 'CLASSVIEWER':
-					obj = new CLASSVIEWER(span, result.model);
-					break;
-				case 'DICTIONARY':
-					obj = new DICTIONARY(span, result.model);
-					break;
-				case 'FORM':
-					obj = new FORM(span, result.model);
-					break;
-				case 'FIELDSET':
-					obj = new FIELDSET(span, result.model);
-					break;
-				case 'FORMELEMENT':
-					if (result.model.type === 'FORMPOSTINPUT') {
-						obj = new FORMPOSTINPUT(span, result.model);
-					} else {
-						switch (result.model.element) {
-							case 'TEXTAREA':
-								obj = new FORMTEXTAREA(span, result.model);
-								break;
-							case 'SELECT':
-								obj = new FORMSELECT(span, result.model);
-								break;
-							case 'INPUT':
-								obj = new FORMINPUT(span, result.model);
-								break;
-							default:
-								obj = new FORMINPUT(span, result.model);
-								break;
-						}
-					}
-					break;
-				case 'FORMELEMENTGROUP':
-					obj = new FORMELEMENTGROUP(span, result.model);
-					break;
-				case 'FORMINPUT':
-					obj = new FORMINPUT(span, result.model);
-					break;
-				case 'FORMSELECT':
-					obj = new FORMSELECT(span, result.model);
-					break;
-				case 'FORMTEXTAREA':
-					obj = new FORMTEXTAREA(span, result.model);
-					break;
-				case 'IMAGEGALLERY':
-					obj = new IMAGEGALLERY(span, result.model);
-					break;
-				case 'INDEX':
-					obj = new INDEX(span, result.model);
-					break;
-				case 'INDEXMAIN':
-					obj = new INDEXMAIN(span, result.model);
-					break;
-				case 'INDEXTHUMBNAIL':
-					obj = new INDEXTHUMBNAIL(span, result.model);
-					break;
-				case 'JUMBOTRON':
-					obj = new JUMBOTRON(span, result.model);
-					break;
-				case 'LI':
-					obj = new LI(span, result.model);
-					break;
-				case 'LIST':
-					obj = new LIST(span, result.model);
-					break;
-				case 'LISTITEM':
-					obj = new LISTITEM(span, result.model);
-					break;
-				case 'MENULIST':
-					obj = new MENULIST(span, result.model);
-					break;
-				case 'MENU':
-					obj = new MENU(span, result.model);
-					break;
-				case 'NAVITEM':
-					obj = new NAVITEM(span, result.model);
-					break;
-				case 'NAVSEPARATOR':
-					obj = new NAVSEPARATOR(span, result.model);
-					break;
-				case 'OPTION':
-					obj = new OPTION(span, result.model);
-					break;
-				case 'SECTION':
-					obj = new SECTION(span, result.model);
-					break;
-				case 'SPAN':
-					obj = new SPAN(span, result.model);
-					break;
-				case 'TEXTBLOCK':
-					obj = new TEXTBLOCK(span, result.model);
-					break;
-				case 'THUMBNAIL':
-					obj = new NAVTHUMBNAIL(span, result.model);
-					break;
-				case 'UL':
-					obj = new UL(span, result.model);
-					break;
-				case 'WORD':
-					obj = new WORD(span, result.model);
-					break;
-				default:
-					throw Error('No constructor exists for CONTAINER{' + className + '}');
-			}
-			node.children[index] = obj;
-			try {
-				// Inject CRUD actions and dependencies
-				obj.container = obj.getProtoTypeByClass('CONTAINER');
-				obj.save = this.save;
-				//obj.quickSave = this.quickSave;
-				obj.quickSaveFormPost = this.quickSaveFormPost;
-				// Overwrite span with 
-				span.el.parentNode.replaceChild(obj.el, span.el);
-			} catch (e) {
-				span.destroy();
-				node.children.splice(index, 1);
-				console.log(e);
-			}
-			return node.children[index];
-		});
+        //console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
+        let span = new SPAN(node, new MODEL());
+        let index = node.children.push(span); // Reserve the slot in the array        
+        return $.getJSON('/' + className + '/Get/' + id, (payload) => {
+            let obj = null;
+            if (payload.className !== 'ERROR') {
+                switch (className) {
+                    case 'ARTICLE':
+                        obj = new ARTICLE(span, payload.model);
+                        break;
+                    case 'BANNER':
+                        obj = new BANNER(span, payload.model);
+                        break;
+                    case 'CALLOUT':
+                        obj = new CALLOUT(span, payload.model);
+                        break;
+                    case 'CHAT':
+                        obj = new CHAT(span, payload.model);
+                        break;
+                    case 'CLASSVIEWER':
+                        obj = new CLASSVIEWER(span, payload.model);
+                        break;
+                    case 'DICTIONARY':
+                        obj = new DICTIONARY(span, payload.model);
+                        break;
+                    case 'FORM':
+                        obj = new FORM(span, payload.model);
+                        break;
+                    case 'FIELDSET':
+                        obj = new FIELDSET(span, payload.model);
+                        break;
+                    case 'FORMELEMENT':
+                        if (payload.model.type === 'FORMPOSTINPUT') {
+                            obj = new FORMPOSTINPUT(span, payload.model);
+                        } else {
+                            switch (payload.model.element) {
+                                case 'TEXTAREA':
+                                    obj = new FORMTEXTAREA(span, payload.model);
+                                    break;
+                                case 'SELECT':
+                                    obj = new FORMSELECT(span, payload.model);
+                                    break;
+                                case 'INPUT':
+                                    obj = new FORMINPUT(span, payload.model);
+                                    break;
+                                default:
+                                    obj = new FORMINPUT(span, payload.model);
+                                    break;
+                            }
+                        }
+                        break;
+                    case 'FORMELEMENTGROUP':
+                        obj = new FORMELEMENTGROUP(span, payload.model);
+                        break;
+                    case 'FORMINPUT':
+                        obj = new FORMINPUT(span, payload.model);
+                        break;
+                    case 'FORMSELECT':
+                        obj = new FORMSELECT(span, payload.model);
+                        break;
+                    case 'FORMTEXTAREA':
+                        obj = new FORMTEXTAREA(span, payload.model);
+                        break;
+                    case 'IMAGEGALLERY':
+                        obj = new IMAGEGALLERY(span, payload.model);
+                        break;
+                    case 'INDEX':
+                        obj = new INDEX(span, payload.model);
+                        break;
+                    case 'INDEXMAIN':
+                        obj = new INDEXMAIN(span, payload.model);
+                        break;
+                    case 'INDEXTHUMBNAIL':
+                        obj = new INDEXTHUMBNAIL(span, payload.model);
+                        break;
+                    case 'JUMBOTRON':
+                        obj = new JUMBOTRON(span, payload.model);
+                        break;
+                    case 'LI':
+                        obj = new LI(span, payload.model);
+                        break;
+                    case 'LIST':
+                        obj = new LIST(span, payload.model);
+                        break;
+                    case 'LISTITEM':
+                        obj = new LISTITEM(span, payload.model);
+                        break;
+                    case 'MENULIST':
+                        obj = new MENULIST(span, payload.model);
+                        break;
+                    case 'MENU':
+                        obj = new MENU(span, payload.model);
+                        break;
+                    case 'NAVITEM':
+                        obj = new NAVITEM(span, payload.model);
+                        break;
+                    case 'NAVSEPARATOR':
+                        obj = new NAVSEPARATOR(span, payload.model);
+                        break;
+                    case 'OPTION':
+                        obj = new OPTION(span, payload.model);
+                        break;
+                    case 'SECTION':
+                        obj = new SECTION(span, payload.model);
+                        break;
+                    case 'SPAN':
+                        obj = new SPAN(span, payload.model);
+                        break;
+                    case 'TEXTBLOCK':
+                        obj = new TEXTBLOCK(span, payload.model);
+                        break;
+                    case 'THUMBNAIL':
+                        obj = new NAVTHUMBNAIL(span, payload.model);
+                        break;
+                    case 'UL':
+                        obj = new UL(span, payload.model);
+                        break;
+                    case 'WORD':
+                        obj = new WORD(span, payload.model);
+                        break;
+                    default:
+                        throw Error('No constructor exists for CONTAINER{' + className + '}');
+                }
+                node.children[index] = obj;
+                try {
+                    // Inject CRUD actions and dependencies
+                    obj.container = obj.getProtoTypeByClass('CONTAINER');
+                    obj.save = this.save;
+                    //obj.quickSave = this.quickSave;
+                    obj.quickSaveFormPost = this.quickSaveFormPost;
+                    // Overwrite span with 
+                    span.el.parentNode.replaceChild(obj.el, span.el);
+                } catch (e) {
+                    span.destroy();
+                    node.children.splice(index, 1);
+                    console.log(e);
+                }
+                return node.children[index];
+            } else {
+                console.warn('An Error Occurred', className + '/Get/' + id, payload);
+            }
+        });
 	}
 	/* eslint-enable max-lines-per-function, complexity */
 	/** Saves the state of the given Container

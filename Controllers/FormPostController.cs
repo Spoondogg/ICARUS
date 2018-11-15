@@ -55,8 +55,6 @@ namespace ICARUS.Controllers {
         public override async Task<ActionResult> Create() {
             try {
                 var model = createEmptyFormPost();
-
-                // Save the object
                 db.dbSets[this.className].Add(model);
                 int result = getObjectDbContext().SaveChanges();
 
@@ -68,8 +66,8 @@ namespace ICARUS.Controllers {
 
             } catch (Exception e) {
                 return Json(new Payload(0, e,
-                    "Unable to create new instance of " +
-                        this.className + "()\n" + e.ToString() + "\n\n" +
+                    "FormPostController.Create(): Unable to create new instance of " +
+                        this.className + "(" + e.GetType() + ")\n" + e.ToString() + "\n\n" +
                         e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
@@ -100,15 +98,7 @@ namespace ICARUS.Controllers {
                 return Json(new Payload(
                     1, "FORMPOST", formPost,
                     formPost.getMessage()
-                ));
-
-            // Why are you handling exceptions within the Payload..?  Derp.
-            } catch (DbUpdateException e) {
-                var message = e.Message;
-                return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
-            } catch (DbEntityValidationException e) {
-                var message = e.Message;
-                return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
+                ));                
             } catch (Exception e) {
                 var message = e.Message;
                 return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
@@ -201,9 +191,6 @@ namespace ICARUS.Controllers {
                 // Return the success response along with the message body
                 return Json(new Payload(1, "FORMPOST", model, "Successfully set FORMPOST (" + model.id + "," + id + ")")); //, JsonRequestBehavior.AllowGet
 
-            } catch (DbEntityValidationException e) {
-                var message = e.Message;
-                return Json(new Payload(0, e, "DbEntityValidationException: " + formPost.getMessage() + "\n\n" + e.Message));
             } catch (Exception e) {
                 return Json(new Payload(0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString())); // JsonRequestBehavior.AllowGet
             }
