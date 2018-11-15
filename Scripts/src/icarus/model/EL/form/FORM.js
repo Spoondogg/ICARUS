@@ -6,6 +6,7 @@ import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
+import HEADER from '../header/HEADER.js';
 /** An Icarus Form Object
     @description An FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
@@ -18,9 +19,13 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model The object model
 	*/
 	constructor(node, model) {
-		super(node, 'FORM', model, ['FIELDSET']); //
+		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
 		//this.el.setAttribute('onsubmit', 'return false;');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
+        this.header = new HEADER(this.body.pane, new MODEL().set({
+            label: model.label
+        }));
+        $(this.header.el).insertBefore(this.body.pane.el);
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
         this.footer = new FORMFOOTER(this.body, new MODEL().set({
 			align: ALIGN.VERTICAL
@@ -59,6 +64,7 @@ export default class FORM extends CONTAINER {
 		return this.addGroup(this.children[this.children.length - 1]);
 	}
 	/** Populates this form with a single fieldset and formelementgroup
+        NavBars are hidden for these elements
 	    @param {EL} node Parent node
 	    @param {boolean} hidden If true, form is hidden
 	    @returns {FORM} An empty form container

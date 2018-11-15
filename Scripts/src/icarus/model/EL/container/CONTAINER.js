@@ -601,7 +601,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
 	*/
 	toggleHeaders() {
-		//$(this.el).find('.icarus-container nav.navbar-nav').toggle();
+		$(this.el).find('.icarus-container > nav').toggle();
 		console.log('CONTAINER.toggleHeaders()');
 	}
 	/** Creates a DIALOG and if user permits, deletes this CONTAINER from the DOM.
