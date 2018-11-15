@@ -76,38 +76,62 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="exception"></param>
         /// <param name="message"></param>
         public Payload(int result, Exception exception, string message = "") {
+            this.className = "ERROR";
             this.result = result;
-            this.message = message += "\n\nException(" + exception.GetType() + ") Details:\n" + exception.Data.ToString(); ;
-            this.exception = exception.Message;
+            this.exception = exception.GetType().ToString();
+            this.message = exception.Message;
 
-
-
+            // Exception specific actions
+            switch (this.exception) {
+                case "System.Data.Entity.Validation.DbEntityValidationException":
+                    this.entityException((DbEntityValidationException)exception, this);
+                    break;
+                case "System.Collections.Generic.KeyNotFoundException":
+                    this.keyException((KeyNotFoundException)exception, this);
+                    break;
+                default:
+                    this.message = message += "\n\nException(" + exception.GetType() + ") Details:\n" + exception.Data.ToString() + "\n\n" + exception.Message;
+                    break;
+            }
         }
-
         /// <summary>
-        /// Construct a Payload for cases where an exception message is returned
+        /// Processes Inner Exceptions of an Entity Validation Exception
         /// </summary>
-        /// <param name="result"></param>
-        /// <param name="exception"></param>
-        /// <param name="message"></param>
-        public Payload(int result, DbEntityValidationException exception, string message = "") {
-            this.result = result;
-            this.message = message; // += "\n\nException Details:\n" + exception.Data.ToString(); ;
-            this.exception = exception.Message;
+        /// <param name="ex">An Entity Validation Exception</param>
+        /// <param name="payload">The Payload that is being processsed</param>
+        private void keyException(KeyNotFoundException ex, Payload payload) {
             this.innerException = "";
             try {
-                foreach (var eve in exception.EntityValidationErrors) {
-                    foreach (var ve in eve.ValidationErrors) {
-                        //this.innerException += "\n ==> - Property: " + ve.PropertyName + ", Error: " + ve.ErrorMessage;
-                        this.innerException += "\n ==> " + ve.PropertyName + ": " + ve.ErrorMessage;
-                        this.message += "\n ==> " + ve.PropertyName + ": " + ve.ErrorMessage;
+                foreach (var e in (ex.Data)) {
+                    payload.innerException += "{" + e.GetType() + "} => " + e.ToString() + "\n";
+                }
+            } catch (Exception e) {
+                payload.innerException = "Failed to parse InnerException";
+            }
+        }
+        /// <summary>
+        /// Processes Inner Exceptions of an Entity Validation Exception
+        /// </summary>
+        /// <param name="ex">An Entity Validation Exception</param>
+        /// <param name="payload">The Payload that is being processsed</param>
+        private void entityException(DbEntityValidationException ex, Payload payload) {
+            this.innerException = "";
+            try {
+                foreach (var err in (ex.EntityValidationErrors)) {
+                    foreach (var e in err.ValidationErrors) {
+                        payload.innerException += "{" + e.GetType() + "} => " + e.PropertyName + ": " + e.ErrorMessage + "\n";
+                        if (e.PropertyName == "authorId") {
+                            payload.exception = "AuthenticationException";
+                            payload.message = "An Authentication Error Occurred.";
+                            break;
+                        }
                     }
                 }
             } catch (Exception e) {
-                this.innerException = "Failed to parse InnerException";
+                payload.innerException = "Failed to parse InnerException";
             }
         }
-
+        /*
         /// <summary>
         /// Construct a Payload for cases where an exception message is returned
         /// </summary>
@@ -115,10 +139,11 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="exception"></param>
         /// <param name="message"></param>
         public Payload(int result, DbUpdateException exception, string message = "") {
-            this.result = result;
-            this.message = message; // += "\n\nException Details:\n" + exception.Data.ToString(); ;
-            this.exception = exception.Message;
-            this.innerException = exception.InnerException.ToString();
+           this.result = result;
+           this.message = message; // += "\n\nException Details:\n" + exception.Data.ToString(); ;
+           this.exception = exception.Message;
+           this.innerException = exception.InnerException.ToString();
         }
+        */
     }
 }
