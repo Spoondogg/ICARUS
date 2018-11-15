@@ -256,8 +256,8 @@ namespace ICARUS.Controllers {
                 ), JsonRequestBehavior.AllowGet);
             } catch (Exception e) {
                 return Json(new Payload(0, e,
-                    "Unable to create new instance of " +
-                        this.className + "()\n" + e.ToString() + "\n\n" +
+                    "Container.Create(): Unable to create new instance of " +
+                        this.className + "(" + e.GetType() + ")\n" + e.ToString() + "\n\n" +
                         e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
@@ -301,8 +301,8 @@ namespace ICARUS.Controllers {
             } catch (Exception e) {
                 return Json(
                     new Payload(0, e,
-                        "Unable to create new instance of " +
-                        this.className + "()\n" + e.ToString() + "\n\n" +
+                        "Container.Create(FormPost): Unable to create new instance of " +
+                        this.className + "(" + e.GetType() + ")\n" + e.ToString() + "\n\n" +
                         e.Message.ToString()), JsonRequestBehavior.AllowGet
                 );
             }
