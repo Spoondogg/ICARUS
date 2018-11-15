@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace ICARUS.Models.Icarus {
-
     /// <summary>
     /// An Icarus Form Value Object 
     /// </summary>
     public class FormValue {
-
         public int id { get; set; }
 
         [StringLength(128), Required]
@@ -24,9 +21,8 @@ namespace ICARUS.Models.Icarus {
         public FormValue() {
 
         }
-
         /// <summary>
-        /// Construct an Icarus Form Post Object
+        /// Construct an Icarus Form Value Object
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -35,9 +31,8 @@ namespace ICARUS.Models.Icarus {
             this.type = "TEXT";
             this.value = value;            
         }
-
         /// <summary>
-        /// Construct an Icarus Form Post Object
+        /// Construct an Icarus Form Value Object
         /// </summary>
         /// <param name="name"></param>
         /// <param name="type"></param>
