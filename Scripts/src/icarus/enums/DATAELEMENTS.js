@@ -155,7 +155,7 @@ export const DATAELEMENTS = {
         attributes: []
     },
     TEXTBLOCK: {
-        data: [createInputModel('INPUT', 'text', 'Text')],
+        data: [createInputModel('INPUT', 'text', '')],
         attributes: []
     },
     THUMBNAIL: {

@@ -4,7 +4,7 @@ import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
-import LEGEND from '../../legend/LEGEND.js';
+import HEADER from '../../header/HEADER.js';
 /** A container made up of a group of form elements
     @class
     @extends CONTAINER
@@ -17,10 +17,10 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'DIV', model, []);
         this.addClass('form-element-group');
-        this.legend = new LEGEND(this.body.pane, new MODEL().set({
+        this.header = new HEADER(this.body.pane, new MODEL().set({
             label: model.label
         }));
-        $(this.legend.el).insertBefore(this.body.pane.el);
+        $(this.header.el).insertBefore(this.body.pane.el);
 		this.navBar.menu.menu.getGroup('ELEMENTS').empty();
         ['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 		this.populate(model.children);

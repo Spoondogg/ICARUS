@@ -52,7 +52,9 @@ export default class CONTAINERFACTORY {
         let index = node.children.push(span); // Reserve the slot in the array        
         return $.getJSON('/' + className + '/Get/' + id, (payload) => {
             let obj = null;
-            if (payload.className !== 'ERROR') {
+            if (payload.className === 'ERROR') {
+                console.warn('An Error Occurred', className + '/Get/' + id, payload);
+            } else {
                 switch (className) {
                     case 'ARTICLE':
                         obj = new ARTICLE(span, payload.model);
@@ -185,8 +187,6 @@ export default class CONTAINERFACTORY {
                     console.log(e);
                 }
                 return node.children[index];
-            } else {
-                console.warn('An Error Occurred', className + '/Get/' + id, payload);
             }
         });
 	}
