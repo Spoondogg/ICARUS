@@ -45,14 +45,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		}
 		if (this.attributes.value > 0) { //  || this.value > 0
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
-			btnEdit.el.onclick = () => this.editAttributes();
+            btnEdit.el.onclick = () => this.editFormPost(this.input.attributes.value);
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
-		btnNew.el.onclick = () => {
-			let className = this.input.el.form.className.value;
-			console.log('THIS FORM', className);
-			this.newFormPost(className, this.attributes.name, this);
-        }
+		btnNew.el.onclick = () => this.newFormPost(this.input.el.form.className.value, this.attributes.name);
 	}
 	/** Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
@@ -78,11 +74,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         @see DATAELEMENTS DataElements contains arrays for each Container
 	*/
 	appendAdditionalModelInputs(inputs, model) {
-        try { // Append any model inputs if they exist
+        try {
             model.forEach((i) => inputs.push(i));
-			//for (let m = 0; m < model.length; m++) {
-			//	inputs.push(model[m]);
-			//}
 		} catch (e) {
 			console.warn('No additional inputs exist for this form post', e);
 		}
@@ -91,31 +84,33 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	/** Opens a Form within a dialog, populated with the state of the given container
         @param {string} className The container className
         @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
-        @param {MODEL} model Model 
-        @returns {Promise<string>} Promise to create a new FormPost Object and retrieve its ID
+        @returns {Promise<string>} Promise to create a new FormPost DIALOG and return its FORM
     */
-	newFormPost(className, dataIdLabel, model) {
-		console.log('New Data Attributes Form', className, dataIdLabel, model, this);
+	newFormPost(className, dataIdLabel) {
 		return new Promise((resolve, reject) => {
-            console.log('newFormPost', className, dataIdLabel, model);
-			try { // Generate new FormPost            
-				$.getJSON('/FORMPOST/Get/0', (data) => {
-					let inputs = this.defaultInputArray(data);
-					this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
-					console.warn('APPEND ME', data);
-					if (dataIdLabel === 'dataId') { // Append additional dataElements
-						inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].data);
+			try {           
+				$.getJSON('/FORMPOST/Get/0', (payload) => {
+					let inputs = this.defaultInputArray(payload);
+					this.input.el.setAttribute('value', payload.model.id); // Set values in MODEL and DOM
+                    switch (dataIdLabel) {
+                        case 'dataId':
+                            inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].data);
+                            break;
+                        case 'attributesId':
+                            inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].attributes);
+                            break;
+                        case 'descriptionId':
+                            inputs.push(createInputModel('TEXTAREA', 'description'));
+                            break;
+                        default:
+                            throw Error('Invalid DataIdLabel');
                     }
-                    if (dataIdLabel === 'attributesId') {
-                        inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].attributes);
-                    }
-					if (dataIdLabel === 'descriptionId') {
-						inputs.push(createInputModel('TEXTAREA', 'description'));
-					}
-					let dialog = this.createFormDialog(inputs, this.getContainer());
-					//dialog.show();
-					this.form = dialog.form;
-					resolve(this.form);
+					
+                    this.createFormDialog(inputs, this.getContainer()).then((dialog) => {
+                        dialog.show();
+                        this.form = dialog.form;
+                        resolve(this.form);
+                    });
 				});
 			} catch (e) {
 				console.log(0, 'Unable to retrieve FormPost.', e);
@@ -134,23 +129,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	successfulFormPost(data, container) {
 		this.updateInput(data.model.id);
-		/*
-        let promise = new Promise((resolve) => { // reject
-			container.save(true) //container, container, 
-			resolve(true);
-		});
-		promise.then((result) => {
-			//console.log('Promise success', result);
-			let cc = container.getProtoTypeByClass('CONTAINER');
-			if (cc !== null) {
-				cc.refresh();
-			}
-			return result;
-		}, (err) => {
-			console.log('promise fail', err);
-			return err; //console.log('promise fail', err);
-		});
-        */
 		return container.save(true).then((result) => {
 			let cc = container.getProtoTypeByClass('CONTAINER');
 			if (cc !== null) {
@@ -174,7 +152,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     label: 'Create FormPost Form',
                     container
 				}));
-				console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
+				//console.log('FORMPOSTINPUT: CreateForm(inputs)', inputs);
 				dialog.form = FORM.createEmptyForm(dialog.body);
 				dialog.form.id = 3; //console.log('formpostinput: 3');
 				dialog.form.el.setAttribute('id', 3);
@@ -187,7 +165,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 					dialog.close();
 				};
 				//return dialog;
-				resolve(dialog.show());
+                //dialog.show();
+				resolve(dialog);
 			} catch (e) {
 				reject(e);
 			}
@@ -214,56 +193,61 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			}
 		}
 	}
-	/** Opens a Modal Form populated with an open version of the FormPost
-        @returns {Promise} Promise to create an edit form for this object
+	/** Opens a Form within a dialog, populated with the state of the given container
+        @param {number} id FormPost Id to edit
+        @returns {Promise} Promise to return a DIALOG with an EDIT form for this object
     */
-	editAttributes() {
-		return new Promise(
-			(resolve, reject) => {
-				try { // Generate new FormPost            
-					$.getJSON('/FORMPOST/Get/' + this.input.attributes.value, (data) => { // If access granted...
-						if (data.model) {
-							let inputs = this.defaultInputArray(data);
-							this.input.el.setAttribute('value', data.model.id); // Set values in MODEL and DOM
-							switch (this.attributes.name) {
-								case 'dataId':
-									inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[this.input.el.form.elements.className.value].data);
-                                    break;
-                                case 'attributesId':
-                                    inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[this.input.el.form.elements.className.value].attributes);
-                                    break;
-								case 'descriptionId':
-									inputs.push(createInputModel('TEXTAREA', 'description'));
-									break;
-								default:
-									console.log('Unidentified attribute name', this.attributes.name);
-							}
-							if (data.model.jsonResults) { // loop through data.model and set values accordingly
-								let i = 0;
-								let jsonResults = JSON.parse(data.model.jsonResults);
-								console.log('data.model', data.model);
-								console.log('INPUTS', inputs);
-								console.log('JSONRESULTS', jsonResults);
-								jsonResults.forEach((inp) => {
-									//console.log('INP[' + i + ']', inp);
-									inputs[i].attributes.value = inp.value;
-									i++;
-								});
-							} else {
-								console.log('Json Results empty');
-							}
-                            let dialog = this.createFormDialog(inputs, this.getContainer());
-							this.form = dialog.form;
-							resolve(this.form);
-						} else {
-							reject(this.getMainContainer().login());
+	editFormPost(id) {
+		return new Promise((resolve, reject) => {
+			try {           
+				$.getJSON('/FORMPOST/Get/' + id, (payload) => { // If access granted...
+                    if (payload.model) {
+                        let className = this.input.el.form.elements.className.value;
+                        let attribute = this.attributes.name;
+
+						let inputs = this.defaultInputArray(payload);
+						this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
+                        switch (attribute) {
+							case 'dataId':
+								inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].data);
+                                break;
+                            case 'attributesId':
+                                inputs = this.appendAdditionalModelInputs(inputs, DATAELEMENTS[className].attributes);
+                                break;
+							case 'descriptionId':
+								inputs.push(createInputModel('TEXTAREA', 'description'));
+								break;
+							default:
+                                console.log('Unidentified attribute name', attribute);
 						}
-					});
-				} catch (e) {
-					console.log(0, 'Unable to retrieve FormPost.', e);
-					reject(e);
-				}
-			});
+                            
+                        this.createFormDialog(inputs, this.getContainer()).then((dialog) => {
+                            dialog.show();
+                            this.form = dialog.form;
+
+                            // Set values based on existing 
+                            if (payload.model.jsonResults) {
+                                let jsonResults = JSON.parse(payload.model.jsonResults);
+                                console.log('INPUTS', inputs);
+                                jsonResults.forEach((inp) => {
+                                    console.log('Setting Form Element[' + inp.name + '] to "' + inp.value + '"', inp);
+                                    this.form.el.elements[inp.name].value = inp.value;
+                                });
+                            } else {
+                                console.log('Json Results empty');
+                            }                                
+                                
+                            resolve(dialog);
+                        });
+					} else {
+						reject(this.getMainContainer().login());
+					}
+				});
+			} catch (e) {
+				console.log(0, 'Unable to retrieve FormPost.', e);
+				reject(e);
+			}
+		});
 	}
 	/** Iterates through the parsed json results and creates
 	    a collection of INPUTS with associated parameters

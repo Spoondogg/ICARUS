@@ -128,11 +128,6 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns></returns>
         public virtual async Task<ActionResult> List() {
-            /*
-            var list = from s in selectAll(getObjectDbContext())
-                       where s.authorId == User.Identity.Name || s.shared == 1
-                       select s;
-            */
             var list = selectAll(getObjectDbContext());
             list = list.OrderByDescending(s => s.id);
 
@@ -140,8 +135,7 @@ namespace ICARUS.Controllers {
             result.Add("className", className);
 
             List<Dictionary<string, object>> listArray = new List<Dictionary<string, object>>();
-            foreach (var li in list) {
-                
+            foreach (var li in list) {                
                 Dictionary<string, object> attribs = new Dictionary<string, object>();
                 attribs.Add("id", li.id);
                 attribs.Add("label", li.label);
@@ -151,8 +145,6 @@ namespace ICARUS.Controllers {
             result.Add("list", listArray);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
-        // http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2 [Authorize]
         
         /// <summary>
         /// Returns a list of Container Ids that contain this container
@@ -195,9 +187,6 @@ namespace ICARUS.Controllers {
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
-
-        // http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2 [Authorize]
-
         /// <summary>
         /// Returns a list of Container Ids that contain this container
         /// </summary>
@@ -234,7 +223,7 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Returns a list of Container Ids that contain this container
+        /// Returns a list of Container Ids that have this container as one of its children
         /// </summary>
         /// <returns>A Json Object</returns>
         [Authorize]
@@ -273,7 +262,6 @@ namespace ICARUS.Controllers {
                 );
             }
         }
-
         /// <summary>
         /// Create an instance of a Container on the database
         /// </summary>
@@ -299,7 +287,6 @@ namespace ICARUS.Controllers {
                 return View();
             }
         }
-
         /// <summary>
         /// Create an instance of a Container on the database based on the given formPost
         /// </summary>
@@ -320,7 +307,6 @@ namespace ICARUS.Controllers {
                 );
             }
         }
-
         /// <summary>
         /// Sets the value of the target object based on the given formPost values
         /// </summary>
@@ -328,7 +314,6 @@ namespace ICARUS.Controllers {
         /// <returns>A Json Object</returns>
         public override async Task<ActionResult> Set(FormPost formPost) {
             try {
-
                 // Extract values from FormPost
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
@@ -340,7 +325,6 @@ namespace ICARUS.Controllers {
                 // Set new values
                 int result = 0;
                 if (model != null) {
-
                     if(model.authorId == User.Identity.Name) {
                         model.status = 1;
 
@@ -361,8 +345,7 @@ namespace ICARUS.Controllers {
                         return Json(new Payload(
                             0, "You are not authorized to modify this " + this.className + "(" + id + ")"
                         ), JsonRequestBehavior.AllowGet);
-                    }                    
-
+                    }
                 } else {
                     return Json(new Payload(
                         0, "Failed to retrieve " + this.className + "(" + id + ").  The request returned null."
@@ -376,7 +359,6 @@ namespace ICARUS.Controllers {
                 );
             }
         }
-
         /// <summary>
         /// Asynchrounously set the given object's active state to false if the user is the 
         /// author of this object.

@@ -2,7 +2,6 @@
 import FORMSELECT, { OPTION } from '../model/el/container/formelement/formselect/FORMSELECT.js';
 import MENULIST, { LI, UL } from '../model/el/container/menulist/MENULIST.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from '../model/el/span/SPAN.js';
-//import EL, { ATTRIBUTES, MODEL } from '../model/el/EL.js';
 import ARTICLE from '../model/el/article/ARTICLE.js';
 import BANNER from '../model/el/container/banner/BANNER.js';
 import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
@@ -30,7 +29,6 @@ import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../model/el/nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
-//import TOKEN from '../model/el/container/formelement/forminput/TOKEN.js';
 import WORD from '../model/el/container/word/WORD.js';
 /** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
@@ -80,8 +78,6 @@ export default class CONTAINERFACTORY {
 					obj = new FIELDSET(span, result.model);
 					break;
 				case 'FORMELEMENT':
-					//obj = new FORMELEMENT(span, result.model);
-					//break;
 					if (result.model.type === 'FORMPOSTINPUT') {
 						obj = new FORMPOSTINPUT(span, result.model);
 					} else {
@@ -104,9 +100,6 @@ export default class CONTAINERFACTORY {
 				case 'FORMELEMENTGROUP':
 					obj = new FORMELEMENTGROUP(span, result.model);
 					break;
-					//case 'FORMPOSTINPUT':
-					//	obj = new FORMPOSTINPUT(span, result.model);
-					//	break;
 				case 'FORMINPUT':
 					obj = new FORMINPUT(span, result.model);
 					break;
@@ -116,9 +109,6 @@ export default class CONTAINERFACTORY {
 				case 'FORMTEXTAREA':
 					obj = new FORMTEXTAREA(span, result.model);
 					break;
-				//case 'IFRAME':
-					//obj = new IFRAME(span, result.model);
-					//break;
 				case 'IMAGEGALLERY':
 					obj = new IMAGEGALLERY(span, result.model);
 					break;
@@ -158,9 +148,6 @@ export default class CONTAINERFACTORY {
 				case 'OPTION':
 					obj = new OPTION(span, result.model);
 					break;
-					//case 'PARAGRAPH':
-					//	obj = new PARAGRAPH(span, result.model);
-					//	break;
 				case 'SECTION':
 					obj = new SECTION(span, result.model);
 					break;
@@ -180,13 +167,11 @@ export default class CONTAINERFACTORY {
 					obj = new WORD(span, result.model);
 					break;
 				default:
-					//obj = new EL(span, result.model);
 					throw Error('No constructor exists for CONTAINER{' + className + '}');
 			}
 			node.children[index] = obj;
 			try {
 				// Inject CRUD actions and dependencies
-				//obj.factory = this;
 				obj.container = obj.getProtoTypeByClass('CONTAINER');
 				obj.save = this.save;
 				//obj.quickSave = this.quickSave;
@@ -227,17 +212,15 @@ export default class CONTAINERFACTORY {
 				//this.quickSaveFormPost(this.dataId, this.data);
 				//this.quickSaveFormPost(this.attributesId, this.attributes);
 				//this.refreshParentContainer();
-				console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
+				//console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
 				resolve(dialog.close());
 			};
 			/* eslint-disable-next-line no-alert */
 			if (noPrompt) {
-                //console.log('Quick Saving ' + this.className + '(' + this.id + ') : ' + this.label);
-				dialog.form.post().then(() => {
+                dialog.form.post().then(() => {
 					dialog.close();
                 });
 			} else {
-				//console.log('Showing save form dialog');
 				dialog.show();
 			}
 		});
@@ -262,16 +245,13 @@ export default class CONTAINERFACTORY {
 				}
 			}
 			form.children[0].children[0].addInputElements(inputs);
-			form.setAction('FormPost/Set');
+			form.setAction('FORMPOST/SET');
 			form.post();
 			form.afterSuccessfulPost = () => {
 				form.destroy();
 				//console.log('FormPost: ' + modelId + ' has been quicksaved');
 			};
 		}
-		/*else {
-			console.log('No modelId provided');
-		}*/
 	}
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };

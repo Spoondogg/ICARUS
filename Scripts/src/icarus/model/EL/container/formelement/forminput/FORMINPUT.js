@@ -20,7 +20,8 @@ export default class FORMINPUT extends FORMELEMENT {
             type: model.attributes.type || 'TEXT', // || this.data.type
             list: model.attributes.name + '-options',
             name: model.attributes.name,
-            value: model.attributes.value || ''
+            value: model.attributes.value || '',
+            placeholder: model.attributes.placeholder || ''
         })));
 		this.createInput();
 	}

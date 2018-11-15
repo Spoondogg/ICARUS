@@ -22,8 +22,7 @@ export default class FORM extends CONTAINER {
 		//this.el.setAttribute('onsubmit', 'return false;');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
-        this.setAction('FORM/SUBMIT');
-		this.footer = new FORMFOOTER(this.body, new MODEL().set({
+        this.footer = new FORMFOOTER(this.body, new MODEL().set({
 			align: ALIGN.VERTICAL
 		}));
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
@@ -83,8 +82,8 @@ export default class FORM extends CONTAINER {
         @returns {ThisType} Returns this form
     */
     setAction(url = 'FORM/SUBMIT') {
-        //this.postUrl = url;
         this.attributes.action = url;
+        this.el.setAttribute('action', url);
 		return this;
     }
     /** Gets this form's ACTION attribute
