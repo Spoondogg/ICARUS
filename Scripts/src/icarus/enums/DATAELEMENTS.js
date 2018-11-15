@@ -71,8 +71,10 @@ export const DATAELEMENTS = {
             createInputModel('INPUT', 'value', '')
         ],
         attributes: [
+            createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'text-input'),
-            createInputModel('INPUT', 'value', 'woot')
+            createInputModel('INPUT', 'value', ''),
+            createInputModel('INPUT', 'placeholder', '')
         ]
     },
     FORMELEMENTGROUP: {

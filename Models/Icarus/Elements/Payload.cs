@@ -77,8 +77,11 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <param name="message"></param>
         public Payload(int result, Exception exception, string message = "") {
             this.result = result;
-            this.message = message += "\n\nException Details:\n" + exception.Data.ToString(); ;
+            this.message = message += "\n\nException(" + exception.GetType() + ") Details:\n" + exception.Data.ToString(); ;
             this.exception = exception.Message;
+
+
+
         }
 
         /// <summary>

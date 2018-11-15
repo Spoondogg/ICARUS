@@ -48,7 +48,7 @@ export default class DIALOG extends EL {
 			try {
 				setTimeout(() => {
 					this.el.showModal();
-					resolve();
+					resolve(this);
 				}, delay);
 			} catch (e) {
 				reject(e);
