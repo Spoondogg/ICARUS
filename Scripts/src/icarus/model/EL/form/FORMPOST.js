@@ -9,7 +9,7 @@ export default class FORMPOST {
 	constructor(form) {
 		this.id = form.id;
 		this.formId = form.id;
-		this.label = form.el.getAttribute('name');
+		//this.label = form.el.getAttribute('name');
 		this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
 		this.message = '';
 		/* eslint-disable-next-line no-underscore-dangle */

@@ -32,7 +32,7 @@ namespace ICARUS {
                     id = UrlParameter.Optional
                 }
             );
-            /** Recieves Icarus.js formposts such as FORM.submit() */
+            /** Recieves Icarus.js formposts such as FORM.submit()
             routes.MapRoute(
                 name: "formPost",
                 url: "Form/Submit",
@@ -41,7 +41,7 @@ namespace ICARUS {
                     action = "Submit",
                     id = UrlParameter.Optional
                 }
-            );
+            );*/
             /** Calls the specified procedure by id */
             routes.MapRoute(
                 name: "callProcedure",
