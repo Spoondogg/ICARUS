@@ -24,16 +24,16 @@ export default class DIALOG extends EL {
         this.container = model.container;
 
 		document.body.insertBefore(this.el, document.body.firstChild);
-		this.header = new HEADER(this, new MODEL('modal-header').set({
+		this.header = new HEADER(this, new MODEL().set({
 			label: model.label
-		}));
+        }));
 		this.navBar = new NAVBAR(this, new MODEL().set({
-			label: this.label // model.label
+			label: this.label
 		}));
 		//this.navBar.show();
 		this.header.btnClose = new BUTTON(this.header, 'x');
 		this.header.btnClose.el.onclick = () => this.close(300);
-		this.body = new DIV(this, new MODEL('modal-body'), model.text); // .setInnerHTML(model.text)
+		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FORMFOOTER(this, new MODEL().set({
 			align: ALIGN.VERTICAL
 		}));

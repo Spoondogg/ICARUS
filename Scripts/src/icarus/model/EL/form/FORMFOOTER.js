@@ -13,7 +13,7 @@ export default class FORMFOOTER extends FOOTER {
 	*/
 	constructor(node, model) {
 		super(node, model);
-		//this.addClass('btn-group-justified form-footer');
+		this.addClass('form-footer');
 		this.buttonGroup = new BUTTONGROUP(this, null, model.align); // Left aligned button group SIZE.MED
 	}
 }

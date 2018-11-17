@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMFOOTER from './FORMFOOTER.js';
@@ -20,11 +20,11 @@ export default class FORM extends CONTAINER {
 	*/
 	constructor(node, model) {
 		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
-		//this.el.setAttribute('onsubmit', 'return false;');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
         this.header = new HEADER(this.body.pane, new MODEL().set({
             label: model.label
         }));
+        this.header.el.ondblclick = () => this.save();
         $(this.header.el).insertBefore(this.body.pane.el);
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
         this.footer = new FORMFOOTER(this.body, new MODEL().set({
@@ -334,4 +334,4 @@ export default class FORM extends CONTAINER {
 		});
 	}
 }
-export { ATTRIBUTES, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };
+export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };

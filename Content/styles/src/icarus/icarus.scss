@@ -286,58 +286,64 @@ h2 {
 	}
 }
 dialog {
-	border: 0;
-	border-radius: .6rem;
-	box-shadow: 0 0 1em $color-black;
-	margin: 1em auto;
-	padding: 0;
-	top: 0;
-	width: calc(100% - 1em);
+    border: 0;
+    border-radius: .6rem;
+    box-shadow: 0 0 1em $color-black;
+    margin: 1em auto;
+    padding: 0;
+    top: 0;
+    width: calc(100% - 1em);
 
-	&.dialog-login {
-		float: right;
-		left: calc(100% - 270px);
-		position: absolute;
-		top: 2em;
-		width: 250px;
-	}
+    &.dialog-login {
+        float: right;
+        left: calc(100% - 270px);
+        position: absolute;
+        top: 2em;
+        width: 250px;
+    }
 
-	&::backdrop {
-		background-color: $color-shadow-dark;
-	}
+    &::backdrop {
+        background-color: $color-shadow-dark;
+    }
 
-	header {
-		&.modal-header {
-			background-color: $color-grey-dark;
-			font-weight: bolder;
-			height: 3em;
-			line-height: 3em;
-			padding: 0 .5em;
-			text-transform: uppercase;
+    > header {
+        background-color: $color-grey-dark;
+        color: $color-light;
+        font-weight: bolder;
+        height: 3em;
+        line-height: 3em;
+        padding: 0 .5em;
+        text-transform: uppercase;
 
-			button {
-				background-color: transparent;
-				color: $color-white;
-				float: right;
-				font-weight: bold;
-				line-height: 1.5em;
+        button {
+            background-color: transparent;
+            color: $color-white;
+            float: right;
+            font-weight: bold;
+            line-height: 1.5em;
 
-				&:hover {
-					color: $color-light-less;
-				}
-			}
-		}
-	}
+            &:hover {
+                color: $color-light-less;
+            }
+        }
+    }
 
-	.modal-body {
-		@extend %modal-tall;
-		//max-height: calc(100vh - $navbar-height * 4);
-		//form { fieldset { } }
-	}
+    > div {
+        @extend %modal-tall;
+        //max-height: calc(100vh - $navbar-height * 4);
+        // PROMPT footer is a footer button group
+        &.body {
+            form {
+                .form-footer {
+                    height: auto;
+                }
+            }
+        }
+    }
 
-	footer {
-		padding: 0;
-	}
+    > footer {
+        padding: 0;
+    }
 }
 .btn-group-vertical {
 	width: 100%;
@@ -525,11 +531,10 @@ form {
     }
 
     fieldset {
-
         legend {
-            margin: 0;
             font-size: small;
             line-height: 2em;
+            margin: 0;
             padding: 0 .5em;
         }
     }
@@ -1304,8 +1309,6 @@ table {
 		}
 
 		.modal-body {
-			height: auto;
-
 			.well {
 				font-size: smaller;
 				margin: 0;
