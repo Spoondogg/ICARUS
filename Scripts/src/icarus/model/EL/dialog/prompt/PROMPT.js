@@ -24,8 +24,8 @@ export default class PROMPT extends DIALOG {
             container: null
 		}));
 		this.addClass('prompt');
-		this.form = FORM.createEmptyForm(this.body, false);
-		this.form.prompt = this;
+        this.form = FORM.createEmptyForm(this.body, false);
+		this.form.dialog = this;
 		this.promptInputs = [];
 		this.addInputs(inputs);
 		this.addButtons(buttons);
