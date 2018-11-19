@@ -1,27 +1,22 @@
-/**
-    @module
-*/
+/** @module */
 import CONTAINER from '../../CONTAINER.js';
 import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/HEADER.js';
 import MODEL from '../../../../MODEL.js';
 import P from '../../../p/P.js';
-/**
-    A panel with an icon and some text
+/** A panel with an icon and some text
     @class
     @extends CONTAINER
 */
 export default class CALLOUT extends CONTAINER {
-	/**
-	    Constructs a Bootstrap Jumbotron.
+	/** Constructs a Bootstrap Jumbotron.
 	    @param {CONTAINER} node The model
-	     @param {MODEL} model Object Model
-	 */
+	    @param {MODEL} model Object Model
+    */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.setClass('col-lg-4'); // Override icarus-container 
+		this.setClass('col-lg-4');
 		this.body.pane.addClass('callout');
-		//this.populate(model.children);
 	}
 	construct() {
 		if (this.dataId > 0) {

@@ -98,6 +98,13 @@ export default class FORM extends CONTAINER {
     getAction() {
         return this.attributes.action || 'FORM/SUBMIT';
     }
+    /** Returns the form's respective DIALOG container (if exists)
+        @returns {DIALOG} A DIALOG
+    */
+    getDialog() {
+        console.warn('No DIALOG exists for this FORM', this);
+        return false;
+    }
 	/** Disables all fieldsets within this form
 	    @returns {boolean} Returns true if successful
 	*/
