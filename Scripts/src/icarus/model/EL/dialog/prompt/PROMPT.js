@@ -25,7 +25,7 @@ export default class PROMPT extends DIALOG {
 		}));
 		this.addClass('prompt');
         this.form = FORM.createEmptyForm(this.body, false);
-		this.form.dialog = this;
+        this.form.getDialog = () => this;
 		this.promptInputs = [];
 		this.addInputs(inputs);
 		this.addButtons(buttons);
@@ -53,7 +53,7 @@ export default class PROMPT extends DIALOG {
         this.form.children[0].children[0].children.push(inp);
     }
 	/** Adds the provided buttons to the prompt
-	    @param {Array} buttons An array of buttons
+	    @param {Array<BUTTON>} buttons An array of buttons
 	    @returns {void}
 	*/
 	addButtons(buttons) {

@@ -4,6 +4,7 @@ import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import FORM from '../../form/FORM.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
+import PROMPT from '../../dialog/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
 /** A top level View that holds all other child Containers
@@ -143,31 +144,41 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
     */
 	new() {
-		$.getJSON('/MAIN/Get/0', (payload) => {
-			console.log('Created MAIN', payload);
-			/** Prompts the user to open the new page.
-			    In order to avoid popup blocking, the user must 
-			    manually click to be redirected or launch a new
-			    page in this window
-			*/
-			let url = '/' + payload.model.id;
-			let dialog = new DIALOG(new MODEL().set({
-                label: 'New Page',
-                container: this
-			}));
-			dialog.form = FORM.createEmptyForm(dialog.body);
-			//dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
-			dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
-				window.open(url, '_blank');
-				dialog.hide(300, true);
-			};
-			dialog.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
-				location.href = url;
-				dialog.hide(300, true);
-			};
-			dialog.show();
-			return true;
-		});
+        return new Promise((resolve, reject) => {
+            try {
+                $.getJSON('/MAIN/Get/0', (payload) => {
+                    console.log('Created MAIN', payload);
+                    /** Prompts the user to open the new page.
+                        In order to avoid popup blocking, the user must 
+                        manually click to be redirected or launch a new
+                        page in this window
+                    */
+                    let url = '/' + payload.model.id;
+                    let dialog = new PROMPT('New Page', 'Create new Page');
+                    //new DIALOG(new MODEL().set({
+                    //label: 'New Page',
+                    //container: this
+                    //}));
+                    //dialog.form = FORM.createEmptyForm(dialog.body);
+
+                    //dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
+                    dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
+                        dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
+                            window.open(url, '_blank');
+                            dialog.hide(300, true);
+                        };
+                        dialog.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
+                            location.href = url;
+                            dialog.hide(300, true);
+                        };
+                        dialog.show();
+                        resolve(true);
+                    });
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Overrides CONTAINER.getContainer() and returns this MAIN Container
 	    @returns {MAIN} The MAIN Container
