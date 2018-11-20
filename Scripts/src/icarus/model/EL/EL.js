@@ -50,9 +50,7 @@ export default class EL extends MODEL {
 			this.merge(model);
 			this.setInnerHTML(innerHTML);
 		} catch (e) {
-			//if (e.name !== 'TypeError') {
 			throw e;
-			//} 
 		}
 		return el;
 	}
@@ -145,7 +143,7 @@ export default class EL extends MODEL {
 			//}
 		} catch (e) {
 			//TypeError: this.getProtoTypeByClass is not a function
-			if (e.name === 'TypeError') {
+            if (e instanceof TypeError) {
 				// Cannot read property '__proto__' of undefined
 				/** 
 				    Show warning if enabled
@@ -160,8 +158,7 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-	/** Sets the parent container for this Nav Header if it does not exist,
-	    then returns it or null
+	/** Sets and returns the parent container for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/
 	getContainer() {
@@ -305,11 +302,11 @@ export default class EL extends MODEL {
 					//this.node.children.splice(this.node.children.indexOf(this), 1);
 					//this.node.children.shift();
 					resolve();
-				} catch (ee) {
-					if (ee.name !== 'TypeError') {
-						console.log('Unable to destroy this ' + this.element, ee);
+				} catch (e) {
+                    if (e instanceof TypeError) {
+						console.log('Unable to destroy this ' + this.element, e);
 						//throw ee;
-						reject(ee);
+						reject(e);
 					}
 				}
 			}, delay);
@@ -334,10 +331,16 @@ export default class EL extends MODEL {
 	    @param {string} className the class to be removed
 	    @returns {EL} Returns this element for chaining purposes
 	*/
-	removeClass(className) {
-		$(this.el).removeClass(className);
-		//this.attributes.set('class', this.attributes.get('class').replace(className, ''));
-		this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
+    removeClass(className) {
+        try {
+            $(this.el).removeClass(className);
+            //this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+            this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
+        } catch (e) {
+            if (!(e instanceof TypeError)) {
+                throw e;
+            }
+        }
 		return this;
 	}
 	/** Shows this Element

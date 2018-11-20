@@ -139,10 +139,10 @@ describe('Initialize Page', () => {
         }
     });
     
-    it('should have a $(main) with class "icarus-container"', (done) => {
+    it('should have a $(main) with class "container"', (done) => {
         try {
             page.$eval('main', (el) => el.className).then((val) => {
-                expect(val).to.eql('icarus-container');
+                expect(val).to.eql('container');
                 done();
             });
         } catch (e) {
@@ -171,7 +171,7 @@ describe('Log In', () => {
     // Launch login form
     it('should have a login button that can be clicked by the user', (done) => {        
         try {
-            page.$eval('main.icarus-container .menu .list .tabs li.pull-right', (li) => li.click()).then(() => {
+            page.$eval('main.container .menu .list .tabs li.pull-right', (li) => li.click()).then(() => {
                 expect(true).to.equal(true);
                 done();
             });
@@ -235,7 +235,7 @@ describe('Verify CONTAINER(s)', () => {
     it('INDEX loaded correctly', (done) => {
         try {
             page.$eval('div.index', (el) => el.className).then((val) => {
-                expect(val).to.equal('icarus-container index');
+                expect(val).to.equal('container index');
                 done();
             });
         } catch (e) {
@@ -247,7 +247,7 @@ describe('Verify CONTAINER(s)', () => {
     it('INDEXMAIN loaded correctly', (done) => {
         try {
             page.$eval('div.index-main', (el) => el.className).then((val) => {
-                expect(val).to.equal('icarus-container index-main');
+                expect(val).to.equal('container index-main');
                 done(); 
             });
         } catch (e) {

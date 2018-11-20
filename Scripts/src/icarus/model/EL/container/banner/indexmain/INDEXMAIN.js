@@ -216,7 +216,7 @@ export default class INDEXMAIN extends BANNER {
 				scrollLeft: $(this.pagination.buttonGroup.children[this.page].el).position().left
 			}, 200);
 		} catch (e) {
-			if (e.name !== 'TypeError') {
+            if (!(e instanceof TypeError)) {
 				throw e;
 			}
 		}
