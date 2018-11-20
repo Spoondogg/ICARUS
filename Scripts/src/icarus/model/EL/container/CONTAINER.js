@@ -140,7 +140,7 @@ export default class CONTAINER extends GROUP {
 	refreshParentContainer() {
 		try {
 			this.getMainContainer().focusBody();
-			this.getMainContainer().loader.hide();
+			//this.getMainContainer().loader.hide();
 		} catch (e) {
 			console.log(e);
 		}
