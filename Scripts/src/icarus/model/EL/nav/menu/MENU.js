@@ -34,8 +34,24 @@ export default class MENU extends UL {
 		this.addCase('NAVITEM', () => this.addNavItem(model));
 		this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
 		this.addCase('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
-		this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
-	}
+        this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
+
+        this.collapseOnFocusOut();
+    }
+
+    /** When MENU loses focus, it will collapse any child MENU(s)
+        This ensures that only one menu is visible at any given time
+        @returns {void}
+    */
+    collapseOnFocusOut() {
+        this.el.onclick = (event) => {
+            if (event.target !== this.el) {
+                console.log('Collapsing siblings');
+                this.children.filter((c) => c.className === 'MENU').forEach((c) => c.hide());
+            }
+        };
+    }
+
 	/** Toggles the collapsed state of the 'COLLAPSE'
         @returns {void}
     */
@@ -47,7 +63,8 @@ export default class MENU extends UL {
 	*/
 	hide() {
 		try {
-			$(this.collapse.el).collapse('hide');
+			//$(this.collapse.el).collapse('hide');
+            $(this.el).collapse('hide');
 			return true;
 		} catch (e) {
 			console.log(e);
@@ -100,10 +117,11 @@ export default class MENU extends UL {
         @param {Array} navItems An array of NAVITEM
         @returns {void}
     */
-	addNavItems(navItems) {
-		for (let i = 0; i < navItems.length; i++) {
+    addNavItems(navItems) {
+        navItems.forEach((i) => this.addNavItem(i));
+		/*for (let i = 0; i < navItems.length; i++) {
 			this.addNavItem(navItems[i]);
-		}
+		}*/
 	}
 	/** Adds a Separator (UI Only)    
         @returns {NAVSEPARATOR} A Navigation Menu Separator
