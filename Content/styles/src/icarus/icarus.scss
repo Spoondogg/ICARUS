@@ -1197,7 +1197,7 @@ table {
 .menu {
 	background-color: $color-nav-background;
 
-	>header {
+	> header {
 		@extend %bevel-up;
 		@extend %clickable;
 		background-color: darken($color-nav-background, 25%);
@@ -1206,7 +1206,7 @@ table {
 		text-transform: uppercase;
 
 		&:hover {
-			background-color: lighten($color-nav-background, 25%);
+			background-color: darken($color-nav-background, 35%);
 		}
 		// First ul after nav header
 		&~ul {
