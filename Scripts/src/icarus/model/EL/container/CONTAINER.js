@@ -30,7 +30,7 @@ export default class CONTAINER extends GROUP {
 	 */
 	constructor(node, element, model = new MODEL(), containerList = []) {
 		super(node, element, model); //console.log('CONTAINER{' + this.className + '}');
-		this.addClass('icarus-container'); //this.isContainer = 1;
+		this.addClass('container'); //this.isContainer = 1;
 		this.id = model.id || 0;
 		// Set reusable data model(s)
 		this.dataId = model.dataId || 0;
@@ -601,7 +601,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
 	*/
 	toggleHeaders() {
-		$(this.el).find('.icarus-container > nav').toggle();
+		$(this.el).find('.container > nav').toggle();
 		console.log('CONTAINER.toggleHeaders()');
 	}
 	/** Creates a DIALOG and if user permits, deletes this CONTAINER from the DOM.

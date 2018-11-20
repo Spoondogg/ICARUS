@@ -337,10 +337,10 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() { //email, password
-        let dialog = new DIALOG(new MODEL('dialog-login').set({
+        let dialog = new DIALOG(new MODEL('login').set({
             text: 'Log In',
             container: this
-        })); //'token': this.getMainContainer().getToken()
+        }));
 		let form = FORM.createEmptyForm(this.body.pane);
 		$(form.el).appendTo(dialog.body.el);
 		form.setAction('/Account/Login');

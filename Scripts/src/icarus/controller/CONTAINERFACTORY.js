@@ -41,7 +41,7 @@ export default class CONTAINERFACTORY {
 	    Retrieves object model and returns the container.
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
-	    @param {MODEL} node Parent node (Generally append to node.body.pane)
+	    @param {EL} node Parent node (Generally append to node.body.pane)
 	    @param {string} className Container Constructor Name
 	    @param {number} id Container UId
 	    @returns {CONTAINER} A newly constructed container
@@ -53,7 +53,15 @@ export default class CONTAINERFACTORY {
         return $.getJSON('/' + className + '/Get/' + id, (payload) => {
             let obj = null;
             if (payload.className === 'ERROR') {
-                console.warn('An Error Occurred', className + '/Get/' + id, payload);
+                if (payload.exception === 'AuthenticationException') {
+                    try {
+                        node.getContainer().getMainContainer().login();
+                    } catch (e) {
+                        console.warn('Unable to launch login', e);
+                    }
+                } else {
+                    console.warn('An Error Occurred', className + '/Get/' + id, payload);
+                }
             } else {
                 switch (className) {
                     case 'ARTICLE':
