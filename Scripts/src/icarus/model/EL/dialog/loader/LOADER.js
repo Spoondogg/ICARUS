@@ -44,22 +44,22 @@ export default class LOADER extends DIALOG {
 	    @returns {void}
 	*/
 	log(value, text, show = false) {
-		if (this.el) {
-			this.progressBar.el.style.width = value + '%';
-			this.progressBar.el.setAttribute('aria-valuenow', value);
-			if (text) {
-				let txt = text.substr(0, 32) + '...';
-				this.progressBar.setInnerHTML(txt);
-				this.console.addEntry(text);
-				console.log(text);
-			}
-			if (show) {
-				this.show();
-				if (value === 100) {
-					this.close();
-				}
-			}
-		} else {
+        try {
+            this.progressBar.el.style.width = value + '%';
+            this.progressBar.el.setAttribute('aria-valuenow', value);
+            if (text) {
+                let txt = text.substr(0, 32) + '...';
+                this.progressBar.setInnerHTML(txt);
+                this.console.addEntry(text);
+                console.log(text);
+            }
+            if (show) {
+                this.show();
+                if (value === 100) {
+                    this.close();
+                }
+            }
+        } catch (e) {
 			console.log('Unable to find loader');
 		}
 	}

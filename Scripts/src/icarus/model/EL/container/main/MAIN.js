@@ -127,23 +127,19 @@ export default class MAIN extends CONTAINER {
 			this.toggleHeaders();
 			this.navBar.menu.toggleCollapse();
 		};
-		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
-			this.loader.show();
-			this.loader.showConsole();
-		};
 		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
 			setTimeout(() => {
 				location.reload(true);
 			}, 1000);
 		};
 		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
-		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.new();
+		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.create();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
         @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
     */
-	new() {
+	create() {
         return new Promise((resolve, reject) => {
             try {
                 $.getJSON('/MAIN/Get/0', (payload) => {
@@ -155,13 +151,6 @@ export default class MAIN extends CONTAINER {
                     */
                     let url = '/' + payload.model.id;
                     let dialog = new PROMPT('New Page', 'Create new Page');
-                    //new DIALOG(new MODEL().set({
-                    //label: 'New Page',
-                    //container: this
-                    //}));
-                    //dialog.form = FORM.createEmptyForm(dialog.body);
-
-                    //dialog.body.el.setInnerHtml = 'A new page has been created at <a href="' + url + '" target="_blank">' + url + '</a>';
                     dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
                         dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
                             window.open(url, '_blank');
