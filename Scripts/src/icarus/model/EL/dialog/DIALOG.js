@@ -21,6 +21,7 @@ export default class DIALOG extends EL {
 	*/
 	constructor(model) {
         super(document.body, 'DIALOG', model);
+        this.addClass('hiding');
         this.container = model.container;
 
 		document.body.insertBefore(this.el, document.body.firstChild);
@@ -31,23 +32,35 @@ export default class DIALOG extends EL {
 			label: this.label
 		}));
 		//this.navBar.show();
-		this.header.btnClose = new BUTTON(this.header, 'x');
-		this.header.btnClose.el.onclick = () => this.close(300);
+		this.btnClose = new BUTTON(this.header, 'x');
+		this.btnClose.el.onclick = () => this.close(300);
 		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FORMFOOTER(this, new MODEL().set({
 			align: ALIGN.VERTICAL
 		}));
-		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close(300);
-	}
+        this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close();
+        this.closeOnFocusOut();
+    }
+    /** When DIALOG loses focus, it will be closed
+        @returns {void}
+    */
+    closeOnFocusOut() {
+        this.el.onclick = (event) => {
+            if (event.target === this.el) {
+                this.close();
+            }
+        };
+    }
 	/** Makes modal appear (adds `open` attribute)
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {Promise} Callback on successful display of dialog
 	*/
 	show(delay = 0) {
 		return new Promise((resolve, reject) => {
-			try {
-				setTimeout(() => {
-					this.el.showModal();
+            try {
+                setTimeout(() => {
+                    this.el.showModal();
+                    this.removeClass('hiding');
 					resolve(this);
 				}, delay);
 			} catch (e) {
@@ -55,27 +68,40 @@ export default class DIALOG extends EL {
 			}
 		});
 	}
-	/** Hides the modal
+	/** Closes the DIALOG by hiding it and then removing it from the DOM
+        @param {number} delay Millisecond delay until dialog is closed
+	    @returns {Promise} Callback on successful close
+	*/
+	close(delay = 300) {
+        this.el.addEventListener('hiding', this.hide);
+        return this.hide(delay, false);
+    }
+    /** Hides the DIALOG
         @param {number} delay Millisecond delay until dialog is closed
         @param {boolean} preserve If true, element is not deleted
 	    @returns {Promise} Callback on successful close
-	*/
-	close(delay = 0, preserve = false) {
-		return new Promise((resolve, reject) => {
-			try {
-				setTimeout(() => {
-					this.el.close();
-					if (!preserve) {
-						this.destroy().then(() => {
-							resolve();
-						});
-					}
-				}, delay);
-			} catch (e) {
-				reject(e);
-			}
-		});
-    }
+    */
+    hide(delay = 300, preserve = true) {
+        return new Promise((resolve, reject) => {
+            try {
+                this.addClass('hiding');
+                setTimeout(() => {
+                    this.el.close();
+                    this.removeClass('hiding');
+                    this.el.removeEventListener('hiding', this.hide);
+                    if (preserve) {
+                        resolve();
+                    } else {
+                        this.destroy().then(() => {
+                            resolve();
+                        });
+                    }
+                }, delay);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }    
     /** Overrides CONTAINER logic for DIALOG
         @returns {CONTAINER} The DIALOG Container (MAIN)
     */
