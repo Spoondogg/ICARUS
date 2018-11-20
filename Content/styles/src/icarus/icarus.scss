@@ -404,6 +404,93 @@ dialog {
         }
     }
 
+    &.loader {
+        animation: slideOutDown $transition-duration ease-out;
+        background-color: transparentize($color-light, .75);
+        border-radius: 0;
+        bottom: 0;
+        height: auto;
+        margin: 0;
+        max-height: 260px;
+        top: auto;
+        width: 100%;
+
+        &::backdrop {
+            opacity: 0;
+        }
+
+        &[open] {
+            animation: slideInTop $transition-duration ease-in;
+
+            &.hiding {
+                animation: slideOutUp $transition-duration ease-in;
+            }
+        }
+
+        .body {
+            margin: .5em;
+
+            .well {
+                font-size: smaller;
+                margin: 0;
+            }
+
+            .progress {
+                clear: both;
+                float: none;
+                margin: 0;
+
+                .text {
+                    clear: both;
+                    float: none;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                }
+
+                .progress-bar {
+                    border-radius: .3em;
+                    height: 2em;
+                    text-shadow: 0 1px 4px $color-shadow-neutral;
+                }
+
+                & + ul {
+                    border: 0;
+                    border-radius: 5px;
+                    height: 0;
+                    margin-top: 0;
+                    //opacity: 0;
+                    padding: 0;
+
+                    &.console {
+                        @include no-scroll-bar;
+
+                        &.collapse {
+                            &.in {
+                                height: 12em;
+                                margin-top: .5em;
+                                //opacity: 1;
+                                padding: initial;
+                            }
+                        }
+
+                        &.collapsing {
+                            margin-top: .5em;
+                        }
+
+                        li {
+                            padding: 3px;
+                        }
+                    }
+                }
+            }
+        }
+
+        footer,
+        header {
+            display: none;
+        }
+    }
+
     > header {
         background-color: $color-grey-dark;
         color: $color-light;

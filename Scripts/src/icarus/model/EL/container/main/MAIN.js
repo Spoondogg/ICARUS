@@ -133,13 +133,13 @@ export default class MAIN extends CONTAINER {
 			}, 1000);
 		};
 		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
-		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.create();
+        this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
         @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
     */
-	create() {
+	createNew() {
         return new Promise((resolve, reject) => {
             try {
                 $.getJSON('/MAIN/Get/0', (payload) => {

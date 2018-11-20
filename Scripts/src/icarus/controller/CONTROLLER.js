@@ -51,7 +51,7 @@ export default class CONTROLLER extends MODEL {
 			location.href = this.returnUrl;
 		}
 		/** @property {LOADER} loader The default loader modal */
-		this.loader = new LOADER(0, 'Loading', 'Loading');
+		this.loader = new LOADER(0, 'Loading');
 		this.loader.log(10, 'Launching application...', true);
 		/** @property {PROMPT} prompt A dialog prompting the user for input
 			@type {PROMPT}
