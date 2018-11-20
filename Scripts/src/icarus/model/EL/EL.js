@@ -284,11 +284,13 @@ export default class EL extends MODEL {
 	/** Empties contents of node element
 	    @returns {EL} This EL
 	*/
-	empty() {
-		while (this.el.firstChild) {
-			this.el.removeChild(this.el.firstChild);
-		}
-		return this;
+    empty() {
+        return new Promise((resolve) => {
+            while (this.el.firstChild) {
+                this.el.removeChild(this.el.firstChild);
+            }
+            resolve(this);
+        });
 	}
 	/** Removes this element from the DOM
 	    @param {number} delay Millisecond delay
@@ -387,19 +389,19 @@ export default class EL extends MODEL {
 	    @param {array} children Array of children object models to be constructed
 	    @returns {EL} This EL
 	*/
-	populate(children) {
-		if (children) {
-			console.log(this.className + '.populate(' + children.length + ');', children);
-			try {
-				children.forEach((c) => this.create(c));
-				/*for (let c = 0; c < children.length; c++) {
-					this.create(children[c]);
-				}*/
-			} catch (e) {
-				console.log(e);
-			}
-		}
-		return this;
+    populate(children) {
+        return new Promise((resolve, reject) => {
+            if (children) {
+                console.log(this.className + '.populate(' + children.length + ');', children);
+                try {
+                    children.forEach((c) => this.create(c));
+                    resolve(this);
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            resolve(this);
+        });
 	}
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
