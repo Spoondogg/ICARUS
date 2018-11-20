@@ -530,10 +530,10 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Returns the parent container for this container or null if it does not exist
 	    @returns {CONTAINER} The parent container for this container
-	*/
+	
 	getContainer() {
 		return this.container;
-	}
+	}*/
 	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container
 	    @throws Will throw an error 

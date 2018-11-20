@@ -21,12 +21,18 @@ export default class LOADER extends DIALOG {
 		}));
 		this.addClass('loader');
 		this.progress = new DIV(this.body, new MODEL('progress'));
-		this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
+        this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
 		this.console = new CONSOLE(this.body, new MODEL('console collapse in'));
 		this.progressBar.el.onclick = () => {
 			$(this.console.el).collapse('toggle');
 		};
-		this.log(value);
+        this.log(value);
+        // Override this.closeOnFocusOut()
+        this.el.onclick = (event) => {
+            if (event.target === this.el) {
+                this.hide();
+            }
+        };
 	}
 	/** Sets the progress bar status
 		@param {number} value Percentage as integer (ie: 50 means 50%).
@@ -34,24 +40,27 @@ export default class LOADER extends DIALOG {
 	    @param {boolean} show If true, the log will be displayed
 	    @returns {Promise} Promise to return this LOADER after success
 	*/
-	log(value, text, show = false) {
+	log(value, text = '', show = false) {
         return new Promise((resolve, reject) => {
             try {
                 this.progressBar.el.style.width = value + '%';
                 this.progressBar.el.setAttribute('aria-valuenow', value);
                 if (text) {
                     let txt = text.substr(0, 32) + '...';
-                    this.progressBar.setInnerHTML(txt);
+                    this.progressBar.text.setInnerHTML(txt);
                     this.console.addEntry(text);
-                    console.log(text);
+                    //console.log(value, text);
                 }
                 if (show) {
                     this.show();
-                    if (value === 100) {
-                        this.close();
-                    }
                 }
-                resolve();
+                if (value === 100) {
+                    setTimeout(() => {
+                        resolve(this.hide());
+                    }, 2000);
+                } else {
+                    resolve();
+                }
             } catch (e) {
                 reject(e);
             }

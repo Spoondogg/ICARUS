@@ -179,7 +179,7 @@ export default class EL extends MODEL {
 	getMainContainer() {
 		if (typeof this.container !== 'undefined') {
 			try {
-				return this.container.getMainContainer();
+				return this.getContainer().getMainContainer();
 			} catch (e) {
 				console.warn('EL{' + this.className + '} Unable to retrieve Main Container', e);
 				//throw e;
@@ -327,7 +327,7 @@ export default class EL extends MODEL {
 	    @returns {void}
 	*/
 	setContainer() {
-		this.container = this.getProtoTypeByClass('CONTAINER');
+        this.container = this.getContainer(); //this.getProtoTypeByClass('CONTAINER');
 	}
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
@@ -389,18 +389,23 @@ export default class EL extends MODEL {
 	    @param {array} children Array of children object models to be constructed
 	    @returns {EL} This EL
 	*/
-    populate(children) {
+    populate(children) {        
         return new Promise((resolve, reject) => {
             if (children) {
-                console.log(this.className + '.populate(' + children.length + ');', children);
                 try {
-                    children.forEach((c) => this.create(c));
-                    resolve(this);
+                    let msg = this.className + '.populate(' + children.length + ');';
+                    this.getMainContainer().loader.log(0, msg).then(() => {
+                        children.forEach((c) => this.create(c));
+                        this.getMainContainer().loader.log(100).then(() => {
+                            resolve(this);
+                        });
+                    });
                 } catch (e) {
                     reject(e);
                 }
+            } else {
+                resolve(this);
             }
-            resolve(this);
         });
 	}
 	/** Sets the inner HTML of this element
