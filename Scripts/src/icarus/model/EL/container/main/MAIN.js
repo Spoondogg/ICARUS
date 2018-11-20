@@ -204,47 +204,46 @@ export default class MAIN extends CONTAINER {
 		$(this.navBar.menu.menu.el).collapse('hide');
 	}
 	/** Loads the specified app id into the Main Container
+        Receives the MAIN model from Main/Get/id (if permitted)
+		Then, sets the document title, application id and label
+		and Populates accordingly
 	    @todo Prompt the user for an Id to load
 	    @todo create a simple application browser to retrieve a MAIN
 		@param {number} id App Id to load
 		@returns {MAIN} This MAIN
 	*/
-	load(id = 1) {
-		let returnUrl = this.url.searchParams.get('ReturnUrl');
-		if (returnUrl) {
-			returnUrl = this.url.origin + returnUrl;
-			location.href = returnUrl;
-		}
-		$.getJSON('Main/Get/' + id, this.loadAjaxCall.bind(this));
-		return this;
-	}
-	/** The ajax call performed when MAIN.load is called
-		Receives the MAIN model from Main/Get/id (if permitted)
-		Then, sets the document title, application id and label
-		and Populates accordingly
-		@param {any} data The ajax payload
-	    @returns {boolean} True on success
-	    @throws Throws an error if unable to construct given class
-	*/
-	loadAjaxCall(data) {
-		if (data.result === 1) {
-			try {
-				if (data.model.label) {
-					document.title = data.model.label;
-				}
-				this.body.pane.empty();
-				this.setId(this.id);
-				this.setLabel(data.model.label);
-				this.populate(data.model.children);
-				return true;
-			} catch (e) {
-				console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
-				throw e;
-			}
-		} else {
-			this.loader.log(0, 'Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + data.message);
-			this.loader.showConsole();
-		}
+    load(id = 1) {
+        return new Promise((resolve, reject) => {
+            try {
+                let returnUrl = this.url.searchParams.get('ReturnUrl');
+                if (returnUrl) {
+                    returnUrl = this.url.origin + returnUrl;
+                    location.href = returnUrl;
+                }
+                $.getJSON('Main/Get/' + id, (payload) => {
+                    if (payload.result === 1) {
+                        try {
+                            if (payload.model.label) {
+                                document.title = payload.model.label;
+                            }
+                            this.body.pane.empty().then(() => {
+                                this.setId(this.id);
+                                this.setLabel(payload.model.label);
+                                this.populate(payload.model.children).then(() => resolve());
+                            });
+                        } catch (e) {
+                            console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
+                            reject(e);
+                        }
+                    } else {
+                        //console.warn(0, 'Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message);
+                        reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
+                    }
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Toggles the active state of the sidebar
 	    @return {ThisType} Return this for method chain
@@ -400,8 +399,6 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<boolean>} True on success
     */
 	logout() {
-		this.loader.showConsole();
-		this.loader.log(50, 'MAIN.logout(); Logging out...', true);
 		$.post('/Account/LogOff', {
 			'__RequestVerificationToken': this.getToken() //.token
 		}, this.ajaxRefreshIfSuccessful, 'json');
