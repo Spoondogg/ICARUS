@@ -42,7 +42,7 @@ export default class MAIN extends CONTAINER {
 		//this.quickSave = model.factory.quickSave;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
-		this.populate(model.children);
+        this.populate(model.children);
 	}
 	construct() {
 		this.navBar.el.setAttribute('draggable', 'false');
