@@ -348,6 +348,7 @@ dialog {
     box-shadow: 0 0 1em $color-black;
     margin: 1em auto;
     padding: 0;
+    position: absolute;
     top: 0;
     width: calc(100% - 1em);
 
@@ -391,7 +392,6 @@ dialog {
         animation: slideOutRight $transition-duration ease-out;
         float: right;
         left: calc(100% - 270px);
-        position: absolute;
         top: 2em;
         width: 250px;
 
@@ -491,7 +491,7 @@ dialog {
 
         footer,
         header {
-            display: none;
+            //display: none;
         }
     }
 
