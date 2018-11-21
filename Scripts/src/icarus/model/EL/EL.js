@@ -306,10 +306,12 @@ export default class EL extends MODEL {
 					resolve();
 				} catch (e) {
                     if (e instanceof TypeError) {
-						console.log('Unable to destroy this ' + this.element, e);
-						//throw ee;
-						reject(e);
-					}
+                        //console.log('Unable to destroy this ' + this.element);
+                        //throw ee;
+                        resolve();
+                    } else {
+                        reject(e);
+                    }
 				}
 			}, delay);
 		});
