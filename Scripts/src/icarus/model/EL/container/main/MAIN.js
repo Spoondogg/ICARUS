@@ -19,7 +19,7 @@ export default class MAIN extends CONTAINER {
     */
 	constructor(model) {
 		document.title = model.label;
-		super(document.body, 'MAIN', model, ['ARTICLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
+		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
 		this.navBar.addClass('navbar-fixed-top');
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
