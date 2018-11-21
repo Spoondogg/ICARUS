@@ -88,7 +88,13 @@ export default class MAIN extends CONTAINER {
 			this.addDefaultMenuItems();
 		}
 		return this;
-	}
+    }
+    /** Returns the MAIN LOADER 
+        @returns {LOADER} A LOADER
+    */
+    getLoader() {
+        return this.loader;
+    }
 	/** Adds a NavItemIcon to the given menu with the given params
 	    @param {MENU} menu A navigation MENU
 	    @param {string} icon An Icon reference
@@ -131,7 +137,10 @@ export default class MAIN extends CONTAINER {
 			setTimeout(() => {
 				location.reload(true);
 			}, 1000);
-		};
+        };
+        this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
+            this.loader.show();
+        };
 		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}

@@ -46,7 +46,6 @@ export default class MENU extends UL {
     collapseOnFocusOut() {
         this.el.onclick = (event) => {
             if (event.target !== this.el) {
-                console.log('Collapsing siblings');
                 this.children.filter((c) => c.className === 'MENU').forEach((c) => c.hide());
             }
         };
