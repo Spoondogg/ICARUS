@@ -188,10 +188,8 @@ export default class CONTAINER extends GROUP {
 	addDefaultContainers(containerList) {
         // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
         let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
-		containerList.splice(2, 0, ...defaultContainers);
-		for (let c = 0; c < containerList.length; c++) {
-			this.addContainerCase(containerList[c]);
-		}
+        containerList.splice(2, 0, ...defaultContainers);
+        containerList.forEach((c) => this.addContainerCase(c));
 	}
 	/** Drag containers by their NavBars
 	    @see https://www.w3schools.com/jsref/event_ondrag.asp
