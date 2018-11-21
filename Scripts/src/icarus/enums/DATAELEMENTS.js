@@ -154,6 +154,10 @@ export const DATAELEMENTS = {
         data: [],
         attributes: []
     },
+    TABLE: {
+        data: [],
+        attributes: []
+    },
     TEXTBLOCK: {
         data: [createInputModel('INPUT', 'text', '')],
         attributes: []
