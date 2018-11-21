@@ -57,23 +57,26 @@ export default class DIALOG extends EL {
 	*/
 	show(delay = 0) {
 		return new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
+            setTimeout(() => {
+                try {
                     this.el.showModal();
                     this.removeClass('hiding');
-					resolve(this);
-				}, delay);
-			} catch (e) {
-				reject(e);
-			}
+                    resolve(this);
+                } catch (e) {
+                    if (e instanceof DOMException) {
+                        resolve(this);
+                    } else {
+                        reject(e);
+                    }
+                }
+            }, delay);
 		});
 	}
 	/** Closes the DIALOG by hiding it and then removing it from the DOM
         @param {number} delay Millisecond delay until dialog is closed
 	    @returns {Promise} Callback on successful close
 	*/
-	close(delay = 300) {
-        this.el.addEventListener('hiding', this.hide);
+    close(delay = 300) {
         return this.hide(delay, false);
     }
     /** Hides the DIALOG
@@ -88,7 +91,7 @@ export default class DIALOG extends EL {
                 setTimeout(() => {
                     this.el.close();
                     this.removeClass('hiding');
-                    this.el.removeEventListener('hiding', this.hide);
+                    //this.el.removeEventListener('hiding', this.hide);
                     if (preserve) {
                         resolve();
                     } else {
