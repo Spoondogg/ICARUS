@@ -103,7 +103,7 @@ export default class CONTAINER extends GROUP {
 			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
 			createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
-			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'HIDDEN', true),
+			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'TEXT', true),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER'), // should be dropdown
 			createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
 			createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
@@ -358,8 +358,8 @@ export default class CONTAINER extends GROUP {
             let group = this.navBar.menu.menu.getGroup('ELEMENTS');
             let item = this.createNavItem(className, group);
             item.el.onclick = () => this.create(new MODEL(className).set({
-				className
-            })); //.then(() => this.save(true));
+                className
+            }));
             return item;
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
@@ -374,24 +374,29 @@ export default class CONTAINER extends GROUP {
         @todo Verify if inline function can be shorthand
         @returns {void}
     */
-	addContainerCase(className, addButton = true) {
-		try {
-			if (typeof this.getMainContainer() !== 'undefined') {
-                this.addCase(className, (model) => {
-                    //console.log(this.className + ': CALLING CASE: ' + className);
-                    try {
-                        return this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0);
-                    } catch (ee) {
-                        console.warn('Unable to retrieve factory for Container Case', ee);
+    addContainerCase(className, addButton = true) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (typeof this.getMainContainer() !== 'undefined') {
+                    if (addButton) {
+                        this.addConstructContainerButton(className);
                     }
-                });
-				if (addButton) {
-					this.addConstructContainerButton(className);
-				}
-			}
-		} catch (e) {
-			console.warn(this.className + ': Unable to add Container Case', e);
-		}
+                    this.addCase(className, (model) => {
+                        try {
+                            this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0).then((r) => {
+                                resolve(r);
+                            });
+                        } catch (ee) {
+                            console.warn('Unable to retrieve factory for Container Case', ee);
+                            reject(ee);
+                        }
+                    });                    
+                }
+            } catch (e) {
+                console.warn(this.className + ': Unable to add Container Case', e);
+                reject(e);
+            }
+        });
     }
     /** Moves the Container up one slot in the DOM
 	    @returns {void}
