@@ -196,6 +196,11 @@ export default class CONTAINERFACTORY {
                 }
                 return node.children[index];
             }
+        }).then(() => {
+            if (id === 0) {
+                console.log('SAVE', node);
+                node.getContainer().save(true);
+            }
         });
 	}
 	/* eslint-enable max-lines-per-function, complexity */
