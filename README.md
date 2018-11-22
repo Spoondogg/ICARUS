@@ -1,16 +1,17 @@
 ﻿# ICARUS
-An SPA (Single Page Application) Prototyping and Development Sandbox.
+A Single Page Application Sandbox.
 
 Technologies Used:
   - C# ASP.NET MVC5 using Entity 6 on SQL Server 
   - HTML5, CSS3, JavaScript (ES6) and Bootstrap 3.3.7
-
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
+
+In a perfect world, there would be no dependencies...
 
 * MVC.NET 4.7.2
 * JQuery
@@ -19,10 +20,6 @@ These instructions will get you a copy of the project up and running on your loc
 * Razor
 * Entity 6
 * SQL Server
-
-```
-Give examples
-```
 
 ### Compatibility
 
@@ -48,8 +45,6 @@ Create ConnectionStrings.config in the same directory as Web.config
 </connectionStrings>
 ~~~~
 
-```
-
 #### Mail Settings
 
 Create MailSettings.config in the same directory as Web.config
@@ -64,19 +59,13 @@ Create MailSettings.config in the same directory as Web.config
 </smtp>
 ~~~~
 
-```
-
 ## Test
 
 Testing in Gulp using Mocha, Chai and Puppeteer
 
-```
-
 ### Lint
 
 See [EsLint](https://github.com/Spoondogg/ICARUS/blob/master/config/eslint.json) for details
-
-```
 
 ## Build
 
@@ -87,7 +76,7 @@ See [EsLint](https://github.com/Spoondogg/ICARUS/blob/master/config/eslint.json)
 
 ## Contribute
 
-Please read [CONTRIBUTING.md](https://github.com/Spoondogg/ICARUS/blob/master/CHANGELOG.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](https://github.com/Spoondogg/ICARUS/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ### Versioning
 
