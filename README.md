@@ -34,7 +34,7 @@ Primarily tested in WebKit
 
 Limited DIALOG support will need to be corrected in future builds
 
-### Installing
+### Install
 
 #### Connection Strings
 
@@ -48,6 +48,7 @@ Create ConnectionStrings.config in the same directory as Web.config
 </connectionStrings>
 ~~~~
 
+```
 
 #### Mail Settings
 
@@ -59,35 +60,36 @@ Create MailSettings.config in the same directory as Web.config
 		userName="XXX@YYY.ZZZ"
 		password="XXXX"
 		enableSsl="true"
-	/>        
+	/>
 </smtp>
 ~~~~
 
+```
 
-## Testing
+## Test
 
 Testing in Gulp using Mocha, Chai and Puppeteer
 
 ```
 
-### Linting and Cleanup
+### Lint
 
 See [EsLint](https://github.com/Spoondogg/ICARUS/blob/master/config/eslint.json) for details
 
 ```
 
-## Built With
+## Build
 
 * [Gulp](https://gulpjs.com/) - Build and Deploy
 * [Node.js](https://nodejs.org) - Build
 * [NPM](https://www.npmjs.com/) - Dependency Management
 * VS2017 - IDE
 
-## Contributing
+## Contribute
 
 Please read [CONTRIBUTING.md](https://github.com/Spoondogg/ICARUS/blob/master/CHANGELOG.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## Versioning
+### Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Spoondogg/ICARUS/tags). 
 
