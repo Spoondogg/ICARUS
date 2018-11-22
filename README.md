@@ -48,7 +48,6 @@ Create ConnectionStrings.config in the same directory as Web.config
 </connectionStrings>
 ~~~~
 
-```
 
 #### Mail Settings
 
@@ -64,7 +63,6 @@ Create MailSettings.config in the same directory as Web.config
 </smtp>
 ~~~~
 
-```
 
 ## Testing
 
