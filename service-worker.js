@@ -30,6 +30,12 @@ self.addEventListener('error', (e) => {
     console.log('Service Worker Error', e);
 });
 
+/* @see https://developers.google.com/web/fundamentals/native-hardware/fullscreen/
+if (navigator.standalone == true) {
+    // My app is installed and therefore fullscreen
+}
+*/
+
 //https://developers.google.com/web/fundamentals/app-install-banners/
 self.addEventListener('install', (event) => {
     // Perform install steps
