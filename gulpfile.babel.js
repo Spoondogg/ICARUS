@@ -454,9 +454,9 @@ const styles_publish = () => gulp
     @param {any} done Callback
     @returns {gulp} A gulp series
 */
-export const publification = gulp.series(
+export const publification_dev = gulp.series(
     (done) => {
-        console.log('\n\n\n==== publish BEGIN ====');
+        console.log('\n\n\n==== publish to DEV BEGIN ====');
         done();
     },
     scripts_build_vendor,
@@ -465,7 +465,31 @@ export const publification = gulp.series(
     scripts_publish,
     styles_publish,
     (done) => {
-        console.log('\n\n\n==== publish END ====');
+        console.log('\n\n\n==== publish to DEV END ====');
+        done();
+    }
+);
+/** Publishes Scripts and Styles to the dev server 
+    @param {any} done Callback
+    @returns {gulp} A gulp series
+*/
+export const publification_prod = gulp.series(
+    (done) => {
+        console.log('\n\n\n==== publish to PROD BEGIN ====');
+        done();
+    },
+    (done) => {
+        console.log('\n > Clearing out old data');
+        del([paths.server.prod], { force: true });
+        done();
+    },
+    (done) => {
+        gulp.src([paths.server.dev, '!**.(yml|md)'])
+        .pipe(gulp.dest(paths.server.prod));
+        done();
+    },
+    (done) => {
+        console.log('\n\n\n==== publish to PROD END ====');
         done();
     }
 );
