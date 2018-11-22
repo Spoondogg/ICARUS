@@ -1,6 +1,5 @@
 # Roadmap
 
-
 - [x] Clean up and prepare for Git
 
 # Changelog
@@ -11,7 +10,16 @@ These are the changes to each version that has been released
 
 **2018-11-22**
 
-- [ ] Secure password(s) in external file
+- [x] Secure application password
+- [x] Secure database connections
+- [x] Encrypt Web.config (Connection Strings, Keys and SMTP)
+
+** 0.5.20181120
+
+**2018-11-20**
+
+- [x] Deprecate MODAL
+- [x] Replace MODAL with DIALOG
 
 ## 0.5.20181016
 

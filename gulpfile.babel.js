@@ -1,3 +1,4 @@
+/// <binding AfterBuild='publification_dev' />
 /* eslint-disable max-lines */
 /* eslint-disable no-undef */
 // #region Head
@@ -480,12 +481,12 @@ export const publification_prod = gulp.series(
     },
     (done) => {
         console.log('\n > Clearing out old data');
-        del([paths.server.prod], { force: true });
+        del(['I://iis/icarus/**/*'], { force: true });
         done();
     },
     (done) => {
-        gulp.src([paths.server.dev, '!**.(yml|md)'])
-        .pipe(gulp.dest(paths.server.prod));
+        gulp.src(['I://iis/dev/**/*', '!**.(yml|md)'])
+            .pipe(gulp.dest(paths.server.prod));
         done();
     },
     (done) => {

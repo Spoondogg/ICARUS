@@ -28,71 +28,66 @@ Give examples
 
 Primarily tested in WebKit 
 
-* Chrome Canary (latest) 
-* Firefox
-* Edge
+* Chrome Canary
 
 ### Known Issues
 
-Ugh, this is embarassing
-
+Limited DIALOG support will need to be corrected in future builds
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+#### Connection Strings
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+Create ConnectionStrings.config in the same directory as Web.config
+~~~~
+<connectionStrings>
+	<add name="DefaultConnection"
+		providerName="System.Data.SqlClient"
+		connectionString="Data Source=127.0.0.1;Initial Catalog=XXX;Integrated Security=False;User Id=XXX@YYY.ZZ;Password=XXX;MultipleActiveResultSets=True"
+	/>
+</connectionStrings>
+~~~~
 
 ```
-Give an example
+
+#### Mail Settings
+
+Create MailSettings.config in the same directory as Web.config
+~~~~
+<smtp from="XXX@YYY.ZZZ">        
+	<network host="smtp.xxxx.com"
+		port="XXX"
+		userName="XXX@YYY.ZZZ"
+		password="XXXX"
+		enableSsl="true"
+	/>        
+</smtp>
+~~~~
+
 ```
 
-### And coding style tests
+## Testing
 
-Explain what these tests test and why
+Testing in Gulp using Mocha, Chai and Puppeteer
 
 ```
-Give an example
+
+### Linting and Cleanup
+
+See [EsLint](https://github.com/Spoondogg/ICARUS/blob/master/config/eslint.json) for details
+
 ```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-* Gulp
-* NuGet
-* VS2017
-* Node
-* NPM
+* [Gulp](https://gulpjs.com/) - Build and Deploy
+* [Node.js](https://nodejs.org) - Build
+* [NPM](https://www.npmjs.com/) - Dependency Management
+* VS2017 - IDE
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/Spoondogg/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/Spoondogg/ICARUS/blob/master/CHANGELOG.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
