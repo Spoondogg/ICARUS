@@ -1,8 +1,17 @@
 ﻿@{
     ViewBag.Title = "Login Failure";
 }
-
 <hgroup>
     <h2>@ViewBag.Title.</h2>
     <h3 class="text-danger">Unsuccessful login with service.</h3>
 </hgroup>
+@section viewInit {
+    @if (User.Identity.IsAuthenticated) {
+        <script type="text/javascript">
+            console.log(100, 'You are already logged in.\nRedirecting...');
+            setTimeout(function () {
+                location.href = '/';
+            }, 1000);
+        </script>
+    }
+}

@@ -68,8 +68,8 @@ namespace ICARUS.Controllers {
                 // http://www.mikesdotnetting.com/article/268/how-to-send-email-in-asp-net-mvc
                 var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
-                message.To.Add(new MailAddress(***REMOVED***));  // replace with valid value 
-                message.From = new MailAddress(***REMOVED***);  // replace with valid value
+                message.To.Add(new MailAddress("ryan@spoonmedia.ca"));  // replace with valid value 
+                message.From = new MailAddress("ryan@spoonmedia.ca");  // replace with valid value
                 if (model.toEmail != null){
                     message.To.Add(new MailAddress(model.toEmail));  // replace with valid value 
                 }

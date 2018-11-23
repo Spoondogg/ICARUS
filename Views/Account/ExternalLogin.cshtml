@@ -30,17 +30,7 @@
     }
 }
 @section viewInit {
-    <script>document.getElementsByClassName('app')[0].style.display = 'none';</script>
-    <script type="text/javascript">
-        app.hide();
-    </script>
-}
-@*section viewInit {
-    @if (!User.Identity.IsAuthenticated) {
-        <script type="text/javascript">
-            app.loginExternal();
-        </script>
-    } else {
+    @if (User.Identity.IsAuthenticated) {
         <script type="text/javascript">
             console.log(100, 'You are already logged in.\nRedirecting...');
             setTimeout(function () {
@@ -48,4 +38,4 @@
             }, 1000);
         </script>
     }
-}*@
+}
