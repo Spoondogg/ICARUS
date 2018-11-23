@@ -39,7 +39,10 @@ Scripts/test/screens
 Content/styles/dist
 Content/styles/src/fonts
 ConnectionStrings.config
+AppSettings.config
 MailSettings.config
+banned.txt
+bfg-1.13.0.jar
 ############################### ICARUS END ###########################################
 
 
