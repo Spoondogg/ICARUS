@@ -744,7 +744,10 @@
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
     </None>
-    <Content Include="MailSettings.config" />
+    <Content Include="MailSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="AppSettings.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DEV.pubxml" />
     <None Include="Properties\PublishProfiles\ICARUS.pubxml" />

@@ -14,7 +14,7 @@ These are the changes to each version that has been released
 - [x] Secure database connections
 - [x] Encrypt Web.config (Connection Strings, Keys and SMTP)
 - [ ] Migrate Registration form to PROMPT
-- [ ] Register test user in test-ui.js and remove sensitive credentials
+- [x] Register test user in test-ui.js and remove sensitive credentials
 - [ ] Correct issues with OAuth2 Registration and Login
 
 ** 0.5.20181120

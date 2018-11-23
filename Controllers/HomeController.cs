@@ -11,9 +11,9 @@ using ICARUS.Models.Icarus;
 using ICARUS.Models.Icarus.Elements.Attributes;
 using System.Linq;
 using System.Data.Entity;
+using System.Configuration;
 
 namespace ICARUS.Controllers {
-
     /// <summary>
     /// Controller for HOME pages, services etc
     /// </summary>=
@@ -22,7 +22,6 @@ namespace ICARUS.Controllers {
         public HomeController() : base("Home") {
 
         }
-
         /// <summary>
         /// The default page.  Certain id's are hardcoded based on domain
         /// TODO: These values should be retrieved from an external source if possible
@@ -30,7 +29,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>=
         public ActionResult Index(int id = 1) { // 0 creates a new APP instance, 1 should be the initial page
 
-            ViewBag.Version = "0.2.2018.05.22";
+            ViewBag.Version = ConfigurationManager.AppSettings["version"];
 
             /// TODO: This should be its own fork.  This is VERY bad practice
             if (Request.Url.Authority.Contains("johnsautocare")) {
@@ -68,8 +67,8 @@ namespace ICARUS.Controllers {
                 // http://www.mikesdotnetting.com/article/268/how-to-send-email-in-asp-net-mvc
                 var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
-                message.To.Add(new MailAddress(***REMOVED***));  // replace with valid value 
-                message.From = new MailAddress(***REMOVED***);  // replace with valid value
+                message.To.Add(new MailAddress(ConfigurationManager.AppSettings["toEmail"]));
+                message.From = new MailAddress(ConfigurationManager.AppSettings["toEmail"]);
                 if (model.toEmail != null){
                     message.To.Add(new MailAddress(model.toEmail));  // replace with valid value 
                 }
