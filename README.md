@@ -1,13 +1,15 @@
 ﻿# ICARUS
 A Single Page Application Sandbox.
 
-Technologies Used:
-  - C# ASP.NET MVC5 using Entity 6 on SQL Server 
-  - HTML5, CSS3, JavaScript (ES6) and Bootstrap 3.3.7
-
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+See deployment for notes on how to deploy the project on a live system.
+
+### Stack
+
+  - C# ASP.NET MVC5 using Entity 6 on SQL Server 2017
+  - HTML5, CSS3, JavaScript (ES6) and Bootstrap 3.3.7
 
 ### Prerequisites
 
@@ -32,6 +34,17 @@ Primarily tested in WebKit
 Limited DIALOG support will need to be corrected in future builds
 
 ### Install
+
+#### App Settings
+
+Create AppSettings.config in the same directory as Web.config
+~~~~
+<appSettings>
+  <add key="version" value="0.0.0" />
+  <add key="toEmail" value="XXX@YYY.ZZZ" />
+  <add key="fromEmail" value="XXX@YYY.ZZZ" />
+</appSettings>
+~~~~
 
 #### Connection Strings
 
