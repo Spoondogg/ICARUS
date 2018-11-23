@@ -149,15 +149,6 @@ namespace ICARUS.Controllers {
                     return View(model);
             }
         }
-        /// <summary>
-        /// GET: /Account/Register
-        /// </summary>
-        /// <returns></returns>
-        [Authorize(Roles = "Admin")]
-        public ActionResult Register() {
-            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
-            return View();
-        }
         /*
         /// <summary>
         /// Attempts to register the given user 
@@ -208,10 +199,10 @@ namespace ICARUS.Controllers {
             try {
                 var formResults = formPost.resultsToDictionary();
                 var user = new ApplicationUser {
-                    UserName = formResults["email"].ToString(),
-                    Email = formResults["email"].ToString()
+                    UserName = formResults["Email"].ToString(),
+                    Email = formResults["Email"].ToString()
                 };
-                var result = await UserManager.CreateAsync(user, formResults["password"].ToString());
+                var result = await UserManager.CreateAsync(user, formResults["Password"].ToString());
 
                 if (result.Succeeded) {
 
@@ -361,8 +352,7 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin(string provider, string returnUrl) {
             // Request a redirect to the external login provider
             var challengeResult = new ChallengeResult(provider, 
-                Url.Action("ExternalLoginCallback", "Account", 
-                    new {
+                Url.Action("ExternalLoginCallback", "Account", new {
                         ReturnUrl = returnUrl
                     }
                 )
@@ -410,8 +400,7 @@ namespace ICARUS.Controllers {
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-
-        //
+        
         // POST: /Account/SendCode
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> SendCode(SendCodeViewModel model) {

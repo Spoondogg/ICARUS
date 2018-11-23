@@ -2,14 +2,12 @@
     ViewBag.Title = "Index";
 }
 @section ServiceWorker {
+    @* see https://developers.google.com/web/fundamentals/app-install-banners/ *@
     <script type="text/javascript">
         console.log('Index.ServiceWorker');
-        // https://developers.google.com/web/fundamentals/app-install-banners/
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later.
+            e.preventDefault(); // Stash the event so it can be triggered later.
             deferredPrompt = e;
             // Update UI notify the user they can add to home screen
             //btnAdd.style.display = 'block';
@@ -22,26 +20,16 @@
         // Register service worker
         // https://developers.google.com/web/fundamentals/primers/service-workers/
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-                    // Registration was successful
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').then((registration) => {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function (err) {
-                    // registration failed :(
+                }, (err) => {
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
         }
     </script>
 }
-@section Scripts {
-    @*
-        <script src="@Url.Content("~/Scripts/injector/main.js")" type="module"></script>
-        <script src="@Url.Content("~/Scripts/dist/dependencies.js")" type="module"></script>
-    *@
-
-}
 @section viewInit {
-    <script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module">
-    </script>
+    <script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module"></script>
 }

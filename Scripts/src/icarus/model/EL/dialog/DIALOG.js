@@ -51,7 +51,7 @@ export default class DIALOG extends EL {
             }
         };
     }
-	/** Makes modal appear (adds `open` attribute)
+	/** Shows the DIALOG and adds the 'open' attribute
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {Promise} Callback on successful display of dialog
 	*/
