@@ -36,36 +36,48 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	    @param {Array<FORMELEMENT>} inputs A list of inputs
 	    @returns {ThisType} Returns this FORMELEMENTGROUP
 	*/
-	addInputElements(inputs) {
-		inputs.forEach((i) => this.addInputElement(i));
-		return this;
+    addInputElements(inputs) {
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(inputs.forEach((i) => this.addInputElement(i)));
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Adds the given FORMELEMENT to this group
 	    @param {MODEL} input A FORM INPUT MODEL
 	    @returns {FORMELEMENT} A FORMELEMENT object
 	*/
-	addInputElement(input) {
-		let inp = null;
-		if (input.type === 'FORMPOSTINPUT') {
-			inp = new FORMPOSTINPUT(this.body.pane, input);
-		} else {
-			switch (input.element) {
-				case 'TEXTAREA':
-					inp = new FORMTEXTAREA(this.body.pane, input);
-					break;
-				case 'SELECT':
-					inp = new FORMSELECT(this.body.pane, input);
-					break;
-				case 'INPUT':
-					inp = new FORMINPUT(this.body.pane, input);
-					break;
-				default:
-					inp = new FORMINPUT(this.body.pane, input);
-					break;
-			}
-		}
-		this.children.push(inp);
-		return this.children[this.children.length - 1];
+    addInputElement(input) {
+        return new Promise((resolve, reject) => {
+            try {
+                let inp = null;
+                if (input.type === 'FORMPOSTINPUT') {
+                    inp = new FORMPOSTINPUT(this.body.pane, input);
+                } else {
+                    switch (input.element) {
+                        case 'TEXTAREA':
+                            inp = new FORMTEXTAREA(this.body.pane, input);
+                            break;
+                        case 'SELECT':
+                            inp = new FORMSELECT(this.body.pane, input);
+                            break;
+                        case 'INPUT':
+                            inp = new FORMINPUT(this.body.pane, input);
+                            break;
+                        default:
+                            inp = new FORMINPUT(this.body.pane, input);
+                            break;
+                    }
+                }
+                this.children.push(inp);
+                //return this.children[this.children.length - 1];
+                resolve(this.children[this.children.length - 1]);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }
 export { ATTRIBUTES, createInputModel, EL, FORMELEMENT, FORMELEMENTGROUP, MODEL };

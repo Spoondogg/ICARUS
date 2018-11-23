@@ -5,8 +5,8 @@
 //import STRING from '../../src/icarus/STRING.js';
 // #endregion
 // #region Variables and Methods
-const USERNAME = 'ryan@spoonmedia.ca';
-const PASSWORD = '***REMOVED***';
+const USERNAME = 'user@spoonmedia.ca';
+const PASSWORD = '123AbC!';
 //const RECORD = false; // If true, screenshots are taken before and after each test step
 let testCount = 0;
 let page = null;

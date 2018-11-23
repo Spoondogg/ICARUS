@@ -1,5 +1,4 @@
-﻿@*
-    Global Javascript variables that are generated 
+﻿@*  Global Javascript variables that are generated 
     Server Side.
 
     This partial view can be imported into _Layout.cshtml
@@ -7,18 +6,11 @@
     available for init.js
 *@
 <script>
-    /**
-        The Application Identifier        
-    */
-    var id = @ViewBag.id;
-
-    /**
-        A friendly string identifier for the user
-    */
+    /** The Application Identifier */
+    var id = @(ViewBag.id == null ? "-1" : ViewBag.id);
+    /** A friendly string identifier for the user */
     var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
-
-    /**
-        If enabled, features that are under development 
+    /** If enabled, features that are under development 
         are also shown.  
 
         This will most definately include buggy or 

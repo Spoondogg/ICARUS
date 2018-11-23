@@ -1,7 +1,8 @@
 /** @module */
-import CONTAINER, { DIALOG, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
-import FORM from '../../form/FORM.js';
+//import FORM from '../../form/FORM.js';
+//import DIV from '../../div/DIV.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
@@ -101,7 +102,7 @@ export default class MAIN extends CONTAINER {
 	    @param {string} label The displayed text
 	    @param {string} url The optional url that this Nav Item references 
 	    @returns {NAVITEMICON} A Nav Item with an Icon and optional label
-	 */
+	*/
 	addNavItemIcon(menu, icon, label = '', url = '#') {
 		return menu.addNavItemIcon(new MODEL().set({
 			icon,
@@ -269,48 +270,38 @@ export default class MAIN extends CONTAINER {
 		The user will be redirected to a third party authenticator
 	    @returns {void}
 	*/
-	loginExternal() {
-		console.log('loginExternal()');
-		/*
-		console.log('Log In - External OAuth Provider');
-		this.prompt = new PROMPT('Log In - OAuth', '', [], [], true);
-		this.prompt.addClass('prompt');
-		this.prompt.form.postUrl = '/Account/ExternalLogin';
-		this.prompt.form.provider = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'provider'
-		})));
-		this.prompt.form.returnUrl = new EL(this.prompt.form.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'ReturnUrl'
-		})));
-		this.prompt.form.destroy(0);
-		// Create a new form to submit 3rd party logins
-		this.externalLogin = FORM.createEmptyForm(this.prompt.container.body.pane);
-		this.externalLogin.el.setAttribute('method', 'post');
-		this.externalLogin.el.setAttribute('action', '/Account/ExternalLogin?ReturnUrl=%2F');
-		this.externalLogin.footer.buttonGroup.children[0].el.style.display = 'none';
-		this.provider = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'provider'
-		})));
-		this.returnUrl = new EL(this.externalLogin.fieldset.formElementGroup.body.pane, 'INPUT', new MODEL(new ATTRIBUTES({
-			'type': 'hidden',
-			'name': 'ReturnUrl'
-		})));
-		let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth - Google');
-		btnOAuth.el.onclick = () => {
-			console.log(50, 'Launching OAuth2 Authenticator...');
-			//let url = new URL(window.location.href);
-			let returnUrl = this.url.origin + '/signin-google';
-			this.returnUrl.el.setAttribute('value', returnUrl);
-			let provider = 'Google';
-			this.provider.el.setAttribute('value', provider);
-			let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-			location.href = postUrl;
-		};
-		this.prompt.show();
-		*/
+    loginExternal() {
+        let prompt = new PROMPT('Login OAuth2');
+        prompt.form.setAction('/Account/ExternalLogin'); // ?ReturnUrl=%2F
+        prompt.form.id = 0;
+        prompt.form.label = 'Login';
+        prompt.form.el.setAttribute('id', 0);
+        prompt.form.addClass('login');
+        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+            createInputModel('INPUT', 'provider', '', '', 'HIDDEN'),
+            createInputModel('INPUT', 'ReturnUrl', '', '', 'HIDDEN')
+        ]).then(() => prompt.form.footer.buttonGroup.children[0].destroy()).then(() => {
+
+            prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
+                let url = new URL(window.location.href);
+                let returnUrl = url.origin + '/signin-google';
+                prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
+                let provider = 'Google';
+                prompt.form.el.elements.provider.setAttribute('value', provider);
+                let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+                /*
+                prompt.form.setAction(postUrl);
+                prompt.form.post().then((payload) => {
+                    console.log('Submitted OAuth Login Request', payload);
+                    //location.href = payload.model.RedirectUri;
+                });
+                */
+                location.href = postUrl;
+            };
+
+            //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+            prompt.show();
+        });
 	}
 	/** Log into the application using the given credentials
 		param {string} email Username / Email 
@@ -327,71 +318,36 @@ export default class MAIN extends CONTAINER {
 			</p>
 			</div>
 		</form>
-	    @todo Consider handling email/password string or CREDENTIALS object
-	    @todo Create INPUT CHECKBOX called 'RememberMe'
-	    @todo Create BUTTON to launch 'Register as new User
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
 	*/
-	login() { //email, password
-        let dialog = new DIALOG(new MODEL('login').set({
-            text: 'Log In',
-            container: this
-        }));
-		let form = FORM.createEmptyForm(this.body.pane);
-		$(form.el).appendTo(dialog.body.el);
-		form.setAction('/Account/Login');
-		form.id = 0;
-		form.label = 'Login';
-		form.el.setAttribute('id', 0);
-		form.el.setAttribute('class', 'login');
-		form.el.setAttribute('method', 'POST');
-		form.el.setAttribute('action', '#');
-		form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+	login() {
+        let prompt = new PROMPT('Login');
+        prompt.form.setAction('/Account/Login');
+        prompt.form.id = 0;
+        prompt.form.label = 'Login';
+        prompt.form.el.setAttribute('id', 0);
+        prompt.form.addClass('login');
+        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
 			createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 			createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 			createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 		]);
-		form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-		/* Create a new form to submit 3rd party logins
-        this.externalLogin = this.createExternalLoginForm();
-        this.provider = new FORMINPUT(this.externalLogin.children[0].children[0].body.pane, new MODEL(new ATTRIBUTES({
-            'type': 'hidden',
-            'name': 'provider'
-        })));
-        this.returnUrl = new FORMINPUT(this.externalLogin.children[0].children[0].body.pane, new MODEL(new ATTRIBUTES({
-            'type': 'hidden',
-            'name': 'returnUrl'
-        })));
-        let btnOAuth = this.externalLogin.footer.buttonGroup.addButton('OAuth');
-        btnOAuth.el.onclick = function () {
-            console.log(50, 'Launching OAuth2 Authenticator...');
-			let returnUrl = this.url.origin + '/signin-google';
-            this.returnUrl.el.setAttribute('value', returnUrl);
-            
-			let provider = 'Google';
-			this.provider.el.setAttribute('value', provider);			            
+        prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = this.loginExternal;
 
-            let postUrl = '/Account/ExternalLogin?provider=' +
-                provider + '&returnUrl=' + encodeURI(returnUrl); 
-			
-            location.href = '/Account/ExternalLogin';			
+        prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
+            let url = new URL(window.location.href);
+            let returnUrl = url.origin + '/signin-google';
+            //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
+            let provider = 'Google';
+            //prompt.form.el.elements['provider'].setAttribute('value', provider);
+            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+            location.href = postUrl;
         };
-        */
-		form.afterSuccessfulPost = (payload, status) => {
-			this.ajaxRefreshIfSuccessful(payload, status)
-		};
-		dialog.show();
-	}
-	/** Sets up the External Login Form
-	    @returns {FORM} An external login form
-	*/
-	createExternalLoginForm() {
-		let externalLogin = FORM.createEmptyForm(this.prompt.container.body.pane);
-		externalLogin.el.setAttribute('method', 'post');
-		externalLogin.el.setAttribute('action', '/Account/ExternalLogin');
-		externalLogin.footer.buttonGroup.children[0].el.style.display = 'none';
-		return externalLogin;
+
+        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+		prompt.show();
 	}
 	/** Logs the current user out
         @returns {Promise<boolean>} True on success
@@ -407,61 +363,21 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
 	register() {
-		console.log('Register');
-		/*
-        this.prompt = new PROMPT('Register', '', [], [], true);
-		this.prompt.addClass('prompt');
-		this.prompt.form.setPostUrl('/Account/Register');
-		this.prompt.form.el.setAttribute('class', 'register');
-		//this.prompt.form.el.setAttribute('method', 'POST');
-		//this.prompt.form.el.setAttribute('action', 'Account/Register');
-		this.prompt.form.postUrl = "Account/Register";
-		//this.email = new INPUT(this.prompt.formElementGroup.body.pane,
-		this.email = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'typeId': INPUTTYPES.INPUT,
-			'type': 'Email',
-			'name': 'email'
-		})).set({
-			'label': 'Username',
-			'showHeader': 0
-		}));
-		this.password = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'typeId': INPUTTYPES.PASSWORD,
-			'type': 'Password',
-			'name': 'password'
-		})).set({
-			'label': 'Password',
-			'showHeader': 0
-		}));
-		this.passwordConfirm = new FORMINPUT(this.prompt.form.fieldset.formElementGroup.body.pane, new MODEL(new ATTRIBUTES({
-			'typeId': INPUTTYPES.PASSWORD,
-			'type': 'Password',
-			'name': 'PasswordConfirm'
-		})).set({
-			'label': 'Confirm Password',
-			'showHeader': 0
-		}));
-		this.prompt.form.afterSuccessfulPost = function(payload) {
-			this.prompt.form.ajaxRefreshIfSuccessful(payload, 'success');
-			this.prompt.hide();
-		}.bind(this);
-		this.prompt.show();
-		*/
-	}
-	/** Call an external registration form
-        param {string} email Username / Email 
-        @returns {void}
-    */
-	registerExternal() { // email
-		console.log('Register External Login');
-		/*
-        this.prompt = new PROMPT('Associate your OAuth2 Id', '', [], [], true);
-		this.prompt.form.destroy();
-		let tmp = new DIV(this.prompt.container.body.pane, new MODEL());
-		$(document.getElementById('externalLoginConfirmation')).insertBefore(tmp.el);
-		tmp.destroy();
-		this.prompt.show();
-        */
+        let prompt = new PROMPT('Register');
+        prompt.form.setAction('/Account/Register');
+        prompt.form.id = 0;
+        prompt.form.label = 'Register';
+        prompt.form.el.setAttribute('id', 0);
+        prompt.form.addClass('register');
+        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+            createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+        ]);
+        prompt.form.afterSuccessfulPost = function(payload, status) {
+            this.ajaxRefreshIfSuccessful(payload, status).bind(this);
+        }.bind(this);
+        prompt.show();
 	}
 }
 export { CONTAINERFACTORY, LOADER, MODEL, NAVITEMICON };
