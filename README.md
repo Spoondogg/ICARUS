@@ -43,6 +43,8 @@ Create AppSettings.config in the same directory as Web.config
   <add key="version" value="0.0.0" />
   <add key="toEmail" value="XXX@YYY.ZZZ" />
   <add key="fromEmail" value="XXX@YYY.ZZZ" />
+  <add key="googleClientId" value="XXXXXXXXXXX" />
+  <add key="googleClientSecret" value="XXXXXXXXXXX" />
 </appSettings>
 ~~~~
 

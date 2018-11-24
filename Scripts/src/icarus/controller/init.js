@@ -11,5 +11,5 @@ import APP from './APP.js';
     </ul>
 */
 var app = new APP(id, user, dev);
-app.showLoginPrompt().main.load(id);
+app.showLoginPrompt().showExternalLoginPrompt().main.load(id);
 /* eslint-enable no-undef */

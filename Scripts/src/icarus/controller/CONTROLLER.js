@@ -112,7 +112,30 @@ export default class CONTROLLER extends MODEL {
 			this.main.login();
 		}
 		return this;
-	}
+    }
+    /**
+	    If conditions are met, launches OAuth Login Prompt
+	    @returns {boolean} If a login parameter exists, return true
+	*/
+    showExternalLoginPrompt() {
+        let provider = this.url.searchParams.get('provider');
+        let returnUrl = this.url.searchParams.get('returnUrl');
+        if (provider && returnUrl) {
+            this.main.loader.log(50, 'Processing OAuth...', true).then(() => {
+                this.main.loginExternal(provider, returnUrl);
+                document.getElementById('Google').click(); // clicks ExternalLogin.cshtml for that returns to '/'
+                //location.href = '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + this.url.searchParams.get('provider');
+                /*$.post('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F', {
+                    '__RequestVerificationToken': this.main.getToken(),
+                    'provider': this.url.searchParams.get('provider'),
+                    'returnUrl': this.url.searchParams.get('returnUrl')
+                }, (data) => {
+                    console.log('Payload', data);
+                }); //, 'json'this.main.ajaxRefreshIfSuccessful,*/
+            });
+        }
+        return this;
+    }
 	/**
 	    If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP

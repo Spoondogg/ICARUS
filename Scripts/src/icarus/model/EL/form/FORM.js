@@ -92,6 +92,15 @@ export default class FORM extends CONTAINER {
         this.el.setAttribute('action', url);
 		return this;
     }
+    /** Sets the form method
+        @param {string} method ie POST or GET
+        @returns {ThisType} callback
+    */
+    setMethod(method = 'POST') {
+        this.attributes.method = method;
+        this.el.setAttribute('method', method);
+        return this;
+    }
     /** Gets this form's ACTION attribute
         @returns {string} Returns this form's action
     */
