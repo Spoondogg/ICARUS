@@ -45,16 +45,6 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Retrieves OAuth Authentication Providers and returns as Json object
-        /// </summary>
-        /// <returns></returns>
-        //[HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> GetLoginProviders() {
-            var loginProviders = HttpContext.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-            return Json(new Payload(1, "MODEL", loginProviders, "Retrieved OAuth Providers"), JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
         /// GET for /Account/Login
         /// </summary>
         /// <param name="returnUrl"></param>
@@ -64,6 +54,7 @@ namespace ICARUS.Controllers {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
         /// <summary>
         /// POST: /Account/Login
         /// </summary>
@@ -349,17 +340,17 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin() {
             return View();
         }
-
+        
         /// <summary>
         /// POST: /Account/ExternalLogin
         /// Third party OAuth2 Authorization
-        /// Request a redirect to the external login provider and return challenge result
         /// </summary>
         /// <param name="provider"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl) {
+            // Request a redirect to the external login provider
             var challengeResult = new ChallengeResult(provider, 
                 Url.Action("ExternalLoginCallback", "Account", new {
                         ReturnUrl = returnUrl
@@ -397,13 +388,8 @@ namespace ICARUS.Controllers {
             return Json(new Payload(1, "ChallengeResult", challengeResult));
             //return challengeResult;
         }*/
-
-        /// <summary>
-        /// GET: /Account/SendCode
-        /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <param name="rememberMe"></param>
-        /// <returns></returns>
+        
+        // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe) {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
@@ -414,12 +400,8 @@ namespace ICARUS.Controllers {
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-
-        /// <summary>
-        /// POST: /Account/SendCode
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        
+        // POST: /Account/SendCode
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> SendCode(SendCodeViewModel model) {
             if (!ModelState.IsValid) {
@@ -541,10 +523,16 @@ namespace ICARUS.Controllers {
         /// Recieves the __RequestVerificationToken and logs out
         /// </summary>
         /// <returns>Json Payload</returns>
-        [HttpPost, ValidateAntiForgeryToken]
+        /// HttpPost, 
+        //[HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return Json(new Payload(1, "Successfully logged out")); //JsonRequestBehavior.AllowGet
+            //return RedirectToAction("Index", "Home");
+            /*return Json(new {
+                state = 1,
+                status = "success"
+            }, JsonRequestBehavior.AllowGet);*/
+            return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
