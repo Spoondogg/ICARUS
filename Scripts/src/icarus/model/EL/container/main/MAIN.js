@@ -219,26 +219,31 @@ export default class MAIN extends CONTAINER {
                     returnUrl = this.url.origin + returnUrl;
                     location.href = returnUrl;
                 }
-                $.getJSON('Main/Get/' + id, (payload) => {
-                    if (payload.result === 1) {
-                        try {
-                            if (payload.model.label) {
-                                document.title = payload.model.label;
+                if (id >= 0) {
+                    $.getJSON('Main/Get/' + id, (payload) => {
+                        if (payload.result === 1) {
+                            try {
+                                if (payload.model.label) {
+                                    document.title = payload.model.label;
+                                }
+                                this.body.pane.empty().then(() => {
+                                    this.setId(this.id);
+                                    this.setLabel(payload.model.label);
+                                    this.populate(payload.model.children).then(() => resolve());
+                                });
+                            } catch (e) {
+                                console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
+                                reject(e);
                             }
-                            this.body.pane.empty().then(() => {
-                                this.setId(this.id);
-                                this.setLabel(payload.model.label);
-                                this.populate(payload.model.children).then(() => resolve());
-                            });
-                        } catch (e) {
-                            console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
-                            reject(e);
+                        } else {
+                            reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
                         }
-                    } else {
-                        //console.warn(0, 'Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message);
-                        reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
-                    }
-                });
+                    });
+                } else {
+                    console.log('Invalid Id to Load');
+                    resolve();
+                }
+                
             } catch (e) {
                 reject(e);
             }
@@ -268,37 +273,48 @@ export default class MAIN extends CONTAINER {
 	}
 	/** Launches the External Authentication Process
 		The user will be redirected to a third party authenticator
+        @param {string} provider OAuth Provider
+        @param {strong} returnUrl Return URL for 3rd party
 	    @returns {void}
 	*/
-    loginExternal() {
+    loginExternal(provider, returnUrl) {
+        console.log('MAIN.loginExternal();', provider, returnUrl);
         let prompt = new PROMPT('Login OAuth2');
-        prompt.form.setAction('/Account/ExternalLogin'); // ?ReturnUrl=%2F
+        prompt.form.setAction('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F'); // ?ReturnUrl=%2F
         prompt.form.id = 0;
-        prompt.form.label = 'Login';
+        prompt.form.label = 'Login External';
         prompt.form.el.setAttribute('id', 0);
         prompt.form.addClass('login');
-        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+        /*prompt.form.children[0].children[0].addInputElements([
             createInputModel('INPUT', 'provider', '', '', 'HIDDEN'),
             createInputModel('INPUT', 'ReturnUrl', '', '', 'HIDDEN')
-        ]).then(() => prompt.form.footer.buttonGroup.children[0].destroy()).then(() => {
-
-            prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
-                let url = new URL(window.location.href);
-                let returnUrl = url.origin + '/signin-google';
-                prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
-                let provider = 'Google';
-                prompt.form.el.elements.provider.setAttribute('value', provider);
-                let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-                /*
-                prompt.form.setAction(postUrl);
-                prompt.form.post().then((payload) => {
-                    console.log('Submitted OAuth Login Request', payload);
-                    //location.href = payload.model.RedirectUri;
+        ]).then(() => */
+        prompt.form.footer.buttonGroup.children[0].destroy().then(() => {            
+            $.getJSON('/Account/GetLoginProviders', (payload) => {
+                payload.model.forEach((p) => {
+                    prompt.form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
+                        //let url = new URL(window.location.href);
+                        //let returnUrl = url.origin + '/signin-google';
+                        //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
+                        //let provider = 'Google';
+                        //prompt.form.el.elements['provider'].setAttribute('value', provider);
+                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + p.Properties.AuthenticationType + '&returnUrl=' + encodeURI(returnUrl);
+                        location.href = postUrl;
+                    };
+                    /*
+                    prompt.form.footer.buttonGroup.addButton('Google').el.onclick = () => {
+                        //let url = new URL(window.location.href);
+                        //let returnUrl = url.origin + '/signin-google';
+                        prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
+                        //let provider = 'Google';
+                        prompt.form.el.elements.provider.setAttribute('value', provider);
+                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+                    
+                        location.href = postUrl;
+                    };
+                    */
                 });
-                */
-                location.href = postUrl;
-            };
-
+            });
             //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
             prompt.show();
         });
@@ -334,17 +350,11 @@ export default class MAIN extends CONTAINER {
 			createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 		]);
         prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = this.loginExternal;
 
-        prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
-            let url = new URL(window.location.href);
-            let returnUrl = url.origin + '/signin-google';
-            //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
-            let provider = 'Google';
-            //prompt.form.el.elements['provider'].setAttribute('value', provider);
-            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-            location.href = postUrl;
-        };
+        let url = new URL(window.location.href);
+        let returnUrl = url.origin + '/signin-google';
+
+        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = () => this.loginExternal('Google', returnUrl);
 
         prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
 		prompt.show();

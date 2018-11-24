@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using ICARUS.Models;
+using System.Configuration;
 
 namespace ICARUS {
     /** 
@@ -71,8 +72,8 @@ namespace ICARUS {
             //   appSecret: "");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions() {
-                ClientId = "244167453755-ce798hb2fvqmgt32hrdgbo9fj9k6mh74.apps.googleusercontent.com",
-                ClientSecret = "jin4AzVzL1LR49n87St7PxXf"
+                ClientId = ConfigurationManager.AppSettings["googleClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["googleClientSecret"]
             });
         }
     }
