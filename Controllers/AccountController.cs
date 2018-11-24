@@ -340,7 +340,15 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin() {
             return View();
         }
-        
+
+        //[HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public async Task<ActionResult> GetLoginProviders() {
+            var loginProviders = HttpContext.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+            return Json(
+                new Payload(1, "MODEL", loginProviders, "Retrieved OAuth Providers"), JsonRequestBehavior.AllowGet
+            );
+        }
+
         /// <summary>
         /// POST: /Account/ExternalLogin
         /// Third party OAuth2 Authorization
