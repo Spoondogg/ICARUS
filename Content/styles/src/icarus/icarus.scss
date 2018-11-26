@@ -286,7 +286,7 @@ h2 {
 	}
 }
 // ********** DIALOG ********** //
-$transition-duration: .3s;
+$transition-duration: .2s;
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -341,7 +341,8 @@ $transition-duration: .3s;
         transform: translateY(-110%);
     }
 }
-dialog {
+dialog,
+.modal {
     animation: slideOutUp $transition-duration ease-out;
     border: 0;
     border-radius: .6rem;
@@ -362,7 +363,8 @@ dialog {
         top: 0;
     }
 
-    &[open] {
+    &[open],
+    &.in {
         animation: slideInTop $transition-duration ease-in;
 
         &.hiding {
@@ -379,7 +381,8 @@ dialog {
         bottom: 0;
         top: auto;
 
-        &[open] {
+        &[open],
+        &.in {
             animation: slideInTop $transition-duration ease-in;
 
             &.hiding {
@@ -395,7 +398,8 @@ dialog {
         top: 2em;
         width: 250px;
 
-        &[open] {
+        &[open],
+        &.in {
             animation: slideInRight $transition-duration ease-in;
 
             &.hiding {
@@ -419,7 +423,8 @@ dialog {
             opacity: 0;
         }
 
-        &[open] {
+        &[open],
+        &.in {
             animation: slideInTop $transition-duration ease-in;
 
             &.hiding {

@@ -35,6 +35,8 @@ Limited DIALOG support will need to be corrected in future builds
 
 ### Install
 
+Clone repo and create the required credentials
+
 #### App Settings
 
 Create AppSettings.config in the same directory as Web.config

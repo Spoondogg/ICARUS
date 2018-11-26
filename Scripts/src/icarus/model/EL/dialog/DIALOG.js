@@ -15,16 +15,21 @@ import NAVBAR from '../nav/navbar/NAVBAR.js';
     @see https://keithjgrant.com/posts/2018/01/meet-the-new-dialog-element/
 */
 export default class DIALOG extends EL {
-	/** Constructs a generic DIALOG Element
+	/** Constructs a generic DIALOG Element or uses a polyfill
 	    @constructs DIALOG
 	    @param {MODEL} model The object model
 	*/
 	constructor(model) {
-        super(document.body, 'DIALOG', model);
-        this.addClass('hiding');
+        //super(document.body, 'DIALOG', model);
+        super(document.body, 'DIV', model);
+        this.addClass('modal');
+        //this.addClass('animated');
+        this.el.setAttribute('role', 'dialog');
+        //dialogPolyfill.registerDialog(this.el);
+        //this.addClass('hiding');
         this.container = model.container;
-
-		document.body.insertBefore(this.el, document.body.firstChild);
+        document.body.insertBefore(this.el, document.body.firstChild);
+        
 		this.header = new HEADER(this, new MODEL().set({
 			label: model.label
         }));
@@ -38,8 +43,21 @@ export default class DIALOG extends EL {
 		this.footer = new FORMFOOTER(this, new MODEL().set({
 			align: ALIGN.VERTICAL
 		}));
-        this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close();
+        this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close();      
         this.closeOnFocusOut();
+
+        // Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+        $(this.el).on('show.bs.modal', () => {
+            this.removeClass('hiding');
+            //this.addClass('bounce');
+        }).on('hide.bs.modal', () => {
+            //this.removeClass('bounce');
+            this.addClass('hiding');
+        }).on('hidden.bs.modal', () => {
+
+        }).on('shown.bs.modal', () => {
+
+        });
     }
     /** When DIALOG loses focus, it will be closed
         @returns {void}
@@ -52,6 +70,7 @@ export default class DIALOG extends EL {
         };
     }
 	/** Shows the DIALOG and adds the 'open' attribute
+        Hides all visible DIALOG(s)
         @param {number} delay Millisecond delay until dialog is shown
 	    @returns {Promise} Callback on successful display of dialog
 	*/
@@ -59,8 +78,9 @@ export default class DIALOG extends EL {
 		return new Promise((resolve, reject) => {
             setTimeout(() => {
                 try {
-                    this.el.showModal();
-                    this.removeClass('hiding');
+                    //this.el.showModal(); // DIALOG method
+                    $(this.el).modal('show');
+                    //this.removeClass('hiding');
                     resolve(this);
                 } catch (e) {
                     if (e instanceof DOMException) {
@@ -76,7 +96,7 @@ export default class DIALOG extends EL {
         @param {number} delay Millisecond delay until dialog is closed
 	    @returns {Promise} Callback on successful close
 	*/
-    close(delay = 300) {
+    close(delay = 200) {
         return this.hide(delay, false);
     }
     /** Hides the DIALOG
@@ -84,14 +104,13 @@ export default class DIALOG extends EL {
         @param {boolean} preserve If true, element is not deleted
 	    @returns {Promise} Callback on successful close
     */
-    hide(delay = 300, preserve = true) {
+    hide(delay = 200, preserve = true) {
         return new Promise((resolve, reject) => {
             try {
                 this.addClass('hiding');
                 setTimeout(() => {
-                    this.el.close();
-                    this.removeClass('hiding');
-                    //this.el.removeEventListener('hiding', this.hide);
+                    //this.el.close(); // DIALOG method
+                    $(this.el).modal('hide');
                     if (preserve) {
                         resolve();
                     } else {

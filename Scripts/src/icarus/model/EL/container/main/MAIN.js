@@ -81,7 +81,7 @@ export default class MAIN extends CONTAINER {
 	addNavOptions() {
 		if (this.navBar.menu.menu) {
 			this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set({
-				'icon': ICONS.SIDEBAR
+				icon: ICONS.SIDEBAR
 			}));
 			this.btnSidebar.el.onclick = this.toggleSidebar.bind(this);
 			$(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
@@ -351,10 +351,36 @@ export default class MAIN extends CONTAINER {
 		]);
         prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
 
-        let url = new URL(window.location.href);
-        let returnUrl = url.origin + '/signin-google';
+        $.getJSON('/Account/GetLoginProviders', (payload) => {
+            payload.model.forEach((p) => {
+                prompt.form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
+                    //let url = new URL(window.location.href);
+                    let returnUrl = this.url.origin + '/signin-' + p.Properties.Caption;
+                    //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
+                    //let provider = 'Google';
+                    //prompt.form.el.elements['provider'].setAttribute('value', provider);
+                    let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + p.Properties.AuthenticationType + '&returnUrl=' + encodeURI(returnUrl);
+                    location.href = postUrl;
+                };
+                /*
+                prompt.form.footer.buttonGroup.addButton('Google').el.onclick = () => {
+                    //let url = new URL(window.location.href);
+                    //let returnUrl = url.origin + '/signin-google';
+                    prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
+                    //let provider = 'Google';
+                    prompt.form.el.elements.provider.setAttribute('value', provider);
+                    let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+                
+                    location.href = postUrl;
+                };
+                */
+            });
+        });
 
-        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = () => this.loginExternal('Google', returnUrl);
+
+        //let url = new URL(window.location.href);
+        //let returnUrl = url.origin + '/signin-google';
+        //prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = () => this.loginExternal('Google', returnUrl);
 
         prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
 		prompt.show();

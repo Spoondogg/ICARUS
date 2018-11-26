@@ -479,8 +479,18 @@ namespace ICARUS.Controllers {
                             Email = loginInfo.Email
                         }
                     );
-                    
-                    //return Json(new Payload(5, loginInfo.Login.LoginProvider, model, "External Login Confirmation: "+loginInfo.Email), JsonRequestBehavior.AllowGet);
+
+                    /* This works, but you still need to pass these values to MAIN and create a FORM
+                     * to work with the results.  Exceptions can occur if the value already exists on the server.
+                     * 
+                    Dictionary<string, object> model = new Dictionary<string, object>();
+                    model.Add("login", loginInfo.Login);
+                    model.Add("username", loginInfo.DefaultUserName);
+                    model.Add("email", loginInfo.Email);
+                    model.Add("externalIdentity", loginInfo.ExternalIdentity);
+
+                    return Json(new Payload(5, loginInfo.Login.LoginProvider, model, "External Login Confirmation: "+loginInfo.Email), JsonRequestBehavior.AllowGet);
+                    */
             }
         }
 

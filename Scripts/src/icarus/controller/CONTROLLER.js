@@ -118,20 +118,34 @@ export default class CONTROLLER extends MODEL {
 	    @returns {boolean} If a login parameter exists, return true
 	*/
     showExternalLoginPrompt() {
+        console.log('showExternalLoginPrompt();');
         let provider = this.url.searchParams.get('provider');
         let returnUrl = this.url.searchParams.get('returnUrl');
         if (provider && returnUrl) {
+            console.log('showing');
             this.main.loader.log(50, 'Processing OAuth...', true).then(() => {
-                this.main.loginExternal(provider, returnUrl);
-                document.getElementById('Google').click(); // clicks ExternalLogin.cshtml for that returns to '/'
-                //location.href = '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + this.url.searchParams.get('provider');
-                /*$.post('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F', {
+
+                //this.main.loginExternal(provider, returnUrl);
+
+                //console.log('Redirecting to ExternalLogin');
+                console.log('You should click the form', '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + provider);
+                //document.getElementById(provider).click(); // clicks ExternalLogin.cshtml form that returns to '/'
+
+                //location.href = '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + provider;
+
+                /*
+                // Or maybe just post to it? 
+                // No, then you aren't able to parse the VIEW that is returned
+                // You would then need to modify the controller that affects the view
+                
+                $.post('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F', {
                     '__RequestVerificationToken': this.main.getToken(),
-                    'provider': this.url.searchParams.get('provider'),
-                    'returnUrl': this.url.searchParams.get('returnUrl')
+                    'provider': provider,
+                    'returnUrl': '%2F'
                 }, (data) => {
                     console.log('Payload', data);
-                }); //, 'json'this.main.ajaxRefreshIfSuccessful,*/
+                }); //, 'json'this.main.ajaxRefreshIfSuccessful,
+                */
             });
         }
         return this;
