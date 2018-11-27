@@ -25,8 +25,7 @@
             <h1>Authenticating...</h1>
             <form id="login-external" class="login-external" 
                 action="/Account/ExternalLogin/externalLogin?ReturnUrl=%2F" 
-                method="post" style="display:none;"
-            >
+                method="post" style="background-color:white;">
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="provider" value="@Request["provider"]" />
                 @*foreach (AuthenticationDescription p in loginProviders) {
@@ -36,13 +35,15 @@
                         @p.AuthenticationType
                     </button>
                 }*@
+                <button type="submit">Submit</button>
             </form>
         }
         <script>
             //let url = new URL(window.location.href);
             //let provider = url.searchParams.get('provider');
             //document.getElementById(provider).click(); // clicks ExternalLogin.cshtml form that returns to '/'
-            document.getElementById('login-external').submit();
+            console.log('Should submit form');
+            //document.getElementById('login-external').submit();
         </script>
         <!--<script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module"></script>-->
     }

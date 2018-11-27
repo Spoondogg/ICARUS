@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ICARUS.Models {
 
     public class ExternalLoginConfirmationViewModel {
-        [Required]
-        [Display(Name = "Email")]
+        [Required, Display(Name = "Email")]
         public string Email { get; set; }
     }
 
