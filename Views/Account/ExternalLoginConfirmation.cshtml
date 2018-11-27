@@ -57,7 +57,7 @@
             @Html.AntiForgeryToken()
             <p class="text-info">
                 You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.<br />
-                Please enter a user name for this site below and click the Register button to finish
+                Please enter a username for this site below and click the Register button to finish
                 logging in.
             </p>
             <div>
@@ -73,7 +73,6 @@
                 </div>
             </div>
         }
-        <script>console.log('woot');</script>
+        <!--<script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module"></script>-->
     }
-    <!--<script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module"></script>-->
 }

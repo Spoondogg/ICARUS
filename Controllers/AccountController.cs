@@ -54,7 +54,6 @@ namespace ICARUS.Controllers {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
         /// <summary>
         /// POST: /Account/Login
         /// </summary>
@@ -233,7 +232,7 @@ namespace ICARUS.Controllers {
 
             // If we got this far, something failed, redisplay form
             //return View(model);
-            return Json(new Payload(2, "Error", "Something went wrong."));
+            return Json(new Payload(2, "Error", new MODEL(), "Something went wrong."));
         }
 
         /// <summary>
@@ -259,7 +258,6 @@ namespace ICARUS.Controllers {
         public ActionResult ForgotPassword() {
             return View();
         }
-
         /// <summary>
         /// POST: /Account/ForgotPassword
         /// </summary>
@@ -285,7 +283,6 @@ namespace ICARUS.Controllers {
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
         /// <summary>
         /// GET: /Account/ForgotPasswordConfirmation
         /// </summary>
@@ -294,7 +291,6 @@ namespace ICARUS.Controllers {
         public ActionResult ForgotPasswordConfirmation() {
             return View();
         }
-
         /// <summary>
         /// Resets the user's password
         /// GET: /Account/ResetPassword
@@ -305,7 +301,6 @@ namespace ICARUS.Controllers {
         public ActionResult ResetPassword(string code) {
             return code == null ? View("Error") : View();
         }
-
         // POST: /Account/ResetPassword
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
@@ -324,7 +319,6 @@ namespace ICARUS.Controllers {
             AddErrors(result);
             return View();
         }
-
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation() {
@@ -341,7 +335,10 @@ namespace ICARUS.Controllers {
             return View();
         }
 
-        //[HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        /// <summary>
+        /// Retrieves the list of 3rd party OAuth Providers and returns them inside a Payload
+        /// </summary>
+        /// <returns>A Json Payload</returns>
         public async Task<ActionResult> GetLoginProviders() {
             var loginProviders = HttpContext.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
             return Json(
@@ -396,8 +393,187 @@ namespace ICARUS.Controllers {
             return Json(new Payload(1, "ChallengeResult", challengeResult));
             //return challengeResult;
         }*/
-        
-        // GET: /Account/SendCode
+
+        /// <summary>
+        /// GET: /Account/ExternalLoginCallback
+        /// Retrieves authentication from third party 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl) {
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null) {
+                //return RedirectToAction("Login");
+                return Json(new Payload(1, "Redirect", new MODEL(), "Redirect to Account/Login because loginInfo was null for returnUrl: "+returnUrl), JsonRequestBehavior.AllowGet);
+            }
+
+            // Sign in the user with this external login provider if the user already has a login
+            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+
+            // Create model for Payload
+            Dictionary<string, object> model = new Dictionary<string, object>();
+            //model.Add("result", result);
+            model.Add("ReturnUrl", returnUrl);
+            model.Add("DefaultUserName", loginInfo.DefaultUserName);
+            model.Add("Email", loginInfo.Email);
+            model.Add("LoginProvider", loginInfo.Login.LoginProvider);
+
+            switch (result) {
+                case SignInStatus.Success:
+                    //return RedirectToLocal(returnUrl);
+                    return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
+
+                case SignInStatus.LockedOut:
+                    //return View("Lockout");
+                    return Json(new Payload(2, "SignInStatus.LockedOut", model), JsonRequestBehavior.AllowGet);
+                
+                // See 
+                case SignInStatus.RequiresVerification:
+                    /*return RedirectToAction("SendCode", new {
+                        ReturnUrl = returnUrl,
+                        RememberMe = false
+                    });*/
+                    model.Add("RememberMe", false);
+                    return Json(new Payload(3, "SendCode", model), JsonRequestBehavior.AllowGet);
+
+                case SignInStatus.Failure:
+                default:
+
+                    // If the user does not have an account, then prompt 
+                    // the user to create an account
+                    // See ExternaLoginConfirmation.cshtml
+                    //ViewBag.ReturnUrl = returnUrl;
+                    //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                    /*return View("ExternalLoginConfirmation", 
+                        new ExternalLoginConfirmationViewModel {
+                            Email = loginInfo.Email
+                        }
+                    );*/
+
+                    // This works, but you still need to pass these values to MAIN and create a FORM
+                    // to work with the results.  Exceptions can occur if the value already exists on the server.                    
+                    
+                    
+
+                    ///////  Instead of returning the ExternalLoginConfirmation View, try processing the results right now!
+
+                    if (User.Identity.IsAuthenticated) {
+                        return Json(new Payload(1, "RedirectToAction", model, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
+                    }
+                    
+                    // Get the information about the user from the external login provider
+                    var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                    if (info == null) {
+                        return Json(new Payload(2, "ExternalLoginFailure", model), JsonRequestBehavior.AllowGet);
+                    } else {
+                        model.Add("ProviderKey", info.Login.ProviderKey);
+                    }
+
+                    // Attempt to create a User
+                    var user = new ApplicationUser {
+                        UserName = model["Email"].ToString(),
+                        Email = model["Email"].ToString()
+                    };
+                    var rslt = await UserManager.CreateAsync(user);
+                    if (rslt.Succeeded) {
+                        rslt = await UserManager.AddLoginAsync(user.Id, info.Login);
+                        if (rslt.Succeeded) {
+                            rslt = await UserManager.AddToRoleAsync(user.Id, "User");
+                            if(rslt.Succeeded) {
+                                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                return Json(new Payload(1, "RedirectToLocal", model), JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+
+                    // If all else fails
+                    model.Add("Errors", rslt.Errors);
+                    return Json(
+                        new Payload(
+                            2, "AccountController.ExternalLoginCallback", 
+                            model, "Failed to creat user"
+                        ), JsonRequestBehavior.AllowGet
+                    );
+                    //return Json(new Payload(5, "SignInStatus.Failure", model), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// POST: /Account/ExternalLoginConfirmation
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public async Task<ActionResult> ExternalLoginConfirmation(
+            ExternalLoginConfirmationViewModel model, string returnUrl
+        ) {
+
+            // Create model for Payload
+            Dictionary<string, object> mdl = new Dictionary<string, object>();
+            mdl.Add("Email", model.Email);
+            mdl.Add("returnUrl", returnUrl);
+
+            if (User.Identity.IsAuthenticated) {
+                //return RedirectToAction("Index", "Manage");
+                return Json(new Payload(1, "RedirectToAction", mdl, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
+            }
+
+            if (ModelState.IsValid) {
+                // Get the information about the user from the external login provider
+                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                if (info == null) {
+                    //return View("ExternalLoginFailure");
+                    return Json(new Payload(2, "ExternalLoginFailure", mdl), JsonRequestBehavior.AllowGet);
+                } else {
+                    mdl.Add("info", info);
+                }
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user);
+                if (result.Succeeded) {
+                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+
+                    if (result.Succeeded) {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        //return RedirectToLocal(returnUrl);
+                        return Json(new Payload(1, "RedirectToLocal", mdl), JsonRequestBehavior.AllowGet);
+                    }
+                }
+                AddErrors(result);
+            }
+
+            //ViewBag.ReturnUrl = returnUrl;
+            //return View(model);
+            return Json(new Payload(1, "ExternalLoginConfirmationView", mdl), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// POST: /Account/LogOff
+        /// Recieves the __RequestVerificationToken and logs out
+        /// </summary>
+        /// <returns>Json Payload</returns>
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> LogOff() {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// GET: /Account/ExternalLoginFailure
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public ActionResult ExternalLoginFailure() {
+            return View();
+        }
+
+        /// <summary>
+        /// GET: /Account/SendCode
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <param name="rememberMe"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe) {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
@@ -408,8 +584,11 @@ namespace ICARUS.Controllers {
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
-        
-        // POST: /Account/SendCode
+        /// <summary>
+        /// POST: /Account/SendCode
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> SendCode(SendCodeViewModel model) {
             if (!ModelState.IsValid) {
@@ -428,139 +607,6 @@ namespace ICARUS.Controllers {
             });
         }
 
-        /// <summary>
-        /// GET: /Account/ExternalLoginCallback
-        /// Retrieves authentication from third party 
-        /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl) {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null) {
-                return RedirectToAction("Login");
-                //return Json(new Payload(1, "Redirect", new MODEL(), "Redirect to Account/Login because loginInfo was null for returnUrl: "+returnUrl), JsonRequestBehavior.AllowGet);
-            }
-
-            // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-
-            //Dictionary<string, object> attr = new Dictionary<string, object>();
-            //attr.Add("result", result);
-            //MODEL model = new MODEL();
-            //model.set(attr);
-
-            switch (result) {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                    //return Json(new Payload(1, "Redirect", model, "Success!  Redirect to "+returnUrl), JsonRequestBehavior.AllowGet);
-
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                    //return Json(new Payload(2, "LockOut", model, "LockOut!"), JsonRequestBehavior.AllowGet);
-
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {
-                        ReturnUrl = returnUrl,
-                        RememberMe = false
-                    });
-                    //return Json(new Payload(3, "Verification", model, "Requires Verification: "+returnUrl), JsonRequestBehavior.AllowGet);
-
-                case SignInStatus.Failure:
-                default:
-
-                    // If the user does not have an account, then prompt 
-                    // the user to create an account
-                    
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", 
-                        new ExternalLoginConfirmationViewModel {
-                            Email = loginInfo.Email
-                        }
-                    );
-
-                    /* This works, but you still need to pass these values to MAIN and create a FORM
-                     * to work with the results.  Exceptions can occur if the value already exists on the server.
-                     * 
-                    Dictionary<string, object> model = new Dictionary<string, object>();
-                    model.Add("login", loginInfo.Login);
-                    model.Add("username", loginInfo.DefaultUserName);
-                    model.Add("email", loginInfo.Email);
-                    model.Add("externalIdentity", loginInfo.ExternalIdentity);
-
-                    return Json(new Payload(5, loginInfo.Login.LoginProvider, model, "External Login Confirmation: "+loginInfo.Email), JsonRequestBehavior.AllowGet);
-                    */
-            }
-        }
-
-        /// <summary>
-        /// POST: /Account/ExternalLoginConfirmation
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(
-            ExternalLoginConfirmationViewModel model, string returnUrl
-        ) {
-            if (User.Identity.IsAuthenticated) {
-                return RedirectToAction("Index", "Manage");
-                //return Json(new Payload(1, "Authenticated", model, "Returning to " + returnUrl), JsonRequestBehavior.AllowGet);
-            }
-
-            if (ModelState.IsValid) {
-                // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null) {
-                    return View("ExternalLoginFailure");
-                    //return Json(new Payload(2, "Fail", model, "ExternalLoginFailure"), JsonRequestBehavior.AllowGet);
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded) {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded) {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                        
-                        //return Json(new Payload(1, "RedirectToLocal", model, "Returning to " + returnUrl), JsonRequestBehavior.AllowGet);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
-
-            //return Json(new Payload(1, "Other", model, "Unknown"), JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// POST: /Account/LogOff
-        /// Recieves the __RequestVerificationToken and logs out
-        /// </summary>
-        /// <returns>Json Payload</returns>
-        /// HttpPost, 
-        //[HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> LogOff() {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            //return RedirectToAction("Index", "Home");
-            /*return Json(new {
-                state = 1,
-                status = "success"
-            }, JsonRequestBehavior.AllowGet);*/
-            return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// GET: /Account/ExternalLoginFailure
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure() {
-            return View();
-        }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
@@ -600,11 +646,6 @@ namespace ICARUS.Controllers {
             }
             return RedirectToAction("Index", "Home");
         }
-
-
-                            // woot
-
-
 
         internal class ChallengeResult : HttpUnauthorizedResult {
             public ChallengeResult(string provider, string redirectUri)
