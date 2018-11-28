@@ -347,7 +347,7 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// POST: /Account/ExternalLogin
+        /// GET: /Account/ExternalLogin
         /// Third party OAuth2 Authorization
         /// </summary>
         /// <param name="provider"></param>
@@ -356,13 +356,11 @@ namespace ICARUS.Controllers {
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl) {
             // Request a redirect to the external login provider
-            var challengeResult = new ChallengeResult(provider, 
+            var challengeResult = new ChallengeResult(provider,
                 Url.Action("ExternalLoginCallback", "Account", new {
-                        ReturnUrl = returnUrl
-                    }
-                )
+                    ReturnUrl = returnUrl
+                })
             );
-            //return Json(new Payload(1, "ChallengeResult", challengeResult));
             return challengeResult;
         }
 
@@ -378,21 +376,29 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin(FormPost formPost) {
 
             formPost.resultsToXml();
-            string provider = formPost.parseString("provider", "Google");
+            string provider = formPost.parseString("provider");
             string returnUrl = formPost.parseString("returnUrl");
 
             // Request a redirect to the external login provider
-            var challengeResult = new ChallengeResult(provider,
-                Url.Action("ExternalLoginCallback", "Account",
-                    new {
-                        ReturnUrl = returnUrl
-                    }
-                )
-            );
+            var redirectUri = Url.Action("ExternalLoginCallback", "Account", new {
+                ReturnUrl = returnUrl
+            });
+            var challengeResult = new ChallengeResult(provider, redirectUri);
 
-            return Json(new Payload(1, "ChallengeResult", challengeResult));
-            //return challengeResult;
-        }*/
+            string LoginProvider = challengeResult.LoginProvider;
+            string RedirectUri = challengeResult.RedirectUri;
+            string UserId = challengeResult.UserId;
+
+            var properties = new AuthenticationProperties { RedirectUri = redirectUri };
+            if (UserId != null) {
+                properties.Dictionary[XsrfKey] = UserId;
+            }
+
+            this.ControllerContext.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+
+            return Json(new Payload(1, "ChallengeResult", challengeResult, RedirectUri), JsonRequestBehavior.AllowGet);
+        }
+        */
 
         /// <summary>
         /// GET: /Account/ExternalLoginCallback
@@ -421,8 +427,8 @@ namespace ICARUS.Controllers {
 
             switch (result) {
                 case SignInStatus.Success:
-                    //return RedirectToLocal(returnUrl);
-                    return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
+                    return RedirectToLocal(returnUrl);
+                    //return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
 
                 case SignInStatus.LockedOut:
                     //return View("Lockout");
@@ -482,7 +488,8 @@ namespace ICARUS.Controllers {
                             rslt = await UserManager.AddToRoleAsync(user.Id, "User");
                             if(rslt.Succeeded) {
                                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                                return Json(new Payload(1, "RedirectToLocal", model), JsonRequestBehavior.AllowGet);
+                                //return Json(new Payload(1, "RedirectToLocal", model), JsonRequestBehavior.AllowGet);
+                                return RedirectToLocal(returnUrl);
                             }
                         }
                     }

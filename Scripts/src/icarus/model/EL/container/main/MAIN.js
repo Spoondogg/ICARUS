@@ -34,7 +34,7 @@ export default class MAIN extends CONTAINER {
 		/** A Sidebar for details and navigation
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
-		this.sidebar = new SIDEBAR(this, new MODEL().set({ 'label': 'Left Sidebar' }));
+		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
         this.addNavOptions();
         /** The active container has access to keybindings */
         this.activeContainer = null;
@@ -51,9 +51,8 @@ export default class MAIN extends CONTAINER {
 		if (this.user === 'Guest') {
 			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
 				icon: ICONS.USER
-				//label: 'LOG IN'
 			}));
-			this.btnLogin.el.onclick = this.login.bind(this);
+			this.btnLogin.el.onclick = this.login();
 		}
 	}
 	/** Returns the Application Dev setting
@@ -277,42 +276,25 @@ export default class MAIN extends CONTAINER {
         @param {strong} returnUrl Return URL for 3rd party
 	    @returns {void}
 	*/
-    loginExternal(provider, returnUrl) {
-        console.log('MAIN.loginExternal();', provider, returnUrl);
+    loginExternal() {
+        console.log('MAIN.loginExternal();');
         let prompt = new PROMPT('Login OAuth2');
-        prompt.form.setAction('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F'); // ?ReturnUrl=%2F
+        prompt.form.setAction('/Account/ExternalLogin'); // /externalLogin?ReturnUrl=%2F
         prompt.form.id = 0;
         prompt.form.label = 'Login External';
         prompt.form.el.setAttribute('id', 0);
         prompt.form.addClass('login');
-        /*prompt.form.children[0].children[0].addInputElements([
-            createInputModel('INPUT', 'provider', '', '', 'HIDDEN'),
-            createInputModel('INPUT', 'ReturnUrl', '', '', 'HIDDEN')
-        ]).then(() => */
         prompt.form.footer.buttonGroup.children[0].destroy().then(() => {            
             $.getJSON('/Account/GetLoginProviders', (payload) => {
                 payload.model.forEach((p) => {
                     prompt.form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
-                        //let url = new URL(window.location.href);
-                        //let returnUrl = url.origin + '/signin-google';
-                        //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
-                        //let provider = 'Google';
-                        //prompt.form.el.elements['provider'].setAttribute('value', provider);
-                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + p.Properties.AuthenticationType + '&returnUrl=' + encodeURI(returnUrl);
+                        let provider = p.Properties.AuthenticationType;
+                        let returnUrl = this.url.origin + '/signin-' + provider;
+                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' +
+                            p.Properties.AuthenticationType +
+                            '&returnUrl=' + encodeURI(returnUrl);
                         location.href = postUrl;
                     };
-                    /*
-                    prompt.form.footer.buttonGroup.addButton('Google').el.onclick = () => {
-                        //let url = new URL(window.location.href);
-                        //let returnUrl = url.origin + '/signin-google';
-                        prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
-                        //let provider = 'Google';
-                        prompt.form.el.elements.provider.setAttribute('value', provider);
-                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-                    
-                        location.href = postUrl;
-                    };
-                    */
                 });
             });
             //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
@@ -348,43 +330,24 @@ export default class MAIN extends CONTAINER {
 			createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 			createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 			createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
-		]);
-        prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-
-        $.getJSON('/Account/GetLoginProviders', (payload) => {
-            payload.model.forEach((p) => {
-                prompt.form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
-                    //let url = new URL(window.location.href);
-                    let returnUrl = this.url.origin + '/signin-' + p.Properties.Caption;
-                    //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
-                    //let provider = 'Google';
-                    //prompt.form.el.elements['provider'].setAttribute('value', provider);
-                    let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + p.Properties.AuthenticationType + '&returnUrl=' + encodeURI(returnUrl);
-                    location.href = postUrl;
-                };
-                /*
-                prompt.form.footer.buttonGroup.addButton('Google').el.onclick = () => {
-                    //let url = new URL(window.location.href);
-                    //let returnUrl = url.origin + '/signin-google';
-                    prompt.form.el.elements.ReturnUrl.setAttribute('value', returnUrl);
-                    //let provider = 'Google';
-                    prompt.form.el.elements.provider.setAttribute('value', provider);
-                    let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-                
-                    location.href = postUrl;
-                };
-                */
-            });
-        });
-
-
-        //let url = new URL(window.location.href);
-        //let returnUrl = url.origin + '/signin-google';
-        //prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = () => this.loginExternal('Google', returnUrl);
+        ]);
+        prompt.form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
+        prompt.form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
+        //prompt.form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
+        prompt.form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
 
         prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
 		prompt.show();
-	}
+    }
+    /** Redirects to the third party OAuth Sign In
+        @param {string} provider The OAuth Provider
+        @returns {void} 
+    */
+    loginOAuth(provider) {
+        let returnUrl = this.url.origin + '/signin-' + provider;
+        location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+    }
+
 	/** Logs the current user out
         @returns {Promise<boolean>} True on success
     */
@@ -410,9 +373,7 @@ export default class MAIN extends CONTAINER {
             createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
             createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
         ]);
-        prompt.form.afterSuccessfulPost = function(payload, status) {
-            this.ajaxRefreshIfSuccessful(payload, status).bind(this);
-        }.bind(this);
+        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
         prompt.show();
 	}
 }

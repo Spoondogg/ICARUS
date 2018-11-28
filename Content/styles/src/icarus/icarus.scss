@@ -406,6 +406,10 @@ dialog,
                 animation: slideOutRight $transition-duration ease-in;
             }
         }
+
+        footer {
+            display: none;
+        }
     }
 
     &.loader {
@@ -564,44 +568,45 @@ nav {
 	}
 }
 main {
-	align-items: stretch;
-	display: flex;
+    align-items: stretch;
+    display: flex;
+    // The pane within the Main container should fill the remaining screen space
+    > .container-body {
+        > .pane {
+            @extend %pane-tall;
+        }
+    }
+    // A left aligned Container (sidebar) for the MAIN UI
+    aside {
+        &.sidebar {
+            @extend %pane-tall;
+            @include boxShadow(0, 0, 3px, 0, $color-black);
+            @include no-scroll-bar;
+            @include transition($transition-default);
+            background-color: transparentize($color-black, .2);
+            display: none;
+            margin-left: -100%; /// !important
+            position: absolute;
+            top: $navbar-height;
+            width: $sidebar-width; // !important
+            z-index: 999;
 
-	// The pane within the Main container should fill the remaining screen space
-	>.container-body {
-		>.pane {
-			@extend %pane-tall;
-		}
-	}
-	// A left aligned Container (sidebar) for the MAIN UI
-	aside {
-		&.sidebar {
-			@extend %pane-tall;
-			@include boxShadow(0, 0, 3px, 0, $color-black);
-			@include no-scroll-bar;
-			@include transition($transition-default);
-			background-color: transparentize($color-black, .2);
-			margin-left: -100%; /// !important
-			position: absolute;
-			top: $navbar-height;
-			width: $sidebar-width; // !important
-			z-index: 999;
-
-			&.active {
-				margin-left: 0;
-			}
-			// Each embedded list gets smaller
-			ul {
-				li {
-					ul {
-						@include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
-						font-size: 90%;
-						text-indent: 1em;
-					}
-				}
-			}
-		}
-	}
+            &.active {
+                display: block;
+                margin-left: 0;
+            }
+            // Each embedded list gets smaller
+            ul {
+                li {
+                    ul {
+                        @include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
+                        font-size: 90%;
+                        text-indent: 1em;
+                    }
+                }
+            }
+        }
+    }
 }
 footer {
     @extend %bevel-up;
