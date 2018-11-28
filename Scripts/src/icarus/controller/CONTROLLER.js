@@ -122,36 +122,12 @@ export default class CONTROLLER extends MODEL {
         let provider = this.url.searchParams.get('provider');
         let returnUrl = this.url.searchParams.get('returnUrl');
         if (provider && returnUrl) {
-            console.log('showing');
-            this.main.loader.log(50, 'Processing OAuth...', true).then(() => {
-
-                //this.main.loginExternal(provider, returnUrl);
-
-                //console.log('Redirecting to ExternalLogin');
-                console.log('You should click the form', '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + provider);
-                //document.getElementById(provider).click(); // clicks ExternalLogin.cshtml form that returns to '/'
-
-                //location.href = '/Account/ExternalLogin/externalLogin?ReturnUrl=%2F&provider=' + provider;
-
-                /*
-                // Or maybe just post to it? 
-                // No, then you aren't able to parse the VIEW that is returned
-                // You would then need to modify the controller that affects the view
-                
-                $.post('/Account/ExternalLogin/externalLogin?ReturnUrl=%2F', {
-                    '__RequestVerificationToken': this.main.getToken(),
-                    'provider': provider,
-                    'returnUrl': '%2F'
-                }, (data) => {
-                    console.log('Payload', data);
-                }); //, 'json'this.main.ajaxRefreshIfSuccessful,
-                */
-            });
+            console.log('showExternalLoginPrompt');
+            //this.main.loader.log(50, 'Processing OAuth[' + provider + ']...', true).then(() => this.main.loginOAuth(provider));
         }
         return this;
     }
-	/**
-	    If a ReturnUrl is provided, redirect to that Url
+	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP
 	*/
 	redirectToReturnUrl() {

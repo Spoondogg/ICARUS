@@ -315,7 +315,13 @@ export default class FORM extends CONTAINER {
 				this.lock();
 				$.ajax({
                     url: this.getAction(),
-					type: 'POST',
+                    type: 'POST',
+                    //mode: 'no-cors',
+                    //crossDomain: true,
+                    /*headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json'
+                    },*/
 					data: formPost,
 					error(xhr, statusText, errorThrown) {
 						console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
