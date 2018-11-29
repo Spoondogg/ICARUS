@@ -231,14 +231,19 @@ $jumbotron-height: 420px;
 	}
 }
 body {
-	@include font-smoothing;
-	background-color: $color-dark-less; //$background-primary;
-	color: $color-primary;
-	font-family: $font-primary;
-	font-size: $font-size-base; //$font-size-normal;
-	font-weight: $font-primary-weight;
-	overflow: hidden;
-	padding-top: $navbar-height;
+    @include font-smoothing;
+    @include transition($transition-default);
+    background-color: $color-dark-less; //$background-primary;
+    color: $color-primary;
+    font-family: $font-primary;
+    font-size: $font-size-base; //$font-size-normal;
+    font-weight: $font-primary-weight;
+    overflow: hidden;
+    padding-top: $navbar-height;
+
+    &.compact {
+        padding-top: 0;
+    }
 }
 button {
 	:disabled {
@@ -286,7 +291,6 @@ h2 {
 	}
 }
 // ********** DIALOG ********** //
-$transition-duration: .2s;
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -343,7 +347,7 @@ $transition-duration: .2s;
 }
 dialog,
 .modal {
-    animation: slideOutUp $transition-duration ease-out;
+    animation: slideOutUp $transition-speed $transition-motion;
     border: 0;
     border-radius: .6rem;
     box-shadow: 0 0 1em $color-black;
@@ -354,7 +358,7 @@ dialog,
     width: calc(100% - 1em);
 
     &::backdrop {
-        animation: fadeIn $transition-duration ease-in;
+        animation: fadeIn $transition-speed $transition-motion;
         background-color: $color-shadow-dark;
         bottom: 0;
         left: 0;
@@ -365,34 +369,34 @@ dialog,
 
     &[open],
     &.in {
-        animation: slideInTop $transition-duration ease-in;
+        animation: slideInTop $transition-speed $transition-motion;
 
         &.hiding {
-            animation: slideOutUp $transition-duration ease-in;
+            animation: slideOutUp $transition-speed $transition-motion;
 
             &::backdrop {
-                animation: fadeOut $transition-duration ease-in;
+                animation: fadeOut $transition-speed $transition-motion;
             }
         }
     }
 
     &.prompt {
-        animation: slideOutDown $transition-duration ease-out;
+        animation: slideOutDown $transition-speed $transition-motion;
         bottom: 0;
         top: auto;
 
         &[open],
         &.in {
-            animation: slideInTop $transition-duration ease-in;
+            animation: slideInTop $transition-speed $transition-motion;
 
             &.hiding {
-                animation: slideOutUp $transition-duration ease-in;
+                animation: slideOutUp $transition-speed $transition-motion;
             }
         }
     }
 
     &.login {
-        animation: slideOutRight $transition-duration ease-out;
+        animation: slideOutRight $transition-speed $transition-motion;
         float: right;
         left: calc(100% - 270px);
         top: 2em;
@@ -400,10 +404,10 @@ dialog,
 
         &[open],
         &.in {
-            animation: slideInRight $transition-duration ease-in;
+            animation: slideInRight $transition-speed $transition-motion;
 
             &.hiding {
-                animation: slideOutRight $transition-duration ease-in;
+                animation: slideOutRight $transition-speed $transition-motion;
             }
         }
 
@@ -413,7 +417,7 @@ dialog,
     }
 
     &.loader {
-        animation: slideOutDown $transition-duration ease-out;
+        animation: slideOutDown $transition-speed $transition-motion;
         background-color: $color-dark; // transparentize($color-light, .75);
         border-radius: 0;
         bottom: 0;
@@ -429,10 +433,10 @@ dialog,
 
         &[open],
         &.in {
-            animation: slideInTop $transition-duration ease-in;
+            animation: slideInTop $transition-speed $transition-motion;
 
             &.hiding {
-                animation: slideOutUp $transition-duration ease-in;
+                animation: slideOutUp $transition-speed $transition-motion;
             }
         }
 

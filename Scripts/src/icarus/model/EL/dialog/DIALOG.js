@@ -28,7 +28,7 @@ export default class DIALOG extends EL {
         //dialogPolyfill.registerDialog(this.el);
         //this.addClass('hiding');
         this.container = model.container;
-        document.body.insertBefore(this.el, document.body.firstChild);
+        //document.body.insertBefore(this.el, document.body.firstChild);
         
 		this.header = new HEADER(this, new MODEL().set({
 			label: model.label
