@@ -373,8 +373,36 @@ export default class MAIN extends CONTAINER {
             createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
             createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
         ]);
-        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+        prompt.form.afterSuccessfulPost = (payload, status) => {
+            this.ajaxRefreshIfSuccessful(payload, status);
+        }
         prompt.show();
-	}
+    }
+    /** Swipe Up Event
+        @returns {void}
+    */
+    swipeUp() {
+        this.hideNav();
+    }
+    /** Swipe Down Event
+        @returns {void}
+    */
+    swipeDown() {
+        this.showNav();
+    }
+    /** Collapses the MAIN NavBar
+        @returns {void}
+    */
+    hideNav() {
+        this.navBar.collapse();
+        $('body').addClass('compact');
+    }
+    /** Expands the MAIN NavBar
+        @returns {void}
+    */
+    showNav() {
+        this.navBar.show();
+        $('body').removeClass('compact');
+    }
 }
 export { CONTAINERFACTORY, LOADER, MODEL, NAVITEMICON };

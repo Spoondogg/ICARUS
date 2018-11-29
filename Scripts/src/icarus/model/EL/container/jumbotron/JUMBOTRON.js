@@ -39,7 +39,8 @@ export default class JUMBOTRON extends CONTAINER {
 				this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
 				this.p.el.onclick = () => {
 					console.log('Clicked text', this);
-					console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
+					//console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
+                    this.editFormPost(this.dataId, 'dataId');
 				};
 			}
 		} catch (e) {

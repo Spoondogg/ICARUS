@@ -61,10 +61,8 @@ export default class CONTAINER extends GROUP {
 		this.name = model.name || element;
 		this.shared = model.shared || 1;
 		this.status = model.status || STATUS.DEFAULT;           
-		this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
-		this.navBar = new NAVBAR(this, new MODEL().set({
-			label: this.label // model.label
-		}));
+        this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
+        this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
 		this.createDraggableNavBar();
 		//if (this.status === STATUS.DEFAULT) {
 		//if (model.showHeader ) {
@@ -501,7 +499,31 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			console.warn(e);
 		}
-	}
+    }
+    /** Swipe Up Event
+        @returns {void}
+    */
+    swipeUp() {
+        //this.hideNav();
+    }
+    /** Swipe Down Event
+        @returns {void}
+    */
+    swipeDown() {
+        //this.showNav();
+    }
+    /** Collapses the NavBar
+        @returns {void}
+    */
+    hideNav() {
+        this.navBar.collapse();
+    }
+    /** Expands the NavBar
+        @returns {void}
+    */
+    showNav() {
+        this.navBar.show();
+    }
 	/** Toggles the collapsed state of the container's body
         @returns {void}
     */

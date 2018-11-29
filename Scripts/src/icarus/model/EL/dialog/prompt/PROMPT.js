@@ -1,5 +1,5 @@
 /** @module */
-import DIALOG, { MODEL } from '../DIALOG.js';
+import DIALOG, { ATTRIBUTES, EL, MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
 import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
@@ -62,4 +62,4 @@ export default class PROMPT extends DIALOG {
 		}
 	}
 }
-export { DIALOG };
+export { ATTRIBUTES, DIALOG, EL, FORM, MODEL };
