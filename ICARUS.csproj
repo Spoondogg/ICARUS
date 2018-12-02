@@ -629,7 +629,7 @@
     <Content Include="Scripts\src\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\src\icarus\model\el\a\A.js" />
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
-    <Content Include="Scripts\src\icarus\model\el\form\formpostform\FORMPOSTFORM.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\formpostform\FORMPOSTFORM.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\src\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
