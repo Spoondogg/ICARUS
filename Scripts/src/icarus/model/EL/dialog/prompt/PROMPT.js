@@ -10,26 +10,41 @@ import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINP
 */
 export default class PROMPT extends DIALOG {
 	/** Constructs a PROMPT
-	    @param {string} label The label
-	    @param {string} text The html text that is displayed in the prompt's well
-	    @param {array} buttons Array of [label, glyphicon, buttonType]
-	    @param {array} inputs Array of inputs
-	    @param {boolean} vertical If true, prompt is vertically centered
+        @param {MODEL} model The object model
+	    param {string} label The label
+	    param {string} text The html text that is displayed in the prompt's well
+	    param {array} buttons Array of [label, glyphicon, buttonType]
+	    param {array} inputs Array of inputs
+	    param {boolean} vertical If true, prompt is vertically centered
     */
-	constructor(label, text, buttons, inputs, vertical) {
-		super(new MODEL().set({
+	//constructor(label, text, buttons, inputs, vertical) {
+    constructor(model) {
+		/*super(new MODEL().set({
 			label,
 			text,
             vertical,
             container: null
-		}));
-		this.addClass('prompt');
-        this.form = FORM.createEmptyForm(this.body, false);
+		}));*/
+        super(model);
+        this.addClass('prompt');
+
+        /** The DIALOG FORM 
+            @type {FORM}
+        */
+        this.form = null;
+        if (model.form) {
+            this.form = model.form;
+        } else {
+            this.form = FORM.createEmptyForm(this.body, false);
+        }
         this.form.getDialog = () => this;
 		this.promptInputs = [];
-		this.addInputs(inputs);
-		this.addButtons(buttons);
-	}
+		this.addInputs(model.inputs);
+		this.addButtons(model.buttons);
+    }
+
+    createDefaultForm
+
 	/** Adds the provided inputs to the prompt
 	    @param {Array<MODEL>} inputs An array of inputs
 	    @returns {void}

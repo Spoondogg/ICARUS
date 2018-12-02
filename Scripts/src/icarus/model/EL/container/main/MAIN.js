@@ -159,7 +159,7 @@ export default class MAIN extends CONTAINER {
                         page in this window
                     */
                     let url = '/' + payload.model.id;
-                    let dialog = new PROMPT('New Page', 'Create new Page');
+                    let dialog = new PROMPT(new MODEL().set('label', 'Create a new page'));
                     dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
                         dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
                             window.open(url, '_blank');
@@ -278,7 +278,7 @@ export default class MAIN extends CONTAINER {
 	*/
     loginExternal() {
         console.log('MAIN.loginExternal();');
-        let prompt = new PROMPT('Login OAuth2');
+        let prompt = new PROMPT(new MODEL().set('label', 'Login OAuth2'));
         prompt.form.setAction('/Account/ExternalLogin'); // /externalLogin?ReturnUrl=%2F
         prompt.form.id = 0;
         prompt.form.label = 'Login External';
@@ -320,7 +320,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() {
-        let prompt = new PROMPT('Login');
+        let prompt = new PROMPT(new MODEL().set('label', 'Login'));
         prompt.form.setAction('/Account/Login');
         prompt.form.id = 0;
         prompt.form.label = 'Login';
@@ -362,7 +362,7 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
 	register() {
-        let prompt = new PROMPT('Register');
+        let prompt = new PROMPT(new MODEL().set('label', 'Register'));
         prompt.form.setAction('/Account/Register');
         prompt.form.id = 0;
         prompt.form.label = 'Register';
