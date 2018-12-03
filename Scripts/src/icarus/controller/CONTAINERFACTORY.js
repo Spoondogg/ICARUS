@@ -8,7 +8,7 @@ import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
 import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../model/el/container/CONTAINER.js';
-import DIALOG from '../model/el/dialog/DIALOG.js';
+//import DIALOG from '../model/el/dialog/DIALOG.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
@@ -27,6 +27,7 @@ import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../model/el/nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+import PROMPT from '../model/el/dialog/prompt/PROMPT.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 import WORD from '../model/el/container/word/WORD.js';
@@ -214,32 +215,37 @@ export default class CONTAINERFACTORY {
 	save(noPrompt = false) { // 
 		return new Promise((resolve) => {
 			console.log(this.className + '.save()', noPrompt);
-			let dialog = new DIALOG(new MODEL().set({
-				label: 'Save ' + this.className,
-				container: this
-			}));
-			dialog.form = FORM.createEmptyForm(dialog.body, false);
-			dialog.form.container = this;
-            dialog.form.addClass('saveContainer').setAction(this.className + '/Set');
-			dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
-			dialog.form.afterSuccessfulPost = (payload) => {
-				console.log('Successful post', payload);
-				this.setLabel(dialog.form.el.elements.label.value);
-				//form.destroy();
-				//this.quickSaveFormPost(this.dataId, this.data);
-				//this.quickSaveFormPost(this.attributesId, this.attributes);
-				//this.refreshParentContainer();
-				//console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
-				resolve(dialog.close());
-			};
-			/* eslint-disable-next-line no-alert */
-			if (noPrompt) {
-                dialog.form.post().then(() => {
-					dialog.close();
-                });
-			} else {
-				dialog.show();
-			}
+            let dialog = new PROMPT(new MODEL().set({
+                label: 'Save ' + this.className + '[' + this.id + ']'
+                /*form: {
+                    type: 'CONTAINER',
+                    container: this
+                }*/
+            })).createForm(new MODEL().set({
+                type: 'CONTAINER',
+                container: this
+            })).then((form) => {
+                //dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+                form.afterSuccessfulPost = (payload) => {
+                    console.log('Successful post', payload, form.getContainer());
+                    form.getContainer().setLabel(form.el.elements.label.value);
+                    //this.quickSaveFormPost(this.dataId, this.data);
+                    //this.quickSaveFormPost(this.attributesId, this.attributes);
+                    //this.refreshParentContainer();
+                    //console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
+                    //resolve(dialog.close());
+                    form.getDialog().close();
+                };
+                /* eslint-disable-next-line no-alert */
+                if (noPrompt) {
+                    form.post().then(() => {
+                        form.getDialog().close();
+                    });
+                } else {
+                    form.getDialog().show();
+                }
+                resolve(form.getDialog());
+            });
 		});
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save

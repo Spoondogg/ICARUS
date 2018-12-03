@@ -11,9 +11,7 @@ import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.
 import FORMSELECT from '../container/formelement/formselect/FORMSELECT.js';
 import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
 import HEADER from '../header/HEADER.js';
-//import SPAN from '../span/SPAN.js';
-/** An Icarus Form Object
-    @description An FORM is the underlying form data type for all other page constructors
+/** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
     @extends CONTAINER
@@ -34,7 +32,8 @@ export default class FORM extends CONTAINER {
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
         this.footer = new FORMFOOTER(this.body, new MODEL().set({
 			align: ALIGN.VERTICAL
-		}));
+        }));
+
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
@@ -57,8 +56,14 @@ export default class FORM extends CONTAINER {
                 console.log('Unable to remove activeContainer', this);
             }
         });
-	}
-    construct() { }
+    }
+    /** Perform async tasks for FORM
+        @returns {void}
+    */
+    construct() {
+        //this.addInputs(model.inputs);
+        //this.addButtons(model.buttons);
+    }
 	/** Constructs a Fieldset for this FORM
         @todo Verify that this overrides the initial fieldset
 	    @param {MODEL} model Object model
@@ -72,83 +77,129 @@ export default class FORM extends CONTAINER {
         based on a FORMPOST MODEL
 	    @param {EL} node Parent node
         @param {MODEL} model Model
-        @param {string} className FORMPOST class
-        @param {string} dataIdLabel FORMPOST data type
-        @param {number} id FORMPOST id
-	    @param {boolean} hidden If true, form is hidden
 	    @returns {FORM} An empty form container
 	*/
     static createFormPostForm(node, model) {
+        //let { className, dataIdLabel, id } = model; // Consider and verify
         return new Promise((resolve, reject) => {
-            let form = this.createEmptyForm(node, model.hidden || false);
-            form.setId(3);
-            form.setAction('FORMPOST/SET');
+            FORM.createEmptyForm(node, model.hidden).then((frm) => {
+                frm.setAction('FORMPOST/SET');
+                try {
+                    $.getJSON('/FORMPOST/GET/' + model.id, (payload) => {
+                        //frm.setId(payload.model.id);
+                        frm.addInputs(
+                            frm.generateFormPostInputs(payload, model.className, model.dataIdLabel),
+                            frm.children[0].children[0]
+                        );
+
+                        // Set values based on existing 
+                        if (payload.model.jsonResults) {
+                            JSON.parse(payload.model.jsonResults).forEach((inp) => {
+                                frm.el.elements[inp.name].value = inp.value;
+                            });
+                        }
+
+                        frm.afterSuccessfulPost = (result) => {
+                            console.log('FORMPOSTFORM.post() afterSuccessfulPost resolved', result);
+                            frm.getDialog().close();
+                        };
+
+                        if (model.inputNode) {
+                            model.inputNode.el.setAttribute('value', frm.el.elements.id.value);
+                        }
+                        console.log('Resolving form' + payload.model.id, payload, frm);
+                        resolve(frm);
+                    });
+                } catch (e) {
+                    reject(e);
+                }
+            });
+            
+        });
+    }
+    /** Constructs a FORM based on a CONTAINER with a single fieldset and formelementgroup
+        based on a FORMPOST MODEL
+	    @param {EL} node Parent node
+        @param {MODEL} model Model
+	    @returns {Promise<FORM>} An empty form container
+	*/
+    static createContainerForm(node, model) {
+        return new Promise((resolve, reject) => {
             try {
-                $.getJSON('/FORMPOST/GET/' + model.id, (payload) => {
-                    form.setId(payload.model.id);
-                    let inputs = form.generateFormPostInputs(payload, model.className, model.dataIdLabel);
-                    form.addInputs(inputs, form.children[0].children[0]);
-
-                    // Set values based on existing 
-                    if (payload.model.jsonResults) {
-                        JSON.parse(payload.model.jsonResults).forEach((inp) => {
-                            form.el.elements[inp.name].value = inp.value;
-                        });
-                    }
-
-                    form.afterSuccessfulPost = (result) => {
-                        console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', result);
-                    };
-
-                    if (model.inputNode) {
-                        model.inputNode.el.setAttribute('value', form.el.elements.id.value);
-                    }
-                    console.log('Resolving form' + payload.model.id, payload, form);
-
-                    resolve(form);
+                FORM.createEmptyForm(node, model.hidden).then((frm) => {
+                    frm.setAction(model.container.className + '/SET');
+                    frm.addInputs(model.container.createContainerInputs()).then((f) => {
+                        f.afterSuccessfulPost = (result) => {
+                            console.log('CONTAINERFORM.save() afterSuccessfulPost resolved', result, f);
+                            f.getDialog().close();
+                        };
+                        resolve(f);
+                    });
                 });
             } catch (e) {
                 reject(e);
             }
         });
     }
-    /** Adds the provided inputs to the FORMPOSTFORM
+    /** Adds the provided buttons to the prompt
+	    @param {Array<BUTTON>} buttons An array of buttons ([label, glyphicon, buttonType])
+	    @returns {Promise<ThisType>} callback
+	*/
+    addButtons(buttons) {
+        return new Promise((resolve) => {
+            if (buttons) {
+                buttons.forEach((btn) => this.footer.buttonGroup.addButton(btn[0], btn[1], btn[2]));
+            }
+            resolve(this);
+        });
+    }
+    /** Adds the provided inputs to the FORM
 	    @param {Array<MODEL>} inputs An array of inputs
         @param {CONTAINER} target Target node
-	    @returns {void}
+	    @returns {Promise<ThisType>} callback
 	*/
-    addInputs(inputs, target) {
-        if (inputs) {
-            inputs.forEach((i) => this.addInput(i, target));
-        }
+    addInputs(inputs, target = this) {
+        return new Promise((resolve) => {
+            if (inputs) {
+                inputs.forEach((i) => this.addInput(i, target));
+            }
+            resolve(this);
+        });
     }
     /** Adds the input to the FORM 
         @param {MODEL} input An input model
         @param {CONTAINER} target Target node
-        @returns {void} 
+        @returns {Promise<FORMELEMENT>} Newly created Form Element
     */
-    addInput(input, target) {
-        let inp = null;
-        if (input.type === 'FORMPOSTINPUT') {
-            inp = new FORMPOSTINPUT(target.body.pane, input);
-        } else {
-            console.log('FORMINPUT', input);
-            switch (input) {
-                case 'TEXTAREA':
-                    inp = new FORMTEXTAREA(target.body.pane, input);
-                    break;
-                case 'SELECT':
-                    inp = new FORMSELECT(target.body.pane, input);
-                    break;
-                case 'INPUT':
-                    inp = new FORMINPUT(target.body.pane, input);
-                    break;
-                default:
-                    inp = new FORMINPUT(target.body.pane, input);
-                    break;
+    addInput(input, target = this) {
+        return new Promise((resolve, reject) => {
+            try {
+                let inp = null;
+                if (input.type === 'FORMPOSTINPUT') {
+                    inp = new FORMPOSTINPUT(target.body.pane, input);
+                } else {
+                    //console.log('FORMINPUT', input);
+                    switch (input) {
+                        case 'TEXTAREA':
+                            inp = new FORMTEXTAREA(target.body.pane, input);
+                            break;
+                        case 'SELECT':
+                            inp = new FORMSELECT(target.body.pane, input);
+                            break;
+                        case 'INPUT':
+                            inp = new FORMINPUT(target.body.pane, input);
+                            break;
+                        default:
+                            inp = new FORMINPUT(target.body.pane, input);
+                            break;
+                    }
+                }
+                target.children.push(inp);
+                resolve(inp);
+            } catch (e) {
+                reject(e);
             }
-        }
-        target.children.push(inp);
+        });
     }
     /** Returns the default Input array
 	    @param {object} data Payload
@@ -224,21 +275,28 @@ export default class FORM extends CONTAINER {
         NavBars are hidden for these elements
 	    @param {EL} node Parent node
 	    @param {boolean} hidden If true, form is hidden
-	    @returns {FORM} An empty form container
+	    @returns {Promise<FORM>} An empty form container
 	*/
 	static createEmptyForm(node, hidden = false) {
-		let form = new FORM(node, new MODEL(new ATTRIBUTES({
-			style: hidden ? 'display:none;' : ''
-		})).set({
-			label: 'FORM',
-			showNav: 0
-		}));
-		form.addFieldset(new MODEL().set({
-			showNav: 0
-		})).addFormElementGroup(new MODEL().set({
-			showNav: 0
-		}));
-		return form;
+        return new Promise((resolve, reject) => {
+            try {
+                let form = new FORM(node, new MODEL(new ATTRIBUTES({
+                    style: hidden ? 'display:none;' : ''
+                })).set({
+                    label: 'FORM',
+                    showNav: 0
+                }));
+                form.addFieldset(new MODEL().set({
+                    showNav: 0
+                })).addFormElementGroup(new MODEL().set({
+                    showNav: 0
+                }));
+                resolve(form);
+            } catch (e) {
+                reject(e);
+            }
+            
+        });
 	}
 	/** Sets this form's ACTION attribute
         @param {string} url Target url
@@ -282,7 +340,7 @@ export default class FORM extends CONTAINER {
                         break;
                     default:
                         i.el.disabled = true;
-                        console.log('Locked element', i);
+                        //console.log('Locked element', i);
                         break;
                 }
             } catch (e) {

@@ -1,8 +1,8 @@
 /** @module */
 import DIALOG, { ATTRIBUTES, EL, MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
-import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
-import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
+//import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
+//import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
 /** A Dialog with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
     @class
@@ -11,70 +11,61 @@ import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINP
 export default class PROMPT extends DIALOG {
 	/** Constructs a PROMPT
         @param {MODEL} model The object model
-	    param {string} label The label
-	    param {string} text The html text that is displayed in the prompt's well
-	    param {array} buttons Array of [label, glyphicon, buttonType]
-	    param {array} inputs Array of inputs
-	    param {boolean} vertical If true, prompt is vertically centered
     */
-	//constructor(label, text, buttons, inputs, vertical) {
     constructor(model) {
-		/*super(new MODEL().set({
-			label,
-			text,
-            vertical,
-            container: null
-		}));*/
         super(model);
         this.addClass('prompt');
-
-        /** The DIALOG FORM 
-            @type {FORM}
-        */
-        this.form = null;
-        if (model.form) {
-            this.form = model.form;
-        } else {
-            this.form = FORM.createEmptyForm(this.body, false);
-        }
-        this.form.getDialog = () => this;
-		this.promptInputs = [];
-		this.addInputs(model.inputs);
-		this.addButtons(model.buttons);
+        /** @type {FORM} */
+        this.form = null; //this.createForm(model.form);
     }
-
-    createDefaultForm
-
-	/** Adds the provided inputs to the prompt
-	    @param {Array<MODEL>} inputs An array of inputs
-	    @returns {void}
-	*/
-	addInputs(inputs) {
-        if (inputs) {
-            inputs.forEach((i) => this.addInput(i));
-		}
-    }
-    /** Adds the input to the PROMPT 
-        @param {MODEL} input An input model
-        @returns {void} 
+    /** Creates the FORM or constructs a new empty FORM
+        @param {MODEL} model FORM
+        @returns {Promise<FORM>} Promise to return a FORM
     */
-    addInput(input) {
-        let inp = null;
-        if (input.type === 'FORMPOSTINPUT') {
-            this.promptInputs.push(new FORMPOSTINPUT(this.form.children[0].children[0].body.pane, input));
-        } else {
-            this.promptInputs.push(new FORMINPUT(this.form.children[0].children[0].body.pane, input));
-        }
-        this.form.children[0].children[0].children.push(inp);
+    createForm(model = new MODEL()) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (model.type === 'FORMPOST') {
+                    FORM.createFormPostForm(this.body, model).then((frm) => {
+                        this.configureForm(frm, model).then((f) => {
+                            resolve(f);
+                        });
+                    });
+                } else if (model.type === 'CONTAINER') {
+                    FORM.createContainerForm(this.body, model).then((frm) => {
+                        this.configureForm(frm, model).then((f) => {
+                            resolve(f);
+                        });
+                    });
+                } else {
+                    FORM.createEmptyForm(this.body, false).then((frm) => {
+                        this.configureForm(frm, model).then((f) => {
+                            resolve(f);
+                        });
+                    });
+                }            
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
-	/** Adds the provided buttons to the prompt
-	    @param {Array<BUTTON>} buttons An array of buttons
-	    @returns {void}
-	*/
-	addButtons(buttons) {
-        if (buttons) {
-            buttons.forEach((btn) => this.form.footer.buttonGroup.addButton(btn[0], btn[1], btn[2]));
-		}
-	}
+    /** Adds buttons, inputs etc to the given FORM
+        @param {FORM} form The form to configure
+        @param {MODEL} model The FORM model
+        @returns {Promise<FORM>} callback
+    */
+    configureForm(form, model) {
+        return new Promise((resolve, reject) => {
+            try {
+                form.addInputs(model.inputs);
+                form.addButtons(model.buttons);
+                form.getDialog = () => this;
+                form.container = model.container;
+                resolve(form);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 }
 export { ATTRIBUTES, DIALOG, EL, FORM, MODEL };

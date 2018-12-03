@@ -159,18 +159,19 @@ export default class MAIN extends CONTAINER {
                         page in this window
                     */
                     let url = '/' + payload.model.id;
-                    let dialog = new PROMPT(new MODEL().set('label', 'Create a new page'));
-                    dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
-                        dialog.form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
-                            window.open(url, '_blank');
-                            dialog.hide(300, true);
-                        };
-                        dialog.form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
-                            location.href = url;
-                            dialog.hide(300, true);
-                        };
-                        dialog.show();
-                        resolve(true);
+                    let dialog = new PROMPT(new MODEL().set('label', 'Create a new page')).createForm().then((form) => {
+                        dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
+                            form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
+                                window.open(url, '_blank');
+                                dialog.hide(300, true);
+                            };
+                            form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
+                                location.href = url;
+                                dialog.hide(300, true);
+                            };
+                            dialog.show();
+                            resolve(true);
+                        });
                     });
                 });
             } catch (e) {
@@ -278,27 +279,28 @@ export default class MAIN extends CONTAINER {
 	*/
     loginExternal() {
         console.log('MAIN.loginExternal();');
-        let prompt = new PROMPT(new MODEL().set('label', 'Login OAuth2'));
-        prompt.form.setAction('/Account/ExternalLogin'); // /externalLogin?ReturnUrl=%2F
-        prompt.form.id = 0;
-        prompt.form.label = 'Login External';
-        prompt.form.el.setAttribute('id', 0);
-        prompt.form.addClass('login');
-        prompt.form.footer.buttonGroup.children[0].destroy().then(() => {            
-            $.getJSON('/Account/GetLoginProviders', (payload) => {
-                payload.model.forEach((p) => {
-                    prompt.form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
-                        let provider = p.Properties.AuthenticationType;
-                        let returnUrl = this.url.origin + '/signin-' + provider;
-                        let postUrl = '/Account/ExternalLogin/externalLogin?provider=' +
-                            p.Properties.AuthenticationType +
-                            '&returnUrl=' + encodeURI(returnUrl);
-                        location.href = postUrl;
-                    };
+        let prompt = new PROMPT(new MODEL().set('label', 'Login OAuth2')).createForm().then((form) => {
+            form.setAction('/Account/ExternalLogin'); // /externalLogin?ReturnUrl=%2F
+            form.id = 0;
+            form.label = 'Login External';
+            form.el.setAttribute('id', 0);
+            form.addClass('login');
+            form.footer.buttonGroup.children[0].destroy().then(() => {
+                $.getJSON('/Account/GetLoginProviders', (payload) => {
+                    payload.model.forEach((p) => {
+                        form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
+                            let provider = p.Properties.AuthenticationType;
+                            let returnUrl = this.url.origin + '/signin-' + provider;
+                            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' +
+                                p.Properties.AuthenticationType +
+                                '&returnUrl=' + encodeURI(returnUrl);
+                            location.href = postUrl;
+                        };
+                    });
                 });
+                //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                prompt.show();
             });
-            //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-            prompt.show();
         });
 	}
 	/** Log into the application using the given credentials
@@ -320,24 +322,25 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	login() {
-        let prompt = new PROMPT(new MODEL().set('label', 'Login'));
-        prompt.form.setAction('/Account/Login');
-        prompt.form.id = 0;
-        prompt.form.label = 'Login';
-        prompt.form.el.setAttribute('id', 0);
-        prompt.form.addClass('login');
-        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-			createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-			createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-			createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
-        ]);
-        prompt.form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-        prompt.form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
-        //prompt.form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
-        prompt.form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
+        let prompt = new PROMPT(new MODEL().set('label', 'Login')).createForm().then((form) => {
+            form.setAction('/Account/Login');
+            form.id = 0;
+            form.label = 'Login';
+            form.el.setAttribute('id', 0);
+            form.addClass('login');
+            form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+                createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+            ]);
+            form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
+            form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
+            //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
+            form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
 
-        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-		prompt.show();
+            form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+            prompt.show();
+        });
     }
     /** Redirects to the third party OAuth Sign In
         @param {string} provider The OAuth Provider
@@ -362,21 +365,22 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
 	register() {
-        let prompt = new PROMPT(new MODEL().set('label', 'Register'));
-        prompt.form.setAction('/Account/Register');
-        prompt.form.id = 0;
-        prompt.form.label = 'Register';
-        prompt.form.el.setAttribute('id', 0);
-        prompt.form.addClass('register');
-        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-            createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
-        ]);
-        prompt.form.afterSuccessfulPost = (payload, status) => {
-            this.ajaxRefreshIfSuccessful(payload, status);
-        }
-        prompt.show();
+        let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm((form) => {
+            form.setAction('/Account/Register');
+            form.id = 0;
+            form.label = 'Register';
+            form.el.setAttribute('id', 0);
+            form.addClass('register');
+            form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+                createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+            ]);
+            form.afterSuccessfulPost = (payload, status) => {
+                this.ajaxRefreshIfSuccessful(payload, status);
+            }
+            prompt.show();
+        });
     }
     /** Swipe Up Event
         @returns {void}
