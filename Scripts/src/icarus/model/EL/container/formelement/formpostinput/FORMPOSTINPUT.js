@@ -3,7 +3,7 @@ import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENT
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
 //import FORMPOSTPROMPT from '../../../dialog/prompt/formpostprompt/FORMPOSTPROMPT.js';
-import FORMPOSTFORM from '../../../dialog/formpostform/FORMPOSTFORM.js';
+//import FORMPOSTFORM from '../../../dialog/formpostform/FORMPOSTFORM.js';
 import INPUT from '../../../input/INPUT.js';
 import PROMPT from '../../../dialog/prompt/PROMPT.js';
 import SPAN from '../../../span/SPAN.js';
@@ -42,15 +42,12 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         let className = this.input.el.form.className.value;
         let dataIdLabel = this.attributes.name;
         let formPostId = this.attributes.value;
-        if (formPostId > 0) { //  || this.value > 0
-			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT1');
-            btnEdit.el.onclick = () => this.createFormPostForm(className, dataIdLabel, formPostId);
+        if (formPostId > 0) {
+			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT');
+            btnEdit.el.onclick = () => this.createForm(className, dataIdLabel, formPostId, this.input);
 		}
-		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW1');
-        btnNew.el.onclick = () => this.createFormPostForm(className, dataIdLabel);
-
-        let btnTest = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'TST1');
-        btnTest.el.onclick = () => this.createFormPostFormTwo(className, dataIdLabel, formPostId, this.input);
+        let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW');
+        btnNew.el.onclick = () => this.createForm(className, dataIdLabel, 0, this.input);
 	}
 	/** Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
@@ -93,68 +90,28 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         }
         return inputs;
     }
-    /** Creates a FORM populated with the state of the given container
-        @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
-        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
-        @param {number} formPostId Optional FormPost Id to edit
-        @returns {Promise<string>} Promise to create a new FormPost DIALOG and return its FORM
-    */
-    createFormPostForm(className, dataIdLabel, formPostId = 0) {
-        return new Promise((resolve, reject) => {
-            try {
-                $.getJSON('/FORMPOST/GET/' + formPostId, (payload) => {
-                    let inputs = this.generateInputs(payload, className, dataIdLabel);
-                    try {
-                        let dialog = new PROMPT(new MODEL().set({
-                            label: 'Create FormPost Form',
-                            inputs
-                        }));
-                        //dialog.container = container;
-                        dialog.form.setId(3);
-                        dialog.form.prompt = this;
-                        dialog.form.setAction('FORMPOST/SET');
-
-                        this.form = dialog.form;
-                        if (payload.model.jsonResults) { // Set values based on existing 
-                            JSON.parse(payload.model.jsonResults).forEach((inp) => {
-                                this.form.el.elements[inp.name].value = inp.value;
-                            });
-                        }
-
-                        dialog.form.afterSuccessfulPost = (result) => {
-                            console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', result);
-                            dialog.close();
-                        };
-
-                        resolve(dialog.show());
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
-            } catch (e) {
-                console.log(0, 'Unable to retrieve FormPost.', e);
-                reject(e);
-            }
-        });
-    }
-    /** Creates a FORM populated with the state of the given container
+    /** Creates a FORM that represents a given FORMPOST
         @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
         @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
         @param {number} formPostId Optional FormPost Id to edit
         @param {INPUT} inputNode The input that spawned this DIALOG
         @returns {Promise<string>} Promise to create a new FormPost DIALOG and return it
     */
-    createFormPostFormTwo(className, dataIdLabel, formPostId = 0, inputNode = null) {
+    createForm(className, dataIdLabel, formPostId = 0, inputNode = null) {
         return new Promise((resolve, reject) => {
             try {
-                let dialog = new FORMPOSTFORM(new MODEL().set({
-                    label: 'Create FormPost Form',
+                let dialog = new PROMPT(new MODEL().set({
+                    label: 'Create FormPost Form'
+                })).createForm(new MODEL().set({
+                    id: formPostId,
+                    type: 'FORMPOST',
                     className,
                     dataIdLabel,
                     formPostId,
                     inputNode
-                }));
-                resolve(dialog.show());
+                })).then(() => {
+                    resolve(dialog.show());
+                });
             } catch (e) {
                 reject(e);
             }
