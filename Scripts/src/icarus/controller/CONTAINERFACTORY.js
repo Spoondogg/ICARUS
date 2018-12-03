@@ -8,7 +8,7 @@ import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
 import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../model/el/container/CONTAINER.js';
-import DIALOG from '../model/el/dialog/DIALOG.js';
+//import DIALOG from '../model/el/dialog/DIALOG.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
@@ -27,6 +27,7 @@ import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../model/el/nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+import PROMPT from '../model/el/dialog/prompt/PROMPT.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 import WORD from '../model/el/container/word/WORD.js';
@@ -214,18 +215,20 @@ export default class CONTAINERFACTORY {
 	save(noPrompt = false) { // 
 		return new Promise((resolve) => {
 			console.log(this.className + '.save()', noPrompt);
-			let dialog = new DIALOG(new MODEL().set({
-				label: 'Save ' + this.className,
-				container: this
-			}));
-			dialog.form = FORM.createEmptyForm(dialog.body, false);
-			dialog.form.container = this;
-            dialog.form.addClass('saveContainer').setAction(this.className + '/Set');
-			dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+            let dialog = new PROMPT(new MODEL().set({
+                label: 'Save ' + this.className + '[' + this.id + ']',
+                form: {
+                    type: 'CONTAINER',
+                    container: this
+                }
+            }));
+            //dialog.form.addInputs(this.createContainerInputs());
+			//dialog.form = FORM.createEmptyForm(dialog.body, false);
+            //dialog.form.addClass('saveContainer').setAction(this.className + '/SET');
+			//dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
 			dialog.form.afterSuccessfulPost = (payload) => {
 				console.log('Successful post', payload);
 				this.setLabel(dialog.form.el.elements.label.value);
-				//form.destroy();
 				//this.quickSaveFormPost(this.dataId, this.data);
 				//this.quickSaveFormPost(this.attributesId, this.attributes);
 				//this.refreshParentContainer();
@@ -239,7 +242,8 @@ export default class CONTAINERFACTORY {
                 });
 			} else {
 				dialog.show();
-			}
+            }
+            resolve(dialog);
 		});
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save
