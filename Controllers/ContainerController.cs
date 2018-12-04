@@ -338,8 +338,8 @@ namespace ICARUS.Controllers {
 
                         // Return the success response along with the message body
                         return Json(new Payload(
-                            1, this.className, model,
-                            "Successfully set " + this.className + " (" + model.id + "," + id + ")"
+                            1, this.className, model
+                            //"Successfully set " + this.className + " (" + model.id + "," + id + ")"
                         ), JsonRequestBehavior.AllowGet);
                     } else {
                         return Json(new Payload(

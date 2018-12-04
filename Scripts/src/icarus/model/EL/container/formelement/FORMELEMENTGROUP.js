@@ -4,7 +4,6 @@ import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
-import HEADER from '../../header/HEADER.js';
 /** A container made up of a group of form elements
     @class
     @extends CONTAINER
@@ -15,21 +14,15 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	    @param {MODEL} model datamodel
     */
 	constructor(node, model) {
-		super(node, 'DIV', model, []);
+		super(node, 'DIV', model);
         this.addClass('form-element-group');
-        this.header = new HEADER(this.body.pane, new MODEL().set({
-            label: model.label
-        }));
-        $(this.header.el).insertBefore(this.body.pane.el);
 		this.navBar.menu.menu.getGroup('ELEMENTS').empty();
         ['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 		this.populate(model.children);
 	}
     construct() {
         if (this.dataId > 0) {
-            //if (this.label) {
-            //    this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
-            //}
+            this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
         }
     }
 	/** Adds the given array of FORMELEMENT(s) to this group

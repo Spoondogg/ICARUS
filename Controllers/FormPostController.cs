@@ -189,7 +189,7 @@ namespace ICARUS.Controllers {
                 result = ctx.SaveChanges();
 
                 // Return the success response along with the message body
-                return Json(new Payload(1, "FORMPOST", model, "Successfully set FORMPOST (" + model.id + "," + id + ")")); //, JsonRequestBehavior.AllowGet
+                return Json(new Payload(1, "FORMPOST", model)); //, JsonRequestBehavior.AllowGet // "Successfully set FORMPOST (" + model.id + "," + id + ")"
 
             } catch (Exception e) {
                 return Json(new Payload(0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString())); // JsonRequestBehavior.AllowGet

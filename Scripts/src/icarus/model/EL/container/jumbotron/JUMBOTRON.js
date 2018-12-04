@@ -1,8 +1,9 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
-import HEADER from '../../header/HEADER.js';
-import P from '../../p/P.js';
+//import HEADER from '../../header/HEADER.js';
+//import P from '../../p/P.js';
+//import PROMPT from '../../dialog/prompt/PROMPT.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
     @class
@@ -15,7 +16,7 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.addClass('jumbotron');
+        this.addClass('jumbotron');
 	}
 	/** Override abstract method
         @returns {void}
@@ -24,28 +25,12 @@ export default class JUMBOTRON extends CONTAINER {
 		if (this.dataId > 0) {
 			this.screen = new DIV(this.body.pane, new MODEL('screen'));
 			this.setScreenColor();
-			this.header = new HEADER(this.screen, new MODEL().set({ label: this.data.header }));
-			this.createTextblock();
+            this.createEditableElement('header', this.screen);
+            this.createEditableElement('p', this.screen);
 			this.loadBgImage();
 			this.setBgColor();
 		}
-	}
-	/** Creates the primary textblock for this Jumbotron 
-	    @returns {void}
-	*/
-	createTextblock() {
-		try {
-			if (this.data.p.length > 0) {
-				this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
-				this.p.el.onclick = () => {
-					console.log('Clicked text', this);
-					console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
-				};
-			}
-		} catch (e) {
-			console.log('Unable to create textblock', e);
-		}
-	}
+    }
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
         @returns {Promise<boolean>} Returns true on success
     */

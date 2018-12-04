@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
@@ -10,7 +10,6 @@ import FORMPOST from './FORMPOST.js';
 import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from '../container/formelement/formselect/FORMSELECT.js';
 import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
-import HEADER from '../header/HEADER.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
@@ -24,15 +23,10 @@ export default class FORM extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
-        this.header = new HEADER(this.body.pane, new MODEL().set({
-            label: model.label
-        }));
-        this.header.el.ondblclick = () => this.save();
-        $(this.header.el).insertBefore(this.body.pane.el);
+        //this.header = new HEADER(this.body.pane, new MODEL().set('label', model.label || ''));
+        this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
-        this.footer = new FORMFOOTER(this.body, new MODEL().set({
-			align: ALIGN.VERTICAL
-        }));
+        this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
 
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
 			e.preventDefault();
@@ -99,15 +93,15 @@ export default class FORM extends CONTAINER {
                             });
                         }
 
-                        frm.afterSuccessfulPost = (result) => {
-                            console.log('FORMPOSTFORM.post() afterSuccessfulPost resolved', result);
+                        frm.afterSuccessfulPost = () => { //result
+                            //console.log('FORMPOSTFORM.post() afterSuccessfulPost resolved', result);
                             frm.getDialog().close();
                         };
 
                         if (model.inputNode) {
                             model.inputNode.el.setAttribute('value', frm.el.elements.id.value);
                         }
-                        console.log('Resolving form' + payload.model.id, payload, frm);
+                        //console.log('Resolving form' + payload.model.id, payload, frm);
                         resolve(frm);
                     });
                 } catch (e) {
@@ -178,8 +172,7 @@ export default class FORM extends CONTAINER {
                 if (input.type === 'FORMPOSTINPUT') {
                     inp = new FORMPOSTINPUT(target.body.pane, input);
                 } else {
-                    //console.log('FORMINPUT', input);
-                    switch (input) {
+                    switch (input.element) {
                         case 'TEXTAREA':
                             inp = new FORMTEXTAREA(target.body.pane, input);
                             break;
@@ -219,7 +212,6 @@ export default class FORM extends CONTAINER {
     */
     generateFormPostInputs(payload, className, type) {
         let inputs = this.defaultFormPostInputArray(payload);
-        //this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
         switch (type) {
             case 'dataId':
                 DATAELEMENTS[className].data.forEach((i) => inputs.push(i));
@@ -247,7 +239,7 @@ export default class FORM extends CONTAINER {
                 let form = new FORM(node, new MODEL(new ATTRIBUTES({
                     style: hidden ? 'display:none;' : ''
                 })).set({
-                    label: 'FORM',
+                    //label: 'FORM',
                     showNav: 0
                 }));
                 form.addFieldset(new MODEL().set({
@@ -287,11 +279,10 @@ export default class FORM extends CONTAINER {
         return this.attributes.action || 'FORM/SUBMIT';
     }
     /** Returns the form's respective DIALOG container (if exists)
-        @returns {DIALOG} A DIALOG
+        @returns {Promise<DIALOG>} A DIALOG
     */
     getDialog() {
-        console.warn('No DIALOG exists for this FORM', this);
-        return false;
+        return Promise.reject(new AbstractMethodError('No DIALOG exists for this FORM'));
     }
 	/** Disables all fieldsets within this form
 	    @returns {boolean} Returns true if successful
@@ -433,7 +424,8 @@ export default class FORM extends CONTAINER {
 				case 'text':
 				case 'email':
 				case 'tel':
-				case 'password':
+                case 'password':
+                case 'textarea':
 					this.validateString(element);
 					break;
                 case 'number':
@@ -452,7 +444,9 @@ export default class FORM extends CONTAINER {
 					console.warn('Unable to validate unidentified form element type.', element.type, element.value);
 			}
 		}
-		console.log('Validation Result: ' + this.payload.isValid);
+        if (!this.payload.isValid) {
+            console.log('Validation Result: ' + this.payload.isValid);
+        }
 		return this.payload;
 	}
 	/** Resets the form and any validation notifications.
@@ -490,7 +484,7 @@ export default class FORM extends CONTAINER {
 		return new Promise((resolve, reject) => {
 			let formPost = this.getFormPost();
             if (formPost) {
-                console.log(10, 'Posting values to ' + this.getAction(), formPost);
+                //console.log(10, 'Posting values to ' + this.getAction(), formPost);
 				this.lock();
 				$.ajax({
                     url: this.getAction(),

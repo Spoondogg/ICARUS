@@ -187,6 +187,7 @@ export default class CONTAINERFACTORY {
                     obj.container = obj.getProtoTypeByClass('CONTAINER');
                     obj.save = this.save;
                     obj.quickSaveFormPost = this.quickSaveFormPost;
+                    obj.editData = this.editData;
                     // Overwrite span with 
                     span.el.parentNode.replaceChild(obj.el, span.el);
                 } catch (e) {
@@ -261,7 +262,44 @@ export default class CONTAINERFACTORY {
                 reject(e);
             }
         });
-	}
+    }
+    /** Launches a FORM POST editor for the specified element
+        param {EL} element The EL who's model.data is being edited
+        @param {string} name The name of the input we are editing
+        @returns {Promise<PROMPT>} Save PROMPT
+    */
+    editData(name) {
+        return new Promise((resolve, reject) => {
+            if (this.dataId > 0) {
+                try {
+                    this[name].addClass('selected');
+                    new PROMPT(new MODEL().set('label', 'Edit ' + this.className + ' : ' + name)).createForm(new MODEL().set({
+                        formtype: 'FORMPOST',
+                        className: this.className,
+                        type: 'dataId',
+                        id: this.data.id,
+                        container: this
+                    })).then(
+                        (form) => this.hideElements(form.children[0].children[0].children, name)
+                            .then(() => {
+                                form.getDialog().close = () => {
+                                    form.getDialog().hide().then(() => $('.selected').removeClass('selected'));
+                                }
+                            })
+                            .then(() => form.getDialog().show()
+                                .then(() => {
+                                    form.el.elements[name].focus();
+                                    form.el.elements[name].onkeyup = () => $('.selected').html(form.el.elements[name]);
+                                    resolve(form.getDialog());
+                                })));
+                } catch (e) {
+                    reject(e);
+                }
+            } else {
+                console.log(this.className + '[' + name + '] does not have a data FORMPOST');
+            }
+        });
+    }
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };
 /* eslint-enable */
