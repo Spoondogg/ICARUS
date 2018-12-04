@@ -48,11 +48,8 @@ export default class MAIN extends CONTAINER {
 	construct() {
 		this.navBar.el.setAttribute('draggable', 'false');
 		this.navBar.show();
-		if (this.user === 'Guest') {
-			this.btnLogin = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set({
-				icon: ICONS.USER
-			}));
-			this.btnLogin.el.onclick = this.login();
+		if (this.getUser() === 'Guest') {
+			this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
 		}
 	}
 	/** Returns the Application Dev setting
@@ -102,46 +99,47 @@ export default class MAIN extends CONTAINER {
 	    @param {string} url The optional url that this Nav Item references 
 	    @returns {NAVITEMICON} A Nav Item with an Icon and optional label
 	*/
-	addNavItemIcon(menu, icon, label = '', url = '#') {
-		return menu.addNavItemIcon(new MODEL().set({
-			icon,
-			label,
-			url
-		}))
+    addNavItemIcon(menu, icon = ICONS.DEFAULT, label = '', url = '#') {
+        return menu ? menu.addNavItemIcon(new MODEL().set({
+            icon,
+            label,
+            url
+        })) : null;
 	}
 	/** Adds the default User, Crud and Dom menus to this Container
 	    @returns {void}
 	*/
-	addDefaultMenuItems() {
-		let userMenu = this.navBar.menu.menu.addMenu(new MODEL('horizontal collapse').set({
-			name: 'USER',
-			showHeader: 1,
-			collapsed: 1
-		}));
-		this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
-			this.navBar.menu.toggleCollapse();
-			this.logout();
-		};
-		this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
-		let domMenu = this.navBar.menu.menu.getGroup('DOM');
-		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
-			setTimeout(() => {
-				location.href = this.url.origin;
-			}, 300);
-		};
-		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
-			this.toggleHeaders();
-			this.navBar.menu.toggleCollapse();
-		};
-		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
-			setTimeout(() => {
-				location.reload(true);
-			}, 1000);
+    addDefaultMenuItems() {
+        let optionsMenu = this.navBar.menu.menu;
+        let userMenu = optionsMenu.addMenu(new MODEL('horizontal collapse').set({
+            name: 'USER',
+            showHeader: 1,
+            collapsed: 1
+        }));
+        this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
+            this.navBar.menu.toggleCollapse();
+            this.logout();
+        };
+        this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
+        let domMenu = optionsMenu.getGroup('DOM');
+        this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
+            setTimeout(() => {
+                location.href = this.url.origin;
+            }, 300);
+        };
+        this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
+            this.toggleHeaders();
+            this.navBar.menu.toggleCollapse();
+        };
+        this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
+            setTimeout(() => {
+                location.reload(true);
+            }, 1000);
         };
         this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
             this.loader.show();
         };
-		let crudMenu = this.navBar.menu.menu.getGroup('CRUD');
+        let crudMenu = optionsMenu.getGroup('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
@@ -304,29 +302,13 @@ export default class MAIN extends CONTAINER {
         });
 	}
 	/** Log into the application using the given credentials
-		param {string} email Username / Email 
-		param {string} password Account Password
-        <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
-			<input name="__RequestVerificationToken" type="hidden" value="woot">
-            <div id="socialLoginList">
-			<p>
-			    <button type="submit"
-			        class="btn btn-default" id="Google"
-			        name="provider" value="Google"
-			        title="Log in using your Google account"
-			    >Google</button>
-			</p>
-			</div>
-		</form>
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
 	*/
-	login() {
-        let prompt = new PROMPT(new MODEL().set('label', 'Login')).createForm().then((form) => {
+    login() {
+        new PROMPT(new MODEL().set('label', 'Login')).createForm().then((form) => {
             form.setAction('/Account/Login');
-            form.id = 0;
             form.label = 'Login';
-            form.el.setAttribute('id', 0);
             form.addClass('login');
             form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
                 createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
@@ -337,9 +319,8 @@ export default class MAIN extends CONTAINER {
             form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
             //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
             form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
-
             form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-            prompt.show();
+            form.getDialog().show();
         });
     }
     /** Redirects to the third party OAuth Sign In

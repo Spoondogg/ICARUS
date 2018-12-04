@@ -22,27 +22,21 @@ export default class DIALOG extends EL {
 	constructor(model) {
         //super(document.body, 'DIALOG', model);
         super(document.body, 'DIV', model);
-        this.addClass('modal');
+        this.addClass('dialog').addClass('modal');
         //this.addClass('animated');
-        this.el.setAttribute('role', 'dialog');
+        //this.el.setAttribute('role', 'dialog');
         //dialogPolyfill.registerDialog(this.el);
         //this.addClass('hiding');
         this.container = model.container;
         //document.body.insertBefore(this.el, document.body.firstChild);
         
-		this.header = new HEADER(this, new MODEL().set({
-			label: model.label
-        }));
-		this.navBar = new NAVBAR(this, new MODEL().set({
-			label: this.label
-		}));
+		this.header = new HEADER(this, new MODEL().set('label', model.label));
+		this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
 		//this.navBar.show();
 		this.btnClose = new BUTTON(this.header, 'x');
 		this.btnClose.el.onclick = () => this.close(300);
 		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
-		this.footer = new FORMFOOTER(this, new MODEL().set({
-			align: ALIGN.VERTICAL
-		}));
+		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
         this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.close();      
         this.closeOnFocusOut();
 

@@ -70,13 +70,11 @@ export default class CONTAINER extends GROUP {
 		//} else {
 		//this.navBar.collapse();
 		//}
-		this.body = new CONTAINERBODY(this, model);
-		this.addNavBarDefaults();
-		this.addDefaultContainers(containerList);
+        this.body = new CONTAINERBODY(this, model);
+        this.addNavBarDefaults();
+        this.addDefaultContainers(containerList);
 		this.setDefaultVisibility(model);
-		//if (this.className !== 'CONTAINER') {
 		this.construct();
-		//}
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
@@ -93,9 +91,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Array<MODEL>} An array of input models
 	*/
 	createContainerInputs() {
-		console.log(this.className + '.createContainerInputs()', this);
 		let subsections = this.getSubSections();
-		console.log('subsections', subsections);
 		return [
 			createInputModel('INPUT', 'className', this.className, 'className', 'HIDDEN', true),
 			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
@@ -115,11 +111,10 @@ export default class CONTAINER extends GROUP {
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 	    @returns {Promise} A Promise to save this Container
 	*/
-	save(noPrompt = false) { // node, container = this, 
-		console.log(this.className + '.save()', noPrompt); // node, container, 
-		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save() not implemented.');
+	save(noPrompt = false) {
+		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save(' + noPrompt + ') not implemented.');
 	}
-	/** If dataId or attributesId exists, extract the appropriate values and save
+	/** Extract the appropriate values and save
         @param {string} type Data type
 	    @returns {void}
 	*/
@@ -283,15 +278,20 @@ export default class CONTAINER extends GROUP {
     /** Creates a NavItem that closes its menu on mouseup
         @param {string} className className
         @param {GROUP} group The NavItem Group to add items to (ie: CRUD, DOM)
-        @returns {NAVITEMICON} An object containing NavItems
+        @returns {NAVITEMICON} A Nav Item
     */
     createNavItem(className, group) {
-        let item = group.addNavItemIcon(new MODEL().set({
-            icon: ICONS[className],
-            label: className
-        }));
-        item.el.onmouseup = () => this.closeMenus(group);
-        return item;
+        try {
+            let item = group.addNavItemIcon(new MODEL().set({
+                icon: ICONS[className],
+                label: className
+            }));
+            item.el.onmouseup = () => this.closeMenus(group);
+            return item;
+        } catch (e) {
+            console.warn(e);
+            return null;
+        }
     }
     /** Creates a collection of NavItems that close Menus on mouseup
         @param {Array<string>} arr List of NavItem labels
@@ -308,7 +308,7 @@ export default class CONTAINER extends GROUP {
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems() {
+    addDomItems() {        
         let group = this.navBar.menu.menu.getGroup('DOM');
         let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE'], group);
         items.UP.el.onclick = () => this.up();
@@ -316,7 +316,7 @@ export default class CONTAINER extends GROUP {
         items.REFRESH.el.onclick = () => this.refresh();
         items.REMOVE.el.onclick = () => this.remove();
         items.DELETE.el.onclick = () => this.disable();
-		return group;
+        return group;
     }
     /** Adds the CRUD Nav Items
         @returns {GROUP} A Menu Group
@@ -332,7 +332,7 @@ export default class CONTAINER extends GROUP {
 	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Dropdown Menu
         @returns {void}
     */
-	addNavBarDefaults() {
+    addNavBarDefaults() {
 		if (this.navBar.menu.menu) {
 			this.addDomItems();
             this.addCrudItems();
@@ -428,12 +428,12 @@ export default class CONTAINER extends GROUP {
 		this.node.close();
 		this.el.setAttribute('data-status', 'closed');
 		// If section is open and we are trying to lock, we must first lock the children
-		console.log(this.element + ' has ' + this.children.length + ' child(ren)');
-		for (let s = 0; s < this.children.length; s++) {
-			if (this.children[s].status === STATUS.OPEN) {
-				this.children[s].close();
-			}
-		}
+        console.log(this.element + ' has ' + this.children.length + ' child(ren)');
+        this.children.forEach((s) => {
+            if (s.status === STATUS.OPEN) {
+                s.close();
+            }
+        });
 		console.log('Children are closed. Closing ' + this.element + '(' + this.getId() + ')');
 		this.header.btnLock.icon.el.className = ICONS.LOCK;
 		$(this.header.btnLock.el).removeClass('active');
@@ -535,7 +535,7 @@ export default class CONTAINER extends GROUP {
 	     @returns {array} A collection of subsection ids
     */
 	getSubSections() {
-		console.log(this.className + '.getSubsections()', this);
+		//console.log(this.className + '.getSubsections()', this);
 		let id = null;
 		let subsections = [];
 		for (let c = 0; c < this.body.pane.el.children.length; c++) {
@@ -546,12 +546,6 @@ export default class CONTAINER extends GROUP {
         }
 		return subsections;
 	}
-	/** Returns the parent container for this container or null if it does not exist
-	    @returns {CONTAINER} The parent container for this container
-	
-	getContainer() {
-		return this.container;
-	}*/
 	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container
 	    @throws Will throw an error 
@@ -567,18 +561,13 @@ export default class CONTAINER extends GROUP {
 				default:
 					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('MODAL'));
 			}
-			//return null;
-			//console.log('CONTAINER.getMainContainer() caught an error');
-			//throw e;
 		}
 	}
-	/** Attempts to have the direct parent Container of this Container perform
-	    a QuickSave
+	/** Parent CONTAINER attempts to perform a QuickSave
 	    @returns {Boolean} Returns true if successful
 	*/
 	quickSaveParent() {
 		try {
-			//return this.container.quickSave(this.container, false);
 			return this.container.save(this, this.container, false);
 		} catch (e) {
 			console.log('Container.QuickSaveParent() No parent exists');
@@ -586,8 +575,6 @@ export default class CONTAINER extends GROUP {
 		}
 	}
 	/** Actions performed after this container is saved
-        param {EL} node Parent node
-        param {EL} caller This
         @param {Payload} payload Form Response Payload
         @returns {void}
     */
