@@ -39,8 +39,7 @@ export default class JUMBOTRON extends CONTAINER {
 				this.p = new P(this.screen, new MODEL(), this.htmlDecode(this.data.p));
 				this.p.el.onclick = () => {
 					console.log('Clicked text', this);
-					//console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
-                    this.editFormPost(this.dataId, 'dataId');
+					console.warn('TODO: Launch Editor for FormPost ' + this.dataId);
 				};
 			}
 		} catch (e) {
@@ -63,7 +62,11 @@ export default class JUMBOTRON extends CONTAINER {
 							}
 						}
 					} catch (ee) {
-						console.log('Unable to load background image for JUMBOTRON', ee);
+                        if (ee instanceof TypeError) {
+                            // console.log('Unable to load background image for JUMBOTRON');
+                        } else {
+                            console.warn('Unable to load background image for JUMBOTRON', ee);
+                        }
 					}
 				});
 			} catch (e) {

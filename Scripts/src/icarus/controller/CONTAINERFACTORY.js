@@ -8,7 +8,6 @@ import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
 import CHAT from '../model/el/container/chat/CHAT.js';
 import CLASSVIEWER from '../model/el/container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../model/el/container/CONTAINER.js';
-//import DIALOG from '../model/el/dialog/DIALOG.js';
 import DICTIONARY from '../model/el/container/dictionary/DICTIONARY.js';
 import FIELDSET from '../model/el/fieldset/FIELDSET.js';
 import FORM from '../model/el/form/FORM.js';
@@ -37,7 +36,7 @@ import WORD from '../model/el/container/word/WORD.js';
     @class
  */
 export default class CONTAINERFACTORY {
-	/* eslint-disable max-lines-per-function, complexity */
+	/* eslint-disable max-lines-per-function, complexity, max-statements */
 	/** Gets this Container from the database via ajax GET request.
 	    Retrieves object model and returns the container.
 	    A placeholder object is created to ensure that values are loaded
@@ -51,11 +50,12 @@ export default class CONTAINERFACTORY {
         //console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
         let span = new SPAN(node, new MODEL());
         let index = node.children.push(span); // Reserve the slot in the array        
-        return $.getJSON('/' + className + '/Get/' + id, (payload) => {
+        return $.getJSON('/' + className + '/GET/' + id, (payload) => {
             let obj = null;
             if (payload.className === 'ERROR') {
                 if (payload.exception === 'AuthenticationException') {
                     try {
+                        console.log('An Authentication Exception occurred');
                         node.getContainer().getMainContainer().login();
                     } catch (e) {
                         console.warn('Unable to launch login', e);
@@ -186,7 +186,6 @@ export default class CONTAINERFACTORY {
                     // Inject CRUD actions and dependencies
                     obj.container = obj.getProtoTypeByClass('CONTAINER');
                     obj.save = this.save;
-                    //obj.quickSave = this.quickSave;
                     obj.quickSaveFormPost = this.quickSaveFormPost;
                     // Overwrite span with 
                     span.el.parentNode.replaceChild(obj.el, span.el);
@@ -204,7 +203,7 @@ export default class CONTAINERFACTORY {
             }
         });
 	}
-	/* eslint-enable max-lines-per-function, complexity */
+	/* eslint-enable max-lines-per-function, complexity, max-statements */
 	/** Saves the state of the CONTAINER
         @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
@@ -244,7 +243,7 @@ export default class CONTAINERFACTORY {
 	    @returns {void}
 	*/
     quickSaveFormPost(type) {
-        console.log('QuickSaveFormPost', type, this);
+        console.log('QuickSaveFormPost{' + this.className + '}[' + type + ']');
         return new Promise((resolve, reject) => {
             try {
                 if (this[type] > 0) {
@@ -253,11 +252,9 @@ export default class CONTAINERFACTORY {
                         className: this.className,
                         type,
                         formPostId: this.id
-                    })).then((form) => {
-                        form.post().then(() => {
-                            resolve(form.getDialog().close());
-                        });
-                    });
+                    })).then((form) => form.post().then(() => {
+                        resolve(form.getDialog().close());
+                    }));
                 }
                 resolve();
             } catch (e) {

@@ -33,13 +33,12 @@ export default class NAVHEADER extends MENU {
 	    @returns {void}
 	*/
 	addDefaultTab() {
-		this.tab.el.onclick = () => { // Toggle Body
-			this.getContainer().toggleBody();
-		};
+		this.tab.el.onclick = () => this.getContainer().toggleBody();
 		this.tab.pressTimer = null; // Simulate LONG CLICK to edit the label
 		this.tab.el.onmousedown = (ev) => {
 			this.tab.pressTimer = window.setTimeout(() => {
-				this.launchSidebarSave();
+				//this.launchSidebarSave();
+                console.log('LONGCLICK');
 				ev.stopPropagation();
 			}, 1000);
 		};
@@ -57,15 +56,15 @@ export default class NAVHEADER extends MENU {
     */
 	addOptionsMenu() {
 		try {
-			//if (this.getContainer().getMainContainer().user !== 'Guest') {
-			if (document.getElementsByTagName('meta').user.content !== 'Guest') {
-				['ELEMENTS', 'CRUD', 'DOM'].forEach((opt) => this.menu.addMenu(new MODEL('horizontal collapse').set({
-					name: opt,
+            //console.log('addOptionsMenu()', document.getElementsByTagName('meta').user.content);
+            //if (document.getElementsByTagName('meta').user.content) {
+				['ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menu.addMenu(new MODEL('horizontal collapse').set({
+					name,
 					collapsed: 1, // Do not remove these!
 					showHeader: 1
 				})));
-			}
-		} catch (e) {
+			//}
+        } catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
 			if (modal === null) {
 				console.warn('Unable to retrieve MAIN Container', e);

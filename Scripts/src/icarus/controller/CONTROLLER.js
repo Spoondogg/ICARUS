@@ -101,32 +101,29 @@ export default class CONTROLLER extends MODEL {
             }
         });
     }
-
-	/**
-	    Determines if a 'login' parameter exists in the Url, and if true, 
+	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
 	    @returns {boolean} If a login parameter exists, return true
 	*/
 	showLoginPrompt() {
-		if (this.url.searchParams.get('login')) {
+        if (this.url.searchParams.get('login')) {
+            console.log('showLoginPrompt();');
 			this.main.login();
 		}
 		return this;
     }
-    /**
-	    If conditions are met, launches OAuth Login Prompt
+    /** If conditions are met, launches OAuth Login Prompt
 	    @returns {boolean} If a login parameter exists, return true
-	*/
+	
     showExternalLoginPrompt() {
-        console.log('showExternalLoginPrompt();');
         let provider = this.url.searchParams.get('provider');
         let returnUrl = this.url.searchParams.get('returnUrl');
         if (provider && returnUrl) {
-            console.log('showExternalLoginPrompt');
+            console.log('showExternalLoginPrompt()');
             //this.main.loader.log(50, 'Processing OAuth[' + provider + ']...', true).then(() => this.main.loginOAuth(provider));
         }
         return this;
-    }
+    }*/
 	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP
 	*/
