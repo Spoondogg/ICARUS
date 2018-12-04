@@ -110,9 +110,6 @@ export default class CONTAINER extends GROUP {
 		];
 	}
 	/** Saves the state of the given Container
-        @description Generates an empty form, populates with current state and posts to appropriate setter
-	    param {EL} node The parent container to hold the save menu
-        param {CONTAINER} container The Container to save
         @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
@@ -123,16 +120,13 @@ export default class CONTAINER extends GROUP {
 		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save() not implemented.');
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save
-	    @param {number} modelId The object's unique identifier
-	    @param {object} data The object to be saved
+        @param {string} type Data type
 	    @returns {void}
 	*/
-	quickSaveFormPost(modelId, data) {
-		console.log(modelId, data);
-		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');
+    quickSaveFormPost(type) {
+		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '] : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');
 	}
 	/** Restore Container View to defaults and refresh parent Container
-	    @param {CONTAINER} container The container to restore
 	    @returns {void}
     */
 	refreshParentContainer() {
@@ -151,7 +145,6 @@ export default class CONTAINER extends GROUP {
 		}
 	}
 	/** Saves this Container's parent Container
-	    param {CONTAINER} container The container to restore
         @param {BOOLEAN} noPrompt If false (default), no prompt is displayed
 	    @returns {void}
     */

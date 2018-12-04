@@ -16,9 +16,11 @@ export default class ATTRIBUTES { // extends Map
 		switch (typeof className) {
 			case 'string':
 				this.set('class', className);
-				this.set('name', name);
-				this.set('type', type);
-				this.set('value', value);
+                this.set({
+                    name,
+                    type,
+                    value
+                });
 				break;
 			case 'object':
 				for (let attr in className) {

@@ -25,13 +25,13 @@ export default class PROMPT extends DIALOG {
     createForm(model = new MODEL()) {
         return new Promise((resolve, reject) => {
             try {
-                if (model.type === 'FORMPOST') {
+                if (model.formtype === 'FORMPOST') {
                     FORM.createFormPostForm(this.body, model).then((frm) => {
                         this.configureForm(frm, model).then((f) => {
                             resolve(f);
                         });
                     });
-                } else if (model.type === 'CONTAINER') {
+                } else if (model.formtype === 'CONTAINER') {
                     FORM.createContainerForm(this.body, model).then((frm) => {
                         this.configureForm(frm, model).then((f) => {
                             resolve(f);

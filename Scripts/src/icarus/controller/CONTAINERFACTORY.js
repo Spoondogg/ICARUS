@@ -205,35 +205,26 @@ export default class CONTAINERFACTORY {
         });
 	}
 	/* eslint-enable max-lines-per-function, complexity */
-	/** Saves the state of the given Container
-        @description Generates an empty form, populates with current state and posts to appropriate setter
-	    param {EL} node The parent container to hold the save menu
-        param {CONTAINER} container The Container to save
+	/** Saves the state of the CONTAINER
         @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
-	save(noPrompt = false) { // 
+	save(noPrompt = false) {
 		return new Promise((resolve) => {
-			console.log(this.className + '.save()', noPrompt);
-            let dialog = new PROMPT(new MODEL().set({
+            new PROMPT(new MODEL().set({
                 label: 'Save ' + this.className + '[' + this.id + ']'
-                /*form: {
-                    type: 'CONTAINER',
-                    container: this
-                }*/
             })).createForm(new MODEL().set({
-                type: 'CONTAINER',
+                formtype: 'CONTAINER',
                 container: this
             })).then((form) => {
                 //dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
                 form.afterSuccessfulPost = (payload) => {
-                    console.log('Successful post', payload, form.getContainer());
-                    form.getContainer().setLabel(form.el.elements.label.value);
-                    //this.quickSaveFormPost(this.dataId, this.data);
-                    //this.quickSaveFormPost(this.attributesId, this.attributes);
+                    let container = form.getContainer();
+                    console.log('Successful post', payload, container);
+                    container.setLabel(form.el.elements.label.value);
+                    container.quickSaveFormPost('dataId');
+                    container.quickSaveFormPost('attributesId');
                     //this.refreshParentContainer();
-                    //console.log('CONTAINERFACTORY.save() afterSuccessfulPost resolved');
-                    //resolve(dialog.close());
                     form.getDialog().close();
                 };
                 /* eslint-disable-next-line no-alert */
@@ -249,32 +240,30 @@ export default class CONTAINERFACTORY {
 		});
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save
-	    @param {number} modelId The object's unique identifier
-	    @param {object} data The object to be saved
+	    @param {string} type Data type
 	    @returns {void}
 	*/
-	quickSaveFormPost(modelId, data) {
-		console.log('QuickSaveFormPost', modelId, data);
-		if (modelId > 0) {
-			//console.log(50, 'Saving FormPost: ' + modelId);
-			let form = FORM.createEmptyForm(this, true);
-			let inputs = [];
-			//console.log('Adding data attributes');
-			for (let key in data) {
-				if (Reflect.call(data, key)) { // if (Object.prototype.hasOwnProperty.call(data, key)) {
-					//console.log('Key', key);
-					//console.log('Value', this.htmlEncode(data[key]));
-					inputs.push(this.createInputModel('INPUT', key, this.htmlEncode(data[key])));
-				}
-			}
-			form.children[0].children[0].addInputElements(inputs);
-			form.setAction('FORMPOST/SET');
-			form.post();
-			form.afterSuccessfulPost = () => {
-				form.destroy();
-				//console.log('FormPost: ' + modelId + ' has been quicksaved');
-			};
-		}
+    quickSaveFormPost(type) {
+        console.log('QuickSaveFormPost', type, this);
+        return new Promise((resolve, reject) => {
+            try {
+                if (this[type] > 0) {
+                    new PROMPT(new MODEL()).createForm(new MODEL().set({
+                        formtype: 'FORMPOST',
+                        className: this.className,
+                        type,
+                        formPostId: this.id
+                    })).then((form) => {
+                        form.post().then(() => {
+                            resolve(form.getDialog().close());
+                        });
+                    });
+                }
+                resolve();
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }
 export { ATTRIBUTES, CONTAINER, EL, MODEL };
