@@ -80,15 +80,15 @@ export default class FORM extends CONTAINER {
 	    @returns {FORM} An empty form container
 	*/
     static createFormPostForm(node, model) {
-        //let { className, dataIdLabel, id } = model; // Consider and verify
+        let { className, type, hidden, id } = model; // Consider and verify
         return new Promise((resolve, reject) => {
-            FORM.createEmptyForm(node, model.hidden).then((frm) => {
+            FORM.createEmptyForm(node, hidden).then((frm) => {
                 frm.setAction('FORMPOST/SET');
                 try {
-                    $.getJSON('/FORMPOST/GET/' + model.id, (payload) => {
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => {
                         //frm.setId(payload.model.id);
                         frm.addInputs(
-                            frm.generateFormPostInputs(payload, model.className, model.dataIdLabel),
+                            frm.generateFormPostInputs(payload, className, type),
                             frm.children[0].children[0]
                         );
 
@@ -214,13 +214,13 @@ export default class FORM extends CONTAINER {
     /** Generates the appropriate INPUT(s) for this FORMPOST
         @param {any} payload The FormPost Payload
         @param {string} className The container className
-        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
+        @param {string} type The key (dataId, attributesId, descriptionId) to add object to
         @returns {Array<MODEL>} An array of MODEL inputs
     */
-    generateFormPostInputs(payload, className, dataIdLabel) {
+    generateFormPostInputs(payload, className, type) {
         let inputs = this.defaultFormPostInputArray(payload);
         //this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
-        switch (dataIdLabel) {
+        switch (type) {
             case 'dataId':
                 DATAELEMENTS[className].data.forEach((i) => inputs.push(i));
                 break;
@@ -231,46 +231,10 @@ export default class FORM extends CONTAINER {
                 inputs.push(createInputModel('TEXTAREA', 'description'));
                 break;
             default:
-                console.log('Unidentified attribute name', dataIdLabel);
+                console.log('Unidentified attribute name', type);
         }
         return inputs;
     }
-    /** Creates a FORM populated with the state of the given container
-        @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
-        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
-        @param {number} id Optional FormPost Id to edit
-        @returns {Promise<string>} Promise to create a new FormPost DIALOG and return its FORM
-    
-    createFormPostForm(className, dataIdLabel, id = 0) {
-        return new Promise((resolve, reject) => {
-            try {
-                $.getJSON('/FORMPOST/Get/' + id, (payload) => {
-                    let inputs = this.generateFormPostInputs(payload, className, dataIdLabel);
-                    try {
-                        this.addInputs(inputs, this.children[0].children[0]);
-
-                        // Set values based on existing 
-                        if (payload.model.jsonResults) {
-                            JSON.parse(payload.model.jsonResults).forEach((inp) => {
-                                this.el.elements[inp.name].value = inp.value;
-                            });
-                        }
-
-                        this.afterSuccessfulPost = (result) => {
-                            console.log('FORMPOSTINPUT.save() afterSuccessfulPost resolved', result);
-                        };
-
-                        resolve();
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
-            } catch (e) {
-                console.log(0, 'Unable to retrieve FormPost.', e);
-                reject(e);
-            }
-        });
-    }*/
 	/** Populates this form with a single fieldset and formelementgroup
         NavBars are hidden for these elements
 	    @param {EL} node Parent node

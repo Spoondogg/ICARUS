@@ -2,8 +2,6 @@
 import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
-//import FORMPOSTPROMPT from '../../../dialog/prompt/formpostprompt/FORMPOSTPROMPT.js';
-//import FORMPOSTFORM from '../../../dialog/formpostform/FORMPOSTFORM.js';
 import INPUT from '../../../input/INPUT.js';
 import PROMPT from '../../../dialog/prompt/PROMPT.js';
 import SPAN from '../../../span/SPAN.js';
@@ -40,14 +38,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			this.input.el.setAttribute('readonly', 'readonly');
         }
         let className = this.input.el.form.className.value;
-        let dataIdLabel = this.attributes.name;
-        let formPostId = this.attributes.value;
-        if (formPostId > 0) {
+        let type = this.attributes.name;
+        let id = this.attributes.value;
+        if (id > 0) {
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT');
-            btnEdit.el.onclick = () => this.createForm(className, dataIdLabel, formPostId, this.input);
+            btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
 		}
         let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW');
-        btnNew.el.onclick = () => this.createForm(className, dataIdLabel, 0, this.input);
+        btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
 	}
 	/** Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
@@ -69,13 +67,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     /** Generates the appropriate INPUT(s) for this FORMPOST
         @param {any} payload The FormPost Payload
         @param {string} className The container className
-        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
+        @param {string} type The key (dataId, attributesId, descriptionId) to add object to
         @returns {Array<MODEL>} An array of MODEL inputs
     */
-    generateInputs(payload, className, dataIdLabel) {
+    generateInputs(payload, className, type) {
         let inputs = this.defaultInputArray(payload);
         this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
-        switch (dataIdLabel) {
+        switch (type) {
             case 'dataId':
                 DATAELEMENTS[className].data.forEach((i) => inputs.push(i));
                 break;
@@ -86,31 +84,30 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                 inputs.push(createInputModel('TEXTAREA', 'description'));
                 break;
             default:
-                console.log('Unidentified attribute name', dataIdLabel);
+                console.log('Unidentified attribute name', type);
         }
         return inputs;
     }
     /** Creates a FORM that represents a given FORMPOST
         @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
-        @param {string} dataIdLabel The key (dataId, attributesId, descriptionId) to add object to
-        @param {number} formPostId Optional FormPost Id to edit
+        @param {string} type The key (dataId, attributesId, descriptionId) to add object to
+        @param {number} id Optional FormPost Id to edit
         @param {INPUT} inputNode The input that spawned this DIALOG
         @returns {Promise<string>} Promise to create a new FormPost DIALOG and return it
     */
-    createForm(className, dataIdLabel, formPostId = 0, inputNode = null) {
+    createForm(className, type, id = 0, inputNode = null) {
         return new Promise((resolve, reject) => {
             try {
-                let dialog = new PROMPT(new MODEL().set({
+                new PROMPT(new MODEL().set({
                     label: 'Create FormPost Form'
                 })).createForm(new MODEL().set({
-                    id: formPostId,
-                    type: 'FORMPOST',
+                    formtype: 'FORMPOST',
                     className,
-                    dataIdLabel,
-                    formPostId,
+                    type,
+                    id,
                     inputNode
-                })).then(() => {
-                    resolve(dialog.show());
+                })).then((form) => {
+                    resolve(form.getDialog().show());
                 });
             } catch (e) {
                 reject(e);
