@@ -11,8 +11,10 @@ import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
+import LEGEND from '../legend/LEGEND.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
-//import PROMPT from '../dialog/prompt/PROMPT.js';
+import P from '../p/P.js';
+//import PROMPT from '../dialog/prompt/PROMPT.js'; You can't have prompt in here because it has a FORM
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract Container element with NAVBAR
@@ -85,7 +87,60 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
-	}
+    }
+    /** Creates an editable EL for this CONTAINER
+        @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
+        @param {string} name The Element to create,
+        @param {EL} node Parent node
+	    @returns {EL} Element
+	*/
+    createEditableElement(name, node) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.data[name]) {
+                    switch (name) {
+                        case 'header':
+                            this[name] = new HEADER(node, new MODEL().set('label', this.data[name]));
+                            break;
+                        case 'p':
+                            this[name] = new P(node, new MODEL(), this.htmlDecode(this.data[name]));
+                            break;
+                        case 'legend':
+                            this[name] = new LEGEND(node, new MODEL().set('label', this.data[name]));
+                            break;
+                        default:
+                            console.warn(name + ' does not have a valid constructor');
+                    }
+                    this[name].el.onclick = () => this.editData(name);
+                    resolve(this[name]);
+                }
+            } catch (e) {
+                console.log('Unable to create ' + name, e);
+                reject(e);
+            }
+        });
+    }
+    /** Hides the collection of named EL(s), optionally excluding those with the specified name
+        @param {Array<EL>} elements A collection of Elements to hide
+        @param {string} name Optional name of element to keep visible
+        @returns {Promise} Resolve on success
+    */
+    hideElements(elements, name = '') {
+        return Promise.resolve(
+            elements
+                .filter((ch) => ch.el.getAttribute('name') !== name)
+                .map((c) => c.hide()));
+    }
+    /** Launches a FORM POST editor for the specified element
+        param {EL} element The EL who's model.data is being edited
+        @param {string} name The name of the input we are editing
+        @abstract
+        @see CONTAINERFACTORY The CONTAINERFACTORY assigns editData() to this CONTAINER
+	    @returns {Promise<PROMPT>} A Save PROMPT
+	*/
+    editData(name) {
+        throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + name + '] : Abstract method ' + this.className + '.editData(' + name + ') not implemented.');
+    }
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
 	    param {CONTAINER} container The specified container for crud actions
 	    @returns {Array<MODEL>} An array of input models
@@ -696,7 +751,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	getDateCreated() {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
-	}
+    }
 }
-export { ATTRIBUTES, createInputModel, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
+export { AbstractMethodError, ATTRIBUTES, createInputModel, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MODEL, STRING };
 /* eslint-enable max-lines */

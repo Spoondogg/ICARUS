@@ -290,6 +290,9 @@ h2 {
 		}
 	}
 }
+.selected {
+    border: 2px dashed;
+}
 // ********** DIALOG ********** //
 @keyframes fadeIn {
     from {
@@ -1092,6 +1095,11 @@ table {
 	.container-body {
 		.pane {
 			padding: .4em;
+
+            > textarea {
+                height: 10em;
+            }
+
 		}
 	}
 }

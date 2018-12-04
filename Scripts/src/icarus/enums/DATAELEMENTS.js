@@ -53,11 +53,11 @@ export const DATAELEMENTS = {
         attributes: []
     },
     FIELDSET: {
-        data: [],
+        data: [createInputModel('INPUT', 'legend')],
         attributes: []
     },
     FORM: {
-        data: [],
+        data: [createInputModel('INPUT', 'header')],
         attributes: [
             createInputModel('INPUT', 'method', 'POST'),
             createInputModel('INPUT', 'action', 'FORM/SUBMIT')
@@ -68,17 +68,17 @@ export const DATAELEMENTS = {
             createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
             createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'value', '')
+            createInputModel('INPUT', 'value')
         ],
         attributes: [
             createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'text-input'),
             createInputModel('INPUT', 'value', ''),
-            createInputModel('INPUT', 'placeholder', '')
+            createInputModel('INPUT', 'placeholder')
         ]
     },
     FORMELEMENTGROUP: {
-        data: [],
+        data: [createInputModel('INPUT', 'header')],
         attributes: []
     },
     FORMINPUT: {
@@ -86,11 +86,23 @@ export const DATAELEMENTS = {
             createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
             createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'value', '')
+            createInputModel('INPUT', 'value')
         ],
         attributes: [
             createInputModel('INPUT', 'name', 'text-input'),
-            createInputModel('INPUT', 'value', 'woot')
+            createInputModel('INPUT', 'value')
+        ]
+    },
+    FORMTEXTAREA: {
+        data: [
+            createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+            createInputModel('INPUT', 'type', 'TEXT'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'value')
+        ],
+        attributes: [
+            createInputModel('INPUT', 'name', 'text-input'),
+            createInputModel('INPUT', 'value')
         ]
     },
     FORMPOST: {

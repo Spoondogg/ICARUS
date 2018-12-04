@@ -23,13 +23,10 @@ export default class EL extends MODEL {
 		this.className = this.constructor.name;
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
-		//this.factory = null;
 		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
-		this.el = document.createElement(this.element);
+        this.el = document.createElement(this.element);
 		this.make(this.el, node, model, innerHTML);
-		//this.merge(model);
-		//this.setInnerHTML(innerHTML);
 	}
 	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
         @param {HTMLElement} el The HTML Element
@@ -65,6 +62,7 @@ export default class EL extends MODEL {
 		return this;
 	}
 	/** Creates a textarea input and populates with this element's contents
+        @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
 	    @returns {void}
 	*/
 	edit() {
@@ -348,19 +346,21 @@ export default class EL extends MODEL {
 		return this;
 	}
 	/** Shows this Element
-	    @returns {EL} This EL
+	    @returns {ThisType} callback
 	*/
 	show() {
 		this.el.style.display = 'block';
 		return this;
 	}
 	/** Hides this Element
-	    @returns {EL} This EL
+	    @returns {ThisType} callback
 	*/
-	hide() {
-		this.el.style.display = 'none';
-		return this;
-	}
+    hide() {
+        return new Promise((resolve) => {
+            this.el.style.display = 'none';
+            resolve(this);
+        });
+    }
 	/** Adds 'active' to this element's classes
 	    @returns {EL} This EL
     */

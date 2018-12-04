@@ -1,9 +1,7 @@
 /** @module */
 import DIALOG, { ATTRIBUTES, EL, MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
-//import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
-//import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
-/** A Dialog with an embedded FORM that can be used to recieve input
+/** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
     @class
     @extends DIALOG
