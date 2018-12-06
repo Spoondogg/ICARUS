@@ -55,12 +55,15 @@ export default class EL extends MODEL {
     /** Sets mobile-friendly single and double click events
         @param {function} click Function call on single click
         @param {function} dblclick Function call on double click
-        @param {number} delay Delay in milliseconds between clicks
+        @param {object} object {delay: Delay in milliseconds between clicks, stopPropagation: Stops event propagation}
         @returns {ThisType} callback
     */
-    clickHandler(click, dblclick, delay = 500) {
-        this.el.onclick = () => new Promise((resolve, reject) => {
+    clickHandler(click, dblclick, { delay = 500, stopPropagation = true }) {
+        this.el.onclick = (ev) => new Promise((resolve, reject) => {
             try {
+                if (stopPropagation) {
+                    ev.stopPropagation();
+                }
                 if (this.touchtime === 0) {
                     this.touchtime = new Date().getTime();
                     setTimeout(() => {
@@ -74,6 +77,7 @@ export default class EL extends MODEL {
                     resolve(dblclick());
                 }
             } catch (e) {
+                ev.stopPropagation();
                 reject(e);
             }
         });

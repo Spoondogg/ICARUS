@@ -22,7 +22,12 @@ export const createInputModel = (element, name, value = '', label = name, type =
 	element,
 	label,
 	type
-}).setAttribute(attr);
+    }).setAttribute(attr);
+
+const defaultContainerData = () => [
+    createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+    createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'NUMBER')
+];
 /* eslint-enable max-params */
 /** Stores the default DATA ELEMENTS collections for each Class
     This belongs on the database or within a config 
@@ -33,7 +38,7 @@ export const createInputModel = (element, name, value = '', label = name, type =
 */
 export const DATAELEMENTS = {
     ARTICLE: {
-        data: [createInputModel('INPUT', 'header')],
+        data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
         attributes: []
     },
     CALLOUT: {
@@ -45,7 +50,7 @@ export const DATAELEMENTS = {
         attributes: []
     },
     CONTAINER: {
-        data: [createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER')],
+        data: defaultContainerData(),
         attributes: []
     },
     DICTIONARY: {
@@ -64,12 +69,11 @@ export const DATAELEMENTS = {
         ]
     },
     FORMELEMENT: {
-        data: [
-            createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+        data: defaultContainerData().concat([
             createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'Text Input'),
             createInputModel('INPUT', 'value')
-        ],
+        ]),
         attributes: [
             createInputModel('INPUT', 'type', 'TEXT'),
             createInputModel('INPUT', 'name', 'text-input'),
