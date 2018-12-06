@@ -66,14 +66,8 @@ export default class CONTAINER extends GROUP {
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
         this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
 		this.createDraggableNavBar();
-		//if (this.status === STATUS.DEFAULT) {
-		//if (model.showHeader ) {
-		//this.navBar.show();
-		//} else {
-        this.hideNav();
-		//}
         this.body = new CONTAINERBODY(this, model);
-        this.body.clickHandler(() => true, () => this.toggleNav());
+        this.body.clickHandler(() => $('.selected').removeClass('selected'), () => this.toggleNav());
         this.addNavBarDefaults();
         this.addDefaultContainers(containerList);
 		this.setDefaultVisibility(model);
@@ -211,19 +205,15 @@ export default class CONTAINER extends GROUP {
 	}
 	/** The default visibility state for menus and collapseable content
 	    @param {MODEL} model The CONTAINER object retrieved from the server
-	    @returns {void}
+	    @returns {Array<boolean>} Array of results
 	*/
-	setDefaultVisibility(model) {
-		if (model.collapsed) {
-			this.collapse();
-		} else {
-			this.show(); // Collapse or Expand Body Pane
-		}
-		if (model.showNav < 1) {
-			this.navBar.hide();
-		} else {
-			this.navBar.show();
-		}
+    setDefaultVisibility(model) {
+        if (model.data) {
+            let a = model.data.collapsed === '1' ? this.collapse() : this.show();
+            let b = model.data.showNav === '1' ? this.navBar.show() : this.navBar.hide();
+            return [a, b];
+        }
+        return [false, false];
 	}
 	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names

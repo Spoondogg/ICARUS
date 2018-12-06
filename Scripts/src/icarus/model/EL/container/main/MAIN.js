@@ -158,16 +158,16 @@ export default class MAIN extends CONTAINER {
                     */
                     let url = '/' + payload.model.id;
                     let dialog = new PROMPT(new MODEL().set('label', 'Create a new page')).createForm().then((form) => {
-                        dialog.form.footer.buttonGroup.children[0].destroy().then(() => {
+                        form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
                             form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
                                 window.open(url, '_blank');
-                                dialog.hide(300, true);
+                                form.getDialog().hide(300, true);
                             };
                             form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
                                 location.href = url;
-                                dialog.hide(300, true);
+                                form.getDialog().hide(300, true);
                             };
-                            dialog.show();
+                            form.getDialog().show();
                             resolve(true);
                         });
                     });
