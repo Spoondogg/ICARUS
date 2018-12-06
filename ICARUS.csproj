@@ -603,6 +603,9 @@
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
+    <Content Include="Content\Images\startup\startup-1125x2436.png" />
+    <Content Include="Content\Images\startup\startup-1242x2208.png" />
+    <Content Include="Content\Images\startup\startup-750x1334.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />

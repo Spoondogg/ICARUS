@@ -1,9 +1,6 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
-//import HEADER from '../../header/HEADER.js';
-//import P from '../../p/P.js';
-//import PROMPT from '../../dialog/prompt/PROMPT.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
     @class
@@ -47,9 +44,7 @@ export default class JUMBOTRON extends CONTAINER {
 							}
 						}
 					} catch (ee) {
-                        if (ee instanceof TypeError) {
-                            // console.log('Unable to load background image for JUMBOTRON');
-                        } else {
+                        if (!(ee instanceof TypeError)) {
                             console.warn('Unable to load background image for JUMBOTRON', ee);
                         }
 					}

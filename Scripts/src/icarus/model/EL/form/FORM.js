@@ -23,7 +23,6 @@ export default class FORM extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
-        //this.header = new HEADER(this.body.pane, new MODEL().set('label', model.label || ''));
         this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
         this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
@@ -236,22 +235,12 @@ export default class FORM extends CONTAINER {
 	static createEmptyForm(node, hidden = false) {
         return new Promise((resolve, reject) => {
             try {
-                let form = new FORM(node, new MODEL(new ATTRIBUTES({
-                    style: hidden ? 'display:none;' : ''
-                })).set({
-                    //label: 'FORM',
-                    showNav: 0
-                }));
-                form.addFieldset(new MODEL().set({
-                    showNav: 0
-                })).addFormElementGroup(new MODEL().set({
-                    showNav: 0
-                }));
+                let form = new FORM(node, new MODEL(new ATTRIBUTES('style', hidden ? 'display:none;' : '')).set('showNav', 0));
+                form.addFieldset(new MODEL().set('showNav', 0)).addFormElementGroup(new MODEL().set('showNav', 0));
                 resolve(form);
             } catch (e) {
                 reject(e);
             }
-            
         });
 	}
 	/** Sets this form's ACTION attribute
@@ -337,11 +326,26 @@ export default class FORM extends CONTAINER {
 	htmlEncodeValues() {
         try {
             for (let e = 0; e < this.el.elements.length; e++) {
-				//console.log('Encode type: ' + this.el.elements[e].type);
-				if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
-					this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
-				}
-			}
+                switch (this.el.elements[e].type.toUpperCase()) {
+                    case 'TEXT':
+                    case 'TEXTAREA':
+                        this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
+                        break;
+                    //case 'TEXTAREA':
+                      //  this.el.elements[e].innerHtml = this.htmlEncode(this.el.elements[e].innerHtml);
+                        //break;
+                    default:
+                        console.warn('Unrecognized type');
+                }
+                //if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
+                //    this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
+                //}
+            }
+            /*this.el.elements.forEach((e) => {
+                if (e.type.toUpperCase() === 'TEXT' || e.type.toUpperCase() === 'TEXTAREA') {
+                    e.value = this.htmlEncode(e.value);
+                }
+            });*/
 		} catch (e) {
 			console.log('FORM.htmlEncodeValues() failed.');
 			throw e;
@@ -473,11 +477,7 @@ export default class FORM extends CONTAINER {
 	getFormPost() {
 		return this.validate().isValid ? new FORMPOST(this) : null;
 	}
-	/** Post values to server.
-		Posts the contents of the given Form Post to the specified url
-		and updates the given prompt.
-		param {CONTAINER} master The master element whos state and id is to be updated
-	    @async
+	/** Post FORM values to server
 	    @returns {Promise<object>} The results of the Form Post
 	*/
 	post() {

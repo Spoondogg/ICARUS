@@ -231,6 +231,7 @@ $jumbotron-height: 420px;
 	}
 }
 body {
+    @extend %gradient-vertical-fade;
     @include font-smoothing;
     @include transition($transition-default);
     background-color: $color-dark-less; //$background-primary;
@@ -238,6 +239,7 @@ body {
     font-family: $font-primary;
     font-size: $font-size-base; //$font-size-normal;
     font-weight: $font-primary-weight;
+    height: 100vh;
     overflow: hidden;
     padding-top: $navbar-height;
 
@@ -290,8 +292,22 @@ h2 {
 		}
 	}
 }
+@keyframes border-dance {
+    0% {
+        background-position: left top, right bottom, left bottom, right top;
+    }
+
+    100% {
+        background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+    }
+}
 .selected {
-    border: 2px dashed;
+    animation: border-dance 1s infinite linear;
+    background-image: linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%);
+    background-position: left top, right bottom, left bottom, right top;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+    //border: 2px dashed;
 }
 // ********** DIALOG ********** //
 @keyframes fadeIn {
@@ -385,7 +401,10 @@ dialog,
 
     &.prompt {
         animation: slideOutDown $transition-speed $transition-motion;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
         bottom: 0;
+        margin-bottom: 0;
         top: auto;
 
         &[open],
@@ -394,6 +413,19 @@ dialog,
 
             &.hiding {
                 animation: slideOutUp $transition-speed $transition-motion;
+            }
+        }
+
+        > footer {
+            &.form-footer {
+                border: 0;
+
+                button {
+                    border-radius: 0;
+                    height: $navbar-height - 1em;
+                    line-height: $navbar-height - 1em;
+                    padding: 0;
+                }
             }
         }
     }
@@ -508,6 +540,7 @@ dialog,
         footer,
         header {
             display: none;
+            height: $navbar-height;
         }
     }
 
@@ -546,8 +579,19 @@ dialog,
         }
     }
 
-    > footer {
+    footer {
         padding: 0;
+
+        &.form-footer {
+            border: 0;
+
+            button {
+                border-radius: 0;
+                height: $navbar-height - 1em;
+                line-height: $navbar-height - 1em;
+                padding: 0;
+            }
+        }
     }
 }
 .btn-group-vertical {

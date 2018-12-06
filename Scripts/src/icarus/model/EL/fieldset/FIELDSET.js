@@ -1,7 +1,6 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../container/CONTAINER.js';
 import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
-//import LEGEND from '../legend/LEGEND.js';
 /** Construct a Form Fieldset
     @class
     @extends CONTAINER
@@ -12,10 +11,8 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']); //'FORMELEMENTGROUP'
+		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
 		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
-		//this.legend = new LEGEND(this.body.pane, new MODEL().set('label', model.label));
-		//$(this.legend.el).insertBefore(this.body.pane.el);
         this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));
 		this.populate(model.children);
 	}

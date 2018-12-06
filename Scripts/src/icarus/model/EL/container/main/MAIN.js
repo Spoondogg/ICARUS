@@ -379,7 +379,7 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     hideNav() {
-        this.navBar.collapse();
+        this.navBar.hide();
         $('body').addClass('compact');
     }
     /** Expands the MAIN NavBar

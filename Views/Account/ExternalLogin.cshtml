@@ -37,16 +37,44 @@
                 </form>
             </div>
             <script>
-                let loader = new LOADER(0, 'Authenticating...');
-                loader.show();
-                document.getElementById('login-external').submit();
-                //$.post('/Account/ExternalLogin', {
-                //    ReturnUrl: '/',
-                //    provider: '@Request["provider"]',
-                //    '__RequestVerificationToken': document.getElementsByTagName('meta').token.content
-                //}, (data) => {
-                //    console.log('POST', data);
-                //});
+                //let loader = new LOADER(0, 'Authenticating...');
+                //loader.show();
+                let url = new URL(window.location.href);
+                let returnUrl = url.searchParams.get('returnUrl');
+                let provider = url.searchParams.get('provider');
+                setTimeout(() => {
+                    console.warn('provider @Request["provider"]', 'url ' + url, 'returnUrl ' + returnUrl);
+                }, 3000)
+                
+                if (returnUrl !== '/') {
+                    document.getElementById('login-external').submit();
+                } else {
+                    console.log(url, returnUrl, provider);
+                }
+                
+                /*
+                console.log('TOKEN', $('body input[name="__RequestVerificationToken"]')[0].value);
+                $.post('/Account/ExternalLogin', {
+                    ReturnUrl: '/',
+                    provider: 'Request["provider"]', //(starts with at symbol)
+                    '__RequestVerificationToken': $('body input[name="__RequestVerificationToken"]')[0].value
+                }, (data, response, woot) => {
+                    console.log('POST', data, response, woot);
+                    if (response === 'success') {
+                        //$(document.body).html(data);
+                        
+                        let url = new URL(window.location.href);
+                        let returnUrl = url.searchParams.get('ReturnUrl');
+                        if (returnUrl) {
+                            location.href = url.origin; // + returnUrl;
+                            //location.href = returnUrl;
+                        } else {
+                            location.reload(true);
+                        }
+                        
+                    }
+                });
+                */
             </script>
         }
         <!--<script src="@Url.Content("~/Scripts/dist/icarus/controller/init.js")" type="module"></script>-->

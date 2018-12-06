@@ -70,13 +70,16 @@ export default class CONTAINER extends GROUP {
 		//if (model.showHeader ) {
 		//this.navBar.show();
 		//} else {
-		//this.navBar.collapse();
+        this.hideNav();
 		//}
         this.body = new CONTAINERBODY(this, model);
+        this.body.clickHandler(() => true, () => this.toggleNav());
         this.addNavBarDefaults();
         this.addDefaultContainers(containerList);
 		this.setDefaultVisibility(model);
-		this.construct();
+        this.construct();
+
+        this.tappedTwice = false;
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
@@ -111,7 +114,7 @@ export default class CONTAINER extends GROUP {
                         default:
                             console.warn(name + ' does not have a valid constructor');
                     }
-                    this[name].el.onclick = () => this.editData(name);
+                    this[name].clickHandler(() => this[name].select(), () => this.editData(name));
                     resolve(this[name]);
                 }
             } catch (e) {
@@ -136,7 +139,7 @@ export default class CONTAINER extends GROUP {
         @param {string} name The name of the input we are editing
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns editData() to this CONTAINER
-	    @returns {Promise<PROMPT>} A Save PROMPT
+	    @returns {Promise<DIALOG>} A Save PROMPT
 	*/
     editData(name) {
         throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + name + '] : Abstract method ' + this.className + '.editData(' + name + ') not implemented.');
@@ -563,8 +566,15 @@ export default class CONTAINER extends GROUP {
     /** Collapses the NavBar
         @returns {void}
     */
+    toggleNav() {
+        this.navBar.toggle();
+    }
+    /** Collapses the NavBar
+        @returns {void}
+    */
     hideNav() {
-        this.navBar.collapse();
+        console.log('Hiding ' + this.className + ' navBar', this);
+        this.navBar.hide();
     }
     /** Expands the NavBar
         @returns {void}
