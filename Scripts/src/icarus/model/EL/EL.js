@@ -26,6 +26,7 @@ export default class EL extends MODEL {
 		this.children = children || []; // Contains an array of child element models
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
         this.el = document.createElement(this.element);
+        this.touchtime = 0; // mobile double click detection
 		this.make(this.el, node, model, innerHTML);
 	}
 	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
@@ -50,7 +51,43 @@ export default class EL extends MODEL {
 			throw e;
 		}
 		return el;
-	}
+    }
+    /** Sets mobile-friendly single and double click events
+        @param {function} click Function call on single click
+        @param {function} dblclick Function call on double click
+        @param {number} delay Delay in milliseconds between clicks
+        @returns {ThisType} callback
+    */
+    clickHandler(click, dblclick, delay = 500) {
+        this.el.onclick = () => new Promise((resolve, reject) => {
+            try {
+                if (this.touchtime === 0) {
+                    this.touchtime = new Date().getTime();
+                    setTimeout(() => {
+                        if (this.touchtime !== 0) {
+                            this.touchtime = 0;
+                            resolve(click());
+                        }
+                    }, delay);
+                } else if (new Date().getTime() - this.touchtime < delay) {
+                    this.touchtime = 0;
+                    resolve(dblclick());
+                }
+            } catch (e) {
+                reject(e);
+            }
+        });
+        return this;
+    }
+    /** Sets this element as 'selected'
+        param {EL} element The element to select
+        @returns {ThisType} callback
+    */
+    select() {
+        $('.selected').removeClass('selected');
+        $(this.el).toggleClass('selected');
+        return this;
+    }
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
 	    @returns {ThisType} Returns this element for chaining purposes

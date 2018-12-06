@@ -272,7 +272,7 @@ export default class CONTAINERFACTORY {
         return new Promise((resolve, reject) => {
             if (this.dataId > 0) {
                 try {
-                    this[name].addClass('selected');
+                    this[name].select();
                     new PROMPT(new MODEL().set('label', 'Edit ' + this.className + ' : ' + name)).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
                         className: this.className,
@@ -289,7 +289,7 @@ export default class CONTAINERFACTORY {
                             .then(() => form.getDialog().show()
                                 .then(() => {
                                     form.el.elements[name].focus();
-                                    form.el.elements[name].onkeyup = () => $('.selected').html(form.el.elements[name]);
+                                    form.el.elements[name].onkeyup = () => $('.selected').html(form.el.elements[name].value);
                                     resolve(form.getDialog());
                                 })));
                 } catch (e) {

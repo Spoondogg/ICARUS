@@ -13,9 +13,25 @@
     <meta name="user" content="@User.Identity.Name" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
-    @* Preload these scripts *@
+    @* Preload these scripts
+        http://www.onlywebpro.com/2011/12/09/ipad-web-application-start-up-image/
+        https://medium.com/appscope/adding-custom-ios-splash-screens-to-your-progressive-web-app-41a9b18bdca3
+        <!-- iPhone 5 (640px x 1136px) -->
+        <link rel="apple-touch-startup-image" href="/apple-launch-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+        <!-- iPad Mini, Air (1536px x 2048px) -->
+        <link rel="apple-touch-startup-image" href="/apple-launch-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+        <!-- iPad Pro 10.5" (1668px x 2224px) -->
+        <link rel="apple-touch-startup-image" href="/apple-launch-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+        <!-- iPad Pro 12.9" (2048px x 2732px) -->
+        <link rel="apple-touch-startup-image" href="/apple-launch-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+    *@
     <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
-    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/Logo.png")" />
+    @* iPhone X (1125px x 2436px) *@
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/startup/startup-1125x2436.png")" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    @* iPhone 8, 7, 6s, 6 (750px x 1334px) *@
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/startup/startup-750x1334.png")" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    @* <!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus (1242px x 2208px) *@
+    <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/startup/startup-1242x2208.png")" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
     <link rel="icon" href="@Url.Content("~/Content/favicon.ico")" />
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
@@ -24,6 +40,9 @@
     <script src="@Url.Content("~/Scripts/dist/icarus/vendor.js")"></script>
 </head>
 <body>
+    <script>
+        document.documentElement.requestFullscreen();
+    </script>
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
     @if (IsSectionDefined("NoScript")) {  

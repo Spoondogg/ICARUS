@@ -51,12 +51,10 @@ export default class CONTAINERBODY extends DIV {
 				console.log(this.className + 'right swipe');
 			}
         } else if (yDiff > 0) {
-            //let c = this.getContainer();
             let c = this.node;
             console.log(c.className + ' up swipe');
             c.swipeUp();
         } else {
-            //let c = this.getContainer();
             let c = this.node;
             console.log(c.className + ' down swipe');
             c.swipeDown();
