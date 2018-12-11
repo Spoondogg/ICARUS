@@ -20,7 +20,7 @@ export default class LOADER extends DIALOG {
             container
 		}));
         this.addClass('loader');
-        //this.el.setAttribute('data-backdrop', false);
+        this.el.setAttribute('data-backdrop', false);
 		this.progress = new DIV(this.body, new MODEL('progress'));
         this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
 		this.console = new CONSOLE(this.body, new MODEL('console collapse in'));
@@ -39,9 +39,10 @@ export default class LOADER extends DIALOG {
 		@param {number} value Percentage as integer (ie: 50 means 50%).
 		@param {string} text Text displayed inside progress bar.  
 	    @param {boolean} show If true, the log will be displayed
-	    @returns {Promise} Promise to return this LOADER after success
+        @param {number} delay Delay to hide when value reaches 100 or stay visible if value === 0
+	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
-	log(value, text = '', show = false) {
+	log(value, text = '', show = false, delay = 2000) {
         return new Promise((resolve, reject) => {
             try {
                 this.progressBar.el.style.width = value + '%';
@@ -55,12 +56,12 @@ export default class LOADER extends DIALOG {
                 if (show) {
                     this.show();
                 }
-                if (value === 100) {
+                if (value === 100 && delay > 0) {
                     setTimeout(() => {
                         resolve(this.hide());
-                    }, 2000);
+                    }, delay);
                 } else {
-                    resolve();
+                    resolve(this);
                 }
             } catch (e) {
                 reject(e);

@@ -46,14 +46,15 @@ export default class NAVBAR extends NAV {
 		}
 	}
 	/** Expands the NAV
-	    @returns {void}
+	    @returns {ThisType} callback
 	*/
 	show() {
 		try {
 			$(this.el).collapse('show');
 		} catch (e) {
 			console.warn(e);
-		}
+        }
+        return this;
 	}
 }
 export { NAVHEADER };

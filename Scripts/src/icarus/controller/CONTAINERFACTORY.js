@@ -56,7 +56,7 @@ export default class CONTAINERFACTORY {
                 if (payload.exception === 'AuthenticationException') {
                     try {
                         console.log('An Authentication Exception occurred');
-                        node.getContainer().getMainContainer().login();
+                        node.getContainer().getMain().login();
                     } catch (e) {
                         console.warn('Unable to launch login', e);
                     }
@@ -252,7 +252,8 @@ export default class CONTAINERFACTORY {
                         formtype: 'FORMPOST',
                         className: this.className,
                         type,
-                        formPostId: this.id
+                        formPostId: this.id,
+                        container: this
                     })).then((form) => form.post().then(() => {
                         resolve(form.getDialog().close());
                     }));
@@ -288,8 +289,9 @@ export default class CONTAINERFACTORY {
                             })
                             .then(() => form.getDialog().show()
                                 .then(() => {
-                                    form.el.elements[name].focus();
-                                    form.el.elements[name].onkeyup = () => $('.selected').html(form.el.elements[name].value);
+                                    let input = form.el.elements[name];
+                                    input.focus();
+                                    input.onkeyup = () => this[name].setInnerHTML(input.value);
                                     resolve(form.getDialog());
                                 })));
                 } catch (e) {

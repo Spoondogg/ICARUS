@@ -40,9 +40,6 @@
     <script src="@Url.Content("~/Scripts/dist/icarus/vendor.js")"></script>
 </head>
 <body>
-    <script>
-        document.documentElement.requestFullscreen();
-    </script>
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
     @if (IsSectionDefined("NoScript")) {  
