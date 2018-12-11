@@ -16,7 +16,7 @@ export default class IMG extends EL {
 	constructor(node, model) {
 		super(node, 'IMG', model);
 		try {
-			if (this.getMainContainer().getDev()) {
+			if (this.getMain().getDev()) {
 				this.el.ondblclick = this.edit.bind(this);
 			}
 		} catch (e) {

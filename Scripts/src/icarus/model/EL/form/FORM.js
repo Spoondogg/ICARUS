@@ -10,6 +10,7 @@ import FORMPOST from './FORMPOST.js';
 import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from '../container/formelement/formselect/FORMSELECT.js';
 import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
+import LOADER from '../dialog/loader/LOADER.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
@@ -37,14 +38,14 @@ export default class FORM extends CONTAINER {
         // Set focused container for relevant keyBindings
         this.el.addEventListener('focusin', () => {
             try {
-                this.getContainer().getMainContainer().activeContainer = this;
+                this.getContainer().getMain().activeContainer = this;
             } catch (e) {
                 console.log('Unable to set activeContainer', this);
             }
         });
         this.el.addEventListener('focusout', () => {
             try {
-                this.getContainer().getMainContainer().activeContainer = null;
+                this.getContainer().getMain().activeContainer = null;
             } catch (e) {
                 console.log('Unable to remove activeContainer', this);
             }
@@ -299,25 +300,28 @@ export default class FORM extends CONTAINER {
 		return true;
 	}
 	/** Enables all fieldsets within this form
-	    @returns {boolean} Returns true if successful
+	    @returns {Promise<ThisType>} callback
 	*/
     unlock() {
-        this.children.forEach((i) => {
-            try {
-                switch (i.className) {
-                    case 'FIELDSET':
-                        break;
-                    default:
-                        i.el.disabled = false;
-                        break;
-                }                
-            } catch (e) {
-                if (e instanceof TypeError) {
-                    console.warn('Unable to unlock "' + i.element + '"');
-                } else {
-                    throw e;
+        return new Promise((resolve, reject) => {
+            this.children.forEach((i) => {
+                try {
+                    switch (i.className) {
+                        case 'FIELDSET':
+                            break;
+                        default:
+                            i.el.disabled = false;
+                            break;
+                    }
+                } catch (e) {
+                    if (e instanceof TypeError) {
+                        console.warn('Unable to unlock "' + i.element + '"');
+                    } else {
+                        reject(e);
+                    }
                 }
-            }
+            });
+            resolve(this);
         });
 	}
 	/** HTML encodes all form element values
@@ -326,16 +330,23 @@ export default class FORM extends CONTAINER {
 	htmlEncodeValues() {
         try {
             for (let e = 0; e < this.el.elements.length; e++) {
-                switch (this.el.elements[e].type.toUpperCase()) {
+                let type = this.el.elements[e].type.toUpperCase();
+                switch (type) {
                     case 'TEXT':
                     case 'TEXTAREA':
                         this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
+                        break;
+                    case 'FIELDSET':
+                    case 'NUMBER':
+                    case 'CHECKBOX':
+                    case 'HIDDEN':
+                    case 'SUBMIT':
                         break;
                     //case 'TEXTAREA':
                       //  this.el.elements[e].innerHtml = this.htmlEncode(this.el.elements[e].innerHtml);
                         //break;
                     default:
-                        console.warn('Unrecognized type');
+                        console.warn('Unrecognized type', type);
                 }
                 //if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
                 //    this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
@@ -481,52 +492,83 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<object>} The results of the Form Post
 	*/
 	post() {
-		return new Promise((resolve, reject) => {
-			let formPost = this.getFormPost();
-            if (formPost) {
-                //console.log(10, 'Posting values to ' + this.getAction(), formPost);
-				this.lock();
-				$.ajax({
-                    url: this.getAction(),
-                    type: 'POST',
-                    //mode: 'no-cors',
-                    //crossDomain: true,
-                    /*headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'application/json'
-                    },*/
-					data: formPost,
-					error(xhr, statusText, errorThrown) {
-						console.log(100, 'Access Denied: ' + statusText + '(' + xhr.status + ')', errorThrown);
-					},
-					statusCode: {
-						200(response) {
-							console.log('StatusCode: 200', response.message, true);
-						},
-						201(response) {
-							console.log('StatusCode: 201', response);
-						},
-						400(response) {
-							console.log('StatusCode: 400', response);
-						},
-						403(response) {
-							console.log('StatusCode: 403', 'Access Denied. Log in to continue', response);
-						},
-						404(response) {
-							console.log('StatusCode: 404', response);
-						}
-					},
-					success: (payload) => {
-						//console.log('Posted results to server.', payload.message);
-						this.unlock();
-						this.afterSuccessfulPost(payload);
-						resolve(payload);
-					}
-				});
-			} else {
-				reject(new Error('Post Failed to submit.  Values may be invalid.'));
+        return new Promise((resolve, reject) => {
+            /** @type {CONTAINER} */
+            let main = null;
+            try {
+                main = this.getContainer().getMain();
+            } catch (e) {
+                main = this.getDialog().getContainer().getMain();
+            }
+            /** @type {LOADER} */
+            let loader = main.getLoader();
+            let data = this.getFormPost();
+            let url = this.getAction();
+            let statusCode = 0;
+            let message = '';
+
+            if (data) {
+                try {
+                    loader.log(10, 'Posting values to ' + this.getAction(), true);
+                    this.lock();
+                    $.ajax({
+                        url,
+                        type: 'POST',
+                        data,
+                        error(xhr, statusText, errorThrown) {
+                            console.warn('An Unknown Error Occurred');
+                            loader.log(100, 'Ajax Error: ' + statusText + '(' + xhr.status + ') Error: ' + errorThrown, true, 0);
+                        },
+                        statusCode: {
+                            200(response) {
+                                statusCode = 200;
+                                message += response.message;
+                                //console.log(100, 'StatusCode: 200, ' + response.message, true).then(() => main.login());
+                            },
+                            201(response) {
+                                statusCode = 201;
+                                message += response.message;
+                                //loader.log(100, 'StatusCode: 201, ' + response.message, true);
+                            },
+                            400(response) {
+                                statusCode = 400;
+                                message += response.message;
+                                //loader.log(100, 'StatusCode: 400, ' + response.message, true);
+                            },
+                            403(response) { // Forbidden
+                                statusCode = 403;
+                                message += response.message;
+                                loader.log(100, 'StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message, true, 0).then(() => {
+                                    //console.log('403 Error', response);
+                                    resolve(main.login());
+                                });
+                            },
+                            404(response) {
+                                statusCode = 404;
+                                message += response.message;
+                            }
+                        },
+                        success: (payload) => {
+                            loader.log(100, 'StatusCode: ' + statusCode + '\n' + message, true).then(() => {
+                                console.log('Payload Result: ' + payload.result);
+                                if (payload.result === 0) {
+                                    main.login();
+                                }
+                            });
+                            this.unlock();
+                            this.afterSuccessfulPost(payload);
+                            resolve(payload);
+                        }
+                    });
+                } catch (e) {
+                    loader.log(100, 'Post Failed to submit', true, 5000);
+                    reject(new Error('Post Failed to submit'));
+                }
+            } else {
+                loader.log(100, 'Invalid FormPost', true, 5000);
+				reject(new Error('Invalid FormPost'));
 			}
 		});
 	}
 }
-export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, MODEL };
+export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL };

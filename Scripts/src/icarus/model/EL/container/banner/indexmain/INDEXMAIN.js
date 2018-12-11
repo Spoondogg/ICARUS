@@ -48,7 +48,7 @@ export default class INDEXMAIN extends BANNER {
 		if (!isNaN(this.page)) {
 			console.log('Retrieving page ' + this.page);
 			$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-				'__RequestVerificationToken': this.getMainContainer().token
+				'__RequestVerificationToken': this.getMain().token
 			}, (payload, status) => {
 				if (status === 'success') {
 					this.isLoading = true;
@@ -144,7 +144,7 @@ export default class INDEXMAIN extends BANNER {
 	    @returns {void}
 	*/
 	launchMain(id) {
-		this.getMainContainer().load(id);
+		this.getMain().load(id);
 	}
 	/** Loads the page
 	    @param {number} page Page to load

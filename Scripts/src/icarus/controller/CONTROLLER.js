@@ -58,7 +58,14 @@ export default class CONTROLLER extends MODEL {
 			@todo There should never be more than one prompt in the DOM.
 		    @todo Create a queue to hold multiple prompts
 		*/
-		this.prompt = null;
+        this.prompt = null;
+
+        /** @property {Array<string>} containers A list of allowed containers */
+        this.containers = [
+            'ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
+            'IMAGEGALLERY', 'DICTIONARY', 'WORD'
+        ];
+
 		/** @property {MAIN} main The MAIN Container */
 		this.main = new MAIN(this);
 		if (user === 'Guest') {

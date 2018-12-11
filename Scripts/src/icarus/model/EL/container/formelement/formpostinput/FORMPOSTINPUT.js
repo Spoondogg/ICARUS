@@ -105,7 +105,8 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     className,
                     type,
                     id,
-                    inputNode
+                    inputNode,
+                    container: this.container
                 })).then((form) => {
                     resolve(form.getDialog().show());
                 });

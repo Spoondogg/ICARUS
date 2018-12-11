@@ -55,13 +55,16 @@ export default class EL extends MODEL {
     /** Sets mobile-friendly single and double click events
         @param {function} click Function call on single click
         @param {function} dblclick Function call on double click
-        @param {object} object {delay: Delay in milliseconds between clicks, stopPropagation: Stops event propagation}
+        @param {MODEL} options {delay: Delay in milliseconds between clicks, stopPropagation: Stops event propagation}
         @returns {ThisType} callback
     */
-    clickHandler(click, dblclick, { delay = 500, stopPropagation = true }) {
+    clickHandler(click, dblclick, options = new MODEL().set({
+        delay: 500,
+        stopPropagation: true
+    })) {
         this.el.onclick = (ev) => new Promise((resolve, reject) => {
             try {
-                if (stopPropagation) {
+                if (options.stopPropagation) {
                     ev.stopPropagation();
                 }
                 if (this.touchtime === 0) {
@@ -71,13 +74,15 @@ export default class EL extends MODEL {
                             this.touchtime = 0;
                             resolve(click());
                         }
-                    }, delay);
-                } else if (new Date().getTime() - this.touchtime < delay) {
+                    }, options.delay);
+                } else if (new Date().getTime() - this.touchtime < options.delay) {
                     this.touchtime = 0;
                     resolve(dblclick());
                 }
             } catch (e) {
-                ev.stopPropagation();
+                if (options.stopPropagation) {
+                    ev.stopPropagation();
+                }
                 reject(e);
             }
         });
@@ -101,35 +106,50 @@ export default class EL extends MODEL {
 		let prevClass = this.attributes.class || '';
 		this.attributes.class = prevClass + ' ' + className;
 		return this;
-	}
+    }
+    /** Adds an array of classnames
+        @param {Array<string>} classNames An array of class names
+        @returns {ThisType} callback
+    */
+    addClasses(classNames) {
+        classNames.forEach((c) => this.addClass(c));
+        return this;
+    }
+    /** Inserts @see {this.el} as the first child of target
+        @param {HTMLElement} target Target HTML Element
+        @returns {ThisType} callback
+    */
+    append(target) {
+        target.insertBefore(this.el, target.firstChild);
+        return this;
+    }
 	/** Creates a textarea input and populates with this element's contents
         @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
 	    @returns {void}
 	*/
-	edit() {
+    edit() {
+        console.log('EL.edit()');
 		try {
-			let footer = this.getMainContainer().stickyFooter;
+			let footer = this.getMain().stickyFooter;
 			this.addClass('edit');
 			this.status = STATUS.LOCKED;
 			this.editor = new EL(footer, 'TEXTAREA', new MODEL(new ATTRIBUTES({
 				'value': this.el.innerHTML
 			})), this.el.innerHTML);
-			this.editor.el.onkeyup = function() {
-				this.el.innerHTML = this.editor.el.value;
-			}.bind(this);
-			this.editor.el.onblur = function() {
+            this.editor.el.onkeyup = () => this.setInnerHTML(this.editor.el.value);
+			this.editor.el.onblur = () => {
 				try {
 					let container = this.getContainer();
 					container.data[this.className.toLowerCase()] = this.editor.el.value;
 					this.editor.destroy();
 					this.removeClass('edit');
 					if (container.quickSave(container, true)) {
-						this.getMainContainer().stickyFooter.hide();
+						this.getMain().stickyFooter.hide();
 					}
 				} catch (e) {
 					throw e;
 				}
-			}.bind(this);
+			}
 			this.editor.el.focus();
 			footer.show();
 			event.stopPropagation();
@@ -143,11 +163,11 @@ export default class EL extends MODEL {
 	*/
 	enableEdit() {
 		try {
-			if (this.getMainContainer().getDev()) {
+			if (this.getMain().getDev()) {
 				this.el.ondblclick = this.edit.bind(this);
 			}
 		} catch (e) {
-			console.log('EL{' + this.className + '}.getMainContainer() error', this);
+			console.log('EL{' + this.className + '}.getMain() error', this);
 		}
 	}
 	/** Retrieve an {@link EL} based on its __proto__
@@ -162,11 +182,10 @@ export default class EL extends MODEL {
         @throws Will throw an error if recursion attempt exceeds limit
     */
 	getProtoTypeByClass(value, node = this.node, attempt = 0) {
-		if (node === document.body) { // || typeof node === 'undefined'
+		if (node === document.body) {
 			return null; // You have reached the top of the chain
 		}
 		let depth = attempt + 1;
-		//attempt++;
 		try {
 			//console.log('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')', node);
 			if (depth < 100) {
@@ -215,10 +234,10 @@ export default class EL extends MODEL {
 	/** Returns the MAIN container
 	    @returns {CONTAINER} This EL's parent container
 	*/
-	getMainContainer() {
+	getMain() {
 		if (typeof this.container !== 'undefined') {
 			try {
-				return this.getContainer().getMainContainer();
+				return this.getContainer().getMain();
 			} catch (e) {
 				console.warn('EL{' + this.className + '} Unable to retrieve Main Container', e);
 				//throw e;
@@ -437,9 +456,9 @@ export default class EL extends MODEL {
             if (children) {
                 try {
                     let msg = this.className + '.populate(' + children.length + ');';
-                    this.getMainContainer().loader.log(0, msg).then(() => {
+                    this.getMain().loader.log(0, msg).then(() => {
                         children.forEach((c) => this.create(c));
-                        this.getMainContainer().loader.log(100).then(() => {
+                        this.getMain().loader.log(100).then(() => {
                             resolve(this);
                         });
                     });

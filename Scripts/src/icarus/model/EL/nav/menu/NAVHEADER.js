@@ -89,7 +89,7 @@ export default class NAVHEADER extends MENU {
 		try {
 			console.log('Long Clicked ' + this.tab.anchor.label);
 			let container = this.getContainer();
-			let main = container.getMainContainer();
+			let main = container.getMain();
 			main.sidebar.empty();
 			main.toggleSidebar();
 			container.save(main.sidebar);

@@ -1,19 +1,16 @@
-/**
-    Error thrown when an abstract method is not overridden
-    @module
-*/
+/** @module */
 import ExtendableError from './ExtendableError.js';
-/**
-    If an abstract method is not overridden, an AbstractMethodError will be thrown
+/** If an abstract method is not overridden, an AbstractMethodError will be thrown
     @class
     @extends ExtendableError
 */
 export default class AbstractMethodError extends ExtendableError {
-	/**
-	    Constructs an Abstract Method Error
-	    @param {string} message
-		
-	constructor(message) {
-		super(message);
-	}*/
+	/** Constructs an Abstract Method Error
+	    @param {string} message The message to display
+        @param {CONTAINER} container Optional container triggers LOADER
+    */
+	constructor(message, container) {
+        super(message);
+        container.getLoader().log(message);
+	}
 }

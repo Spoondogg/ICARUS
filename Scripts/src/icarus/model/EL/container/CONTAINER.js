@@ -28,9 +28,9 @@ export default class CONTAINER extends GROUP {
 	    @param {EL} node The element to contain the section
 	    @param {string} element HTML element
 	    @param {MODEL} model The CONTAINER object retrieved from the server
-	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
-	 */
-	constructor(node, element, model = new MODEL(), containerList = []) {
+	    @param {Array<string>} containers An array of strings representing child Containers that this Container can create
+	*/
+	constructor(node, element, model = new MODEL(), containers = []) {
 		super(node, element, model); //console.log('CONTAINER{' + this.className + '}');
 		this.addClass('container'); //this.isContainer = 1;
 		this.id = model.id || 0;
@@ -67,9 +67,9 @@ export default class CONTAINER extends GROUP {
         this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
 		this.createDraggableNavBar();
         this.body = new CONTAINERBODY(this, model);
-        this.body.clickHandler(() => $('.selected').removeClass('selected'), () => this.toggleNav());
+        this.body.clickHandler(() => this.body.select(), () => this.toggleNav());
         this.addNavBarDefaults();
-        this.addDefaultContainers(containerList);
+        this.addDefaultContainers(containers);
 		this.setDefaultVisibility(model);
         this.construct();
 
@@ -163,8 +163,9 @@ export default class CONTAINER extends GROUP {
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 	    @returns {Promise} A Promise to save this Container
 	*/
-	save(noPrompt = false) {
-		throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save(' + noPrompt + ') not implemented.');
+    save(noPrompt = false) {
+        let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save(' + noPrompt + ') not implemented.';
+        throw new AbstractMethodError(msg, this);
 	}
 	/** Extract the appropriate values and save
         @param {string} type Data type
@@ -178,8 +179,8 @@ export default class CONTAINER extends GROUP {
     */
 	refreshParentContainer() {
 		try {
-			this.getMainContainer().focusBody();
-			//this.getMainContainer().loader.hide();
+			this.getMain().focusBody();
+			//this.getMain().loader.hide();
 		} catch (e) {
 			console.log(e);
 		}
@@ -188,7 +189,7 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			//console.log('Unable to reload Container);
 			//location.reload(true);
-			this.getMainContainer().refresh();
+			this.getMain().refresh();
 		}
 	}
 	/** Saves this Container's parent Container
@@ -358,12 +359,13 @@ export default class CONTAINER extends GROUP {
 	*/
     addDomItems() {        
         let group = this.navBar.menu.menu.getGroup('DOM');
-        let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE'], group);
+        let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], group);
         items.UP.el.onclick = () => this.up();
         items.DOWN.el.onclick = () => this.down();
         items.REFRESH.el.onclick = () => this.refresh();
         items.REMOVE.el.onclick = () => this.remove();
         items.DELETE.el.onclick = () => this.disable();
+        //items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
         return group;
     }
     /** Adds the CRUD Nav Items
@@ -414,13 +416,13 @@ export default class CONTAINER extends GROUP {
     addContainerCase(className, addButton = true) {
         return new Promise((resolve, reject) => {
             try {
-                if (typeof this.getMainContainer() !== 'undefined') {
+                if (typeof this.getMain() !== 'undefined') {
                     if (addButton) {
                         this.addConstructContainerButton(className);
                     }
                     this.addCase(className, (model) => {
                         try {
-                            this.getMainContainer().getFactory().get(this.body.pane, className, model.id || 0).then((r) => {
+                            this.getMain().getFactory().get(this.body.pane, className, model.id || 0).then((r) => {
                                 resolve(r);
                             });
                         } catch (ee) {
@@ -605,7 +607,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {CONTAINER} The MAIN Container
 	    @throws Will throw an error 
 	*/
-	getMainContainer() {
+	getMain() {
 		try {
 			return this.getProtoTypeByClass('MAIN');
 		} catch (e) {
@@ -641,7 +643,17 @@ export default class CONTAINER extends GROUP {
 	*/
 	getLabel() {
 		return this.header.getLabel();
-	}
+    }
+    /** Retrieve the application loader
+        @returns {LOADER} Loader
+    */
+    getLoader() {
+        try {
+            return this.getMain().getLoader();
+        } catch (e) {
+            return null;
+        }
+    }
 	/** Sets the label of this element to the given value.
 		@param {string} label The name to be set
 	    @returns {void}
@@ -673,19 +685,21 @@ export default class CONTAINER extends GROUP {
 			try {
 				let dialog = new DIALOG(new MODEL().set({
                     label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className,
-                    container: this.getMainContainer()
+                    container: this.getMain()
 				}));
 				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
-					console.log('Remove', this);
-					this.destroy().then(() => {
-						try {
-							this.container.save(true).then(() => {
-								resolve(dialog.close());
-							});
-						} catch (ee) {
-							reject(ee);
-						}
-					});
+                    this.getLoader().log(50, 'Remove', this).then((loader) => {
+                        this.destroy().then(() => {
+                            try {
+                                this.container.save(true).then(() => {
+                                    resolve(dialog.close());
+                                });
+                            } catch (ee) {
+                                reject(ee);
+                            }
+                        });
+                    });
+					
 				};
 				dialog.show();
 			} catch (e) {
@@ -723,8 +737,8 @@ export default class CONTAINER extends GROUP {
 		//let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
 		//let text = 'Disable ' + label + ' in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
 		//let container = this.getContainer();
-		//let main = container.getMainContainer();
-		//let token = this.getMainContainer().getToken();
+		//let main = container.getMain();
+		//let token = this.getMain().getToken();
 		//console.log('Token', token);
 		/*
         try {

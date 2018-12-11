@@ -18,7 +18,7 @@ export default class CHAT extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'DIV', model, []);
 		this.addClass('chat');
-		this.user = this.getMainContainer().getUser();
+		this.user = this.getMain().getUser();
 		this.form = FORM.createEmptyForm(this.body.pane);
 		this.form.el.style = 'height:68px;background-color:#5a5a5a;';
 		$(this.form.el).insertAfter(this.body.pane.el);

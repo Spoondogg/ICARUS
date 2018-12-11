@@ -21,7 +21,7 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
-		this.navBar.addClass('navbar-fixed-top');
+        this.addClass('main').navBar.addClass('navbar-fixed-top');
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
@@ -146,30 +146,38 @@ export default class MAIN extends CONTAINER {
         @todo This should be a POST to avoid CSRF
         @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
     */
-	createNew() {
+    createNew() {
         return new Promise((resolve, reject) => {
             try {
-                $.getJSON('/MAIN/Get/0', (payload) => {
-                    console.log('Created MAIN', payload);
-                    /** Prompts the user to open the new page.
-                        In order to avoid popup blocking, the user must 
-                        manually click to be redirected or launch a new
-                        page in this window
-                    */
-                    let url = '/' + payload.model.id;
-                    let dialog = new PROMPT(new MODEL().set('label', 'Create a new page')).createForm().then((form) => {
-                        form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
-                            form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
-                                window.open(url, '_blank');
-                                form.getDialog().hide(300, true);
-                            };
-                            form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
-                                location.href = url;
-                                form.getDialog().hide(300, true);
-                            };
-                            form.getDialog().show();
-                            resolve(true);
-                        });
+                this.getLoader().log(20, 'Creating new MAIN Element', true).then((loader) => {
+                    $.getJSON('/MAIN/Get/0', (payload) => {
+                        console.log(payload.message, payload);
+                        if (payload.result === 0) {
+                            resolve(this.login());
+                        } else {
+                            loader.log(100, 'Created MAIN, ' + payload.message, true).then(() => {
+                                /** Prompts the user to open the new page.
+                                    In order to avoid popup blocking, the user must 
+                                    manually click to be redirected or launch a new
+                                    page in this window
+                                */
+                                let url = '/' + payload.model.id;
+                                new PROMPT(new MODEL().set('label', 'Create a new page')).createForm().then((form) => {
+                                    form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
+                                        form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
+                                            window.open(url, '_blank');
+                                            form.getDialog().hide(300, true);
+                                        };
+                                        form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
+                                            location.href = url;
+                                            form.getDialog().hide(300, true);
+                                        };
+                                        form.getDialog().show();
+                                        resolve(true);
+                                    });
+                                });
+                            });
+                        }
                     });
                 });
             } catch (e) {
@@ -183,10 +191,10 @@ export default class MAIN extends CONTAINER {
 	getContainer() {
 		return this;
 	}
-	/** Overrides CONTAINER.getMainContainer() and returns this MAIN Container
+	/** Overrides CONTAINER.getMain() and returns this MAIN Container
 	    @returns {MAIN} The MAIN Container
 	*/
-	getMainContainer() {
+	getMain() {
 		return this;
 	}
 	/** Sets the focus on the Main container body.  
@@ -306,9 +314,11 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     login() {
-        new PROMPT(new MODEL().set('label', 'Login')).createForm().then((form) => {
+        new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
+            container: this,
+            label: 'Log In'
+        })).then((form) => {
             form.setAction('/Account/Login');
-            form.label = 'Login';
             form.addClass('login');
             form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
                 createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),

@@ -12,7 +12,7 @@ export default class IMAGEGALLERY extends BANNER {
 	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
-	 */
+	*/
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('image-gallery');
@@ -49,7 +49,7 @@ export default class IMAGEGALLERY extends BANNER {
 			postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;
 		}
 		$.post(postUrl, {
-				'__RequestVerificationToken': this.getMainContainer().token //token.value
+				'__RequestVerificationToken': this.getMain().token //token.value
 			},
 			/** Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
 				@param {any} payload The POST payload
@@ -91,11 +91,10 @@ export default class IMAGEGALLERY extends BANNER {
 				}
 			});
 	}
-	/**
-		    Sets the page variables and reconstructs
-		    @param {any} page A page to load
-	        @returns {void}
-		*/
+	/** Sets the page variables and reconstructs
+		@param {any} page A page to load
+	    @returns {void}
+	*/
 	loadPage(page) {
 		console.log('Loading page ' + page);
 		this.header.setInnerHTML('Page ' + (page + 1));
@@ -108,10 +107,9 @@ export default class IMAGEGALLERY extends BANNER {
 		this.page = page;
 		this.construct();
 	}
-	/**
-		    Loads the next page
-	        @returns {void}
-		*/
+	/** Loads the next page
+	    @returns {void}
+	*/
 	nextPage() {
 		if (this.pageTotal > this.page * this.pageLength + 1) {
 			this.loadPage(this.page + 1);
@@ -119,10 +117,9 @@ export default class IMAGEGALLERY extends BANNER {
 			console.log('No next pages to display');
 		}
 	}
-	/**
-		    Loads the previous page
-	        @returns {void}
-		*/
+	/** Loads the previous page
+	    @returns {void}
+	*/
 	prevPage() {
 		if (this.page > 0) {
 			this.loadPage(this.page - 1);
@@ -130,11 +127,10 @@ export default class IMAGEGALLERY extends BANNER {
 			console.log('No previous pages to display');
 		}
 	}
-	/**
-		    Opens the given Image FormPost in a new window
-		    @param {number} id Main Container Id
-	        @returns {void}
-		 */
+	/** Opens the given Image FormPost in a new window
+		@param {number} id Main Container Id
+	    @returns {void}
+	*/
 	launchMain(id) {
 		window.open(new URL(window.location.href).origin + '/FormPost/Get/' + id);
 	}
