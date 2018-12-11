@@ -50,11 +50,22 @@ export default class FORM extends CONTAINER {
                 console.log('Unable to remove activeContainer', this);
             }
         });
+
+        
+        let crudGroup = this.navBar.menu.menu.getGroup('CRUD');
+        let navItem = this.createNavItem('POST', crudGroup);
+        navItem.el.onclick = (e) => {
+            e.preventDefault();
+            this.post();
+            return false;
+        };
+
     }
     /** Perform async tasks for FORM
         @returns {void}
     */
     construct() {
+        
         //this.addInputs(model.inputs);
         //this.addButtons(model.buttons);
     }

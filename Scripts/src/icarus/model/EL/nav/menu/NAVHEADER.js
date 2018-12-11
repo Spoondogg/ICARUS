@@ -21,7 +21,8 @@ export default class NAVHEADER extends MENU {
 		this.addDefaultTab();
 		this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
 			icon: ICONS.COG
-		}));
+        }));
+        /** @property {MENU} menu The header menu */
 		this.menu = new MENU(this, new MODEL('collapse').set({
 			name: 'menu'
 		}));

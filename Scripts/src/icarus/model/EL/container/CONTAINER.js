@@ -64,6 +64,10 @@ export default class CONTAINER extends GROUP {
 		this.shared = model.shared || 1;
 		this.status = model.status || STATUS.DEFAULT;           
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
+
+        /** The Container NAVBAR 
+            @property {NAVBAR} navBar 
+        */
         this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
 		this.createDraggableNavBar();
         this.body = new CONTAINERBODY(this, model);
