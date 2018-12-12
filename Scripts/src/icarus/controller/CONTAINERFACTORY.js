@@ -240,7 +240,7 @@ export default class CONTAINERFACTORY {
 		});
 	}
 	/** If dataId or attributesId exists, extract the appropriate values and save
-	    @param {string} type Data type
+	    @param {string} type Data type (dataId, attributesId, descriptionId)
 	    @returns {void}
 	*/
     quickSaveFormPost(type) {
@@ -257,6 +257,8 @@ export default class CONTAINERFACTORY {
                     })).then((form) => form.post().then(() => {
                         resolve(form.getDialog().close());
                     }));
+                } else {
+                    console.log('Creating ' + type + ' for ' + this.className);
                 }
                 resolve();
             } catch (e) {

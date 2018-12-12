@@ -52,9 +52,7 @@ export default class CLASSVIEWER extends BANNER {
 		}));
 		let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
 		for (let m = 0; m < methods.length; m++) {
-			this.menulist.menu.addNavItem(new MODEL().set({
-				label: this.classType + '.' + methods[m] + '()'
-			})).el.onclick = () => {
+			this.menulist.menu.addNavItem(new MODEL().set('label', this.classType + '.' + methods[m] + '()')).el.onclick = () => {
 				window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]);
 			};
 		}
