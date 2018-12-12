@@ -14,18 +14,20 @@ export default class NAVHEADER extends MENU {
 	constructor(node, model) {
 		super(node, model);
 		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
-		this.tabs = new MENU(this, new MODEL('tabs'));
-		this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set({
-			label: model.label
-		}));
-		this.addDefaultTab();
-		this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-			icon: ICONS.COG
-        }));
-        /** @property {MENU} menu The header menu */
-		this.menu = new MENU(this, new MODEL('collapse').set({
-			name: 'menu'
-		}));
+        /** A collection of navigation tabs
+            @property {MENU}
+        */
+        this.tabs = new MENU(this, new MODEL('tabs'));
+		this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label));
+        this.addDefaultTab();
+        /** NavItemIcon Tab
+            @property {NAVITEMICON} optionsTab
+        */
+        this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.COG));
+        /** The header menu
+            @property {MENU} menu
+        */
+		this.menu = new MENU(this, new MODEL('collapse').set('name', 'menu'));
 		this.optionsTab.el.onclick = () => this.toggleCollapse();
 		this.addOptionsMenu();
 	}
@@ -59,7 +61,7 @@ export default class NAVHEADER extends MENU {
 		try {
             //console.log('addOptionsMenu()', document.getElementsByTagName('meta').user.content);
             //if (document.getElementsByTagName('meta').user.content) {
-				['ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menu.addMenu(new MODEL('horizontal collapse').set({
+				['OPTIONS', 'ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menu.addMenu(new MODEL('horizontal collapse').set({
 					name,
 					collapsed: 1, // Do not remove these!
 					showHeader: 1

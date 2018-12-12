@@ -31,12 +31,19 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containers An array of strings representing child Containers that this Container can create
 	*/
 	constructor(node, element, model = new MODEL(), containers = []) {
-		super(node, element, model); //console.log('CONTAINER{' + this.className + '}');
-		this.addClass('container'); //this.isContainer = 1;
-		this.id = model.id || 0;
-		// Set reusable data model(s)
+		super(node, element, model);
+        this.setId(model.id).addClass('container');        
+        /** If true, invokes double click
+            @property {boolean} tappedTwice
+        */
+        this.tappedTwice = false;
+		/** Data model unique id
+            @property {number} dataId
+        */
 		this.dataId = model.dataId || 0;
-		/** @type {Array<MODEL>} An array of Input MODELs */
+		/** An array of Input MODELs
+            @property {Array<MODEL>} dataElements 
+        */
 		this.dataElements = [];
 		try {
 			DATAELEMENTS.CONTAINER.data.forEach((m) => this.dataElements.push(m));
@@ -44,7 +51,9 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			console.warn('Unable to retrieve dataElements for ' + this.className);
 		}
-		// Set reusable attribute model(s)
+		/** Attribute model unique id
+            @property {number} attributesId
+        */
         this.attributesId = model.attributesId || 0;
         /** @type {Array<MODEL>} An array of Input MODELs */
         this.attrElements = [];
@@ -54,13 +63,22 @@ export default class CONTAINER extends GROUP {
         } catch (e) {
             console.warn('Unable to retrieve dataElements for ' + this.className);
         }
-		// Set reusable description model(s)
+		/** Description model unique id
+            @property {number} descriptionId
+        */
 		this.descriptionId = model.descriptionId || 0;
-		if (model.id) { // Needed for save hooks
-			this.el.setAttribute('id', model.id);
-		}
-		this.label = model.label || element;
-		this.name = model.name || element;
+		
+        /** Human readable label
+            @property {string} label
+        */
+        this.label = model.label || element;
+        /** Code friendly identifier
+            @property {string} name
+        */
+        this.name = model.name || element;
+        /** Toggles public sharing of this CONTAINER
+            @property {number} shared
+        */
 		this.shared = model.shared || 1;
 		this.status = model.status || STATUS.DEFAULT;           
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
@@ -76,8 +94,8 @@ export default class CONTAINER extends GROUP {
         this.addDefaultContainers(containers);
 		this.setDefaultVisibility(model);
         this.construct();
-
-        this.tappedTwice = false;
+        this.ifEmpty();
+        
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
@@ -88,6 +106,21 @@ export default class CONTAINER extends GROUP {
 		if (this.className !== 'CONTAINER') {
 			throw new AbstractMethodError('CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.');
 		}
+    }
+    /** If the Container has no children, display a button to create an element
+        Should be overridden on CONTAINERs that should not have children
+        @returns {void}
+    */
+    ifEmpty() {
+        if (this.children.length === 0) {
+            let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+            btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
+            btnAddElement.btn.el.onclick = () => {
+                this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+                btnAddElement.destroy();
+                return false;
+            }
+        }
     }
     /** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
@@ -331,15 +364,18 @@ export default class CONTAINER extends GROUP {
     /** Creates a NavItem that closes its menu on mouseup
         @param {string} className className
         @param {GROUP} group The NavItem Group to add items to (ie: CRUD, DOM)
+        @param {boolean} close If true (default), menus are closed after click
         @returns {NAVITEMICON} A Nav Item
     */
-    createNavItem(className, group) {
+    createNavItem(className, group, close = true) {
         try {
             let item = group.addNavItemIcon(new MODEL().set({
                 icon: ICONS[className],
                 label: className
             }));
-            item.el.onmouseup = () => this.closeMenus(group);
+            if (close) {
+                item.el.onmouseup = () => this.closeMenus(group);
+            }
             return item;
         } catch (e) {
             console.warn(e);
@@ -358,6 +394,33 @@ export default class CONTAINER extends GROUP {
         });
         return items;
     }
+
+    /** Adds default groups to the Option Menu
+	    @returns {GROUP} A Menu Group
+	*/
+    addOptionGroups() {
+        let group = this.navBar.menu.menu.getGroup('OPTIONS');
+        let items = this.createNavItems(['ELEMENTS', 'CRUD', 'DOM', 'USER'], group);
+        items.ELEMENTS.el.onmouseup = () => false;
+        items.ELEMENTS.el.onclick = (ev) => {
+            console.log('ELEMENTS');
+            this.navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+        items.CRUD.el.onclick = () => {
+            console.log('CRUD');
+            this.navBar.menu.toggleCollapse().menu.getGroup('CRUD').toggleCollapse();
+        }
+        items.DOM.el.onclick = () => {
+            console.log('DOM');
+        }
+        items.USER.el.onclick = () => {
+            console.log('USER');
+        }
+        return group;
+    }
+
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
 	*/
@@ -369,7 +432,7 @@ export default class CONTAINER extends GROUP {
         items.REFRESH.el.onclick = () => this.refresh();
         items.REMOVE.el.onclick = () => this.remove();
         items.DELETE.el.onclick = () => this.disable();
-        //items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+        items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
         return group;
     }
     /** Adds the CRUD Nav Items
@@ -387,7 +450,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addNavBarDefaults() {
-		if (this.navBar.menu.menu) {
+        if (this.navBar.menu.menu) {
+            this.addOptionGroups();
 			this.addDomItems();
             this.addCrudItems();
 		}
@@ -500,15 +564,19 @@ export default class CONTAINER extends GROUP {
 	getId() {
 		return this.el.getAttribute('id');
 	}
-	/** Sets the CONTAINER's ID
-	    @param {number} id Container database Id
-	    @returns {void}
+	/** Sets this Container's unique identifier to the given id
+	    @param {number} id Container UId
+	    @returns {ThisType} callback
 	*/
 	setId(id) {
-		this.id = id;
+        /** CONTAINER unique id
+            @property {number} id
+        */
+        this.id = id;
 		this.el.setAttribute('id', id);
 		this.data.id = id;
-		this.attributes.id = id;
+        this.attributes.id = id;
+        return this;
 	}
 	/** Returns the CONTAINER's name attribute
 	    @returns {string} Container name
@@ -573,10 +641,11 @@ export default class CONTAINER extends GROUP {
         this.navBar.hide();
     }
     /** Expands the NavBar
-        @returns {void}
+        @returns {ThisType} callback
     */
     showNav() {
         this.navBar.show();
+        return this;
     }
 	/** Toggles the collapsed state of the container's body
         @returns {void}
@@ -737,32 +806,41 @@ export default class CONTAINER extends GROUP {
         Optionally, this should also delete the object from the database
         @returns {void}
     */
-	disable() {
-		//let label = 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']';
-		//let text = 'Disable ' + label + ' in the Database?<br>This ' + this.className + ' will be permenantly deleted from database in X days!!!';
-		//let container = this.getContainer();
-		//let main = container.getMain();
-		//let token = this.getMain().getToken();
-		//console.log('Token', token);
-		/*
-        try {
-			this.prompt = new PROMPT(label, text, [], [], true);
-			this.prompt.form.footer.buttonGroup.children[0].setLabel('Disable', ICONS.REMOVE);
-			this.prompt.form.footer.buttonGroup.children[0].el.onclick = () => {
-				this.destroy();
-				this.prompt.hide();
-				console.log('TODO: Disable method on Container controller.');
-				console.log(100, 'Disabling ' + this.className);
-				$.post('/' + this.className + '/Disable/' + this.id, {
-					'__RequestVerificationToken': token //token.value
-				}, this.ajaxRefreshIfSuccessful);
-				console.log(100, 'Disable Complete');
-			};
-			this.prompt.show();
-		} catch (e) {
-			console.log('Unable to disable this ' + this.element, e);
-		}
-        */
+    disable() {
+        return new Promise((resolve, reject) => {
+            try {
+                let dialog = new DIALOG(new MODEL().set({
+                    label: 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']',
+                    container: this.getMain()
+                }));
+                dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE).el.onclick = () => {
+                    this.getLoader().log(50, 'Disable', this).then((loader) => {
+                        this.destroy().then(() => {
+                            try {
+                                this.container.save(true).then(() => {
+                                    console.log('/' + this.className + '/DISABLE/' + this.id);
+                                    $.post('/' + this.className + '/DISABLE/' + this.id, {
+                                        '__RequestVerificationToken': this.getToken() //token.value
+                                    }, //this.ajaxRefreshIfSuccessful);
+                                        (data) => {
+                                            console.log('RESULTS', data);
+                                            resolve(dialog.close());
+                                        }
+                                    );
+                                });
+                            } catch (ee) {
+                                reject(ee);
+                            }
+                        });
+                    });
+
+                };
+                dialog.show();
+            } catch (e) {
+                console.log('Unable to disable this ' + this.element, e);
+                reject(e);
+            }
+        });
 	}
 	/** Creates a DATEOBJECT using this Container's dateCreated attribute
 	    @returns {DATEOBJECT} An easy to use date object

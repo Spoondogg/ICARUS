@@ -21,7 +21,6 @@ namespace ICARUS.Controllers {
     /// </summary>
     public abstract class ContainerController : AbstractController {
         
-
         /// <summary>
         /// Creates a new instance of this element's class
         /// </summary>
@@ -362,11 +361,7 @@ namespace ICARUS.Controllers {
         /// <summary>
         /// Asynchrounously set the given object's active state to false if the user is the 
         /// author of this object.
-        /// 
-        /// Be sure to update any dependant objects as well, or prevent the change
-        /// 
-        /// [HttpGet]  // TODO: Secure as HttpPost 
-        /// 
+        /// @TODO Update any dependant objects as well, or prevent the change
         /// </summary>
         /// <param name="id">id</param>
         /// <returns>A Json Object</returns>
@@ -377,8 +372,6 @@ namespace ICARUS.Controllers {
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
                 var model = select(ctx, id);
-
-                
 
                 // Verify ownership and process deletion
                 if (model.getAuthorId() == User.Identity.Name) {
@@ -424,9 +417,6 @@ namespace ICARUS.Controllers {
                             0, "Failed to disable " + this.className + "(" + id + ").  This Container is still in use."
                         ), JsonRequestBehavior.AllowGet);
                     }
-
-
-
                 } else {
                     message = "Failed to disable " + this.className + "(" + id
                     + ")\nYou do not have permissions to modify this " + this.className;

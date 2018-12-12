@@ -52,10 +52,11 @@ export default class MENU extends UL {
     }
 
 	/** Toggles the collapsed state of the 'COLLAPSE'
-        @returns {void}
+        @returns {ThisType} callback
     */
 	toggleCollapse() {
-		$(this.el).collapse('toggle');
+        $(this.el).collapse('toggle');
+        return this;
 	}
 	/** Collapses the container's body
 	    @returns {boolean} true if hidden

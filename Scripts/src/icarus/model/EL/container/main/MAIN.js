@@ -76,12 +76,25 @@ export default class MAIN extends CONTAINER {
 	*/
 	addNavOptions() {
 		if (this.navBar.menu.menu) {
-			this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set({
-				icon: ICONS.SIDEBAR
-			}));
-			this.btnSidebar.el.onclick = this.toggleSidebar.bind(this);
-			$(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
-			this.body.el.onclick = this.focusBody.bind(this); // Hide Sidebar when container body is focused
+            // LEFT ALIGN
+            this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
+			this.btnSidebar.el.onclick = () => this.toggleSidebar();
+            $(this.btnSidebar.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+            this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
+            $(this.btnPrev.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+            this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
+            $(this.btnNext.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+            // RIGHT ALIGN
+            this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+            $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+            this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
+            $(this.userTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+            this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
 			this.addDefaultMenuItems();
 		}
 		return this;

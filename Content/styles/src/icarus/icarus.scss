@@ -587,7 +587,7 @@ dialog,
     > header {
         background-color: $color-grey-dark;
         color: $color-light;
-        font-weight: bolder;
+        //font-weight: bolder;
         height: 3em;
         line-height: 3em;
         padding: 0 .5em;
@@ -1165,6 +1165,12 @@ table {
     padding: 0;
     width: 100%;
 
+    &.article {
+        margin: 0 auto .8em;
+        border-bottom: 1px solid $color-grey;
+        border-top: 1px solid $color-grey-darker;
+    }
+
     &.index {
         background-color: $color-shadow-neutral;
         color: inherit;
@@ -1312,6 +1318,7 @@ table {
         > .container-body {
             > .pane {
                 @extend %pane-tall;
+                background-color: $color-grey;
             }
         }
         // A left aligned Container (sidebar) for the MAIN UI
@@ -1403,11 +1410,13 @@ table {
         @extend %clickable;
         background-color: darken($color-nav-background, 25%);
         color: $color-light;
+        line-height: normal;
         padding: 0 .2em;
         text-transform: uppercase;
 
         &:hover {
             background-color: darken($color-nav-background, 35%);
+            text-decoration: none;
         }
         // First ul after nav header
         & ~ ul {
@@ -1433,8 +1442,7 @@ table {
             .wide-tab {
                 flex-basis: auto;
                 flex-grow: 2;
-                text-align: center;
-                //width: calc(100% - 8em);
+                text-align: left;
             }
         }
 
@@ -1484,12 +1492,9 @@ table {
         .nav-item {
             @extend %clickable;
             background-color: $color-shadow-neutral;
-            //border: 1px solid $color-shadow-dark;
-            //border-left: 0;
-            //border-right: 0;
             cursor: pointer;
             float: left;
-            line-height: $navbar-height - 1em;
+            line-height: $navbar-height; // - 1em;
             list-style: none;
             //margin: 4px 0;
             //padding: 0;

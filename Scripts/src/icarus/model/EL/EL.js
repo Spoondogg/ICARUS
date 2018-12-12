@@ -14,16 +14,21 @@ export default class EL extends MODEL {
 	    @param {string} element The HTML tag that is used for this element
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
-	    @param {array} children An object array of child models
+	    @param {Array<MODEL>} children An object array of child models
 	*/
-	constructor(node, element = 'DIV', model, innerHTML, children) {
+	constructor(node, element = 'DIV', model, innerHTML, children = []) {
 		super(model.attributes);
 		this.setContainer();
 		this.node = node; // The parent EL (or Body) that this ELEMENT is within        
 		this.className = this.constructor.name;
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
-		this.children = children || []; // Contains an array of child element models
+
+        /** An array of MODELS that are children of this EL
+            @property {Array<MODEL>} children 
+        */
+        this.children = children;
+
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
         this.el = document.createElement(this.element);
         this.touchtime = 0; // mobile double click detection
