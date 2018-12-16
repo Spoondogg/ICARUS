@@ -210,32 +210,33 @@ export default class CONTAINERFACTORY {
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
 	save(noPrompt = false) {
-		return new Promise((resolve) => {
-            new PROMPT(new MODEL().set({
-                label: 'Save ' + this.className + '[' + this.id + ']'
-            })).createForm(new MODEL().set({
-                formtype: 'CONTAINER',
-                container: this
-            })).then((form) => {
-                //dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
-                form.afterSuccessfulPost = (payload) => {
-                    let container = form.getContainer();
-                    console.log('Successful post', payload, container);
-                    container.setLabel(form.el.elements.label.value);
-                    container.quickSaveFormPost('dataId');
-                    container.quickSaveFormPost('attributesId');
-                    //this.refreshParentContainer();
-                    form.getDialog().close();
-                };
-                /* eslint-disable-next-line no-alert */
-                if (noPrompt) {
-                    form.post().then(() => {
+        return new Promise((resolve) => {
+            this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
+                new PROMPT(new MODEL().set({
+                    label: 'Save ' + this.className + '[' + this.id + ']',
+                    container: this
+                })).createForm(new MODEL().set({
+                    formtype: 'CONTAINER',
+                    container: this
+                })).then((form) => {
+                    //dialog.form.children[0].children[0].addInputElements(this.createContainerInputs());
+                    form.afterSuccessfulPost = (payload) => {
+                        let container = form.getContainer();
+                        console.log('Successful post', payload, container);
+                        container.setLabel(form.el.elements.label.value);
+                        container.quickSaveFormPost('dataId');
+                        container.quickSaveFormPost('attributesId');
+                        //this.refreshParentContainer();
                         form.getDialog().close();
-                    });
-                } else {
-                    form.getDialog().show();
-                }
-                resolve(form.getDialog());
+                    };
+                    /* eslint-disable-next-line no-alert */
+                    if (noPrompt) {
+                        form.post().then(() => form.getDialog().close());
+                    } else {
+                        form.getDialog().show();
+                    }
+                    loader.log(100).then(() => resolve(form.getDialog()));
+                });
             });
 		});
 	}
@@ -248,15 +249,15 @@ export default class CONTAINERFACTORY {
         return new Promise((resolve, reject) => {
             try {
                 if (this[type] > 0) {
-                    new PROMPT(new MODEL()).createForm(new MODEL().set({
+                    new PROMPT(new MODEL().set({
+                        container: this
+                    })).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
                         className: this.className,
                         type,
                         formPostId: this.id,
                         container: this
-                    })).then((form) => form.post().then(() => {
-                        resolve(form.getDialog().close());
-                    }));
+                    })).then((form) => form.post().then(() => resolve(form.getDialog().close())));
                 } else {
                     console.log('Creating ' + type + ' for ' + this.className);
                 }
@@ -273,34 +274,39 @@ export default class CONTAINERFACTORY {
     */
     editData(name) {
         return new Promise((resolve, reject) => {
-            if (this.dataId > 0) {
-                try {
-                    this[name].select();
-                    new PROMPT(new MODEL().set('label', 'Edit ' + this.className + ' : ' + name)).createForm(new MODEL().set({
-                        formtype: 'FORMPOST',
-                        className: this.className,
-                        type: 'dataId',
-                        id: this.data.id,
-                        container: this
-                    })).then(
-                        (form) => this.hideElements(form.children[0].children[0].children, name)
-                            .then(() => {
-                                form.getDialog().close = () => {
-                                    form.getDialog().hide().then(() => $('.selected').removeClass('selected'));
-                                }
-                            })
-                            .then(() => form.getDialog().show()
+            try {
+                if (this.dataId > 0) {
+                    this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
+                        this[name].select();
+                        new PROMPT(new MODEL().set({
+                            label: 'Edit ' + this.className + ' : ' + name,
+                            container: this
+                        })).createForm(new MODEL().set({
+                            formtype: 'FORMPOST',
+                            className: this.className,
+                            type: 'dataId',
+                            id: this.dataId,
+                            container: this
+                        })).then(
+                            (form) => this.hideElements(form.children[0].children[0].children, name)
                                 .then(() => {
-                                    let input = form.el.elements[name];
-                                    input.focus();
-                                    input.onkeyup = () => this[name].setInnerHTML(input.value);
-                                    resolve(form.getDialog());
-                                })));
-                } catch (e) {
-                    reject(e);
+                                    form.getDialog().close = () => form.getDialog().hide().then(() => this.deselectAll());
+                                })
+                                .then(() => form.getDialog().show()
+                                    .then(() => {
+                                        let input = form.el.elements[name];
+                                        input.focus();
+                                        input.onkeyup = () => this[name].setInnerHTML(input.value);
+                                        loader.log(100);
+                                        resolve(form.getDialog());
+                                    })));
+                    });
+                } else {
+                    let msg = this.className + '[' + name + '] does not have a data FORMPOST';
+                    this.getLoader().log(100, msg).then(() => resolve(false));
                 }
-            } else {
-                console.log(this.className + '[' + name + '] does not have a data FORMPOST');
+            } catch (e) {
+                reject(e);
             }
         });
     }

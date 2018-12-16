@@ -94,7 +94,7 @@ export default class CONTAINER extends GROUP {
         this.addDefaultContainers(containers);
 		this.setDefaultVisibility(model);
         this.construct();
-        this.ifEmpty();
+        //this.ifEmpty();
         
 	}
 	/* eslint-enable max-statements */
@@ -160,7 +160,7 @@ export default class CONTAINER extends GROUP {
         @returns {Promise} Resolve on success
     */
     hideElements(elements, name = '') {
-        return Promise.resolve(
+        return Promise.all(
             elements
                 .filter((ch) => ch.el.getAttribute('name') !== name)
                 .map((c) => c.hide()));
@@ -761,7 +761,7 @@ export default class CONTAINER extends GROUP {
                     container: this.getMain()
 				}));
 				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
-                    this.getLoader().log(50, 'Remove', this).then((loader) => {
+                    this.getLoader().log(50, 'Remove', true).then(() => { //loader
                         this.destroy().then(() => {
                             try {
                                 this.container.save(true).then(() => {
@@ -789,18 +789,29 @@ export default class CONTAINER extends GROUP {
         @returns {void} 
     */
 	ajaxRefreshIfSuccessful(payload, status) {
-		console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
-		if (payload.result === 1) { //!== 0 
-			let url = new URL(window.location.href);
-			let returnUrl = url.searchParams.get('ReturnUrl');
-			if (returnUrl) {
-				location.href = url.origin + returnUrl;
-			} else {
-				location.reload(true);
-			}
-		} else {
-			console.log('Unable to POST results to server with status: "' + status + '"', payload);
-		}
+        return new Promise((resolve, reject) => {
+            this.getLoader().log(80, '...', true).then((loader) => {
+                console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
+                try {
+                    if (payload.result === 1) { //!== 0 
+                        let url = new URL(window.location.href);
+                        let returnUrl = url.searchParams.get('ReturnUrl');
+                        if (returnUrl) {
+                            location.href = url.origin + returnUrl;
+                            loader.log(100, location.href).then(() => resolve(location.href));
+                        } else {
+                            loader.log(100, location.href).then(() => resolve(location.reload(true)));
+                        }
+                    } else {
+                        let err = 'Unable to POST results to server with status: "' + status + '"';
+                        //console.log(err, payload);
+                        loader.log(100, location.href, true, 3000).then(() => reject(new Error(err)));                        
+                    }
+                } catch (e) {
+                    loader.log(100, location.href, true, 3000).then(() => reject(e));
+                }
+            });
+        });
 	}
 	/** Creates a PROMPT and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database
@@ -814,7 +825,7 @@ export default class CONTAINER extends GROUP {
                     container: this.getMain()
                 }));
                 dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE).el.onclick = () => {
-                    this.getLoader().log(50, 'Disable', this).then((loader) => {
+                    this.getLoader().log(50, 'Disable', true).then(() => { //loader
                         this.destroy().then(() => {
                             try {
                                 this.container.save(true).then(() => {

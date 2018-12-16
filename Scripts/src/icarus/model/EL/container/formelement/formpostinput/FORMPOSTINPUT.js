@@ -98,19 +98,23 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     createForm(className, type, id = 0, inputNode = null) {
         return new Promise((resolve, reject) => {
             try {
+                let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
+                console.log('CreateForm', container, typeof container);
                 new PROMPT(new MODEL().set({
-                    label: 'Create FormPost Form'
+                    label: 'Create FormPost Form',
+                    container
                 })).createForm(new MODEL().set({
                     formtype: 'FORMPOST',
                     className,
                     type,
                     id,
                     inputNode,
-                    container: this.container
+                    container
                 })).then((form) => {
                     resolve(form.getDialog().show());
                 });
             } catch (e) {
+                console.warn('SNORT', e, this);
                 reject(e);
             }
         });

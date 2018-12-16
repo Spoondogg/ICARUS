@@ -42,7 +42,7 @@ export default class LOADER extends DIALOG {
         @param {number} delay Delay to hide when value reaches 100 or stay visible if value === 0
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
-	log(value, text = '', show = false, delay = 2000) {
+	log(value, text = '', show = false, delay = 500) {
         return new Promise((resolve, reject) => {
             try {
                 this.progressBar.el.style.width = value + '%';

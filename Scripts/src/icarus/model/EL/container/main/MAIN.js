@@ -13,15 +13,14 @@ import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
     @extends CONTAINER
 */
 export default class MAIN extends CONTAINER {
-	/** Constructs a MAIN Container and populates the DOM 
-	    with any relevant elements
-	    @constructor
+	/** Constructs a MAIN Container and populates the DOM with any relevant elements
 	    @param {MODEL} model APP model
     */
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
-        this.addClass('main').navBar.addClass('navbar-fixed-top');
+        this.addClass('main');
+        this.navBar.addClass('navbar-fixed-top');
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
@@ -36,6 +35,7 @@ export default class MAIN extends CONTAINER {
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
         this.addNavOptions();
+
         /** The active container has access to keybindings */
         this.activeContainer = null;
 
@@ -46,7 +46,7 @@ export default class MAIN extends CONTAINER {
         this.populate(model.children);
 	}
 	construct() {
-		this.navBar.el.setAttribute('draggable', 'false');
+        this.navBar.setAttribute('draggable', false); //.el.setAttribute('draggable', 'false');
 		this.navBar.show();
 		if (this.getUser() === 'Guest') {
 			this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
@@ -327,23 +327,25 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     login() {
-        new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
-            container: this,
-            label: 'Log In'
-        })).then((form) => {
-            form.setAction('/Account/Login');
-            form.addClass('login');
-            form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-                createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-                createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
-            ]);
-            form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-            form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
-            //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
-            form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
-            form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-            form.getDialog().show();
+        this.loader.log(99, 'Logging In', true).then((loader) => {
+            new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
+                container: this,
+                label: 'Log In'
+            })).then((form) => {
+                form.setAction('/Account/Login');
+                form.addClass('login');
+                form.children[0].children[0].addInputElements([
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+                ]);
+                form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
+                form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
+                //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
+                form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
+                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                loader.log(100).then(() => form.getDialog().show());
+            });
         });
     }
     /** Redirects to the third party OAuth Sign In
@@ -358,32 +360,36 @@ export default class MAIN extends CONTAINER {
 	/** Logs the current user out
         @returns {Promise<boolean>} True on success
     */
-	logout() {
-		$.post('/Account/LogOff', {
-			'__RequestVerificationToken': this.getToken() //.token
-		}, this.ajaxRefreshIfSuccessful, 'json');
+    logout() {
+        this.loader.log(99, 'Logging Out', true).then((loader) => {
+            $.post('/Account/LogOff', {
+                '__RequestVerificationToken': this.getToken() //.token
+            }, this.ajaxRefreshIfSuccessful.bind(this), 'json');
+        });
 	}
 	/** Log into the application using the given credentials
         @param {string} email Username / Email 
         @param {string} password Account Password
         @returns {void}
     */
-	register() {
-        let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm((form) => {
-            form.setAction('/Account/Register');
-            form.id = 0;
-            form.label = 'Register';
-            form.el.setAttribute('id', 0);
-            form.addClass('register');
-            form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-                createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-                createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
-            ]);
-            form.afterSuccessfulPost = (payload, status) => {
-                this.ajaxRefreshIfSuccessful(payload, status);
-            }
-            prompt.show();
+    register() {
+        this.loader.log(99, 'Launching Registration...', true).then((loader) => {
+            let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm((form) => {
+                form.setAction('/Account/Register');
+                form.id = 0;
+                form.label = 'Register';
+                form.el.setAttribute('id', 0);
+                form.addClass('register');
+                form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+                form.afterSuccessfulPost = (payload, status) => {
+                    this.ajaxRefreshIfSuccessful(payload, status);
+                }
+                loader.log(100).then(() => prompt.show());
+            });
         });
     }
     /** Swipe Up Event

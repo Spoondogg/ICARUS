@@ -27,50 +27,37 @@ export default class FORM extends CONTAINER {
         this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this); //, new MODEL().set({ 'value': this.getToken() })
         this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
-
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
 		};
         this.populate(model.children);
-
         // Set focused container for relevant keyBindings
-        this.el.addEventListener('focusin', () => {
-            try {
-                this.getContainer().getMain().activeContainer = this;
-            } catch (e) {
-                console.log('Unable to set activeContainer', this);
-            }
-        });
-        this.el.addEventListener('focusout', () => {
-            try {
-                this.getContainer().getMain().activeContainer = null;
-            } catch (e) {
-                console.log('Unable to remove activeContainer', this);
-            }
-        });
-
-        
-        let crudGroup = this.navBar.menu.menu.getGroup('CRUD');
-        let navItem = this.createNavItem('POST', crudGroup);
-        navItem.el.onclick = (e) => {
+        this.el.addEventListener('focusin', () => this.setFocus('focusin'));
+        this.el.addEventListener('focusout', () => this.setFocus('focusout'));        
+        this.createNavItem('POST', this.navBar.menu.menu.getGroup('CRUD')).el.onclick = (e) => {
             e.preventDefault();
             this.post();
             return false;
         };
-
+    }
+    /** Sets the focused container to this FORM to listen for appropriate key bindings
+        @param {string} eventName Name of event
+        @returns {void}
+    */
+    setFocus(eventName) {
+        try {
+            this.getContainer().getMain().activeContainer = eventName === 'focusin' ? this : null;
+        } catch (e) {
+            console.log('Unable to modify focus for this form', this);
+        }
     }
     /** Perform async tasks for FORM
         @returns {void}
     */
-    construct() {
-        
-        //this.addInputs(model.inputs);
-        //this.addButtons(model.buttons);
-    }
+    construct() { /* this.addInputs(model.inputs); //this.addButtons(model.buttons); */ }
 	/** Constructs a Fieldset for this FORM
-        @todo Verify that this overrides the initial fieldset
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
@@ -78,8 +65,7 @@ export default class FORM extends CONTAINER {
 		this.children.push(new FIELDSET(this.body.pane, model));
 		return this.addGroup(this.children[this.children.length - 1]);
     }
-    /** Populates this form with a single fieldset and formelementgroup
-        based on a FORMPOST MODEL
+    /** Populates this form with a single fieldset and formelementgroup based on a FORMPOST MODEL
 	    @param {EL} node Parent node
         @param {MODEL} model Model
 	    @returns {FORM} An empty form container
@@ -87,39 +73,28 @@ export default class FORM extends CONTAINER {
     static createFormPostForm(node, model) {
         let { className, type, hidden, id } = model; // Consider and verify
         return new Promise((resolve, reject) => {
-            FORM.createEmptyForm(node, hidden).then((frm) => {
-                frm.setAction('FORMPOST/SET');
-                try {
-                    $.getJSON('/FORMPOST/GET/' + id, (payload) => {
-                        //frm.setId(payload.model.id);
-                        frm.addInputs(
-                            frm.generateFormPostInputs(payload, className, type),
-                            frm.children[0].children[0]
-                        );
-
-                        // Set values based on existing 
-                        if (payload.model.jsonResults) {
+            FORM.createEmptyForm(node, hidden).then((form) => {
+                form.setAction('FORMPOST/SET');
+                try { // frm.setId(payload.model.id);
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
+                        form.generateFormPostInputs(payload, className, type),
+                        form.children[0].children[0]
+                    ).then(() => {
+                        if (payload.model.jsonResults) { // Set values based on existing 
                             JSON.parse(payload.model.jsonResults).forEach((inp) => {
-                                frm.el.elements[inp.name].value = inp.value;
+                                form.el.elements[inp.name].value = inp.value;
                             });
                         }
-
-                        frm.afterSuccessfulPost = () => { //result
-                            //console.log('FORMPOSTFORM.post() afterSuccessfulPost resolved', result);
-                            frm.getDialog().close();
-                        };
-
+                        form.afterSuccessfulPost = () => form.getDialog().close();
                         if (model.inputNode) {
-                            model.inputNode.el.setAttribute('value', frm.el.elements.id.value);
+                            model.inputNode.el.setAttribute('value', form.el.elements.id.value);
                         }
-                        //console.log('Resolving form' + payload.model.id, payload, frm);
-                        resolve(frm);
-                    });
+                        resolve(form);
+                    }));
                 } catch (e) {
                     reject(e);
                 }
-            });
-            
+            });            
         });
     }
     /** Constructs a FORM based on a CONTAINER with a single fieldset and formelementgroup
@@ -132,12 +107,8 @@ export default class FORM extends CONTAINER {
         return new Promise((resolve, reject) => {
             try {
                 FORM.createEmptyForm(node, model.hidden).then((frm) => {
-                    frm.setAction(model.container.className + '/SET');
-                    frm.addInputs(model.container.createContainerInputs()).then((f) => {
-                        f.afterSuccessfulPost = (result) => {
-                            console.log('CONTAINERFORM.save() afterSuccessfulPost resolved', result, f);
-                            f.getDialog().close();
-                        };
+                    frm.setAction(model.container.className + '/SET').addInputs(model.container.createContainerInputs()).then((f) => {
+                        f.afterSuccessfulPost = () => f.getDialog().close();
                         resolve(f);
                     });
                 });
@@ -158,15 +129,23 @@ export default class FORM extends CONTAINER {
             resolve(this);
         });
     }
-    /** Adds the provided inputs to the FORM
+    /** Adds the provided inputs to the FORM asynchronously
 	    @param {Array<MODEL>} inputs An array of inputs
         @param {CONTAINER} target Target node
 	    @returns {Promise<ThisType>} callback
 	*/
-    addInputs(inputs, target = this) {
-        return new Promise((resolve) => {
+    addInputs(inputs = [], target = this) {
+        //return Array.isArray(inputs) ? Promise.all(inputs.forEach((i) => this.addInput(i, target))) : Promise.resolve(this);
+        //return Array.isArray(inputs) ? Promise.all(inputs.map((i) => this.addInput(i, target))) : Promise.resolve(this);
+        /*return new Promise((resolve) => {
             if (inputs) {
                 inputs.forEach((i) => this.addInput(i, target));
+            }
+            resolve(this);
+        });*/
+        return new Promise((resolve) => {
+            if (inputs) {
+                Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
             }
             resolve(this);
         });
@@ -509,7 +488,11 @@ export default class FORM extends CONTAINER {
             try {
                 main = this.getContainer().getMain();
             } catch (e) {
-                main = this.getDialog().getContainer().getMain();
+                try {
+                    main = this.getDialog().getContainer().getMain();
+                } catch (ee) {
+                    console.warn('WHAT THE BUZZ? Where is the main element?', this);
+                }
             }
             /** @type {LOADER} */
             let loader = main.getLoader();
