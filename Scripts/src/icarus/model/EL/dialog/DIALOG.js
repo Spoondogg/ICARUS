@@ -21,10 +21,12 @@ export default class DIALOG extends EL {
 	*/
     constructor(model) { // container
         super(document.body, 'DIV', model);
-        this.addClasses(['dialog', 'modal']).append(document.body);
+        this.addClasses(['dialog', 'modal']);
+        this.append(document.body);
         //document.body.insertBefore(this.el, document.body.firstChild);
-        //this.container = model.container;        
-		this.header = new HEADER(this, new MODEL().set('label', model.label));
+        console.log('this.container', this, model);
+        this.container = model.container;
+        this.header = new HEADER(this, new MODEL().set('label', model.label));
         this.btnClose = new BUTTON(this.header, 'x');
 		this.btnClose.el.onclick = () => this.close(300);
 
@@ -64,9 +66,7 @@ export default class DIALOG extends EL {
 		return new Promise((resolve, reject) => {
             setTimeout(() => {
                 try {
-                    //this.el.showModal(); // DIALOG method
                     $(this.el).modal('show');
-                    //this.removeClass('hiding');
                     resolve(this);
                 } catch (e) {
                     if (e instanceof DOMException) {

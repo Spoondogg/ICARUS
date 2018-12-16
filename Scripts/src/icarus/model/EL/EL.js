@@ -67,7 +67,8 @@ export default class EL extends MODEL {
         delay: 500,
         stopPropagation: true
     })) {
-        this.el.onclick = (ev) => new Promise((resolve, reject) => {
+        //this.el.onclick = (ev) => new Promise((resolve, reject) => {
+        this.el.addEventListener('click', (ev) => new Promise((resolve, reject) => {
             try {
                 if (options.stopPropagation) {
                     ev.stopPropagation();
@@ -77,12 +78,15 @@ export default class EL extends MODEL {
                     setTimeout(() => {
                         if (this.touchtime !== 0) {
                             this.touchtime = 0;
-                            resolve(click());
+                            resolve(click(ev));
                         }
-                    }, options.delay);
+                    }, dblclick === 'undefined' ? 0 : options.delay);
                 } else if (new Date().getTime() - this.touchtime < options.delay) {
-                    this.touchtime = 0;
-                    resolve(dblclick());
+                    if (dblclick) {
+                        //console.log('TouchTime', this.touchtime);
+                        this.touchtime = 0;
+                        resolve(dblclick(ev));
+                    }
                 }
             } catch (e) {
                 if (options.stopPropagation) {
@@ -90,43 +94,84 @@ export default class EL extends MODEL {
                 }
                 reject(e);
             }
-        });
+        }));
         return this;
     }
-    /** Sets this element as 'selected'
+    /** Deselects any selected elements and sets this element as 'selected'
         param {EL} element The element to select
-        @returns {ThisType} callback
+        param {Event} event Event
+        @returns {Promise<ThisType>} callback
     */
-    select() {
-        $('.selected').removeClass('selected');
-        $(this.el).toggleClass('selected');
+    select() { // event
+        return new Promise((resolve, reject) => {
+            try {
+                this.deselectAll()
+                    .then(() => this.addClass('selected')
+                        .then(() => resolve(this)));
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+    /** Deselect this element
+        @returns {Promise<ThisType>} callback
+    */
+    deselect() {
+        return Promise.resolve(this.removeClass('selected'));
+    }
+
+    /** Deselects any 'selected' elements 
+        @returns {Promise<void>} callback
+    */
+    deselectAll() {
+        return Promise.resolve($('.selected').removeClass('selected'));
+    }
+    /** Sets the given attribute to the element and its model
+         @param {string} key Attribute name
+         @param {any} value Attribute value
+         @returns {ThisType} callback
+    */
+    setAttribute(key, value) {
+        this.el.setAttribute(key, value);
+        this.attributes.set(key, value);
         return this;
     }
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
-	    @returns {ThisType} Returns this element for chaining purposes
+	    @returns {Promise<ThisType>} Returns this element for chaining purposes
 	*/
-	addClass(className) {
-		$(this.el).addClass(className);
-		let prevClass = this.attributes.class || '';
-		this.attributes.class = prevClass + ' ' + className;
-		return this;
+    addClass(className) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (className === 'undefined') {
+                    console.log('ClassName Undefined');
+                } else {
+                    $(this.el).addClass(className);
+                    let prevClass = this.attributes.class || '';
+                    this.attributes.class = prevClass + ' ' + className;
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
-    /** Adds an array of classnames
+    /** Promises to add an array of classnames to this element
         @param {Array<string>} classNames An array of class names
-        @returns {ThisType} callback
+        @returns {Promise<ThisType>} callback
     */
     addClasses(classNames) {
-        classNames.forEach((c) => this.addClass(c));
-        return this;
+        Promise.all(classNames.map((c) => this.addClass(c))).then(() => this);
     }
     /** Inserts @see {this.el} as the first child of target
         @param {HTMLElement} target Target HTML Element
         @returns {ThisType} callback
     */
     append(target) {
-        target.insertBefore(this.el, target.firstChild);
-        return this;
+        return new Promise((resolve) => {
+            target.insertBefore(this.el, target.firstChild);
+            resolve(this);
+        });
     }
 	/** Creates a textarea input and populates with this element's contents
         @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
@@ -240,14 +285,16 @@ export default class EL extends MODEL {
 	    @returns {CONTAINER} This EL's parent container
 	*/
 	getMain() {
-		if (typeof this.container !== 'undefined') {
-			try {
-				return this.getContainer().getMain();
-			} catch (e) {
-				console.warn('EL{' + this.className + '} Unable to retrieve Main Container', e);
-				//throw e;
-			}
-		}
+        if (typeof this.container !== 'undefined') {
+            try {
+                return this.getContainer().getMain();
+            } catch (e) {
+                console.warn('EL{' + this.className + '} Unable to retrieve Main Container', e);
+                //throw e;
+            }
+        } else {
+            this.getProtoTypeByClass('MAIN')
+        }
 	}
 	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token
@@ -396,27 +443,33 @@ export default class EL extends MODEL {
 	}
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
-	    @returns {EL} Returns this element for chaining purposes
+	    @returns {Promise<ThisType>} callback
 	*/
     removeClass(className) {
-        try {
-            $(this.el).removeClass(className);
-            //this.attributes.set('class', this.attributes.get('class').replace(className, ''));
-            this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
-        } catch (e) {
-            if (!(e instanceof TypeError)) {
-                throw e;
+        return new Promise((resolve, reject) => {
+            try {
+                $(this.el).removeClass(className);
+                //this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+                this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
+                resolve(this);
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    resolve(this);
+                } else {
+                    reject(e);
+                }
             }
-        }
-		return this;
+        });
 	}
 	/** Shows this Element
 	    @returns {ThisType} callback
 	*/
-	show() {
-		this.el.style.display = 'block';
-		return this;
-	}
+    show() {
+        return new Promise((resolve) => {
+            this.el.style.display = 'block';
+            resolve(this);
+        });
+    }
 	/** Hides this Element
 	    @returns {ThisType} callback
 	*/
@@ -429,9 +482,8 @@ export default class EL extends MODEL {
 	/** Adds 'active' to this element's classes
 	    @returns {EL} This EL
     */
-	activate() {
-		$(this.el).addClass('active');
-		return this;
+    activate() {
+        return Promise.resolve(this.addClass('active'));
 	}
 	/** Removes 'active' from this element's classes
 	    @returns {EL} This EL

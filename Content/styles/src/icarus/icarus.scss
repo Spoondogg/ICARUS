@@ -1403,11 +1403,20 @@ table {
 	}
 }
 .menu {
+    @extend %noSelect;
     background-color: $color-nav-background;
+
+    &.selected {
+        > header {
+            background-color: darken($color-nav-background, 35%);
+            text-decoration: none;
+        }
+    }
 
     > header {
         @extend %bevel-down;
         @extend %clickable;
+        @extend %noSelect;
         background-color: darken($color-nav-background, 25%);
         color: $color-light;
         line-height: normal;

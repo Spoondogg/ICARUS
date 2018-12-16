@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../container/CONTAINER.js';
+import CONTAINER from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
 /** A generic ARTICLE Element
     @class
     @extends CONTAINER
@@ -13,6 +13,7 @@ export default class ARTICLE extends CONTAINER {
         super(node, 'ARTICLE', model, ['JUMBOTRON', 'SECTION']);
         this.addClass('article');
         this.populate(model.children);
+        this.ifEmpty();
 	}
     construct() { }
 }

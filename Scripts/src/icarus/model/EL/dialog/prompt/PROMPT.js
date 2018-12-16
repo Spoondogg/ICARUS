@@ -24,22 +24,16 @@ export default class PROMPT extends DIALOG {
         return new Promise((resolve, reject) => {
             try {
                 if (model.formtype === 'FORMPOST') {
-                    FORM.createFormPostForm(this.body, model).then((frm) => {
-                        this.configureForm(frm, model).then((f) => {
-                            resolve(f);
-                        });
+                    FORM.createFormPostForm(this.body, model).then((form) => {
+                        this.configureForm(form, model).then((f) => resolve(f));
                     });
                 } else if (model.formtype === 'CONTAINER') {
-                    FORM.createContainerForm(this.body, model).then((frm) => {
-                        this.configureForm(frm, model).then((f) => {
-                            resolve(f);
-                        });
+                    FORM.createContainerForm(this.body, model).then((form) => {
+                        this.configureForm(form, model).then((f) => resolve(f));
                     });
                 } else {
-                    FORM.createEmptyForm(this.body, false).then((frm) => {
-                        this.configureForm(frm, model).then((f) => {
-                            resolve(f);
-                        });
+                    FORM.createEmptyForm(this.body, false).then((form) => {
+                        this.configureForm(form, model).then((f) => resolve(f));
                     });
                 }            
             } catch (e) {
@@ -58,6 +52,7 @@ export default class PROMPT extends DIALOG {
                 form.addInputs(model.inputs);
                 form.addButtons(model.buttons);
                 form.getDialog = () => this;
+                form.getContainer = () => model.container;
                 form.container = model.container;
                 resolve(form);
             } catch (e) {
