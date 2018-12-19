@@ -24,12 +24,12 @@ export default class CHAT extends CONTAINER {
 		$(this.form.el).insertAfter(this.body.pane.el);
 		let inputs = [
 			new MODEL(new ATTRIBUTES({
-				'name': 'statement',
-				'type': 'TEXTAREA',
-				'value': ''
+				name: 'statement',
+				type: 'TEXTAREA',
+				value: ''
 			})).set({
-				'element': 'TEXTAREA',
-				'label': 'element'
+				element: 'TEXTAREA',
+				label: 'element'
 			})
 		];
 		this.form.fieldset.formElementGroup.addInputElements(inputs);

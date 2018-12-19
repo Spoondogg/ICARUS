@@ -35,21 +35,8 @@ export default class NAVHEADER extends MENU {
 	    param {string} label The tab label
 	    @returns {void}
 	*/
-	addDefaultTab() {
-		this.tab.el.onclick = () => this.getContainer().toggleBody();
-		this.tab.pressTimer = null; // Simulate LONG CLICK to edit the label
-		this.tab.el.onmousedown = (ev) => {
-			this.tab.pressTimer = window.setTimeout(() => {
-				//this.launchSidebarSave();
-                console.log('LONGCLICK');
-				ev.stopPropagation();
-			}, 1000);
-		};
-		this.tab.el.onmouseup = (ev) => {
-			clearTimeout(this.tab.pressTimer);
-			ev.stopPropagation();
-			return false;
-		};
+    addDefaultTab() {
+        this.tab.clickHandler(() => this.getContainer().toggleBody(), () => this.getContainer().save(), () => this.getContainer().setLabel(new Date().getTime()));
 		//return tab;
 	}
 	/** Adds the Options/Config menu to the NavHeader.

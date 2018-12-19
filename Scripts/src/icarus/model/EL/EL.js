@@ -23,12 +23,10 @@ export default class EL extends MODEL {
 		this.className = this.constructor.name;
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
-
         /** An array of MODELS that are children of this EL
             @property {Array<MODEL>} children 
         */
         this.children = children;
-
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
         this.el = document.createElement(this.element);
         this.touchtime = 0; // mobile double click detection
@@ -57,44 +55,103 @@ export default class EL extends MODEL {
 		}
 		return el;
     }
+    /** On PressDown Event, starts a timer that triggers the Long Press Event
+        @param {Event} ev Event
+        @param {string} eventName Event Name
+        @param {object} options Options
+        @param {Function} longclick Long Press Function
+        @returns {Promise<any>} Promise to resolve given function
+    */
+    pressDown(ev, eventName, options, longclick) {
+        //console.log('Press: ' + eventName, this.timer);
+        if (options.stopPropagation) {
+            ev.stopPropagation();
+        }
+        this.timer = window.setTimeout(() => {
+            //console.log('Pressing ' + eventName, this.timer);
+            clearTimeout(this.timer);
+            ev.preventDefault();
+            this.touchtime = 1;
+            Promise.resolve(longclick(ev));
+        }, options.longClickDelay);
+    }
+    /** On PressUp Event, cancels PressDown Timer
+        @param {Event} ev Event
+        @param {string} eventName Event Name
+        @param {object} options Options
+        @returns {void} 
+    */
+    pressUp(ev, eventName, options) {
+        //console.log(eventName, this.timer);
+        if (options.stopPropagation) {
+            ev.stopPropagation();
+        }
+        clearTimeout(this.timer);  
+    }
+    /** Press Event occurs after Press Down/Up events complete
+        @param {Event} ev Event
+        @param {object} options Options
+        @param {Function} click Single Press Function
+        @param {Function} dblclick Double Press Function
+        @param {Function} longclick Long Press Function
+        @returns {Promise<any>} Promise to resolve appropriate Press Event
+    */
+    pressed(ev, options, click, dblclick, longclick) {
+        //console.log('Pressed', this.timer, ev);
+        try {
+            if (this.touchtime === 0) {
+                this.touchtime = new Date().getTime();
+                setTimeout(() => {
+                    if (this.touchtime !== 0) {
+                        //console.log('singleclick', this.timer);
+                        this.touchtime = 0;
+                        clearTimeout(this.timer);
+                        Promise.resolve(click(ev));
+                    }
+                }, options.delay);
+            } else if (new Date().getTime() - this.touchtime < options.delay) {
+                //console.log('doubleclick', this.timer);
+                this.touchtime = 0;
+                clearTimeout(this.timer);
+                Promise.resolve(dblclick(ev));
+            } else {
+                //console.log('longclick', this.timer);
+                this.touchtime = 0;
+                clearTimeout(this.timer);
+                //Promise.resolve(longclick(ev));
+            }
+        } catch (e) {
+            console.warn('error', e);
+            this.touchtime = 0;
+            clearTimeout(this.timer);
+            if (options.stopPropagation) {
+                ev.stopPropagation();
+            }
+            Promise.reject(e);
+        }
+    }
     /** Sets mobile-friendly single and double click events
-        @param {function} click Function call on single click
-        @param {function} dblclick Function call on double click
+        @param {Function} click Function call on single click
+        @param {Function} dblclick Function call on double click
+        @param {Function} longclick Funciton call on long click
         @param {MODEL} options {delay: Delay in milliseconds between clicks, stopPropagation: Stops event propagation}
         @returns {ThisType} callback
     */
-    clickHandler(click, dblclick, options = new MODEL().set({
-        delay: 500,
+    clickHandler(click, dblclick = () => false, longclick = () => false, options = new MODEL().set({
+        delay: 300,
+        longClickDelay: 1000,
         stopPropagation: true
     })) {
-        //this.el.onclick = (ev) => new Promise((resolve, reject) => {
-        this.el.addEventListener('click', (ev) => new Promise((resolve, reject) => {
-            try {
-                if (options.stopPropagation) {
-                    ev.stopPropagation();
-                }
-                if (this.touchtime === 0) {
-                    this.touchtime = new Date().getTime();
-                    setTimeout(() => {
-                        if (this.touchtime !== 0) {
-                            this.touchtime = 0;
-                            resolve(click(ev));
-                        }
-                    }, dblclick === 'undefined' ? 0 : options.delay);
-                } else if (new Date().getTime() - this.touchtime < options.delay) {
-                    if (dblclick) {
-                        //console.log('TouchTime', this.touchtime);
-                        this.touchtime = 0;
-                        resolve(dblclick(ev));
-                    }
-                }
-            } catch (e) {
-                if (options.stopPropagation) {
-                    ev.stopPropagation();
-                }
-                reject(e);
-            }
-        }));
+        this.addClass('clickable');
+        this.el.style.webkitTouchCallout = 'none';
+        this.timer = null;
+        // Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+        this.el.onmousedown = (ev) => this.pressDown(ev, 'mousedown', options, longclick);
+        this.el.onmouseup = (ev) => this.pressUp(ev, 'mouseup', options);
+        this.el.ontouchstart = (ev) => this.pressDown(ev, 'touchstart', options, longclick);
+        this.el.ontouchend = (ev) => this.pressUp(ev, 'touchend', options);
+        // Detect Single and Double Click
+        this.el.onclick = (ev) => this.pressed(ev, options, click, dblclick, longclick);
         return this;
     }
     /** Deselects any selected elements and sets this element as 'selected'
@@ -233,22 +290,17 @@ export default class EL extends MODEL {
     */
 	getProtoTypeByClass(value, node = this.node, attempt = 0) {
 		if (node === document.body) {
-			return null; // You have reached the top of the chain
+            return null; //this.getMain(); // null You have reached the top of the chain
 		}
 		let depth = attempt + 1;
 		try {
-			//console.log('Searching for __proto__.__proto__.constructor.name: ' + value + '(' + attempt + ')', node);
 			if (depth < 100) {
-				//if (node.__proto__.__proto__.__proto__.constructor.name === value.toString() || node.__proto__.__proto__.constructor.name === value.toString() || node.__proto__.constructor.name === value.toString()) {
 				if (Reflect.getPrototypeOf(Reflect.getPrototypeOf(Reflect.getPrototypeOf(node))).constructor.name === value.toString() || Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() || Reflect.getPrototypeOf(node).constructor.name === value.toString()) {
-					//console.log('Found container(' + value.toString() + ')...', node);
 					return node;
-				} //else {
-				return this.getProtoTypeByClass(value, node.node, depth); // attempt++
-				//}
-			} //else {
+				}
+				return this.getProtoTypeByClass(value, node.node, depth);
+			}
 			throw new RecursionLimitError(this.className + '.getProtoTypeByClass(): Exceeded attempt limit. (Attempt ' + attempt + ')');
-			//}
 		} catch (e) {
 			//TypeError: this.getProtoTypeByClass is not a function
             if (e instanceof TypeError) {
@@ -271,29 +323,40 @@ export default class EL extends MODEL {
 	*/
 	getContainer() {
 		try {
-			if (typeof this.container === 'undefined') { // || this.container === null
+			if (typeof this.container === 'undefined') {
 				this.container = this.getProtoTypeByClass('CONTAINER');
 				return this.container;
 			}
 			return this.container;
 		} catch (e) {
-			console.log(e);
+			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-	}
+    }
+    /** Retrieve the application loader
+        @returns {LOADER} Loader
+    */
+    getLoader() {
+        try {
+            return this.getMain().getLoader();
+        } catch (e) {
+            return null;
+        }
+    }
 	/** Returns the MAIN container
-	    @returns {CONTAINER} This EL's parent container
+	    @returns {MAIN} MAIN class
 	*/
-	getMain() {
-        if (typeof this.container !== 'undefined') {
+    getMain() {
+        //return this.getProtoTypeByClass('MAIN');
+        if (typeof this.container === 'undefined') {
+            this.getProtoTypeByClass('MAIN');            
+        } else {
             try {
                 return this.getContainer().getMain();
             } catch (e) {
-                console.warn('EL{' + this.className + '} Unable to retrieve Main Container', e);
-                //throw e;
+                console.warn('EL{' + this.className + '} Unable to retrieve MAIN Container', e);
+                throw e;
             }
-        } else {
-            this.getProtoTypeByClass('MAIN')
         }
 	}
 	/** Retrieves the token value from the DOM Meta tags

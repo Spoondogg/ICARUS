@@ -144,7 +144,7 @@ export const DATAELEMENTS = {
             createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
             createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
         ],
-        attributes: []
+        attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
     },
     LIST: {
         data: [],

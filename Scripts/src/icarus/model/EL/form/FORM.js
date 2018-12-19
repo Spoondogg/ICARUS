@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
@@ -135,14 +136,6 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<ThisType>} callback
 	*/
     addInputs(inputs = [], target = this) {
-        //return Array.isArray(inputs) ? Promise.all(inputs.forEach((i) => this.addInput(i, target))) : Promise.resolve(this);
-        //return Array.isArray(inputs) ? Promise.all(inputs.map((i) => this.addInput(i, target))) : Promise.resolve(this);
-        /*return new Promise((resolve) => {
-            if (inputs) {
-                inputs.forEach((i) => this.addInput(i, target));
-            }
-            resolve(this);
-        });*/
         return new Promise((resolve) => {
             if (inputs) {
                 Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
@@ -265,6 +258,7 @@ export default class FORM extends CONTAINER {
         return Promise.reject(new AbstractMethodError('No DIALOG exists for this FORM'));
     }
 	/** Disables all fieldsets within this form
+        @todo Should be Promise.all
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
@@ -332,21 +326,10 @@ export default class FORM extends CONTAINER {
                     case 'HIDDEN':
                     case 'SUBMIT':
                         break;
-                    //case 'TEXTAREA':
-                      //  this.el.elements[e].innerHtml = this.htmlEncode(this.el.elements[e].innerHtml);
-                        //break;
                     default:
                         console.warn('Unrecognized type', type);
                 }
-                //if (this.el.elements[e].type.toUpperCase() === 'TEXT' || this.el.elements[e].type.toUpperCase() === 'TEXTAREA') {
-                //    this.el.elements[e].value = this.htmlEncode(this.el.elements[e].value);
-                //}
             }
-            /*this.el.elements.forEach((e) => {
-                if (e.type.toUpperCase() === 'TEXT' || e.type.toUpperCase() === 'TEXTAREA') {
-                    e.value = this.htmlEncode(e.value);
-                }
-            });*/
 		} catch (e) {
 			console.log('FORM.htmlEncodeValues() failed.');
 			throw e;
@@ -411,6 +394,8 @@ export default class FORM extends CONTAINER {
 	    Note that this is a simple form of validation that occurs on the
 	    client side and should not be used as a substitution for
 	    server side validation.
+        For loop outperforms forEach because of break
+        @see https://thejsguy.com/2016/07/30/javascript-for-loop-vs-array-foreach.html
 	    @returns {object} The validation payload
 	*/
 	validate() {
@@ -418,9 +403,7 @@ export default class FORM extends CONTAINER {
 		this.payload = {
 			isValid: true,
 			formName: this.el.name
-		};
-		// For loop outperforms forEach because of break;
-		// @see https://thejsguy.com/2016/07/30/javascript-for-loop-vs-array-foreach.html
+		};		
 		for (let e = 0; e < this.el.elements.length; e++) {
 			let element = this.el.elements[e];
 			switch (element.type) {
@@ -458,7 +441,7 @@ export default class FORM extends CONTAINER {
         @returns {void}
 	*/
 	reset() {
-        console.log('Resetting form[' + this.el.name + ']');
+        //console.log('Resetting form[' + this.el.name + ']');
         this.el.elements.forEach((e) => {
             e.removeAttribute('data-valid');
             $(e.previousSibling).removeClass('invalid');
@@ -477,22 +460,20 @@ export default class FORM extends CONTAINER {
 	*/
 	getFormPost() {
 		return this.validate().isValid ? new FORMPOST(this) : null;
-	}
+    }
+    /* eslint-disable max-lines-per-function */
 	/** Post FORM values to server
 	    @returns {Promise<object>} The results of the Form Post
 	*/
 	post() {
         return new Promise((resolve, reject) => {
             /** @type {CONTAINER} */
+            //let main = this.getMain();
             let main = null;
             try {
                 main = this.getContainer().getMain();
             } catch (e) {
-                try {
-                    main = this.getDialog().getContainer().getMain();
-                } catch (ee) {
-                    console.warn('WHAT THE BUZZ? Where is the main element?', this);
-                }
+                main = this.getDialog().getContainer().getMain();
             }
             /** @type {LOADER} */
             let loader = main.getLoader();
@@ -500,69 +481,69 @@ export default class FORM extends CONTAINER {
             let url = this.getAction();
             let statusCode = 0;
             let message = '';
-
             if (data) {
                 try {
-                    loader.log(10, 'Posting values to ' + this.getAction(), true);
-                    this.lock();
-                    $.ajax({
-                        url,
-                        type: 'POST',
-                        data,
-                        error(xhr, statusText, errorThrown) {
-                            console.warn('An Unknown Error Occurred');
-                            loader.log(100, 'Ajax Error: ' + statusText + '(' + xhr.status + ') Error: ' + errorThrown, true, 0);
-                        },
-                        statusCode: {
-                            200(response) {
-                                statusCode = 200;
-                                message += response.message;
-                                //console.log(100, 'StatusCode: 200, ' + response.message, true).then(() => main.login());
+                    loader.log(10, 'Posting values to ' + this.getAction(), true).then(() => {
+                        this.lock();
+                        $.ajax({
+                            url,
+                            type: 'POST',
+                            data,
+                            error(xhr, statusText, errorThrown) {
+                                console.warn('An Unknown Error Occurred');
+                                loader.log(100, 'Ajax Error: ' + statusText + '(' + xhr.status + ') Error: ' + errorThrown, true, 0);
                             },
-                            201(response) {
-                                statusCode = 201;
-                                message += response.message;
-                                //loader.log(100, 'StatusCode: 201, ' + response.message, true);
-                            },
-                            400(response) {
-                                statusCode = 400;
-                                message += response.message;
-                                //loader.log(100, 'StatusCode: 400, ' + response.message, true);
-                            },
-                            403(response) { // Forbidden
-                                statusCode = 403;
-                                message += response.message;
-                                loader.log(100, 'StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message, true, 0).then(() => {
-                                    //console.log('403 Error', response);
-                                    resolve(main.login());
-                                });
-                            },
-                            404(response) {
-                                statusCode = 404;
-                                message += response.message;
-                            }
-                        },
-                        success: (payload) => {
-                            loader.log(100, 'StatusCode: ' + statusCode + '\n' + message, true).then(() => {
-                                console.log('Payload Result: ' + payload.result);
-                                if (payload.result === 0) {
-                                    main.login();
+                            statusCode: {
+                                200(response) {
+                                    statusCode = 200;
+                                    message += response.message;
+                                    //console.log(100, 'StatusCode: 200, ' + response.message, true).then(() => main.login());
+                                },
+                                201(response) {
+                                    statusCode = 201;
+                                    message += response.message;
+                                    //loader.log(100, 'StatusCode: 201, ' + response.message, true);
+                                },
+                                400(response) {
+                                    statusCode = 400;
+                                    message += response.message;
+                                    //loader.log(100, 'StatusCode: 400, ' + response.message, true);
+                                },
+                                403(response) { // Forbidden
+                                    statusCode = 403;
+                                    message += response.message;
+                                    loader.log(100, 'StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message, true, 0).then(() => {
+                                        //console.log('403 Error', response);
+                                        resolve(main.login());
+                                    });
+                                },
+                                404(response) {
+                                    statusCode = 404;
+                                    message += response.message;
                                 }
-                            });
-                            this.unlock();
-                            this.afterSuccessfulPost(payload);
-                            resolve(payload);
-                        }
+                            },
+                            success: (payload) => {
+                                loader.log(100, 'StatusCode: ' + statusCode + '\n' + message, true).then(() => {
+                                    console.log('Payload Result: ' + payload.result);
+                                    if (payload.result === 0) {
+                                        main.login();
+                                    }
+                                });
+                                this.unlock();
+                                this.afterSuccessfulPost(payload);
+                                resolve(payload);
+                            }
+                        });
                     });
                 } catch (e) {
-                    loader.log(100, 'Post Failed to submit', true, 5000);
-                    reject(new Error('Post Failed to submit'));
+                    loader.log(100, 'Post Failed to submit', true, 5000).then(() => reject(new Error('Post Failed to submit')));
                 }
             } else {
-                loader.log(100, 'Invalid FormPost', true, 5000);
-				reject(new Error('Invalid FormPost'));
+                loader.log(100, 'Invalid FormPost', true, 5000).then(() => reject(new Error('Invalid FormPost')));
 			}
 		});
-	}
+    }
+    /* eslint-enable max-lines-per-function */
 }
 export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL };
+/* eslint-enable max-lines */

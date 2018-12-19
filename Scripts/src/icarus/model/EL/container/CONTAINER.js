@@ -464,9 +464,7 @@ export default class CONTAINER extends GROUP {
         try {
             let group = this.navBar.menu.menu.getGroup('ELEMENTS');
             let item = this.createNavItem(className, group);
-            item.el.onclick = () => this.create(new MODEL(className).set({
-                className
-            }));
+            item.el.onclick = () => this.create(new MODEL(className).set('className', className));
             return item;
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
@@ -677,7 +675,7 @@ export default class CONTAINER extends GROUP {
 		return subsections;
 	}
 	/** Returns the MAIN container
-	    @returns {CONTAINER} The MAIN Container
+	    @returns {MAIN} The MAIN Container class
 	    @throws Will throw an error 
 	*/
 	getMain() {
@@ -687,7 +685,10 @@ export default class CONTAINER extends GROUP {
 			switch (this.getProtoTypeByClass('MODAL').className) {
 				case 'LOADER':
 					console.warn('Modals exist in body.document and do not have a parent Container');
-					break;
+                    break;
+                case 'PROMPT':
+                    console.warn('Prompts exist in body.document and do not have a parent Container');
+                    break;
 				default:
 					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('MODAL'));
 			}
@@ -716,16 +717,6 @@ export default class CONTAINER extends GROUP {
 	*/
 	getLabel() {
 		return this.header.getLabel();
-    }
-    /** Retrieve the application loader
-        @returns {LOADER} Loader
-    */
-    getLoader() {
-        try {
-            return this.getMain().getLoader();
-        } catch (e) {
-            return null;
-        }
     }
 	/** Sets the label of this element to the given value.
 		@param {string} label The name to be set
