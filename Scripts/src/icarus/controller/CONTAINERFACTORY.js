@@ -260,8 +260,8 @@ export default class CONTAINERFACTORY {
                         })).then((form) => form.post().then(() => loader.log(100).then(() => resolve(form.getDialog().close()))));
                     } else {
                         console.log('Creating ' + type + ' for ' + this.className);
+                        resolve();
                     }
-                    resolve();
                 } catch (e) {
                     reject(e);
                 }
@@ -275,38 +275,34 @@ export default class CONTAINERFACTORY {
     */
     editData(name) {
         return new Promise((resolve, reject) => {
+            console.log('woot');
             this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
                 try {
                     if (this.dataId > 0) {                    
-                            this[name].select();
-                            new PROMPT(new MODEL().set({
-                                label: 'Edit ' + this.className + ' : ' + name,
-                                container: this
-                            })).createForm(new MODEL().set({
-                                formtype: 'FORMPOST',
-                                className: this.className,
-                                type: 'dataId',
-                                id: this.dataId,
-                                container: this
-                            })).then(
-                                (form) => this.hideElements(form.children[0].children[0].children, name)
-                                    .then(() => {
-                                        form.getDialog().close = () => form.getDialog().hide().then(() => this.deselectAll());
-                                    })
-                                    .then(() => form.getDialog().show()
-                                        .then(() => {
-                                            let input = form.el.elements[name];
-                                            input.focus();
-                                            input.onkeyup = () => this[name].setInnerHTML(input.value);
-                                            loader.log(100);
-                                            resolve(form.getDialog());
-                                        })));
-                    
+                        this[name].select();
+                        new PROMPT(new MODEL().set({
+                            label: 'Edit ' + this.className + ' : ' + name,
+                            container: this
+                        })).createForm(new MODEL().set({
+                            formtype: 'FORMPOST',
+                            className: this.className,
+                            type: 'dataId',
+                            id: this.dataId,
+                            container: this
+                        })).then((form) => this.hideElements(form.children[0].children[0].children, name)
+                            .then(() => {
+                                form.getDialog().close = () => form.getDialog().hide().then(() => this.deselectAll());
+                                let input = form.el.elements[name];
+                                input.focus();
+                                input.onkeyup = () => this[name].setInnerHTML(input.value);
+                                loader.log(100).then(() => resolve(form.getDialog().show()));
+                            })
+                        );                    
                     } else {
                         loader.log(100, this.className + '[' + name + '] does not have a data FORMPOST').then(() => resolve(false));
                     }
                 } catch (e) {
-                    reject(e);
+                    loader.log(100, 'Unable to edit').then(() => reject(e));
                 }
             });
         });
