@@ -1,13 +1,13 @@
 /** @module */
 import UL, { ATTRIBUTES, LI, MODEL } from '../../ul/UL.js';
 import DIV from '../../div/DIV.js';
-import DeselectEvent from '../../../../event/DeselectEvent.js';
+import Deselect from '../../../../event/Deselect.js';
 import HEADER from '../../header/HEADER.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
-import SelectEvent from '../../../../event/SelectEvent.js';
+import Select from '../../../../event/Select.js';
 /** A collapseable list of Nav Items
     @extends UL
 */
@@ -59,7 +59,7 @@ export default class MENU extends UL {
                 let selected = $('.selected');
                 console.log('Select Count: ' + selected.length, selected);
                 if (selected.length > 0) {
-                    selected.each((i) => selected[i].dispatchEvent(new DeselectEvent(this)));                    
+                    selected.each((i) => selected[i].dispatchEvent(new Deselect(this)));                    
                 }
                 resolve(this);
             } catch (e) {
@@ -103,7 +103,7 @@ export default class MENU extends UL {
         @returns {void}
     */
     scroll(event) {
-        this.wrapper.el.dispatchEvent(new DeselectEvent(this));
+        this.wrapper.el.dispatchEvent(new Deselect(this));
         //$('.selected')[0].dispatchEvent(this.deselectEvent());
         //this.wrapper.deselect();
         //$(this.el).collapse('hide');
@@ -111,12 +111,12 @@ export default class MENU extends UL {
             if (event.wheelDelta > 0) {
                 console.log('scroll prev');
                 if ($(this.wrapper.el).prev().children('header').length > 0) {
-                    $(this.wrapper.el).prev().children('header')[0].dispatchEvent(new SelectEvent(this));
+                    $(this.wrapper.el).prev().children('header')[0].dispatchEvent(new Select(this));
                 }
             } else {
                 console.log('scroll next');
                 if ($(this.wrapper.el).next().children('header').length > 0) {
-                    $(this.wrapper.el).next().children('header')[0].dispatchEvent(new SelectEvent(this));
+                    $(this.wrapper.el).next().children('header')[0].dispatchEvent(new Select(this));
                 }
             }
         } catch (e) {

@@ -1,13 +1,13 @@
 ﻿/** @module */
-/** An Element Select Event
+/** An Element Deselect Event
     @extends CustomEvent
 */
-export default class SelectEvent extends CustomEvent {
-    /** An element selection event
+export default class Deselect extends CustomEvent {
+    /** An element deselection event
         @param {EL} caller Calling node
     */
     constructor(caller) {
-        super('select', {
+        super('deselect', {
             bubbles: false,
             detail: {
                 caller

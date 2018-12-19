@@ -1,14 +1,14 @@
 ﻿/** @module */
-/** An Element Click Event for EL.clickHandler()
+/** An Element Select Event
     @extends CustomEvent
 */
-export default class ClickEvent extends CustomEvent {
-    /** An element click event
+export default class Select extends CustomEvent {
+    /** An element selection event
         @param {EL} caller Calling node
     */
     constructor(caller) {
-        super('click', {
-            bubbles: true,
+        super('select', {
+            bubbles: false,
             detail: {
                 caller
             }
