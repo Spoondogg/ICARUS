@@ -137,10 +137,20 @@ $jumbotron-height: 420px;
 }
 /// The object can be clicked or tapped
 %clickable {
-	cursor: pointer;
-	&:hover {
-		text-decoration: underline;
-	}
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none; //underline;
+
+        > a {
+            text-decoration: none;
+        }
+    }
+
+    //*:not(input):not(textarea) {
+        //-webkit-user-select: none; /* disable selection/Copy of UIWebView */
+        //-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+    //}
 }
 %gradient-primary {
 	$color-one: $color-blue-lighter;
@@ -244,6 +254,7 @@ body {
     height: 100vh;
     overflow: hidden;
     padding-top: $navbar-height;
+    //-webkit-touch-callout: none !important;
 
     &.compact {
         padding-top: 0;
@@ -512,10 +523,11 @@ dialog,
             }
 
             .progress {
+                border-radius: 3px;
                 clear: both;
                 float: none;
                 margin: 0;
-
+                //height: calc(#{$navbar-height} - .5em);
                 .text {
                     clear: both;
                     float: none;
@@ -1166,9 +1178,9 @@ table {
     width: 100%;
 
     &.article {
-        margin: 0 auto .8em;
         border-bottom: 1px solid $color-grey;
         border-top: 1px solid $color-grey-darker;
+        margin: 0 auto .8em;
     }
 
     &.index {

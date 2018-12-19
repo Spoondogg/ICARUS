@@ -16,7 +16,6 @@ export default class FORMELEMENT extends CONTAINER {
 		super(node, 'DIV', model);
         this.addClass('form-element'); //this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0');
         //this.navBar.header.menu.getGroup('ELEMENTS').empty();
-		/** @type {LABEL} A LABEL Element */
         this.label = new LABEL(this.body.pane, model.label || element);
 	}
 	/** Construct with an associated LABEL element

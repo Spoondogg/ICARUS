@@ -356,12 +356,11 @@ export default class MAIN extends CONTAINER {
         let returnUrl = this.url.origin + '/signin-' + provider;
         location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
     }
-
-	/** Logs the current user out
+	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
     */
     logout() {
-        this.loader.log(99, 'Logging Out', true).then((loader) => {
+        this.loader.log(99, 'Logging Out', true).then(() => { // loader
             $.post('/Account/LogOff', {
                 '__RequestVerificationToken': this.getToken() //.token
             }, this.ajaxRefreshIfSuccessful.bind(this), 'json');

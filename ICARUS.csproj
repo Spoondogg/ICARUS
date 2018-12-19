@@ -627,6 +627,7 @@
     <Content Include="Scripts\src\icarus\error\RecursionLimitError.js" />
     <Content Include="Scripts\src\icarus\error\TokenError.js" />
     <Content Include="Scripts\src\icarus\event\DeselectEvent.js" />
+    <Content Include="Scripts\src\icarus\event\ClickEvent.js" />
     <Content Include="Scripts\src\icarus\event\SelectEvent.js" />
     <Content Include="Scripts\src\icarus\helper\DATEOBJECT.js" />
     <Content Include="Scripts\src\icarus\helper\SERVICEWORKER.js" />

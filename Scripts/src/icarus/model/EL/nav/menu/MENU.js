@@ -8,7 +8,6 @@ import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 import SelectEvent from '../../../../event/SelectEvent.js';
-
 /** A collapseable list of Nav Items
     @extends UL
 */
@@ -43,11 +42,13 @@ export default class MENU extends UL {
 		this.addCase('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
         this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
 
+        /*
         this.clickHandler(() => {
             console.log('Single clicked MENU', this);
         }, () => {
             console.log('Double clicked MENU', this);
         });
+        */
     }
     /** Promise to deselect any selected elements
         @returns {Promise<ThisType>} callback

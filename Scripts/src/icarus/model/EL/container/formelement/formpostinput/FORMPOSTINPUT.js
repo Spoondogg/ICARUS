@@ -110,9 +110,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     id,
                     inputNode,
                     container
-                })).then((form) => {
-                    resolve(form.getDialog().show());
-                });
+                })).then((form) => resolve(form.getDialog().show()));
             } catch (e) {
                 console.warn('SNORT', e, this);
                 reject(e);
