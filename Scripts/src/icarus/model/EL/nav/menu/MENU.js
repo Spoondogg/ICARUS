@@ -27,10 +27,7 @@ export default class MENU extends UL {
         if (model.showHeader) {
             let label = model.label || model.name || '__Unknown';
             this.header = new HEADER(this.wrapper, new MODEL().set('label', label));
-            this.header.clickHandler(this.select.bind(this), this.deselect.bind(this), {
-                delay: 200,
-                stopPropagation: true
-            });
+            this.header.clickHandler(this.select.bind(this), this.deselect.bind(this));
             this.header.el.addEventListener('wheel', this.scroll.bind(this), { passive: true });
             this.header.el.addEventListener('select', this.select.bind(this), { passive: true });
 		}
