@@ -38,7 +38,7 @@ export default class EL extends MODEL {
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {HTMLElement} This element
-	 */
+	*/
 	make(el, node, model, innerHTML) {
 		try {
 			if (node === document.body) {
@@ -145,7 +145,8 @@ export default class EL extends MODEL {
         this.addClass('clickable');
         this.el.style.webkitTouchCallout = 'none';
         this.timer = null;
-        // Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
+        // Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
+        // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
         this.el.onmousedown = (ev) => this.pressDown(ev, 'mousedown', options, longclick);
         this.el.onmouseup = (ev) => this.pressUp(ev, 'mouseup', options);
         this.el.ontouchstart = (ev) => this.pressDown(ev, 'touchstart', options, longclick);

@@ -90,12 +90,12 @@ export default class CONTAINER extends GROUP {
 		this.createDraggableNavBar();
         this.body = new CONTAINERBODY(this, model);
         this.body.clickHandler(() => this.body.select(), () => this.toggleNav());
+        //this.body.clickHandler(() => false, () => this.body.select(), () => this.toggleNav());
         this.addNavBarDefaults();
         this.addDefaultContainers(containers);
 		this.setDefaultVisibility(model);
         this.construct();
         //this.ifEmpty();
-        
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
@@ -145,7 +145,7 @@ export default class CONTAINER extends GROUP {
                         default:
                             console.warn(name + ' does not have a valid constructor');
                     }
-                    this[name].clickHandler(() => this[name].select(), () => this.editData(name));
+                    this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
                     resolve(this[name]);
                 }
             } catch (e) {
