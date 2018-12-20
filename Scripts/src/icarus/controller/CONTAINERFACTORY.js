@@ -275,7 +275,6 @@ export default class CONTAINERFACTORY {
     */
     editData(name) {
         return new Promise((resolve, reject) => {
-            console.log('woot');
             this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
                 try {
                     if (this.dataId > 0) {                    

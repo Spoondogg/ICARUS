@@ -70,7 +70,7 @@ export default class EL extends MODEL {
         this.timer = window.setTimeout(() => {
             //console.log('Pressing ' + eventName, this.timer);
             clearTimeout(this.timer);
-            ev.preventDefault();
+            //ev.preventDefault();
             this.touchtime = 1;
             Promise.resolve(longclick(ev));
         }, options.longClickDelay);
@@ -93,10 +93,10 @@ export default class EL extends MODEL {
         @param {object} options Options
         @param {Function} click Single Press Function
         @param {Function} dblclick Double Press Function
-        @param {Function} longclick Long Press Function
+        param {Function} longclick Long Press Function
         @returns {Promise<any>} Promise to resolve appropriate Press Event
     */
-    pressed(ev, options, click, dblclick, longclick) {
+    pressed(ev, options, click, dblclick) {
         //console.log('Pressed', this.timer, ev);
         try {
             if (this.touchtime === 0) {
@@ -149,8 +149,10 @@ export default class EL extends MODEL {
         // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
         this.el.onmousedown = (ev) => this.pressDown(ev, 'mousedown', options, longclick);
         this.el.onmouseup = (ev) => this.pressUp(ev, 'mouseup', options);
-        this.el.ontouchstart = (ev) => this.pressDown(ev, 'touchstart', options, longclick);
-        this.el.ontouchend = (ev) => this.pressUp(ev, 'touchend', options);
+        //this.el.ontouchstart = (ev) => this.pressDown(ev, 'touchstart', options, longclick);
+        this.el.addEventListener('touchstart', (ev) => this.pressDown(ev, 'touchstart', options, longclick), { passive: true });
+        //this.el.ontouchend = (ev) => this.pressUp(ev, 'touchend', options);
+        this.el.addEventListener('touchend', (ev) => this.pressUp(ev, 'touchend', options), { passive: true });
         // Detect Single and Double Click
         this.el.onclick = (ev) => this.pressed(ev, options, click, dblclick, longclick);
         return this;

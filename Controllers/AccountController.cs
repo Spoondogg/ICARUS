@@ -55,6 +55,7 @@ namespace ICARUS.Controllers {
             return View();
         }
         /// <summary>
+        /// Recieves a LOGIN FormPost and 
         /// POST: /Account/Login
         /// </summary>
         /// <param name="model"></param>
@@ -84,7 +85,7 @@ namespace ICARUS.Controllers {
                     case SignInStatus.RequiresVerification:
                         return RedirectToAction("SendCode", new {
                             ReturnUrl = returnUrl,
-                            RememberMe = false // formResults["RememberMe"].ToString() //model.RememberMe
+                            RememberMe = true // formResults["RememberMe"].ToString() //model.RememberMe
                         });
                     case SignInStatus.Failure:
                     default:
@@ -415,7 +416,7 @@ namespace ICARUS.Controllers {
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: true);
 
             // Create model for Payload
             Dictionary<string, object> model = new Dictionary<string, object>();
@@ -440,7 +441,7 @@ namespace ICARUS.Controllers {
                         ReturnUrl = returnUrl,
                         RememberMe = false
                     });*/
-                    model.Add("RememberMe", false);
+                    model.Add("RememberMe", true);
                     return Json(new Payload(3, "SendCode", model), JsonRequestBehavior.AllowGet);
 
                 case SignInStatus.Failure:
