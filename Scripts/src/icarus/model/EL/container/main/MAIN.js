@@ -343,6 +343,7 @@ export default class MAIN extends CONTAINER {
                 form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
                 //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
                 form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
+                form.footer.buttonGroup.addButton('Login - Facebook').el.onclick = () => this.loginOAuth('Facebook');
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
                 loader.log(100).then(() => form.getDialog().show());
             });

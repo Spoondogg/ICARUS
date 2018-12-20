@@ -112,7 +112,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
                     container
                 })).then((form) => resolve(form.getDialog().show()));
             } catch (e) {
-                console.warn('SNORT', e, this);
+                console.warn('Failed to create FormPost Form', e, this);
                 reject(e);
             }
         });
