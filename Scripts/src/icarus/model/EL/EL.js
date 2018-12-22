@@ -193,7 +193,13 @@ export default class EL extends MODEL {
     */
     setAttribute(key, value) {
         this.el.setAttribute(key, value);
-        this.attributes.set(key, value);
+        try {
+            this.attributes.set(key, value);
+        } catch (e) {
+            if (e instanceof TypeError) {
+                this.attributes = new ATTRIBUTES().set(key, value);
+            }
+        }
         return this;
     }
 	/** Adds the given class name to the element's list of classes
