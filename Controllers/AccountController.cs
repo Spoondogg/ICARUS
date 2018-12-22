@@ -44,6 +44,7 @@ namespace ICARUS.Controllers {
             }
         }
 
+        /*
         /// <summary>
         /// GET for /Account/Login
         /// </summary>
@@ -54,15 +55,17 @@ namespace ICARUS.Controllers {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        */
+
         /// <summary>
         /// Recieves a LOGIN FormPost and 
         /// POST: /Account/Login
+        /// Previous signature: Login(LoginViewModel model, string returnUrl)
         /// </summary>
         /// <param name="model"></param>
         /// <param name="returnUrl"></param>
         /// <returns></returns>
         [HttpPost, AllowAnonymous] //ValidateAntiForgeryToken
-        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
         public async Task<ActionResult> Login(FormPost model, string returnUrl) {
             try {
                 var formResults = model.resultsToDictionary();
@@ -80,17 +83,21 @@ namespace ICARUS.Controllers {
                         //return RedirectToLocal(returnUrl);
                         return Json(new Payload(1, "MODEL", result, "Successfully logged in"));
                     case SignInStatus.LockedOut:
-                        return View("Lockout");
+                        //return View("Lockout");
+                        return Json(new Payload(2, "Lockout", model), JsonRequestBehavior.AllowGet);
 
                     case SignInStatus.RequiresVerification:
-                        return RedirectToAction("SendCode", new {
+                        /*return RedirectToAction("SendCode", new {
                             ReturnUrl = returnUrl,
                             RememberMe = true // formResults["RememberMe"].ToString() //model.RememberMe
-                        });
+                        });*/
+                        //model.Add("RememberMe", true);
+                        return Json(new Payload(3, "SendCode", model), JsonRequestBehavior.AllowGet);
                     case SignInStatus.Failure:
                     default:
                         ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                        return Json(new Payload(4, "InvalidLoginAttempt", model), JsonRequestBehavior.AllowGet);
+                        //return View(model);
                 }
             } catch (Exception e) {
                 return Json(new Payload(2, e, "An exception occurred trying to log in"));
@@ -235,7 +242,6 @@ namespace ICARUS.Controllers {
             //return View(model);
             return Json(new Payload(2, "Error", new MODEL(), "Something went wrong."));
         }
-
         /// <summary>
         /// GET: /Account/ConfirmEmail
         /// </summary>
@@ -250,7 +256,6 @@ namespace ICARUS.Controllers {
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
         /// <summary>
         /// GET: /Account/ForgotPassword
         /// </summary>
@@ -325,7 +330,6 @@ namespace ICARUS.Controllers {
         public ActionResult ResetPasswordConfirmation() {
             return View();
         }
-
         /// <summary>
         /// GET: /Account/ExternalLogin
         /// Returns the ExternalLogin.cshtml View
@@ -335,7 +339,6 @@ namespace ICARUS.Controllers {
         public ActionResult ExternalLogin() {
             return View();
         }
-
         /// <summary>
         /// Retrieves the list of 3rd party OAuth Providers and returns them inside a Payload
         /// </summary>
@@ -346,9 +349,8 @@ namespace ICARUS.Controllers {
                 new Payload(1, "MODEL", loginProviders, "Retrieved OAuth Providers"), JsonRequestBehavior.AllowGet
             );
         }
-
         /// <summary>
-        /// GET: /Account/ExternalLogin
+        /// POST: /Account/ExternalLogin
         /// Third party OAuth2 Authorization
         /// </summary>
         /// <param name="provider"></param>
@@ -412,7 +414,9 @@ namespace ICARUS.Controllers {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null) {
                 //return RedirectToAction("Login");
-                return Json(new Payload(1, "Redirect", new MODEL(), "Redirect to Account/Login because loginInfo was null for returnUrl: "+returnUrl), JsonRequestBehavior.AllowGet);
+                //return Json(new Payload(1, "Redirect", new MODEL(), "Redirect to Account/Login because loginInfo was null for returnUrl: "+returnUrl), JsonRequestBehavior.AllowGet);
+
+                return RedirectToLocal(returnUrl);
             }
 
             // Sign in the user with this external login provider if the user already has a login
@@ -509,6 +513,7 @@ namespace ICARUS.Controllers {
 
         /// <summary>
         /// POST: /Account/ExternalLoginConfirmation
+        /// Creates the User account based on the results from the OAuth Provider
         /// </summary>
         /// <param name="model"></param>
         /// <param name="returnUrl"></param>
@@ -523,17 +528,19 @@ namespace ICARUS.Controllers {
             mdl.Add("Email", model.Email);
             mdl.Add("returnUrl", returnUrl);
 
+            // If already logged in, redirect
             if (User.Identity.IsAuthenticated) {
                 //return RedirectToAction("Index", "Manage");
                 return Json(new Payload(1, "RedirectToAction", mdl, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
             }
 
+            // Otherwise...
             if (ModelState.IsValid) {
                 // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null) {
                     //return View("ExternalLoginFailure");
-                    return Json(new Payload(2, "ExternalLoginFailure", mdl), JsonRequestBehavior.AllowGet);
+                    return Json(new Payload(2, "ExternalLoginFailure", mdl, "info unavailable"), JsonRequestBehavior.AllowGet);
                 } else {
                     mdl.Add("info", info);
                 }

@@ -42,12 +42,24 @@
                 let url = new URL(window.location.href);
                 let returnUrl = url.searchParams.get('returnUrl');
                 let provider = url.searchParams.get('provider');
+                let requestProvider = '@Request["provider"]';
                 setTimeout(() => {
                     console.warn('provider @Request["provider"]', 'url ' + url, 'returnUrl ' + returnUrl);
-                }, 3000)
+                }, 3000);
+
+                /*
+                // Post back to Opener
+                window.opener.postMessage({
+                    returnUrl,
+                    provider,
+                    requestProvider
+                }, returnUrl);
+                */
                 
+                // THIS IS THE FUNCTIONAL OPTION
                 if (returnUrl !== '/') {
                     document.getElementById('login-external').submit();
+                    //$('#login-external').submit();
                 } else {
                     console.log(url, returnUrl, provider);
                 }

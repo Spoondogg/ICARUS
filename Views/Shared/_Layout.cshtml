@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="author" content="Ryan Dunphy" />
     <meta name="description" content="@ViewBag.Description" />
+    <meta name="google-signin-client_id" content="244167453755-ce798hb2fvqmgt32hrdgbo9fj9k6mh74.apps.googleusercontent.com">
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="theme-color" content="#FFF" />
     <meta name="token" content="" />
@@ -37,7 +38,15 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/icarus/vendor.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/dist/icarus/icarus.min.css")" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="@Url.Content("~/Scripts/dist/icarus/vendor.js")"></script>
+    @*
+        <script>
+            // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
+            var manifest = document.querySelector('link[rel=manifest]');
+            if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
+        </script>
+    *@
 </head>
 <body>
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@

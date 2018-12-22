@@ -1,8 +1,9 @@
 /** @module */
-import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
+import CONTAINER, { EL, ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 //import FORM from '../../form/FORM.js';
 //import DIV from '../../div/DIV.js';
+import IFRAME from '../../iframe/IFRAME.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
@@ -16,7 +17,7 @@ export default class MAIN extends CONTAINER {
 	/** Constructs a MAIN Container and populates the DOM with any relevant elements
 	    @param {MODEL} model APP model
     */
-	constructor(model) {
+    constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
         this.addClass('main');
@@ -34,6 +35,7 @@ export default class MAIN extends CONTAINER {
 		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
 		*/
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
+
         this.addNavOptions();
 
         /** The active container has access to keybindings */
@@ -49,9 +51,10 @@ export default class MAIN extends CONTAINER {
         this.navBar.setAttribute('draggable', false); //.el.setAttribute('draggable', 'false');
 		this.navBar.show();
 		if (this.getUser() === 'Guest') {
-			this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
-		}
-	}
+            this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
+            //this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
+        }
+    }
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
@@ -291,11 +294,11 @@ export default class MAIN extends CONTAINER {
 		return this.id;
 	}
 	/** Launches the External Authentication Process
-		The user will be redirected to a third party authenticator
+		The user will be redirected to a third party OAuth authenticator
         @param {string} provider OAuth Provider
         @param {strong} returnUrl Return URL for 3rd party
 	    @returns {void}
-	*/
+	
     loginExternal() {
         console.log('MAIN.loginExternal();');
         let prompt = new PROMPT(new MODEL().set('label', 'Login OAuth2')).createForm().then((form) => {
@@ -321,7 +324,66 @@ export default class MAIN extends CONTAINER {
                 prompt.show();
             });
         });
-	}
+    }*/
+    /** Performs calls to the Google Identity API
+        @returns {void}
+    */
+    loginGoogle() {
+        this.loader.log(99, 'Google Identity').then((loader) => {
+            new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
+                container: this,
+                label: 'Log In - Google API'
+            })).then((form) => {
+                form.footer.buttonGroup.addButton('Login - API').el.onclick = () => {
+                    console.log('Calling Auth2...');
+                    gapi.load('auth2', () => {
+                        gapi.auth2.init().then(() => {
+                            let googleAuth = gapi.auth2.getAuthInstance();
+                            googleAuth.signIn().then((googleUser) => {
+                                // Current User
+                                let currentUser = googleAuth.currentUser.get();
+                                console.log('currentUser', currentUser);
+                                console.log('currentUserId', currentUser.getId());
+
+                                // Google User
+                                console.log('googleUser', googleUser);
+                                console.log('googleUserId', googleUser.getId());
+                                console.log('googleUserIsSignedIn', googleUser.isSignedIn());
+                                console.log('hostedDomain', googleUser.getHostedDomain());
+
+                                let basicProfile = googleUser.getBasicProfile();
+                                console.log('basicInfo', basicProfile);
+                                console.log('id', basicProfile.getId());
+                                console.log('getName', basicProfile.getName());
+                                console.log('givenName', basicProfile.getGivenName());
+                                console.log('familyName', basicProfile.getFamilyName());
+                                console.log('imageUrl', basicProfile.getImageUrl());
+                                console.log('email', basicProfile.getEmail());
+
+                                // https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api
+                                let authResponse = googleUser.getAuthResponse(true);
+                                console.log('authResponse', authResponse);
+                                sessionStorage.setItem('access_token', authResponse.access_token);
+
+                                /*
+                                console.log('Hello ' + basicProfile.getEmail() + ', a user is being created for you');
+                                $.post('/Account/ExternalLoginConfirmation?returnUrl=%2F', {
+                                    '__RequestVerificationToken': this.token,
+                                    'Email': basicProfile.getEmail()
+                                }, (response) => {
+                                    console.log('Response', response);
+                                });
+                                */
+                            });
+                        });
+                    });
+                }
+                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                loader.log(100).then(() => form.getDialog().show());
+            });
+        });
+    }
+
 	/** Log into the application using the given credentials
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
@@ -340,10 +402,12 @@ export default class MAIN extends CONTAINER {
                     createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                 ]);
                 form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-                form.footer.buttonGroup.addButton('Register - Local').el.onclick = this.register;
+                form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
                 //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
-                form.footer.buttonGroup.addButton('Login - Google').el.onclick = () => this.loginOAuth('Google');
-                form.footer.buttonGroup.addButton('Login - Facebook').el.onclick = () => this.loginOAuth('Facebook');
+                form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => this.loginOAuth('Google');
+                form.footer.buttonGroup.addButton('Login - Google API').el.onclick = () => this.loginGoogle();
+                
+                //form.footer.buttonGroup.addButton('Login - Facebook').el.onclick = () => this.loginOAuth('Facebook');
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
                 loader.log(100).then(() => form.getDialog().show());
             });
@@ -373,8 +437,13 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     register() {
-        this.loader.log(99, 'Launching Registration...', true).then((loader) => {
-            let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm((form) => {
+        this.loader.log(99, 'Register', true).then((loader) => {
+            let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm(
+                new MODEL().set({
+                    container: this,
+                    label: 'Register'
+                })
+            ).then((form) => {
                 form.setAction('/Account/Register');
                 form.id = 0;
                 form.label = 'Register';
@@ -388,7 +457,7 @@ export default class MAIN extends CONTAINER {
                 form.afterSuccessfulPost = (payload, status) => {
                     this.ajaxRefreshIfSuccessful(payload, status);
                 }
-                loader.log(100).then(() => prompt.show());
+                loader.log(100).then(() => form.getDialog().show());
             });
         });
     }
