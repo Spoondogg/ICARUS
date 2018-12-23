@@ -23,7 +23,7 @@ export default class FORMELEMENT extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
 	construct() {
-        Promise.resolve(this);
+        return Promise.resolve(this);
     }
     /** Sets the label of this element to the given value.
         @param {string} label The name to be set

@@ -12,8 +12,7 @@ export default class ARTICLE extends CONTAINER {
 	constructor(node, model) {
         super(node, 'ARTICLE', model, ['JUMBOTRON', 'SECTION']);
         this.addClass('article');
-        this.populate(model.children);
-        this.ifEmpty();
+        this.populate(model.children).then(() => this.ifEmpty());
 	}
     construct() {
         return Promise.resolve(this);

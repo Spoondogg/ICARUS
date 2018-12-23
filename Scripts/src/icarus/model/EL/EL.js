@@ -22,7 +22,8 @@ export default class EL extends MODEL {
 		this.node = node; // The parent EL (or Body) that this ELEMENT is within        
 		this.className = this.constructor.name;
 		this.element = element || HtmlElement.DEFAULT; // Html Element that this EL represents
-		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
+        this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
+        this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
         /** An array of MODELS that are children of this EL
             @property {Array<MODEL>} children 
         */
@@ -585,12 +586,9 @@ export default class EL extends MODEL {
             if (children) {
                 try {
                     let msg = this.className + '.populate(' + children.length + ');';
-                    this.getMain().loader.log(0, msg).then(() => {
-                        children.forEach((c) => this.create(c));
-                        this.getMain().loader.log(100).then(() => {
-                            resolve(this);
-                        });
-                    });
+                    this.getMain().loader.log(10, msg)
+                        .then((loader) => Promise.all(children.map((c) => this.create(c)))
+                            .then(() => loader.log(100).then(() => resolve(this))));
                 } catch (e) {
                     reject(e);
                 }
