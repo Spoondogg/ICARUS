@@ -18,21 +18,28 @@ export default class CALLOUT extends CONTAINER {
 		this.setClass('col-lg-4');
         this.body.pane.addClass('callout');
 	}
-	construct() {
-		if (this.dataId > 0) {
-			if (this.data.icon) {
-				this.icon = new GLYPHICON(this.body.pane, this.data.icon);
-			}
-			if (this.data.header) {
-                this.createEditableElement('header', this.body.pane).then((header) => {
-                    if (this.data.align) {
-                        header.el.setAttribute('style', 'text-align:' + this.data.align + ';');
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.dataId > 0) {
+                    if (this.data.icon) {
+                        this.icon = new GLYPHICON(this.body.pane, this.data.icon);
                     }
-                });
-			}
-			if (this.data.p) {
-                this.createEditableElement('p', this.body.pane);
-			}
-		}
+                    if (this.data.header) {
+                        this.createEditableElement('header', this.body.pane).then((header) => {
+                            if (this.data.align) {
+                                header.el.setAttribute('style', 'text-align:' + this.data.align + ';');
+                            }
+                        });
+                    }
+                    if (this.data.p) {
+                        this.createEditableElement('p', this.body.pane);
+                    }
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }

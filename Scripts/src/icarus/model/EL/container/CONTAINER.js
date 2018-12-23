@@ -91,16 +91,24 @@ export default class CONTAINER extends GROUP {
         this.body = new CONTAINERBODY(this, model);
         this.body.clickHandler(() => this.body.select(), () => this.toggleNav());
         //this.body.clickHandler(() => false, () => this.body.select(), () => this.toggleNav());
-        this.addNavBarDefaults();
-        this.addDefaultContainers(containers);
-		this.setDefaultVisibility(model);
-        this.construct();
+        this.addNavBarDefaults().then(() => {
+            this.addDefaultContainers(containers)
+                .then((container) => {
+                    this.construct()
+                        .then((cont) => cont.setDefaultVisibility(model))
+                        .catch((e) => {
+                            console.log('FAIL', e);
+                        });
+                }).catch((e) => {
+                    console.log('FAIL2', e, this.className, this);
+                });
+            });
         //this.ifEmpty();
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
 		@abstract
-	    @returns {void}
+	    @returns {Promise<ThisType>} callback
 	*/
 	construct() {
 		if (this.className !== 'CONTAINER') {
@@ -255,13 +263,21 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Adds the default Container Cases to the CRUD Menu
 	    @param {Array} containerList An array of container class names
-	    @returns {void}
+	    @returns {Promise<ThisType>} callback
 	*/
 	addDefaultContainers(containerList) {
-        // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
-        let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
-        containerList.splice(2, 0, ...defaultContainers);
-        containerList.forEach((c) => this.addContainerCase(c));
+        return new Promise((resolve, reject) => {
+            try {
+                // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
+                let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
+                containerList.splice(2, 0, ...defaultContainers);
+                containerList.forEach((c) => this.addContainerCase(c));
+                resolve(this);
+            } catch (e) {
+                //reject(e);
+                resolve(this);
+            }
+        });
 	}
 	/** Drag containers by their NavBars
 	    @see https://www.w3schools.com/jsref/event_ondrag.asp
@@ -345,13 +361,22 @@ export default class CONTAINER extends GROUP {
         based on the current model
         @returns {void}
     */
-	refresh() {
-		console.log(0, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']');
-		this.body.pane.empty();
-		const [...children] = this.body.pane.children;
-		this.body.pane.children = [];
-		this.construct();
-		this.populate(children);
+    refresh() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
+                    this.body.pane.empty().then((container) => {
+                        const [...children] = this.body.pane.children;
+                        this.body.pane.children = [];
+                        this.construct().then(
+                            () => this.populate(children).then(
+                                () => resolve(this)));
+                    });
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
     /** Closes parent menus
         @param {GROUP} group Menu Group
@@ -385,76 +410,109 @@ export default class CONTAINER extends GROUP {
     /** Creates a collection of NavItems that close Menus on mouseup
         @param {Array<string>} arr List of NavItem labels
         @param {GROUP} group The NavItem Group to add items to (ie: CRUD, DOM)
-        @returns {any} An object containing NavItems
+        @returns {Promise<object>} An object containing NavItems
     */
     createNavItems(arr, group) {
-        let items = {};
-        arr.forEach((i) => {
-            items[i] = this.createNavItem(i, group);
+        return new Promise((resolve, reject) => {
+            try {
+                let items = {};
+                arr.forEach((i) => {
+                    items[i] = this.createNavItem(i, group);
+                });
+                resolve(items);
+            } catch (e) {
+                console.warn(this.className + '.createNavItems()', e);
+                reject(e);
+            }
         });
-        return items;
     }
 
     /** Adds default groups to the Option Menu
 	    @returns {GROUP} A Menu Group
 	*/
     addOptionGroups() {
-        let group = this.navBar.menu.menu.getGroup('OPTIONS');
-        let items = this.createNavItems(['ELEMENTS', 'CRUD', 'DOM', 'USER'], group);
-        items.ELEMENTS.el.onmouseup = () => false;
-        items.ELEMENTS.el.onclick = (ev) => {
-            console.log('ELEMENTS');
-            this.navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
-            ev.stopPropagation();
-            ev.preventDefault();
-        }
-        items.CRUD.el.onclick = () => {
-            console.log('CRUD');
-            this.navBar.menu.toggleCollapse().menu.getGroup('CRUD').toggleCollapse();
-        }
-        items.DOM.el.onclick = () => {
-            console.log('DOM');
-        }
-        items.USER.el.onclick = () => {
-            console.log('USER');
-        }
-        return group;
+        return new Promise((resolve, reject) => {
+            try {
+                let group = this.navBar.menu.menu.getGroup('OPTIONS');
+                let items = this.createNavItems(['ELEMENTS', 'CRUD', 'DOM', 'USER'], group);
+                items.ELEMENTS.el.onmouseup = () => false;
+                items.ELEMENTS.el.onclick = (ev) => {
+                    console.log('ELEMENTS');
+                    this.navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                }
+                items.CRUD.el.onclick = () => {
+                    console.log('CRUD');
+                    this.navBar.menu.toggleCollapse().menu.getGroup('CRUD').toggleCollapse();
+                }
+                items.DOM.el.onclick = () => {
+                    console.log('DOM');
+                }
+                items.USER.el.onclick = () => {
+                    console.log('USER');
+                }
+                resolve(group);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
 	/** Adds default items to the DOM Menu
 	    @returns {GROUP} A Menu Group
 	*/
-    addDomItems() {        
-        let group = this.navBar.menu.menu.getGroup('DOM');
-        let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], group);
-        items.UP.el.onclick = () => this.up();
-        items.DOWN.el.onclick = () => this.down();
-        items.REFRESH.el.onclick = () => this.refresh();
-        items.REMOVE.el.onclick = () => this.remove();
-        items.DELETE.el.onclick = () => this.disable();
-        items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
-        return group;
+    addDomItems() {  
+        return new Promise((resolve, reject) => {
+            try {
+                let group = this.navBar.menu.menu.getGroup('DOM');
+                let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], group);
+                items.UP.el.onclick = () => this.up();
+                items.DOWN.el.onclick = () => this.down();
+                items.REFRESH.el.onclick = () => this.refresh();
+                items.REMOVE.el.onclick = () => this.remove();
+                items.DELETE.el.onclick = () => this.disable();
+                items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+                //return group;
+                resolve(group);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
     /** Adds the CRUD Nav Items
-        @returns {GROUP} A Menu Group
+        @returns {Promise<GROUP>} A Menu Group
 	*/
     addCrudItems() {
-        let group = this.navBar.menu.menu.getGroup('CRUD');
-        let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], group);
-        items.LOAD.el.onclick = () => this.load();
-        items.SAVEAS.el.onclick = () => this.save();
-        items.SAVE.el.onclick = () => this.save(true);
-        return group;
+        return new Promise((resolve, reject) => {
+            this.loader.log(10, this.className + '.addCrudItems()').then((loader) => {
+                try {
+                    let group = this.navBar.menu.menu.getGroup('CRUD');
+                    let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], group);
+                    items.LOAD.el.onclick = () => this.load();
+                    items.SAVEAS.el.onclick = () => this.save();
+                    items.SAVE.el.onclick = () => this.save(true);
+                    loader.log(100).then(() => resolve(group));
+                } catch (e) {
+                    loader.log(0).then(() => reject(e));
+                }
+            });
+        });
     }
 	/** Adds default DOM, CRUD and ELEMENT Nav Items to the Option Dropdown Menu
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
     addNavBarDefaults() {
-        if (this.navBar.menu.menu) {
-            this.addOptionGroups();
-			this.addDomItems();
-            this.addCrudItems();
-		}
+        return new Promise((resolve) => {
+            if (this.navBar.menu.menu) {
+                Promise.all([
+                    this.addOptionGroups,
+                    this.addDomItems,
+                    this.addCrudItems
+                ]);
+            }
+            resolve(this);
+        });
 	}
 	/** Adds a button to the options menu that promises to construct the given CONTAINER name
         @param {string} className CONTAINER class name to construct

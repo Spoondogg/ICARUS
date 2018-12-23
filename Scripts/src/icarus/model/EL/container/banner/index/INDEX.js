@@ -21,23 +21,33 @@ export default class INDEX extends BANNER {
 		super(node, model);
 		this.addClass('index');
 	}
-	construct() {
-		this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
-			'label': 'INDEX',
-			'collapsed': 1,
-			'showHeader': 1
-		}));
-		['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
-			this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
-				'icon': ICONS[element.toUpperCase()],
-				'label': element,
-				'dataId': -1,
-				'data': {
-					'header': element,
-					'p': '&nbsp;'
-				}
-			})));
-		});
+    construct() {
+        return new Promise((resolve, reject) => {
+            this.getLoader().log(20, this.className).then((loader) => {
+                try {
+                    this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
+                        label: 'INDEX',
+                        collapsed: 1,
+                        showHeader: 1
+                    }));
+
+                    ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
+                        this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
+                            icon: ICONS[element.toUpperCase()],
+                            label: element,
+                            dataId: -1,
+                            data: {
+                                header: element,
+                                p: '&nbsp;'
+                            }
+                        })));
+                    });
+                    loader.log(100).then(() => resolve(this));
+                } catch (e) {
+                    loader.log(0).then(() => reject(e));
+                }
+            });
+        });
 	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
@@ -46,18 +56,23 @@ export default class INDEX extends BANNER {
 	    @returns {void}
 	    @async
 	*/
-	addThumbButtonActions(element, thumb) {
-		$.post('/' + element + '/List', {
-			'__RequestVerificationToken': this.getToken()
-		}, (payload, status) => {
-			if (status === 'success') {
-				let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
-				thumb.el.setAttribute('title', str);
-				thumb.el.onclick = () => {
-					this.launchModal(payload.className, str, payload.className, payload.list);
-				};
-			}
-		});
+    addThumbButtonActions(element, thumb) {
+        return new Promise((resolve, reject) => {
+            try {
+                $.post('/' + element + '/List', {
+                    '__RequestVerificationToken': this.getToken()
+                }, (payload, status) => {
+                    if (status === 'success') {
+                        let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
+                        thumb.el.setAttribute('title', str);
+                        thumb.el.onclick = () => this.launchModal(payload.className, str, payload.className, payload.list);
+                    }
+                    resolve(this);
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Creates the Modal that contains the list of objects for preview
         @todo Consider paging these results

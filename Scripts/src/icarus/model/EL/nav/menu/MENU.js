@@ -54,7 +54,7 @@ export default class MENU extends UL {
         return new Promise((resolve, reject) => {
             try {
                 let selected = $('.selected');
-                console.log('Select Count: ' + selected.length, selected);
+                //console.log('Select Count: ' + selected.length, selected);
                 if (selected.length > 0) {
                     selected.each((i) => selected[i].dispatchEvent(new Deselect(this)));                    
                 }

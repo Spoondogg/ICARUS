@@ -66,32 +66,40 @@ export default class CHAT extends CONTAINER {
 	/** Adds a statement to the conversation window
         @param {string} username User name
         @param {string} string Statement
-        @returns {EL} The statement object
+        @returns {Promise<EL>} The statement object
         @todo Consider creating a STATEMENT EL
     */
-	addStatement(username, string) {
-		let statement = new DIV(this.body.pane, new MODEL('statement'));
-		statement.el.style.display = 'none';
-		statement.thumb = new DIV(statement, new MODEL(new ATTRIBUTES({
-			'class': 'thumb'
-		})));
-		statement.thumb.img = new IMG(statement.thumb, new MODEL(new ATTRIBUTES({
-			'class': 'user-photo',
-			'src': 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'
-		})));
-		statement.bubble = new DIV(statement, new MODEL('bubble'));
-		statement.bubble.panel = new DIV(statement.bubble, new MODEL('panel panel-default'));
-		statement.bubble.panel.heading = new DIV(statement.bubble.panel, new MODEL('panel-heading'));
-		statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL(), username);
-		statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL(), 'commented X mins ago');
-		statement.bubble.panel.body = new DIV(statement.bubble.panel, new MODEL('panel-body'), string);
-		$(statement.el).fadeIn(500);
-		$(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
-		return statement;
+    addStatement(username, string) {
+        return new Promise((resolve, reject) => {
+            let statement = new DIV(this.body.pane, new MODEL('statement'));
+            statement.el.style.display = 'none';
+            statement.thumb = new DIV(statement, new MODEL(new ATTRIBUTES({
+                'class': 'thumb'
+            })));
+            statement.thumb.img = new IMG(statement.thumb, new MODEL(new ATTRIBUTES({
+                'class': 'user-photo',
+                'src': 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'
+            })));
+            statement.bubble = new DIV(statement, new MODEL('bubble'));
+            statement.bubble.panel = new DIV(statement.bubble, new MODEL('panel panel-default'));
+            statement.bubble.panel.heading = new DIV(statement.bubble.panel, new MODEL('panel-heading'));
+            statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL(), username);
+            statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL(), 'commented X mins ago');
+            statement.bubble.panel.body = new DIV(statement.bubble.panel, new MODEL('panel-body'), string);
+            $(statement.el).fadeIn(500);
+            $(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
+            resolve(statement);
+        });
 	}
-	construct() {
-		setTimeout(() => {
-			this.addStatement('ICARUS', 'Hello ' + this.user);
-		}, 2000);
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
+                }, 2000);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }

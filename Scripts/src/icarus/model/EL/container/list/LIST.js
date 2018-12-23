@@ -18,7 +18,9 @@ export default class LIST extends CONTAINER {
 		this.addClass('list');
 		this.populate(model.children);
 	}
-	construct() {}
+    construct() {
+        return Promise.resolve(this);
+    }
 	/**
 	    Adds a List Item (LI) to this LIST
 	    @param {MODEL} model List Item Model

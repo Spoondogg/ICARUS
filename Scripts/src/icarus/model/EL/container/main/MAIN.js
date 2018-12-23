@@ -47,13 +47,20 @@ export default class MAIN extends CONTAINER {
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
         this.populate(model.children);
 	}
-	construct() {
-        this.navBar.setAttribute('draggable', false); //.el.setAttribute('draggable', 'false');
-		this.navBar.show();
-		if (this.getUser() === 'Guest') {
-            this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
-            //this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
-        }
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.navBar.setAttribute('draggable', false);
+                if (this.getUser() === 'Guest') {
+                    this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
+                }
+                this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
+                this.navBar.show();
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
@@ -251,7 +258,7 @@ export default class MAIN extends CONTAINER {
                                 this.body.pane.empty().then(() => {
                                     this.setId(this.id);
                                     this.setLabel(payload.model.label);
-                                    this.populate(payload.model.children).then(() => resolve());
+                                    this.populate(payload.model.children).then(() => resolve(this));
                                 });
                             } catch (e) {
                                 console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
@@ -263,7 +270,7 @@ export default class MAIN extends CONTAINER {
                     });
                 } else {
                     console.log('Invalid Id to Load');
-                    resolve();
+                    resolve(this);
                 }
                 
             } catch (e) {

@@ -18,15 +18,22 @@ export default class JUMBOTRON extends CONTAINER {
 	/** Override abstract method
         @returns {void}
     */
-	construct() {
-		if (this.dataId > 0) {
-			this.screen = new DIV(this.body.pane, new MODEL('screen'));
-			this.setScreenColor();
-            this.createEditableElement('header', this.screen);
-            this.createEditableElement('p', this.screen);
-			this.loadBgImage();
-			this.setBgColor();
-		}
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.dataId > 0) {
+                    this.screen = new DIV(this.body.pane, new MODEL('screen'));
+                    this.setScreenColor();
+                    this.createEditableElement('header', this.screen);
+                    this.createEditableElement('p', this.screen);
+                    this.loadBgImage();
+                    this.setBgColor();
+                    resolve(this);
+                }
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
         @returns {Promise<boolean>} Returns true on success

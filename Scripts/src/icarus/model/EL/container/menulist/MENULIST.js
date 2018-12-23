@@ -22,9 +22,14 @@ export default class MENULIST extends CONTAINER {
 		//this.populate(model.children);
 	}
 	construct() {
-		this.menu = new MENU(this.body.pane, new MODEL('menulist-menu').set({
-			'label': this.label
-		}));
+        return new Promise((resolve, reject) => {
+            try {
+                this.menu = new MENU(this.body.pane, new MODEL('menulist-menu').set('label', this.label));
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }
 export { LI, MENU, UL };

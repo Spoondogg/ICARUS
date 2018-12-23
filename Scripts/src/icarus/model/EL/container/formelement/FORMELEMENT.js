@@ -20,10 +20,10 @@ export default class FORMELEMENT extends CONTAINER {
 	}
 	/** Construct with an associated LABEL element
         Sets a default label of '__NoLabel' if none is provided
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
 	construct() {
-		
+        Promise.resolve(this);
     }
     /** Sets the label of this element to the given value.
         @param {string} label The name to be set

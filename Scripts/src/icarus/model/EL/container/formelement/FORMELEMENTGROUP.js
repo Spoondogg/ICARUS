@@ -21,9 +21,16 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		this.populate(model.children);
 	}
     construct() {
-        if (this.dataId > 0) {
-            this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.dataId > 0) {
+                    this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 	/** Adds the given array of FORMELEMENT(s) to this group
 	    @param {Array<FORMELEMENT>} inputs A list of inputs
