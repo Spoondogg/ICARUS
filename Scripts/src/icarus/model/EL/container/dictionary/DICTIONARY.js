@@ -17,5 +17,7 @@ export default class DICTIONARY extends CONTAINER {
 		super(node, 'DIV', model, ['WORD']);
 		this.populate(model.children);
 	}
-	construct() {}
+    construct() {
+        return Promise.resolve(this);
+    }
 }

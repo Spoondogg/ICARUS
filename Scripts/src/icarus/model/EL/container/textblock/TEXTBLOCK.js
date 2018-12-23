@@ -20,10 +20,17 @@ export default class TEXTBLOCK extends CONTAINER {
 	/** Override abstract method
 	    @returns {void}
 	*/
-	construct() {
-		if (this.dataId > 0) {
-			this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
-			this.text.el.ondblclick = () => this.save()
-		}
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.dataId > 0) {
+                    this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
+                    this.text.el.ondblclick = () => this.save()
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }

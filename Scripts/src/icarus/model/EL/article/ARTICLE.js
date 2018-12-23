@@ -15,5 +15,7 @@ export default class ARTICLE extends CONTAINER {
         this.populate(model.children);
         this.ifEmpty();
 	}
-    construct() { }
+    construct() {
+        return Promise.resolve(this);
+    }
 }

@@ -20,7 +20,9 @@ export default class BANNER extends CONTAINER {
 		this.body.pane.addClass('banner');
 		this.populate(model.children);
 	}
-	construct() {}
+    construct() {
+        return Promise.resolve(this);
+    }
 	/** Returns the parent container for this container or null if it does not exist
 	    @returns {CONTAINER} The parent container for this container
 	*/

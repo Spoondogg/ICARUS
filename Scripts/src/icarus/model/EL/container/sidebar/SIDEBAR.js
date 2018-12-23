@@ -15,5 +15,7 @@ export default class SIDEBAR extends CONTAINER { // NAVBAR
 		super(node, 'ASIDE', model, ['SECTION', 'FORM', 'LIST', 'MENULIST']);
 		this.addClass('sidebar');
 	}
-	construct() {}
+    construct() {
+        return Promise.resolve(this);
+    }
 }

@@ -24,8 +24,8 @@ export default class LOADER extends DIALOG {
 		this.progress = new DIV(this.body, new MODEL('progress'));
         this.progressBar = new PROGRESSBAR(this.progress, new MODEL());
         this.console = new CONSOLE(this.body, new MODEL('console collapse')); //in
-		this.progressBar.el.onclick = () => $(this.console.el).collapse('toggle');
-        this.log(value);        
+        this.progressBar.el.onclick = () => $(this.console.el).collapse('toggle');
+        this.log(value);
         //this.el.onclick = this.overrideCloseOnFocusOut;
     }
     /** Prevents the LOADER from closing when it loses focus
@@ -54,13 +54,14 @@ export default class LOADER extends DIALOG {
                     this.progressBar.text.setInnerHTML(txt);
                     this.console.addEntry(text);
                 }
-                if (show) {
-                    this.show();
-                }
-                if (value === 100 && delay > 0) {
-                    setTimeout(() => this.hide().then((loader) => resolve(loader)), delay);
+                if (value < 100) {
+                    clearTimeout(this.logTimer);
+                    resolve(show ? this.show() : this);
                 } else {
-                    resolve(this);
+                    this.logTimer = window.setTimeout(() => {
+                        clearTimeout(this.logTimer);
+                        setTimeout(() => this.hide().then((loader) => resolve(loader)), delay);
+                    }, delay);
                 }
             } catch (e) {
                 reject(e);

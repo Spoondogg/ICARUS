@@ -55,9 +55,12 @@ export default class FORM extends CONTAINER {
         }
     }
     /** Perform async tasks for FORM
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
-    construct() { /* this.addInputs(model.inputs); //this.addButtons(model.buttons); */ }
+    construct() {
+        //this.addInputs(model.inputs); //this.addButtons(model.buttons);
+        return Promise.resolve(this);
+    }
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element

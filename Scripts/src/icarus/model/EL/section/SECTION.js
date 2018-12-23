@@ -14,5 +14,7 @@ export default class SECTION extends CONTAINER {
 		super(node, 'SECTION', model, ['FORM']);
 		this.populate(model.children);
 	}
-	construct() {}
+    construct() {
+        return Promise.resolve(this);
+    }
 }

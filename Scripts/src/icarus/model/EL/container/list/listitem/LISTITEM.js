@@ -19,11 +19,18 @@ export default class LISTITEM extends CONTAINER {
 		super(node, 'LI', model, ['LIST']);
 		this.populate(model.children);
 	}
-	construct() {
-		if (this.dataId > 0 || this.dataId === -1) {
-			if (this.data.p) {
-				this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
-			}
-		}
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.dataId > 0 || this.dataId === -1) {
+                    if (this.data.p) {
+                        this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
+                    }
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 }
