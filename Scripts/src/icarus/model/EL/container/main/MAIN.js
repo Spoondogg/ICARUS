@@ -1,9 +1,9 @@
 /** @module */
-import CONTAINER, { EL, ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
+import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 //import FORM from '../../form/FORM.js';
 //import DIV from '../../div/DIV.js';
-import IFRAME from '../../iframe/IFRAME.js';
+//import IFRAME from '../../iframe/IFRAME.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
@@ -467,7 +467,7 @@ export default class MAIN extends CONTAINER {
     */
     register() {
         this.loader.log(99, 'Register', true).then((loader) => {
-            let prompt = new PROMPT(new MODEL().set('label', 'Register')).createForm(
+            new PROMPT(new MODEL().set('label', 'Register')).createForm(
                 new MODEL().set({
                     container: this,
                     label: 'Register'

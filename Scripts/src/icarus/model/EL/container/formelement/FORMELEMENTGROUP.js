@@ -18,15 +18,19 @@ export default class FORMELEMENTGROUP extends CONTAINER {
         this.addClass('form-element-group');
 		this.navBar.menu.menu.getGroup('ELEMENTS').empty();
         ['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
-		this.populate(model.children);
-	}
-    construct() {
+		
+    }
+    /** Perform any async actions and populate this Container
+        @param {Array<MODEL>} children Array of elements to add to this container's body
+        @returns {Promise<ThisType>} callback
+    */
+    construct(children) {
         return new Promise((resolve, reject) => {
             try {
                 if (this.dataId > 0) {
                     this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
                 }
-                resolve(this);
+                this.populate(children).then(() => resolve(this));
             } catch (e) {
                 reject(e);
             }

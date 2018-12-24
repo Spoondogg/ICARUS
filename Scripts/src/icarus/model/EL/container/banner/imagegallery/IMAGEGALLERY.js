@@ -25,7 +25,51 @@ export default class IMAGEGALLERY extends BANNER {
 		this.footer = new FOOTER(this, new MODEL());
 		$(this.pagination.el).insertAfter(this.body.pane.el);
 		this.loadPage(this.page);
-	}
+    }
+    construct() {
+        let postUrl = '/ImageGallery/ImageIndex';
+        if (this.page) {
+            postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;
+        }
+        $.post(postUrl, {
+            '__RequestVerificationToken': this.getMain().token //token.value
+        },
+			/** Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
+				@param {any} payload The POST payload
+				@param {any} status The POST status
+			    @returns {void}
+			*/
+            (payload, status) => {
+                if (status === 'success') {
+                    this.pageTotal = payload.total;
+                    for (let l = 0; l < payload.list.length; l++) {
+                        let thumb = new NAVTHUMBNAIL(this.body.pane, new MODEL().set({
+                            label: payload.list[l].label,
+                            dataId: -1,
+                            data: {
+                                header: payload.list[l].label,
+                                p: 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']',
+                                img: payload.list[l].id,
+                                showImageDetails: true
+                            }
+                        }));
+                        if (payload.list[l].id === 0) {
+                            thumb.image.el.setAttribute('style', 'display:none;');
+                        }
+                        thumb.button.el.onclick = () => this.launchMain(payload.list[l].id);
+                    }
+                    if (!this.pagination.buttonGroup.loaded) {
+                        //console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
+                        this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
+                        //console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
+                        for (let p = 0; p < this.pageCount; p++) {
+                            this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => this.loadPage(p);
+                        }
+                        this.pagination.buttonGroup.loaded = true;
+                    }
+                }
+            });
+    }
 	/** Creates a Pagination button group as a footer
 	    @returns {FOOTER} A pagination footer
 	*/
@@ -42,50 +86,6 @@ export default class IMAGEGALLERY extends BANNER {
 		pagination.btnNext.el.setAttribute('style', 'margin-left:1em;');
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
-	}
-	construct() {
-		let postUrl = '/ImageGallery/ImageIndex';
-		if (this.page) {
-			postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;
-		}
-		$.post(postUrl, {
-				'__RequestVerificationToken': this.getMain().token //token.value
-			},
-			/** Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
-				@param {any} payload The POST payload
-				@param {any} status The POST status
-			    @returns {void}
-			*/
-			(payload, status) => {
-				if (status === 'success') {
-					this.pageTotal = payload.total;
-					for (let l = 0; l < payload.list.length; l++) {
-						let thumb = new NAVTHUMBNAIL(this.body.pane, new MODEL().set({
-							label: payload.list[l].label,
-							dataId: -1,
-							data: {
-								header: payload.list[l].label,
-								p: 'Launch ' + payload.list[l].label + ' (' + payload.list[l].id + ')<br>' + payload.className + '[' + payload.list[l].index + ']',
-								img: payload.list[l].id,
-								showImageDetails: true
-							}
-						}));
-						if (payload.list[l].id === 0) {
-							thumb.image.el.setAttribute('style', 'display:none;');
-						}
-						thumb.button.el.onclick = () => this.launchMain(payload.list[l].id);
-					}
-					if (!this.pagination.buttonGroup.loaded) {
-						//console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
-						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-						//console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
-						for (let p = 0; p < this.pageCount; p++) {
-							this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => this.loadPage(p);
-						}
-						this.pagination.buttonGroup.loaded = true;
-					}
-				}
-			});
 	}
 	/** Sets the page variables and reconstructs
 		@param {any} page A page to load

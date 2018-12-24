@@ -15,8 +15,14 @@ export default class LIST extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'UL', model, ['LISTITEM']);
 		this.addClass('list');
-		this.populate(model.children);
-	}
+    }
+    /** Perform any async actions and populate this Container
+        @param {Array<MODEL>} children Array of elements to add to this container's body
+        @returns {Promise<ThisType>} callback
+    */
+    construct(children) {
+        return this.populate(children).then(() => this.ifEmpty());
+    }
 	/** Adds a List Item (LI) to this LIST
 	    @param {MODEL} model List Item Model
 	    @returns {LISTITEM} A list item
