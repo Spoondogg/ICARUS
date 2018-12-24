@@ -97,10 +97,10 @@ export default class CONTAINER extends GROUP {
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
 		@abstract
-        @param {Array<MODEL>} children Array of children to construct
+        param {Array<MODEL>} children Array of children to construct
 	    @returns {Promise<ThisType>} callback
 	*/
-    construct(children) {
+    construct() { // children
         return Promise.resolve(this);
         /*if (this.className !== 'CONTAINER') {
             let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.';
@@ -275,7 +275,7 @@ export default class CONTAINER extends GROUP {
                     let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
                     containerList.splice(2, 0, ...defaultContainers);
                     //containerList.forEach((c) => this.addContainerCase(c));
-                    Promise.all([containerList.map((c) => this.addContainerCase(c))]).then((promises) => resolve(this));
+                    Promise.all([containerList.map((c) => this.addContainerCase(c))]).then(() => resolve(this));
                 } else {
                     resolve(this);
                 }
@@ -371,12 +371,12 @@ export default class CONTAINER extends GROUP {
             try {
                 this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
                     this.body.pane.empty()
-                        .then((container) => {
+                        .then(() => { //container
                             const [...children] = this.body.pane.children;
                             this.body.pane.children = [];
-                            this.construct()
+                            this.construct(children)
                                 //.then(() => this.populate(children))
-                                .then(() => resolve(this));
+                                .then(() => loader.log(100).then(() => resolve(this)));
                         });
                 });
             } catch (e) {

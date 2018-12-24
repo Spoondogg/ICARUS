@@ -579,7 +579,7 @@ export default class EL extends MODEL {
 	}
 	/** Creates given elements as children of this element
 	    @param {array} children Array of children object models to be constructed
-	    @returns {EL} This EL
+	    @returns {Promise<ThisType>} callback
 	*/
     populate(children) {        
         return new Promise((resolve, reject) => {

@@ -31,7 +31,7 @@ export default class FORMINPUT extends FORMELEMENT {
         @todo file, text, number, email, phone (html5 inputs) 
         @todo This should use a factory constructor pattern to create specific input types
     */
-	createInput() {		
+	createInput() {
 		switch (this.attributes.type) {
 			case 'HIDDEN':
 				this.collapse();

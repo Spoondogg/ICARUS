@@ -11,6 +11,12 @@ export default class DICTIONARY extends CONTAINER {
 	*/
 	constructor(node, model) {
 		super(node, 'DIV', model, ['WORD']);
-		this.populate(model.children);
-	}
+    }
+    /** Perform any async actions and populate this Container
+        @param {Array<MODEL>} children Array of elements to add to this container's body
+        @returns {Promise<ThisType>} callback
+    */
+    construct(children) {
+        return this.populate(children);
+    }
 }

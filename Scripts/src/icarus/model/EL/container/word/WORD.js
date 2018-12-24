@@ -12,7 +12,7 @@ export default class WORD extends CONTAINER {
 	    @param {MODEL} model The SECTION object retrieves from the server
 	*/
 	constructor(node, model) {
-		super(node, 'DIV', model);
+        super(node, 'DIV', model);
 	}
     construct() {
         return new Promise((resolve, reject) => {

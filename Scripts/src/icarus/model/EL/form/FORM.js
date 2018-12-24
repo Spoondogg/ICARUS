@@ -33,7 +33,7 @@ export default class FORM extends CONTAINER {
 			this.post();
 			return false;
 		};
-        this.populate(model.children);
+        //this.populate(model.children);
         // Set focused container for relevant keyBindings
         this.el.addEventListener('focusin', () => this.setFocus('focusin'));
         this.el.addEventListener('focusout', () => this.setFocus('focusout'));        
@@ -42,6 +42,13 @@ export default class FORM extends CONTAINER {
             this.post();
             return false;
         };
+    }
+    /** Perform any async actions and populate this Container
+        @param {Array<MODEL>} children Array of elements to add to this container's body
+        @returns {Promise<ThisType>} callback
+    */
+    construct(children) {
+        return this.populate(children).then(() => this.ifEmpty());
     }
     /** Sets the focused container to this FORM to listen for appropriate key bindings
         @param {string} eventName Name of event
