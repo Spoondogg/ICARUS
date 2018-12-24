@@ -5,8 +5,7 @@ import CONTAINER from '../container/CONTAINER.js';
     @extends CONTAINER
 */
 export default class SECTION extends CONTAINER {
-	/**
-	    Constructs a SECTION Container Element
+	/** Constructs a SECTION Container Element
 	    @param {ARTICLE} node The ARTICLE to contain the section
 	    @param {MODEL} model The SECTION object retrieves from the server
     */
@@ -14,7 +13,4 @@ export default class SECTION extends CONTAINER {
 		super(node, 'SECTION', model, ['FORM']);
 		this.populate(model.children);
 	}
-    construct() {
-        return Promise.resolve(this);
-    }
 }

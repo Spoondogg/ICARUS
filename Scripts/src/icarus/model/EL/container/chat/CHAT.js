@@ -49,7 +49,18 @@ export default class CHAT extends CONTAINER {
 		this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
 		console.log('Chat Input', this.chatInput);
 		this.chatInput.el.onkeypress = this.postStatement.bind(this);
-	}
+    }
+    construct() {
+        return new Promise((resolve, reject) => {
+            try {
+                setTimeout(() => {
+                    this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
+                }, 2000);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 	/** Posts the chat statement to the server and handles any responses
         when the user presses ENTER 
         @returns {boolean} True if succeeds
@@ -89,17 +100,6 @@ export default class CHAT extends CONTAINER {
             $(statement.el).fadeIn(500);
             $(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
             resolve(statement);
-        });
-	}
-    construct() {
-        return new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
-                }, 2000);
-            } catch (e) {
-                reject(e);
-            }
         });
 	}
 }

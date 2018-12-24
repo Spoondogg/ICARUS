@@ -91,36 +91,45 @@ export default class CONTAINER extends GROUP {
         this.body.clickHandler(() => this.body.select(), () => this.toggleNav());
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
         //console.log('Construct', this.className, this);
-        this.construct().then(() => this.setDefaultVisibility(model));
+        this.construct(model.children).then(() => this.setDefaultVisibility(model));
         //this.ifEmpty();
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
 		@abstract
+        @param {Array<MODEL>} children Array of children to construct
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct() {
-        if (this.className !== 'CONTAINER') {
+    construct(children) {
+        return Promise.resolve(this);
+        /*if (this.className !== 'CONTAINER') {
             let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.';
             console.warn(msg);
-            //return Promise.resolve(this);
-			throw new AbstractMethodError(msg);
-		}
+            return Promise.resolve(this);
+			//throw new AbstractMethodError(msg);
+		}*/
     }
     /** If the Container has no children, display a button to create an element
         Should be overridden on CONTAINERs that should not have children
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
     ifEmpty() {
-        if (this.children.length === 0) {
-            let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
-            btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
-            btnAddElement.btn.el.onclick = () => {
-                this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
-                btnAddElement.destroy();
-                return false;
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.children.length === 0) {
+                    let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+                    btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
+                    btnAddElement.btn.el.onclick = () => {
+                        this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+                        btnAddElement.destroy();
+                        return false;
+                    }
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
             }
-        }
+        });
     }
     /** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
@@ -366,8 +375,8 @@ export default class CONTAINER extends GROUP {
                             const [...children] = this.body.pane.children;
                             this.body.pane.children = [];
                             this.construct()
-                                .then(() => this.populate(children)
-                                    .then(() => resolve(this)));
+                                //.then(() => this.populate(children))
+                                .then(() => resolve(this));
                         });
                 });
             } catch (e) {

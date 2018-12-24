@@ -28,8 +28,8 @@ export default class JUMBOTRON extends CONTAINER {
                     this.createEditableElement('p', this.screen);
                     this.loadBgImage();
                     this.setBgColor();
-                    resolve(this);
                 }
+                resolve(this);
             } catch (e) {
                 reject(e);
             }

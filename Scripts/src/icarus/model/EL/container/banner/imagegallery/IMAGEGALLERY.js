@@ -73,18 +73,14 @@ export default class IMAGEGALLERY extends BANNER {
 						if (payload.list[l].id === 0) {
 							thumb.image.el.setAttribute('style', 'display:none;');
 						}
-						thumb.button.el.onclick = () => {
-							this.launchMain(payload.list[l].id);
-						};
+						thumb.button.el.onclick = () => this.launchMain(payload.list[l].id);
 					}
 					if (!this.pagination.buttonGroup.loaded) {
 						//console.log('Page Total: ' + this.pageTotal + ', Length: ' + this.pageLength);
 						this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
 						//console.log('PageCount: ' + this.pageCount + ', (' + this.pageTotal / this.pageLength + ')');
 						for (let p = 0; p < this.pageCount; p++) {
-							this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-								this.loadPage(p);
-							};
+							this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => this.loadPage(p);
 						}
 						this.pagination.buttonGroup.loaded = true;
 					}
