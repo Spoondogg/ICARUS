@@ -12,18 +12,19 @@ export default class FIELDSET extends CONTAINER {
 	*/
 	constructor(node, model) {
 		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));
-        this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));
-		this.populate(model.children);
+		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));		
 	}
-    construct() {
+    construct(children) {
         return new Promise((resolve, reject) => {
             try {
+                this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));
                 if (this.dataId > 0) {
                     //if (this.label) {
                     //	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
                     //}
                 }
+                this.populate(model.children);
+                resolve(this);
             } catch (e) {
                 reject(e);
             }

@@ -27,41 +27,57 @@ export default class MAIN extends CONTAINER {
 		this.factory = model.factory;
 		/** @type {LOADER} */
 		this.loader = model.loader;
-		/** A Security token @type {string} */
+		/** @type {string} */
 		this.token = model.token;
-		/** Browser Url @type {Url} url The browser url */
-		this.url = model.url;
-		/** A Sidebar for details and navigation
-		    @property {SIDEBAR} sidebar A Sidebar that exists at the top level of the MAIN Container
-		*/
-		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
-
-        this.addNavOptions();
-
+		/** @type {URL} */
+        this.url = model.url;
         /** The active container has access to keybindings */
         this.activeContainer = null;
-
+        // ELEMENTS
+		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
+        this.stickyFooter = new STICKYFOOTER(this, new MODEL());        
+        // CRUD
 		this.save = this.factory.save;
-		//this.quickSave = model.factory.quickSave;
-		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
-        this.populate(model.children);
-	}
-    construct() {
+        this.quickSaveFormPost = model.factory.quickSaveFormPost;
+        //this.quickSave = model.factory.quickSave;
+    }
+    /** Perform any async actions and populate this Container
+        @param {Array<MODEL>} children Array of elements to add to this container's body
+        @returns {Promise<ThisType>} callback
+    */
+    construct(children) {
+        return new Promise((resolve, reject) => {
+            try {
+                this.addNavOptions()
+                    .then(() => this.addNavLogin())
+                    .then(() => this.populate(children))
+                    .then(() => {
+                        this.navBar.show();
+                        resolve(this);
+                    });
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+    /** MAIN NavBars should not be draggable, and should contain a user/login button
+        @returns {Promise<ThisType>} callback
+    */
+    addNavLogin() {
         return new Promise((resolve, reject) => {
             try {
                 this.navBar.setAttribute('draggable', false);
                 if (this.getUser() === 'Guest') {
                     this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
+                    this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
                 }
-                this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
-                this.navBar.show();
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
         });
     }
+
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
@@ -82,32 +98,38 @@ export default class MAIN extends CONTAINER {
 		return this.factory;
 	}
 	/** Add items to Options Dropdown Tab
-	    @returns {ThisType} Returns this MAIN for method chaining
+	    @returns {Promise<ThisType>} callback
 	*/
-	addNavOptions() {
-		if (this.navBar.menu.menu) {
-            // LEFT ALIGN
-            this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
-			this.btnSidebar.el.onclick = () => this.toggleSidebar();
-            $(this.btnSidebar.el).insertBefore(this.navBar.menu.optionsTab.el);
+    addNavOptions() {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.navBar.menu.menu) {
+                    // LEFT ALIGN
+                    this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
+                    this.btnSidebar.el.onclick = () => this.toggleSidebar();
+                    $(this.btnSidebar.el).insertBefore(this.navBar.menu.optionsTab.el);
 
-            this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
-            $(this.btnPrev.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
+                    $(this.btnPrev.el).insertBefore(this.navBar.menu.optionsTab.el);
 
-            this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
-            $(this.btnNext.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
+                    $(this.btnNext.el).insertBefore(this.navBar.menu.optionsTab.el);
 
-            // RIGHT ALIGN
-            this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
-            $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    // RIGHT ALIGN
+                    this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+                    $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
 
-            this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
-            $(this.userTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
+                    $(this.userTab.el).insertBefore(this.navBar.menu.optionsTab.el);
 
-            this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
-			this.addDefaultMenuItems();
-		}
-		return this;
+                    this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
+                    this.addDefaultMenuItems();
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
     /** Returns the MAIN LOADER 
         @returns {LOADER} A LOADER

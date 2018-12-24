@@ -54,13 +54,6 @@ export default class FORM extends CONTAINER {
             console.log('Unable to modify focus for this form', this);
         }
     }
-    /** Perform async tasks for FORM
-        @returns {Promise<ThisType>} callback
-    */
-    construct() {
-        //this.addInputs(model.inputs); //this.addButtons(model.buttons);
-        return Promise.resolve(this);
-    }
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
