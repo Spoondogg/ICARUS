@@ -361,20 +361,27 @@ export default class EL extends MODEL {
         }
     }
 	/** Returns the MAIN container
-	    @returns {MAIN} MAIN class
+	    @returns {Promise<MAIN>} MAIN class
 	*/
     getMain() {
-        //return this.getProtoTypeByClass('MAIN');
-        if (typeof this.container === 'undefined') {
-            this.getProtoTypeByClass('MAIN');            
-        } else {
+        return new Promise((resolve, reject) => {
             try {
-                return this.getContainer().getMain();
-            } catch (e) {
-                console.warn('EL{' + this.className + '} Unable to retrieve MAIN Container', e);
-                throw e;
+                //return this.getProtoTypeByClass('MAIN');
+                if (typeof this.container === 'undefined') {
+                    this.getProtoTypeByClass('MAIN');
+                } else {
+                    try {
+                        resolve(this.getContainer().getMain());
+                    } catch (e) {
+                        console.warn('EL{' + this.className + '} Unable to retrieve MAIN Container', e);
+                        reject(e);
+                    }
+                }
+            } catch (ee) {
+                console.error(ee);
+                reject(e);
             }
-        }
+        });
 	}
 	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token

@@ -27,9 +27,23 @@ export default class USERMENU extends MENU {
         }));
         this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
         this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
-        this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
-        $(this.el).insertAfter(this.profile.el);        
+        //this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
+        $(this.el).insertAfter(this.profile.el);
+
+        this.btnLogout = this.addNavItem(new MODEL().set('label', 'Log Out'));
+        this.btnLogout.el.onclick = () => this.logout();
+
+        for (let i = 0; i < 5; i++) {
+            this.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.toggle();
+        }
     }
+    /** Calls MAIN.logout()
+        @returns {Promise<ThisType>} callback
+    */
+    logout() {
+        return this.toggle().then((usermenu) => usermenu.getMain().then((main) => main.logout()));
+    }
+
     /** Toggles the visibility of the User Menu
         @returns {ThisType} callback
     */
@@ -39,6 +53,7 @@ export default class USERMENU extends MENU {
                 $(this.wrapper.el).toggle();
                 resolve(this);
             } catch (e) {
+                console.error(e);
                 reject(e);
             }
         });

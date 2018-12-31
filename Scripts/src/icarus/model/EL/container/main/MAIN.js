@@ -150,11 +150,6 @@ export default class MAIN extends CONTAINER {
                         this.userTab.el.onclick = () => this.login();
                     } else {
                         this.userTab.el.onclick = () => this.userMenu.toggle();
-                        //this.setUserIcon();
-                        this.userMenu.addNavItem(new MODEL().set('label', 'Log Out')).el.onclick = () => {
-                            this.userMenu.toggle();
-                            this.logout();
-                        };
                     }
 
                     this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
