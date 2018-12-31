@@ -50,13 +50,7 @@ export default class MAIN extends CONTAINER {
     construct(children) {
         return new Promise((resolve, reject) => {
             try {
-                this.addNavOptions()
-                    //.then(() => this.addNavLogin())
-                    .then(() => this.populate(children))
-                    .then(() => {
-                        this.navBar.show();
-                        resolve(this);
-                    });
+                this.addNavOptions().then(() => this.populate(children).then(() => resolve(this.navBar.show())));
             } catch (e) {
                 reject(e);
             }
@@ -64,7 +58,7 @@ export default class MAIN extends CONTAINER {
     }
     /** MAIN NavBars should not be draggable, and should contain a user/login button
         @returns {Promise<ThisType>} callback
-    */
+    
     addNavLogin() {
         return new Promise((resolve, reject) => {
             try {
@@ -81,8 +75,7 @@ export default class MAIN extends CONTAINER {
                 reject(e);
             }
         });
-    }
-
+    }*/
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
@@ -453,11 +446,26 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     login() {
-        this.loader.log(99, 'Logging In', true).then((loader) => {
+        this.loader.log(99, 'Logging In').then((loader) => {
             new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
                 container: this,
                 label: 'Log In'
             })).then((form) => {
+                //this.createLoginForm(form);
+                form.footer.buttonGroup.empty().then(() => {
+                    form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => form.getDialog().hide().then(() => this.loginOAuth('Google'));
+                    loader.log(100).then(() => form.getDialog().show());
+                });
+            });
+        });
+    }
+    /** Creates a login form in the given form
+        @param {FORM} form Form element
+        @returns {Promise<ThisType>} callback
+    */
+    createLoginForm(form) {
+        return new Promise((resolve, reject) => {
+            try {
                 form.setAction('/Account/Login');
                 form.addClass('login');
                 form.children[0].children[0].addInputElements([
@@ -467,14 +475,11 @@ export default class MAIN extends CONTAINER {
                 ]);
                 form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
                 form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
-                //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
-                form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => this.loginOAuth('Google');
-                //form.footer.buttonGroup.addButton('Login - Google API').el.onclick = () => this.loginGoogle();
-                
-                //form.footer.buttonGroup.addButton('Login - Facebook').el.onclick = () => this.loginOAuth('Facebook');
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-                loader.log(100).then(() => form.getDialog().show());
-            });
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
     /** Redirects to the third party OAuth Sign In
@@ -482,8 +487,10 @@ export default class MAIN extends CONTAINER {
         @returns {void} 
     */
     loginOAuth(provider) {
-        let returnUrl = this.url.origin + '/signin-' + provider;
-        location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+        this.toggleBody().then(() => {
+            let returnUrl = this.url.origin + '/signin-' + provider;
+            location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+        });
     }
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success

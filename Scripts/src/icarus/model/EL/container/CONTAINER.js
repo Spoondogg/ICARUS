@@ -682,10 +682,17 @@ export default class CONTAINER extends GROUP {
         return this;
     }
 	/** Toggles the collapsed state of the container's body
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
-	toggleBody() {
-		$(this.body.el).collapse('toggle');
+    toggleBody() {
+        return new Promise((resolve, reject) => {
+            try {
+                $(this.body.el).collapse('toggle');
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });		
 	}
 	/** An abstract load method for a CONTAINER
         @abstract
