@@ -15,10 +15,10 @@ export default class LISTITEM extends CONTAINER {
 		super(node, 'LI', model, ['LIST']);
     }
     /** Perform any async actions and populate this Container
-        param {Array<MODEL>} children Array of elements to add to this container's body
+        @param {Array<MODEL>} children Array of elements to add to this container's body
         @returns {Promise<ThisType>} callback
     */
-    construct() {
+    construct(children) {
         return new Promise((resolve, reject) => {
             try {
                 if (this.dataId > 0 || this.dataId === -1) {
@@ -26,7 +26,7 @@ export default class LISTITEM extends CONTAINER {
                         this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
                     }
                 }
-                this.populate(model.children).then(() => resolve(this));
+                this.populate(children).then(() => resolve(this));
             } catch (e) {
                 reject(e);
             }

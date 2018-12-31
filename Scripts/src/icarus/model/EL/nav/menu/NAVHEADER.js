@@ -28,7 +28,7 @@ export default class NAVHEADER extends MENU {
             @property {MENU} menu
         */
 		this.menu = new MENU(this, new MODEL('collapse').set('name', 'menu'));
-		this.optionsTab.el.onclick = () => this.toggleCollapse();
+		this.optionsTab.el.onclick = () => this.toggle();
 		this.addOptionsMenu();
 	}
 	/** Adds the default toggle tab for this MENU
@@ -91,7 +91,7 @@ export default class NAVHEADER extends MENU {
 	/**	Show/Hide this.menu
 	    @returns {void}
 	*/
-	toggleCollapse() {
+	toggle() {
 		$(this.menu.el).collapse('toggle');
 	}
 }

@@ -1,20 +1,38 @@
-﻿@*  Global Javascript variables that are generated 
-    Server Side.
-
+﻿@*  Global Javascript variables that are generated Server Side.
     This partial view can be imported into _Layout.cshtml
-    before initializing the application, and will be 
-    available for init.js
+    before initializing the application, and should be available for init.js
 *@
 <script>
+    /** Global URL */
+    var globalUrl = new URL(window.location.href);
+
     /** The Application Identifier */
     var id = @(ViewBag.id == null ? "-1" : ViewBag.id);
+
+    /** Payload / Model */
+    let payload = @Html.Raw(Json.Encode(ViewBag.Payload));
+    if (payload) {
+        console.log('Setting local payload');
+        @* 
+            There may be some duplicate serialization going on here
+            Also, make sure to remove any tokens before returning the payload!!!!!
+        *@
+        //localStorage.setItem('payload', JSON.stringify(payload));
+        localStorage.setItem('family_name', payload.GoogleIdentity.family_name);
+        localStorage.setItem('given_name', payload.GoogleIdentity.given_name);
+        localStorage.setItem('locale', payload.GoogleIdentity.locale);
+        localStorage.setItem('name', payload.GoogleIdentity.name);
+        localStorage.setItem('picture', payload.GoogleIdentity.picture);
+    } else {
+        console.log('Using cached payload');
+    }
+
     /** A friendly string identifier for the user */
     var user = '@(User.Identity.Name == "" ? "Guest" : User.Identity.Name)';
-    /** If enabled, features that are under development 
-        are also shown.  
 
-        This will most definately include buggy or 
-        incomplete code, so be warned.
+    /** If enabled, features that are under development are also shown
+        This will most definately include buggy or incomplete code
+        Be warned.
     */
     var dev = @(User.IsInRole("Dev") ? 1 : User.IsInRole("Admin") ? 1 : 0) ? true : false;
 </script>

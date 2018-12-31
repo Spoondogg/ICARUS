@@ -15,6 +15,7 @@ $(document).ready(() => {
     //let provider = app.url.searchParams.get('provider');
     //let returnUrl = app.url.searchParams.get('returnUrl');
     //app.showLoginPrompt().showExternalLoginPrompt().main.load(id);
-    app.showLoginPrompt().main.load(id);
+    //app.showLoginPrompt().main.load(id);
+    app.main.load(id);
 });
 /* eslint-enable no-undef */

@@ -12,6 +12,9 @@ using ICARUS.Models;
 using ICARUS.Models.Icarus.Elements;
 using System.Collections.Generic;
 using ICARUS.Models.Icarus;
+using Newtonsoft.Json;
+using System.Web.Script.Serialization;
+using System.Net.Http;
 
 namespace ICARUS.Controllers {
     //[Authorize] // Disable on initial build so that an admin can be created
@@ -430,10 +433,27 @@ namespace ICARUS.Controllers {
             model.Add("Email", loginInfo.Email);
             model.Add("LoginProvider", loginInfo.Login.LoginProvider);
 
+            var accessToken = loginInfo.ExternalIdentity.Claims
+                .Where(c => c.Type.Equals("urn:google:accesstoken"))
+                .Select(c => c.Value).FirstOrDefault();
+            model.Add("AccessToken", accessToken);
+
+            // https://stackoverflow.com/questions/22820349/how-to-get-google-plus-profile-picture-in-c-sharp-mvc-authentication
+            Uri apiRequestUri = new Uri("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + accessToken.ToString());
+            //request profile image
+            using (var webClient = new System.Net.WebClient()) {
+                var json = webClient.DownloadString(apiRequestUri);
+                model.Add("GoogleIdentity", new JavaScriptSerializer().DeserializeObject(json));
+            }
+
             switch (result) {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //ViewBag.Payload = model;
+                    TempData["payload"] = model;
+
+                    //return RedirectToLocal(returnUrl);
                     //return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
+                    return RedirectToAction("Index", "Home");
 
                 case SignInStatus.LockedOut:
                     //return View("Lockout");
@@ -445,7 +465,7 @@ namespace ICARUS.Controllers {
                         ReturnUrl = returnUrl,
                         RememberMe = false
                     });*/
-                    model.Add("RememberMe", true);
+                    model.Add("RememberMe", false); // 20181229 previously true
                     return Json(new Payload(3, "SendCode", model), JsonRequestBehavior.AllowGet);
 
                 case SignInStatus.Failure:

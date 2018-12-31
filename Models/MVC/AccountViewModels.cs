@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
 namespace ICARUS.Models {
-
     public class ExternalLoginConfirmationViewModel {
         [Required, Display(Name = "Email")]
         public string Email { get; set; }
@@ -87,7 +85,6 @@ namespace ICARUS.Models {
 
         public string Code { get; set; }
     }
-
     /// <summary>
     /// The user has forgotten their password and will 
     /// recieve an email at the given Email (if exists)

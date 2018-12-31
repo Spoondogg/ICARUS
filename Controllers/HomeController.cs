@@ -18,34 +18,21 @@ namespace ICARUS.Controllers {
     /// Controller for HOME pages, services etc
     /// </summary>=
     public class HomeController : AbstractController {
-
-        public HomeController() : base("Home") {
-
-        }
+        public HomeController() : base("Home") { }
         /// <summary>
-        /// The default page.  Certain id's are hardcoded based on domain
-        /// TODO: These values should be retrieved from an external source if possible
+        /// Loads the given application by id, or creates a new one
+        /// By default, loads the initial application (app id 1)
         /// </summary>
-        /// <returns></returns>=
-        public ActionResult Index(int id = 1) { // 0 creates a new APP instance, 1 should be the initial page
-
+        /// <param name="id">The page UId to load</param>
+        /// <returns></returns>
+        public ActionResult Index(int id = 1) {
             ViewBag.Version = ConfigurationManager.AppSettings["version"];
-
-            /// TODO: This should be its own fork.  This is VERY bad practice
-            if (Request.Url.Authority.Contains("johnsautocare")) {
-                id = 2819;
-                ViewBag.id = id;
-                ViewBag.Title = "Johns Auto Care";
-                ViewBag.Description = "John's Auto Care, 1584 Main Street West, Hamilton ON, Automotive Care";
-            } else {
-                ViewBag.id = id;
-                ViewBag.Title = "Index";
-                ViewBag.Description = "Ryan Dunphy, spoonMEDIA, Web Application Developer";
-            }            
-
+            ViewBag.id = id;
+            ViewBag.Title = "Index";
+            ViewBag.Description = "Home/Index";
+            ViewBag.Payload = TempData["payload"];
             return View();
         }
-
         /// <summary>
         /// A contact form for emailing specific users
         /// </summary>
@@ -54,7 +41,6 @@ namespace ICARUS.Controllers {
         public ActionResult Contact() {
             return View();
         }
-
         /// <summary>
         /// The Contact Task that processes email details
         /// </summary>

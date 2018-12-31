@@ -92,7 +92,6 @@ export default class CONTAINER extends GROUP {
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
         //console.log('Construct', this.className, this);
         this.construct(model.children).then(() => this.setDefaultVisibility(model));
-        //this.ifEmpty();
 	}
 	/* eslint-enable max-statements */
 	/** Abstract construct method throws an error if not declared 
@@ -390,7 +389,7 @@ export default class CONTAINER extends GROUP {
     */
     closeMenus(group) {
         group.toggleCollapse();
-        this.navBar.menu.toggleCollapse();
+        this.navBar.menu.toggle();
     }
     /** Creates a NavItem that closes its menu on mouseup
         @param {string} className className
@@ -425,7 +424,6 @@ export default class CONTAINER extends GROUP {
         });
         return items;
     }
-
     /** Adds default groups to the Option Menu
 	    @returns {GROUP} A Menu Group
 	*/
@@ -435,13 +433,13 @@ export default class CONTAINER extends GROUP {
         items.ELEMENTS.el.onmouseup = () => false;
         items.ELEMENTS.el.onclick = (ev) => {
             console.log('ELEMENTS');
-            this.navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+            this.navBar.menu.menu.toggle().getGroup('ELEMENTS').toggleCollapse();
             ev.stopPropagation();
             ev.preventDefault();
         }
         items.CRUD.el.onclick = () => {
             console.log('CRUD');
-            this.navBar.menu.toggleCollapse().menu.getGroup('CRUD').toggleCollapse();
+            this.navBar.menu.toggle().menu.getGroup('CRUD').toggleCollapse();
         }
         items.DOM.el.onclick = () => {
             console.log('DOM');
@@ -545,14 +543,14 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     up() {
-        this.navBar.menu.toggleCollapse();
+        this.navBar.menu.toggle();
         this.moveUp();
     }
 	/** Moves the Container down one slot in the DOM
 	    @returns {void}
 	*/
     down() {
-        this.navBar.menu.toggleCollapse();
+        this.navBar.menu.toggle();
         this.moveDown();
     }
 	/** Overrides EL.open();
@@ -848,38 +846,40 @@ export default class CONTAINER extends GROUP {
     */
     disable() {
         return new Promise((resolve, reject) => {
-            try {
-                let dialog = new DIALOG(new MODEL().set({
-                    label: 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']',
-                    container: this.getMain()
-                }));
-                dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE).el.onclick = () => {
-                    this.getLoader().log(50, 'Disable', true).then(() => { //loader
-                        this.destroy().then(() => {
-                            try {
-                                this.container.save(true).then(() => {
-                                    console.log('/' + this.className + '/DISABLE/' + this.id);
-                                    $.post('/' + this.className + '/DISABLE/' + this.id, {
-                                        '__RequestVerificationToken': this.getToken() //token.value
-                                    }, //this.ajaxRefreshIfSuccessful);
-                                        (data) => {
-                                            console.log('RESULTS', data);
-                                            resolve(dialog.close());
-                                        }
-                                    );
-                                });
-                            } catch (ee) {
-                                reject(ee);
-                            }
+            this.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
+                try {
+                    let dialog = new DIALOG(new MODEL().set({
+                        label: 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']',
+                        container: this.getMain()
+                    }));
+                    dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE).el.onclick = () => {
+                        this.getLoader().log(50, 'Disable', true).then(() => { //loader
+                            this.destroy().then(() => {
+                                try {
+                                    this.container.save(true).then(() => {
+                                        console.log('/' + this.className + '/DISABLE/' + this.id);
+                                        $.post('/' + this.className + '/DISABLE/' + this.id, {
+                                            '__RequestVerificationToken': this.getToken() //token.value
+                                        }, //this.ajaxRefreshIfSuccessful);
+                                            (data) => {
+                                                console.log('RESULTS', data);
+                                                resolve(dialog.close());
+                                            }
+                                        );
+                                    });
+                                } catch (ee) {
+                                    reject(ee);
+                                }
+                            });
                         });
-                    });
 
-                };
-                dialog.show();
-            } catch (e) {
-                console.log('Unable to disable this ' + this.element, e);
-                reject(e);
-            }
+                    };
+                    loader.log(100).then(() => dialog.show());
+                } catch (e) {
+                    console.log('Unable to disable this ' + this.element, e);
+                    loader.log(0).then(() => reject(e));
+                }
+            });
         });
 	}
 	/** Creates a DATEOBJECT using this Container's dateCreated attribute

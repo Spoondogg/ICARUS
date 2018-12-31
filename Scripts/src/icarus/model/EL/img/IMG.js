@@ -1,18 +1,14 @@
-/**
-    @module
-*/
+/** @module */
 import EL from '../EL.js';
-/**
-    An image (IMG) Element
+/** An image (IMG) Element
     @class
     @extends EL
 */
 export default class IMG extends EL {
-	/**
-	    Constructs a Paragraph
+	/** Constructs an IMAGE element
 	    @param {EL} node The object to contain this element
 	    @param {MODEL} model The object
-	 */
+	*/
 	constructor(node, model) {
 		super(node, 'IMG', model);
 		try {
