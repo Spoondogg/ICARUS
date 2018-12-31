@@ -27,7 +27,7 @@ export default class USERMENU extends MENU {
         }));
         this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
         this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
-        //this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
+        this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
         $(this.el).insertAfter(this.profile.el);
 
         this.btnLogout = this.addNavItem(new MODEL().set('label', 'Log Out'));
@@ -41,15 +41,16 @@ export default class USERMENU extends MENU {
         @returns {Promise<ThisType>} callback
     */
     logout() {
-        return this.toggle().then((usermenu) => usermenu.getMain().then((main) => main.logout()));
+        console.log('USERMENU.logout()');
+        return this.toggle().then(() => this.getMain().then((main) => main.logout()));
     }
-
     /** Toggles the visibility of the User Menu
         @returns {ThisType} callback
     */
     toggle() {
         return new Promise((resolve, reject) => {
             try {
+                console.log(' - toggle usermenu');
                 $(this.wrapper.el).toggle();
                 resolve(this);
             } catch (e) {

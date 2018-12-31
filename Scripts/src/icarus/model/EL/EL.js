@@ -364,11 +364,12 @@ export default class EL extends MODEL {
 	    @returns {Promise<MAIN>} MAIN class
 	*/
     getMain() {
+        console.log(this.className + '.getMain()');
         return new Promise((resolve, reject) => {
             try {
                 //return this.getProtoTypeByClass('MAIN');
                 if (typeof this.container === 'undefined') {
-                    this.getProtoTypeByClass('MAIN');
+                    resolve(this.getProtoTypeByClass('MAIN'));
                 } else {
                     try {
                         resolve(this.getContainer().getMain());
