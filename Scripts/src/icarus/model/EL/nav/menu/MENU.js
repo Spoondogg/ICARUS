@@ -1,5 +1,5 @@
 /** @module */
-import UL, { ATTRIBUTES, LI, MODEL } from '../../ul/UL.js';
+import UL, { ATTRIBUTES, GROUP, LI, MODEL } from '../../ul/UL.js';
 import DIV from '../../div/DIV.js';
 import Deselect from '../../../../event/Deselect.js';
 import HEADER from '../../header/HEADER.js';
@@ -79,7 +79,6 @@ export default class MENU extends UL {
             }
         });
     }
-
     /** Selects the wrapper for this MENU and opens it
         param {Event} event Event
         @returns {Promise<ThisType>} callback
@@ -237,4 +236,4 @@ export default class MENU extends UL {
 		}
 	}
 }
-export { ATTRIBUTES, LI, MODEL, UL };
+export { ATTRIBUTES, GROUP, LI, MODEL, UL };
