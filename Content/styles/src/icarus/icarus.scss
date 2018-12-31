@@ -1172,6 +1172,16 @@ table {
 		font-family: Lato;
 	}
 }
+.btn-add-element {
+    padding: .5em 0;
+
+    button {
+        display: block;
+        height: 128px;
+        margin: 0 auto;
+        width: 128px;
+    }
+}
 .container {
     margin: 0;
     padding: 0;
@@ -1246,6 +1256,7 @@ table {
             > footer {
                 &.pagination {
                     text-align: center;
+
                     @media only screen and (max-width: $max-width-mobile) {
                         display: none;
                     }
@@ -1438,6 +1449,57 @@ table {
         }
     }
 
+    &.usermenu {
+        background-color: #373c40;
+        border: 1px solid rgba(160, 160, 160, 0.25);
+        border-radius: .2em;
+        box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.8);
+        display: block;
+        float: right;
+        max-height: 320px;
+        position: absolute;
+        right: 1px;
+        top: calc(#{$navbar-height} + 2px);
+        width: 230px;
+
+        > ul {
+            &.horizontal {
+                flex-direction: row-reverse;
+            }
+        }
+
+        .profile {
+            //background-color: $color-grey-dark;
+            color: $color-white;
+            font-family: $font-header;
+            text-align: center;
+
+            > img {
+                &.picture {
+                    background-color: $color-grey;
+                    border: 2px solid #ffffff96;
+                    border-radius: 128px;
+                    box-sizing: content-box;
+                    clear: both;
+                    display: block;
+                    float: none;
+                    height: 128px;
+                    margin: 1em auto;
+                    width: 128px;
+                }
+            }
+
+            > .username {
+                line-height: 1.4em;
+            }
+
+            > .quote {
+                font-size: .8em;
+                line-height: 1.4em;
+            }
+        }
+    }
+
     > header {
         @extend %bevel-down;
         @extend %clickable;
@@ -1476,7 +1538,7 @@ table {
             .wide-tab {
                 flex-basis: auto;
                 flex-grow: 2;
-                text-align: left;
+                text-align: center;
             }
         }
 
@@ -1548,6 +1610,18 @@ table {
             }
 
             &.nav-item-icon {
+
+                &.userTab {
+                    > a {
+                        padding: .2em;
+
+                        .user-image {
+                            border-radius: 32px;
+                            width: 32px;
+                        }
+                    }
+                }
+
                 > a {
                     > .icon {
                         > .icon-label {

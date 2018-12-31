@@ -7,12 +7,13 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using ICARUS.Models;
 using System.Configuration;
-
+using System.Security.Claims;
+using System.Threading.Tasks;
 namespace ICARUS {
     /** 
         @see http://www.tutorialsteacher.com/mvc/mvc-folder-structure 
         @see https://exceptionnotfound.net/whats-this-and-can-i-delete-it-examining-a-default-asp-net-mvc-project/
-     */
+    */
     public partial class Startup {
 
         /// <summary>
@@ -20,8 +21,7 @@ namespace ICARUS {
         /// please visit http://go.microsoft.com/fwlink/?LinkId=301864
         /// </summary>
         /// <param name="app"></param>
-        public void ConfigureAuth(IAppBuilder app) {
-            
+        public void ConfigureAuth(IAppBuilder app) {            
             // Configure the db context, user manager and signin manager to use a single instance per request
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
@@ -73,7 +73,17 @@ namespace ICARUS {
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions() {
                 ClientId = ConfigurationManager.AppSettings["googleClientId"],
-                ClientSecret = ConfigurationManager.AppSettings["googleClientSecret"]
+                ClientSecret = ConfigurationManager.AppSettings["googleClientSecret"],
+                Provider = new GoogleOAuth2AuthenticationProvider() {
+                    OnAuthenticated = (context) => {
+                        context.Identity.AddClaim(new Claim("urn:google:name", context.Identity.FindFirstValue(ClaimTypes.Name)));
+                        context.Identity.AddClaim(new Claim("urn:google:email", context.Identity.FindFirstValue(ClaimTypes.Email)));
+                        // Retrieve the profile image
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("urn:google:accesstoken", context.AccessToken, ClaimValueTypes.String, "Google"));
+
+                        return Task.FromResult(0);
+                    }
+                }
             });
         }
     }

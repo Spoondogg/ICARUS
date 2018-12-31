@@ -21,6 +21,7 @@ export default class MENU extends UL {
         this.addClass('list');
         this.el.addEventListener('deselect', this.deselect.bind(this));
         this.wrapper = new DIV(node, new MODEL('menu'));
+        this.wrapper.addClass(model.wrapperClass);
         this.wrapper.el.addEventListener('select', this.select.bind(this));
         this.wrapper.el.addEventListener('deselect', this.deselect.bind(this));
         
@@ -124,7 +125,6 @@ export default class MENU extends UL {
             }
         }
     }
-
     /** When MENU loses focus, it will collapse any child MENU(s)
         This ensures that only one menu is visible at any given time
         @returns {void}
@@ -136,13 +136,18 @@ export default class MENU extends UL {
             }
         };
     }
-
-	/** Toggles the collapsed state of the 'COLLAPSE'
+	/** Toggles the collapsed state of this element
         @returns {ThisType} callback
     */
-	toggleCollapse() {
-        $(this.el).collapse('toggle');
-        return this;
+    toggle() {
+        return new Promise((resolve, reject) => {
+            try {
+                $(this.el).collapse('toggle');
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
 	}
 	/** Promises to collapse the MENU
 	    @returns {Promise<ThisType>} callback
@@ -169,7 +174,7 @@ export default class MENU extends UL {
                 reject(e);
             }
         });
-	}
+    }
 	/** Constructs a MENU inside this MENU
 	    @param {MODEL} model Object model
 	    @returns {MENU} Nav Item with Anchor

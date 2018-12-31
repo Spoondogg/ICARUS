@@ -1,9 +1,11 @@
 /** @module */
 import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
+import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 //import FORM from '../../form/FORM.js';
 //import DIV from '../../div/DIV.js';
 //import IFRAME from '../../iframe/IFRAME.js';
+import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
@@ -49,7 +51,7 @@ export default class MAIN extends CONTAINER {
         return new Promise((resolve, reject) => {
             try {
                 this.addNavOptions()
-                    .then(() => this.addNavLogin())
+                    //.then(() => this.addNavLogin())
                     .then(() => this.populate(children))
                     .then(() => {
                         this.navBar.show();
@@ -69,7 +71,10 @@ export default class MAIN extends CONTAINER {
                 this.navBar.setAttribute('draggable', false);
                 if (this.getUser() === 'Guest') {
                     this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
-                    this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
+                    //this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
+                } else {
+                    //this.getGoogleIdentity();
+                    this.setUserIcon();
                 }
                 resolve(this);
             } catch (e) {
@@ -96,7 +101,19 @@ export default class MAIN extends CONTAINER {
 	*/
 	getFactory() {
 		return this.factory;
-	}
+    }
+    /** Acts as an undo or back function
+        @returns {void}
+    */
+    navigateBack() {
+        console.log('TODO: Back');
+    }
+    /** Acts as an redo or forward function
+        @returns {void}
+    */
+    navigateForward() {
+        console.log('TODO: Forward');
+    }
 	/** Add items to Options Dropdown Tab
 	    @returns {Promise<ThisType>} callback
 	*/
@@ -107,20 +124,38 @@ export default class MAIN extends CONTAINER {
                     // LEFT ALIGN
                     this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
                     this.btnSidebar.el.onclick = () => this.toggleSidebar();
-                    $(this.btnSidebar.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
 
                     this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
-                    $(this.btnPrev.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    this.btnPrev.el.onclick = () => this.navigateBack();
+                    $(this.btnPrev.el).insertBefore(this.navBar.menu.tab.el);
 
                     this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
-                    $(this.btnNext.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    this.btnNext.el.onclick = () => this.navigateForward();
+                    $(this.btnNext.el).insertBefore(this.navBar.menu.tab.el);
 
                     // RIGHT ALIGN
                     this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
                     $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    
+                    this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER)); // 'userTab'
 
-                    this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
-                    $(this.userTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+                    // This is the default way of doing things
+                    //this.userMenu = this.navBar.menu.addMenu(new MODEL('horizontal collapse').set({
+                    this.userMenu = new USERMENU(this.navBar.menu);
+
+                    // Instead, create a cool looking User Menu
+
+                    if (this.getUser() === 'Guest') {
+                        this.userTab.el.onclick = () => this.login();
+                    } else {
+                        this.userTab.el.onclick = () => this.userMenu.toggle();
+                        //this.setUserIcon();
+                        this.userMenu.addNavItem(new MODEL().set('label', 'Log Out')).el.onclick = () => {
+                            this.userMenu.toggle();
+                            this.logout();
+                        };
+                    }
 
                     this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
                     this.addDefaultMenuItems();
@@ -156,16 +191,7 @@ export default class MAIN extends CONTAINER {
 	*/
     addDefaultMenuItems() {
         let optionsMenu = this.navBar.menu.menu;
-        let userMenu = optionsMenu.addMenu(new MODEL('horizontal collapse').set({
-            name: 'USER',
-            showHeader: 1,
-            collapsed: 1
-        }));
-        this.addNavItemIcon(userMenu, ICONS.USER, 'Log Out', '#?url=logout').el.onclick = () => {
-            this.navBar.menu.toggleCollapse();
-            this.logout();
-        };
-        this.addNavItemIcon(userMenu, ICONS.OPTIONS, 'Manage', 'Manage/Index');
+
         let domMenu = optionsMenu.getGroup('DOM');
         this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
             setTimeout(() => {
@@ -174,7 +200,7 @@ export default class MAIN extends CONTAINER {
         };
         this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
             this.toggleHeaders();
-            this.navBar.menu.toggleCollapse();
+            this.navBar.menu.toggle();
         };
         this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
             setTimeout(() => {
@@ -354,65 +380,79 @@ export default class MAIN extends CONTAINER {
             });
         });
     }*/
-    /** Performs calls to the Google Identity API
+    /** Instantiates the Google Authentication API 
+        and retrieves user details if they exist
+        @returns {void}
+    
+    getGoogleIdentity() {
+        console.log('Calling Auth2...');
+        gapi.load('auth2', () => {
+            gapi.auth2.init().then(() => {
+                let googleAuth = gapi.auth2.getAuthInstance();
+                googleAuth.signIn().then((googleUser) => {
+                    // Current User
+                    let currentUser = googleAuth.currentUser.get();
+                    console.log('currentUser', currentUser);
+                    console.log('currentUserId', currentUser.getId());
+
+                    // Google User
+                    console.log('googleUser', googleUser);
+                    console.log('googleUserId', googleUser.getId());
+                    console.log('googleUserIsSignedIn', googleUser.isSignedIn());
+                    console.log('hostedDomain', googleUser.getHostedDomain());
+
+                    let basicProfile = googleUser.getBasicProfile();
+                    console.log('basicInfo', basicProfile);
+                    console.log('id', basicProfile.getId());
+                    console.log('getName', basicProfile.getName());
+                    console.log('givenName', basicProfile.getGivenName());
+                    console.log('familyName', basicProfile.getFamilyName());
+                    console.log('imageUrl', basicProfile.getImageUrl());
+                    console.log('email', basicProfile.getEmail());
+
+                    // https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api
+                    let authResponse = googleUser.getAuthResponse(true);
+                    console.log('authResponse', authResponse);
+
+                    this.userTab.anchor.icon.destroy(0).then(() => {
+                        this.userTab.anchor.icon = new IMG(this.userTab.anchor, new MODEL({
+                            class: 'user-image',
+                            src: basicProfile.getImageUrl()
+                        }));
+                    });
+                });
+            });
+        });
+    }*/
+    /** Retrieves user data from localStorage
+        and sets the user icon image accordingly
         @returns {void}
     */
+    setUserIcon() {
+        console.log('setting user icon');
+        this.userTab.anchor.icon.destroy(0).then(() => {
+            this.userTab.anchor.icon = new IMG(this.userTab.anchor, new MODEL({
+                class: 'user-image',
+                src: localStorage.getItem('picture')
+            }));
+            this.userTab.anchor.icon.el.setAttribute('title', localStorage.getItem('given_name'));
+        });
+    }
+    /** Performs calls to the Google Identity API
+        @returns {void}
+    
     loginGoogle() {
         this.loader.log(99, 'Google Identity').then((loader) => {
             new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
                 container: this,
                 label: 'Log In - Google API'
             })).then((form) => {
-                form.footer.buttonGroup.addButton('Login - API').el.onclick = () => {
-                    console.log('Calling Auth2...');
-                    gapi.load('auth2', () => {
-                        gapi.auth2.init().then(() => {
-                            let googleAuth = gapi.auth2.getAuthInstance();
-                            googleAuth.signIn().then((googleUser) => {
-                                // Current User
-                                let currentUser = googleAuth.currentUser.get();
-                                console.log('currentUser', currentUser);
-                                console.log('currentUserId', currentUser.getId());
-
-                                // Google User
-                                console.log('googleUser', googleUser);
-                                console.log('googleUserId', googleUser.getId());
-                                console.log('googleUserIsSignedIn', googleUser.isSignedIn());
-                                console.log('hostedDomain', googleUser.getHostedDomain());
-
-                                let basicProfile = googleUser.getBasicProfile();
-                                console.log('basicInfo', basicProfile);
-                                console.log('id', basicProfile.getId());
-                                console.log('getName', basicProfile.getName());
-                                console.log('givenName', basicProfile.getGivenName());
-                                console.log('familyName', basicProfile.getFamilyName());
-                                console.log('imageUrl', basicProfile.getImageUrl());
-                                console.log('email', basicProfile.getEmail());
-
-                                // https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api
-                                let authResponse = googleUser.getAuthResponse(true);
-                                console.log('authResponse', authResponse);
-                                sessionStorage.setItem('access_token', authResponse.access_token);
-
-                                /*
-                                console.log('Hello ' + basicProfile.getEmail() + ', a user is being created for you');
-                                $.post('/Account/ExternalLoginConfirmation?returnUrl=%2F', {
-                                    '__RequestVerificationToken': this.token,
-                                    'Email': basicProfile.getEmail()
-                                }, (response) => {
-                                    console.log('Response', response);
-                                });
-                                */
-                            });
-                        });
-                    });
-                }
+                form.footer.buttonGroup.addButton('Login - API').el.onclick = this.getGoogleIdentity();
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
                 loader.log(100).then(() => form.getDialog().show());
             });
         });
-    }
-
+    }*/
 	/** Log into the application using the given credentials
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
@@ -434,7 +474,7 @@ export default class MAIN extends CONTAINER {
                 form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
                 //form.footer.buttonGroup.addButton('Login - OAuth').el.onclick = () => prompt.close().then(this.loginExternal());
                 form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => this.loginOAuth('Google');
-                form.footer.buttonGroup.addButton('Login - Google API').el.onclick = () => this.loginGoogle();
+                //form.footer.buttonGroup.addButton('Login - Google API').el.onclick = () => this.loginGoogle();
                 
                 //form.footer.buttonGroup.addButton('Login - Facebook').el.onclick = () => this.loginOAuth('Facebook');
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
@@ -455,9 +495,11 @@ export default class MAIN extends CONTAINER {
     */
     logout() {
         this.loader.log(99, 'Logging Out', true).then(() => { // loader
-            $.post('/Account/LogOff', {
-                '__RequestVerificationToken': this.getToken() //.token
-            }, this.ajaxRefreshIfSuccessful.bind(this), 'json');
+            Promise.resolve(localStorage.clear()).then(() => {
+                $.post('/Account/LogOff', {
+                    '__RequestVerificationToken': this.getToken() //.token
+                }, this.ajaxRefreshIfSuccessful.bind(this), 'json');
+            });
         });
 	}
 	/** Log into the application using the given credentials
@@ -517,4 +559,4 @@ export default class MAIN extends CONTAINER {
         $('body').removeClass('compact');
     }
 }
-export { CONTAINERFACTORY, LOADER, MODEL, NAVITEMICON };
+export { CONTAINERFACTORY, LOADER, MENU, MODEL, NAVITEMICON };

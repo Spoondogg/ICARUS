@@ -635,6 +635,8 @@
     <Content Include="Scripts\src\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\src\icarus\model\el\a\A.js" />
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
     <Content Include="Scripts\src\icarus\model\el\button\togglebutton\TOGGLEBUTTON.js" />
@@ -698,7 +700,6 @@
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\NAVHEADER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\SIDEBARMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />

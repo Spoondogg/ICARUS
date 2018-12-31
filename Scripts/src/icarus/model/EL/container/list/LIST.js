@@ -1,9 +1,7 @@
 /** @module */
 import CONTAINER from '../CONTAINER.js';
 import LISTITEM from './listitem/LISTITEM.js';
-/**
-    List Constructor
-    A LIST is essentially a UL that is designed to contain List Items (LI)
+/** A UL Container that is designed to contain List Items (LI)
     @class
     @extends CONTAINER    
 */

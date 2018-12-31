@@ -180,7 +180,6 @@ export default class EL extends MODEL {
     deselect() {
         return Promise.resolve(this.removeClass('selected'));
     }
-
     /** Deselects any 'selected' elements 
         @returns {Promise<void>} callback
     */
@@ -202,6 +201,14 @@ export default class EL extends MODEL {
             }
         }
         return this;
+    }
+    /** Adds given child element to this element's children
+	    @param {EL} model Object model
+	    @returns {EL} Nav Item with Anchor
+	*/
+    addChild(model) {
+        this.children.push(model);
+        return this.children[this.children.length - 1];
     }
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
@@ -533,23 +540,49 @@ export default class EL extends MODEL {
                 }
             }
         });
-	}
-	/** Shows this Element
-	    @returns {ThisType} callback
+    }
+    /** Toggles the 'active' class on this element
+	    @param {string} className Optionally toggle this class
+	    @returns {EL} This EL
 	*/
-    show() {
-        return new Promise((resolve) => {
-            this.el.style.display = 'block';
-            resolve(this);
+    toggle(className) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (className) {
+                    $(this.el).toggleClass(className); // || 'active'
+                } else {
+                    $(this.el).toggle();
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
-	/** Hides this Element
-	    @returns {ThisType} callback
+	/** Promises to collapse the MENU
+	    @returns {Promise<ThisType>} callback
 	*/
     hide() {
-        return new Promise((resolve) => {
-            this.el.style.display = 'none';
-            resolve(this);
+        return new Promise((resolve, reject) => {
+            try {
+                this.el.style.display = 'none';
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+	/** Expands the MENU body
+        @returns {Promise<ThisType>} callback
+    */
+    show() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.el.style.display = 'block';
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
 	/** Adds 'active' to this element's classes
@@ -563,18 +596,6 @@ export default class EL extends MODEL {
     */
 	deactivate() {
 		$(this.el).removeClass('active');
-		return this;
-	}
-	/** Toggles the 'active' class on this element
-	    @param {string} className Optionally toggle this class
-	    @returns {EL} This EL
-	*/
-	toggle(className) {
-		if (className) {
-			$(this.el).toggleClass(className); // || 'active'
-		} else {
-			$(this.el).toggle();
-		}
 		return this;
 	}
 	/** Creates given elements as children of this element
