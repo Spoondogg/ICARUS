@@ -1,5 +1,6 @@
 /** @module */
 import UL, { ATTRIBUTES, GROUP, LI, MODEL } from '../../ul/UL.js';
+import Activate from '../../../../event/Activate.js';
 import DIV from '../../div/DIV.js';
 import Deselect from '../../../../event/Deselect.js';
 import HEADER from '../../header/HEADER.js';
@@ -52,7 +53,13 @@ export default class MENU extends UL {
         @returns {Promise<ThisType>} callback
     */
     deselectAll() {
-        return new Promise((resolve, reject) => {
+        this.callback(() => {
+            let selected = $('.selected');
+            if (selected.length > 0) {
+                selected.each((i) => selected[i].dispatchEvent(new Deselect(this)));
+            }
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 let selected = $('.selected');
                 //console.log('Select Count: ' + selected.length, selected);
@@ -63,13 +70,14 @@ export default class MENU extends UL {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
     /** Promises to deselect this menu
         @returns {Promise<ThisType>} callback
     */
     deselect() { //event
-        return new Promise((resolve, reject) => {
+        this.callback(() => this.wrapper.deselect().then(() => this.hide()));
+        /*return new Promise((resolve, reject) => {
             try {
                 this.wrapper.deselect()
                     .then(() => this.hide()
@@ -77,13 +85,16 @@ export default class MENU extends UL {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
     /** Selects the wrapper for this MENU and opens it
         param {Event} event Event
         @returns {Promise<ThisType>} callback
     */
     select() { // event
+        /*this.callback(() => this.deselectAll()
+            .then(() => this.wrapper.select()
+                .then(() => this.show())));*/
         return new Promise((resolve, reject) => {
             try {
                 this.deselectAll()
@@ -139,40 +150,42 @@ export default class MENU extends UL {
         @returns {ThisType} callback
     */
     toggle() {
-        return new Promise((resolve, reject) => {
-            try {
-                $(this.el).collapse('toggle');
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });
+        return this.callback(() => $(this.el).collapse('toggle'));
+        /*try {
+            $(this.el).collapse('toggle');
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }*/
 	}
 	/** Promises to collapse the MENU
 	    @returns {Promise<ThisType>} callback
 	*/
     hide() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => $(this.el).collapse('hide'));
+        /*return new Promise((resolve, reject) => {
             try {
                 $(this.el).collapse('hide');
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
 	}
 	/** Expands the MENU body
         @returns {Promise<ThisType>} callback
     */
     show() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => $(this.el).collapse('show'));
+        /*return new Promise((resolve, reject) => {
             try {
                 $(this.el).collapse('show');
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
 	/** Constructs a MENU inside this MENU
 	    @param {MODEL} model Object model
@@ -226,7 +239,8 @@ export default class MENU extends UL {
 	    @returns {boolean} true if successful
     */
 	setActive() {
-		try {
+        try {
+            this.el.dispatchEvent(new Activate(this));
 			$('.dropdown-tab').removeClass('active');
 			$(this).toggleClass('active');
 			return true;

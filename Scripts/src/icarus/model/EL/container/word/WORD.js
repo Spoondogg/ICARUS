@@ -15,14 +15,9 @@ export default class WORD extends CONTAINER {
         super(node, 'DIV', model);
 	}
     construct() {
-        return new Promise((resolve, reject) => {
-            try {
-                console.log(this);
-                this.header = new HEADER(this.body.pane, new MODEL().set('label', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
+        return this.callback(() => {
+            console.log(this);
+            this.header = new HEADER(this.body.pane, new MODEL().set('label', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
         });
 	}
 }

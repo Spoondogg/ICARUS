@@ -1,7 +1,9 @@
 /** @module */
 import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
+import Activate from '../../../../event/Activate.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
+import Deactivate from '../../../../event/Deactivate.js';
 //import FORM from '../../form/FORM.js';
 //import DIV from '../../div/DIV.js';
 //import IFRAME from '../../iframe/IFRAME.js';
@@ -24,6 +26,8 @@ export default class MAIN extends CONTAINER {
 		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
         this.addClass('main');
         this.navBar.addClass('navbar-fixed-top');
+        this.navBar.setAttribute('draggable', false);
+        this.navBar.expand();
 		this.body.pane.addClass('pane-tall');
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
@@ -111,7 +115,33 @@ export default class MAIN extends CONTAINER {
 	    @returns {Promise<ThisType>} callback
 	*/
     addNavOptions() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            if (this.navBar.menu.menu) {
+                // LEFT ALIGN
+                this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
+                this.btnSidebar.el.onclick = () => this.toggleSidebar();
+                $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
+
+                this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
+                this.btnPrev.el.onclick = () => this.navigateBack();
+                $(this.btnPrev.el).insertBefore(this.navBar.menu.tab.el);
+
+                this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
+                this.btnNext.el.onclick = () => this.navigateForward();
+                $(this.btnNext.el).insertBefore(this.navBar.menu.tab.el);
+
+                // RIGHT ALIGN
+                this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+                $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+                // USER TAB / MENU
+                this.addUserTab();
+
+                this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
+                this.addDefaultMenuItems();
+            }
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 if (this.navBar.menu.menu) {
                     // LEFT ALIGN
@@ -130,20 +160,9 @@ export default class MAIN extends CONTAINER {
                     // RIGHT ALIGN
                     this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
                     $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
-                    
-                    this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER)); // 'userTab'
 
-                    // This is the default way of doing things
-                    //this.userMenu = this.navBar.menu.addMenu(new MODEL('horizontal collapse').set({
-                    this.userMenu = new USERMENU(this.navBar.menu);
-
-                    // Instead, create a cool looking User Menu
-
-                    if (this.getUser() === 'Guest') {
-                        this.userTab.el.onclick = () => this.login();
-                    } else {
-                        this.userTab.el.onclick = () => this.userMenu.toggle();
-                    }
+                    // USER TAB / MENU
+                    this.addUserTab();
 
                     this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
                     this.addDefaultMenuItems();
@@ -152,7 +171,22 @@ export default class MAIN extends CONTAINER {
             } catch (e) {
                 reject(e);
             }
+        });*/
+    }
+    /** Creates a USER Tab and its associated UserMenu
+        @returns {void}
+    */
+    addUserTab() {
+        this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
+        this.userMenu = new USERMENU(this.navBar.menu);
+        this.userTab.el.addEventListener('activate', () => {
+            if (this.getUser() === 'Guest') {
+                this.login();
+            } else {
+                this.userMenu.el.dispatchEvent(new Activate(this.userMenu));
+            }
         });
+        this.userTab.el.addEventListener('deactivate', () => this.userMenu.el.dispatchEvent(new Deactivate(this.userMenu)));
     }
     /** Returns the MAIN LOADER 
         @returns {LOADER} A LOADER
@@ -195,9 +229,7 @@ export default class MAIN extends CONTAINER {
                 location.reload(true);
             }, 1000);
         };
-        this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => {
-            this.loader.show();
-        };
+        this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
         let crudMenu = optionsMenu.getGroup('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
@@ -307,8 +339,7 @@ export default class MAIN extends CONTAINER {
                 } else {
                     console.log('Invalid Id to Load');
                     resolve(this);
-                }
-                
+                }                
             } catch (e) {
                 reject(e);
             }
@@ -464,22 +495,17 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
     createLoginForm(form) {
-        return new Promise((resolve, reject) => {
-            try {
-                form.setAction('/Account/Login');
-                form.addClass('login');
-                form.children[0].children[0].addInputElements([
-                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                    createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
-                ]);
-                form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-                form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
-                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
+        return this.callback(() => {
+            form.setAction('/Account/Login');
+            form.addClass('login');
+            form.children[0].children[0].addInputElements([
+                createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+            ]);
+            form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
+            form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
+            form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
         });
     }
     /** Redirects to the third party OAuth Sign In
@@ -487,7 +513,7 @@ export default class MAIN extends CONTAINER {
         @returns {void} 
     */
     loginOAuth(provider) {
-        this.toggleBody().then(() => {
+        this.body.toggle().then(() => {
             let returnUrl = this.url.origin + '/signin-' + provider;
             location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
         });

@@ -1,5 +1,7 @@
 /** @module */
 import MENU, { MODEL } from '../menu/MENU.js';
+//import Collapse from '../../../../event/Collapse.js';
+//import Expand from '../../../../event/Expand.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import SVG from '../../svg/SVG.js';
 /** An expandable menu with clickable header that opens a container full of icons
@@ -19,7 +21,7 @@ export default class NAVHEADER extends MENU {
         */
         this.tabs = new MENU(this, new MODEL('tabs'));
 		this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label));
-        this.addDefaultTab();
+        //this.addDefaultTab();
         /** NavItemIcon Tab
             @property {NAVITEMICON} optionsTab
         */
@@ -36,7 +38,24 @@ export default class NAVHEADER extends MENU {
 	    @returns {void}
 	*/
     addDefaultTab() {
-        this.tab.clickHandler(() => this.getContainer().toggleBody(), () => this.getContainer().save(), () => this.getContainer().setLabel(new Date().getTime()));
+        //this.tab.el.addEventListener('activate', () => this.getContainer().body.el.dispatchEvent(new Expand(this)));
+        //this.tab.el.addEventListener('deactivate', () => this.getContainer().body.el.dispatchEvent(new Collapse(this)));
+        
+        this.tab.clickHandler(
+            //() => this.getContainer().toggleBody(),
+            /*() => {
+                let container = this.getContainer();
+                if (container.body.hasClass('in')) {
+                    container.collapse();
+                } else {
+                    container.expand();
+                }
+            },*/
+            () => Promise.resolve(true),
+            () => this.getContainer().save(),
+            () => this.getContainer().setLabel(new Date().getTime())
+        );
+        
 		//return tab;
 	}
 	/** Adds the Options/Config menu to the NavHeader.
@@ -89,9 +108,9 @@ export default class NAVHEADER extends MENU {
 		}
 	}
 	/**	Show/Hide this.menu
-	    @returns {void}
+	    @returns {Promise<ThisType>} callback
 	*/
-	toggle() {
-		$(this.menu.el).collapse('toggle');
+    toggle() {
+        return this.callback(() => $(this.menu.el).collapse('toggle'));
 	}
 }

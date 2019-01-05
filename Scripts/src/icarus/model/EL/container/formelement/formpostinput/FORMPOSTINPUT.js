@@ -32,7 +32,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
     createInput() {
 		if (this.attributes.type === 'HIDDEN') {
-			this.collapse();
+			this.body.collapse();
 		}
 		if (this.attributes.readonly) {
 			this.input.el.setAttribute('readonly', 'readonly');

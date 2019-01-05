@@ -53,7 +53,7 @@ $sidebar-width: 80%;
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
 $thumbnail-height: 10em;
-$transition-speed: .2s;
+$transition-speed: 150ms;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
 $icon-width: 4em; //64px;
@@ -1450,17 +1450,25 @@ table {
     }
 
     &.usermenu {
+        @include transition(right $transition-speed $transition-motion);
+        //animation: slideOutRight $transition-speed $transition-motion;
         background-color: #373c40;
         border: 1px solid rgba(160, 160, 160, 0.25);
         border-radius: .2em;
         box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.8);
-        display: block;
+        //display: none;
         float: right;
         max-height: 320px;
         position: absolute;
-        right: 1px;
+        right: -231px;
         top: calc(#{$navbar-height} + 2px);
         width: 230px;
+
+        &.active {
+            //animation: slideInRight $transition-speed $transition-motion;
+            right: 1px;
+            //display: block;
+        }
 
         > ul {
             &.horizontal {
@@ -1560,6 +1568,16 @@ table {
             > .nav-item-icon {
                 display: inline-block;
 
+                &.active {
+                    background-color: rgb(103, 102, 86);
+
+                    > a {
+                        span {
+                            color: $color-white;
+                        }
+                    }
+                }
+
                 > a {
                     display: block;
                     width: 8em;
@@ -1588,7 +1606,11 @@ table {
 
         .nav-item {
             @extend %clickable;
+            @include transition($transition-default);
             background-color: $color-shadow-neutral;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            box-sizing: border-box;
             cursor: pointer;
             float: left;
             line-height: $navbar-height; // - 1em;
@@ -1598,11 +1620,27 @@ table {
             //text-align: center;
             &:hover {
                 background-color: $color-shadow-light;
+                border-left: 1px solid $color-shadow-neutral;
+                border-right: 1px solid $color-shadow-neutral;
+            }
+
+            &.active {
+                background-color: $color-grey-dark;
+                box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+            }
+
+            &.wide-tab {
+                font-weight: bold;
+
+                &.active {
+                    > a {
+                        text-shadow: 3px 2px 3px rgba(255,255,255,.2);
+                    }
+                }
             }
 
             > a {
                 color: $color-light;
-                //line-height: 1em;
                 padding: 0 1em;
 
                 &:hover {
@@ -1611,8 +1649,10 @@ table {
             }
 
             &.nav-item-icon {
-
-                &.userTab {
+                &.active {
+                    color: $color-grey-dark;
+                }
+                /*&.userTab {
                     > a {
                         padding: .2em;
 
@@ -1621,8 +1661,7 @@ table {
                             width: 32px;
                         }
                     }
-                }
-
+                }*/
                 > a {
                     > .icon {
                         > .icon-label {

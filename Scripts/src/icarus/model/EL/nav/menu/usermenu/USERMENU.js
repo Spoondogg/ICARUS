@@ -18,7 +18,7 @@ export default class USERMENU extends MENU {
             collapsed: 0,
             wrapperClass: 'usermenu'
         }));
-        this.hide();
+        //this.hide();
         
         this.profile = new DIV(this.wrapper, new MODEL('profile'));
         this.image = new IMG(this.profile, new MODEL({
@@ -36,6 +36,14 @@ export default class USERMENU extends MENU {
         for (let i = 0; i < 5; i++) {
             this.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.toggle();
         }
+
+        this.el.addEventListener('activate', () => { //this.toggle()
+            this.wrapper.addClass('active');
+        });
+        this.el.addEventListener('deactivate', () => {
+            this.wrapper.removeClass('active');
+        });
+
     }
     /** Calls MAIN.logout()
         @returns {Promise<ThisType>} callback
@@ -48,7 +56,11 @@ export default class USERMENU extends MENU {
         @returns {ThisType} callback
     */
     toggle() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            console.log(' - toggle usermenu');
+            $(this.wrapper.el).toggle();
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 console.log(' - toggle usermenu');
                 $(this.wrapper.el).toggle();
@@ -57,33 +69,35 @@ export default class USERMENU extends MENU {
                 console.error(e);
                 reject(e);
             }
-        });
+        });*/
     }
-    /** Collapses the User Menu
+    /** Sets the User Menu display to 'none' 
 	    @returns {Promise<ThisType>} callback
 	*/
     hide() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => $(this.wrapper.el).toggle('hide'));
+        /*return new Promise((resolve, reject) => {
             try {
                 $(this.wrapper.el).toggle('hide');
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
 	/** Expands the User Menu
         @returns {Promise<ThisType>} callback
     */
     show() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => $(this.wrapper.el).toggle('show'));
+        /*return new Promise((resolve, reject) => {
             try {
                 $(this.wrapper.el).toggle('show');
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
 }
 export { ATTRIBUTES, MENU, MODEL };

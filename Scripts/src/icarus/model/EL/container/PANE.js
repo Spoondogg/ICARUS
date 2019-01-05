@@ -1,25 +1,23 @@
 /** @module */
 import DIV, { EL, MODEL } from '../div/DIV.js';
 import CONTAINER from '../container/CONTAINER.js';
-/** Containers have a 'body' that can contain an optional sidebar and detect swipe events
+/** A panel with swipe detection
     @class
     @extends EL
 */
-export default class CONTAINERBODY extends DIV {
-	/** Construct a body with an optional sidebar
+export default class PANE extends DIV {
+	/** Construct a panel with swipe detection
         @param {CONTAINER} node Parent
         @param {MODEL} model Object
 	*/
 	constructor(node, model) {
 		super(node, model);
-		this.setClass('container-body collapse in');
-		//this.sidebar = null;
-		this.pane = new DIV(this, new MODEL('pane'));
+        this.addClass('pane');
 		// Add swipe detection for editing options in sidebar
-		this.pane.el.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
-		this.pane.el.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+		this.el.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+		this.el.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
 		this.xDown = null;
-		this.yDown = null;
+        this.yDown = null;
 	}
 	/** Sets start coordinates
 		@param {Event} ev Event
@@ -30,7 +28,7 @@ export default class CONTAINERBODY extends DIV {
         this.yDown = ev.touches[0].clientY;
         //ev.stopPropagation();
 	}
-	/** Process the swipe on body.pane
+	/** Process the swipe
         @todo Move body.pane into its own PANE class
         @see https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
         @param {any} ev Event
@@ -64,11 +62,5 @@ export default class CONTAINERBODY extends DIV {
         this.yDown = null;
         //ev.stopPropagation();
     }
-	/** Toggle the collapsed state of this container
-	    @returns {void}
-	*/
-	collapse() {
-		$(this.el).collapse('toggle');
-	}
 }
 export { CONTAINER, EL, MODEL };

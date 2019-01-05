@@ -1,13 +1,14 @@
 /** @module */
 import MENU, { MODEL } from './MENU.js'; //ATTRIBUTES
 import NAVSEARCH, { NAVITEM } from '../navitem/NAVSEARCH.js';
+import COLLAPSIBLE from '../../container/COLLAPSIBLE.js';
 /** A vertical navitemgroup with a search panel
     @class
     @extends MENU
- */
+*/
 export default class SIDEBARMENU extends MENU {
 	/** A vertical navitemgroup with a search panel
-        @param {CONTAINERBODY} node The CONTAINERBODY to contain the sidebar
+        @param {COLLAPSIBLE} node The CONTAINERBODY to contain the sidebar
         @param {MODEL} model The text that is displayed within the footer
         @todo NAVSEARCH needs improvement
     */
@@ -16,18 +17,12 @@ export default class SIDEBARMENU extends MENU {
 		this.addClass('sidebar collapse');
 		this.search = new NAVSEARCH(this);
 		this.search.el.style.display = 'none';
-		this.search.inputGroup.q.el.onkeypress = function() {
-			this.menu.addClass('in');
-		}.bind(this);
-		this.toggleButton = new NAVITEM(this, new MODEL('toggle').set({
-			'label': '<span class="caret"></span>'
-		}));
+		this.search.inputGroup.q.el.onkeypress = () => this.menu.addClass('in');
+		this.toggleButton = new NAVITEM(this, new MODEL('toggle').set('label', '<span class="caret"></span>'));
 		this.toggleButton.el.style.display = 'none';
 		this.toggleButton.anchor.addClass('toggle-wide noselect');
 		this.toggleButton.el.onclick = this.toggleDocumentMap.bind(this);
-		this.menu = new MENU(this, new MODEL('collapse in').set({
-			'name': 'document-map'
-		}));
+		this.menu = new MENU(this, new MODEL('collapse in').set('name', 'document-map'));
 	}
 	/** Show / Hide the Document Map Menu
         @returns {void}
@@ -36,3 +31,4 @@ export default class SIDEBARMENU extends MENU {
 		$(this.menu.el).collapse('toggle');
 	}
 }
+export { COLLAPSIBLE, MENU, MODEL };
