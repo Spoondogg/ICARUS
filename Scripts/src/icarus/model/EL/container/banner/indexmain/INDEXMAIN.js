@@ -161,7 +161,17 @@ export default class INDEXMAIN extends BANNER {
 	    @returns {Promise<this>} callback
 	*/
     loadPage(page) {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            this.header.setInnerHTML('Page ' + (page + 1));
+            let buttons = this.pagination.buttonGroup.el.children;
+            for (let b = 0; b < buttons.length; b++) {
+                $(buttons[b]).removeClass('active');
+            }
+            $(buttons[page]).addClass('active');
+            this.page = page;
+            this.construct();
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 this.header.setInnerHTML('Page ' + (page + 1));
                 let buttons = this.pagination.buttonGroup.el.children;
@@ -176,7 +186,7 @@ export default class INDEXMAIN extends BANNER {
                 console.log('Unable to load page.', e);
                 reject(e);
             }
-        });
+        });*/
 	}
 	/** Loads the next page in sequence
 	    @returns {void}

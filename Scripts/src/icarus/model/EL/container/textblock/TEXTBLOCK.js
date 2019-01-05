@@ -21,7 +21,13 @@ export default class TEXTBLOCK extends CONTAINER {
 	    @returns {void}
 	*/
     construct() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
+                this.text.el.ondblclick = () => this.save()
+            }
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 if (this.dataId > 0) {
                     this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
@@ -31,6 +37,6 @@ export default class TEXTBLOCK extends CONTAINER {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
 	}
 }

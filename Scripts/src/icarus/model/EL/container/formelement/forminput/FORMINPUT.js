@@ -34,7 +34,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	createInput() {
 		switch (this.attributes.type) {
 			case 'HIDDEN':
-				this.collapse();
+                this.body.collapse();                
 				break;
 			case 'CHECKBOX':
 				this.input.el.checked = this.attributes.value > 0;

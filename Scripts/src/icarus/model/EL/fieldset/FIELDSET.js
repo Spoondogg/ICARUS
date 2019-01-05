@@ -19,7 +19,15 @@ export default class FIELDSET extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
     construct(children) {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                //if (this.label) {
+                //	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
+                //}
+            }
+            this.populate(children);
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));
                 if (this.dataId > 0) {
@@ -31,7 +39,7 @@ export default class FIELDSET extends CONTAINER {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
 	}
 	/** Constructs a Form Element Group for this Fieldset
         @todo Verify that this overrides the initial case constructor

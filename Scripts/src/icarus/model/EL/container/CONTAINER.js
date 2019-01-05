@@ -3,10 +3,14 @@
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../group/GROUP.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
-import CONTAINERBODY from './CONTAINERBODY.js';
+//import Activate from '../../../event/Activate.js';
+import COLLAPSIBLE from './COLLAPSIBLE.js';
+//import Collapse from '../../../event/Collapse.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
+//import Deactivate from '../../../event/Deactivate.js';
 import DIALOG from '../dialog/DIALOG.js';
 //import DIV from '../div/DIV.js';
+//import Expand from '../../../event/Expand.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
@@ -30,9 +34,9 @@ export default class CONTAINER extends GROUP {
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @param {Array<string>} containers An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, element, model = new MODEL(), containers = []) {
-		super(node, element, model);
-        this.setId(model.id).addClass('container');        
+    constructor(node, element, model = new MODEL(), containers = []) {
+        super(node, element, model);
+        this.setId(model.id).addClass('container');
         /** If true, invokes double click
             @property {boolean} tappedTwice
         */
@@ -40,17 +44,17 @@ export default class CONTAINER extends GROUP {
 		/** Data model unique id
             @property {number} dataId
         */
-		this.dataId = model.dataId || 0;
+        this.dataId = model.dataId || 0;
 		/** An array of Input MODELs
             @property {Array<MODEL>} dataElements 
         */
-		this.dataElements = [];
-		try {
-			DATAELEMENTS.CONTAINER.data.forEach((m) => this.dataElements.push(m));
-			DATAELEMENTS[this.className].data.forEach((m) => this.dataElements.push(m));
-		} catch (e) {
-			console.warn('Unable to retrieve dataElements for ' + this.className);
-		}
+        this.dataElements = [];
+        try {
+            DATAELEMENTS.CONTAINER.data.forEach((m) => this.dataElements.push(m));
+            DATAELEMENTS[this.className].data.forEach((m) => this.dataElements.push(m));
+        } catch (e) {
+            console.warn('Unable to retrieve dataElements for ' + this.className);
+        }
 		/** Attribute model unique id
             @property {number} attributesId
         */
@@ -66,8 +70,8 @@ export default class CONTAINER extends GROUP {
 		/** Description model unique id
             @property {number} descriptionId
         */
-		this.descriptionId = model.descriptionId || 0;
-		
+        this.descriptionId = model.descriptionId || 0;
+
         /** Human readable label
             @property {string} label
         */
@@ -79,16 +83,23 @@ export default class CONTAINER extends GROUP {
         /** Toggles public sharing of this CONTAINER
             @property {number} shared
         */
-		this.shared = model.shared || 1;
-		this.status = model.status || STATUS.DEFAULT;           
+        this.shared = model.shared || 1;
+        this.status = model.status || STATUS.DEFAULT;
         this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
         /** The Container NAVBAR 
             @property {NAVBAR} navBar 
         */
         this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
-		this.createDraggableNavBar();
-        this.body = new CONTAINERBODY(this, model);
-        this.body.clickHandler(() => this.body.select(), () => this.toggleNav());
+        this.navBar.menu.tab.el.addEventListener('activate', () => this.expand());
+        this.navBar.menu.tab.el.addEventListener('deactivate', () => this.collapse());
+        this.createDraggableNavBar();
+        this.body = new COLLAPSIBLE(this, model);
+        //this.body.el.addEventListener('collapse', () => this.collapse());
+        this.body.el.addEventListener('collapse', () => this.navBar.menu.tab.el.dispatchEvent('activate'));
+        //this.body.el.addEventListener('expand', () => this.expand());
+        this.body.el.addEventListener('expand', () => this.navBar.menu.tab.el.dispatchEvent('deactivate'));
+
+        this.body.clickHandler(() => this.body.select(), () => this.navBar.toggle());
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
         //console.log('Construct', this.className, this);
         this.construct(model.children).then(() => this.setDefaultVisibility(model));
@@ -108,25 +119,43 @@ export default class CONTAINER extends GROUP {
 			//throw new AbstractMethodError(msg);
 		}*/
     }
+    /** Expands the Container's body and activates it primary tab
+        @returns {Promise<ThisType>} callback
+    */
+    expand() {
+        this.callback(() => {
+            //this.navBar.menu.tab.el.dispatchEvent(new Activate(this));
+            this.body.expand();
+            this.navBar.menu.tab.activate();
+            //this.navBar.menu.tab.expand();
+        });
+    }
+    /** Expands the Container's body and activates it primary tab
+        @returns {Promise<ThisType>} callback
+    */
+    collapse() {
+        this.callback(() => {
+            //this.navBar.menu.tab.el.dispatchEvent(new Deactivate(this));
+            this.body.collapse();            
+            this.navBar.menu.tab.deactivate();
+            //this.navBar.menu.tab.collapse();
+        });
+    }
+
     /** If the Container has no children, display a button to create an element
         Should be overridden on CONTAINERs that should not have children
         @returns {Promise<ThisType>} callback
     */
     ifEmpty() {
-        return new Promise((resolve, reject) => {
-            try {
-                if (this.children.length === 0) {
-                    let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
-                    btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
-                    btnAddElement.btn.el.onclick = () => {
-                        this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
-                        btnAddElement.destroy();
-                        return false;
-                    }
+        return this.callback(() => {
+            if (this.children.length === 0) {
+                let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+                btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
+                btnAddElement.btn.el.onclick = () => {
+                    this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+                    btnAddElement.destroy();
+                    return false;
                 }
-                resolve(this);
-            } catch (e) {
-                reject(e);
             }
         });
     }
@@ -255,7 +284,8 @@ export default class CONTAINER extends GROUP {
 	*/
     setDefaultVisibility(model) {
         if (model.data) {
-            let a = model.data.collapsed === '1' ? this.collapse() : this.show();
+            let a = model.data.collapsed === '1' ? this.collapse() : this.expand();
+            //let a = model.data.collapsed === '1' ? this.body.collapse() : this.body.expand();
             let b = model.data.showNav === '1' ? this.navBar.show() : this.navBar.hide();
             return [a, b];
         }
@@ -266,6 +296,16 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     addDefaultContainers(containerList) {
+        return this.callback(() => {
+            if (containerList.length > 0) {
+                // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
+                let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
+                containerList.splice(2, 0, ...defaultContainers);
+                //containerList.forEach((c) => this.addContainerCase(c));
+                Promise.all([containerList.map((c) => this.addContainerCase(c))]);
+            }
+        });
+        /*
         //console.log('containerList', containerList);
         return new Promise((resolve, reject) => {
             try {
@@ -282,6 +322,7 @@ export default class CONTAINER extends GROUP {
                 reject(e);
             }
         });
+        */
 	}
 	/** Drag containers by their NavBars
 	    @see https://www.w3schools.com/jsref/event_ondrag.asp
@@ -291,7 +332,7 @@ export default class CONTAINER extends GROUP {
 		this.navBar.el.setAttribute('draggable', true);
 		this.navBar.el.ondragstart = (ev) => {
 			console.log('Dragging Container: ' + this.className + '(' + this.id + ') ' + this.label);
-			this.collapse();
+			this.body.collapse();
 			ev.dataTransfer.setData("Container", this.id);
 		};
 		// Drop the Container
@@ -366,7 +407,18 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     refresh() {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
+                this.body.pane.empty()
+                    .then(() => { //container
+                        const [...children] = this.body.pane.children;
+                        this.body.pane.children = [];
+                        this.construct(children)
+                            //.then(() => this.populate(children))
+                            .then(() => loader.log(100));
+                    });
+            })
+        );
+        /*return new Promise((resolve, reject) => {
             try {
                 this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
                     this.body.pane.empty()
@@ -381,15 +433,14 @@ export default class CONTAINER extends GROUP {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
     }
     /** Closes parent menus
         @param {GROUP} group Menu Group
-        @returns {void}
+        @returns {Promise<ThisType>} callback
     */
     closeMenus(group) {
-        group.toggleCollapse();
-        this.navBar.menu.toggle();
+        return this.callback(() => group.toggleCollapse().then(() => this.navBar.menu.toggle()));
     }
     /** Creates a NavItem that closes its menu on mouseup
         @param {string} className className
@@ -479,16 +530,11 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addNavBarDefaults() {
-        return new Promise((resolve, reject) => {
-            try {
-                if (this.navBar.menu.menu) {
-                    this.addOptionGroups();
-                    this.addDomItems();
-                    this.addCrudItems();
-                }
-                resolve(this);
-            } catch (e) {
-                reject(e);
+        return this.callback(() => {
+            if (this.navBar.menu.menu) {
+                this.addOptionGroups();
+                this.addDomItems();
+                this.addCrudItems();
             }
         });
 	}
@@ -626,19 +672,6 @@ export default class CONTAINER extends GROUP {
 		this.el.setAttribute('name', name);
 		this.model.name = name;
 	}
-	/** Collapses the container's body
-	    @returns {boolean} true if hidden
-	    @returns {void}
-	*/
-	collapse() {
-		try {
-			$(this.body.el).collapse('hide');
-			return true;
-		} catch (e) {
-			console.log(e);
-			return false;
-		}
-	}
 	/** Expands the container's body
         @returns {void}
     */
@@ -663,10 +696,10 @@ export default class CONTAINER extends GROUP {
     }
     /** Collapses the NavBar
         @returns {void}
-    */
+    
     toggleNav() {
         this.navBar.toggle();
-    }
+    }*/
     /** Collapses the NavBar
         @returns {void}
     */
@@ -685,14 +718,16 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<ThisType>} callback
     */
     toggleBody() {
-        return new Promise((resolve, reject) => {
+        console.log('toggleBody()', this);
+        /*return new Promise((resolve, reject) => {
             try {
+                //this.body.el.dispatchEvent(new 
                 $(this.body.el).collapse('toggle');
                 resolve(this);
             } catch (e) {
                 reject(e);
             }
-        });		
+        });*/
 	}
 	/** An abstract load method for a CONTAINER
         @abstract

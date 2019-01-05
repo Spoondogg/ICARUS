@@ -30,6 +30,7 @@ export default class EL extends MODEL {
         this.children = children;
 		this.callbacks = {}; // Contains a series of Constructor functions that this element can use
         this.el = document.createElement(this.element);
+        //this.timer = null;
         this.touchtime = 0; // mobile double click detection
 		this.make(this.el, node, model, innerHTML);
 	}
@@ -104,19 +105,19 @@ export default class EL extends MODEL {
                 this.touchtime = new Date().getTime();
                 setTimeout(() => {
                     if (this.touchtime !== 0) {
-                        //console.log('singleclick', this.timer);
+                        console.log('singleclick', this.timer, this);
                         this.touchtime = 0;
                         clearTimeout(this.timer);
                         Promise.resolve(click(ev));
                     }
                 }, options.delay);
             } else if (new Date().getTime() - this.touchtime < options.delay) {
-                //console.log('doubleclick', this.timer);
+                console.log('doubleclick', this.timer, this);
                 this.touchtime = 0;
                 clearTimeout(this.timer);
                 Promise.resolve(dblclick(ev));
             } else {
-                //console.log('longclick', this.timer);
+                console.log('longclick', this.timer, this);
                 this.touchtime = 0;
                 clearTimeout(this.timer);
                 //Promise.resolve(longclick(ev));
@@ -132,6 +133,7 @@ export default class EL extends MODEL {
         }
     }
     /** Sets mobile-friendly single and double click events
+        @todo Consider treating this like an interface. ie: isClickable() binds clickHandler
         @param {Function} click Function call on single click
         @param {Function} dblclick Function call on double click
         @param {Function} longclick Funciton call on long click
@@ -139,8 +141,8 @@ export default class EL extends MODEL {
         @returns {ThisType} callback
     */
     clickHandler(click, dblclick = () => false, longclick = () => false, options = new MODEL().set({
-        delay: 300,
-        longClickDelay: 1000,
+        delay: 200,
+        longClickDelay: 850,
         stopPropagation: true
     })) {
         this.addClass('clickable');
@@ -148,14 +150,18 @@ export default class EL extends MODEL {
         this.timer = null;
         // Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
         // @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
-        this.el.onmousedown = (ev) => this.pressDown(ev, 'mousedown', options, longclick);
-        this.el.onmouseup = (ev) => this.pressUp(ev, 'mouseup', options);
+        // Consider showing a simple press-timer animation after 100ms
+        //this.el.onmousedown = (ev) => this.pressDown(ev, 'mousedown', options, longclick);
+        this.el.addEventListener('mousedown', (ev) => this.pressDown(ev, 'mousedown', options, longclick));
+        //this.el.onmouseup = (ev) => this.pressUp(ev, 'mouseup', options);
+        this.el.addEventListener('mouseup', (ev) => this.pressUp(ev, 'mouseup', options));
         //this.el.ontouchstart = (ev) => this.pressDown(ev, 'touchstart', options, longclick);
         this.el.addEventListener('touchstart', (ev) => this.pressDown(ev, 'touchstart', options, longclick), { passive: true });
         //this.el.ontouchend = (ev) => this.pressUp(ev, 'touchend', options);
         this.el.addEventListener('touchend', (ev) => this.pressUp(ev, 'touchend', options), { passive: true });
         // Detect Single and Double Click
-        this.el.onclick = (ev) => this.pressed(ev, options, click, dblclick, longclick);
+        //this.el.onclick = (ev) => this.pressed(ev, options, click, dblclick, longclick);
+        this.el.addEventListener('click', (ev) => this.pressed(ev, options, click, dblclick, longclick));
         return this;
     }
     /** Deselects any selected elements and sets this element as 'selected'
@@ -164,15 +170,7 @@ export default class EL extends MODEL {
         @returns {Promise<ThisType>} callback
     */
     select() { // event
-        return new Promise((resolve, reject) => {
-            try {
-                this.deselectAll()
-                    .then(() => this.addClass('selected')
-                        .then(() => resolve(this)));
-            } catch (e) {
-                reject(e);
-            }
-        });
+        return this.callback(() => this.deselectAll().then(() => this.addClass('selected')));
     }
     /** Deselect this element
         @returns {Promise<ThisType>} callback
@@ -192,15 +190,16 @@ export default class EL extends MODEL {
          @returns {ThisType} callback
     */
     setAttribute(key, value) {
-        this.el.setAttribute(key, value);
-        try {
-            this.attributes.set(key, value);
-        } catch (e) {
-            if (e instanceof TypeError) {
-                this.attributes = new ATTRIBUTES().set(key, value);
+        return this.callback(() => {
+            this.el.setAttribute(key, value);
+            try {
+                this.attributes.set(key, value);
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    this.attributes = new ATTRIBUTES().set(key, value);
+                }
             }
-        }
-        return this;
+        });
     }
     /** Adds given child element to this element's children
 	    @param {EL} model Object model
@@ -215,18 +214,13 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Returns this element for chaining purposes
 	*/
     addClass(className) {
-        return new Promise((resolve, reject) => {
-            try {
-                if (className === 'undefined') {
-                    console.log('ClassName Undefined');
-                } else {
-                    $(this.el).addClass(className);
-                    let prevClass = this.attributes.class || '';
-                    this.attributes.class = prevClass + ' ' + className;
-                }
-                resolve(this);
-            } catch (e) {
-                reject(e);
+        return this.callback(() => {
+            if (className === 'undefined') {
+                console.log('ClassName Undefined');
+            } else {
+                $(this.el).addClass(className);
+                let prevClass = this.attributes.class || '';
+                this.attributes.class = prevClass + ' ' + className;
             }
         });
     }
@@ -242,10 +236,7 @@ export default class EL extends MODEL {
         @returns {ThisType} callback
     */
     append(target) {
-        return new Promise((resolve) => {
-            target.insertBefore(this.el, target.firstChild);
-            resolve(this);
-        });
+        return this.callback(() => target.insertBefore(this.el, target.firstChild));
     }
 	/** Creates a textarea input and populates with this element's contents
         @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
@@ -380,7 +371,7 @@ export default class EL extends MODEL {
                 }
             } catch (ee) {
                 console.error(ee);
-                reject(e);
+                reject(ee);
             }
         });
 	}
@@ -459,25 +450,26 @@ export default class EL extends MODEL {
 	    between the object on the server and its client side representation
 	    @returns {EL} This EL
 	*/
-	open() {
-		this.status = STATUS.OPEN;
-		//this.el.setAttribute('data-status', 'open');
-		try {
-			this.node.open();
-		} catch (e) {
-			console.log('Unable to open parent element(' + this.element + ')', e);
-		}
-		return this;
+    open() {
+        return this.callback(() => {
+            this.status = STATUS.OPEN;
+            //this.el.setAttribute('data-status', 'open');
+            try {
+                this.node.open();
+            } catch (e) {
+                console.warn('Unable to open parent element(' + this.element + ')', e);
+            }
+        });
 	}
 	/** Closes the EL up for editing.  <br>This should create a link
 	    between the object on the server and its client side representation
 	    and update accordingly
 	    @returns {EL} This EL
 	*/
-	close() {
-		this.status = STATUS.CLOSED;
-		//this.el.setAttribute('data-status', 'closed');
-		return this;
+    close() {
+        return this.callback(() => {
+            this.status = STATUS.CLOSED;
+        });
 	}
 	/** Empties contents of node element
 	    @returns {EL} This EL
@@ -518,10 +510,11 @@ export default class EL extends MODEL {
         @param {string} className A class
         @returns {EL} Returns this element for chaining purposes
     */
-	setClass(className) {
-		this.el.className = className;
-		this.attributes.class = className;
-		return this;
+    setClass(className) {
+        this.callback(() => {
+            this.el.className = className;
+            this.attributes.class = className;
+        });
 	}
 	/** Retrieves the container (if exists) and sets it
 	    @returns {void}
@@ -534,6 +527,9 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} callback
 	*/
     removeClass(className) {
+        /*return this.callback(() => $(this.el).removeClass(className)).then((el) => {
+            el.attributes.set('class', el.attributes.get('class').split(' ').filter((v) => v !== className));
+        });*/
         return new Promise((resolve, reject) => {
             try {
                 $(this.el).removeClass(className);
@@ -549,63 +545,73 @@ export default class EL extends MODEL {
             }
         });
     }
-    /** Toggles the 'active' class on this element
-	    @param {string} className Optionally toggle this class
-	    @returns {EL} This EL
+    /** Toggles the given class on this element
+	    @param {string} className The classname to toggle on this element
+	    @returns {ThisType} callback
 	*/
-    toggle(className) {
+    toggle(className = 'active') {
+        //console.log('EL.toggle()', className);
+        return this.callback(() => $(this.el).toggleClass(className));
+    }
+    /** Wraps a Synchronous function inside a Promise that returns this element as a callback
+        The function is called within a try/catch block and will reject on error
+        @param {Array<Function>} funct An array of Synchronous functions in performing order
+        @param {string} msg Optional message to display on error
+        @returns {ThisType} Returns this object as a callback
+    */
+    callback(funct, msg = 'Callback Error') {
         return new Promise((resolve, reject) => {
             try {
-                if (className) {
-                    $(this.el).toggleClass(className); // || 'active'
+                if (Array.isArray(funct)) {
+                    funct.map((f, i) => {
+                        console.log('function call[' + i + ']', f);
+                        f();
+                    });
                 } else {
-                    $(this.el).toggle();
+                    funct();
                 }
                 resolve(this);
             } catch (e) {
+                console.warn(msg, e);
+                if (e instanceof TypeError) {
+                    console.log('Given Array', funct);
+                }
                 reject(e);
             }
         });
+    }
+    /** Binds methods of the given interface to this class
+        @param {IFACE} iface The interface to implement on this class
+        @returns {void}
+    */
+    implement(iface) {
+        Object.keys(iface.methods).forEach((key) => {
+            this[key] = iface.methods[key];
+        });
+    }
+    /** Returns true if class exists on this element
+	    @param {string} className the class to be appended
+	    @returns {boolean} True if class exists
+	*/
+    hasClass(className) {
+        return $(this.el).hasClass(className);
     }
 	/** Promises to collapse the MENU
 	    @returns {Promise<ThisType>} callback
 	*/
     hide() {
-        return new Promise((resolve, reject) => {
-            try {
-                this.el.style.display = 'none';
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
+        return this.callback(() => {
+            this.el.style.display = 'none';
         });
     }
 	/** Expands the MENU body
         @returns {Promise<ThisType>} callback
     */
     show() {
-        return new Promise((resolve, reject) => {
-            try {
-                this.el.style.display = 'block';
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
+        this.callback(() => {
+            this.el.style.display = 'block';
         });
     }
-	/** Adds 'active' to this element's classes
-	    @returns {EL} This EL
-    */
-    activate() {
-        return Promise.resolve(this.addClass('active'));
-	}
-	/** Removes 'active' from this element's classes
-	    @returns {EL} This EL
-    */
-	deactivate() {
-		$(this.el).removeClass('active');
-		return this;
-	}
 	/** Creates given elements as children of this element
 	    @param {array} children Array of children object models to be constructed
 	    @returns {Promise<ThisType>} callback

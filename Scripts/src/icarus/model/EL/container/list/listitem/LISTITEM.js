@@ -19,7 +19,15 @@ export default class LISTITEM extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
     construct(children) {
-        return new Promise((resolve, reject) => {
+        return this.callback(() => {
+            if (this.dataId > 0 || this.dataId === -1) {
+                if (this.data.p) {
+                    this.p = new P(this.body.pane, new MODEL(), this.htmlDecode(this.data.p));
+                }
+            }
+            this.populate(children);
+        });
+        /*return new Promise((resolve, reject) => {
             try {
                 if (this.dataId > 0 || this.dataId === -1) {
                     if (this.data.p) {
@@ -30,6 +38,6 @@ export default class LISTITEM extends CONTAINER {
             } catch (e) {
                 reject(e);
             }
-        });
+        });*/
 	}
 }
