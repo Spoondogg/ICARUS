@@ -94,42 +94,28 @@ export default class CONTAINER extends GROUP {
         this.navBar.menu.tab.el.addEventListener('activate', () => this.expand());
         this.navBar.menu.tab.el.addEventListener('deactivate', () => this.collapse());
         this.createDraggableNavBar();
-        this.body = new COLLAPSIBLE(this, model)
+        this.body = new COLLAPSIBLE(this, new MODEL('container-body'));
         this.body.implement(new Selectable(this));
-        //this.body.el.addEventListener('collapse', () => this.collapse());
-        this.body.el.addEventListener('collapse', () => this.navBar.menu.tab.el.dispatchEvent('activate'));
-        //this.body.el.addEventListener('expand', () => this.expand());
-        this.body.el.addEventListener('expand', () => this.navBar.menu.tab.el.dispatchEvent('deactivate'));
-
+        this.body.el.addEventListener('collapse', () => this.navBar.menu.tab.activate());
+        this.body.el.addEventListener('expand', () => this.navBar.menu.tab.deactivate());
         this.body.clickHandler(this.body.select, this.navBar.toggle);
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
-        //console.log('Construct', this.className, this);
         this.construct(model.children).then(() => this.setDefaultVisibility(model));
 	}
 	/* eslint-enable max-statements */
-	/** Abstract construct method throws an error if not declared 
-		@abstract
-        param {Array<MODEL>} children Array of children to construct
+	/** Generic construct method
 	    @returns {Promise<ThisType>} callback
 	*/
-    construct() { // children
+    construct() {
         return Promise.resolve(this);
-        /*if (this.className !== 'CONTAINER') {
-            let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.construct() not implemented.';
-            console.warn(msg);
-            return Promise.resolve(this);
-			//throw new AbstractMethodError(msg);
-		}*/
     }
     /** Expands the Container's body and activates it primary tab
         @returns {Promise<ThisType>} callback
     */
     expand() {
         this.callback(() => {
-            //this.navBar.menu.tab.el.dispatchEvent(new Activate(this));
             this.body.expand();
             this.navBar.menu.tab.activate();
-            //this.navBar.menu.tab.expand();
         });
     }
     /** Expands the Container's body and activates it primary tab
@@ -137,13 +123,10 @@ export default class CONTAINER extends GROUP {
     */
     collapse() {
         this.callback(() => {
-            //this.navBar.menu.tab.el.dispatchEvent(new Deactivate(this));
             this.body.collapse();            
             this.navBar.menu.tab.deactivate();
-            //this.navBar.menu.tab.collapse();
         });
     }
-
     /** If the Container has no children, display a button to create an element
         Should be overridden on CONTAINERs that should not have children
         @returns {Promise<ThisType>} callback
@@ -308,24 +291,6 @@ export default class CONTAINER extends GROUP {
                 Promise.all([containerList.map((c) => this.addContainerCase(c))]);
             }
         });
-        /*
-        //console.log('containerList', containerList);
-        return new Promise((resolve, reject) => {
-            try {
-                if (containerList.length > 0) {
-                    // containerList.splice(2, 0, ...['FORM', 'MENU', 'BANNER', 'TEXTBLOCK']).forEach((c) => this.addContainerCase(c));
-                    let defaultContainers = []; // 'FORM', 'MENU', 'BANNER', 'TEXTBLOCK' //, 'IFRAME'  'LIST', 'MENULIST', 'JUMBOTRON' 'CHAT'
-                    containerList.splice(2, 0, ...defaultContainers);
-                    //containerList.forEach((c) => this.addContainerCase(c));
-                    Promise.all([containerList.map((c) => this.addContainerCase(c))]).then(() => resolve(this));
-                } else {
-                    resolve(this);
-                }
-            } catch (e) {
-                reject(e);
-            }
-        });
-        */
 	}
 	/** Drag containers by their NavBars
 	    @see https://www.w3schools.com/jsref/event_ondrag.asp
@@ -421,22 +386,6 @@ export default class CONTAINER extends GROUP {
                     });
             })
         );
-        /*return new Promise((resolve, reject) => {
-            try {
-                this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
-                    this.body.pane.empty()
-                        .then(() => { //container
-                            const [...children] = this.body.pane.children;
-                            this.body.pane.children = [];
-                            this.construct(children)
-                                //.then(() => this.populate(children))
-                                .then(() => loader.log(100).then(() => resolve(this)));
-                        });
-                });
-            } catch (e) {
-                reject(e);
-            }
-        });*/
     }
     /** Closes parent menus
         @param {GROUP} group Menu Group
@@ -491,16 +440,9 @@ export default class CONTAINER extends GROUP {
             ev.stopPropagation();
             ev.preventDefault();
         }
-        items.CRUD.el.onclick = () => {
-            console.log('CRUD');
-            this.navBar.menu.toggle().menu.getGroup('CRUD').toggle();
-        }
-        items.DOM.el.onclick = () => {
-            console.log('DOM');
-        }
-        items.USER.el.onclick = () => {
-            console.log('USER');
-        }
+        items.CRUD.el.onclick = () => console.log('CRUD'); //this.navBar.menu.toggle().menu.getGroup('CRUD').toggle();
+        items.DOM.el.onclick = () => console.log('DOM');
+        items.USER.el.onclick = () => console.log('USER');
         return group;
     }
 

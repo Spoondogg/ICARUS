@@ -41,7 +41,8 @@ export default class MAIN extends CONTAINER {
         /** The active container has access to keybindings */
         this.activeContainer = null;
         // ELEMENTS
-		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
+        this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
+        this.sidebar.deactivate();
         this.stickyFooter = new STICKYFOOTER(this, new MODEL());   
         this.stickyFooter.expand();
         // CRUD
@@ -101,7 +102,8 @@ export default class MAIN extends CONTAINER {
             if (this.navBar.menu.menu) {
                 // LEFT ALIGN
                 this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
-                this.btnSidebar.el.onclick = () => this.sidebar.toggle();
+                this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
+                this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
                 $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
 
                 this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
