@@ -21,6 +21,7 @@ import P from '../p/P.js';
 //import PROMPT from '../dialog/prompt/PROMPT.js'; You can't have prompt in here because it has a FORM
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
+import Selectable from '../../../interface/Selectable/Selectable.js';
 /** An abstract Container element with NAVBAR
     @description A container can be expanded or hidden and have elements added to itself
     @class
@@ -93,13 +94,14 @@ export default class CONTAINER extends GROUP {
         this.navBar.menu.tab.el.addEventListener('activate', () => this.expand());
         this.navBar.menu.tab.el.addEventListener('deactivate', () => this.collapse());
         this.createDraggableNavBar();
-        this.body = new COLLAPSIBLE(this, model);
+        this.body = new COLLAPSIBLE(this, model)
+        this.body.implement(new Selectable(this));
         //this.body.el.addEventListener('collapse', () => this.collapse());
         this.body.el.addEventListener('collapse', () => this.navBar.menu.tab.el.dispatchEvent('activate'));
         //this.body.el.addEventListener('expand', () => this.expand());
         this.body.el.addEventListener('expand', () => this.navBar.menu.tab.el.dispatchEvent('deactivate'));
 
-        this.body.clickHandler(() => this.body.select(), () => this.navBar.toggle());
+        this.body.clickHandler(this.body.select, this.navBar.toggle);
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
         //console.log('Construct', this.className, this);
         this.construct(model.children).then(() => this.setDefaultVisibility(model));
@@ -152,7 +154,7 @@ export default class CONTAINER extends GROUP {
                 let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
                 btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
                 btnAddElement.btn.el.onclick = () => {
-                    this.showNav().navBar.menu.menu.toggleCollapse().getGroup('ELEMENTS').toggleCollapse();
+                    this.showNav().navBar.menu.menu.toggle().getGroup('ELEMENTS').toggle();
                     btnAddElement.destroy();
                     return false;
                 }
@@ -182,6 +184,7 @@ export default class CONTAINER extends GROUP {
                         default:
                             console.warn(name + ' does not have a valid constructor');
                     }
+                    this[name].implement(new Selectable(this[name]));
                     this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
                     resolve(this[name]);
                 }
@@ -286,7 +289,7 @@ export default class CONTAINER extends GROUP {
         if (model.data) {
             let a = model.data.collapsed === '1' ? this.collapse() : this.expand();
             //let a = model.data.collapsed === '1' ? this.body.collapse() : this.body.expand();
-            let b = model.data.showNav === '1' ? this.navBar.show() : this.navBar.hide();
+            let b = model.data.showNav === '1' ? this.navBar.expand() : this.navBar.collapse();
             return [a, b];
         }
         return [false, false];
@@ -440,7 +443,7 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<ThisType>} callback
     */
     closeMenus(group) {
-        return this.callback(() => group.toggleCollapse().then(() => this.navBar.menu.toggle()));
+        return this.callback(() => group.toggle().then(() => this.navBar.menu.toggle()));
     }
     /** Creates a NavItem that closes its menu on mouseup
         @param {string} className className
@@ -484,13 +487,13 @@ export default class CONTAINER extends GROUP {
         items.ELEMENTS.el.onmouseup = () => false;
         items.ELEMENTS.el.onclick = (ev) => {
             console.log('ELEMENTS');
-            this.navBar.menu.menu.toggle().getGroup('ELEMENTS').toggleCollapse();
+            this.navBar.menu.menu.toggle().getGroup('ELEMENTS').toggle();
             ev.stopPropagation();
             ev.preventDefault();
         }
         items.CRUD.el.onclick = () => {
             console.log('CRUD');
-            this.navBar.menu.toggle().menu.getGroup('CRUD').toggleCollapse();
+            this.navBar.menu.toggle().menu.getGroup('CRUD').toggle();
         }
         items.DOM.el.onclick = () => {
             console.log('DOM');
@@ -696,22 +699,16 @@ export default class CONTAINER extends GROUP {
     }
     /** Collapses the NavBar
         @returns {void}
-    
-    toggleNav() {
-        this.navBar.toggle();
-    }*/
-    /** Collapses the NavBar
-        @returns {void}
     */
     hideNav() {
         console.log('Hiding ' + this.className + ' navBar', this);
-        this.navBar.hide();
+        this.navBar.collapse();
     }
     /** Expands the NavBar
         @returns {ThisType} callback
     */
     showNav() {
-        this.navBar.show();
+        this.navBar.expand();
         return this;
     }
 	/** Toggles the collapsed state of the container's body

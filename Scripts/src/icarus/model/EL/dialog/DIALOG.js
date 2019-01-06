@@ -30,7 +30,9 @@ export default class DIALOG extends EL {
         this.btnClose = new BUTTON(this.header, 'x');
 		this.btnClose.el.onclick = () => this.close(300);
 
-        this.navBar = new NAVBAR(this, new MODEL().set('label', model.label)).show();
+        this.navBar = new NAVBAR(this, new MODEL().set('label', model.label));
+        this.navBar.expand();
+        this.navBar.menu.expand();
 		
 		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));

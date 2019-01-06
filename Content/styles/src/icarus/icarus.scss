@@ -49,7 +49,7 @@ $font-size-normal: 1em;
 $font-size-large: 1.5em;
 $font-size-extralarge: 2.5em;
 $navbar-height: 4em; // 50px
-$sidebar-width: 80%;
+$sidebar-width: 320px;
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
 $thumbnail-height: 10em;
@@ -1363,19 +1363,23 @@ table {
                 @extend %pane-tall;
                 @include boxShadow(0, 0, 3px, 0, $color-black);
                 @include no-scroll-bar;
-                @include transition($transition-default);
+                //@include transition($transition-default);
+                @include transition(left $transition-speed $transition-motion);
                 background-color: transparentize($color-black, .2);
-                display: none;
-                margin-left: -100%; /// !important
+                float: left;
+                left: calc(0px - #{$sidebar-width});
+                //margin-left: -100%; /// !important
                 position: absolute;
                 top: $navbar-height;
                 width: $sidebar-width; // !important
                 z-index: 999;
 
                 &.active {
-                    display: block;
-                    margin-left: 0;
+                    //animation: slideInLeft $transition-speed $transition-motion;
+                    left: 0;
+                    //display: block;
                 }
+
                 // Each embedded list gets smaller
                 ul {
                     li {

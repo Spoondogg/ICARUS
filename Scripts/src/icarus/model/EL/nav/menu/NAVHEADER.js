@@ -1,9 +1,11 @@
 /** @module */
 import MENU, { MODEL } from '../menu/MENU.js';
 //import Collapse from '../../../../event/Collapse.js';
+import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
 //import Expand from '../../../../event/Expand.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import SVG from '../../svg/SVG.js';
+
 /** An expandable menu with clickable header that opens a container full of icons
     @class
     @extends MENU
@@ -14,14 +16,13 @@ export default class NAVHEADER extends MENU {
 	    @param {MODEL} model Object model
 	 */
 	constructor(node, model) {
-		super(node, model);
-		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
+        super(node, model);
+        this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
         /** A collection of navigation tabs
             @property {MENU}
         */
         this.tabs = new MENU(this, new MODEL('tabs'));
 		this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label));
-        //this.addDefaultTab();
         /** NavItemIcon Tab
             @property {NAVITEMICON} optionsTab
         */
@@ -29,8 +30,8 @@ export default class NAVHEADER extends MENU {
         /** The header menu
             @property {MENU} menu
         */
-		this.menu = new MENU(this, new MODEL('collapse').set('name', 'menu'));
-		this.optionsTab.el.onclick = () => this.toggle();
+		this.menu = new MENU(this, new MODEL().set('name', 'menu'));
+		this.optionsTab.el.onclick = () => this.menu.toggle();
 		this.addOptionsMenu();
 	}
 	/** Adds the default toggle tab for this MENU
@@ -109,8 +110,8 @@ export default class NAVHEADER extends MENU {
 	}
 	/**	Show/Hide this.menu
 	    @returns {Promise<ThisType>} callback
-	*/
+	
     toggle() {
         return this.callback(() => $(this.menu.el).collapse('toggle'));
-	}
+	}*/
 }

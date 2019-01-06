@@ -636,6 +636,8 @@
     <Content Include="Scripts\src\icarus\helper\DATEOBJECT.js" />
     <Content Include="Scripts\src\icarus\helper\SERVICEWORKER.js" />
     <Content Include="Scripts\src\icarus\helper\WATERMARK.js" />
+    <Content Include="Scripts\src\icarus\interface\Scrollable\Scrollable.js" />
+    <Content Include="Scripts\src\icarus\interface\Swipeable\Swipeable.js" />
     <Content Include="Scripts\src\icarus\interface\Hideable\Hideable.js" />
     <Content Include="Scripts\src\icarus\interface\Selectable\Selectable.js" />
     <Content Include="Scripts\src\icarus\interface\Switchable\Switchable.js" />
