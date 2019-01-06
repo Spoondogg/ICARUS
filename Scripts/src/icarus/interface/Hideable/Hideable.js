@@ -13,7 +13,10 @@ export default class Hideable extends IFACE {
 	*/
     constructor(node) {
         super(node);
-        node.addClass('hideable');
+        //node.addClass('hideable');
+        node.el.addEventListener('hide', () => node.activate());
+        node.el.addEventListener('show', () => node.deactivate());
+        //node.el.addEventListener('flip', () => node.flip());
         /** Promises to collapse the MENU
 	        @returns {Promise<ThisType>} callback
 	    */

@@ -2,6 +2,7 @@
 import MENU, { ATTRIBUTES, MODEL } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import IMG from '../../../img/IMG.js';
+import Switchable from '../../../../../interface/Switchable/Switchable.js';
 /** User Menu 
     @class
     @extends EL
@@ -18,7 +19,12 @@ export default class USERMENU extends MENU {
             collapsed: 0,
             wrapperClass: 'usermenu'
         }));
-        //this.hide();
+        this.expand();
+        //this.implement(new Switchable(this));
+        this.wrapper.implement(new Switchable(this.wrapper));
+        this.activate = () => this.wrapper.activate();
+        this.deactivate = () => this.wrapper.deactivate();
+        this.flip = () => this.wrapper.flip();
         
         this.profile = new DIV(this.wrapper, new MODEL('profile'));
         this.image = new IMG(this.profile, new MODEL({
@@ -34,70 +40,15 @@ export default class USERMENU extends MENU {
         this.btnLogout.el.onclick = () => this.logout();
 
         for (let i = 0; i < 5; i++) {
-            this.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.toggle();
+            this.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.wrapper.deactivate();
         }
-
-        this.el.addEventListener('activate', () => { //this.toggle()
-            this.wrapper.addClass('active');
-        });
-        this.el.addEventListener('deactivate', () => {
-            this.wrapper.removeClass('active');
-        });
-
     }
     /** Calls MAIN.logout()
         @returns {Promise<ThisType>} callback
     */
     logout() {
         console.log('USERMENU.logout()');
-        return this.toggle().then(() => this.getMain().then((main) => main.logout()));
-    }
-    /** Toggles the visibility of the User Menu
-        @returns {ThisType} callback
-    */
-    toggle() {
-        return this.callback(() => {
-            console.log(' - toggle usermenu');
-            $(this.wrapper.el).toggle();
-        });
-        /*return new Promise((resolve, reject) => {
-            try {
-                console.log(' - toggle usermenu');
-                $(this.wrapper.el).toggle();
-                resolve(this);
-            } catch (e) {
-                console.error(e);
-                reject(e);
-            }
-        });*/
-    }
-    /** Sets the User Menu display to 'none' 
-	    @returns {Promise<ThisType>} callback
-	*/
-    hide() {
-        return this.callback(() => $(this.wrapper.el).toggle('hide'));
-        /*return new Promise((resolve, reject) => {
-            try {
-                $(this.wrapper.el).toggle('hide');
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });*/
-    }
-	/** Expands the User Menu
-        @returns {Promise<ThisType>} callback
-    */
-    show() {
-        return this.callback(() => $(this.wrapper.el).toggle('show'));
-        /*return new Promise((resolve, reject) => {
-            try {
-                $(this.wrapper.el).toggle('show');
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });*/
+        return this.wrapper.flip().then(() => this.getMain().then((main) => main.logout()));
     }
 }
 export { ATTRIBUTES, MENU, MODEL };

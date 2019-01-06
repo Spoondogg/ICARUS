@@ -1,6 +1,7 @@
 /** @module */
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import { HtmlElement } from '../../enums/HtmlElement.js';
+//import Hideable from '../../interface/Hideable/Hideable.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
@@ -32,6 +33,7 @@ export default class EL extends MODEL {
         this.el = document.createElement(this.element);
         //this.timer = null;
         this.touchtime = 0; // mobile double click detection
+        //this.implement(new Hideable(this));
 		this.make(this.el, node, model, innerHTML);
 	}
 	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
@@ -168,22 +170,22 @@ export default class EL extends MODEL {
         param {EL} element The element to select
         param {Event} event Event
         @returns {Promise<ThisType>} callback
-    */
+    
     select() { // event
         return this.callback(() => this.deselectAll().then(() => this.addClass('selected')));
-    }
+    }*/
     /** Deselect this element
         @returns {Promise<ThisType>} callback
-    */
+    
     deselect() {
         return Promise.resolve(this.removeClass('selected'));
-    }
+    }*/
     /** Deselects any 'selected' elements 
         @returns {Promise<void>} callback
-    */
+    
     deselectAll() {
         return Promise.resolve($('.selected').removeClass('selected'));
-    }
+    }*/
     /** Sets the given attribute to the element and its model
          @param {string} key Attribute name
          @param {any} value Attribute value
@@ -549,8 +551,7 @@ export default class EL extends MODEL {
 	    @param {string} className The classname to toggle on this element
 	    @returns {ThisType} callback
 	*/
-    toggle(className = 'active') {
-        //console.log('EL.toggle()', className);
+    toggleClass(className = 'active') {
         return this.callback(() => $(this.el).toggleClass(className));
     }
     /** Wraps a Synchronous function inside a Promise that returns this element as a callback
@@ -595,22 +596,6 @@ export default class EL extends MODEL {
 	*/
     hasClass(className) {
         return $(this.el).hasClass(className);
-    }
-	/** Promises to collapse the MENU
-	    @returns {Promise<ThisType>} callback
-	*/
-    hide() {
-        return this.callback(() => {
-            this.el.style.display = 'none';
-        });
-    }
-	/** Expands the MENU body
-        @returns {Promise<ThisType>} callback
-    */
-    show() {
-        this.callback(() => {
-            this.el.style.display = 'block';
-        });
     }
 	/** Creates given elements as children of this element
 	    @param {array} children Array of children object models to be constructed

@@ -15,19 +15,11 @@ export default class Collapsible extends INTERFACE {
         node.addClass('collapse');
         node.el.addEventListener('collapse', () => node.collapse());
         node.el.addEventListener('expand', () => node.expand());
+        node.el.addEventListener('toggle', () => node.toggle());
         /** Toggles the collapsed state of the node
 	       @returns {Promise<ThisType>} callback
 	    */
         this.methods.toggle = () => node.callback(() => $(node.el).collapse('toggle'));
-        /** Collapses the node
-	        @returns {Promise<ThisType>} callback
-	    */
-        //this.methods.hide = () => node.callback(() => $(node.el).collapse('hide'));
-        /** Expands the node
-	        @returns {ThisType} callback
-	    */
-        //this.methods.show = () => node.callback(() => $(node.el).collapse('show'));
-
         /** Collapses the node
 	        @returns {Promise<ThisType>} callback
 	    */
@@ -36,6 +28,5 @@ export default class Collapsible extends INTERFACE {
 	        @returns {ThisType} callback
 	    */
         this.methods.expand = () => node.callback(() => $(node.el).collapse('show'));
-
     }
 }

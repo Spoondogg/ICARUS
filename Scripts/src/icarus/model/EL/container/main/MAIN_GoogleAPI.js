@@ -42,8 +42,7 @@ export default class MAIN extends CONTAINER {
         this.activeContainer = null;
         // ELEMENTS
 		this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
-        this.stickyFooter = new STICKYFOOTER(this, new MODEL());   
-        this.stickyFooter.expand();
+        this.stickyFooter = new STICKYFOOTER(this, new MODEL());        
         // CRUD
 		this.save = this.factory.save;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
@@ -62,6 +61,26 @@ export default class MAIN extends CONTAINER {
             }
         });
     }
+    /** MAIN NavBars should not be draggable, and should contain a user/login button
+        @returns {Promise<ThisType>} callback
+    
+    addNavLogin() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.navBar.setAttribute('draggable', false);
+                if (this.getUser() === 'Guest') {
+                    this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.USER)).el.onclick = () => this.login();
+                    //this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.CERTIFICATE)).el.onclick = () => this.loginGoogle();
+                } else {
+                    //this.getGoogleIdentity();
+                    this.setUserIcon();
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }*/
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
@@ -101,7 +120,7 @@ export default class MAIN extends CONTAINER {
             if (this.navBar.menu.menu) {
                 // LEFT ALIGN
                 this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
-                this.btnSidebar.el.onclick = () => this.sidebar.toggle();
+                this.btnSidebar.el.onclick = () => this.toggleSidebar();
                 $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
 
                 this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
@@ -123,6 +142,37 @@ export default class MAIN extends CONTAINER {
                 this.addDefaultMenuItems();
             }
         });
+        /*return new Promise((resolve, reject) => {
+            try {
+                if (this.navBar.menu.menu) {
+                    // LEFT ALIGN
+                    this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
+                    this.btnSidebar.el.onclick = () => this.toggleSidebar();
+                    $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
+
+                    this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
+                    this.btnPrev.el.onclick = () => this.navigateBack();
+                    $(this.btnPrev.el).insertBefore(this.navBar.menu.tab.el);
+
+                    this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
+                    this.btnNext.el.onclick = () => this.navigateForward();
+                    $(this.btnNext.el).insertBefore(this.navBar.menu.tab.el);
+
+                    // RIGHT ALIGN
+                    this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+                    $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+
+                    // USER TAB / MENU
+                    this.addUserTab();
+
+                    this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
+                    this.addDefaultMenuItems();
+                }
+                resolve(this);
+            } catch (e) {
+                reject(e);
+            }
+        });*/
     }
     /** Creates a USER Tab and its associated UserMenu
         @returns {void}
@@ -134,10 +184,10 @@ export default class MAIN extends CONTAINER {
             if (this.getUser() === 'Guest') {
                 this.login();
             } else {
-                this.userMenu.wrapper.activate(); //.el.dispatchEvent(new Activate(this.userMenu));
+                this.userMenu.el.dispatchEvent(new Activate(this.userMenu));
             }
         });
-        this.userTab.el.addEventListener('deactivate', () => this.userMenu.wrapper.deactivate()); //this.userMenu.el.dispatchEvent(new Deactivate(this.userMenu))
+        this.userTab.el.addEventListener('deactivate', () => this.userMenu.el.dispatchEvent(new Deactivate(this.userMenu)));
     }
     /** Returns the MAIN LOADER 
         @returns {LOADER} A LOADER
@@ -296,6 +346,13 @@ export default class MAIN extends CONTAINER {
             }
         });
 	}
+	/** Toggles the active state of the sidebar
+	    @return {ThisType} Return this for method chain
+	*/
+	toggleSidebar() {
+		this.sidebar.toggle('active');
+		return this;
+	}
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id
 	    @todo Create method to browse MAINs
@@ -311,6 +368,82 @@ export default class MAIN extends CONTAINER {
 	getId() {
 		return this.id;
 	}
+	/** Launches the External Authentication Process
+		The user will be redirected to a third party OAuth authenticator
+        @param {string} provider OAuth Provider
+        @param {strong} returnUrl Return URL for 3rd party
+	    @returns {void}
+	
+    loginExternal() {
+        console.log('MAIN.loginExternal();');
+        let prompt = new PROMPT(new MODEL().set('label', 'Login OAuth2')).createForm().then((form) => {
+            form.setAction('/Account/ExternalLogin'); // /externalLogin?ReturnUrl=%2F
+            form.id = 0;
+            form.label = 'Login External';
+            form.el.setAttribute('id', 0);
+            form.addClass('login');
+            form.footer.buttonGroup.children[0].destroy().then(() => {
+                $.getJSON('/Account/GetLoginProviders', (payload) => {
+                    payload.model.forEach((p) => {
+                        form.footer.buttonGroup.addButton(p.Properties.Caption).el.onclick = () => {
+                            let provider = p.Properties.AuthenticationType;
+                            let returnUrl = this.url.origin + '/signin-' + provider;
+                            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' +
+                                p.Properties.AuthenticationType +
+                                '&returnUrl=' + encodeURI(returnUrl);
+                            location.href = postUrl;
+                        };
+                    });
+                });
+                //prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                prompt.show();
+            });
+        });
+    }*/
+    /** Instantiates the Google Authentication API 
+        and retrieves user details if they exist
+        @returns {void}
+    
+    getGoogleIdentity() {
+        console.log('Calling Auth2...');
+        gapi.load('auth2', () => {
+            gapi.auth2.init().then(() => {
+                let googleAuth = gapi.auth2.getAuthInstance();
+                googleAuth.signIn().then((googleUser) => {
+                    // Current User
+                    let currentUser = googleAuth.currentUser.get();
+                    console.log('currentUser', currentUser);
+                    console.log('currentUserId', currentUser.getId());
+
+                    // Google User
+                    console.log('googleUser', googleUser);
+                    console.log('googleUserId', googleUser.getId());
+                    console.log('googleUserIsSignedIn', googleUser.isSignedIn());
+                    console.log('hostedDomain', googleUser.getHostedDomain());
+
+                    let basicProfile = googleUser.getBasicProfile();
+                    console.log('basicInfo', basicProfile);
+                    console.log('id', basicProfile.getId());
+                    console.log('getName', basicProfile.getName());
+                    console.log('givenName', basicProfile.getGivenName());
+                    console.log('familyName', basicProfile.getFamilyName());
+                    console.log('imageUrl', basicProfile.getImageUrl());
+                    console.log('email', basicProfile.getEmail());
+
+                    // https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api
+                    let authResponse = googleUser.getAuthResponse(true);
+                    console.log('authResponse', authResponse);
+
+                    this.userTab.anchor.icon.destroy(0).then(() => {
+                        this.userTab.anchor.icon = new IMG(this.userTab.anchor, new MODEL({
+                            class: 'user-image',
+                            src: basicProfile.getImageUrl()
+                        }));
+                    });
+                });
+            });
+        });
+    }*/
     /** Retrieves user data from localStorage
         and sets the user icon image accordingly
         @returns {void}
@@ -325,6 +458,21 @@ export default class MAIN extends CONTAINER {
             this.userTab.anchor.icon.el.setAttribute('title', localStorage.getItem('given_name'));
         });
     }
+    /** Performs calls to the Google Identity API
+        @returns {void}
+    
+    loginGoogle() {
+        this.loader.log(99, 'Google Identity').then((loader) => {
+            new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
+                container: this,
+                label: 'Log In - Google API'
+            })).then((form) => {
+                form.footer.buttonGroup.addButton('Login - API').el.onclick = this.getGoogleIdentity();
+                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                loader.log(100).then(() => form.getDialog().show());
+            });
+        });
+    }*/
 	/** Log into the application using the given credentials
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}

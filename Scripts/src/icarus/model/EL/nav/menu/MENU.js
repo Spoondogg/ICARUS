@@ -1,6 +1,7 @@
 /** @module */
 import UL, { ATTRIBUTES, GROUP, LI, MODEL } from '../../ul/UL.js';
 import Activate from '../../../../event/Activate.js';
+import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
 import DIV from '../../div/DIV.js';
 import Deselect from '../../../../event/Deselect.js';
 import HEADER from '../../header/HEADER.js';
@@ -9,6 +10,7 @@ import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 import Select from '../../../../event/Select.js';
+import Selectable from '../../../../interface/Selectable/Selectable.js';
 /** A collapseable list of Nav Items
     @extends UL
 */
@@ -20,18 +22,22 @@ export default class MENU extends UL {
 	constructor(node, model) {
 		super(node, model);
         this.addClass('list');
-        this.el.addEventListener('deselect', this.deselect.bind(this));
+        this.implement(new Selectable(this));
+        this.implement(new Collapsible(this));
+        // Override Selectable 
+        this.select = () => this.callback(() => this.deselectAll().then(() => this.wrapper.select().then(() => this.expand())));
+        this.deselect = () => this.callback(() => this.wrapper.deselect().then(() => this.collapse()));
+
         this.wrapper = new DIV(node, new MODEL('menu'));
         this.wrapper.addClass(model.wrapperClass);
-        this.wrapper.el.addEventListener('select', this.select.bind(this));
-        this.wrapper.el.addEventListener('deselect', this.deselect.bind(this));
+        this.wrapper.implement(new Selectable(this));
         
         if (model.showHeader) {
             let label = model.label || model.name || '__Unknown';
             this.header = new HEADER(this.wrapper, new MODEL().set('label', label));
-            this.header.clickHandler(this.select.bind(this), this.deselect.bind(this));
-            this.header.el.addEventListener('wheel', this.scroll.bind(this), { passive: true });
-            this.header.el.addEventListener('select', this.select.bind(this), { passive: true });
+            this.header.implement(new Selectable(this));
+            this.header.clickHandler(() => this.select(), () => this.deselect());
+            this.header.el.addEventListener('wheel', () => this.scroll(), { passive: true });
 		}
         $(this.el).appendTo(this.wrapper.el);
 
@@ -40,71 +46,6 @@ export default class MENU extends UL {
 		this.addCase('NAVITEMICON', () => this.addNavItemIcon(model));
 		this.addCase('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
         this.addCase('NAVSEPARATOR', () => this.addNavSeparator());
-
-        /*
-        this.clickHandler(() => {
-            console.log('Single clicked MENU', this);
-        }, () => {
-            console.log('Double clicked MENU', this);
-        });
-        */
-    }
-    /** Promise to deselect any selected elements
-        @returns {Promise<ThisType>} callback
-    */
-    deselectAll() {
-        this.callback(() => {
-            let selected = $('.selected');
-            if (selected.length > 0) {
-                selected.each((i) => selected[i].dispatchEvent(new Deselect(this)));
-            }
-        });
-        /*return new Promise((resolve, reject) => {
-            try {
-                let selected = $('.selected');
-                //console.log('Select Count: ' + selected.length, selected);
-                if (selected.length > 0) {
-                    selected.each((i) => selected[i].dispatchEvent(new Deselect(this)));                    
-                }
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });*/
-    }
-    /** Promises to deselect this menu
-        @returns {Promise<ThisType>} callback
-    */
-    deselect() { //event
-        this.callback(() => this.wrapper.deselect().then(() => this.hide()));
-        /*return new Promise((resolve, reject) => {
-            try {
-                this.wrapper.deselect()
-                    .then(() => this.hide()
-                        .then(() => resolve(this)));
-            } catch (e) {
-                reject(e);
-            }
-        });*/
-    }
-    /** Selects the wrapper for this MENU and opens it
-        param {Event} event Event
-        @returns {Promise<ThisType>} callback
-    */
-    select() { // event
-        /*this.callback(() => this.deselectAll()
-            .then(() => this.wrapper.select()
-                .then(() => this.show())));*/
-        return new Promise((resolve, reject) => {
-            try {
-                this.deselectAll()
-                    .then(() => this.wrapper.select()
-                        .then(() => this.show()
-                            .then(() => resolve(this))));
-            } catch (e) {
-                reject(e);
-            }
-        });
     }
     /** Enables scroll Up/Down from the current MENU
         @param {Event} event Event
@@ -112,9 +53,6 @@ export default class MENU extends UL {
     */
     scroll(event) {
         this.wrapper.el.dispatchEvent(new Deselect(this));
-        //$('.selected')[0].dispatchEvent(this.deselectEvent());
-        //this.wrapper.deselect();
-        //$(this.el).collapse('hide');
         try {
             if (event.wheelDelta > 0) {
                 console.log('scroll prev');
@@ -142,50 +80,9 @@ export default class MENU extends UL {
     collapseOnFocusOut() {
         this.el.onclick = (event) => {
             if (event.target !== this.el) {
-                this.children.filter((c) => c.className === 'MENU').forEach((c) => c.hide());
+                this.children.filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
             }
         };
-    }
-	/** Toggles the collapsed state of this element
-        @returns {ThisType} callback
-    */
-    toggle() {
-        return this.callback(() => $(this.el).collapse('toggle'));
-        /*try {
-            $(this.el).collapse('toggle');
-            return true;
-        } catch (e) {
-            console.log(e);
-            return false;
-        }*/
-	}
-	/** Promises to collapse the MENU
-	    @returns {Promise<ThisType>} callback
-	*/
-    hide() {
-        return this.callback(() => $(this.el).collapse('hide'));
-        /*return new Promise((resolve, reject) => {
-            try {
-                $(this.el).collapse('hide');
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });*/
-	}
-	/** Expands the MENU body
-        @returns {Promise<ThisType>} callback
-    */
-    show() {
-        return this.callback(() => $(this.el).collapse('show'));
-        /*return new Promise((resolve, reject) => {
-            try {
-                $(this.el).collapse('show');
-                resolve(this);
-            } catch (e) {
-                reject(e);
-            }
-        });*/
     }
 	/** Constructs a MENU inside this MENU
 	    @param {MODEL} model Object model

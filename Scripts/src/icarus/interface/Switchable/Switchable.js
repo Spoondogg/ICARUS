@@ -14,6 +14,9 @@ export default class Switchable extends IFACE {
     constructor(node) {
         super(node);
         node.addClass('switch');
+        node.el.addEventListener('activate', () => node.activate());
+        node.el.addEventListener('deactivate', () => node.deactivate());
+        node.el.addEventListener('flip', () => node.flip());
         /** Toggles the active state of the node
 	       @returns {Promise<ThisType>} callback
 	    */
