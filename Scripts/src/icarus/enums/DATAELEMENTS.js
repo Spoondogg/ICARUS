@@ -155,6 +155,7 @@ export const DATAELEMENTS = {
         attributes: []
     },
     MAIN: {
+        containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
         data: [],
         attributes: []
     },

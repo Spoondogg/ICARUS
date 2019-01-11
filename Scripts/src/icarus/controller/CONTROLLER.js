@@ -52,7 +52,7 @@ export default class CONTROLLER extends MODEL {
 		}
 		/** @property {LOADER} loader The default loader modal */
 		this.loader = new LOADER(0, 'Loading');
-		this.loader.log(10, 'Launching application...', true);
+		this.loader.log(10, 'Launching application...');
 		/** @property {PROMPT} prompt A dialog prompting the user for input
 			@type {PROMPT}
 			@todo There should never be more than one prompt in the DOM.

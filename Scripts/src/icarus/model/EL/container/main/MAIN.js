@@ -1,12 +1,7 @@
 /** @module */
-import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js'; //DIALOG
+import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import Activate from '../../../../event/Activate.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
-import Deactivate from '../../../../event/Deactivate.js';
-//import FORM from '../../form/FORM.js';
-//import DIV from '../../div/DIV.js';
-//import IFRAME from '../../iframe/IFRAME.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
@@ -24,12 +19,8 @@ export default class MAIN extends CONTAINER {
     constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
-        this.addClass('main');
-        this.navBar.addClass('navbar-fixed-top');
-        this.navBar.setAttribute('draggable', false);
-        this.navBar.expand()
-        this.navBar.menu.expand();
-		this.body.pane.addClass('pane-tall');
+        this.addClass('main').then(() => this.body.pane.addClass('pane-tall'));
+        this.navBar.addClass('navbar-fixed-top').then(() => this.navBar.setAttribute('draggable', false));
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -41,35 +32,27 @@ export default class MAIN extends CONTAINER {
         /** The active container has access to keybindings */
         this.activeContainer = null;
         // ELEMENTS
-        this.sidebar = new SIDEBAR(this, new MODEL().set({ label: 'Left Sidebar' }));
-        this.sidebar.deactivate();
-        this.stickyFooter = new STICKYFOOTER(this, new MODEL());   
+        this.sidebar = new SIDEBAR(this);
+        this.stickyFooter = new STICKYFOOTER(this, new MODEL());
         this.stickyFooter.expand();
         // CRUD
 		this.save = this.factory.save;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
-        //this.quickSave = model.factory.quickSave;
     }
     /** Perform any async actions and populate this Container
         @param {Array<MODEL>} children Array of elements to add to this container's body
         @returns {Promise<ThisType>} callback
     */
     construct(children) {
-        return new Promise((resolve, reject) => {
-            try {
-                this.addNavOptions().then(() => this.populate(children).then(() => resolve(this.navBar.expand())));
-            } catch (e) {
-                reject(e);
-            }
-        });
+        return this.addNavOptions().then(() => this.populate(children).then(() => this.navBar.expand()));
     }
 	/** Returns the Application Dev setting
 	    @todo Move this into a config
 	    @returns {boolean} Returns true if app in dev mode
-	*/
+	
 	isDev() {
 		return this.dev;
-	}
+	}*/
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -120,6 +103,7 @@ export default class MAIN extends CONTAINER {
 
                 // USER TAB / MENU
                 this.addUserTab();
+                //this.userTab = this.addTab(ICONS.USER, new USERMENU(this.navBar.menu));
 
                 this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
                 this.addDefaultMenuItems();
@@ -127,19 +111,26 @@ export default class MAIN extends CONTAINER {
         });
     }
     /** Creates a USER Tab and its associated UserMenu
+        @param {ICON} icon Tab Icon
+        @param {EL} el A 'Switchable' Element
+        @returns {NAVITEMICON} Clickable Nav Item with Icon
+    */
+    addTab(icon, el) {
+        let tab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', icon));
+        //this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
+        tab.el.addEventListener('activate', () => el.activate()); //.el.dispatchEvent(new Activate(this));  
+        tab.el.addEventListener('deactivate', () => el.deactivate()); //.el.dispatchEvent(new Deactivate(this))
+        return tab;
+    }
+    /** Creates a USER Tab and its associated UserMenu
         @returns {void}
+        @deprecated
     */
     addUserTab() {
         this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
         this.userMenu = new USERMENU(this.navBar.menu);
-        this.userTab.el.addEventListener('activate', () => {
-            if (this.getUser() === 'Guest') {
-                this.login();
-            } else {
-                this.userMenu.wrapper.activate(); //.el.dispatchEvent(new Activate(this.userMenu));
-            }
-        });
-        this.userTab.el.addEventListener('deactivate', () => this.userMenu.wrapper.deactivate()); //this.userMenu.el.dispatchEvent(new Deactivate(this.userMenu))
+        this.userTab.el.addEventListener('activate', () => this.getUser() === 'Guest' ? this.login(this.userTab) : this.userMenu.activate()); //.el.dispatchEvent(new Activate(this));  
+        this.userTab.el.addEventListener('deactivate', () => this.userMenu.deactivate()); //.el.dispatchEvent(new Deactivate(this))
     }
     /** Returns the MAIN LOADER 
         @returns {LOADER} A LOADER
@@ -166,22 +157,10 @@ export default class MAIN extends CONTAINER {
 	*/
     addDefaultMenuItems() {
         let optionsMenu = this.navBar.menu.menu;
-
         let domMenu = optionsMenu.getGroup('DOM');
-        this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => {
-            setTimeout(() => {
-                location.href = this.url.origin;
-            }, 300);
-        };
-        this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => {
-            this.toggleHeaders();
-            this.navBar.menu.toggle();
-        };
-        this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => {
-            setTimeout(() => {
-                location.reload(true);
-            }, 1000);
-        };
+        this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => { location.href = this.url.origin; }, 300);
+        this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navBar.menu.toggle());
+        this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
         this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
         let crudMenu = optionsMenu.getGroup('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
@@ -233,13 +212,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {MAIN} The MAIN Container
 	*/
 	getContainer() {
-		return this;
+		//return Promise.resolve(this);
+        return this;
 	}
 	/** Overrides CONTAINER.getMain() and returns this MAIN Container
 	    @returns {MAIN} The MAIN Container
 	*/
 	getMain() {
-		return this;
+        //return Promise.resolve(this);
+        return this;
 	}
 	/** Sets the focus on the Main container body.  
 	    This generally is used to hide elements such 
@@ -328,22 +309,23 @@ export default class MAIN extends CONTAINER {
         });
     }
 	/** Log into the application using the given credentials
+        @param {EL} caller The calling element to resolve on DIALOG close
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
 	*/
-    login() {
-        this.loader.log(99, 'Logging In').then((loader) => {
-            new PROMPT(new MODEL().set('label', 'Login')).createForm(new MODEL().set({
-                container: this,
-                label: 'Log In'
-            })).then((form) => {
-                //this.createLoginForm(form);
-                form.footer.buttonGroup.empty().then(() => {
-                    form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => form.getDialog().hide().then(() => this.loginOAuth('Google'));
-                    loader.log(100).then(() => form.getDialog().show());
-                });
-            });
-        });
+    login(caller = this) {
+        this.loader.log(99, 'Logging In').then((loader) => new PROMPT(new MODEL().set({
+            caller,
+            container: this,
+            label: 'Log In'
+        })).createForm(new MODEL().set({
+            caller,
+            container: this,
+            label: 'Log In'
+        })).then((form) => form.footer.buttonGroup.empty().then(() => {
+            form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => form.getDialog().hide().then(() => this.loginOAuth('Google'));
+            loader.log(100).then(() => form.getDialog().show());
+        })));
     }
     /** Creates a login form in the given form
         @param {FORM} form Form element
@@ -368,9 +350,8 @@ export default class MAIN extends CONTAINER {
         @returns {void} 
     */
     loginOAuth(provider) {
-        this.body.toggle().then(() => {
-            let returnUrl = this.url.origin + '/signin-' + provider;
-            location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+        this.body.collapse().then(() => {
+            location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
         });
     }
 	/** Logs the current user out 

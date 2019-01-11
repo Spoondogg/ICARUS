@@ -207,31 +207,31 @@ export default class CONTAINERFACTORY {
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 	/** Saves the state of the CONTAINER
         @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
+        @param {CONTAINER} container Container to save (Default this)
+        @param {EL} caller Element that called the save (ie: switchable element resolved)
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
-	save(noPrompt = false) {
+	save(noPrompt = false, container = this, caller = this) {
         return new Promise((resolve) => {
             this.getLoader().log(25).then((loader) => {
                 new PROMPT(new MODEL().set({
                     label: 'Save ' + this.className + '[' + this.id + ']',
-                    container: this
+                    container,
+                    caller
                 })).createForm(new MODEL().set({
                     formtype: 'CONTAINER',
                     container: this
                 })).then((form) => {
-                    form.afterSuccessfulPost = () => { //payload console.log('Successful post', payload, container);
-                        let container = form.getContainer();
-                        container.setLabel(form.el.elements.label.value);
-                        container.quickSaveFormPost('dataId')
-                            .then(() => container.quickSaveFormPost('attributesId').then(
+                    form.afterSuccessfulPost = () => {
+                        let cont = form.getContainer();
+                        cont.setLabel(form.el.elements.label.value);
+                        cont.quickSaveFormPost('dataId')
+                            .then(() => cont.quickSaveFormPost('attributesId').then(
                                 () => form.getDialog().close()));
-                            
-                    };
+                    }
                     loader.log(100).then(() => {
                         if (noPrompt) {
-                            form.post()
-                                .then(() => form.getDialog().close().then(
-                                    (dialog) => resolve(dialog)));
+                            form.post().then(() => form.getDialog().close().then((dialog) => resolve(dialog)));
                         } else {
                             resolve(form.getDialog().show());
                         }
@@ -239,7 +239,7 @@ export default class CONTAINERFACTORY {
                 });
             });
         });
-	}
+    }
 	/** If dataId or attributesId exists, extract the appropriate values and save
 	    @param {string} type Data type (dataId, attributesId, descriptionId)
 	    @returns {void}

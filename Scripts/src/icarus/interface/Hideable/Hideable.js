@@ -1,29 +1,28 @@
 ﻿/** @module */
-import IFACE from '../IFACE.js';
-//import Activate from '../../event/Activate.js';
+import IFACE, { EL } from '../IFACE.js';
 /** An interface for Display driven Events
     @class
-    @extends INTERFACE
+    @extends IFACE
 */
 export default class Hideable extends IFACE {
 	/** A series of Display Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
-        param {Event} eventOn Event to call if class does not yet exist
-        param {Event} eventOff Event to call if class already exists
 	*/
     constructor(node) {
-        super(node);
-        //node.addClass('hideable');
-        node.el.addEventListener('hide', () => node.activate());
-        node.el.addEventListener('show', () => node.deactivate());
-        //node.el.addEventListener('flip', () => node.flip());
-        /** Promises to collapse the MENU
+        super(node, 'hideable');
+    }
+    addListeners(node) {
+        node.el.addEventListener('hide', () => node.hide());
+        node.el.addEventListener('show', () => node.show());
+    }
+    setMethods(node) {
+        /** Hides the element
 	        @returns {Promise<ThisType>} callback
 	    */
         this.methods.hide = () => node.callback(() => {
             node.el.style.display = 'none';
         });
-        /** Expands the MENU body
+        /** Shows the element
             @returns {Promise<ThisType>} callback
         */
         this.methods.show = () => node.callback(() => {
@@ -31,3 +30,4 @@ export default class Hideable extends IFACE {
         });
     }
 }
+export { EL, IFACE }

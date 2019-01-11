@@ -3,21 +3,22 @@ import IFACE from '../IFACE.js';
 //import Activate from '../../event/Activate.js';
 /** An interface for Click driven Events
     @class
-    @extends INTERFACE
+    @extends IFACE
 */
 export default class Swipeable extends IFACE {
 	/** A series of Swipe Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
-        param {Event} eventOn Event to call if class does not yet exist
-        param {Event} eventOff Event to call if class already exists
 	*/
     constructor(node) {
-        super(node);
-        node.addClass('swipeable');
+        super(node, 'swipeable');
+    }
+    addListeners(node) {
         node.el.addEventListener('swipeUp', () => node.swipeUp());
         node.el.addEventListener('swipeDown', () => node.swipeDown());
         node.el.addEventListener('swipeLeft', () => node.swipeLeft());
         node.el.addEventListener('swipeRight', () => node.swipeRight());
+    }
+    setMethods(node) {
         /** Triggers when upward swipe occurs on this element
 	       @returns {Promise<ThisType>} callback
 	    */

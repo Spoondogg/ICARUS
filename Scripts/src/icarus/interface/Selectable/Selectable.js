@@ -1,23 +1,24 @@
 ﻿/** @module */
 import Deselect from '../../event/Deselect.js';
-import INTERFACE from '../INTERFACE.js';
+import IFACE from '../IFACE.js';
 /** An interface for Select driven Events
     @class
-    @extends INTERFACE
+    @extends IFACE
 */
-export default class Selectable extends INTERFACE {
+export default class Selectable extends IFACE {
 	/** A series of Select Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
-        param {Event} eventOn Event to call if class does not yet exist
-        param {Event} eventOff Event to call if class already exists
 	*/
     constructor(node) {
-        super(node);
-        node.addClass('selectable');
+        super(node, 'selectable');
+    }
+    addListeners(node) {
         node.el.addEventListener('select', () => node.select());
         node.el.addEventListener('selectAll', () => node.selectAll());
         node.el.addEventListener('deselect', () => node.deselect());
         node.el.addEventListener('deselectAll', () => node.deselectAll());
+    }
+    setMethods(node) {
         /** Select this element
             @returns {Promise<ThisType>} callback
         */

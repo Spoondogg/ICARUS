@@ -1,8 +1,6 @@
 /** @module */
 import ATTRIBUTES from './ATTRIBUTES.js';
-/** A Map like data structure
-    @todo Consider just extending Map()
-    @see https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
+/** A Map like object, representative of an Element Model
     @class
 */
 export default class MODEL {
@@ -12,11 +10,30 @@ export default class MODEL {
         @param {ATTRIBUTES} description A collection of description attributes
         @todo Consider renaming description to meta
     */
-	constructor(attributes, data, description) {
-		this.attributes = typeof attributes === 'string' ? new ATTRIBUTES(attributes) : attributes || new ATTRIBUTES();
-		this.data = data || new ATTRIBUTES();
-		this.description = description || new ATTRIBUTES();
-	}
+	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), description = new ATTRIBUTES()) {
+        this.attributes = this.defaultAttributes(attributes);
+        this.data = this.defaultAttributes(data);
+        this.description = this.defaultAttributes(description);
+    }
+    /** Resolves appropriate Attributes object based on input
+        @param {string|ATTRIBUTES} attributes Attributes
+        @returns {ATTRIBUTES} Resolved attributes class
+     */
+    defaultAttributes(attributes) {
+        let attr = null;
+        switch (typeof attributes) {
+            case 'string':
+                attr = new ATTRIBUTES(attributes);
+                break;
+            case 'object':
+                attr = attributes;
+                break;
+            default:
+                console.log('Attributes is not properly defined', attributes, this);
+                attr = new ATTRIBUTES();
+        }
+        return attr;
+    }
 	/** Sets a property (or a collection of properties) for this MODEL
 	    @param {string} key Name of property || An object containing key/value pairs
 	    @param {any} value Value for property
@@ -38,7 +55,19 @@ export default class MODEL {
 			}
 		}
 		return this;
-	}
+    }
+    /** Validates existed of a required value
+        @param {any} value Value
+        @returns {any} Verified required value
+    */
+    required(value) {
+        if (typeof value === 'undefined') {
+            console.error('Unable to set required value', this, value);
+            throw new Error('Missing required value');
+        } else {
+            return value;
+        }
+    }
 	/** Sets a property (or a collection of properties) for this Model's ATTRIBUTES
 	    @param {string} key Name of property || An object containing key/value pairs
 	    @param {any} value Value for property

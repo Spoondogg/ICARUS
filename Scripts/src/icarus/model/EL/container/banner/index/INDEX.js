@@ -25,10 +25,11 @@ export default class INDEX extends BANNER {
         return new Promise((resolve, reject) => {
             this.getLoader().log(20, this.className).then((loader) => {
                 try {
-                    this.menu = new MENU(this.body.pane, new MODEL('horizontal collapse').set({
+                    this.menu = new MENU(this.body.pane, new MODEL('horizontal').set({
                         label: 'INDEX',
                         collapsed: 1,
-                        showHeader: 1
+                        showHeader: 1,
+                        name: 'index'
                     }));
 
                     ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {

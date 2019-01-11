@@ -11,12 +11,12 @@ export default class IMG extends EL {
 	*/
 	constructor(node, model) {
 		super(node, 'IMG', model);
-		try {
+		/*try {
 			if (this.getMain().getDev()) {
 				this.el.ondblclick = this.edit.bind(this);
 			}
 		} catch (e) {
 			//console.warn('IMG does not have a MAIN Container', e);
-		}
+		}*/
 	}
 }

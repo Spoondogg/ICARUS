@@ -21,11 +21,15 @@
     "array-callback-return": "off",
     "array-element-newline": "off",
     "arrow-body-style": "error",
-    "arrow-parens": "error",
+    "arrow-parens": "off",
     "arrow-spacing": "error",
     "block-scoped-var": "error",
     "block-spacing": "error",
-    "brace-style": "error",
+    "brace-style": [
+      "error",
+      "1tbs",
+      { "allowSingleLine": true }
+    ],
     "callback-return": "error",
     "capitalized-comments": "off",
     "class-methods-use-this": "off",
@@ -114,7 +118,10 @@
       "warn", 20,
       { "ignoreTopLevelFunctions": true }
     ],
-    "max-statements-per-line": "error",
+    "max-statements-per-line": [
+      "warn",
+      { "max": 3 }
+    ],
     "multiline-comment-style": "off",
     "multiline-ternary": "off",
     "new-cap": "warn",
@@ -130,7 +137,10 @@
     "no-buffer-constructor": "error",
     "no-caller": "error",
     "no-catch-shadow": "error",
-    "no-confusing-arrow": "error",
+    "no-confusing-arrow": [
+      "off",
+      { "allowParens": true }
+    ],
     "no-continue": "error",
     "no-div-regex": "error",
     "no-duplicate-imports": "error",

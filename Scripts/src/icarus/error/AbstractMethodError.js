@@ -11,6 +11,6 @@ export default class AbstractMethodError extends ExtendableError {
     */
 	constructor(message, container) {
         super(message);
-        container.getLoader().log(message);
+        console.error(message, container);
 	}
 }
