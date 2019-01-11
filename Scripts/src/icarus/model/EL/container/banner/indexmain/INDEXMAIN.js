@@ -13,10 +13,7 @@ import MODEL from '../../../../MODEL.js';
 export default class INDEXMAIN extends BANNER {
 	/** Constructs a banner with a header affixed outside of the Container's pane
         Contents are paged and pagination exists in the footer
-        @todo Contents should be grouped in 3's or 4's and cycled through by swiping
-        @todo Preload / Stream contents
-        @see https://stackoverflow.com/questions/15181286/how-to-implement-an-endless-infinite-scroll-within-a-div-in-javascript-jquery
-	    @param {CONTAINER} node Parent node
+        @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
 	 */
 	constructor(node, model) {

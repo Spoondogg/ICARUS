@@ -11,8 +11,8 @@ export default class STICKYFOOTER extends FOOTER {
 	    @param {MODEL} model stickyfooter model
 	*/
 	constructor(node, model) {
-		super(node, model);
-        this.el.setAttribute('class', 'stickyfooter');
+        super(node, model);
+        this.addClass('stickyfooter');
         this.implement(new Collapsible(this));
 	}
 }

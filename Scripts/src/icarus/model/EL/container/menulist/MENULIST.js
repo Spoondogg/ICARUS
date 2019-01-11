@@ -12,9 +12,12 @@ export default class MENULIST extends CONTAINER {
 	    @param {MODEL} model Object MODEL
 	*/
 	constructor(node, model) {
-		super(node, 'DIV', model, []); //'LISTITEM'
+		super(node, 'DIV', model, []);
         this.addClass('menulist');
-        this.menu = new MENU(this.body.pane, new MODEL('menulist-menu').set('label', this.label));
+        this.menu = new MENU(this.body.pane, new MODEL('menulist-menu').set({
+            label: this.label,
+            name: this.label
+        }));
 	}
 }
 export { LI, MENU, UL };

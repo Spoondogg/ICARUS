@@ -1,32 +1,34 @@
 ﻿/** @module */
-import INTERFACE from '../INTERFACE.js';
+import Collapse from '../../event/Collapse.js';
+import Expand from '../../event/Expand.js';
+import IFACE from '../IFACE.js';
 /** An interface for Collapse driven Events
     @class
-    @extends INTERFACE
+    @extends IFACE
 */
-export default class Collapsible extends INTERFACE {
+export default class Collapsible extends IFACE {
 	/** A series of Collapse Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
-        param {Event} eventOn Event to call if class does not yet exist
-        param {Event} eventOff Event to call if class already exists
 	*/
     constructor(node) {
-        super(node);
-        node.addClass('collapse');
+        super(node, 'collapse');        
+    }
+    addListeners(node) {
         node.el.addEventListener('collapse', () => node.collapse());
         node.el.addEventListener('expand', () => node.expand());
-        node.el.addEventListener('toggle', () => node.toggle());
-        /** Toggles the collapsed state of the node
-	       @returns {Promise<ThisType>} callback
-	    */
-        this.methods.toggle = () => node.callback(() => $(node.el).collapse('toggle'));
+        node.el.addEventListener('toggle', () => this.toggle('in', new Expand(node), new Collapse(node)));
+    }
+    setMethods(node) {
         /** Collapses the node
 	        @returns {Promise<ThisType>} callback
 	    */
+        //this.methods.collapse = () => node.removeClass('in');
         this.methods.collapse = () => node.callback(() => $(node.el).collapse('hide'));
         /** Expands the node
-	        @returns {ThisType} callback
+	        @returns {Promise<ThisType>} callback
 	    */
+        //this.methods.expand = () => node.addClass('in');
         this.methods.expand = () => node.callback(() => $(node.el).collapse('show'));
     }
 }
+export { Collapse, Expand }

@@ -8,24 +8,21 @@ import { ALIGN } from '../../../../enums/ALIGN.js';
 */
 export default class BUTTONGROUP extends GROUP {
 	/** Constructs a Button Group
-	    @param {EL} node The parent
-	    @param {string} className Optional className to be appended to default class
-	    @param {string} align ALIGN.enum
+	    @param {EL} node Parent Node
+        @param {MODEL} model Model
+	    param {string} className Optional className to be appended to default class
+	    param {string} align ALIGN.enum
 	    param {string} size SIZE.enum
 	 */
-	constructor(node, className, align) { //size
-		let attributes = new ATTRIBUTES('btn-group');
-		attributes.set('role', 'group');
-		super(node, 'DIV', new MODEL(attributes));
-		if (className) {
-			this.addClass(className);
-		}
-		if (align === ALIGN.VERTICAL) {
-			this.addClass('btn-group-vertical');
-		}
+    constructor(node, model = new MODEL().set('label', 'buttons')) {
+        //console.log('buttongroup', node, model);
+        super(node, 'DIV', model);
+        //console.log('buttongroup super complete');
+        this.addClass('btn-group');
+		if (model.align === ALIGN.VERTICAL) { this.addClass('btn-group-vertical'); }
 		/* Add cases for each relevant constructor that inherited class does not have */
-		this.addCase('BUTTON', () => this.addButton('BUTTON'));
-		this.addCase('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
+		this.addCallback('BUTTON', () => this.addButton('BUTTON'));
+		this.addCallback('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
 	}
 	/** Creates a button and adds it to this button group, then adds it to the buttons array
 	    @param {string} label The label

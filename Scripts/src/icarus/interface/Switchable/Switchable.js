@@ -1,26 +1,24 @@
 ﻿/** @module */
+import Activate from '../../event/Activate.js';
+import Deactivate from '../../event/Deactivate.js';
 import IFACE from '../IFACE.js';
-//import Activate from '../../event/Activate.js';
 /** An interface for Toggle driven Events for a collapsable element
     @class
-    @extends INTERFACE
+    @extends IFACE
 */
 export default class Switchable extends IFACE {
 	/** A series of Switch Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
-        param {Event} eventOn Event to call if class does not yet exist
-        param {Event} eventOff Event to call if class already exists
 	*/
     constructor(node) {
-        super(node);
-        node.addClass('switch');
+        super(node, 'switch');
+    }
+    addListeners(node) {
         node.el.addEventListener('activate', () => node.activate());
         node.el.addEventListener('deactivate', () => node.deactivate());
         node.el.addEventListener('flip', () => node.flip());
-        /** Toggles the active state of the node
-	       @returns {Promise<ThisType>} callback
-	    */
-        this.methods.flip = () => node.callback(() => $(node.el).toggle('active'));
+    }
+    setMethods(node) {
         /** Adds active state to node
 	        @returns {Promise<ThisType>} callback
 	    */
@@ -29,5 +27,13 @@ export default class Switchable extends IFACE {
 	        @returns {ThisType} callback
 	    */
         this.methods.deactivate = () => node.callback(() => node.removeClass('active'));
+
+        /** Toggles the 'active' state of this element, triggering an Activate/Deactivate Event
+            @param {string} className Existence of classname indicates on/off event to call
+            @param {Event} eventOn Event to call if class does not yet exist
+            @param {Event} eventOff Event to call if class already exists
+            @returns {ThisType} callback
+        */
+        this.methods.flip = () => this.toggle('active', new Activate(node), new Deactivate(node));
     }
 }

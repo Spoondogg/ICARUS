@@ -3,14 +3,10 @@
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../group/GROUP.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
-//import Activate from '../../../event/Activate.js';
 import COLLAPSIBLE from './COLLAPSIBLE.js';
-//import Collapse from '../../../event/Collapse.js';
+import Clickable from '../../../interface/Clickable/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
-//import Deactivate from '../../../event/Deactivate.js';
 import DIALOG from '../dialog/DIALOG.js';
-//import DIV from '../div/DIV.js';
-//import Expand from '../../../event/Expand.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
@@ -18,10 +14,8 @@ import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LEGEND from '../legend/LEGEND.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
-//import PROMPT from '../dialog/prompt/PROMPT.js'; You can't have prompt in here because it has a FORM
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
-import Selectable from '../../../interface/Selectable/Selectable.js';
 /** An abstract Container element with NAVBAR
     @description A container can be expanded or hidden and have elements added to itself
     @class
@@ -38,10 +32,6 @@ export default class CONTAINER extends GROUP {
     constructor(node, element, model = new MODEL(), containers = []) {
         super(node, element, model);
         this.setId(model.id).addClass('container');
-        /** If true, invokes double click
-            @property {boolean} tappedTwice
-        */
-        this.tappedTwice = false;
 		/** Data model unique id
             @property {number} dataId
         */
@@ -76,29 +66,26 @@ export default class CONTAINER extends GROUP {
         /** Human readable label
             @property {string} label
         */
-        this.label = model.label || element;
+        this.label = this.required(model.label || element);
         /** Code friendly identifier
             @property {string} name
         */
-        this.name = model.name || element;
+        this.name = this.required(model.name || element);
         /** Toggles public sharing of this CONTAINER
             @property {number} shared
         */
-        this.shared = model.shared || 1;
-        this.status = model.status || STATUS.DEFAULT;
-        this.subsections = model.subsections ? model.subsections.split(',') : '0'; // Delimited list of child ids
-        /** The Container NAVBAR 
-            @property {NAVBAR} navBar 
-        */
+        this.shared = this.required(model.shared || 1);
+        this.status = this.required(model.status || STATUS.DEFAULT);
+        this.subsections = this.required(model.subsections ? model.subsections.split(',') : '0'); // Delimited list of child ids
         this.navBar = new NAVBAR(this, new MODEL().set('label', this.label));
-        this.navBar.menu.tab.el.addEventListener('activate', () => this.expand());
-        this.navBar.menu.tab.el.addEventListener('deactivate', () => this.collapse());
         this.createDraggableNavBar();
         this.body = new COLLAPSIBLE(this, new MODEL('container-body'));
-        this.body.implement(new Selectable(this));
-        this.body.el.addEventListener('collapse', () => this.navBar.menu.tab.activate());
-        this.body.el.addEventListener('expand', () => this.navBar.menu.tab.deactivate());
-        this.body.clickHandler(this.body.select, this.navBar.toggle);
+
+        this.el.addEventListener('activate', () => this.navBar.menu.tab.activate());
+        this.el.addEventListener('deactivate', () => this.navBar.menu.tab.deactivate());
+        this.navBar.menu.tab.el.addEventListener('activate', () => this.body.expand());
+        this.navBar.menu.tab.el.addEventListener('deactivate', () => this.body.collapse());
+
         this.addNavBarDefaults().then(() => this.addDefaultContainers(containers));
         this.construct(model.children).then(() => this.setDefaultVisibility(model));
 	}
@@ -122,10 +109,7 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<ThisType>} callback
     */
     collapse() {
-        this.callback(() => {
-            this.body.collapse();            
-            this.navBar.menu.tab.deactivate();
-        });
+        this.callback(() => this.body.collapse().then(() => this.navBar.menu.tab.deactivate()));
     }
     /** If the Container has no children, display a button to create an element
         Should be overridden on CONTAINERs that should not have children
@@ -137,7 +121,10 @@ export default class CONTAINER extends GROUP {
                 let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
                 btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
                 btnAddElement.btn.el.onclick = () => {
-                    this.showNav().navBar.menu.menu.toggle().getGroup('ELEMENTS').toggle();
+                    this.navBar.expand().then(
+                        (navBar) => navBar.menu.expand().then(
+                            (nav) => nav.menu.expand().then(
+                                (n) => n.getGroup('ELEMENTS').expand())));
                     btnAddElement.destroy();
                     return false;
                 }
@@ -167,8 +154,9 @@ export default class CONTAINER extends GROUP {
                         default:
                             console.warn(name + ' does not have a valid constructor');
                     }
-                    this[name].implement(new Selectable(this[name]));
-                    this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
+                    this[name].implement(new Clickable(this[name]));
+                    //this[name].implement(new Selectable(this[name]));
+                    //this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
                     resolve(this[name]);
                 }
             } catch (e) {
@@ -270,7 +258,7 @@ export default class CONTAINER extends GROUP {
 	*/
     setDefaultVisibility(model) {
         if (model.data) {
-            let a = model.data.collapsed === '1' ? this.collapse() : this.expand();
+            let a = model.data.collapsed === '1' ? this.deactivate() : this.activate();
             //let a = model.data.collapsed === '1' ? this.body.collapse() : this.body.expand();
             let b = model.data.showNav === '1' ? this.navBar.expand() : this.navBar.collapse();
             return [a, b];
@@ -392,6 +380,7 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<ThisType>} callback
     */
     closeMenus(group) {
+        console.log('closemenus', this);
         return this.callback(() => group.toggle().then(() => this.navBar.menu.toggle()));
     }
     /** Creates a NavItem that closes its menu on mouseup
@@ -513,7 +502,7 @@ export default class CONTAINER extends GROUP {
                     if (addButton) {
                         this.addConstructContainerButton(className);
                     }
-                    this.addCase(className, (model) => {
+                    this.addCallback(className, (model) => {
                         try {
                             this.getMain().getFactory().get(this.body.pane, className, model.id || 0).then((r) => {
                                 resolve(r);
@@ -548,7 +537,7 @@ export default class CONTAINER extends GROUP {
         Opens the CONTAINER up for editing.  This should create a link
         between the object on the server and its client side representation
         @returns {void}
-    */
+    
 	open() {
 		try {
 			this.status = STATUS.OPEN;
@@ -559,12 +548,12 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			console.log('Unable to open parent.', e);
 		}
-	}
+	}*/
 	/** Closes the CONTAINER up for editing.  This should create a link
         between the object on the server and its client side representation
         and update accordingly
         @returns {void}
-    */
+    
 	close() {
 		console.log('Locking ' + this.element + '(' + this.getId() + ')');
 		this.status = STATUS.CLOSED;
@@ -582,7 +571,7 @@ export default class CONTAINER extends GROUP {
 		$(this.header.btnLock.el).removeClass('active');
 		this.header.options.el.setAttribute('disabled', 'disabled');
 		console.log('Locked');
-	}
+	}*/
 	/** Returns the CONTAINER's name attribute
 	    @returns {string} Container name
 	*/
@@ -650,8 +639,7 @@ export default class CONTAINER extends GROUP {
         @returns {ThisType} callback
     */
     showNav() {
-        this.navBar.expand();
-        return this;
+        return this.navBar.expand();
     }
 	/** Toggles the collapsed state of the container's body
         @returns {Promise<ThisType>} callback
@@ -751,11 +739,10 @@ export default class CONTAINER extends GROUP {
 		this.model.subsections = subsections;
 	}
 	/** Toggles visibility of any child Container Headers
-        @returns {void}
+        @returns {Promise<ThisType>} callback
 	*/
-	toggleHeaders() {
-		$(this.el).find('.container > nav').toggle();
-		console.log('CONTAINER.toggleHeaders()');
+    toggleHeaders() {
+        return this.callback(() => $(this.el).find('.container > nav').toggle());
 	}
 	/** Creates a DIALOG and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database

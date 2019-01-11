@@ -15,3 +15,4 @@ export default class PROGRESSBAR extends EL {
         this.text = new DIV(this, new MODEL('text'));
 	}
 }
+export { DIV, EL, MODEL }

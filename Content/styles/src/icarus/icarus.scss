@@ -231,7 +231,7 @@ $jumbotron-height: 420px;
 .edit {
 	border: dashed 1px $color-white;
 }
-.dropdown-tab {
+/*.dropdown-tab {
 	width: 160px;
 	>a {
 		display: block;
@@ -241,7 +241,7 @@ $jumbotron-height: 420px;
 		background-color: $color-grey-darker;
 		border-right: 1px solid $color-grey;
 	}
-}
+}*/
 body {
     @extend %gradient-vertical-fade;
     @include font-smoothing;
@@ -653,26 +653,7 @@ dialog,
 		}
 	}
 }
-nav {
-	@extend %bevel-up;
-	background-color: $color-nav-background;
-	font-size: $font-size-normal;
-	min-height: $navbar-height;
 
-    &.navbar-fixed-top {
-        width: 100%;
-    }
-
-	.btn-group {
-		>.dropdown-menu {
-			>li {
-				color: $color-grey;
-				text-align: left;
-				text-decoration: none;
-			}
-		}
-	}
-}
 footer {
     @extend %bevel-up;
     @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
@@ -1379,7 +1360,6 @@ table {
                     left: 0;
                     //display: block;
                 }
-
                 // Each embedded list gets smaller
                 ul {
                     li {
@@ -1413,6 +1393,33 @@ table {
             @include transition($transition-default);
             @include no-scroll-bar;
             width: 100%;
+        }
+    }
+}
+nav {
+    @extend %bevel-up;
+    background-color: $color-nav-background;
+    font-size: $font-size-normal;
+    min-height: $navbar-height;
+
+    &.navbar-fixed-top {
+        width: 100%;
+    }
+
+    > ul {
+        &.navheader {
+            padding: 0;
+
+        }
+    }
+
+    .btn-group {
+        > .dropdown-menu {
+            > li {
+                color: $color-grey;
+                text-align: left;
+                text-decoration: none;
+            }
         }
     }
 }
