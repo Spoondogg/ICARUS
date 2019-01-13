@@ -1401,6 +1401,7 @@ nav {
     background-color: $color-nav-background;
     font-size: $font-size-normal;
     min-height: $navbar-height;
+    height: $navbar-height;
 
     &.navbar-fixed-top {
         width: 100%;
@@ -1409,7 +1410,6 @@ nav {
     > ul {
         &.navheader {
             padding: 0;
-
         }
     }
 

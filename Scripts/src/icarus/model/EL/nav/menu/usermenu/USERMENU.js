@@ -1,24 +1,22 @@
 /** @module */
-import MENU, { ATTRIBUTES, MODEL } from '../MENU.js'
+import MENU, { ATTRIBUTES, EL, MODEL } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import IMG from '../../../img/IMG.js';
-//import Switchable from '../../../../../interface/Switchable/Switchable.js';
 /** User Menu 
     @class
     @extends MENU
 */
 export default class USERMENU extends MENU {
 	/** Constructs a User Menu
-	    @param {UL} node The object to contain this element
-	    @param {MODEL} model The element's attributes
+	    @param {EL} node Parent Node
+	    @param {MODEL} model Model
 	*/
 	constructor(node) {
         super(node, new MODEL('horizontal').set({
             name: 'USER',
             showHeader: 0,
             collapsed: 0
-        }));
-        
+        }));        
         this.profile = new DIV(this, new MODEL('profile'));
         this.image = new IMG(this.profile, new MODEL({
             class: 'picture',
@@ -43,4 +41,4 @@ export default class USERMENU extends MENU {
         return this.flip().then(() => this.getMain().logout());
     }
 }
-export { ATTRIBUTES, MENU, MODEL };
+export { ATTRIBUTES, EL, MENU, MODEL };

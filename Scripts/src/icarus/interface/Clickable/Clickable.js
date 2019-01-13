@@ -1,5 +1,5 @@
 ﻿/** @module */
-import IFACE, { MODEL } from '../IFACE.js';
+import IFACE, { EL, MODEL } from '../IFACE.js';
 import Activate from '../../event/Activate.js';
 import Deactivate from '../../event/Deactivate.js';
 import Deselect from '../../event/Deselect.js';
@@ -21,10 +21,10 @@ export default class Clickable extends IFACE {
         @param {MODEL} options Click Timer Options
 	*/
     constructor(node, options = new MODEL().set({
-            delay: 200,
-            longClickDelay: 850,
-            stopPropagation: true
-        })) {
+        delay: 200,
+        longClickDelay: 850,
+        stopPropagation: true
+    })) {
         super(node, 'clickable');
         this.options = options;
         node.implement(new Switchable(node));
@@ -101,3 +101,4 @@ export default class Clickable extends IFACE {
         }
     }   
 }
+export { Activate, Deactivate, Deselect, Select, Selectable, Switchable }

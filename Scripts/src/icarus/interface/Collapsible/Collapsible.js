@@ -8,10 +8,11 @@ import IFACE from '../IFACE.js';
 */
 export default class Collapsible extends IFACE {
 	/** A series of Collapse Related Events and Methods
+        By default, a collapsible element is collapsed
         @param {EL} node Class to implement this interface (Typically 'this')
 	*/
     constructor(node) {
-        super(node, 'collapse');        
+        super(node, 'collapse');
     }
     addListeners(node) {
         node.el.addEventListener('collapse', () => node.collapse());
@@ -31,4 +32,4 @@ export default class Collapsible extends IFACE {
         this.methods.expand = () => node.callback(() => $(node.el).collapse('show'));
     }
 }
-export { Collapse, Expand }
+export { Collapse, Expand, IFACE }

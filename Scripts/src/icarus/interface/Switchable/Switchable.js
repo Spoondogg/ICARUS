@@ -27,7 +27,6 @@ export default class Switchable extends IFACE {
 	        @returns {ThisType} callback
 	    */
         this.methods.deactivate = () => node.callback(() => node.removeClass('active'));
-
         /** Toggles the 'active' state of this element, triggering an Activate/Deactivate Event
             @param {string} className Existence of classname indicates on/off event to call
             @param {Event} eventOn Event to call if class does not yet exist
@@ -37,3 +36,4 @@ export default class Switchable extends IFACE {
         this.methods.flip = () => this.toggle('active', new Activate(node), new Deactivate(node));
     }
 }
+export { Activate, Deactivate }

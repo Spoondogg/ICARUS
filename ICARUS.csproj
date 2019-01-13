@@ -654,6 +654,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
     <Content Include="Scripts\src\icarus\model\el\EL.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\list\LIST.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />

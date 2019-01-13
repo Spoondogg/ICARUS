@@ -84,8 +84,8 @@ const paths = {
     scripts: {
         buildglob: 'Scripts/**/**.*',
         base: 'Scripts/src/icarus',
-        baseglob: './Scripts/src/**/**.js',
-        src: ['Scripts/src/icarus/**/*.js'],
+        baseglob: './Scripts/src/**/**.js|ts',
+        src: ['Scripts/src/icarus/**/*.js|ts'],
         dest: 'Scripts/dist/icarus'
     },
     serverside: {

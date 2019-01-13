@@ -37,8 +37,8 @@ export default class FORM extends CONTAINER {
         // Set focused container for relevant keyBindings
         this.el.addEventListener('focusin', () => this.setFocus('focusin'));
         this.el.addEventListener('focusout', () => this.setFocus('focusout'));        
-        this.createNavItem('POST', this.navBar.menu.menu.getGroup('CRUD')).el.onclick = (e) => {
-            e.preventDefault();
+        this.createNavItem('POST', this.navBar.menu.list.getGroup('CRUD')).el.onclick = (ev) => {
+            ev.preventDefault();
             this.post();
             return false;
         };
