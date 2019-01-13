@@ -17,12 +17,11 @@ export default class NAVHEADER extends MENU {
         //console.log('navheader super complete');
         this.addClass('navheader');
         this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
-        //console.log('navheader tabs');
         this.tabs = new MENU(this, new MODEL('tabs').set('name', 'tabs')); // @todo Should be its own class
-        //console.log('navheader tabs complete');
-        this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label));
+        this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label)); // Container should create this!!
         this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.COG));
-		this.menu = new MENU(this, new MODEL().set('name', 'menu'));
+        this.tabs.expand();
+		this.menu = new MENU(this, new MODEL().set('name', 'menu')); // Main Menu..?
         this.optionsTab.el.addEventListener('activate', () => this.menu.activate());
         this.optionsTab.el.addEventListener('deactivate', () => this.menu.deactivate());
         this.addOptionsMenu();

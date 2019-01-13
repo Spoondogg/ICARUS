@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ICONS, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ICONS, MODEL, createInputModel, DATAELEMENTS } from '../CONTAINER.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
@@ -18,7 +18,7 @@ export default class MAIN extends CONTAINER {
     */
     constructor(model) {
 		document.title = model.label;
-		super(document.body, 'MAIN', model, ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD']);
+		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
         this.addClass('main').then(() => this.body.pane.addClass('pane-tall'));
         this.navBar.addClass('navbar-fixed-top').then(() => this.navBar.setAttribute('draggable', false));
 		/** @type {CONTAINERFACTORY} */
@@ -34,7 +34,6 @@ export default class MAIN extends CONTAINER {
         // ELEMENTS
         this.sidebar = new SIDEBAR(this);
         this.stickyFooter = new STICKYFOOTER(this, new MODEL());
-        this.stickyFooter.expand();
         // CRUD
 		this.save = this.factory.save;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
@@ -44,15 +43,11 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
     construct(children) {
-        return this.addNavOptions().then(() => this.populate(children).then(() => this.navBar.expand()));
+        return this.addNavOptions().then(() => this.populate(children).then(
+            () => this.navBar.expand().then(
+                () => this.body.expand().then(
+                    () => this.stickyFooter.expand()))));
     }
-	/** Returns the Application Dev setting
-	    @todo Move this into a config
-	    @returns {boolean} Returns true if app in dev mode
-	
-	isDev() {
-		return this.dev;
-	}*/
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -82,31 +77,31 @@ export default class MAIN extends CONTAINER {
 	*/
     addNavOptions() {
         return this.callback(() => {
-            if (this.navBar.menu.menu) {
+            if (this.navBar.menu) {
                 // LEFT ALIGN
-                this.btnSidebar = this.navBar.menu.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
+                this.btnSidebar = this.navBar.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
                 this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
                 this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
-                $(this.btnSidebar.el).insertBefore(this.navBar.menu.tab.el);
+                //$(this.btnSidebar.el).insertBefore(this.navBar.tab.el);
 
-                this.btnPrev = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
+                this.btnPrev = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
                 this.btnPrev.el.onclick = () => this.navigateBack();
-                $(this.btnPrev.el).insertBefore(this.navBar.menu.tab.el);
+                //$(this.btnPrev.el).insertBefore(this.navBar.tab.el);
 
-                this.btnNext = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
+                this.btnNext = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
                 this.btnNext.el.onclick = () => this.navigateForward();
-                $(this.btnNext.el).insertBefore(this.navBar.menu.tab.el);
+                //$(this.btnNext.el).insertBefore(this.navBar.tab.el);
 
                 // RIGHT ALIGN
-                this.addTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
-                $(this.addTab.el).insertBefore(this.navBar.menu.optionsTab.el);
+                this.addTab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+                //$(this.addTab.el).insertBefore(this.navBar.optionsTab.el);
 
                 // USER TAB / MENU
                 this.addUserTab();
                 //this.userTab = this.addTab(ICONS.USER, new USERMENU(this.navBar.menu));
 
                 this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
-                this.addDefaultMenuItems();
+                //this.addDefaultMenuItems();
             }
         });
     }
@@ -116,7 +111,7 @@ export default class MAIN extends CONTAINER {
         @returns {NAVITEMICON} Clickable Nav Item with Icon
     */
     addTab(icon, el) {
-        let tab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', icon));
+        let tab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', icon));
         //this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
         tab.el.addEventListener('activate', () => el.activate()); //.el.dispatchEvent(new Activate(this));  
         tab.el.addEventListener('deactivate', () => el.deactivate()); //.el.dispatchEvent(new Deactivate(this))
@@ -127,10 +122,19 @@ export default class MAIN extends CONTAINER {
         @deprecated
     */
     addUserTab() {
-        this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
-        this.userMenu = new USERMENU(this.navBar.menu);
+        this.navBar.addTabbableElement(
+            this.navBar.tabs.addNavItemIcon(new MODEL().set({
+                label: 'USER',
+                icon: ICONS.USER
+            })),
+            new USERMENU(this.navBar)
+        )
+        /*
+        this.userTab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
+        this.userMenu = new USERMENU(this.navBar);
         this.userTab.el.addEventListener('activate', () => this.getUser() === 'Guest' ? this.login(this.userTab) : this.userMenu.activate()); //.el.dispatchEvent(new Activate(this));  
         this.userTab.el.addEventListener('deactivate', () => this.userMenu.deactivate()); //.el.dispatchEvent(new Deactivate(this))
+        */
     }
     /** Returns the MAIN LOADER 
         @returns {LOADER} A LOADER
@@ -156,13 +160,13 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     addDefaultMenuItems() {
-        let optionsMenu = this.navBar.menu.menu;
-        let domMenu = optionsMenu.getGroup('DOM');
+        let optionsMenu = this.navBar.menu;
+        let domMenu = optionsMenu.list.getGroup('DOM');
         this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => { location.href = this.url.origin; }, 300);
-        this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navBar.menu.toggle());
+        this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navBar.toggle());
         this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
         this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-        let crudMenu = optionsMenu.getGroup('CRUD');
+        let crudMenu = optionsMenu.list.getGroup('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
@@ -231,7 +235,7 @@ export default class MAIN extends CONTAINER {
 		if ($(this.sidebar.el).hasClass('active')) {
 			this.sidebar.removeClass('active');
 		}
-		$(this.navBar.menu.menu.el).collapse('hide');
+		$(this.navBar.menu.el).collapse('hide');
 	}
 	/** Loads the specified app id into the Main Container
         Receives the MAIN model from Main/Get/id (if permitted)
