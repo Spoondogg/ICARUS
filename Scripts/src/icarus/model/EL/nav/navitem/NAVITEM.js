@@ -1,26 +1,26 @@
 /** @module */
-import UL, { ANCHOR, ATTRIBUTES, EL, LI, MODEL } from '../../ul/UL.js';
+import UL, { ATTRIBUTES, EL, LI, MODEL } from '../../list/ul/UL.js';
+import ANCHOR from '../../a/anchor/ANCHOR.js';
 import Clickable from '../../../../interface/Clickable/Clickable.js';
 import MENU from '../menu/MENU.js';
-/** A wide navigation button
-    @description Nav items can be single buttons or dropdowns with nav items nested within them  
+/** A Navigation Item
     @class
     @extends LI
 */
 export default class NAVITEM extends LI {
-	/** Constructs a Nav Item 
+	/** Constructs a Nav Item (LI)
 	    @param {UL} node The element that will contain this object
 	    @param {MODEL} model The nav-item json object retrieved from the server
 	*/
 	constructor(node, model) {
-		super(node, new MODEL(model.attributes));
+        super(node, model); //new MODEL(model.attributes)
         this.addClass('nav-item');
         this.implement(new Clickable(this));
 		this.anchor = new ANCHOR(this, model);
 		this.addCallback('MENU', () => this.addMenu(model));
 		if (model.label) { this.el.setAttribute('title', model.label); }
     }
-	/** Add a {@link MENU} to this element
+	/** Add a MENU to this MENU
 	    @param {MODEL} model NavBarNav model
 	    @returns {MENU} The newly created element
     */
@@ -29,4 +29,4 @@ export default class NAVITEM extends LI {
 		return this.children[this.children.length - 1];
 	}
 }
-export { ANCHOR, ATTRIBUTES, EL, LI, MENU, MODEL, UL };
+export { ANCHOR, ATTRIBUTES, EL, LI, MENU, MODEL, UL }

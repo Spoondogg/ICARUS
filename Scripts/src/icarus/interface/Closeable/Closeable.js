@@ -54,5 +54,44 @@ export default class Closeable extends Hideable {
         */
         this.methods.close = (delay = 200) => node.hide(delay, false);
     }
+    /** Overrides EL.open();
+        Opens the CONTAINER up for editing.  This should create a link
+        between the object on the server and its client side representation
+        @returns {void}
+    
+	open() {
+		try {
+			this.status = STATUS.OPEN;
+			super.open();
+			this.el.setAttribute('data-status', 'open');
+			this.header.btnLock.icon.el.className = ICONS.UNLOCK;
+			this.header.options.el.removeAttribute('disabled');
+		} catch (e) {
+			console.log('Unable to open parent.', e);
+		}
+	}*/
+	/** Closes the CONTAINER up for editing.  This should create a link
+        between the object on the server and its client side representation
+        and update accordingly
+        @returns {void}
+    
+	close() {
+		console.log('Locking ' + this.element + '(' + this.getId() + ')');
+		this.status = STATUS.CLOSED;
+		this.node.close();
+		this.el.setAttribute('data-status', 'closed');
+		// If section is open and we are trying to lock, we must first lock the children
+        console.log(this.element + ' has ' + this.children.length + ' child(ren)');
+        this.children.forEach((s) => {
+            if (s.status === STATUS.OPEN) {
+                s.close();
+            }
+        });
+		console.log('Children are closed. Closing ' + this.element + '(' + this.getId() + ')');
+		this.header.btnLock.icon.el.className = ICONS.LOCK;
+		$(this.header.btnLock.el).removeClass('active');
+		this.header.options.el.setAttribute('disabled', 'disabled');
+		console.log('Locked');
+	}*/
 }
 export { EL };

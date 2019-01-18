@@ -6,13 +6,13 @@ export default class TABLE extends EL {
 		super(node, 'TABLE', model);
 		this.columns = model.columns; // Array<COLUMN> The default columns for this table (schema)
 		this.groups = [];
-		this.addGroups(model.groups);
+		this.addEach(model.groups);
 	}
 	/** Adds the given table group to the table
 	    @param {string} element Table group element name ie: THEAD, TBODY, TFOOT
 	    @returns {TGROUP} A Table group
 	*/
-	addGroup(element) {
+	add(element) {
 		this.groups.push(new TGROUP(this, new MODEL().set({
 			element,
 			'rows': []
@@ -23,7 +23,7 @@ export default class TABLE extends EL {
 	    @param {Array<TGROUP>} groups An array of groups
 	    @returns {void}
 	*/
-	addGroups(groups) {
+	addEach(groups) {
 		groups.forEach((group) => {
 			this.addGroup(group);
 		});

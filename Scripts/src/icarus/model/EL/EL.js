@@ -280,7 +280,7 @@ export default class EL extends MODEL {
 				let result = this.callbacks[model.className].forEach((fn) => fn(model));
 				resolve(result);
 			} catch (e) {
-				console.warn(0, this.className + '.create(): No constructor exists for className "' + model.className + '"', e);
+				console.warn(0, this.className + '.create(): No constructor exists for className "' + model.className + '"', this, e);
 				reject(e);
 			}
 		});
@@ -385,7 +385,9 @@ export default class EL extends MODEL {
     */
     setAttribute(key, value) {
         return this.callback(() => {
-            this.el.setAttribute(key, value);
+            if (typeof value !== 'undefined' && value !== null) {
+                this.el.setAttribute(key, value);
+            }
             try {
                 this.attributes.set(key, value);
             } catch (e) {

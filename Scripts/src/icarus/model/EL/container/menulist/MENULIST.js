@@ -20,4 +20,4 @@ export default class MENULIST extends CONTAINER {
         }));
 	}
 }
-export { LI, MENU, UL };
+export { LI, MENU, UL }

@@ -157,7 +157,8 @@ export const DATAELEMENTS = {
     MAIN: {
         containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
         data: [],
-        attributes: []
+        attributes: [], 
+        description: []
     },
     PARAGRAPH: {
         data: [createInputModel('INPUT', 'p', 'Paragraph Text')],

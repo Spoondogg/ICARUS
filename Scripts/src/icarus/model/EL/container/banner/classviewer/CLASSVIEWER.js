@@ -33,7 +33,7 @@ export default class CLASSVIEWER extends BANNER {
 		this.form.fieldset.formElementGroup.addInputElements(inputs);
 		/** @todo Remove inline style */
         this.menulist = new MENULIST(this.body.pane, new MODEL(new ATTRIBUTES('style', 'max-height:200px;overflow-y:auto;'))
-            .set({
+            .setGroup({
                 name: 'preview-list',
                 label: this.data.listClass + '(s)'
             }));

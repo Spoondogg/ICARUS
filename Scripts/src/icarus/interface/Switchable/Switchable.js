@@ -1,7 +1,7 @@
 ﻿/** @module */
+import IFACE, { ATTRIBUTES, EL, MODEL } from '../IFACE.js';
 import Activate from '../../event/Activate.js';
 import Deactivate from '../../event/Deactivate.js';
-import IFACE from '../IFACE.js';
 /** An interface for Toggle driven Events for a collapsable element
     @class
     @extends IFACE
@@ -36,4 +36,4 @@ export default class Switchable extends IFACE {
         this.methods.flip = () => this.toggle('active', new Activate(node), new Deactivate(node));
     }
 }
-export { Activate, Deactivate }
+export { Activate, ATTRIBUTES, Deactivate, EL, MODEL }

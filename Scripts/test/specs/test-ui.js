@@ -258,7 +258,7 @@ describe('Verify CONTAINER(s)', () => {
 
     it('INDEXMAIN ul.list loaded correctly', (done) => {
         try {
-            page.$eval('div.index-main .container-body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
+            page.$eval('div.index-main .body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
                 console.log(' - The query did not return any results');
                 expect(false).to.equal(true);
                 done(e);

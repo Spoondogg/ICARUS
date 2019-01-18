@@ -640,6 +640,7 @@
     <Content Include="Scripts\src\icarus\interface\Closeable\Closeable.js" />
     <Content Include="Scripts\src\icarus\interface\Editable\Editable.js" />
     <Content Include="Scripts\src\icarus\interface\IFACE.js" />
+    <Content Include="Scripts\src\icarus\interface\Movable\Movable.js" />
     <Content Include="Scripts\src\icarus\interface\Scrollable\Scrollable.js" />
     <Content Include="Scripts\src\icarus\interface\Swipeable\Swipeable.js" />
     <Content Include="Scripts\src\icarus\interface\Hideable\Hideable.js" />
@@ -654,7 +655,13 @@
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
     <Content Include="Scripts\src\icarus\model\el\EL.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\menu\list\LIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\group\GROUP.js" />
+    <Content Include="Scripts\src\icarus\model\el\header\HEADER.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\dl\dd\DD.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\item\ITEM.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\dl\dt\DT.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\LIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\ul\UL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
@@ -694,8 +701,6 @@
     <Content Include="Scripts\src\icarus\model\el\iframe\IFRAME.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\list\LIST.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\list\listitem\LISTITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAIN.js" />
     <Content Include="Scripts\src\icarus\model\el\container\menulist\MENULIST.js" />
     <Content Include="Scripts\src\icarus\model\el\legend\LEGEND.js" />
@@ -709,13 +714,11 @@
     <Content Include="Scripts\src\icarus\model\el\footer\FOOTER.js" />
     <Content Include="Scripts\src\icarus\model\el\footer\stickyfooter\STICKYFOOTER.js" />
     <Content Include="Scripts\src\icarus\model\el\group\buttongroup\BUTTONGROUP.js" />
-    <Content Include="Scripts\src\icarus\model\el\group\GROUP.js" />
-    <Content Include="Scripts\src\icarus\model\el\header\HEADER.js" />
     <Content Include="Scripts\src\icarus\model\el\hr\HR.js" />
     <Content Include="Scripts\src\icarus\model\el\img\IMG.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUT.js" />
     <Content Include="Scripts\src\icarus\model\el\label\LABEL.js" />
-    <Content Include="Scripts\src\icarus\model\el\li\LI.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\li\LI.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\LOADER.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\PROGRESSBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
@@ -739,10 +742,12 @@
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\ROW.js" />
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\TGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\textarea\TEXTAREA.js" />
-    <Content Include="Scripts\src\icarus\model\el\ul\console\CONSOLE.js" />
-    <Content Include="Scripts\src\icarus\model\el\ul\UL.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\dl\DL.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\console\CONSOLE.js" />
     <Content Include="Scripts\src\icarus\model\MODEL.js" />
     <Content Include="Scripts\src\icarus\STRING.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPFILE.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPPATHS.js" />
     <Content Include="Scripts\test\fixtures\index2.html" />
     <Content Include="Scripts\test\fixtures\index.html" />
     <Content Include="Scripts\test\fixtures\init.js" />
@@ -825,6 +830,11 @@
     <Content Include="Views\Account\LogOff.cshtml" />
     <Content Include="Views\Account\ExternalLogin.cshtml" />
     <Content Include="Views\Shared\_Globals.cshtml" />
+    <Content Include="Scripts\src\icarus\task\config\beautify.json" />
+    <Content Include="Scripts\src\icarus\task\config\doxygen.json" />
+    <Content Include="Scripts\src\icarus\task\config\eslint.json" />
+    <Content Include="Scripts\src\icarus\task\config\jsdoc.json" />
+    <Content Include="Scripts\src\icarus\task\config\sasslint.json" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>

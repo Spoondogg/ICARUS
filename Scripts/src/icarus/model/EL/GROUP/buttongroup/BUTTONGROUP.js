@@ -7,17 +7,12 @@ import { ALIGN } from '../../../../enums/ALIGN.js';
     @extends GROUP
 */
 export default class BUTTONGROUP extends GROUP {
-	/** Constructs a Button Group
+	/** Constructs a Group for containing Buttons
 	    @param {EL} node Parent Node
         @param {MODEL} model Model
-	    param {string} className Optional className to be appended to default class
-	    param {string} align ALIGN.enum
-	    param {string} size SIZE.enum
-	 */
+	*/
     constructor(node, model = new MODEL().set('label', 'buttons')) {
-        //console.log('buttongroup', node, model);
         super(node, 'DIV', model);
-        //console.log('buttongroup super complete');
         this.addClass('btn-group');
 		if (model.align === ALIGN.VERTICAL) { this.addClass('btn-group-vertical'); }
 		/* Add cases for each relevant constructor that inherited class does not have */

@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ICONS, MODEL, createInputModel, DATAELEMENTS } from '../CONTAINER.js';
+import CONTAINER, { DATAELEMENTS, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
@@ -43,10 +43,11 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<ThisType>} callback
     */
     construct(children) {
-        return this.addNavOptions().then(() => this.populate(children).then(
-            () => this.navBar.expand().then(
-                () => this.body.expand().then(
-                    () => this.stickyFooter.expand()))));
+        return this.addNavOptions().then(
+            () => this.populate(children).then(
+                () => this.navBar.expand().then(
+                    () => this.body.expand().then(
+                        () => this.stickyFooter.expand()))));
     }
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
@@ -161,12 +162,12 @@ export default class MAIN extends CONTAINER {
 	*/
     addDefaultMenuItems() {
         let optionsMenu = this.navBar.menu;
-        let domMenu = optionsMenu.list.getGroup('DOM');
+        let domMenu = optionsMenu.list.get('DOM');
         this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => { location.href = this.url.origin; }, 300);
         this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navBar.toggle());
         this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
         this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-        let crudMenu = optionsMenu.list.getGroup('CRUD');
+        let crudMenu = optionsMenu.list.get('CRUD');
         this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
