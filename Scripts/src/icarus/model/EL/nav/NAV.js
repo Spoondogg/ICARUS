@@ -1,16 +1,17 @@
 /** @module */
 import EL, { MODEL } from '../EL.js';
+import MENU from './menu/MENU.js';
 /** Generic NAV Element 
     @class
-    @extends EL
+    @extends MENU
 */
-export default class NAV extends EL {
+export default class NAV extends MENU {
 	/** Constructs a NAV
-	    @param {EL} node The element that will contain this object
-	    @param {MODEL} model The object attributes
+	    @param {EL} node Parent Node
+	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
-		super(node, 'NAV', model);
+        super(node, model, 'NAV');
     }
 }
 export { EL, MODEL }

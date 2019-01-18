@@ -101,4 +101,4 @@ export default class Clickable extends IFACE {
         }
     }   
 }
-export { Activate, Deactivate, Deselect, Select, Selectable, Switchable }
+export { Activate, Deactivate, Deselect, EL, Select, Selectable, Switchable }

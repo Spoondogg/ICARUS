@@ -137,20 +137,20 @@ $jumbotron-height: 420px;
 }
 /// The object can be clicked or tapped
 %clickable {
-    cursor: pointer;
+	cursor: pointer;
 
-    &:hover {
-        text-decoration: none; //underline;
+	&:hover {
+		text-decoration: none; //underline;
 
-        > a {
-            text-decoration: none;
-        }
-    }
+		>a {
+			text-decoration: none;
+		}
+	}
 
-    //*:not(input):not(textarea) {
-        //-webkit-user-select: none; /* disable selection/Copy of UIWebView */
-        //-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
-    //}
+	//*:not(input):not(textarea) {
+	//-webkit-user-select: none; /* disable selection/Copy of UIWebView */
+	//-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
+	//}
 }
 %gradient-primary {
 	$color-one: $color-blue-lighter;
@@ -179,7 +179,7 @@ $jumbotron-height: 420px;
 %bevel {
 	border-left: 0;
 	border-right: 0;
-    box-sizing: border-box; //https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge
+	box-sizing: border-box; //https://stackoverflow.com/questions/9601357/placing-border-inside-of-div-and-not-on-its-edge
 	//clear: both;
 	//float: left;
 	line-height: $navbar-height;
@@ -243,22 +243,22 @@ $jumbotron-height: 420px;
 	}
 }*/
 body {
-    @extend %gradient-vertical-fade;
-    @include font-smoothing;
-    @include transition($transition-default);
-    background-color: $color-dark-less; //$background-primary;
-    color: $color-primary;
-    font-family: $font-primary;
-    font-size: $font-size-base; //$font-size-normal;
-    font-weight: $font-primary-weight;
-    height: 100vh;
-    overflow: hidden;
-    padding-top: $navbar-height;
-    //-webkit-touch-callout: none !important;
+	@extend %gradient-vertical-fade;
+	@include font-smoothing;
+	@include transition($transition-default);
+	background-color: $color-dark-less; //$background-primary;
+	color: $color-primary;
+	font-family: $font-primary;
+	font-size: $font-size-base; //$font-size-normal;
+	font-weight: $font-primary-weight;
+	height: 100vh;
+	overflow: hidden;
+	padding-top: $navbar-height;
+	//-webkit-touch-callout: none !important;
 
-    &.compact {
-        padding-top: 0;
-    }
+	&.compact {
+		padding-top: 0;
+	}
 }
 button {
 	:disabled {
@@ -292,9 +292,9 @@ h4,
 h5,
 h6,
 header {
-    color: $color-dark;
-    font-family: $font-major;
-    font-weight: $font-primary-weight;
+	color: $color-dark;
+	font-family: $font-major;
+	font-weight: $font-primary-weight;
 }
 h2 {
 	input {
@@ -307,343 +307,343 @@ h2 {
 	}
 }
 @keyframes border-dance-mobile {
-    0% {
-        background-position: left top, right bottom, left bottom, right top;
-    }
+	0% {
+		background-position: left top, right bottom, left bottom, right top;
+	}
 
-    100% {
-        background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
-    }
+	100% {
+		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+	}
 }
 @keyframes border-dance-desktop {
-    0% {
-        background-position: left top, right bottom, left bottom, right top;
-    }
+	0% {
+		background-position: left top, right bottom, left bottom, right top;
+	}
 
-    100% {
-        background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
-    }
+	100% {
+		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+	}
 }
 .selected {
-    animation: border-dance-desktop 1s infinite linear;
-    background-image: linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%);
-    background-position: left top, right bottom, left bottom, right top;
-    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-    background-size: 5px 2px, 5px 2px, 2px 5px, 2px 5px;
-    border-radius: .3em;
-    /// Removes side borders
-    @media only screen and (max-width: $max-width-mobile) {
-        animation: border-dance-mobile 1s infinite linear;
-        background-size: 5px 2px, 5px 2px, 0 5px, 0 5px; // no sides
-        border-radius: 0;
-    }
+	animation: border-dance-desktop 1s infinite linear;
+	background-image: linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%);
+	background-position: left top, right bottom, left bottom, right top;
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: 5px 2px, 5px 2px, 2px 5px, 2px 5px;
+	border-radius: .3em;
+	/// Removes side borders
+	@media only screen and (max-width: $max-width-mobile) {
+		animation: border-dance-mobile 1s infinite linear;
+		background-size: 5px 2px, 5px 2px, 0 5px, 0 5px; // no sides
+		border-radius: 0;
+	}
 }
 // ********** DIALOG ********** //
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 @keyframes fadeOut {
-    to {
-        opacity: 0;
-    }
+	to {
+		opacity: 0;
+	}
 }
 @keyframes slideInTop {
-    from {
-        transform: translateY(110%);
-    }
-    to {
-        transform: translateY(0%);
-    }
+	from {
+		transform: translateY(110%);
+	}
+	to {
+		transform: translateY(0%);
+	}
 }
 @keyframes slideInRight {
-    from {
-        transform: translateX(110%);
-    }
+	from {
+		transform: translateX(110%);
+	}
 
-    to {
-        transform: translateX(0%);
-    }
+	to {
+		transform: translateX(0%);
+	}
 }
 @keyframes slideInBottom {
-    from {
-        transform: translateY(-110%);
-    }
+	from {
+		transform: translateY(-110%);
+	}
 
-    to {
-        transform: translateY(0%);
-    }
+	to {
+		transform: translateY(0%);
+	}
 }
 @keyframes slideOutUp {
-    to {
-        transform: translateY(110%);
-    }
+	to {
+		transform: translateY(110%);
+	}
 }
 @keyframes slideOutRight {
-    to {
-        transform: translateX(110%);
-    }
+	to {
+		transform: translateX(110%);
+	}
 }
 @keyframes slideOutDown {
-    to {
-        transform: translateY(-110%);
-    }
+	to {
+		transform: translateY(-110%);
+	}
 }
 dialog,
 .modal {
-    animation: slideOutUp $transition-speed $transition-motion;
-    border: 0;
-    border-radius: .6rem;
-    box-shadow: 0 0 1em $color-black;
-    margin: 1em auto;
-    max-width: $body-width;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    //width: calc(100% - 1em);
-    width: 100%;
+	animation: slideOutUp $transition-speed $transition-motion;
+	border: 0;
+	border-radius: .6rem;
+	box-shadow: 0 0 1em $color-black;
+	margin: 1em auto;
+	max-width: $body-width;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	//width: calc(100% - 1em);
+	width: 100%;
 
-    &::backdrop {
-        animation: fadeIn $transition-speed $transition-motion;
-        background-color: $color-shadow-dark;
-        bottom: 0;
-        left: 0;
-        position: fixed;
-        right: 0;
-        top: 0;
-    }
+	&::backdrop {
+		animation: fadeIn $transition-speed $transition-motion;
+		background-color: $color-shadow-dark;
+		bottom: 0;
+		left: 0;
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
 
-    &[open],
-    &.in {
-        animation: slideInTop $transition-speed $transition-motion;
+	&[open],
+	&.in {
+		animation: slideInTop $transition-speed $transition-motion;
 
-        &.hiding {
-            animation: slideOutUp $transition-speed $transition-motion;
+		&.hiding {
+			animation: slideOutUp $transition-speed $transition-motion;
 
-            &::backdrop {
-                animation: fadeOut $transition-speed $transition-motion;
-            }
-        }
-    }
+			&::backdrop {
+				animation: fadeOut $transition-speed $transition-motion;
+			}
+		}
+	}
 
-    &.prompt {
-        animation: slideOutDown $transition-speed $transition-motion;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        bottom: 0;
-        margin-bottom: 0;
-        //margin-left: 0;
-        //margin-right: 0;
-        top: auto;
+	&.prompt {
+		animation: slideOutDown $transition-speed $transition-motion;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		bottom: 0;
+		margin-bottom: 0;
+		//margin-left: 0;
+		//margin-right: 0;
+		top: auto;
 
-        &[open],
-        &.in {
-            animation: slideInTop $transition-speed $transition-motion;
+		&[open],
+		&.in {
+			animation: slideInTop $transition-speed $transition-motion;
 
-            &.hiding {
-                animation: slideOutUp $transition-speed $transition-motion;
-            }
-        }
+			&.hiding {
+				animation: slideOutUp $transition-speed $transition-motion;
+			}
+		}
 
-        > footer {
-            &.form-footer {
-                border: 0;
+		>footer {
+			&.form-footer {
+				border: 0;
 
-                button {
-                    border-radius: 0;
-                    height: $navbar-height - 1em;
-                    line-height: $navbar-height - 1em;
-                    padding: 0;
-                }
-            }
-        }
-    }
+				button {
+					border-radius: 0;
+					height: $navbar-height - 1em;
+					line-height: $navbar-height - 1em;
+					padding: 0;
+				}
+			}
+		}
+	}
 
-    &.login {
-        animation: slideOutRight $transition-speed $transition-motion;
-        float: right;
-        left: calc(100% - 270px);
-        top: 2em;
-        width: 250px;
+	&.login {
+		animation: slideOutRight $transition-speed $transition-motion;
+		float: right;
+		left: calc(100% - 270px);
+		top: 2em;
+		width: 250px;
 
-        &[open],
-        &.in {
-            animation: slideInRight $transition-speed $transition-motion;
+		&[open],
+		&.in {
+			animation: slideInRight $transition-speed $transition-motion;
 
-            &.hiding {
-                animation: slideOutRight $transition-speed $transition-motion;
-            }
-        }
+			&.hiding {
+				animation: slideOutRight $transition-speed $transition-motion;
+			}
+		}
 
-        footer {
-            display: none;
-        }
-    }
+		footer {
+			display: none;
+		}
+	}
 
-    &.loader {
-        animation: slideOutDown $transition-speed $transition-motion;
-        background-color: $color-dark; // transparentize($color-light, .75);
-        border-radius: 0;
-        border-top: 1px solid transparentize($color-grey-light, .7);
-        bottom: 0;
-        height: auto;
-        //margin: 0;
-        margin-bottom: -.5em;
-        max-height: 260px;
-        top: auto;
-        width: 100%;
+	&.loader {
+		animation: slideOutDown $transition-speed $transition-motion;
+		background-color: $color-dark; // transparentize($color-light, .75);
+		border-radius: 0;
+		border-top: 1px solid transparentize($color-grey-light, .7);
+		bottom: 0;
+		height: auto;
+		//margin: 0;
+		margin-bottom: -.5em;
+		max-height: 260px;
+		top: auto;
+		width: 100%;
 
-        &::backdrop {
-            opacity: 0;
-        }
+		&::backdrop {
+			opacity: 0;
+		}
 
-        &[open],
-        &.in {
-            animation: slideInTop $transition-speed $transition-motion;
+		&[open],
+		&.in {
+			animation: slideInTop $transition-speed $transition-motion;
 
-            &.hiding {
-                animation: slideOutUp $transition-speed $transition-motion;
-            }
-        }
+			&.hiding {
+				animation: slideOutUp $transition-speed $transition-motion;
+			}
+		}
 
-        > nav {
-            display: none;
-        }
+		>nav {
+			display: none;
+		}
 
-        .body {
-            margin: .5em;
+		.body {
+			margin: .5em;
 
-            .well {
-                font-size: smaller;
-                margin: 0;
-            }
+			.well {
+				font-size: smaller;
+				margin: 0;
+			}
 
-            .progress {
-                border-radius: 3px;
-                clear: both;
-                float: none;
-                margin: 0;
-                //height: calc(#{$navbar-height} - .5em);
-                .text {
-                    clear: both;
-                    float: none;
-                    min-width: 400px;
-                    overflow: visible;
-                    padding: 0 .5em;
-                    text-align: left;
-                    text-decoration: none;
-                    text-transform: uppercase;
-                }
+			.progress {
+				border-radius: 3px;
+				clear: both;
+				float: none;
+				margin: 0;
+				//height: calc(#{$navbar-height} - .5em);
+				.text {
+					clear: both;
+					float: none;
+					min-width: 400px;
+					overflow: visible;
+					padding: 0 .5em;
+					text-align: left;
+					text-decoration: none;
+					text-transform: uppercase;
+				}
 
-                .progress-bar {
-                    border-radius: .3em;
-                    overflow: visible;
-                    text-shadow: 0 1px 4px $color-shadow-neutral;
-                }
+				.progress-bar {
+					border-radius: .3em;
+					overflow: visible;
+					text-shadow: 0 1px 4px $color-shadow-neutral;
+				}
 
-                & + ul {
-                    border: 1px solid $color-grey-dark;
-                    border-radius: 5px;
-                    height: 0;
-                    margin-top: 0;
-                    //opacity: 0;
-                    padding: 0;
+				&+ul {
+					border: 1px solid $color-grey-dark;
+					border-radius: 5px;
+					height: 0;
+					margin-top: 0;
+					//opacity: 0;
+					padding: 0;
 
-                    &.console {
-                        @include no-scroll-bar;
+					&.console {
+						@include no-scroll-bar;
 
-                        &.collapse {
-                            &.in {
-                                height: 12em;
-                                margin-top: .5em;
-                                //opacity: 1;
-                                padding: initial;
-                            }
-                        }
+						&.collapse {
+							&.in {
+								height: 12em;
+								margin-top: .5em;
+								//opacity: 1;
+								padding: initial;
+							}
+						}
 
-                        &.collapsing {
-                            margin-top: .5em;
-                        }
+						&.collapsing {
+							margin-top: .5em;
+						}
 
-                        li {
-                            padding: 3px;
-                        }
-                    }
-                }
-            }
-        }
+						li {
+							padding: 3px;
+						}
+					}
+				}
+			}
+		}
 
-        footer,
-        header {
-            display: none;
-            height: $navbar-height;
-        }
-    }
+		footer,
+		header {
+			display: none;
+			height: $navbar-height;
+		}
+	}
 
-    > nav {
-        //position: fixed;
-        width: 100%;
+	>nav {
+		//position: fixed;
+		width: 100%;
 
-        > .menu {
-            > .list {
-                max-height: 18em;
-                overflow-y: auto;
-            }
-        }
-    }
+		>.menu {
+			>.list {
+				max-height: 18em;
+				overflow-y: auto;
+			}
+		}
+	}
 
-    > header {
-        background-color: $color-grey-dark;
-        color: $color-light;
-        //font-weight: bolder;
-        height: 3em;
-        line-height: 3em;
-        padding: 0 .5em;
-        text-transform: uppercase;
+	>header {
+		background-color: $color-grey-dark;
+		color: $color-light;
+		//font-weight: bolder;
+		height: 3em;
+		line-height: 3em;
+		padding: 0 .5em;
+		text-transform: uppercase;
 
-        button {
-            background-color: transparent;
-            color: $color-white;
-            float: right;
-            font-weight: bold;
-            line-height: 1.5em;
+		button {
+			background-color: transparent;
+			color: $color-white;
+			float: right;
+			font-weight: bold;
+			line-height: 1.5em;
 
-            &:hover {
-                color: $color-light-less;
-            }
-        }
-    }
+			&:hover {
+				color: $color-light-less;
+			}
+		}
+	}
+    
+	>div {
+		&.body {
+			@extend %modal-tall;
+			//max-height: calc(100vh - $navbar-height * 4);
+			>form {
+				.form-footer {
+					height: auto;
+				}
+			}
+		}
+	}
 
-    > div {
-        &.body {
-            @extend %modal-tall;
-            //max-height: calc(100vh - $navbar-height * 4);
-            > form {
-                .form-footer {
-                    height: auto;
-                }
-            }
-        }
-    }
+	footer {
+		padding: 0;
 
-    footer {
-        padding: 0;
+		&.form-footer {
+			border: 0;
 
-        &.form-footer {
-            border: 0;
-
-            button {
-                border-radius: 0;
-                height: $navbar-height - 1em;
-                line-height: $navbar-height - 1em;
-                padding: 0;
-            }
-        }
-    }
+			button {
+				border-radius: 0;
+				height: $navbar-height - 1em;
+				line-height: $navbar-height - 1em;
+				padding: 0;
+			}
+		}
+	}
 }
 .btn-group-vertical {
 	width: 100%;
@@ -653,161 +653,160 @@ dialog,
 		}
 	}
 }
-
 footer {
-    @extend %bevel-up;
-    @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
-    background-color: $color-grey-dark;
-    //border-top: 1px solid $color-grey-light;
-    clear: both;
-    color: $color-white;
-    display: block;
-    float: left;
-    font-size: smaller;
-    height: $navbar-height;
-    line-height: $navbar-height - 1em;
-    padding: 0; //.5em;
-    width: 100%;
+	@extend %bevel-up;
+	@include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
+	background-color: $color-grey-dark;
+	//border-top: 1px solid $color-grey-light;
+	clear: both;
+	color: $color-white;
+	display: block;
+	float: left;
+	font-size: smaller;
+	height: $navbar-height;
+	line-height: $navbar-height - 1em;
+	padding: 0; //.5em;
+	width: 100%;
 
-    button {
-        @include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
-        background-color: $color-grey-light;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        border-color: $color-grey-light;
-        border-top: 1px solid $color-grey;
-        color: $color-grey-darker;
-        cursor: pointer;
-        font-weight: bold;
-        text-shadow: 0 -1px 1px $color-grey;
-        text-transform: uppercase;
+	button {
+		@include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
+		background-color: $color-grey-light;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		border-color: $color-grey-light;
+		border-top: 1px solid $color-grey;
+		color: $color-grey-darker;
+		cursor: pointer;
+		font-weight: bold;
+		text-shadow: 0 -1px 1px $color-grey;
+		text-transform: uppercase;
 
-        &:hover {
-            @include transition(color 400ms);
-            @include transition(background-color 400ms);
-            background-color: $color-blue-light;
-            color: $color-secondary-neutral;
-        }
-    }
+		&:hover {
+			@include transition(color 400ms);
+			@include transition(background-color 400ms);
+			background-color: $color-blue-light;
+			color: $color-secondary-neutral;
+		}
+	}
 
-    > .container {
-        margin: .4em auto;
-    }
+	>.container {
+		margin: .4em auto;
+	}
 
-    > cite {
-        float: right;
-        line-height: 16px;
-        text-align: right;
+	>cite {
+		float: right;
+		line-height: 16px;
+		text-align: right;
 
-        a {
-            color: $color-white;
-            text-decoration: underline;
+		a {
+			color: $color-white;
+			text-decoration: underline;
 
-            &:hover {
-                color: $color-blue-lighter;
-            }
-        }
-    }
+			&:hover {
+				color: $color-blue-lighter;
+			}
+		}
+	}
 
-    &.stickyfooter {
-        @extend %bevel-up;
-        @include transition($transition-default);
-        bottom: 0;
-        padding: 0;
-        position: fixed;
+	&.stickyfooter {
+		@extend %bevel-up;
+		@include transition($transition-default);
+		bottom: 0;
+		padding: 0;
+		position: fixed;
 
-        &.active {
-            height: $navbar-height * 5;
-        }
+		&.active {
+			height: $navbar-height * 5;
+		}
 
-        textarea {
-            border-radius: 5px;
-            color: $color-black;
-            height: 180px;
-            line-height: normal;
-            margin: 1em;
-            width: calc(100% - 25px);
-        }
-    }
+		textarea {
+			border-radius: 5px;
+			color: $color-black;
+			height: 180px;
+			line-height: normal;
+			margin: 1em;
+			width: calc(100% - 25px);
+		}
+	}
 
-    &.pagination {
-        border-radius: 0;
-        display: flex;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-        width: 100%;
+	&.pagination {
+		border-radius: 0;
+		display: flex;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+		width: 100%;
 
-        .btn-group {
-            @extend %horizontal-scroll;
-            //flex-basis: auto;
-            flex-grow: 2;
-        }
+		.btn-group {
+			@extend %horizontal-scroll;
+			//flex-basis: auto;
+			flex-grow: 2;
+		}
 
-        button {
-            background-color: $color-grey-darker;
-            border: 0;
-            flex-basis: 5em;
-            flex-grow: 1;
-            font-family: $font-primary;
-            text-transform: uppercase;
+		button {
+			background-color: $color-grey-darker;
+			border: 0;
+			flex-basis: 5em;
+			flex-grow: 1;
+			font-family: $font-primary;
+			text-transform: uppercase;
 
-            &:focus {
-                color: $color-blue-lighter;
-                outline: none;
-            }
+			&:focus {
+				color: $color-blue-lighter;
+				outline: none;
+			}
 
-            &.active {
-                background-color: $color-grey-dark;
-                color: $color-blue-light;
-                outline: none;
-            }
-        }
-    }
+			&.active {
+				background-color: $color-grey-dark;
+				color: $color-blue-light;
+				outline: none;
+			}
+		}
+	}
 }
 form {
-    @extend %bevel-up;
+	@extend %bevel-up;
 
-    .login {
-        input,
-        label {
-            text-align: center;
-        }
-    }
+	.login {
+		input,
+		label {
+			text-align: center;
+		}
+	}
 
-    fieldset {
-        legend {
-            font-size: small;
-            line-height: 2em;
-            margin: 0;
-            padding: 0 .5em;
-        }
-    }
+	fieldset {
+		legend {
+			font-size: small;
+			line-height: 2em;
+			margin: 0;
+			padding: 0 .5em;
+		}
+	}
 
-    footer {
-        &.form-footer {
-            background-color: transparent;
-            padding: 0;
+	footer {
+		&.form-footer {
+			background-color: transparent;
+			padding: 0;
 
-            .btn-group-vertical {
-                button {
+			.btn-group-vertical {
+				button {
 
-                    &:first-child {
-                        &:not(:last-child) {
-                            border-radius: 0;
-                        }
-                    }
+					&:first-child {
+						&:not(:last-child) {
+							border-radius: 0;
+						}
+					}
 
-                    &:last-child {
-                        &:not(:first-child) {
-                            // override vendor
-                            border-radius: 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
+					&:last-child {
+						&:not(:first-child) {
+							// override vendor
+							border-radius: 0;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 input,
 select,
@@ -1127,13 +1126,13 @@ table {
 	}
 }
 .form-element {
-	.container-body {
+	.body {
 		.pane {
 			padding: .4em;
 
-            > textarea {
-                height: 10em;
-            }
+			>textarea {
+				height: 10em;
+			}
 
 		}
 	}
@@ -1154,19 +1153,70 @@ table {
 	}
 }
 .btn-add-element {
-    padding: .5em 0;
+	padding: .5em 0;
 
-    button {
-        display: block;
-        height: 128px;
-        margin: 0 auto;
-        width: 128px;
-    }
+	button {
+		display: block;
+		height: 128px;
+		margin: 0 auto;
+		width: 128px;
+	}
 }
 .container {
     margin: 0;
     padding: 0;
     width: 100%;
+
+    nav {
+        @extend %bevel-up;
+        background-color: $color-nav-background;
+        font-size: $font-size-normal;
+        min-height: $navbar-height;
+
+        &.navbar {
+            height: $navbar-height;
+
+            &.navbar-fixed-top {
+                background-color: rgb(255, 165, 0);
+                width: 100%;
+            }
+
+            > svg {
+                height: $navbar-height;
+                width: $navbar-height;
+            }
+
+            > .menu {
+                list-style: none;
+                padding: 0;
+                width: 100%;
+
+                &[name="tabs"] {
+
+                }
+
+                .nav-item {
+                    list-style: none;
+                }
+            }
+
+            ul {
+                & &.navheader {
+                    padding: 0;
+                }
+            }
+
+            .btn-group {
+                > .dropdown-menu {
+                    > li {
+                        color: $color-grey;
+                        text-align: left;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
 
     &.article {
         border-bottom: 1px solid $color-grey;
@@ -1178,7 +1228,7 @@ table {
         background-color: $color-shadow-neutral;
         color: inherit;
 
-        .container-body {
+        .body {
             > .banner {
                 > header {
                     background-color: $color-black;
@@ -1197,7 +1247,7 @@ table {
     }
 
     &.index-main {
-        > .container-body {
+        > .body {
             background-color: $color-grey-dark;
 
             > header {
@@ -1249,7 +1299,7 @@ table {
     &.image-gallery {
         color: inherit;
 
-        > .container-body {
+        > .body {
             & > header {
                 color: $color-light;
                 font-family: sans-serif;
@@ -1332,7 +1382,7 @@ table {
         margin-right: auto;
         max-width: $body-width;
         // The pane within the Main container should fill the remaining screen space
-        > .container-body {
+        > .body {
             > .pane {
                 @extend %pane-tall;
                 background-color: $color-grey;
@@ -1384,7 +1434,7 @@ table {
         background-color: adjust-color($color-black, $alpha: .5);
     }
 
-    > .container-body {
+    > .body {
         background-color: $color-light;
         box-sizing: border-box;
         width: 100%;
@@ -1394,32 +1444,9 @@ table {
             @include no-scroll-bar;
             width: 100%;
         }
-    }
-}
-nav {
-    @extend %bevel-up;
-    background-color: $color-nav-background;
-    font-size: $font-size-normal;
-    min-height: $navbar-height;
-    height: $navbar-height;
 
-    &.navbar-fixed-top {
-        width: 100%;
-    }
-
-    > ul {
-        &.navheader {
-            padding: 0;
-        }
-    }
-
-    .btn-group {
-        > .dropdown-menu {
-            > li {
-                color: $color-grey;
-                text-align: left;
-                text-decoration: none;
-            }
+        .woot {
+            width: 100%;
         }
     }
 }
@@ -1450,220 +1477,220 @@ nav {
 	}
 }
 .menu {
-    @extend %noSelect;
-    background-color: $color-nav-background;
+	@extend %noSelect;
+	background-color: $color-nav-background;
 
-    &.selected {
-        > header {
-            background-color: darken($color-nav-background, 35%);
-            text-decoration: none;
-        }
-    }
+	&.selected {
+		> header {
+			background-color: darken($color-nav-background, 35%);
+			text-decoration: none;
+		}
+	}
 
-    &.usermenu {
-        @include transition(right $transition-speed $transition-motion);
-        //animation: slideOutRight $transition-speed $transition-motion;
-        background-color: #373c40;
-        border: 1px solid rgba(160, 160, 160, 0.25);
-        border-radius: .2em;
-        box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.8);
-        //display: none;
-        float: right;
-        max-height: 320px;
-        position: absolute;
-        right: -231px;
-        top: calc(#{$navbar-height} + 2px);
-        width: 230px;
+	&.usermenu {
+		@include transition(right $transition-speed $transition-motion);
+		//animation: slideOutRight $transition-speed $transition-motion;
+		background-color: #373c40;
+		border: 1px solid rgba(160, 160, 160, 0.25);
+		border-radius: .2em;
+		box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.8);
+		//display: none;
+		float: right;
+		max-height: 320px;
+		position: absolute;
+		right: -231px;
+		top: calc(#{$navbar-height} + 2px);
+		width: 230px;
 
-        &.active {
-            //animation: slideInRight $transition-speed $transition-motion;
-            right: 1px;
-            //display: block;
-        }
+		&.active {
+			//animation: slideInRight $transition-speed $transition-motion;
+			right: 1px;
+			//display: block;
+		}
 
-        > ul {
-            &.horizontal {
-                flex-direction: row-reverse;
-            }
-        }
+		>ul {
+			&.horizontal {
+				flex-direction: row-reverse;
+			}
+		}
 
-        .profile {
-            //background-color: $color-grey-dark;
-            color: $color-white;
-            font-family: $font-header;
-            text-align: center;
+		.profile {
+			//background-color: $color-grey-dark;
+			color: $color-white;
+			font-family: $font-header;
+			text-align: center;
 
-            > img {
-                &.picture {
-                    background-color: $color-grey;
-                    border: 2px solid #ffffff96;
-                    border-radius: 128px;
-                    box-sizing: content-box;
-                    clear: both;
-                    display: block;
-                    float: none;
-                    height: 128px;
-                    margin: 1em auto;
-                    width: 128px;
-                }
-            }
+			>img {
+				&.picture {
+					background-color: $color-grey;
+					border: 2px solid $color-grey-light;
+					border-radius: 128px;
+					box-sizing: content-box;
+					clear: both;
+					display: block;
+					float: none;
+					height: 128px;
+					margin: 1em auto;
+					width: 128px;
+				}
+			}
 
-            > .username {
-                line-height: 1.4em;
-            }
+			>.username {
+				line-height: 1.4em;
+			}
 
-            > .quote {
-                font-size: .8em;
-                line-height: 1.4em;
-                margin-bottom: 1em;
-            }
-        }
-    }
+			>.quote {
+				font-size: .8em;
+				line-height: 1.4em;
+				margin-bottom: 1em;
+			}
+		}
+	}
 
-    > header {
-        @extend %bevel-down;
-        @extend %clickable;
-        @extend %noSelect;
-        background-color: darken($color-nav-background, 25%);
-        color: $color-light;
-        line-height: normal;
-        padding: 0 .2em;
-        text-transform: uppercase;
+	> header {
+		@extend %bevel-down;
+		@extend %clickable;
+		@extend %noSelect;
+		background-color: darken($color-nav-background, 25%);
+		color: $color-light;
+		line-height: normal;
+		padding: 0 .2em;
+		text-transform: uppercase;
 
-        &:hover {
-            background-color: darken($color-nav-background, 35%);
-            text-decoration: none;
-        }
-        // First ul after nav header
-        & ~ ul {
-            .nav {
-                background-color: darken($color-nav-background, 50%);
-            }
-        }
-    }
+		&:hover {
+			background-color: darken($color-nav-background, 35%);
+			text-decoration: none;
+		}
+		// First ul after nav header
+		&~ul {
+			.nav {
+				background-color: darken($color-nav-background, 50%);
+			}
+		}
+	}
 
-    > .list {
-        margin: 0;
-        padding: 0;
-        width: 100%;
+	>.list {
+		margin: 0;
+		padding: 0;
+		width: 100%;
 
-        &.tabs {
-            display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-            .nav-item {
-                flex-basis: 3em;
-                //flex-grow: 1;
-                height: $navbar-height;
-            }
+		&.tabs {
+			display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+			.nav-item {
+				flex-basis: 3em;
+				//flex-grow: 1;
+				height: $navbar-height;
+			}
 
-            .wide-tab {
-                flex-basis: auto;
-                flex-grow: 2;
-                text-align: center;
-            }
-        }
+			.wide-tab {
+				flex-basis: auto;
+				flex-grow: 2;
+				text-align: center;
+			}
+		}
 
-        &.horizontal {
-            @extend %horizontal-scroll;
-            //@media only screen and (max-width: $max-width-mobile) {}
-            //@media only screen and (max-width: $max-width-desktop) {}
-            @include no-scroll-bar;
+		&.horizontal {
+			@extend %horizontal-scroll;
+			//@media only screen and (max-width: $max-width-mobile) {}
+			//@media only screen and (max-width: $max-width-desktop) {}
+			@include no-scroll-bar;
 
-            &.collapse {
-                height: 0;
+			&.collapse {
+				height: 0;
 
-                &.in {
-                    height: 4em; //96px; //$navbar-height;
-                }
-            }
+				&.in {
+					height: 4em; //96px; //$navbar-height;
+				}
+			}
 
-            > .nav-item-icon {
-                display: inline-block;
+			>.nav-item-icon {
+				display: inline-block;
 
-                &.active {
-                    background-color: rgb(103, 102, 86);
+				&.active {
+					background-color: rgb(103, 102, 86);
 
-                    > a {
-                        span {
-                            color: $color-white;
-                        }
-                    }
-                }
+					>a {
+						span {
+							color: $color-white;
+						}
+					}
+				}
 
-                > a {
-                    display: block;
-                    width: 8em;
+				>a {
+					display: block;
+					width: 8em;
 
-                    span {
-                        float: left;
-                        line-height: inherit;
+					span {
+						float: left;
+						line-height: inherit;
 
 
-                        &.label {
-                            overflow: hidden;
-                            padding: 0 .3em;
-                            text-overflow: ellipsis;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5em;
-                        }
-                    }
-                }
-            }
-        }
+						&.label {
+							overflow: hidden;
+							padding: 0 .3em;
+							text-overflow: ellipsis;
+							text-transform: uppercase;
+							white-space: nowrap;
+							width: 5em;
+						}
+					}
+				}
+			}
+		}
 
-        .icon-label {
-            @extend %noSelect;
-        }
+		.icon-label {
+			@extend %noSelect;
+		}
 
-        .nav-item {
-            @extend %clickable;
-            @include transition($transition-default);
-            background-color: $color-shadow-neutral;
-            border-left-color: transparent;
-            border-right-color: transparent;
-            box-sizing: border-box;
-            cursor: pointer;
-            float: left;
-            line-height: $navbar-height; // - 1em;
-            list-style: none;
-            //margin: 4px 0;
-            //padding: 0;
-            //text-align: center;
-            &:hover {
-                background-color: $color-shadow-light;
-                border-left: 1px solid $color-shadow-neutral;
-                border-right: 1px solid $color-shadow-neutral;
-            }
+		.nav-item {
+			@extend %clickable;
+			@include transition($transition-default);
+			background-color: $color-shadow-neutral;
+			border-left-color: transparent;
+			border-right-color: transparent;
+			box-sizing: border-box;
+			cursor: pointer;
+			float: left;
+			line-height: $navbar-height; // - 1em;
+			list-style: none;
+			//margin: 4px 0;
+			//padding: 0;
+			//text-align: center;
+			&:hover {
+				background-color: $color-shadow-light;
+				border-left: 1px solid $color-shadow-neutral;
+				border-right: 1px solid $color-shadow-neutral;
+			}
 
-            &.active {
-                background-color: $color-grey-dark;
-                box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
-            }
+			&.active {
+				background-color: $color-grey-dark;
+				box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+			}
 
-            &.wide-tab {
-                font-weight: bold;
+			&.wide-tab {
+				font-weight: bold;
 
-                &.active {
-                    > a {
-                        text-shadow: 3px 2px 3px rgba(255,255,255,.2);
-                    }
-                }
-            }
+				&.active {
+					>a {
+						text-shadow: 3px 2px 3px rgba(255, 255, 255, .2);
+					}
+				}
+			}
 
-            > a {
-                color: $color-light;
-                padding: 0 1em;
+			>a {
+				color: $color-light;
+				padding: 0 1em;
 
-                &:hover {
-                    color: $color-light-more;
-                }
-            }
+				&:hover {
+					color: $color-light-more;
+				}
+			}
 
-            &.nav-item-icon {
-                &.active {
-                    color: $color-grey-dark;
-                }
-                /*&.userTab {
+			&.nav-item-icon {
+				&.active {
+					color: $color-grey-dark;
+				}
+				/*&.userTab {
                     > a {
                         padding: .2em;
 
@@ -1673,25 +1700,25 @@ nav {
                         }
                     }
                 }*/
-                > a {
-                    > .icon {
-                        > .icon-label {
-                            //clear: both;
-                            display: block;
-                            //float: none;
-                            font-size: $font-size-small;
-                            line-height: 1.5em;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5em; //$icon-width;
-                        }
-                    }
-                }
-            }
-        }
-    }
+				>a {
+					>.icon {
+						>.icon-label {
+							//clear: both;
+							display: block;
+							//float: none;
+							font-size: $font-size-small;
+							line-height: 1.5em;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							text-transform: uppercase;
+							white-space: nowrap;
+							width: 5em; //$icon-width;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 .menulist-menu {
 	border-bottom: 3px solid $color-grey-darker;
@@ -1702,7 +1729,7 @@ nav {
 .menulist {
 	max-height: 200px;
 	overflow-y: auto;
-	& .container-body {
+	& .body {
 		& ul {
 			&.nav {
 				& .nav-item {
@@ -1829,12 +1856,12 @@ nav {
 		}
 	}
 
-	.container-body {
+	.body {
 		.pane {
 			background-color: $color-light;
 			color: $color-dark;
 
-			> header {
+			>header {
 				clear: right;
 				color: $color-light-less;
 				display: block;
@@ -1847,7 +1874,7 @@ nav {
 				width: calc(100% - 148px);
 			}
 
-			> img {
+			>img {
 				background-color: $color-white;
 				border: 1px solid $color-white;
 				border-radius: .3em;
@@ -1860,7 +1887,7 @@ nav {
 				//border-radius: .3em .3em 0 0;
 			}
 
-			> p {
+			>p {
 				color: $color-light-less;
 				float: left;
 				font-size: smaller;
@@ -1872,12 +1899,12 @@ nav {
 				width: calc(100% - 148px);
 			}
 
-			> .btn-group {
+			>.btn-group {
 				bottom: 1.75em;
 				position: absolute;
 				right: 1.35em;
 
-				> button {
+				>button {
 					&.btn {
 						border: 0;
 						border-radius: .3em;

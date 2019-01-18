@@ -1,5 +1,5 @@
 ﻿/** @module */
-import EL, { MODEL } from '../model/el/EL.js';
+import EL, { ATTRIBUTES, MODEL } from '../model/el/EL.js';
 import AbstractMethodError from '../error/AbstractMethodError.js';
 /** A generic interface for an EL element
     @class
@@ -55,4 +55,4 @@ export default class IFACE {
             () => this.node.el.dispatchEvent(this.node.hasClass(className) ? eventOff : eventOn));
     }
 }
-export { EL, MODEL };
+export { ATTRIBUTES, EL, MODEL };

@@ -1,10 +1,10 @@
 /** @module */
-import MENU, { NAVITEM, NAVITEMICON } from '../menu/MENU.js';
+import MENU, { LIST } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
 import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import SVG from '../../svg/SVG.js';
-import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
 /** A full width collapseable NAV Element
     @class
     @extends NAV
@@ -21,31 +21,31 @@ export default class NAVBAR extends NAV {
         this.implement(new Collapsible(this));
 
         this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
-        this.tabs = new MENU(this, new MODEL('tabs').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tabs = new MENU(this, new MODEL().set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
         this.tabs.activate();
-        this.tabs.list.expand();
-        this.menus = new MENU(this, new MODEL('menus').set('name', 'menus'));
+        this.tabs.expand();
+        this.menus = new MENU(this, new MODEL().set('name', 'menus'));
         this.menus.activate();
-        this.menus.list.expand();
+        this.menus.expand();
 
-        this.addTabbableElement(
-            this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-                icon: ICONS.COG,
-                name: 'OPTIONS'
+        // Create initial OPTIONS Tab and Menu
+        let optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
+            icon: ICONS.COG,
+            name: 'OPTIONS'
+        }));
+        let optionsMenu = this.menus.addMenu(new MODEL().set('name', 'OPTIONS'));
+        this.addTabbableElement(optionsTab, optionsMenu);
+
+        // Create Secondary Tabs and Menus inside Options Menu
+        ['ELEMENTS', 'CRUD', 'DOM'].map((name) => this.addTabbableElement(
+            optionsMenu.addNavItemIcon(new MODEL().set({
+                label: name,
+                icon: ICONS[name]
             })),
-            this.menus.addMenu(new MODEL().set('name', 'OPTIONS'))
-        );
+            optionsMenu.addMenu(new MODEL().set('name', name))
+        ));
 
-        //this.tab = this.tabs.addNavItem(new MODEL('wide-tab').set('label', model.label)); // Container should create this!!
-        //this.optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set('icon', ICONS.COG));
-        
-        //this.menu = new MENU(this, new MODEL('main-menu').set('name', 'menu')); // Main Menu..?
-        //this.optionsTab.el.addEventListener('activate', () => this.menu.activate());
-        //this.optionsTab.el.addEventListener('deactivate', () => this.menu.deactivate());
         //this.addOptionsMenu();
-
-        //this.activate();
-        //this.expand();
     }
     /** Adds a Tab and associated Menu
          @param {NAVITEM} tab NAV Item that acts as a Tab
@@ -63,7 +63,7 @@ export default class NAVBAR extends NAV {
     */
     addOptionsMenu() {
         try {
-            ['OPTIONS', 'ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menu.addMenu(new MODEL('horizontal collapse').set({
+            ['ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menus.get('OPTIONS').addMenu(new MODEL('horizontal collapse').setGroup({
                 name,
                 collapsed: 1, // Do not remove these!
                 showHeader: 1
@@ -86,4 +86,4 @@ export default class NAVBAR extends NAV {
         }
     }
 }
-export { EL, MODEL };
+export { EL, LIST, MENU, MODEL };

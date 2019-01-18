@@ -7,7 +7,7 @@ import LABEL from '../../label/LABEL.js';
     @extends CONTAINER
 */
 export default class FORMELEMENT extends CONTAINER {
-	/** Constructs a Form Element 
+	/** Constructs a Form Element
         @param {FORMELEMENTGROUP} node The parent
         @param {string} element INPUT, SELECT, TEXTAREA
         @param {MODEL} model the data model
@@ -15,8 +15,8 @@ export default class FORMELEMENT extends CONTAINER {
 	constructor(node, element, model) {
 		super(node, 'DIV', model);
         this.addClass('form-element'); //this.setClass('col-xs-12 col-sm-6 col-md-4 col-lg-offset-0');
-        //this.navBar.header.menu.list.getGroup('ELEMENTS').empty();
+        //this.navBar.header.menu.list.get('ELEMENTS').empty();
         this.label = new LABEL(this.body.pane, model.label || element);
-	}
+	} //
 }
-export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL }; //CONTAINER
+export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL };

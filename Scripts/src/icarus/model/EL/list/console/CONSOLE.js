@@ -1,10 +1,10 @@
 /** @module */
-import UL, { EL, MODEL } from '../UL.js';
+import LIST, { EL, MODEL } from '../LIST.js';
 /** A console like panel (UL) that contains entries as list items (LI)
     @class
     @extends UL
 */
-export default class CONSOLE extends UL {
+export default class CONSOLE extends LIST {
 	/** Construct a console
 	    @param {EL} node Console parent
 	    @param {MODEL} model Console model
@@ -17,10 +17,10 @@ export default class CONSOLE extends UL {
 	    @param {string} text Text to be added
 	    @returns {LI} The console entry
 	*/
-	addEntry(text) {
-		let li = this.addListItem(new MODEL().set('label', text));
+    addEntry(text) {
+		let li = this.addLI(new MODEL().set('label', text));
 		$(this.el).prepend(li.el);
 		return li;
 	}
 }
-export { EL, MODEL, UL };
+export { EL, MODEL }

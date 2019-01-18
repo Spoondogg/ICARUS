@@ -56,9 +56,10 @@ export default class MODEL {
 		}
 		return this;
     }
-    /** Validates existed of a required value
+    /** Throws an error if given value is not defined
         @param {any} value Value
         @returns {any} Verified required value
+        @throws {Error} Missing Value
     */
     required(value) {
         if (typeof value === 'undefined') {

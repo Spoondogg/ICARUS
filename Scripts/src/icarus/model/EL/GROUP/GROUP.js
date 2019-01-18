@@ -1,12 +1,12 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import Switchable, { Activate, Deactivate } from '../../../interface/Switchable/Switchable.js';
-/** A Switchable group of items
+//import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import Switchable, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../../../interface/Switchable/Switchable.js';
+/** A group acts as a named, Switchable element used for grouping items
     @class
     @extends EL
 */
 export default class GROUP extends EL {
-	/** Construct a group of elements that is Switchable and Collapsible
+	/** Construct a Switchable named Element for grouping items
         @param {EL} node The element that will contain this object
         @param {string} element HTML Element 
         @param {MODEL} model The json object representing this element
@@ -25,26 +25,26 @@ export default class GROUP extends EL {
         @param {string} name Name of group
         @returns {GROUP} A group
     */
-	getGroup(name) {
+    getGroup(name) {
 		return this.groups[name];
 	}
 	/** Adds the given group to this.groups
         @param {GROUP} group A GROUP Element
         @returns {GROUP} The given group
     */
-	addGroup(group) {
-		this.groups[group.name] = group;
+    addGroup(group) {
+        if (typeof this.groups[name] === 'undefined') {
+            this.groups[group.name] = group;
+        }
 		return this.groups[group.name];
 	}
-	/** Adds or Overrides the given group to this.groups
+	/** Adds the given group to this.groups if it does not already exist
         @param {GROUP} group A GROUP Element
         @returns {GROUP} The given group
     */
-	setGroup(group) {
-		if (typeof this.groups[name] === 'undefined') {
-			this.groups[group.name] = group;
-		}
-		return this.groups[group.name];
+    setGroup(group) {
+        this.groups[group.name] = group;
+        return this.groups[group.name];
 	}
 }
 export { Activate, ATTRIBUTES, Deactivate, EL, GROUP, MODEL };

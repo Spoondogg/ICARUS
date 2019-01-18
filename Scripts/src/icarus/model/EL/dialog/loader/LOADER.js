@@ -1,6 +1,6 @@
 /** @module */
 import DIALOG, { DIV, EL, MODEL } from '../../dialog/DIALOG.js'; //ATTRIBUTES
-import CONSOLE from '../../ul/console/CONSOLE.js';
+import CONSOLE from '../../list/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /** A Dialog showing loading details
     @public

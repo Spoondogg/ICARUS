@@ -20,8 +20,6 @@ import INDEX from '../model/el/container/banner/index/INDEX.js';
 import INDEXMAIN from '../model/el/container/banner/indexmain/INDEXMAIN.js';
 import INDEXTHUMBNAIL from '../model/el/container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../model/el/container/jumbotron/JUMBOTRON.js';
-import LIST from '../model/el/container/list/LIST.js';
-import LISTITEM from '../model/el/container/list/listitem/LISTITEM.js';
 import MENU from '../model/el/nav/menu/MENU.js';
 import NAVITEM from '../model/el/nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../model/el/nav/navitem/NAVSEPARATOR.js';
@@ -139,12 +137,12 @@ export default class CONTAINERFACTORY {
                     case 'LI':
                         obj = new LI(span, payload.model);
                         break;
-                    case 'LIST':
-                        obj = new LIST(span, payload.model);
-                        break;
-                    case 'LISTITEM':
-                        obj = new LISTITEM(span, payload.model);
-                        break;
+                    //case 'LIST':
+                    //    obj = new LIST(span, payload.model);
+                    //    break;
+                    //case 'LISTITEM':
+                    //    obj = new LISTITEM(span, payload.model);
+                    //    break;
                     case 'MENULIST':
                         obj = new MENULIST(span, payload.model);
                         break;
