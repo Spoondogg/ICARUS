@@ -13,8 +13,10 @@ export default class SWITCH extends BUTTON {
 	    @param {string} buttonType buttonType
 	*/
 	constructor(node, label, glyphicon, buttonType) {
-        super(node, label, glyphicon, buttonType);
-        this.implement(new Clickable(this));
+		super(node, label, glyphicon, buttonType);
+		this.implement(new Clickable(this));
 	}
 }
-export { BUTTON }
+export {
+	BUTTON
+}

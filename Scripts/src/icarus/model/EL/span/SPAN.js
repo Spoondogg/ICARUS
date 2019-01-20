@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /** A span (SPAN) Element
     @class
     @extends EL
@@ -14,4 +17,9 @@ export default class SPAN extends EL {
 		super(node, 'SPAN', model, innerHtml);
 	}
 }
-export { ATTRIBUTES, EL, MODEL, SPAN };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL,
+	SPAN
+};

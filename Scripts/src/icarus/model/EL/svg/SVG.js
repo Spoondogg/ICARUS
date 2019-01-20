@@ -1,7 +1,10 @@
 /*
     @module
 */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /**
     Creates a scaleable vector graphic
     @class
@@ -16,7 +19,9 @@ export default class SVG extends EL {
 	    @param {string} fill A hex based color value
 	 */
 	constructor(node, viewbox, svgObj, fill) {
-		super(node, 'SVG', new MODEL(new ATTRIBUTES({ 'viewBox': viewbox }))); // '0 0 32 32'
+		super(node, 'SVG', new MODEL(new ATTRIBUTES({
+			'viewBox': viewbox
+		}))); // '0 0 32 32'
 		this.path = new EL(this, 'PATH', new MODEL(new ATTRIBUTES({
 			//'fill': fill, // ? fill : svgObj.fill,
 			fill,

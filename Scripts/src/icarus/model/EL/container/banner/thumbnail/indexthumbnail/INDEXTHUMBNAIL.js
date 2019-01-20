@@ -1,9 +1,12 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL } from '../../../CONTAINER.js';
+import CONTAINER, {
+	ATTRIBUTES,
+	MODEL
+} from '../../../CONTAINER.js';
 import DIV from '../../../../div/DIV.js';
 import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
-import MENULIST from '../../../menulist/MENULIST.js';
+//import MENULIST from '../../../menulist/MENULIST.js';
 import MODAL from '../../../../modal/MODAL.js';
 import NAVTHUMBNAIL from '../../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import P from '../../../../p/P.js';
@@ -38,20 +41,20 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 	addModal() {
 		this.modal = new MODAL(this.data.header);
 		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
-		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({ 'src': this.image.el.src })));
+		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
+			'src': this.image.el.src
+		})));
 		//this.modal.container.image.el.src = this.image.el.src;
 		this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set({
 			'label': this.data.header
 		}));
-		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
-			'style': 'height:auto;'
-		})), this.data.p);
+		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('style', 'height:auto;')), this.data.p);
 		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL('preview-notes'), '');
 		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'), [this.data.listClass.toUpperCase()]);
-		this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL('index-thumbnail-menulist').set({
-			'name': 'preview-list',
-			'label': this.data.listClass + '(s)'
-		}));
+		/*this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL('index-thumbnail-menulist').set({
+			name: 'preview-list',
+			label: this.data.listClass + '(s)'
+		}));*/
 		return this.modal;
 	}
 	/** Adds NavItems for each data list

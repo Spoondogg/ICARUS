@@ -1,5 +1,8 @@
 /** @module */
-import SPAN, { ATTRIBUTES, MODEL } from './SPAN.js';
+import SPAN, {
+	ATTRIBUTES,
+	MODEL
+} from './SPAN.js';
 /** An icon button that toggles a dropdown
     @class
     @extends SPAN
@@ -12,4 +15,7 @@ export default class CARET extends SPAN {
 		super(node, new MODEL('caret'));
 	}
 }
-export { ATTRIBUTES, MODEL };
+export {
+	ATTRIBUTES,
+	MODEL
+};

@@ -1,5 +1,9 @@
 /** @module */
-import NAVITEM, { ATTRIBUTES, EL, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import NAVITEM, {
+	ATTRIBUTES,
+	EL,
+	MODEL
+} from '../../../nav/navitem/NAVITEM.js';
 import HEADER from '../../../header/header.js';
 import IMG from '../../../img/IMG.js';
 import P from '../../../p/P.js';
@@ -19,7 +23,9 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 		this.addClass('thumbnail');
 		this.image = new IMG(this.anchor, new MODEL());
 		$(this.image.el).insertBefore(this.anchor.label.el);
-		this.header = new HEADER(this.anchor, new MODEL().set({ 'label': model.label }));
+		this.header = new HEADER(this.anchor, new MODEL().set({
+			'label': model.label
+		}));
 		this.p = new P(this.anchor, new MODEL(), new STRING(model.description || 'N/A').truncate(128));
 		this.fetchImage();
 	}
@@ -37,7 +43,10 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 								if (data.model.jsonResults) {
 									parsed = JSON.parse(data.model.jsonResults);
 									let img = {}; // Extract the base64 values and create an image
-									parsed.forEach(({ name, value }) => {
+									parsed.forEach(({
+										name,
+										value
+									}) => {
 										img[name] = value;
 										if (name === 'base64') {
 											this.image.el.src = img[name];
@@ -71,4 +80,8 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 		}
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

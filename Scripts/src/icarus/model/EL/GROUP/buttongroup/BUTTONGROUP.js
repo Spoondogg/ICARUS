@@ -1,7 +1,15 @@
 /** @module */
-import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
-import TOGGLEBUTTON, { BUTTON } from '../../button/togglebutton/TOGGLEBUTTON.js';
-import { ALIGN } from '../../../../enums/ALIGN.js';
+import GROUP, {
+	ATTRIBUTES,
+	EL,
+	MODEL
+} from '../GROUP.js';
+import TOGGLEBUTTON, {
+	BUTTON
+} from '../../button/togglebutton/TOGGLEBUTTON.js';
+import {
+	ALIGN
+} from '../../../../enums/ALIGN.js';
 /** A container for Buttons
     @class
     @extends GROUP
@@ -11,10 +19,12 @@ export default class BUTTONGROUP extends GROUP {
 	    @param {EL} node Parent Node
         @param {MODEL} model Model
 	*/
-    constructor(node, model = new MODEL().set('label', 'buttons')) {
-        super(node, 'DIV', model);
-        this.addClass('btn-group');
-		if (model.align === ALIGN.VERTICAL) { this.addClass('btn-group-vertical'); }
+	constructor(node, model = new MODEL().set('label', 'buttons')) {
+		super(node, 'DIV', model);
+		this.addClass('btn-group');
+		if (model.align === ALIGN.VERTICAL) {
+			this.addClass('btn-group-vertical');
+		}
 		/* Add cases for each relevant constructor that inherited class does not have */
 		this.addCallback('BUTTON', () => this.addButton('BUTTON'));
 		this.addCallback('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
@@ -42,4 +52,11 @@ export default class BUTTONGROUP extends GROUP {
 		return this.children[this.children.length - 1];
 	}
 }
-export { ALIGN, ATTRIBUTES, BUTTON, EL, MODEL, TOGGLEBUTTON };
+export {
+	ALIGN,
+	ATTRIBUTES,
+	BUTTON,
+	EL,
+	MODEL,
+	TOGGLEBUTTON
+};

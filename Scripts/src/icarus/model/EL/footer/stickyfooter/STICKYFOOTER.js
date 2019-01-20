@@ -1,5 +1,7 @@
 /** @module */
-import FOOTER, { EL } from '../FOOTER.js';
+import FOOTER, {
+	EL
+} from '../FOOTER.js';
 import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
 /** A Footer that sticks to bottom of page    
     @class
@@ -11,9 +13,12 @@ export default class STICKYFOOTER extends FOOTER {
 	    @param {MODEL} model stickyfooter model
 	*/
 	constructor(node, model) {
-        super(node, model);
-        this.addClass('stickyfooter');
-        this.implement(new Collapsible(this));
+		super(node, model);
+		this.addClass('stickyfooter');
+		this.implement(new Collapsible(this));
 	}
 }
-export { EL, FOOTER };
+export {
+	EL,
+	FOOTER
+};

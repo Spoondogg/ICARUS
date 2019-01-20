@@ -1,5 +1,9 @@
 /** @module */
-import SPAN, { ATTRIBUTES, EL, MODEL } from '../span/SPAN.js';
+import SPAN, {
+	ATTRIBUTES,
+	EL,
+	MODEL
+} from '../span/SPAN.js';
 /** A hyperlink / page anchor    
     @class
     @extends EL
@@ -23,4 +27,9 @@ export default class A extends EL {
 		this.el.setAttribute('target', target);
 	}
 }
-export { ATTRIBUTES, EL, MODEL, SPAN };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL,
+	SPAN
+};

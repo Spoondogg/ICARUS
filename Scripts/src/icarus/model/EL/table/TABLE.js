@@ -1,5 +1,10 @@
 /** @module */
-import TGROUP, { COLUMN, EL, MODEL, ROW } from './tgroup/TGROUP.js';
+import TGROUP, {
+	COLUMN,
+	EL,
+	MODEL,
+	ROW
+} from './tgroup/TGROUP.js';
 /** A TABLE */
 export default class TABLE extends EL {
 	constructor(node, model) {
@@ -29,4 +34,9 @@ export default class TABLE extends EL {
 		});
 	}
 }
-export { COLUMN, MODEL, ROW, TGROUP }
+export {
+	COLUMN,
+	MODEL,
+	ROW,
+	TGROUP
+}

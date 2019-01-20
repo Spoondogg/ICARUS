@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /**
     A generic footer that should be placed at the bottom of content
     @class
@@ -15,4 +18,8 @@ export default class FOOTER extends EL {
 		super(node, 'FOOTER', model);
 	}
 }
-export { ATTRIBUTES, EL, MODEL }
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+}

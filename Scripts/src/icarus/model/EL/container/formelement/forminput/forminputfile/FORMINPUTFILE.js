@@ -1,7 +1,10 @@
 /**
     @module
 */
-import FORMINPUT, { ATTRIBUTES, MODEL } from '../FORMINPUT.js'; // EL
+import FORMINPUT, {
+	ATTRIBUTES,
+	MODEL
+} from '../FORMINPUT.js'; // EL
 import FORMTEXTAREA from '../../formtextarea/FORM9TEXTAREA.js';
 /**
     A file INPUT element for a FORM Container

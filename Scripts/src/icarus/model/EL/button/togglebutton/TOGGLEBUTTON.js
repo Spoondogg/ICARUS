@@ -1,5 +1,7 @@
 /** @module */
-import MENU, { MODEL } from '../../nav/menu/MENU.js';
+import MENU, {
+	MODEL
+} from '../../nav/menu/MENU.js';
 import BUTTON from '../BUTTON.js';
 import STRING from '../../../../STRING.js';
 /** Button that show/hides a list of options
@@ -22,4 +24,7 @@ export default class TOGGLEBUTTON extends BUTTON {
 		this.menu = new MENU(node, new MODEL().set('name', new STRING(label).friendly()));
 	}
 }
-export { BUTTON, MENU };
+export {
+	BUTTON,
+	MENU
+};

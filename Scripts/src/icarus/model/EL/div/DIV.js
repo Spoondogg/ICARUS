@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /** A DIV element
     @class
     @extends EL
@@ -14,4 +17,8 @@ export default class DIV extends EL {
 		super(node, 'DIV', model, innerHtml);
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

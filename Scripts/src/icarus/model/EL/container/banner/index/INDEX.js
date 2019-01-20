@@ -1,13 +1,17 @@
 /** @module  */
-import CONTAINER, { ATTRIBUTES, MODEL } from '../../CONTAINER.js';
+//import CONTAINER, { MODEL } from '../../CONTAINER.js';
+import MENU, {
+	MODEL
+} from '../../../nav/menu/MENU.js';
 import BANNER from '../BANNER.js';
-import DIV from '../../../div/DIV.js';
-import HEADER from '../../../header/HEADER.js';
-import { ICONS } from '../../../../../enums/ICONS.js';
-import MENU from '../../../nav/menu/MENU.js';
-import MENULIST from '../../menulist/MENULIST.js';
-import MODAL from '../../../modal/MODAL.js';
-import P from '../../../p/P.js';
+//import DIV from '../../../div/DIV.js';
+//import HEADER from '../../../header/HEADER.js';
+import {
+	ICONS
+} from '../../../../../enums/ICONS.js';
+//import MENULIST from '../../menulist/MENULIST.js';
+//import MODAL from '../../../modal/MODAL.js';
+//import P from '../../../p/P.js';
 /** Contains a high level view of all objects owned by this user
     @class
     @extends BANNER
@@ -21,34 +25,33 @@ export default class INDEX extends BANNER {
 		super(node, model);
 		this.addClass('index');
 	}
-    construct() {
-        return new Promise((resolve, reject) => {
-            this.getLoader().log(20, this.className).then((loader) => {
-                try {
-                    this.menu = new MENU(this.body.pane, new MODEL('horizontal').set({
-                        label: 'INDEX',
-                        collapsed: 1,
-                        showHeader: 1,
-                        name: 'index'
-                    }));
-
-                    ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
-                        this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
-                            icon: ICONS[element.toUpperCase()],
-                            label: element,
-                            dataId: -1,
-                            data: {
-                                header: element,
-                                p: '&nbsp;'
-                            }
-                        })));
-                    });
-                    loader.log(100).then(() => resolve(this));
-                } catch (e) {
-                    loader.log(0).then(() => reject(e));
-                }
-            });
-        });
+	construct() {
+		return new Promise((resolve, reject) => {
+			this.getLoader().log(20, this.className).then((loader) => {
+				try {
+					this.menu = new MENU(this.body.pane, new MODEL('horizontal').set({
+						label: 'INDEX',
+						collapsed: 1,
+						showHeader: 1,
+						name: 'index'
+					}));
+					['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
+						this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
+							icon: ICONS[element.toUpperCase()],
+							label: element,
+							dataId: -1,
+							data: {
+								header: element,
+								p: '&nbsp;'
+							}
+						})));
+					});
+					loader.log(100).then(() => resolve(this));
+				} catch (e) {
+					loader.log(0).then(() => reject(e));
+				}
+			});
+		});
 	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
@@ -57,23 +60,23 @@ export default class INDEX extends BANNER {
 	    @returns {void}
 	    @async
 	*/
-    addThumbButtonActions(element, thumb) {
-        return new Promise((resolve, reject) => {
-            try {
-                $.post('/' + element + '/List', {
-                    '__RequestVerificationToken': this.getToken()
-                }, (payload, status) => {
-                    if (status === 'success') {
-                        let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
-                        thumb.el.setAttribute('title', str);
-                        thumb.el.onclick = () => this.launchModal(payload.className, str, payload.className, payload.list);
-                    }
-                    resolve(this);
-                });
-            } catch (e) {
-                reject(e);
-            }
-        });
+	addThumbButtonActions(element, thumb) {
+		return new Promise((resolve, reject) => {
+			try {
+				$.post('/' + element + '/List', {
+					'__RequestVerificationToken': this.getToken()
+				}, (payload, status) => {
+					if (status === 'success') {
+						let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
+						thumb.el.setAttribute('title', str);
+						thumb.el.onclick = () => this.launchModal(payload.className, str, payload.className, payload.list);
+					}
+					resolve(this);
+				});
+			} catch (e) {
+				reject(e);
+			}
+		});
 	}
 	/** Creates the Modal that contains the list of objects for preview
         @todo Consider paging these results
@@ -84,7 +87,9 @@ export default class INDEX extends BANNER {
         @returns {void}
     */
 	launchModal(header, p, listClass, list) {
-		console.log('Launch Index Thumbnail Modal');
+		console.log(header, p, listClass, list);
+		/*
+        console.log('Launch Index Thumbnail Modal');
 		this.modal = new MODAL(header);
 		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
 		//this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL());
@@ -117,6 +122,7 @@ export default class INDEX extends BANNER {
 			};
 		}
 		this.modal.expand();
+        */
 	}
 	/**
 	        Creates a modal and loads the specified container

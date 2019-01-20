@@ -1,5 +1,9 @@
 /** @module */
-import DIALOG, { DIV, EL, MODEL } from '../../dialog/DIALOG.js'; //ATTRIBUTES
+import DIALOG, {
+	DIV,
+	EL,
+	MODEL
+} from '../../dialog/DIALOG.js'; //ATTRIBUTES
 import CONSOLE from '../../list/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /** A Dialog showing loading details
@@ -17,18 +21,18 @@ export default class LOADER extends DIALOG {
 		super(new MODEL().set({
 			value,
 			label,
-            container,
-            caller: container,
-            name: 'loader'
+			container,
+			caller: container,
+			name: 'loader'
 		}));
-        this.addClass('loader');
-        this.el.setAttribute('data-backdrop', false);
+		this.addClass('loader');
+		this.el.setAttribute('data-backdrop', false);
 		this.progress = new DIV(this.body, new MODEL('progress'));
-        this.progressBar = new PROGRESSBAR(this.progress);
-        this.console = new CONSOLE(this.body);
-        this.progressBar.el.onclick = () => this.console.flip();
-        this.log(value);
-    }
+		this.progressBar = new PROGRESSBAR(this.progress);
+		this.console = new CONSOLE(this.body);
+		this.progressBar.el.onclick = () => this.console.flip();
+		this.log(value);
+	}
 	/** Sets the progress bar status
 		@param {number} value Percentage as integer (ie: 50 means 50%).
 		@param {string} text Text displayed inside progress bar.  
@@ -37,26 +41,34 @@ export default class LOADER extends DIALOG {
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
 	log(value, text = '', show = true, delay = 300) {
-        return this.callback(() => {
-            this.progressBar.el.style.width = value + '%';
-            this.progressBar.el.setAttribute('aria-valuenow', value);
-            if (text) {
-                let txt = text.substr(0, 32) + '...';
-                this.progressBar.text.setInnerHTML(txt);
-                this.console.addEntry(text);
-            }
-            if (value < 100) {
-                clearTimeout(this.logTimer);
-                if (show) { this.show(); }
-                //resolve(show ? this.show() : this);
-            } else {
-                this.logTimer = window.setTimeout(() => {
-                    clearTimeout(this.logTimer);
-                    //setTimeout(() => this.hide().then((loader) => resolve(loader)), delay);
-                    setTimeout(() => this.hide(), delay);
-                }, delay);
-            }
-        });
+		return this.callback(() => {
+			this.progressBar.el.style.width = value + '%';
+			this.progressBar.el.setAttribute('aria-valuenow', value);
+			if (text) {
+				let txt = text.substr(0, 32) + '...';
+				this.progressBar.text.setInnerHTML(txt);
+				this.console.addEntry(text);
+			}
+			if (value < 100) {
+				clearTimeout(this.logTimer);
+				if (show) {
+					this.show();
+				}
+				//resolve(show ? this.show() : this);
+			} else {
+				this.logTimer = window.setTimeout(() => {
+					clearTimeout(this.logTimer);
+					//setTimeout(() => this.hide().then((loader) => resolve(loader)), delay);
+					setTimeout(() => this.hide(), delay);
+				}, delay);
+			}
+		});
 	}
 }
-export { CONSOLE, DIV, EL, MODEL, PROGRESSBAR }
+export {
+	CONSOLE,
+	DIV,
+	EL,
+	MODEL,
+	PROGRESSBAR
+}

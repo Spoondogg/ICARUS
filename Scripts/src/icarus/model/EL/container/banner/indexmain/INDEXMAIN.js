@@ -28,7 +28,9 @@ export default class INDEXMAIN extends BANNER {
 		/** @param {number} maxNavItems The maximum number of pages to cache */
 		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
 		this.isLoading = false;
-		this.menu = new MENU(this.body.pane, new MODEL().set({ 'label': 'INDEX' }));
+		this.menu = new MENU(this.body.pane, new MODEL().set({
+			'label': 'INDEX'
+		}));
 		this.addEvents();
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);
@@ -41,47 +43,47 @@ export default class INDEXMAIN extends BANNER {
         @todo This should be able to create PageIndexes for ALL Container types, not just MAIN
         @returns {void}
     */
-    construct() {
-        return new Promise((resolve, reject) => {
-            try {
-                if (!isNaN(this.page)) {
-                    this.getLoader().log(10, 'Retrieving page ' + this.page).then((loader) => {
-                        $.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-                            '__RequestVerificationToken': this.getMain().token
-                        }, (payload, status) => {
-                            if (status === 'success') {
-                                loader.log(50).then(() => {
-                                    this.isLoading = true;
-                                    this.pageTotal = payload.total;
-                                    payload.list.forEach((model) => {
-                                        this.createThumbnail(model, payload.className).el.onclick = () => this.launchMain(model.id, model.label);
-                                    });
-                                    this.isLoading = false;
-                                    this.purgeList();
-                                    if (!this.pagination.buttonGroup.loaded) {
-                                        this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-                                        for (let p = 0; p < this.pageCount; p++) {
-                                            this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-                                                this.menu.empty().then(() => this.loadPage(p));
-                                                return false;
-                                            };
-                                        }
-                                        this.pagination.buttonGroup.loaded = true;
-                                        this.pagination.buttonGroup.children[0].addClass('active');
-                                    }
-                                    //loader.log(100, '', true, 2000);
-                                    loader.log(100).then(() => resolve(this));
-                                });
-                            } else {
-                                loader.log(0, status).then(() => reject(new Error('Failed to retrieve page')));
-                            }
-                        });
-                    });
-                }
-            } catch (e) {
-                reject(e);
-            }
-        });
+	construct() {
+		return new Promise((resolve, reject) => {
+			try {
+				if (!isNaN(this.page)) {
+					this.getLoader().log(10, 'Retrieving page ' + this.page).then((loader) => {
+						$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
+							'__RequestVerificationToken': this.getMain().token
+						}, (payload, status) => {
+							if (status === 'success') {
+								loader.log(50).then(() => {
+									this.isLoading = true;
+									this.pageTotal = payload.total;
+									payload.list.forEach((model) => {
+										this.createThumbnail(model, payload.className).el.onclick = () => this.launchMain(model.id, model.label);
+									});
+									this.isLoading = false;
+									this.purgeList();
+									if (!this.pagination.buttonGroup.loaded) {
+										this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
+										for (let p = 0; p < this.pageCount; p++) {
+											this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
+												this.menu.empty().then(() => this.loadPage(p));
+												return false;
+											};
+										}
+										this.pagination.buttonGroup.loaded = true;
+										this.pagination.buttonGroup.children[0].addClass('active');
+									}
+									//loader.log(100, '', true, 2000);
+									loader.log(100).then(() => resolve(this));
+								});
+							} else {
+								loader.log(0, status).then(() => reject(new Error('Failed to retrieve page')));
+							}
+						});
+					});
+				}
+			} catch (e) {
+				reject(e);
+			}
+		});
 	}
 	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
 	    @returns {void}
@@ -124,7 +126,10 @@ export default class INDEXMAIN extends BANNER {
 	    @param {string} name The name to launch
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-	createThumbnail({ label, description }) {
+	createThumbnail({
+		label,
+		description
+	}) {
 		return this.menu.addNavThumbnail(new MODEL().set({
 			label,
 			description
@@ -157,33 +162,33 @@ export default class INDEXMAIN extends BANNER {
 	    @param {number} page Page to load
 	    @returns {Promise<this>} callback
 	*/
-    loadPage(page) {
-        return this.callback(() => {
-            this.header.setInnerHTML('Page ' + (page + 1));
-            let buttons = this.pagination.buttonGroup.el.children;
-            for (let b = 0; b < buttons.length; b++) {
-                $(buttons[b]).removeClass('active');
-            }
-            $(buttons[page]).addClass('active');
-            this.page = page;
-            this.construct();
-        });
-        /*return new Promise((resolve, reject) => {
-            try {
-                this.header.setInnerHTML('Page ' + (page + 1));
-                let buttons = this.pagination.buttonGroup.el.children;
-                for (let b = 0; b < buttons.length; b++) {
-                    $(buttons[b]).removeClass('active');
-                }
-                $(buttons[page]).addClass('active');
-                //this.menu.empty();
-                this.page = page;
-                this.construct().then(() => resolve(this));
-            } catch (e) {
-                console.log('Unable to load page.', e);
-                reject(e);
-            }
-        });*/
+	loadPage(page) {
+		return this.callback(() => {
+			this.header.setInnerHTML('Page ' + (page + 1));
+			let buttons = this.pagination.buttonGroup.el.children;
+			for (let b = 0; b < buttons.length; b++) {
+				$(buttons[b]).removeClass('active');
+			}
+			$(buttons[page]).addClass('active');
+			this.page = page;
+			this.construct();
+		});
+		/*return new Promise((resolve, reject) => {
+		    try {
+		        this.header.setInnerHTML('Page ' + (page + 1));
+		        let buttons = this.pagination.buttonGroup.el.children;
+		        for (let b = 0; b < buttons.length; b++) {
+		            $(buttons[b]).removeClass('active');
+		        }
+		        $(buttons[page]).addClass('active');
+		        //this.menu.empty();
+		        this.page = page;
+		        this.construct().then(() => resolve(this));
+		    } catch (e) {
+		        console.log('Unable to load page.', e);
+		        reject(e);
+		    }
+		});*/
 	}
 	/** Loads the next page in sequence
 	    @returns {void}
@@ -236,7 +241,7 @@ export default class INDEXMAIN extends BANNER {
 				scrollLeft: $(this.pagination.buttonGroup.children[this.page].el).position().left
 			}, 200);
 		} catch (e) {
-            if (!(e instanceof TypeError)) {
+			if (!(e instanceof TypeError)) {
 				throw e;
 			}
 		}

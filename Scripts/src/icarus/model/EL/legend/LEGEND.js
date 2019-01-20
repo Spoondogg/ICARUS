@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /** Legend Constructor
     @class
     @extends EL
@@ -13,4 +16,8 @@ export default class LEGEND extends EL {
 		super(node, 'LEGEND', model, model.label);
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

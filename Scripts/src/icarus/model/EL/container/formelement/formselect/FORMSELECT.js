@@ -1,5 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, {
+	ATTRIBUTES,
+	EL,
+	INPUTTYPES,
+	MODEL
+} from '../FORMELEMENT.js';
 import OPTION from '../../../option/OPTION.js';
 import SELECT from '../../../select/SELECT.js';
 //import STRING from '../../../../../STRING.js';
@@ -53,4 +58,8 @@ export default class FORMSELECT extends FORMELEMENT {
 		}
 	}
 }
-export { EL, INPUTTYPES, OPTION };
+export {
+	EL,
+	INPUTTYPES,
+	OPTION
+};

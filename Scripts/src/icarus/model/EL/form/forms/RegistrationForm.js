@@ -1,5 +1,8 @@
 /** @module */
-import FORM, { ATTRIBUTES, MODEL } from '../FORM.js';
+import FORM, {
+	ATTRIBUTES,
+	MODEL
+} from '../FORM.js';
 /** A Registration Form
     @class
     @extends FORM

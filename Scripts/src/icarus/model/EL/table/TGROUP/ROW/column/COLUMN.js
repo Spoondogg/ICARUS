@@ -1,5 +1,7 @@
 /** @module */
-import EL, { MODEL } from '../../../../EL.js';
+import EL, {
+	MODEL
+} from '../../../../EL.js';
 /** A Column that exists inside a Row */
 export default class COLUMN extends EL {
 	/** Constructs a table column element (ie: TH or TD) 
@@ -12,4 +14,7 @@ export default class COLUMN extends EL {
 		this.value = model.value;
 	}
 }
-export { EL, MODEL }
+export {
+	EL,
+	MODEL
+}

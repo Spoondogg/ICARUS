@@ -1,5 +1,8 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL } from '../CONTAINER.js';
+import CONTAINER, {
+	ATTRIBUTES,
+	MODEL
+} from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
@@ -49,18 +52,18 @@ export default class CHAT extends CONTAINER {
 		this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
 		console.log('Chat Input', this.chatInput);
 		this.chatInput.el.onkeypress = this.postStatement.bind(this);
-    }
-    construct() {
-        return new Promise((resolve, reject) => {
-            try {
-                setTimeout(() => {
-                    this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
-                }, 2000);
-            } catch (e) {
-                reject(e);
-            }
-        });
-    }
+	}
+	construct() {
+		return new Promise((resolve, reject) => {
+			try {
+				setTimeout(() => {
+					this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
+				}, 2000);
+			} catch (e) {
+				reject(e);
+			}
+		});
+	}
 	/** Posts the chat statement to the server and handles any responses
         when the user presses ENTER 
         @returns {boolean} True if succeeds
@@ -80,28 +83,30 @@ export default class CHAT extends CONTAINER {
         @returns {Promise<EL>} The statement object
         @todo Consider creating a STATEMENT EL
     */
-    addStatement(username, string) {
-        return new Promise((resolve, reject) => {
-            try {
-                let statement = new DIV(this.body.pane, new MODEL('statement'));
-                statement.el.style.display = 'none';
-                statement.thumb = new DIV(statement, new MODEL(new ATTRIBUTES('class', 'thumb')));
-                statement.thumb.img = new IMG(statement.thumb, new MODEL(new ATTRIBUTES({
-                    class: 'user-photo',
-                    src: 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'
-                })));
-                statement.bubble = new DIV(statement, new MODEL('bubble'));
-                statement.bubble.panel = new DIV(statement.bubble, new MODEL('panel panel-default'));
-                statement.bubble.panel.heading = new DIV(statement.bubble.panel, new MODEL('panel-heading'));
-                statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL(), username);
-                statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL(), 'commented X mins ago');
-                statement.bubble.panel.body = new DIV(statement.bubble.panel, new MODEL('panel-body'), string);
-                $(statement.el).fadeIn(500);
-                $(this.body.pane.el).animate({ scrollTop: $(this.body.pane.el).prop("scrollHeight") }, 1000);
-                resolve(statement);
-            } catch (e) {
-                reject(e);
-            }
-        });
+	addStatement(username, string) {
+		return new Promise((resolve, reject) => {
+			try {
+				let statement = new DIV(this.body.pane, new MODEL('statement'));
+				statement.el.style.display = 'none';
+				statement.thumb = new DIV(statement, new MODEL(new ATTRIBUTES('class', 'thumb')));
+				statement.thumb.img = new IMG(statement.thumb, new MODEL(new ATTRIBUTES({
+					class: 'user-photo',
+					src: 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png'
+				})));
+				statement.bubble = new DIV(statement, new MODEL('bubble'));
+				statement.bubble.panel = new DIV(statement.bubble, new MODEL('panel panel-default'));
+				statement.bubble.panel.heading = new DIV(statement.bubble.panel, new MODEL('panel-heading'));
+				statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL(), username);
+				statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL(), 'commented X mins ago');
+				statement.bubble.panel.body = new DIV(statement.bubble.panel, new MODEL('panel-body'), string);
+				$(statement.el).fadeIn(500);
+				$(this.body.pane.el).animate({
+					scrollTop: $(this.body.pane.el).prop("scrollHeight")
+				}, 1000);
+				resolve(statement);
+			} catch (e) {
+				reject(e);
+			}
+		});
 	}
 }

@@ -1,5 +1,7 @@
 /** @module */
-import MENU, { MODEL } from '../../nav/menu/MENU.js';
+import MENU, {
+	MODEL
+} from '../../nav/menu/MENU.js';
 import MODAL from '../MODAL.js';
 /** A modal prompt.
     @description Creates a modal and displays a text well and any buttons that have
@@ -18,12 +20,12 @@ export default class MODALMENU extends MODAL {
 		this.addClass('prompt');
 		this.container.addContainerCase('MENU');
 		this.menu = new MENU(this.container.body.pane, new MODEL().set('name', 'menu'));
-    }
-    /** Perform any async actions and populate this Container
-        @param {Array<MODEL>} children Array of elements to add to this container's body
-        @returns {Promise<ThisType>} callback
-    */
-    construct(children) {
-        return this.menu.populate(children);
-    }
+	}
+	/** Perform any async actions and populate this Container
+	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	    @returns {Promise<ThisType>} callback
+	*/
+	construct(children) {
+		return this.menu.populate(children);
+	}
 }

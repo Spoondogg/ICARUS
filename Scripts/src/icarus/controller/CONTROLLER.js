@@ -1,5 +1,8 @@
 /** @module */
-import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
+import MAIN, {
+	LOADER,
+	MODEL
+} from '../model/el/container/main/MAIN.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
 //import DIALOG from '../model/EL/dialog/DIALOG.js';
 import WATERMARK from '../helper/WATERMARK.js';
@@ -58,68 +61,62 @@ export default class CONTROLLER extends MODEL {
 			@todo There should never be more than one prompt in the DOM.
 		    @todo Create a queue to hold multiple prompts
 		*/
-        this.prompt = null;
-
-        /** @property {Array<string>} containers A list of allowed containers */
-        this.containers = [
-            'ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER',
-            'IMAGEGALLERY', 'DICTIONARY', 'WORD'
-        ];
-
+		this.prompt = null;
+		/** @property {Array<string>} containers A list of allowed containers */
+		this.containers = ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'];
 		/** @property {MAIN} main The MAIN Container */
 		this.main = new MAIN(this);
 		if (user === 'Guest') {
 			this.showLoginPrompt();
-        }
-
-        // Add key bindings
-        this.keyBindings();
-    }
-    /** Sets application keybindings
-        @returns {void}
-        @see https://stackoverflow.com/a/14180949/722785
-    */
-    keyBindings() {
-        window.addEventListener('keydown', (event) => {
-            if (event.ctrlKey || event.metaKey) {
-                switch (String.fromCharCode(event.which).toLowerCase()) {
-                    case 's':
-                        event.preventDefault();
-                        console.log('ctrl-s', this.main.activeContainer);
-                        try {
-                            if (this.main.activeContainer.className === 'FORM') {
-                                this.main.activeContainer.post();
-                            }
-                        } catch (e) {
-                            console.log('Failed keyBinding', e);
-                        }
-                        break;
-                    case 'f':
-                        event.preventDefault();
-                        console.log('ctrl-f', this.main.activeContainer);
-                        break;
-                    case 'g':
-                        event.preventDefault();
-                        console.log('ctrl-g', this.main.activeContainer);
-                        break;
-                    default:
-                        //
-                }
-            }
-        });
-    }
+		}
+		// Add key bindings
+		this.keyBindings();
+	}
+	/** Sets application keybindings
+	    @returns {void}
+	    @see https://stackoverflow.com/a/14180949/722785
+	*/
+	keyBindings() {
+		window.addEventListener('keydown', (event) => {
+			if (event.ctrlKey || event.metaKey) {
+				switch (String.fromCharCode(event.which).toLowerCase()) {
+					case 's':
+						event.preventDefault();
+						console.log('ctrl-s', this.main.activeContainer);
+						try {
+							if (this.main.activeContainer.className === 'FORM') {
+								this.main.activeContainer.post();
+							}
+						} catch (e) {
+							console.log('Failed keyBinding', e);
+						}
+						break;
+					case 'f':
+						event.preventDefault();
+						console.log('ctrl-f', this.main.activeContainer);
+						break;
+					case 'g':
+						event.preventDefault();
+						console.log('ctrl-g', this.main.activeContainer);
+						break;
+					default:
+						//
+				}
+			}
+		});
+	}
 	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
 	    @returns {boolean} If a login parameter exists, return true
 	*/
 	showLoginPrompt() {
-        if (this.url.searchParams.get('login')) {
-            console.log('showLoginPrompt();');
+		if (this.url.searchParams.get('login')) {
+			console.log('showLoginPrompt();');
 			this.main.login();
 		}
 		return this;
-    }
-    /** If conditions are met, launches OAuth Login Prompt
+	}
+	/** If conditions are met, launches OAuth Login Prompt
 	    @returns {boolean} If a login parameter exists, return true
 	
     showExternalLoginPrompt() {
@@ -142,4 +139,6 @@ export default class CONTROLLER extends MODEL {
 		return this;
 	}
 }
-export { CONTAINERFACTORY };
+export {
+	CONTAINERFACTORY
+};

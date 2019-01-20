@@ -11,29 +11,29 @@ export default class MODEL {
         @todo Consider renaming description to meta
     */
 	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), description = new ATTRIBUTES()) {
-        this.attributes = this.defaultAttributes(attributes);
-        this.data = this.defaultAttributes(data);
-        this.description = this.defaultAttributes(description);
-    }
-    /** Resolves appropriate Attributes object based on input
-        @param {string|ATTRIBUTES} attributes Attributes
-        @returns {ATTRIBUTES} Resolved attributes class
-     */
-    defaultAttributes(attributes) {
-        let attr = null;
-        switch (typeof attributes) {
-            case 'string':
-                attr = new ATTRIBUTES(attributes);
-                break;
-            case 'object':
-                attr = attributes;
-                break;
-            default:
-                console.log('Attributes is not properly defined', attributes, this);
-                attr = new ATTRIBUTES();
-        }
-        return attr;
-    }
+		this.attributes = this.defaultAttributes(attributes);
+		this.data = this.defaultAttributes(data);
+		this.description = this.defaultAttributes(description);
+	}
+	/** Resolves appropriate Attributes object based on input
+	    @param {string|ATTRIBUTES} attributes Attributes
+	    @returns {ATTRIBUTES} Resolved attributes class
+	 */
+	defaultAttributes(attributes) {
+		let attr = null;
+		switch (typeof attributes) {
+			case 'string':
+				attr = new ATTRIBUTES(attributes);
+				break;
+			case 'object':
+				attr = attributes;
+				break;
+			default:
+				console.log('Attributes is not properly defined', attributes, this);
+				attr = new ATTRIBUTES();
+		}
+		return attr;
+	}
 	/** Sets a property (or a collection of properties) for this MODEL
 	    @param {string} key Name of property || An object containing key/value pairs
 	    @param {any} value Value for property
@@ -55,20 +55,20 @@ export default class MODEL {
 			}
 		}
 		return this;
-    }
-    /** Throws an error if given value is not defined
-        @param {any} value Value
-        @returns {any} Verified required value
-        @throws {Error} Missing Value
-    */
-    required(value) {
-        if (typeof value === 'undefined') {
-            console.error('Unable to set required value', this, value);
-            throw new Error('Missing required value');
-        } else {
-            return value;
-        }
-    }
+	}
+	/** Throws an error if given value is not defined
+	    @param {any} value Value
+	    @returns {any} Verified required value
+	    @throws {Error} Missing Value
+	*/
+	required(value) {
+		if (typeof value === 'undefined') {
+			console.error('Unable to set required value', this, value);
+			throw new Error('Missing required value');
+		} else {
+			return value;
+		}
+	}
 	/** Sets a property (or a collection of properties) for this Model's ATTRIBUTES
 	    @param {string} key Name of property || An object containing key/value pairs
 	    @param {any} value Value for property
@@ -101,4 +101,6 @@ export default class MODEL {
 		}
 	}
 }
-export { ATTRIBUTES };
+export {
+	ATTRIBUTES
+};

@@ -1,5 +1,7 @@
 /** @module */
-import CONTAINER, { MODEL } from '../CONTAINER.js';
+import CONTAINER, {
+	MODEL
+} from '../CONTAINER.js';
 /** A Sidebar Container
     @class
     @extends CONTAINER
@@ -9,10 +11,12 @@ export default class SIDEBAR extends CONTAINER {
 	    @param {CONTAINER} node Parent Container (Typically MAIN)
 	    @param {MODEL} model Model
 	*/
-    constructor(node, model = new MODEL().set('name', 'sidebar')) {
+	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model, ['SECTION', 'FORM', 'LIST', 'MENULIST']);
-        this.addClass('sidebar');
-        this.deactivate();
+		this.addClass('sidebar');
+		this.deactivate();
 	}
 }
-export { MODEL }
+export {
+	MODEL
+}

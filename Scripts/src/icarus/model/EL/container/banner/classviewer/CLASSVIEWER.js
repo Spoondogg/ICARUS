@@ -1,8 +1,11 @@
 /** @module */
-import FORM, { ATTRIBUTES, MODEL } from '../../../form/FORM.js';
+import FORM, {
+	ATTRIBUTES,
+	MODEL
+} from '../../../form/FORM.js';
 import BANNER from '../BANNER.js';
 import HEADER from '../../../header/HEADER.js';
-import MENULIST from '../../menulist/MENULIST.js';
+//import MENU from '../../../nav/menu/MENU.js';
 /** Contains a high level view of all MAIN Objects available to this user
     @class
     @extends BANNER
@@ -31,17 +34,17 @@ export default class CLASSVIEWER extends BANNER {
 			})
 		];
 		this.form.fieldset.formElementGroup.addInputElements(inputs);
-		/** @todo Remove inline style */
-        this.menulist = new MENULIST(this.body.pane, new MODEL(new ATTRIBUTES('style', 'max-height:200px;overflow-y:auto;'))
-            .setGroup({
-                name: 'preview-list',
-                label: this.data.listClass + '(s)'
-            }));
-        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
-        for (let m = 0; m < methods.length; m++) {
+		/* @todo Remove inline style and replace MENU from MENULIST
+		this.menulist = new MENU(this.body.pane, new MODEL(new ATTRIBUTES('style', 'max-height:200px;overflow-y:auto;')).setGroup({
+			name: 'preview-list',
+			label: this.data.listClass + '(s)'
+		}));
+		let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
+		for (let m = 0; m < methods.length; m++) {
 			this.menulist.menu.addNavItem(new MODEL().set('label', this.classType + '.' + methods[m] + '()')).el.onclick = () => {
 				window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]);
 			};
         }
+        */
 	}
 }
