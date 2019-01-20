@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /** A standard control-label for form elements */
 export default class LABEL extends EL {
 	/** Constructs a generic Label
@@ -17,4 +20,8 @@ export default class LABEL extends EL {
 		this.setInnerHTML(name);
 	}*/
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

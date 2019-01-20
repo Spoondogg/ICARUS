@@ -1,7 +1,10 @@
 /**
     @module
 */
-import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../../EL.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 /**
     A search input wrapped in a FORM that filter's the
@@ -38,4 +41,9 @@ export default class NAVSEARCH extends NAVITEM {
 		this.inputGroup.btnGroup.btn.icon = new EL(this.inputGroup.btnGroup.btn, 'I', new MODEL('glyphicon glyphicon-search'));
 	}
 }
-export { ATTRIBUTES, EL, MODEL, NAVITEM };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL,
+	NAVITEM
+};

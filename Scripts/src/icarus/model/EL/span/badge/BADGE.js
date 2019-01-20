@@ -14,6 +14,8 @@ export default class BADGE extends SPAN {
 	    @param {string} label The inner text for this element
 	*/
 	constructor(node, label) {
-		super(node, { 'class': 'badge' }, label);
+		super(node, {
+			'class': 'badge'
+		}, label);
 	}
 }

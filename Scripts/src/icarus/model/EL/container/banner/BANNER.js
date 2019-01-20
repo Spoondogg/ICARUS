@@ -15,14 +15,14 @@ export default class BANNER extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'DIV', model, ['CALLOUT', 'THUMBNAIL']);
 		this.body.pane.addClass('banner');
-    }
-    /** Perform any async actions and populate this Container
-        @param {Array<MODEL>} children Array of elements to add to this container's body
-        @returns {Promise<ThisType>} callback
-    */
-    construct(children) {
-        return this.populate(children);
-    }
+	}
+	/** Perform any async actions and populate this Container
+	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	    @returns {Promise<ThisType>} callback
+	*/
+	construct(children) {
+		return this.populate(children);
+	}
 	/** Returns the parent container for this container or null if it does not exist
 	    @returns {CONTAINER} The parent container for this container
 	*/

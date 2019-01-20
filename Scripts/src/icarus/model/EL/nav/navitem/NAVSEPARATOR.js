@@ -1,5 +1,7 @@
 /** @module */
-import NAVITEM, { MODEL } from '../navitem/NAVITEM.js';
+import NAVITEM, {
+	MODEL
+} from '../navitem/NAVITEM.js';
 /** A horizontal line that separates content inside a vertical menu
     @class
     @extends NAVITEM
@@ -12,4 +14,6 @@ export default class NAVSEPARATOR extends NAVITEM {
 		super(node, new MODEL('divider'));
 	}
 }
-export { MODEL };
+export {
+	MODEL
+};

@@ -1,5 +1,11 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, {
+	ATTRIBUTES,
+	CONTAINER,
+	EL,
+	INPUTTYPES,
+	MODEL
+} from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -14,15 +20,15 @@ export default class FORMINPUT extends FORMELEMENT {
 	    @param {MODEL} model The model
     */
 	constructor(node, model) {
-        super(node, 'DIV', model);
-        this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
-            class: 'form-control',
-            type: model.attributes.type || 'TEXT', // || this.data.type
-            list: model.attributes.name + '-options',
-            name: model.attributes.name,
-            value: model.attributes.value || '',
-            placeholder: model.attributes.placeholder || ''
-        })));
+		super(node, 'DIV', model);
+		this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+			class: 'form-control',
+			type: model.attributes.type || 'TEXT', // || this.data.type
+			list: model.attributes.name + '-options',
+			name: model.attributes.name,
+			value: model.attributes.value || '',
+			placeholder: model.attributes.placeholder || ''
+		})));
 		this.createInput();
 	}
 	/** Creates an INPUT Element
@@ -34,7 +40,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	createInput() {
 		switch (this.attributes.type) {
 			case 'HIDDEN':
-                this.body.collapse();                
+				this.body.collapse();
 				break;
 			case 'CHECKBOX':
 				this.input.el.checked = this.attributes.value > 0;
@@ -64,8 +70,8 @@ export default class FORMINPUT extends FORMELEMENT {
 		this.datalist = new DATALIST(this.node, new MODEL(new ATTRIBUTES({
 			id: this.attributes.name + '-options'
 		})));
-        if (Array.isArray(this.options)) {
-            this.options.forEach((o) => this.addOption(o.value));
+		if (Array.isArray(this.options)) {
+			this.options.forEach((o) => this.addOption(o.value));
 			/*for (let o = 0; o < this.options.length; o++) {
 				this.addOption(this.options[o].value);
 			}*/
@@ -176,4 +182,11 @@ export default class FORMINPUT extends FORMELEMENT {
 		return this;
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, INPUTTYPES, MODEL };
+export {
+	ATTRIBUTES,
+	CONTAINER,
+	EL,
+	FORMELEMENT,
+	INPUTTYPES,
+	MODEL
+};

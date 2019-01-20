@@ -10,7 +10,7 @@ export default class AbstractMethodError extends ExtendableError {
         @param {CONTAINER} container Optional container triggers LOADER
     */
 	constructor(message, container) {
-        super(message);
-        console.error(message, container);
+		super(message);
+		console.error(message, container);
 	}
 }

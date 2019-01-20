@@ -18,25 +18,25 @@ export default class FORMPOST {
 	/** Serialize the form into a JSON object key/value
 	    @returns {Promise<object>} Form Results as an Object
 	*/
-    getResultsAsObject() {
-        return new Promise((resolve, reject) => {
-            let obj = {};
-            try {
-                this.results.forEach((item) => { //index
-                    if (typeof obj[item.name] === 'undefined') { // New
-                        obj[item.name] = item.value || '';
-                    } else { // Existing
-                        if (!obj[item.name].push) {
-                            obj[item.name] = [obj[item.name]];
-                        }
-                        obj[item.name].push(item.value || '');
-                    }
-                });
-            } catch (e) {
-                console.warn('Unable to parse FormPost into an object', e);
-                reject(e);
-            }
-            resolve(obj);
-        });
+	getResultsAsObject() {
+		return new Promise((resolve, reject) => {
+			let obj = {};
+			try {
+				this.results.forEach((item) => { //index
+					if (typeof obj[item.name] === 'undefined') { // New
+						obj[item.name] = item.value || '';
+					} else { // Existing
+						if (!obj[item.name].push) {
+							obj[item.name] = [obj[item.name]];
+						}
+						obj[item.name].push(item.value || '');
+					}
+				});
+			} catch (e) {
+				console.warn('Unable to parse FormPost into an object', e);
+				reject(e);
+			}
+			resolve(obj);
+		});
 	}
 }

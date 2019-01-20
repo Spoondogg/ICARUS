@@ -1,5 +1,7 @@
 /** @module */
-import ITEM, { MODEL } from '../../item/ITEM.js';
+import ITEM, {
+	MODEL
+} from '../../item/ITEM.js';
 /** List Item Constructor
     @class
     @extends ITEM
@@ -13,4 +15,6 @@ export default class DT extends ITEM {
 		super(node, 'DT', model, model.label);
 	}
 }
-export { MODEL }
+export {
+	MODEL
+}

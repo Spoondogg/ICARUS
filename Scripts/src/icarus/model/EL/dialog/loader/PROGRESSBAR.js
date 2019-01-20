@@ -1,5 +1,8 @@
 /** @module */
-import DIV, { EL, MODEL } from '../../div/DIV.js';
+import DIV, {
+	EL,
+	MODEL
+} from '../../div/DIV.js';
 /** A horizontal progress bar
     @class
     @extends EL
@@ -11,8 +14,12 @@ export default class PROGRESSBAR extends EL {
 		this.el.setAttribute('role', 'progressbar');
 		this.el.setAttribute('aria-valuenow', 0);
 		this.el.setAttribute('aria-valuemin', 0);
-        this.el.setAttribute('aria-valuemax', 100);
-        this.text = new DIV(this, new MODEL('text'));
+		this.el.setAttribute('aria-valuemax', 100);
+		this.text = new DIV(this, new MODEL('text'));
 	}
 }
-export { DIV, EL, MODEL }
+export {
+	DIV,
+	EL,
+	MODEL
+}

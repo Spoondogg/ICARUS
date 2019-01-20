@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../EL.js';
 /** A CITE element
     @class
     @extends EL
@@ -14,4 +17,8 @@ export default class CITE extends EL {
 		super(node, 'CITE', model, innerHtml);
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

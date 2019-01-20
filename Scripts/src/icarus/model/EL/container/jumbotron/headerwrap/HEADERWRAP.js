@@ -1,8 +1,12 @@
 /** @module */
-import JUMBOTRON, { MODEL } from '../JUMBOTRON.js'; // ATTRIBUTES
+import JUMBOTRON, {
+	MODEL
+} from '../JUMBOTRON.js'; // ATTRIBUTES
 import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/HEADER.js';
-import { ICONS } from '../../../../../enums/ICONS.js';
+import {
+	ICONS
+} from '../../../../../enums/ICONS.js';
 import P from '../../../p/P.js';
 /** A fixed header
     @class
@@ -17,15 +21,17 @@ export default class HEADERWRAP extends JUMBOTRON {
 		super(node, model);
 		this.addClass('headerwrap');
 		this.header = new HEADER(this.body.pane, new MODEL('clearfix'));
-		this.header.h1 = new HEADER(this.header, new MODEL().set({ 'label': 'Hello World' }), 1);
+		this.header.h1 = new HEADER(this.header, new MODEL().set({
+			'label': 'Hello World'
+		}), 1);
 		this.header.h1.icon = new GLYPHICON(this.header.h1, ICONS.PLUS);
 		this.header.p = new P(this.header, new MODEL(), 'Woot to the Woot');
-    }
-    /** Perform any async actions and populate this Container
-        @param {Array<MODEL>} children Array of elements to add to this container's body
-        @returns {Promise<ThisType>} callback
-    */
-    construct(children) {
-        return this.populate(children);
-    }
+	}
+	/** Perform any async actions and populate this Container
+	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	    @returns {Promise<ThisType>} callback
+	*/
+	construct(children) {
+		return this.populate(children);
+	}
 }

@@ -12,12 +12,12 @@ export default class WORD extends CONTAINER {
 	    @param {MODEL} model The SECTION object retrieves from the server
 	*/
 	constructor(node, model) {
-        super(node, 'DIV', model);
+		super(node, 'DIV', model);
 	}
-    construct() {
-        return this.callback(() => {
-            console.log(this);
-            this.header = new HEADER(this.body.pane, new MODEL().set('label', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
-        });
+	construct() {
+		return this.callback(() => {
+			console.log(this);
+			this.header = new HEADER(this.body.pane, new MODEL().set('label', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
+		});
 	}
 }

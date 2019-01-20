@@ -1,5 +1,9 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
+import CONTAINER, {
+	ATTRIBUTES,
+	EL,
+	MODEL
+} from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -13,24 +17,24 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-        this.addClass('jumbotron');
+		this.addClass('jumbotron');
 	}
 	/** Override abstract method
         @returns {void}
     */
-    construct() {
-        return this.callback(() => {
-            if (this.dataId > 0) {
-                this.screen = new DIV(this.body.pane, new MODEL('screen'));
-                this.setScreenColor();
-                this.createEditableElement('header', this.screen);
-                this.createEditableElement('p', this.screen);
-                this.loadBgImage();
-                this.setBgColor();
-                this.body.expand();
-            }
-        });
-    }
+	construct() {
+		return this.callback(() => {
+			if (this.dataId > 0) {
+				this.screen = new DIV(this.body.pane, new MODEL('screen'));
+				this.setScreenColor();
+				this.createEditableElement('header', this.screen);
+				this.createEditableElement('p', this.screen);
+				this.loadBgImage();
+				this.setBgColor();
+				this.body.expand();
+			}
+		});
+	}
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
         @returns {Promise<boolean>} Returns true on success
     */
@@ -39,8 +43,8 @@ export default class JUMBOTRON extends CONTAINER {
 			try {
 				$.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), (data) => {
 					try {
-                        let parsed = JSON.parse(data.model.jsonResults);
-                        parsed.filter(p => p.name === 'base64').map(v => this.setBgImage(v.value));
+						let parsed = JSON.parse(data.model.jsonResults);
+						parsed.filter(p => p.name === 'base64').map(v => this.setBgImage(v.value));
 						/*for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
 							if (parsed[p].name === 'base64') {
                                 this.setBgImage(parsed[p].value);
@@ -48,24 +52,24 @@ export default class JUMBOTRON extends CONTAINER {
 							}
 						}*/
 					} catch (ee) {
-                        if (!(ee instanceof TypeError)) {
-                            console.warn('Unable to load background image for JUMBOTRON', ee);
-                        }
+						if (!(ee instanceof TypeError)) {
+							console.warn('Unable to load background image for JUMBOTRON', ee);
+						}
 					}
 				});
 			} catch (e) {
 				console.log('Unable to retrieve FormPost.', e);
 			}
 		}
-    }
-    /** Sets the background image of the jumbotron pane
-        @param {string} url Background image url
-        @returns {void}
-    */
-    setBgImage(url) {
-        //this.body.pane.el.setAttribute('style', 'background: url(' + url + ');');
-        this.body.pane.el.style.backgroundImage = 'url("' + url + '")';
-    }
+	}
+	/** Sets the background image of the jumbotron pane
+	    @param {string} url Background image url
+	    @returns {void}
+	*/
+	setBgImage(url) {
+		//this.body.pane.el.setAttribute('style', 'background: url(' + url + ');');
+		this.body.pane.el.style.backgroundImage = 'url("' + url + '")';
+	}
 	/** Sets the background color of the jumbotron pane 
 	    @returns {void}
 	*/
@@ -83,4 +87,8 @@ export default class JUMBOTRON extends CONTAINER {
 		}
 	}
 }
-export { ATTRIBUTES, EL, MODEL };
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+};

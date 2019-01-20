@@ -702,7 +702,6 @@
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAIN.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\menulist\MENULIST.js" />
     <Content Include="Scripts\src\icarus\model\el\legend\LEGEND.js" />
     <Content Include="Scripts\src\icarus\model\el\section\SECTION.js" />
     <Content Include="Scripts\src\icarus\model\el\container\sidebar\SIDEBAR.js" />
@@ -759,15 +758,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="package.json" />
-    <Content Include="config\jsdoc.json" />
-    <Content Include="config\eslint.json" />
     <Content Include="package-lock.json" />
     <Content Include="Content\styles\src\icarus\icarus.scss" />
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
-    <Content Include="config\beautify.json" />
-    <Content Include="config\sasslint.json" />
-    <Content Include="config\doxygen.json" />
     <Content Include="ConnectionStrings.config" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
@@ -835,6 +829,7 @@
     <Content Include="Scripts\src\icarus\task\config\eslint.json" />
     <Content Include="Scripts\src\icarus\task\config\jsdoc.json" />
     <Content Include="Scripts\src\icarus\task\config\sasslint.json" />
+    <Content Include="Scripts\src\icarus\index.md" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>

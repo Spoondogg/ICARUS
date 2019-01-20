@@ -1,5 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
+import EL, {
+	ATTRIBUTES,
+	MODEL
+} from '../../EL.js';
 //import ANCHOR from '../a/anchor/ANCHOR.js';
 //import UL from '../ul/UL.js';
 /** An abstract List Item Constructor
@@ -25,4 +28,8 @@ export default class ITEM extends EL {
 		return this.children[this.children.length - 1];
 	}*/
 }
-export { ATTRIBUTES, EL, MODEL }
+export {
+	ATTRIBUTES,
+	EL,
+	MODEL
+}

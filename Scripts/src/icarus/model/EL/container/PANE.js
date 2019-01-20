@@ -1,5 +1,8 @@
 /** @module */
-import DIV, { EL, MODEL } from '../div/DIV.js';
+import DIV, {
+	EL,
+	MODEL
+} from '../div/DIV.js';
 import CONTAINER from '../container/CONTAINER.js';
 /** A panel with swipe detection
     @class
@@ -12,12 +15,16 @@ export default class PANE extends DIV {
 	*/
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('pane');
+		this.addClass('pane');
 		// Add swipe detection for editing options in sidebar
-		this.el.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
-		this.el.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+		this.el.addEventListener('touchstart', this.handleTouchStart.bind(this), {
+			passive: true
+		});
+		this.el.addEventListener('touchmove', this.handleTouchMove.bind(this), {
+			passive: true
+		});
 		this.xDown = null;
-        this.yDown = null;
+		this.yDown = null;
 	}
 	/** Sets start coordinates
 		@param {Event} ev Event
@@ -25,8 +32,8 @@ export default class PANE extends DIV {
 	*/
 	handleTouchStart(ev) {
 		this.xDown = ev.touches[0].clientX;
-        this.yDown = ev.touches[0].clientY;
-        //ev.stopPropagation();
+		this.yDown = ev.touches[0].clientY;
+		//ev.stopPropagation();
 	}
 	/** Process the swipe
         @todo Move body.pane into its own PANE class
@@ -48,19 +55,23 @@ export default class PANE extends DIV {
 			} else {
 				console.log(this.className + 'right swipe');
 			}
-        } else if (yDiff > 0) {
-            let c = this.node;
-            console.log(c.className + ' up swipe');
-            c.swipeUp();
-        } else {
-            let c = this.node;
-            console.log(c.className + ' down swipe');
-            c.swipeDown();
+		} else if (yDiff > 0) {
+			let c = this.node;
+			console.log(c.className + ' up swipe');
+			c.swipeUp();
+		} else {
+			let c = this.node;
+			console.log(c.className + ' down swipe');
+			c.swipeDown();
 		}
 		/* reset values */
 		this.xDown = null;
-        this.yDown = null;
-        //ev.stopPropagation();
-    }
+		this.yDown = null;
+		//ev.stopPropagation();
+	}
 }
-export { CONTAINER, EL, MODEL };
+export {
+	CONTAINER,
+	EL,
+	MODEL
+};

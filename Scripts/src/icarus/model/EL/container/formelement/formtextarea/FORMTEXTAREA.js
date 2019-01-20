@@ -1,5 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, EL, LABEL, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, {
+	ATTRIBUTES,
+	EL,
+	LABEL,
+	MODEL
+} from '../FORMELEMENT.js';
 import TEXTAREA from '../../../textarea/TEXTAREA.js';
 /** Represents a <TEXTAREA> for an Icarus Form       
     @class
@@ -18,4 +23,10 @@ export default class FORMTEXTAREA extends FORMELEMENT {
 		})), model.attributes.value || '');
 	}
 }
-export { ATTRIBUTES, EL, LABEL, MODEL, TEXTAREA };
+export {
+	ATTRIBUTES,
+	EL,
+	LABEL,
+	MODEL,
+	TEXTAREA
+};

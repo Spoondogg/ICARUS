@@ -1,5 +1,11 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, FOOTER, HEADER, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, {
+	ATTRIBUTES,
+	EL,
+	FOOTER,
+	HEADER,
+	MODEL
+} from '../container/CONTAINER.js';
 import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import WELL from '../p/WELL.js';
@@ -94,7 +100,9 @@ export default class MODAL extends CONTAINER {
 		try {
 			setTimeout(() => {
 				$(this.el).modal('hide');
-				$('.modal-backdrop').animate({ opacity: 'toggle' }, 0).remove();
+				$('.modal-backdrop').animate({
+					opacity: 'toggle'
+				}, 0).remove();
 				if (destroy) {
 					this.destroy(delay);
 				}
@@ -120,4 +128,11 @@ export default class MODAL extends CONTAINER {
 		return null;
 	}
 }
-export { ATTRIBUTES, BUTTON, DIV, EL, MODAL, MODEL };
+export {
+	ATTRIBUTES,
+	BUTTON,
+	DIV,
+	EL,
+	MODAL,
+	MODEL
+};
