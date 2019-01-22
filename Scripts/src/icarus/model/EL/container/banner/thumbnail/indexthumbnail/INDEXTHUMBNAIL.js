@@ -1,12 +1,8 @@
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	MODEL
-} from '../../../CONTAINER.js';
+import CONTAINER, {	ATTRIBUTES,	MODEL } from '../../../CONTAINER.js';
 import DIV from '../../../../div/DIV.js';
 import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';
-//import MENULIST from '../../../menulist/MENULIST.js';
 import MODAL from '../../../../modal/MODAL.js';
 import NAVTHUMBNAIL from '../../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import P from '../../../../p/P.js';
@@ -23,7 +19,6 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('indexthumbnail');
-		//this.setClass('col-xs-12 col-vs-6 col-sm-6 col-md-4 col-lg-offset-0');
 	}
 	/** Creates the Modal that contains the list of objects for preview
         @todo Consider paging these results
@@ -41,20 +36,11 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 	addModal() {
 		this.modal = new MODAL(this.data.header);
 		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
-		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
-			'src': this.image.el.src
-		})));
-		//this.modal.container.image.el.src = this.image.el.src;
-		this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set({
-			'label': this.data.header
-		}));
+		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('src', this.image.el.src)));
+		this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set('label', this.data.header));
 		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('style', 'height:auto;')), this.data.p);
 		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL('preview-notes'), '');
 		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'), [this.data.listClass.toUpperCase()]);
-		/*this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL('index-thumbnail-menulist').set({
-			name: 'preview-list',
-			label: this.data.listClass + '(s)'
-		}));*/
 		return this.modal;
 	}
 	/** Adds NavItems for each data list
@@ -90,7 +76,6 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		setTimeout(() => {
 			$.getJSON('/' + className + '/GetContainerParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
-				//this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});
 		}, delay);

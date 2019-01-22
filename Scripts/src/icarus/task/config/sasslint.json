@@ -20,6 +20,7 @@
         ]
       }
     ],
+    "no-css-comments": 0,
     "no-vendor-prefixes": 0
   }
 }

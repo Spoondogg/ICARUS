@@ -1,13 +1,6 @@
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	EL,
-	MODEL,
-	createInputModel
-} from '../CONTAINER.js';
-import FORMINPUT, {
-	FORMELEMENT
-} from './forminput/FORMINPUT.js';
+import CONTAINER, {	ATTRIBUTES,	EL,	MODEL, createInputModel } from '../CONTAINER.js';
+import FORMINPUT, {	FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
@@ -87,20 +80,11 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 							break;
 					}
 				}
-				this.children.push(inp);
-				//return this.children[this.children.length - 1];
-				resolve(this.children[this.children.length - 1]);
+				resolve(this.addChild(inp));
 			} catch (e) {
 				reject(e);
 			}
 		});
 	}
 }
-export {
-	ATTRIBUTES,
-	createInputModel,
-	EL,
-	FORMELEMENT,
-	FORMELEMENTGROUP,
-	MODEL
-};
+export { ATTRIBUTES, createInputModel, EL, FORMELEMENT,	FORMELEMENTGROUP, MODEL }

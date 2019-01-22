@@ -1,9 +1,5 @@
 /** @module */
-import LIST, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../LIST.js';
+import LIST, { ATTRIBUTES, EL, MODEL } from '../LIST.js';
 import DD from './dd/DD.js';
 import DT from './dt/DT.js';
 /** A Description List (DL) acts like a Dictionary with terms and descriptions
@@ -24,24 +20,15 @@ export default class DL extends LIST {
 	    @param {MODEL} model Model
 	    @returns {DT} A Term (DT)
 	*/
-	addDT(model) {
-		this.children.push(new DT(this, model));
-		return this.children[this.children.length - 1];
+    addDT(model) {
+        return this.addChild(new DT(this, model));
 	}
 	/** Construct a Description Term Definition (UL) and append to this element's children
 	    @param {MODEL} model Model
 	    @returns {DD} An Definition (DD)
 	*/
-	addDD(model) {
-		this.children.push(new DD(this, model));
-		return this.children[this.children.length - 1];
+    addDD(model) {
+        return this.addChild(new DD(this, model));
 	}
 }
-export {
-	ATTRIBUTES,
-	DD,
-	DL,
-	EL,
-	LIST,
-	MODEL
-};
+export { ATTRIBUTES, DD, DL, EL, LIST, MODEL }

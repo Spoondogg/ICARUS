@@ -14,14 +14,6 @@ export default class DD extends ITEM {
 	constructor(node, model) {
 		super(node, 'DD', model, model.label);
 	}
-	/** Construct an Description List (DL) and append to this element's children
-	    @param {MODEL} model Object Model
-	    @returns {DL} An Unordered List (UL)
-	
-    addDescriptionList(model) {
-        this.children.push(new DL(this, model));
-        return this.children[this.children.length - 1];
-    }*/
 }
 export {
 	MODEL

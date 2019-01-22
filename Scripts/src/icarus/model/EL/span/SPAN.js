@@ -1,25 +1,17 @@
 /** @module */
-import EL, {
-	ATTRIBUTES,
-	MODEL
-} from '../EL.js';
-/** A span (SPAN) Element
+import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+/** A SPAN Element
     @class
     @extends EL
 */
 export default class SPAN extends EL {
-	/** Constructs a blob of text in a SPAN
-	    @param {EL} node The object to contain this element
-	    @param {MODEL} model The object attributes
+	/** Constructs a simple SPAN Element
+	    @param {EL} node Parent Node
+	    @param {MODEL} model Model
 	    @param {string} innerHtml The object contents (html)
     */
 	constructor(node, model, innerHtml) {
 		super(node, 'SPAN', model, innerHtml);
 	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	MODEL,
-	SPAN
-};
+export { ATTRIBUTES, EL, MODEL,	SPAN }

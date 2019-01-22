@@ -1,16 +1,10 @@
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	EL,
-	FOOTER,
-	HEADER,
-	MODEL
-} from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES,	EL,	FOOTER,	HEADER,	MODEL } from '../container/CONTAINER.js';
 import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import WELL from '../p/WELL.js';
 /** A Bootstrap 3 Modal
-    @see https://www.w3schools.com/bootstrap/bootstrap_modal.asp    
+    @see https://www.w3schools.com/bootstrap/bootstrap_modal.asp
     @todo Integreate DIALOG wherever possible
     @class
     @extends DIV
@@ -43,13 +37,11 @@ export default class MODAL extends CONTAINER {
 		// Footer : Contains options to save or cancel out of form
 		this.footer = new FOOTER(this.content, new MODEL('modal-footer'));
 		this.footer.btnClose = new BUTTON(this.footer, new MODEL(new ATTRIBUTES({
-			'class': 'btn btn-default btn-block',
+			class: 'btn btn-default btn-block',
 			'data-dismiss': 'modal',
 			'aria-hidden': 'true'
 		})), 'Close');
-		this.footer.btnClose.el.onclick = () => {
-			this.hide(1000, true);
-		};
+		this.footer.btnClose.el.onclick = () => this.hide(1000, true);
 	}
 	/** Creates a generic Modal header with close button
 	    @param {string} title The Header Title Text
@@ -71,12 +63,8 @@ export default class MODAL extends CONTAINER {
 	    @returns {void}
 	*/
 	setModalAnimation() {
-		$(this.el).on('show.bs.modal', () => {
-			$('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn');
-		});
-		$(this.el).on('hide.bs.modal', () => {
-			$('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut');
-		});
+		$(this.el).on('show.bs.modal', () => $('.modal .modal-dialog').addClass('fadeOut').removeClass('fadeIn'));
+		$(this.el).on('hide.bs.modal', () => $('.modal .modal-dialog').addClass('fadeIn').remove('fadeOut'));
 	}
 	/** Scrolls to top
 	    @returns {void}
@@ -128,11 +116,4 @@ export default class MODAL extends CONTAINER {
 		return null;
 	}
 }
-export {
-	ATTRIBUTES,
-	BUTTON,
-	DIV,
-	EL,
-	MODAL,
-	MODEL
-};
+export { ATTRIBUTES, BUTTON, DIV, EL, MODAL, MODEL }

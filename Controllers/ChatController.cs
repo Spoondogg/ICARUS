@@ -142,7 +142,7 @@ namespace ICARUS.Controllers {
                     message.Append(
                         "<li>"
                         + "<a class=\"dropdown toggle\" data-toggle=\"dropdown\" href=\"#\">" + uniqueWords[uw].name + "</a>"
-                        + "<ul class=\"dropdown-menu word-summary\">"
+                        + "<ul class=\"word-summary\">"
                             + "<li><a href=\"http://www.dictionary.com/browse/" + uniqueWords[uw].name 
                             + "?s=t\" target=\"_blank\">" + uniqueWords[uw].name + "["+ results.result+"]</a>"
                             + "</li>"
