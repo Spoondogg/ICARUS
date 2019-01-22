@@ -77,9 +77,8 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
-	addFieldset(model) {
-		this.children.push(new FIELDSET(this.body.pane, model));
-		return this.addGroup(this.children[this.children.length - 1]);
+    addFieldset(model) {
+        return this.addChild(new FIELDSET(this.body.pane, model));
 	}
 	/** Populates this form with a single fieldset and formelementgroup based on a FORMPOST MODEL
 	    @param {EL} node Parent node

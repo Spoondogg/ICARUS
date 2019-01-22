@@ -1,15 +1,6 @@
 /** @module */
-import Switchable, {
-	Activate,
-	Deactivate
-} from '../../../../interface/Switchable/Switchable.js';
-import UL, {
-	ATTRIBUTES,
-	EL,
-	LI,
-	LIST,
-	MODEL
-} from '../../list/ul/UL.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
+import UL, { ATTRIBUTES, EL, LI, LIST, MODEL } from '../../list/ul/UL.js';
 import GROUP from '../../group/GROUP.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
@@ -60,33 +51,29 @@ export default class MENU extends LIST {
 	    @param {MODEL} model Object model
 	    @returns {MENU} Nav Item with Anchor
 	*/
-	addMenu(model) {
-		this.children.push(new MENU(this, model));
-		return this.children[this.children.length - 1];
+    addMenu(model) {
+        return this.addChild(new MENU(this, model));
 	}
 	/** Constructs a Nav Item (Anchor)
 	    @param {MODEL} model Object model
 	    @returns {NAVITEM} Nav Item with Anchor
 	*/
-	addNavItem(model) {
-		this.children.push(new NAVITEM(this, model)); //model.url, model.label
-		return this.children[this.children.length - 1];
+    addNavItem(model) {
+        return this.addChild(new NAVITEM(this, model)); //model.url, model.label
 	}
 	/** Constructs a Nav Item Icon
 	    @param {MODEL} model Object model
 	    @returns {NAVITEMICON} Nav Item with Anchor
 	*/
-	addNavItemIcon(model) {
-		this.children.push(new NAVITEMICON(this, model));
-		return this.children[this.children.length - 1];
+    addNavItemIcon(model) {
+        return this.addChild(new NAVITEMICON(this, model));
 	}
 	/** Constructs a Nav Item Thumbnail
 	    @param {MODEL} model The model
 	    @returns {NAVITEMTHUMBNAIL} A nav item with a thumbnail
 	*/
-	addNavThumbnail(model) {
-		this.children.push(new NAVITEMTHUMBNAIL(this, model));
-		return this.children[this.children.length - 1];
+    addNavThumbnail(model) {
+        return this.addChild(new NAVITEMTHUMBNAIL(this, model));
 	}
 	/** Adds an array of Nav Items
         @param {Array} navItems An array of NAVITEM
@@ -102,16 +89,4 @@ export default class MENU extends LIST {
 		return new NAVSEPARATOR(this.list);
 	}
 }
-export {
-	Activate,
-	ATTRIBUTES,
-	Deactivate,
-	EL,
-	GROUP,
-	LI,
-	LIST,
-	MODEL,
-	NAVITEM,
-	NAVITEMICON,
-	UL
-};
+export { Activate, ATTRIBUTES, Deactivate, EL, GROUP, LI, LIST,	MODEL, NAVITEM,	NAVITEMICON, UL }

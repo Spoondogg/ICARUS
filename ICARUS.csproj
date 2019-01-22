@@ -661,10 +661,12 @@
     <Content Include="Scripts\src\icarus\model\el\list\item\ITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\list\dl\dt\DT.js" />
     <Content Include="Scripts\src\icarus\model\el\list\LIST.js" />
+    <Content Include="Scripts\src\icarus\model\el\list\li\LI.js" />
     <Content Include="Scripts\src\icarus\model\el\list\ul\UL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
@@ -717,13 +719,11 @@
     <Content Include="Scripts\src\icarus\model\el\img\IMG.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUT.js" />
     <Content Include="Scripts\src\icarus\model\el\label\LABEL.js" />
-    <Content Include="Scripts\src\icarus\model\el\list\li\LI.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\LOADER.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\PROGRESSBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\NAVHEADER.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEARCH.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />

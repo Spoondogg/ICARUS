@@ -1,24 +1,9 @@
 /* eslint-disable max-lines */
 /** @module */
-import COLLAPSIBLE, {
-	Collapse,
-	Collapsible,
-	Expand
-} from './COLLAPSIBLE.js';
-import {
-	DATAELEMENTS,
-	createInputModel
-} from '../../../enums/DATAELEMENTS.js';
-import GROUP, {
-	ATTRIBUTES,
-	Activate,
-	Deactivate,
-	EL,
-	MODEL
-} from '../group/GROUP.js';
-import NAVBAR, {
-	MENU
-} from '../nav/navbar/NAVBAR.js';
+import COLLAPSIBLE, { Collapse,	Collapsible, Expand } from './COLLAPSIBLE.js';
+import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
+import GROUP, {	ATTRIBUTES,	Activate, Deactivate, EL, MODEL } from '../group/GROUP.js';
+import NAVBAR, { MENU } from '../nav/navbar/NAVBAR.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import Clickable from '../../../interface/Clickable/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
@@ -26,18 +11,12 @@ import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable/Draggable.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
-import {
-	ICONS
-} from '../../../enums/ICONS.js';
-import {
-	INPUTTYPES
-} from '../../../enums/INPUTTYPES.js';
+import { ICONS } from '../../../enums/ICONS.js';
+import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LEGEND from '../legend/LEGEND.js';
 import Movable from '../../../interface/Movable/Movable.js';
 import P from '../p/P.js';
-import {
-	STATUS
-} from '../../../enums/STATUS.js';
+import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract Container element with NAVBAR
     @description A container can be expanded or hidden and have elements added to itself
@@ -46,24 +25,6 @@ import STRING from '../../../STRING.js';
 */
 export default class CONTAINER extends GROUP {
 	/* eslint-disable max-statements */
-	/** Creates the Id and Collection attributes for the given name
-	    @param {string} name ie: data, attributes, description
-	    @param {MODEL} model Container Model
-	    @returns {void}
-	*/
-	createElementCollection(name, model) {
-		this[name + 'Id'] = parseInt(model[name + 'Id'] || 0);
-		/** @type {Array<MODEL>} */
-		this[name + 'Elements'] = [];
-		try {
-			DATAELEMENTS.CONTAINER[name].forEach((m) => this[name + 'Elements'].push(m));
-			DATAELEMENTS[this.className][name].forEach((m) => this[name + 'Elements'].push(m));
-		} catch (e) {
-			if (!(e instanceof TypeError)) {
-				console.warn('Unable to retrieve {' + this.className + '}[' + name + 'Elements] for ' + this.className, this, DATAELEMENTS[this.className], e);
-			}
-		}
-	}
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
@@ -102,7 +63,25 @@ export default class CONTAINER extends GROUP {
 	*/
 	construct() {
 		return Promise.resolve(this);
-	}
+    }
+    /** Creates the Id and Collection attributes for the given name
+	    @param {string} name ie: data, attributes, description
+	    @param {MODEL} model Container Model
+	    @returns {void}
+	*/
+    createElementCollection(name, model) {
+        this[name + 'Id'] = parseInt(model[name + 'Id'] || 0);
+        /** @type {Array<MODEL>} */
+        this[name + 'Elements'] = [];
+        try {
+            DATAELEMENTS.CONTAINER[name].forEach((m) => this[name + 'Elements'].push(m));
+            DATAELEMENTS[this.className][name].forEach((m) => this[name + 'Elements'].push(m));
+        } catch (e) {
+            if (!(e instanceof TypeError)) {
+                console.warn('Unable to retrieve {' + this.className + '}[' + name + 'Elements] for ' + this.className, this, DATAELEMENTS[this.className], e);
+            }
+        }
+    }
 	/** If the Container has no children, display a button to create an element
 	    Should be overridden on CONTAINERs that should not have children
 	    @returns {Promise<ThisType>} callback
@@ -709,21 +688,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export {
-	AbstractMethodError,
-	ATTRIBUTES,
-	Collapsible,
-	createInputModel,
-	DATAELEMENTS,
-	DATEOBJECT,
-	DIALOG,
-	EL,
-	FOOTER,
-	HEADER,
-	ICONS,
-	INPUTTYPES,
-	MENU,
-	MODEL,
-	STRING
-}
+export { AbstractMethodError, ATTRIBUTES, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, DIALOG, EL, FOOTER, HEADER, ICONS, INPUTTYPES, MENU,	MODEL, STRING }
 /* eslint-enable max-lines */

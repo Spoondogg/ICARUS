@@ -1,20 +1,10 @@
 /** @module */
-import MENU, {
-	LIST
-} from '../menu/MENU.js';
-import NAV, {
-	EL,
-	MODEL
-} from '../NAV.js';
-import Switchable, {
-	Activate,
-	Deactivate
-} from '../../../../interface/Switchable/Switchable.js';
+import MENU, { LIST } from '../menu/MENU.js';
+import NAV, { EL, MODEL } from '../NAV.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
 import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
-import {
-	ICONS
-} from '../../../../enums/ICONS.js';
-import SVG from '../../svg/SVG.js';
+import { ICONS } from '../../../../enums/ICONS.js';
+//import SVG from '../../svg/SVG.js';
 /** A full width collapseable NAV Element
     @class
     @extends NAV
@@ -29,7 +19,7 @@ export default class NAVBAR extends NAV {
 		this.addClass('navbar');
 		this.implement(new Switchable(this));
 		this.implement(new Collapsible(this));
-		this.logo = new SVG(this, '0 0 32 32', '', '#CCC');
+		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
 		this.tabs = new MENU(this, new MODEL().set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
 		this.tabs.activate();
 		this.tabs.expand();
@@ -89,9 +79,4 @@ export default class NAVBAR extends NAV {
 		}
 	}
 }
-export {
-	EL,
-	LIST,
-	MENU,
-	MODEL
-};
+export { EL, LIST, MENU, MODEL }

@@ -1,7 +1,5 @@
 /** @module */
-import EL, {
-	MODEL
-} from '../EL.js';
+import EL, { MODEL } from '../EL.js';
 import GLYPHICON from '../span/GLYPHICON.js';
 import SPAN from '../span/SPAN.js';
 /** A generic BUTTON Element with an Icon and Label
@@ -34,3 +32,4 @@ export default class BUTTON extends EL {
 		}
 	}
 }
+export { EL, MODEL }
