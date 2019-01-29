@@ -1,5 +1,5 @@
 /** @module */
-import GROUP, {	ATTRIBUTES,	EL,	MODEL } from '../GROUP.js';
+import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
 import TOGGLEBUTTON, { BUTTON } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A container for Buttons
@@ -29,8 +29,8 @@ export default class BUTTONGROUP extends GROUP {
 	*/
 	addButton(label, glyphicon, buttonType) {
 		let btn = new BUTTON(this, label, glyphicon, buttonType);
-        btn.el.onclick = () => false;
-        return this.addChild(btn);
+		btn.el.onclick = () => false;
+		return this.addChild(btn);
 	}
 	/** Createa a toggle button with a corresponding dropdown menu
 	    @param {string} label The label
@@ -38,8 +38,8 @@ export default class BUTTONGROUP extends GROUP {
 	    @param {string} buttonType The button type
 	    @returns {TOGGLEBUTTON} A toggle button
 	*/
-    addToggleButton(label, glyphicon, buttonType) {
-        return this.addChild(new TOGGLEBUTTON(this, label, glyphicon, buttonType));
+	addToggleButton(label, glyphicon, buttonType) {
+		return this.addChild(new TOGGLEBUTTON(this, label, glyphicon, buttonType));
 	}
 }
-export { ALIGN,	ATTRIBUTES,	BUTTON,	EL,	MODEL, TOGGLEBUTTON }
+export { ALIGN, ATTRIBUTES, BUTTON, EL, MODEL, TOGGLEBUTTON }

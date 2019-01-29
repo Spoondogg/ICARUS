@@ -1,16 +1,7 @@
 /** @module */
-import FORMSELECT, {
-	OPTION
-} from '../model/el/container/formelement/formselect/FORMSELECT.js';
-import MENU, {
-	LI,
-	UL
-} from '../model/el/nav/menu/MENU.js';
-import SPAN, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../model/el/span/SPAN.js';
+import FORMSELECT, { OPTION } from '../model/el/container/formelement/formselect/FORMSELECT.js';
+import MENU, { LI, UL } from '../model/el/nav/menu/MENU.js';
+import SPAN, { ATTRIBUTES, EL, MODEL } from '../model/el/span/SPAN.js';
 import ARTICLE from '../model/el/article/ARTICLE.js';
 import BANNER from '../model/el/container/banner/BANNER.js';
 import CALLOUT from '../model/el/container/banner/callout/CALLOUT.js';
@@ -307,10 +298,5 @@ export default class CONTAINERFACTORY {
 		});
 	}
 }
-export {
-	ATTRIBUTES,
-	CONTAINER,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, CONTAINER,	EL,	MODEL }
 /* eslint-enable */

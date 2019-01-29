@@ -67,6 +67,11 @@ export const Lint = (done) => gulpfile.lintAll()(done);
     @returns {void}
 */
 export const BuildDocumentation = (done) => gulpfile.buildDocumentation(doxygen)(done);
+/** Builds Client Side Documentation
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const BuildClientDocumentation = (done) => gulpfile.documentClient()(done);
 /** Serves Documentation
     @returns {void}
 */

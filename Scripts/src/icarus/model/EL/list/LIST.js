@@ -1,6 +1,6 @@
 /** @module */
+import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible/Collapsible.js';
 import ITEM, { ATTRIBUTES, EL, MODEL } from './item/ITEM.js';
-import Collapsible from '../../../interface/Collapsible/Collapsible.js';
 import LI from './li/LI.js';
 import UL from './ul/UL.js';
 /** List Constructor
@@ -25,15 +25,15 @@ export default class LIST extends ITEM {
 	    @param {MODEL} model Object Model
 	    @returns {LI} A list item LI
 	*/
-    addLI(model) {
-        return this.addChild(new LI(this, model, model.label));
+	addLI(model) {
+		return this.addChild(new LI(this, model, model.label));
 	}
 	/** Construct an unordered List (UL) and append to this element's children
 	    @param {MODEL} model Object Model
 	    @returns {UL} An Unordered List (UL)
 	*/
-    addUL(model) {
-        return this.addChild(new UL(this, model));
+	addUL(model) {
+		return this.addChild(new UL(this, model));
 	}
 }
-export { ATTRIBUTES, Collapsible, EL, ITEM,	LI,	MODEL }
+export { ATTRIBUTES, Collapse, Collapsible, EL, Expand, ITEM, LI, MODEL }

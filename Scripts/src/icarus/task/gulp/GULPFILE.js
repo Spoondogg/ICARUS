@@ -263,21 +263,7 @@ export default class GULPFILE {
 	*/
 	documentStyles(done) {
 		return this.pipeEvents('DocumentStyles',
-			() => this.gulp.src(GULPPATHS.styles.src).pipe(sassdoc({
-				dest: 'Documentation/sassdoc',
-				verbose: true,
-				display: {
-					access: ['public', 'private'],
-					alias: true,
-					watermark: true
-				},
-				groups: {
-					'undefined': 'Ungrouped',
-					foo: 'Foo group',
-					bar: 'Bar group'
-				},
-				basePath: 'https://github.com/Spoondogg/ICARUS/blob/master/ICARUS/Content/css/icarus/scss/'
-			})), done);
+			() => this.gulp.src(GULPPATHS.styles.src).pipe(sassdoc(require('../config/sassdoc.json'))), done);
 	}
 	/** Generates Script documentation using JSDoc3
 	    @param {Function} done Callback
@@ -463,9 +449,7 @@ export default class GULPFILE {
 			(done) => this.logCompletion('\n\n\n==== publish to PROD BEGIN ====', done),
 			(done) => {
 				console.log('\n > Clearing out old data');
-				del(['I://iis/icarus/**/*'], {
-					force: true
-				});
+				del(['I://iis/icarus/**/*'], { force: true });
 				done();
 			},
 			(done) => {
@@ -490,6 +474,15 @@ export default class GULPFILE {
 			(done) => this.lintScripts(done, 'Scripts', GULPPATHS.scripts.src),
 			(done) => this.lintStyles(done),
 			(done) => this.lintScripts(done, 'Tasks', GULPPATHS.tasks.src));
+	}
+	/** Lints Scripts and Styles 
+	    @returns {gulp.series} Series 
+	*/
+	documentClient() {
+		return this.gulp.series(
+			(done) => this.documentStyles(done),
+			(done) => this.documentScripts(done)
+		);
 	}
 	/** Generates JSDoc, SassDoc and API Documentation
         @param {doxygen} doxygen Doxygen Node Module

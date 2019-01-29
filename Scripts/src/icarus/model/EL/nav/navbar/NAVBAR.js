@@ -1,8 +1,7 @@
 /** @module */
-import MENU, { LIST } from '../menu/MENU.js';
+import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
-import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 //import SVG from '../../svg/SVG.js';
 /** A full width collapseable NAV Element
@@ -20,47 +19,55 @@ export default class NAVBAR extends NAV {
 		this.implement(new Switchable(this));
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
-		this.tabs = new MENU(this, new MODEL().set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
-		this.tabs.activate();
+		this.tabs = new MENU(this, new MODEL('horizontal').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tab = this.tabs.addNavItemIcon(new MODEL().set({
+            icon: ICONS.CERTIFICATE,
+            label: model.label
+        }));
+        node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate()));
+        node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate()));
+        this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand()));
+        this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse()));
+        this.tabs.activate();
 		this.tabs.expand();
 		this.menus = new MENU(this, new MODEL().set('name', 'menus'));
 		this.menus.activate();
 		this.menus.expand();
 		// Create initial OPTIONS Tab and Menu
-		let optionsTab = this.tabs.addNavItemIcon(new MODEL('pull-right').set({
-			icon: ICONS.COG,
-			name: 'OPTIONS'
-		}));
-		let optionsMenu = this.menus.addMenu(new MODEL().set('name', 'OPTIONS'));
-		this.addTabbableElement(optionsTab, optionsMenu);
-		// Create Secondary Tabs and Menus inside Options Menu
-		['ELEMENTS', 'CRUD', 'DOM'].map((name) => this.addTabbableElement(optionsMenu.addNavItemIcon(new MODEL().set({
-			label: name,
-			icon: ICONS[name]
-		})), optionsMenu.addMenu(new MODEL().set('name', name))));
-		//this.addOptionsMenu();
-	}
-	/** Adds a Tab and associated Menu
-	     @param {NAVITEM} tab NAV Item that acts as a Tab
+        this.addOptionsMenu();
+    }    
+	/** Sets the 'activate' and 'deactivate' so that the NAVITEM will trigger the EL
+	     @param {NAVITEM} navitem NAV Item that acts as a Tab
 	     @param {EL} element A Switchable Element that is activated by this Tab
 	     @returns {void}
 	*/
-	addTabbableElement(tab, element) {
-		tab.el.addEventListener('activate', () => element.el.dispatchEvent(new Activate())); //.activate());
-		tab.el.addEventListener('deactivate', () => element.el.dispatchEvent(new Deactivate())); //.deactivate());
+	addTabbableElement(navitem, element) {
+		navitem.el.addEventListener('activate', () => element.el.dispatchEvent(new Activate()));
+		navitem.el.addEventListener('deactivate', () => element.el.dispatchEvent(new Deactivate()));
 	}
-	/** Adds the Options/Config menu to the NavHeader.
+	/** Adds the Options/Config menu
 	    Adds a right aligned tab to show/hide the Options Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
 	    @returns {void}
 	*/
 	addOptionsMenu() {
-		try {
-			['ELEMENTS', 'CRUD', 'DOM'].forEach((name) => this.menus.get('OPTIONS').addMenu(new MODEL('horizontal collapse').setGroup({
-				name,
-				collapsed: 1, // Do not remove these!
-				showHeader: 1
-			})));
+        try {
+            // Create Primary Options tab and Menu
+            this.btnOptions = this.tabs.addNavItemIcon(new MODEL().set({
+                icon: ICONS.COG,
+                label: 'OPTIONS'
+            }));
+            this.options = this.menus.addMenu(new MODEL().set('name', 'OPTIONS'));
+            this.addTabbableElement(this.btnOptions, this.options);
+            // Create Secondary Tabs and Horizontal Menus inside Options Menu
+            ['ELEMENTS', 'CRUD', 'DOM'].map((name) => {
+                let tb = this.options.addNavItemIcon(new MODEL().set({
+                    label: name,
+                    icon: ICONS[name]
+                }));
+                let opt = this.options.addMenu(new MODEL('horizontal').set('name', name));
+                this.addTabbableElement(tb, opt);
+            });
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
 			if (modal === null) {
@@ -79,4 +86,4 @@ export default class NAVBAR extends NAV {
 		}
 	}
 }
-export { EL, LIST, MENU, MODEL }
+export { ANCHOR, Collapse, Collapsible, EL, Expand, LIST, MENU, MODEL, NAVITEM, NAVITEMICON }

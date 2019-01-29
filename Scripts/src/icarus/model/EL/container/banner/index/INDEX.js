@@ -1,14 +1,10 @@
 /** @module  */
 //import CONTAINER, { MODEL } from '../../CONTAINER.js';
-import MENU, {
-	MODEL
-} from '../../../nav/menu/MENU.js';
+import MENU, { MODEL } from '../../../nav/menu/MENU.js';
 import BANNER from '../BANNER.js';
 //import DIV from '../../../div/DIV.js';
 //import HEADER from '../../../header/HEADER.js';
-import {
-	ICONS
-} from '../../../../../enums/ICONS.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
 //import MENULIST from '../../menulist/MENULIST.js';
 //import MODAL from '../../../modal/MODAL.js';
 //import P from '../../../p/P.js';

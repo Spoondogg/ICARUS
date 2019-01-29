@@ -48,12 +48,22 @@ export default class FORM extends CONTAINER {
 		//this.populate(model.children);
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
-		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-		this.createNavItem('POST', this.navBar.menu.list.get('CRUD')).el.onclick = (ev) => {
-			ev.preventDefault();
-			this.post();
-			return false;
-		};
+        this.el.addEventListener('focusout', () => this.setFocus('focusout'));
+
+        /*
+        let { menu } = this.navbar.options; // .get('CRUD', 'MENU')[0]
+        this.btnPost = menu.addNavItemIcon(new MODEL().set({
+            icon: ICONS.SAVE,
+            label: 'SAVE'
+        }));
+        this.btnPost.el.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            this.post();
+            return false;
+        });
+        this.btnPost.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
+        //this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
+        */
 	}
 	/** Perform any async actions and populate this Container
 	    @param {Array<MODEL>} children Array of elements to add to this container's body
@@ -77,8 +87,8 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
-    addFieldset(model) {
-        return this.addChild(new FIELDSET(this.body.pane, model));
+	addFieldset(model) {
+		return this.addChild(new FIELDSET(this.body.pane, model));
 	}
 	/** Populates this form with a single fieldset and formelementgroup based on a FORMPOST MODEL
 	    @param {EL} node Parent node
@@ -271,7 +281,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<DIALOG>} A DIALOG
 	*/
 	getDialog() {
-		return Promise.reject(new AbstractMethodError('No DIALOG exists for this FORM'));
+		return Promise.reject(new AbstractMethodError('No DIALOG exists for this FORM', this));
 	}
 	/** Disables all fieldsets within this form
         @todo Should be Promise.all

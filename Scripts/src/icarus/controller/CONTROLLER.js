@@ -34,6 +34,7 @@ export default class CONTROLLER extends MODEL {
 			token,
 			factory
 		});
+		document.body.className = "icarus";
 		this.watermark = new WATERMARK();
 		/** @property {string} name The application name
         this.name = name;*/

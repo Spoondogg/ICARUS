@@ -1,14 +1,6 @@
 /** @module */
-import {
-	DATAELEMENTS,
-	createInputModel
-} from '../../../../../enums/DATAELEMENTS.js';
-import FORMELEMENT, {
-	ATTRIBUTES,
-	CONTAINER,
-	EL,
-	MODEL
-} from '../../formelement/FORMELEMENT.js';
+import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
 import INPUT from '../../../input/INPUT.js';
 import PROMPT from '../../../dialog/prompt/PROMPT.js';
@@ -110,14 +102,16 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				console.log('CreateForm', container, typeof container);
 				new PROMPT(new MODEL().set({
 					label: 'Create FormPost Form',
-					container
+                    container,
+                    caller: this
 				})).createForm(new MODEL().set({
 					formtype: 'FORMPOST',
 					className,
 					type,
 					id,
 					inputNode,
-					container
+                    container,
+                    caller: this
 				})).then((form) => resolve(form.getDialog().show()));
 			} catch (e) {
 				console.warn('Failed to create FormPost Form', e, this);
@@ -126,9 +120,4 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		});
 	}
 }
-export {
-	ATTRIBUTES,
-	CONTAINER,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, CONTAINER,	EL,	MODEL }

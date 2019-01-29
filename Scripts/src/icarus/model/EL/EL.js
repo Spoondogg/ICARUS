@@ -1,5 +1,5 @@
 /** @module */
-import MODEL, {	ATTRIBUTES } from '../MODEL.js';
+import MODEL, { ATTRIBUTES } from '../MODEL.js';
 //import { HtmlElement } from '../../enums/HtmlElement.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
@@ -95,8 +95,8 @@ export default class EL extends MODEL {
 				this.attributes.class = this.getClass() + ' ' + className;
 			}
 		});
-    }
-    /** Promises to add an array of classnames to this element
+	}
+	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
 	    @returns {Promise<ThisType>} callback
 	*/
@@ -175,10 +175,10 @@ export default class EL extends MODEL {
 		let depth = attempt + 1;
 		try {
 			if (depth < 100) {
-                if (Reflect.getPrototypeOf(
-                        Reflect.getPrototypeOf(
-                            Reflect.getPrototypeOf(node)))
-                    .constructor.name === value.toString() || Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() || Reflect.getPrototypeOf(node).constructor.name === value.toString()) {
+				if (Reflect.getPrototypeOf(
+						Reflect.getPrototypeOf(
+							Reflect.getPrototypeOf(node)))
+					.constructor.name === value.toString() || Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() || Reflect.getPrototypeOf(node).constructor.name === value.toString()) {
 					return node;
 				}
 				return this.getProtoTypeByClass(value, node.node, depth);
@@ -201,20 +201,28 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-    /** Get child element by Name
+	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
+        @param {strong} className Element Class
 	    @returns {Array<ITEM>} Child Item/Element Filtered Results
 	*/
-    get(name) {
-        return this.children.filter((ch) => ch.el.getAttribute('name') === name);
-    }
-    /** Retrieves MODEL.ATTRIBUTES.class 
-        @returns {string} Class Name
-    */
-    getClass() {
-        return this.attributes.class || '';
-    }
-    /** Sets and returns the parent container for this element
+    get(name = null, className = null) {
+        let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+        if (results.length === 0) {
+            console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
+        } /*else {
+            console.info(this.className + '.get(' + name + ', ' + className + ') results', results);
+        }*/
+		return results;
+		//return this.children.filter((c) => c.el.name === name);
+	}
+	/** Retrieves MODEL.ATTRIBUTES.class 
+	    @returns {string} Class Name
+	*/
+	getClass() {
+		return this.attributes.class || '';
+	}
+	/** Sets and returns the parent container for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/
 	getContainer() {

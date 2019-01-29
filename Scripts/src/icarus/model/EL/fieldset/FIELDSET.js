@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	EL,	MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../container/CONTAINER.js';
 import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
 /** Construct a Form Fieldset
     @class
@@ -46,8 +46,8 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model Object model
 	    @returns {FORMELEMENTGROUP} A Form Fieldset element
 	*/
-    addFormElementGroup(model) {
-        return this.addChild(new FORMELEMENTGROUP(this.body.pane, model));
+	addFormElementGroup(model) {
+		return this.addChild(new FORMELEMENTGROUP(this.body.pane, model));
 	}
 }
 export { ATTRIBUTES, EL, MODEL }

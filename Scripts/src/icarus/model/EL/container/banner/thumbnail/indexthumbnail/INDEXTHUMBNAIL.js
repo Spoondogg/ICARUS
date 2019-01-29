@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	MODEL } from '../../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL } from '../../../CONTAINER.js';
 import DIV from '../../../../div/DIV.js';
 import HEADER from '../../../../header/HEADER.js';
 import IMG from '../../../../img/IMG.js';

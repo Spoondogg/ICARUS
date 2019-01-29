@@ -1,13 +1,6 @@
 /** @module */
-import CONTAINER, {
-	DATAELEMENTS,
-	ICONS,
-	MODEL,
-	createInputModel
-} from '../CONTAINER.js';
-import USERMENU, {
-	MENU
-} from '../../nav/menu/usermenu/USERMENU.js';
+import CONTAINER, { Activate, DATAELEMENTS, Deactivate, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
+import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
@@ -27,7 +20,7 @@ export default class MAIN extends CONTAINER {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
 		this.addClass('main').then(() => this.body.pane.addClass('pane-tall'));
-		this.navBar.addClass('navbar-fixed-top').then(() => this.navBar.setAttribute('draggable', false));
+		this.navbar.addClass('navbar-fixed-top').then(() => this.navbar.setAttribute('draggable', false));
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -52,7 +45,7 @@ export default class MAIN extends CONTAINER {
 	construct(children) {
 		return this.addNavOptions().then(
 			() => this.populate(children).then(
-				() => this.navBar.expand().then(
+				() => this.navbar.expand().then(
 					() => this.body.expand().then(
 						() => this.stickyFooter.expand()))));
 	}
@@ -80,61 +73,58 @@ export default class MAIN extends CONTAINER {
 	navigateForward() {
 		console.log('TODO: Forward');
 	}
-	/** Add items to Options Dropdown Tab
+	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} callback
 	*/
 	addNavOptions() {
 		return this.callback(() => {
-			if (this.navBar.menu) {
-				// LEFT ALIGN
-				this.btnSidebar = this.navBar.tabs.addNavItemIcon(new MODEL('pull-left').set('icon', ICONS.SIDEBAR));
-				this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
-				this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
-				//$(this.btnSidebar.el).insertBefore(this.navBar.tab.el);
-				this.btnPrev = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_LEFT));
-				this.btnPrev.el.onclick = () => this.navigateBack();
-				//$(this.btnPrev.el).insertBefore(this.navBar.tab.el);
-				this.btnNext = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.CHEVRON_RIGHT));
-				this.btnNext.el.onclick = () => this.navigateForward();
-				//$(this.btnNext.el).insertBefore(this.navBar.tab.el);
-				// RIGHT ALIGN
-				this.addTab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
-				//$(this.addTab.el).insertBefore(this.navBar.optionsTab.el);
-				// USER TAB / MENU
-				this.addUserTab();
-				//this.userTab = this.addTab(ICONS.USER, new USERMENU(this.navBar.menu));
-				this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
-				//this.addDefaultMenuItems();
-			}
+			//if (this.navbar.menu) {
+			//console.warn('Yes to addNavOptions');
+			// LEFT ALIGN
+            this.btnSidebar = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+                icon: ICONS.SIDEBAR,
+                label: 'Sidebar'
+            }));
+			this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
+            this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
+            $(this.btnSidebar.el).insertBefore(this.navbar.tab.el);
+
+            this.btnPrev = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+                icon: ICONS.CHEVRON_LEFT,
+                label: 'Prev'
+            }));
+			this.btnPrev.el.onclick = () => this.navigateBack();
+			$(this.btnPrev.el).insertBefore(this.navbar.btnOptions.el);
+
+			// RIGHT ALIGN
+
+			//this.addTab = this.navbar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
+			//$(this.addTab.el).insertBefore(this.navbar.optionsTab.el);
+			// USER TAB / MENU
+
+			this.addUserTab();
+			this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
+			//this.addDefaultMenuItems();
+			//} else {
+			//    console.warn('No to addNavOptions');
+			//}
 		});
-	}
-	/** Creates a USER Tab and its associated UserMenu
-	    @param {ICON} icon Tab Icon
-	    @param {EL} el A 'Switchable' Element
-	    @returns {NAVITEMICON} Clickable Nav Item with Icon
-	*/
-	addTab(icon, el) {
-		let tab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', icon));
-		//this.userTab = this.navBar.menu.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
-		tab.el.addEventListener('activate', () => el.activate()); //.el.dispatchEvent(new Activate(this));  
-		tab.el.addEventListener('deactivate', () => el.deactivate()); //.el.dispatchEvent(new Deactivate(this))
-		return tab;
 	}
 	/** Creates a USER Tab and its associated UserMenu
 	    @returns {void}
 	    @deprecated
 	*/
-	addUserTab() {
-		this.navBar.addTabbableElement(this.navBar.tabs.addNavItemIcon(new MODEL().set({
-			label: 'USER',
-			icon: ICONS.USER
-		})), new USERMENU(this.navBar))
-		/*
-		this.userTab = this.navBar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.USER));
-		this.userMenu = new USERMENU(this.navBar);
-		this.userTab.el.addEventListener('activate', () => this.getUser() === 'Guest' ? this.login(this.userTab) : this.userMenu.activate()); //.el.dispatchEvent(new Activate(this));  
-		this.userTab.el.addEventListener('deactivate', () => this.userMenu.deactivate()); //.el.dispatchEvent(new Deactivate(this))
-		*/
+    addUserTab() {
+        let tab = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+            icon: ICONS.USER,
+            label: 'USER'
+        }));
+        let menu = this.navbar.menus.addChild(new USERMENU(this.navbar.menus));
+        if (this.getUser() === 'Guest') {
+            tab.el.addEventListener('activate', () => this.login(tab));
+        } else {
+            this.navbar.addTabbableElement(tab, menu);
+        }
 	}
 	/** Returns the MAIN LOADER 
 	    @returns {LOADER} A LOADER
@@ -160,15 +150,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		let optionsMenu = this.navBar.menu;
-		let domMenu = optionsMenu.list.get('DOM');
+		let optionsMenu = this.navbar.menu;
+		let domMenu = optionsMenu.get('DOM');
 		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
-		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navBar.toggle());
+		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navbar.toggle());
 		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
 		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-		let crudMenu = optionsMenu.list.get('CRUD');
+		let crudMenu = optionsMenu.get('CRUD');
 		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
@@ -233,11 +223,12 @@ export default class MAIN extends CONTAINER {
 	    as a Sidebar, Modal or an EDIT pane
 	    @returns {void}
 	*/
-	focusBody() {
-		if ($(this.sidebar.el).hasClass('active')) {
-			this.sidebar.removeClass('active');
-		}
-		$(this.navBar.menu.el).collapse('hide');
+    focusBody() {
+        let ev = new Deactivate(this);
+        this.sidebar.el.dispatchEvent(ev);
+        this.btnSidebar.el.dispatchEvent(ev);
+        this.navbar.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navbar.tab).map((icon) => icon.el.dispatchEvent(ev));
+        this.navbar.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
 	/** Loads the specified app id into the Main Container
         Receives the MAIN model from Main/Get/id (if permitted)
@@ -257,7 +248,7 @@ export default class MAIN extends CONTAINER {
 					location.href = returnUrl;
 				}
 				if (id >= 0) {
-					$.getJSON('Main/Get/' + id, (payload) => {
+					$.getJSON('MAIN/GET/' + id, (payload) => {
 						if (payload.result === 1) {
 							try {
 								if (payload.model.label) {
@@ -319,19 +310,34 @@ export default class MAIN extends CONTAINER {
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
 	*/
-	login(caller = this) {
-		this.loader.log(99, 'Logging In').then((loader) => new PROMPT(new MODEL().set({
-			caller,
-			container: this,
-			label: 'Log In'
-		})).createForm(new MODEL().set({
-			caller,
-			container: this,
-			label: 'Log In'
-		})).then((form) => form.footer.buttonGroup.empty().then(() => {
-			form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => form.getDialog().hide().then(() => this.loginOAuth('Google'));
-			loader.log(100).then(() => form.getDialog().show());
-		})));
+    login(caller = this) {
+        console.log('Login Caller', caller);
+		let label = 'LogIn';
+        this.loader.log(99, label).then(
+            (loader) => {
+                let prompt = new PROMPT(new MODEL().set({
+                    caller,
+                    container: this,
+                    label
+                }));
+                prompt.createForm(new MODEL().set({
+                    caller,
+                    container: prompt,
+                    label
+                })).then(
+                    (form) => form.footer.buttonGroup.empty().then(
+                        () => {
+                            form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
+                                this.loginOAuth('Google');
+                                return false;
+                            }
+                            //loader.log(100).then(() => form.getDialog().show());
+                            loader.log(100).then(() => prompt.show());
+                        }
+                    )
+                )
+            }
+        );
 	}
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
@@ -352,6 +358,7 @@ export default class MAIN extends CONTAINER {
 		});
 	}
 	/** Redirects to the third party OAuth Sign In
+        ie: http://localhost:8052/Account/ExternalLogin/externalLogin?provider=Google
 	    @param {string} provider The OAuth Provider
 	    @returns {void} 
 	*/
@@ -364,13 +371,16 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<boolean>} True on success
     */
 	logout() {
-		this.loader.log(99, 'Logging Out', true).then(() => { // loader
-			Promise.resolve(localStorage.clear()).then(() => {
-				$.post('/Account/LogOff', {
-					'__RequestVerificationToken': this.getToken() //.token
-				}, this.ajaxRefreshIfSuccessful.bind(this), 'json');
-			});
-		});
+        this.loader.log(99, 'Logging Out').then(
+            () => Promise.resolve(localStorage.clear()).then(
+                $.post('/Account/LogOff', {
+                    '__RequestVerificationToken': this.getToken()
+                }, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
+		/*this.loader.log(99, 'Logging Out').then(() => { // loader
+            $.post('/Account/LogOff', {
+				'__RequestVerificationToken': this.getToken() //.token
+			}, this.ajaxRefreshIfSuccessful.bind(this), 'json');
+		});*/
 	}
 	/** Log into the application using the given credentials
         @param {string} email Username / Email 
@@ -393,9 +403,7 @@ export default class MAIN extends CONTAINER {
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
 				]);
-				form.afterSuccessfulPost = (payload, status) => {
-					this.ajaxRefreshIfSuccessful(payload, status);
-				}
+				form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
 				loader.log(100).then(() => form.getDialog().show());
 			});
 		});
@@ -404,21 +412,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	swipeUp() {
-		this.navBar.collapse();
-		$('body').addClass('compact');
+		this.navbar.collapse();
+		document.body.classList.add('compact');
 	}
 	/** Swipe Down Event
 	    @returns {void}
 	*/
 	swipeDown() {
-		this.navBar.expand();
-		$('body').removeClass('compact');
+		this.navbar.expand();
+		document.body.classList.remove('compact');
 	}
 }
-export {
-	CONTAINERFACTORY,
-	LOADER,
-	MENU,
-	MODEL,
-	NAVITEMICON
-};
+export { Activate, CONTAINERFACTORY, Deactivate, LOADER, MENU, MODEL, NAVITEMICON }

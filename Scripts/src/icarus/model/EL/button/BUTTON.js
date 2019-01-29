@@ -18,7 +18,7 @@ export default class BUTTON extends EL {
 		this.addClass('btn glyphicon');
 		this.attributes.set('type', buttonType);
 		this.icon = new GLYPHICON(this, glyphicon);
-		this.label = new SPAN(this, new MODEL('button-label'), label);
+        this.label = new SPAN(this, new MODEL('button-label'), label);
 	}
 	/** Sets the label within the button to the given string
         @param {string} label A button label

@@ -1,9 +1,5 @@
 /** @module */
-import MENU, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../MENU.js'
+import MENU, { ATTRIBUTES, EL, MODEL } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import IMG from '../../../img/IMG.js';
 /** User Menu 
@@ -16,7 +12,7 @@ export default class USERMENU extends MENU {
 	    @param {MODEL} model Model
 	*/
 	constructor(node) {
-		super(node, new MODEL('horizontal').set({
+        super(node, new MODEL().set({ //'horizontal'
 			name: 'USER',
 			showHeader: 0,
 			collapsed: 0
@@ -29,11 +25,16 @@ export default class USERMENU extends MENU {
 		this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
 		this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
 		this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
-		this.btnLogout = this.addNavItem(new MODEL().set('label', 'Log Out'));
+
+        this.options = this.addMenu(new MODEL('horizontal').set('name', 'USEROPTIONS'));
+        this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log In'));
+		this.btnLogout.el.onclick = () => this.login();
+        this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
 		this.btnLogout.el.onclick = () => this.logout();
 		for (let i = 0; i < 5; i++) {
-			this.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
-		}
+            this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
+        }
+        this.options.expand();
 	}
 	/** Calls MAIN.logout()
 	    @returns {Promise<ThisType>} callback
@@ -42,10 +43,12 @@ export default class USERMENU extends MENU {
 		console.log('USERMENU.logout()');
 		return this.flip().then(() => this.getMain().logout());
 	}
+	/** Calls MAIN.login()
+	    @returns {Promise<ThisType>} callback
+	*/
+	login() {
+		console.log('USERMENU.login()');
+		return this.flip().then(() => this.getMain().login());
+	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	MENU,
-	MODEL
-};
+export { ATTRIBUTES, EL, MENU, MODEL }

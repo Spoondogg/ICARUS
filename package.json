@@ -1,7 +1,7 @@
 {
   "name": "icarus",
   "author": "Ryan Dunphy <ryan@spoonmedia.ca>",
-  "version": "0.5.2",
+  "version": "0.5.2.1",
   "description": "Single Page Web Application Engine",
   "keywords": [
     "SPWA",

@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES,	EL,	FOOTER,	HEADER,	MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, FOOTER, HEADER, MODEL } from '../container/CONTAINER.js';
 import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import WELL from '../p/WELL.js';
@@ -18,8 +18,8 @@ export default class MODAL extends CONTAINER {
 	*/
 	constructor(title, text, vertical) {
 		super(document.body, new MODEL(new ATTRIBUTES({
-			'class': 'modal fade in',
-			'role': 'dialog'
+			class: 'modal fade in',
+			role: 'dialog'
 		})));
 		if (vertical) { // Vertical alignment helper div where required
 			this.alignHelper = new DIV(this, new MODEL('vertical-alignment-helper'));
@@ -27,7 +27,7 @@ export default class MODAL extends CONTAINER {
 		// Dialog inside vertical align helper if set to vertical align
 		let parentEl = vertical ? this.alignHelper : this;
 		this.dialog = new DIV(parentEl, new MODEL('modal-dialog' + vertical ? ' vertical-align-center' : ''));
-		this.content = new DIV(this.dialog, new MODEL('modal-content'));
+		this.content = new DIV(this.dialog, new MODEL('content'));
 		this.header = this.createModalHeader(title);
 		if (text) {
 			this.well = new WELL(this.content, new MODEL(), text);
@@ -37,7 +37,7 @@ export default class MODAL extends CONTAINER {
 		// Footer : Contains options to save or cancel out of form
 		this.footer = new FOOTER(this.content, new MODEL('modal-footer'));
 		this.footer.btnClose = new BUTTON(this.footer, new MODEL(new ATTRIBUTES({
-			class: 'btn btn-default btn-block',
+			//class: 'btn btn-default btn-block',
 			'data-dismiss': 'modal',
 			'aria-hidden': 'true'
 		})), 'Close');
@@ -50,7 +50,7 @@ export default class MODAL extends CONTAINER {
 	createModalHeader(title) {
 		let header = new DIV(this.content, new MODEL('modal-header'));
 		header.btnClose = new BUTTON(header, new MODEL(new ATTRIBUTES({
-			'class': 'close',
+			class: 'close',
 			'data-dismiss': 'modal',
 			'aria-hidden': 'true'
 		})), 'x');

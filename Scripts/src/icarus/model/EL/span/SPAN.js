@@ -14,4 +14,4 @@ export default class SPAN extends EL {
 		super(node, 'SPAN', model, innerHtml);
 	}
 }
-export { ATTRIBUTES, EL, MODEL,	SPAN }
+export { ATTRIBUTES, EL, MODEL, SPAN }

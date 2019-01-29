@@ -590,8 +590,12 @@ namespace ICARUS.Controllers {
         /// <returns>Json Payload</returns>
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> LogOff() {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
+            try {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                return Json(new Payload(1, "Successfully logged out"), JsonRequestBehavior.AllowGet);
+            } catch (Exception e) {
+                return Json(new Payload(0, "Failed to log out"), JsonRequestBehavior.AllowGet);
+            }
         }
 
         /// <summary>

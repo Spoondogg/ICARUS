@@ -28,9 +28,7 @@ export default class INDEXMAIN extends BANNER {
 		/** @param {number} maxNavItems The maximum number of pages to cache */
 		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
 		this.isLoading = false;
-		this.menu = new MENU(this.body.pane, new MODEL().set({
-			'label': 'INDEX'
-		}));
+		this.menu = new MENU(this.body.pane, new MODEL().set('label', 'INDEX'));
 		this.addEvents();
 		this.header = new HEADER(this, new MODEL());
 		$(this.header.el).insertBefore(this.body.pane.el);

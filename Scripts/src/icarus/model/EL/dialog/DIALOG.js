@@ -1,17 +1,10 @@
 /** @module */
-import EL, {
-	ATTRIBUTES,
-	MODEL
-} from '../EL.js';
-import FORMFOOTER, {
-	ALIGN
-} from '../form/FORMFOOTER.js';
+import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
 import Closeable from '../../../interface/Closeable/Closeable.js';
 import DIV from '../div/DIV.js';
 import HEADER from '../header/HEADER.js';
-import {
-	ICONS
-} from '../../../enums/ICONS.js';
+import { ICONS } from '../../../enums/ICONS.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import SWITCH from '../button/switch/SWITCH.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
@@ -35,14 +28,17 @@ export default class DIALOG extends EL {
 		this.header = new HEADER(this, new MODEL().set('label', model.label));
 		this.btnClose = new SWITCH(this.header, 'x');
 		this.btnClose.el.addEventListener('activate', () => this.closeDialog());
-		this.navBar = new NAVBAR(this, new MODEL().set('label', model.label));
-		//this.navBar.expand().then(navbar => navbar.menu.expand());		
+		this.navbar = new NAVBAR(this, new MODEL().set('label', model.label));
+		//this.navbar.expand().then(navbar => navbar.menu.expand());		
 		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
-		$(this.el).on('show.bs.modal', () => this.removeClass('hiding')).on('hide.bs.modal', () => this.addClass('hiding')).on('hidden.bs.modal', () => { /**/ }).on('shown.bs.modal', () => { /**/ });
+        $(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
+        $(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
+        $(this.el).on('hidden.bs.modal', () => { /**/ });
+        $(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 	/** When DIALOG loses focus, it will be closed
 	    @returns {void}
@@ -95,9 +91,4 @@ export default class DIALOG extends EL {
 		});
 	}
 }
-export {
-	ATTRIBUTES,
-	DIV,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, DIV, EL, MODEL }
