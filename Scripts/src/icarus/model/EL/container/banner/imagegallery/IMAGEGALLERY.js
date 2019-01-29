@@ -79,17 +79,16 @@ export default class IMAGEGALLERY extends BANNER {
 	    @returns {FOOTER} A pagination footer
 	*/
 	createPaginationFooter() {
-		let pagination = new FOOTER(this, new MODEL('pagination text-center'));
-		//this.pagination.el.setAttribute('style', 'text-align:center;');
+		let pagination = new FOOTER(this, new MODEL('pagination'));
 		$(pagination.el).insertBefore(this.body.pane.el);
 		pagination.btnPrev = new BUTTON(this.pagination, 'Prev');
 		pagination.btnPrev.el.setAttribute('style', 'margin-right:1em;');
-		pagination.btnPrev.el.onclick = this.prevPage.bind(this);
+		pagination.btnPrev.el.onclick = () => this.prevPage();
 		pagination.buttonGroup = new BUTTONGROUP(this.pagination);
 		pagination.buttonGroup.loaded = false;
 		pagination.btnNext = new BUTTON(this.pagination, 'Next');
 		pagination.btnNext.el.setAttribute('style', 'margin-left:1em;');
-		pagination.btnNext.el.onclick = this.nextPage.bind(this);
+		pagination.btnNext.el.onclick = () => this.nextPage();
 		return pagination;
 	}
 	/** Sets the page variables and reconstructs

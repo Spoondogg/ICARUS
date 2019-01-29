@@ -1,8 +1,5 @@
 /** @module */
-import IFACE, {
-	EL,
-	MODEL
-} from '../IFACE.js';
+import IFACE, {	EL,	MODEL } from '../IFACE.js';
 import Activate from '../../event/Activate.js';
 import Deactivate from '../../event/Deactivate.js';
 import Deselect from '../../event/Deselect.js';
@@ -42,12 +39,8 @@ export default class Clickable extends IFACE {
 		// Consider showing a simple press-timer animation after 100ms
 		node.el.addEventListener('mousedown', () => node.pressDown());
 		node.el.addEventListener('mouseup', () => node.pressUp());
-		node.el.addEventListener('touchstart', () => node.pressDown(), {
-			passive: true
-		});
-		node.el.addEventListener('touchend', () => node.pressUp(), {
-			passive: true
-		});
+		node.el.addEventListener('touchstart', () => node.pressDown(), { passive: true });
+		node.el.addEventListener('touchend', () => node.pressUp(), { passive: true });
 		node.el.addEventListener('click', () => node.pressed());
 	}
 	startTimer(node) {
@@ -61,7 +54,7 @@ export default class Clickable extends IFACE {
 	setMethods(node) {
 		this.methods.click = () => this.toggle('active', new Activate(node), new Deactivate(node));
 		this.methods.dblclick = () => this.toggle('select', new Select(node), new Deselect(node));
-		this.methods.longclick = () => console.log('Long Click', node);
+		this.methods.longclick = () => console.log('longclick-down', node);
 		/** On PressDown Event, starts a timer that triggers the Long Press Event
 		    @returns {Promise<any>} Promise to resolve given function
 		*/
@@ -86,17 +79,17 @@ export default class Clickable extends IFACE {
 					node.touchtime = new Date().getTime();
 					setTimeout(() => {
 						if (node.touchtime !== 0) {
-							console.log('singleclick', node.timer, node);
+							console.log('click-single', node.timer, node);
 							this.resetTimer(node);
 							Promise.resolve(node.click());
 						}
 					}, this.options.delay);
 				} else if (new Date().getTime() - node.touchtime < this.options.delay) {
-					console.log('doubleclick', node.timer, node);
+					console.log('click-double', node.timer, node);
 					this.resetTimer(node);
 					Promise.resolve(node.dblclick());
 				} else {
-					console.log('longclick', node.timer, node);
+					console.log('longclick-up', node.timer, node);
 					this.resetTimer(node);
 					//Promise.resolve(longclick(ev));
 				}
@@ -108,12 +101,4 @@ export default class Clickable extends IFACE {
 		}
 	}
 }
-export {
-	Activate,
-	Deactivate,
-	Deselect,
-	EL,
-	Select,
-	Selectable,
-	Switchable
-}
+export { Activate, Deactivate, Deselect, EL, Select, Selectable, Switchable }

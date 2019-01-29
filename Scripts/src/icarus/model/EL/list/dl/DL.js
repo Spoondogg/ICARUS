@@ -20,15 +20,15 @@ export default class DL extends LIST {
 	    @param {MODEL} model Model
 	    @returns {DT} A Term (DT)
 	*/
-    addDT(model) {
-        return this.addChild(new DT(this, model));
+	addDT(model) {
+		return this.addChild(new DT(this, model));
 	}
 	/** Construct a Description Term Definition (UL) and append to this element's children
 	    @param {MODEL} model Model
 	    @returns {DD} An Definition (DD)
 	*/
-    addDD(model) {
-        return this.addChild(new DD(this, model));
+	addDD(model) {
+		return this.addChild(new DD(this, model));
 	}
 }
 export { ATTRIBUTES, DD, DL, EL, LIST, MODEL }

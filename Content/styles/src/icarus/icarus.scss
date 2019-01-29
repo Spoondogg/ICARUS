@@ -1,27 +1,43 @@
-/** A SASS stylesheet for Icarus, extending Bootstrap 3.3.7
-    @author Ryan Dunphy
-    @see SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
-    @see http://sassdoc.com/annotations/
-    @see https://webdevstudios.com/2015/03/17/getting-started-with-sassdoc/
-    @see Consider http://sass-lang.com/documentation/Sass/Script/Functions.html#saturate-instance_method
-    @todo Implement SASSDoc
-*/
+/* #region Variables */
+/// Maximum body width before pillars should appear
 $body-width: 1024px;
+/// Default White Color
+/// @type Color
 $color-white: #fff;
+/// Default Black Color
+/// @type Color
 $color-black: #000;
-$color-blue: rgb(0, 0, 255);
-$color-blue-light: #bee1ef;
-$color-blue-lighter: #00dcff;
-$color-blue-deep: #005879;
-$color-orange: rgb(255, 165, 0);
-$color-red: rgb(255, 0, 0);
-$color-red-deep: #641818;
+/// Primary Color used for this theme
+/// @type Color
 $color-primary: #555;
+/// Default Blue Color
+/// @type Color
+$color-blue: rgb(0, 0, 255);
+/// A light blue color
+/// @type Color
+$color-blue-light: #bee1ef;
+/// A vibrant light-blue color
+/// @type Color
+$color-blue-lighter: #00dcff;
+/// A deep blue color
+/// @type Color
+$color-blue-deep: #005879;
+/// Default Orange Color
+/// @type Color
+$color-orange: rgb(255, 165, 0);
+/// Default Red Color
+/// @type Color
+$color-red: rgb(255, 0, 0);
+/// Default Deep Red Color
+/// @type Color
+$color-red-deep: #641818;
 $color-secondary-neutral: #4a6879;
 $color-secondary-dark: #353e52;
 $color-statement-even: #98a594;
 $color-statement-odd: #6e7880;
 $color-scrollbar-face: #999;
+/// A neutral grey color
+/// @type Color
 $color-grey: #666;
 $color-grey-dark: darken($color-grey, 25%);
 $color-grey-darker: darken($color-grey, 50%);
@@ -39,9 +55,17 @@ $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
 $content-maxwidth: 900px;
 $container-bgcolor: adjust-color($color-black, $alpha: .8);
+/// Header Font
+/// @type Font
 $font-header: 'Raleway', sans-serif;
+/// A Bold Font
+/// @type Font
 $font-major: 'Raleway', sans-serif;
+/// A Thin Font
+/// @type Font
 $font-minor: 'Lato', sans-serif;
+/// The Primary Font
+/// @type Font
 $font-primary: 'Lato', sans-serif;
 $font-primary-weight: 300;
 $font-size-base: 10pt;
@@ -51,6 +75,7 @@ $font-size-large: 1.5em;
 $font-size-extralarge: 2.5em;
 $navbar-height: 4em; // 50px
 $sidebar-width: 320px;
+/// Acts as a placeholder to prevent zero-unit warnings from sass-lint
 $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
@@ -62,25 +87,34 @@ $icon-width: 4em; //64px;
 $icon-height: 4em; //64px;
 $jumbotron-bg-default: #008196;
 $jumbotron-height: 420px;
-// Mixins: https://sass-lang.com/guide#topic-6-SCSS
+/* #endregion */
+/* #region Mixins: Functions and Methods https://sass-lang.com/guide#topic-6-SCSS */
+/// Assigns given transition property
+@mixin anchor($color: $color-blue, $color-hover: $color-blue-lighter, $underline: false) {
+	@if($underline==true) {
+		text-decoration: underline;
+	}
+	@else {
+		text-decoration: none;
+	}
+
+	color: $color-blue;
+
+	&:hover {
+		color: $color-hover;
+	}
+}
+/// Assigns given transition property
 @mixin transition($property) {
 	transition: $property;
 }
+/// Creates a shadow beneath this element
 @mixin boxShadow($x, $y, $blur, $spread, $color) {
 	box-shadow: $x $y $blur $spread $color;
 }
+/// Inset shadow that creates the appearance of depth
 @mixin boxShadowInset($x, $y, $blur, $spread, $color) {
 	box-shadow: inset $x $y $blur $spread $color;
-}
-/// Extends a list so that each embedded list gets smaller
-@mixin list-within-list {
-    >li {
-        >ul {
-            @include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
-            font-size: 90%;
-            text-indent: 1em;
-        }
-    }
 }
 /// A Webkit scrollbar
 /// @param {size} $size
@@ -90,35 +124,23 @@ $jumbotron-height: 420px;
 		height: $height;
 		width: $width;
 	}
+
 	::-webkit-scrollbar-thumb {
 		background: $foreground-color;
 		border-radius: 10px;
 	}
+
 	::-webkit-scrollbar-track {
 		background: $background-color;
 		border-radius: 10px;
 	}
-	// For Internet Explorer
+
 	body {
 		scrollbar-face-color: $color-scrollbar-face;
 		scrollbar-track-color: $background-color;
 	}
 }
-/// no scroll bar
-@mixin no-scroll-bar {
-	&::-webkit-scrollbar {
-		height: 0;
-		width: 0;
-	}
-	&::-webkit-scrollbar-thumb {
-		height: 0;
-		width: 0;
-	}
-	&::-webkit-scrollbar-track {
-		height: 0;
-		width: 0;
-	}
-}
+/// Adds font smoothing
 @mixin font-smoothing($value: antialiased) {
 	@if ($value==antialiased) {
 		font-smoothing: antialiased;
@@ -127,18 +149,26 @@ $jumbotron-height: 420px;
 		font-smoothing: auto;
 	}
 }
-// Abstract Classes: Inheritance: https://sass-lang.com/guide#topic-7-SCSS
+/* #endregion */
+/* #region Placeholders: Abstract Classes and Inheritance: https://sass-lang.com/guide#topic-7-SCSS */
+// Placeholders do not duplicate 
 /// Prevents the user from selecting this element
 %noSelect {
 	cursor: default;
 	user-select: none;
 }
-/** A Mobile Only horizontal scroll using flex */
+/// A Mobile Only horizontal scroll using flex
 %horizontal-scroll {
 	display: flex;
 	flex-wrap: nowrap;
 	overflow-x: auto;
 	overflow-y: hidden;
+}
+/// A full width block without padding or margins
+%wide-block {
+	margin: 0;
+	padding: 0;
+	width: 100%;
 }
 /// The object can be clicked or tapped
 %clickable {
@@ -154,22 +184,46 @@ $jumbotron-height: 420px;
 	//-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
 	//}
 }
+/// The object is being edited
+%edit {
+	border: dashed 1px $color-white;
+}
+/// Indicates that the element has been selected with a moving dashed line
+%selected {
+	animation: border-dance-desktop 1s infinite linear;
+	background-image: linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%);
+	background-position: left top, right bottom, left bottom, right top;
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: 5px 2px, 5px 2px, 2px 5px, 2px 5px;
+	border-radius: .3em;
+
+	@media only screen and (max-width: $max-width-mobile) {
+		// Remove side borders on mobile
+		animation: border-dance-mobile 1s infinite linear;
+		background-size: 5px 2px, 5px 2px, 0 5px, 0 5px; // no sides
+		border-radius: 0;
+	}
+}
+/// Adds the default gradient
 %gradient-primary {
 	$color-one: $color-blue-lighter;
 	$color-two: $color-blue-deep;
 	background-image: radial-gradient(ellipse farthest-corner at left center, $color-one 0%, $color-two 100%);
 }
+/// Adds a gradient that creates the appearance of a vignette
 %gradient-vignette {
 	background: radial-gradient(ellipse at center,
 		$color-shadow-light 0%,
 		$color-shadow-neutral 60%,
 		$color-shadow-dark 100%);
 }
+/// Adds a vertical gradient that fades to black
 %gradient-vertical-fade {
 	background: linear-gradient(to bottom,
 		$color-shadow-dark 0%,
 		$color-shadow-light 100%);
 }
+/// Horizontally centers the element
 %horizontal-center {
 	clear: both;
 	float: none;
@@ -208,94 +262,96 @@ $jumbotron-height: 420px;
 	max-height: calc(50vh - #{$navbar-height});
 	overflow-y: auto;
 }
+/// An image thumbnail
 %thumbnail-image {
 	border: 1px solid $color-shadow-neutral;
 	border-radius: .2em;
 	box-shadow: 0 2px 1px 1px $color-shadow-light;
 	display: block;
 }
-// Generic UI tweaks
-.clickable {
-	@extend %clickable;
-}
-.edit {
-	border: dashed 1px $color-white;
-}
-body {
-	@extend %gradient-vertical-fade;
-	@include font-smoothing;
-	@include transition($transition-default);
-	background-color: $color-dark-less; //$background-primary;
-	color: $color-primary;
-	font-family: $font-primary;
-	font-size: $font-size-base; //$font-size-normal;
-	font-weight: $font-primary-weight;
-	height: 100vh;
-	overflow: hidden;
-	padding-top: $navbar-height;
-	//-webkit-touch-callout: none !important;
-
-	&.compact {
-		padding-top: 0;
-	}
-}
-button {
-	:disabled {
-		background-color: $color-red-deep;
-	}
-
-	>.icon {
-		color: $color-black;
-	}
-
-	.glyphicon {
-		.icon-label {
-			color: $color-black;
-			text-transform: uppercase;
-		}
-	}
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-header {
+/// A Header Element
+%header {
 	color: $color-dark;
 	font-family: $font-major;
 	font-weight: $font-primary-weight;
 }
-@keyframes border-dance-mobile {
-	0% {
-		background-position: left top, right bottom, left bottom, right top;
+/// A Button Element / Should also be a NAV item...  maybe
+%button {
+	@extend %clickable;
+	@include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
+	background-color: $color-grey-light;
+	border-color: $color-grey-light;
+	border-radius: 0;
+	border-top: 1px solid $color-grey;
+	color: $color-grey-darker;
+	flex-basis: 5em;
+	flex-grow: 1;
+	font-family: $font-primary;
+	font-weight: bold;
+	height: $navbar-height - 1em;
+	line-height: $navbar-height - 1em;
+	padding: 0;
+	text-shadow: 0 -1px 1px $color-grey;
+	text-transform: uppercase;
+
+	:disabled {
+		background-color: $color-red-deep;
 	}
-	100% {
-		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+
+	&.active {
+		background-color: $color-grey-dark;
+		color: $color-blue-light;
+		outline: none;
+	}
+
+	&:focus {
+		border-color: $color-blue;
+		color: $color-blue-lighter;
+		outline: none;
+	}
+
+	&:hover {
+		@include transition(color 400ms);
+		@include transition(background-color 400ms);
+		background-color: $color-blue-light;
+		color: $color-secondary-neutral;
+	}
+
+	&.selected {
+		@extend %selected;
 	}
 }
-@keyframes border-dance-desktop {
-	0% {
-		background-position: left top, right bottom, left bottom, right top;
-	}
-	100% {
-		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
-	}
-}
-.selected {
-	animation: border-dance-desktop 1s infinite linear;
-	background-image: linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(90deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%), linear-gradient(0deg, $color-grey 50%, transparent 50%);
-	background-position: left top, right bottom, left bottom, right top;
-	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-	background-size: 5px 2px, 5px 2px, 2px 5px, 2px 5px;
-	border-radius: .3em;
-	/// Removes side borders
-	@media only screen and (max-width: $max-width-mobile) {
-		animation: border-dance-mobile 1s infinite linear;
-		background-size: 5px 2px, 5px 2px, 0 5px, 0 5px; // no sides
-		border-radius: 0;
+/// Extends a list so that each embedded list gets smaller
+%list-within-list {
+	>li {
+		>ul {
+			@include boxShadowInset(0, 1px, 1px, 0, rgba(1, 1, 1, .2));
+			font-size: 90%;
+			text-indent: 1em;
+		}
 	}
 }
+/// no scroll bar
+%no-scroll-bar {
+	&::-webkit-scrollbar {
+		height: 0;
+		width: 0;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		height: 0;
+		width: 0;
+	}
+
+	&::-webkit-scrollbar-track {
+		height: 0;
+		width: 0;
+	}
+}
+/* #endregion */
+/* #region Keyframes */
+/// Transitions opacity from 0 to 1
+/// @group keyframes
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -304,11 +360,15 @@ header {
 		opacity: 1;
 	}
 }
+/// Transitions opacity from current value to 0
+/// @group keyframes
 @keyframes fadeOut {
 	to {
 		opacity: 0;
 	}
 }
+/// Element slides in from the top of the page
+/// @group keyframes
 @keyframes slideInTop {
 	from {
 		transform: translateY(110%);
@@ -317,6 +377,8 @@ header {
 		transform: translateY(0%);
 	}
 }
+/// Element slides in from the right of the page
+/// @group keyframes
 @keyframes slideInRight {
 	from {
 		transform: translateX(110%);
@@ -325,6 +387,8 @@ header {
 		transform: translateX(0%);
 	}
 }
+/// Element slides in from the bottom of the page
+/// @group keyframes
 @keyframes slideInBottom {
 	from {
 		transform: translateY(-110%);
@@ -333,1283 +397,1418 @@ header {
 		transform: translateY(0%);
 	}
 }
+/// Element slides out towards the top of the page
+/// @group keyframes
 @keyframes slideOutUp {
 	to {
 		transform: translateY(110%);
 	}
 }
+/// Element slides out towards the right of the page
+/// @group keyframes
 @keyframes slideOutRight {
 	to {
 		transform: translateX(110%);
 	}
 }
+/// Element slides out towards the bottom of the page
+/// @group keyframes
 @keyframes slideOutDown {
 	to {
 		transform: translateY(-110%);
 	}
 }
-dialog,
-.modal {
-    animation: slideOutUp $transition-speed $transition-motion;
-    border: 0;
-    border-radius: .6rem;
-    box-shadow: 0 0 1em $color-black;
-    margin: 1em auto;
-    max-width: $body-width;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    &::backdrop {
-        animation: fadeIn $transition-speed $transition-motion;
-        background-color: $color-shadow-dark;
-        bottom: 0;
-        left: 0;
-        position: fixed;
-        right: 0;
+/// A mobile first dashed border that appears to scroll around the element
+/// @group keyframes
+@keyframes border-dance-mobile {
+	0% {
+		background-position: left top, right bottom, left bottom, right top;
+	}
+
+	100% {
+		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+	}
+}
+/// A dashed border that appears to scroll around the element
+/// @group keyframes
+@keyframes border-dance-desktop {
+	0% {
+		background-position: left top, right bottom, left bottom, right top;
+	}
+
+	100% {
+		background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+	}
+}
+/* #endregion */
+/// A SASS stylesheet for Icarus, extending Bootstrap 3.3.7
+/// @author Ryan Dunphy
+/// @link SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
+/// @link http://sassdoc.com/annotations/
+/// @link https://webdevstudios.com/2015/03/17/getting-started-with-sassdoc/
+/// @link Consider http://sass-lang.com/documentation/Sass/Script/Functions.html#saturate-instance_method
+.icarus {
+    @extend %gradient-vertical-fade;
+    @include font-smoothing;
+    @include transition($transition-default);
+    background-color: $color-dark-less;
+    color: $color-primary;
+    font-family: $font-primary;
+    font-size: $font-size-base;
+    font-weight: $font-primary-weight;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: $navbar-height;
+    /* #region Styles */
+    /// Removes fixed padding consumed by MAIN.nav
+    &.compact {
+        padding-top: 0;
+    }
+
+    .clickable {
+        @extend %clickable;
+    }
+
+    .edit {
+        @extend %edit;
+    }
+
+    .selected {
+        @extend %selected;
+    }
+    /* #endregion */
+    /* #region Elements */
+    button {
+        @extend %button;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    header {
+        @extend %header;
+    }
+    /* #endregion */
+    /// Bootstrap Modal and non-standard DIALOG Element
+    .modal {
+        animation: slideOutUp $transition-speed $transition-motion;
+        border: 0;
+        border-radius: .6rem;
+        box-shadow: 0 0 1em $color-black;
+        margin: 1em auto;
+        max-width: $body-width;
+        padding: 0;
+        position: absolute;
         top: 0;
-    }
-    &[open],
-    &.in {
-        animation: slideInTop $transition-speed $transition-motion;
+        width: 100%;
 
-        &.hiding {
-            animation: slideOutUp $transition-speed $transition-motion;
-
-            &::backdrop {
-                animation: fadeOut $transition-speed $transition-motion;
-            }
+        &::backdrop {
+            animation: fadeIn $transition-speed $transition-motion;
+            background-color: $color-shadow-dark;
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
         }
-    }
-    &.prompt {
-        animation: slideOutDown $transition-speed $transition-motion;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        bottom: 0;
-        margin-bottom: 0;
-        top: auto;
+
         &[open],
         &.in {
             animation: slideInTop $transition-speed $transition-motion;
+
             &.hiding {
                 animation: slideOutUp $transition-speed $transition-motion;
+
+                &::backdrop {
+                    animation: fadeOut $transition-speed $transition-motion;
+                }
             }
         }
-        > footer {
-            &.form-footer {
+        /// A Prompt style Dialog
+        /// @group dialog
+        &.prompt {
+            animation: slideOutDown $transition-speed $transition-motion;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            bottom: 0;
+            margin-bottom: 0;
+            top: auto;
+
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
+
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
+            /*> .form-footer {
                 border: 0;
+
                 button {
                     border-radius: 0;
                     height: $navbar-height - 1em;
                     line-height: $navbar-height - 1em;
                     padding: 0;
                 }
-            }
+            }*/
         }
-    }
-    &.login {
-        animation: slideOutRight $transition-speed $transition-motion;
-        float: right;
-        left: calc(100% - 270px);
-        top: 2em;
-        width: 250px;
-        &[open],
-        &.in {
-            animation: slideInRight $transition-speed $transition-motion;
-            &.hiding {
-                animation: slideOutRight $transition-speed $transition-motion;
-            }
-        }
-        footer {
-            display: none;
-        }
-    }
-    &.loader {
-        animation: slideOutDown $transition-speed $transition-motion;
-        background-color: $color-dark; // transparentize($color-light, .75);
-        border-radius: 0;
-        border-top: 1px solid transparentize($color-grey-light, .7);
-        bottom: 0;
-        height: auto;
-        //margin: 0;
-        margin-bottom: -.5em;
-        max-height: 260px;
-        top: auto;
-        width: 100%;
+        /// A Login Form embedded in a Prompt
+        /// @group dialog
+        &.login {
+            animation: slideOutRight $transition-speed $transition-motion;
+            float: right;
+            left: calc(100% - 270px);
+            top: 2em;
+            width: 250px;
 
-        &::backdrop {
-            opacity: 0;
-        }
+            &[open],
+            &.in {
+                animation: slideInRight $transition-speed $transition-motion;
 
-        &[open],
-        &.in {
-            animation: slideInTop $transition-speed $transition-motion;
-
-            &.hiding {
-                animation: slideOutUp $transition-speed $transition-motion;
-            }
-        }
-        //>nav {
-        //	display: none;
-        //}
-        .body {
-            margin: .5em;
-
-            .well {
-                font-size: smaller;
-                margin: 0;
+                &.hiding {
+                    animation: slideOutRight $transition-speed $transition-motion;
+                }
             }
 
-            .progress {
-                border-radius: 3px;
-                clear: both;
-                float: none;
-                margin: 0;
-                //height: calc(#{$navbar-height} - .5em);
-                .text {
+            footer {
+                display: none;
+            }
+        }
+        /// A Loader Dialog
+        /// @group dialog
+        &.loader {
+            animation: slideOutDown $transition-speed $transition-motion;
+            background-color: $color-dark; // transparentize($color-light, .75);
+            border-radius: 0;
+            border-top: 1px solid transparentize($color-grey-light, .7);
+            bottom: 0;
+            height: auto;
+            margin-bottom: -.5em;
+            max-height: 260px;
+            top: auto;
+            width: 100%;
+
+            &::backdrop {
+                opacity: 0;
+            }
+
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
+
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
+            //>nav {
+            //	display: none;
+            //}
+            .body {
+                margin: .5em;
+
+                .well {
+                    font-size: smaller;
+                    margin: 0;
+                }
+
+                .progress {
+                    border-radius: 3px;
                     clear: both;
                     float: none;
-                    min-width: 400px;
-                    overflow: visible;
-                    padding: 0 .5em;
-                    text-align: left;
-                    text-decoration: none;
-                    text-transform: uppercase;
-                }
+                    margin: 0;
+                    //height: calc(#{$navbar-height} - .5em);
+                    .text {
+                        clear: both;
+                        float: none;
+                        min-width: 400px;
+                        overflow: visible;
+                        padding: 0 .5em;
+                        text-align: left;
+                        text-decoration: none;
+                        text-transform: uppercase;
+                    }
 
-                .progress-bar {
-                    border-radius: .3em;
-                    overflow: visible;
-                    text-shadow: 0 1px 4px $color-shadow-neutral;
-                }
+                    .progress-bar {
+                        border-radius: .3em;
+                        overflow: visible;
+                        text-shadow: 0 1px 4px $color-shadow-neutral;
+                    }
 
-                & + ul {
-                    border: 1px solid $color-grey-dark;
-                    border-radius: 5px;
-                    height: 0;
-                    margin-top: 0;
-                    //opacity: 0;
-                    padding: 0;
+                    & + ul {
+                        border: 1px solid $color-grey-dark;
+                        border-radius: 5px;
+                        height: 0;
+                        margin-top: 0;
+                        padding: 0;
 
-                    &.console {
-                        @include no-scroll-bar;
+                        &.console {
+                            @extend %no-scroll-bar;
 
-                        &.collapse {
-                            &.in {
-                                height: 12em;
-                                margin-top: .5em;
-                                //opacity: 1;
-                                padding: initial;
+                            &.collapse {
+                                &.in {
+                                    height: 12em;
+                                    margin-top: .5em;
+                                    //opacity: 1;
+                                    padding: initial;
+                                }
                             }
-                        }
 
-                        &.collapsing {
-                            margin-top: .5em;
-                        }
+                            &.collapsing {
+                                margin-top: .5em;
+                            }
 
-                        li {
-                            padding: 3px;
+                            li {
+                                padding: 3px;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        footer,
-        header {
-            display: none;
-            height: $navbar-height;
-        }
-    }
-    > header {
-        background-color: $color-grey-dark;
-        color: $color-light;
-        height: 3em;
-        line-height: 3em;
-        padding: 0 .5em;
-        text-transform: uppercase;
-        button {
-            background-color: transparent;
-            color: $color-white;
-            float: right;
-            font-weight: bold;
-            line-height: 1.5em;
-            &:hover {
-                color: $color-light-less;
+            footer,
+            header {
+                display: none;
+                height: $navbar-height;
             }
         }
-    }
-    > .body {
-        @extend %modal-tall;
-        > form {
-            .form-footer {
-                height: auto;
-            }
-        }
-    }
-    footer {
-        &.form-footer {
-            border: 0;
+        /// The Dialog Header
+        /// @group dialog
+        > header {
+            background-color: $color-grey-dark;
+            color: $color-light;
+            height: 3em;
+            line-height: 3em;
+            padding: 0 .5em;
+            text-transform: uppercase;
+
             button {
-                border-radius: 0;
-                height: $navbar-height - 1em;
-                line-height: $navbar-height - 1em;
-                padding: 0;
+                //background-color: transparent;
+                //color: $color-white;
+                float: right;
+                //font-weight: bold;
+                //line-height: 1.5em;
+                //&:hover {
+                //    color: $color-light-less;
+                //}
+            }
+        }
+
+        > .body {
+            @extend %modal-tall;
+
+            > form {
+                .form-footer {
+                    height: auto;
+                }
+            }
+        }
+
+        footer {
+            &.form-footer {
+                border: 0;
+                //button {
+                //border-radius: 0;
+                //height: $navbar-height - 1em;
+                //line-height: $navbar-height - 1em;
+                //padding: 0;
+                //}
             }
         }
     }
-}
-.btn-group-vertical {
-	width: 100%;
-	button {
-		.btn {
-			margin: 0;
-		}
-	}
-}
-footer {
-	@extend %bevel-up;
-	@include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
-	background-color: $color-grey-dark;
-	clear: both;
-	color: $color-white;
-	display: block;
-	float: left;
-	font-size: smaller;
-	height: $navbar-height;
-	line-height: $navbar-height - 1em;
-	padding: 0;
-	width: 100%;
-	button {
-		@include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
-		background-color: $color-grey-light;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		border-color: $color-grey-light;
-		border-top: 1px solid $color-grey;
-		color: $color-grey-darker;
-		cursor: pointer;
-		font-weight: bold;
-		text-shadow: 0 -1px 1px $color-grey;
-		text-transform: uppercase;
-		&:hover {
-			@include transition(color 400ms);
-			@include transition(background-color 400ms);
-			background-color: $color-blue-light;
-			color: $color-secondary-neutral;
-		}
-	}
-	>.container {
-		margin: .4em auto;
-	}
-	>cite {
-		float: right;
-		line-height: 16px;
-		text-align: right;
-		a {
-			color: $color-white;
-			text-decoration: underline;
-			&:hover {
-				color: $color-blue-lighter;
-			}
-		}
-	}
-	&.stickyfooter {
-		@extend %bevel-up;
-		@include transition($transition-default);
-		bottom: 0;
-		position: fixed;
-		&.active {
-			height: $navbar-height * 5;
-		}
-		textarea {
-			border-radius: 5px;
-			color: $color-black;
-			height: 180px;
-			line-height: normal;
-			margin: 1em;
-			width: calc(100% - 25px);
-		}
-	}
-	&.pagination {
-		border-radius: 0;
-		display: flex;
-		margin: 0;
-		padding: 0;
-		text-align: center;
-		width: 100%;
-		.btn-group {
-			@extend %horizontal-scroll;
-			//flex-basis: auto;
-			flex-grow: 2;
-		}
-		button {
-			background-color: $color-grey-darker;
-			border: 0;
-			flex-basis: 5em;
-			flex-grow: 1;
-			font-family: $font-primary;
-			text-transform: uppercase;
-			&:focus {
-				color: $color-blue-lighter;
-				outline: none;
-			}
-			&.active {
-				background-color: $color-grey-dark;
-				color: $color-blue-light;
-				outline: none;
-			}
-		}
-	}
-}
-form {
-	@extend %bevel-up;
-	.login {
-		input,
-		label {
-			text-align: center;
-		}
-	}
-	fieldset {
-		legend {
-			font-size: small;
-			line-height: 2em;
-			margin: 0;
-			padding: 0 .5em;
-		}
-	}
-	footer {
-		&.form-footer {
-			background-color: transparent;
-			.btn-group-vertical {
-				button {
-					&:first-child {
-						&:not(:last-child) {
-							border-radius: 0;
-						}
-					}
-					&:last-child {
-						&:not(:first-child) {
-							// override vendor
-							border-radius: 0;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-input,
-select,
-textarea {
-	margin: 0;
-	width: 100%;
-}
-input {
-	&[type='submit'] {
-		background-color: $color-blue-deep;
-		color: $color-white;
-		font-size: larger;
-		font-weight: bold;
-		height: 50px;
-		text-transform: uppercase;
-		width: 100%;
-		&:hover {
-			background-color: $color-blue-lighter;
-		}
-		&:disabled {
-			background-color: $color-red-deep;
-		}
-	}
-}
-label {
-	clear: both;
-	color: $color-grey-darker;
-	display: block;
-	float: left;
-	font-size: smaller;
-	margin: .3em 0;
-	text-align: left;
-	text-transform: uppercase;
-	width: 100%;
-	&.invalid {
-		color: $color-red;
-		&+input {
-			background-color: $color-red;
-		}
-	}
-}
-table {
-	&.table-fixed {
-		font-size: smaller;
-		thead {
-			border-bottom: 2px solid $color-white;
-			padding-right: 18px;
-		}
-		th {
-			background-color: $color-light-more;
-			border: 0;
-			font-size: smaller;
-			text-transform: uppercase;
-		}
-		tr {
-			border-bottom: 1px solid $color-light;
-			border-top: 1px solid $color-grey;
-			display: inline-table;
-			table-layout: fixed;
-			width: 100%;
-			&:hover {
-				background-color: $color-light-more;
-			}
-		}
-		td,
-		th {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		tbody {
-			border-bottom: thin solid $color-white;
-		}
-		.btn-group-sm {
-			.btn {
-				height: 24px;
-				line-height: 12px;
-			}
-		}
-	}
-}
-.banner {
-	@extend %noSelect;
-	@media only screen and (max-width: $max-width-desktop) {
-		height: 21em;
-		overflow-y: auto;
-	}
-}
-.btn {
-	&.glyphicon {
-		.icon-label {
-			color: $color-black;
-			font-family: sans-serif;
-			padding: 0 0 0 4px;
-			text-transform: uppercase;
-			top: -3px;
-		}
-	}
-}
-.btn-block {
-	border-bottom: 2px solid $color-grey-dark;
-	border-left: 0;
-	border-radius: 0;
-	border-right: 0;
-	border-top: 1px solid $color-blue-light;
-}
-.callout {
-	padding: 0;
-	text-align: center;
-	&>.icon {
-		font-size: 3em;
-	}
-}
-.chat {
-	background-color: $color-light-more;
-	& .pane {
-		height: 400px;
-		max-height: 400px;
-		overflow-y: auto;
-		width: 100%;
-	}
-	& .statement {
-		background-color: $color-orange;
-		border-bottom: 2px solid transparentize($color-grey-dark, .8);
-		border-top: 1px solid transparentize($color-grey-light, .8);
-		float: left;
-		padding: .5em 0;
-		width: 100%;
-		&:nth-child(odd) {
-			background-color: $color-statement-odd;
-		}
-		&:nth-child(even) {
-			background-color: $color-statement-even;
-		}
-	}
-	.thumb {
-		float: left;
-		margin-right: 1em;
-		& .user-photo {
-			border: 1px solid $color-grey-darker;
-			border-radius: 64px;
-			height: 64px;
-			margin: 4px 0 0 12px;
-			width: 64px;
-		}
-	}
-	.bubble {
-		float: left;
-		width: calc(100% - 124px);
-	}
-	.panel {
-		margin-top: 20px;
-		position: relative;
-		.panel-body {
-			background-color: $color-white;
-		}
-		.panel-heading {
-			cite {
-				display: block;
-				font-size: $font-size-small;
-			}
-			&::after,
-			&::before {
-				border-color: transparent;
-				border-style: solid solid outset;
-				content: ' ';
-				display: block;
-				height: 0;
-				left: -16px;
-				pointer-events: none;
-				position: absolute;
-				right: 100%;
-				top: 11px;
-				width: 0;
-			}
-			&::after {
-				border-right-color: $color-light-more;
-				border-width: 7px;
-				margin-left: 2px;
-				margin-top: 1px;
-			}
-			&::before {
-				border-right-color: $color-light-more;
-				border-width: 8px;
-			}
-		}
-	}
+    /// A vertically aligned button group
+    /// @todo This should just be a list...  shouldn't it?
+    /// @group review
+    .btn-group-vertical {
+        width: 100%;
 
-	footer {
-		padding: 1em;
-		position: relative;
-
-		textearea {
-			border: 2px solid $color-blue-light;
-			border-radius: 6px;
-			color: $color-white;
-			font-size: 18px;
-			font-weight: bold;
-			padding: .2em .5em;
-		}
-	}
-
-	.nav-pills {
-		>li {
-			display: block;
-			float: left;
-			list-style: none;
-		}
-	}
-
-	.word-summary {
-		>li {
-			>a {
-				color: $color-blue;
-			}
-		}
-	}
-}
-.console {
-	@include transition($transition-default);
-	background-color: adjust-color($color-black, $alpha: .75);
-	color: $color-grey-light;
-	display: block;
-	font-family: monospace;
-	font-size: 8pt;
-	line-height: 2em;
-	list-style: none;
-	margin: 0;
-	max-height: 200px;
-	overflow-y: auto;
-	padding: 1em;
-}
-.control-label {
-	&:hover {
-		color: $color-blue-deep;
-		cursor: pointer;
-		text-decoration: underline;
-	}
-}
-.dl-horizontal {
-	// Override the default bootstrap behavior where horizontal description lists
-	// will truncate terms that are too long to fit in the left column
-	dt {
-		white-space: normal;
-	}
-}
-.form-element {
-	.body {
-		.pane {
-			padding: .4em;
-			>textarea {
-				height: 10em;
-			}
-		}
-	}
-}
-.form-element-group {
-	border-bottom: thin solid $color-grey-light;
-	position: relative;
-	transition: position 800ms;
-	transition-delay: 300ms;
-}
-.form-group {
-	margin-bottom: 0;
-}
-.glyphicon {
-	.icon-label {
-		color: $color-grey-light;
-		font-family: Lato;
-	}
-}
-// Button that is used to trigger the addition of elements
-.btn-add-element {
-	padding: .5em 0;
-	button {
-		display: block;
-		height: 128px;
-		margin: 0 auto;
-		width: 128px;
-	}
-}
-/// An Element that can contain child elements
-.container {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-
-    nav {
-        @extend %bevel-up;
-        background-color: $color-nav-background;
-        font-size: $font-size-normal;
-        min-height: $navbar-height;
-
-        &.navbar {
-            height: $navbar-height;
-            &.navbar-fixed-top {
-                width: 100%;
+        button {
+            &:first-child {
+                &:not(:last-child) {
+                    border-radius: 0;
+                }
             }
-            > .icon {
+
+            &:last-child {
+                &:not(:first-child) {
+                    // override vendor
+                    border-radius: 0;
+                }
+            }
+
+            .btn {
+                margin: 0;
+            }
+        }
+    }
+    /// Full width block affixed to the bottom of its container
+    /// @group elements
+    footer {
+        @extend %bevel-up;
+        @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
+        background-color: $color-grey-dark;
+        clear: both;
+        color: $color-white;
+        display: block;
+        float: left;
+        font-size: smaller;
+        height: $navbar-height;
+        line-height: $navbar-height - 1em;
+        padding: 0;
+        width: 100%;
+        /// Button within a footer
+        /// @todo This may be somewhat redundant
+        /// @group review
+        /*button {
+            @include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
+            background-color: $color-grey-light;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border-color: $color-grey-light;
+            border-top: 1px solid $color-grey;
+            color: $color-grey-darker;
+            //cursor: pointer;
+            font-weight: bold;
+            text-shadow: 0 -1px 1px $color-grey;
+            text-transform: uppercase;
+
+            &:hover {
+                @include transition(color 400ms);
+                @include transition(background-color 400ms);
+                background-color: $color-blue-light;
+                color: $color-secondary-neutral;
+            }
+        }*/
+        > cite {
+            float: right;
+            line-height: 16px;
+            text-align: right;
+
+            a {
+                @include anchor($color-white, $color-blue-lighter, true);
+                //color: $color-white;
+                //text-decoration: underline;
+                //&:hover {
+                //    color: $color-blue-lighter;
+                //}
+            }
+        }
+        /// Locks the footer to the bottom of the page
+        &.stickyfooter {
+            @extend %bevel-up;
+            @include transition($transition-default);
+            bottom: 0;
+            position: fixed;
+            /// EDIT Container
+            > .container {
+                margin: .4em auto;
+            }
+            /// Footer is extended for EDIT Container
+            &.active {
+                height: $navbar-height * 5;
+            }
+
+            textarea {
+                border-radius: 5px;
+                color: $color-black;
+                height: 180px;
+                line-height: normal;
+                margin: 1em;
+                width: calc(100% - 25px);
+            }
+        }
+        /// A series of buttons for paged results
+        &.pagination {
+
+            @extend %wide-block;
+            border-radius: 0;
+            display: flex;
+            //margin: 0;
+            //padding: 0;
+            text-align: center;
+            //width: 100%;
+            @media only screen and (max-width: $max-width-mobile) {
+                display: none;
+            }
+            /// A horizontally scrollable group of buttons
+            .btn-group {
+                @extend %horizontal-scroll;
+                //flex-basis: auto;
+                flex-grow: 2;
+            }
+            /// Button representing a paged result
+            /*button {
+                background-color: $color-grey-darker;
+                border: 0;
+                flex-basis: 5em;
+                flex-grow: 1;
+                font-family: $font-primary;
+                text-transform: uppercase;
+
+                &:focus {
+                    color: $color-blue-lighter;
+                    outline: none;
+                }
+
+                &.active {
+                    background-color: $color-grey-dark;
+                    color: $color-blue-light;
+                    outline: none;
+                }
+            }*/
+        }
+    }
+    /// HTML FORM Element
+    form {
+        @extend %bevel-up;
+
+        .login {
+            input,
+            label {
+                text-align: center;
+            }
+        }
+        /// A tab within a form
+        fieldset {
+            legend {
+                font-size: small;
+                line-height: 2em;
+                margin: 0;
+                padding: 0 .5em;
+            }
+        }
+        /// A footer that contains form event buttons
+        &.form-footer {
+            background-color: transparent;
+        }
+    }
+    /// Standard Input Elements
+    input,
+    select,
+    textarea {
+        margin: 0;
+        width: 100%;
+
+        &[type='submit'] {
+            background-color: $color-blue-deep;
+            color: $color-white;
+            font-size: larger;
+            font-weight: bold;
+            height: 50px;
+            text-transform: uppercase;
+            width: 100%;
+
+            &:hover {
+                background-color: $color-blue-lighter;
+            }
+
+            &:disabled {
+                background-color: $color-red-deep;
+            }
+        }
+    }
+    /// Clickable element that triggers focus
+    label {
+        clear: both;
+        color: $color-grey-darker;
+        display: block;
+        float: left;
+        font-size: smaller;
+        margin: .3em 0;
+        text-align: left;
+        text-transform: uppercase;
+        width: 100%;
+
+        &.invalid {
+            color: $color-red;
+
+            & + input {
+                background-color: $color-red;
+            }
+        }
+    }
+    /// A Table Element
+    table {
+        font-size: smaller;
+        /// A Table Header
+        thead {
+            border-bottom: 2px solid $color-white;
+            padding-right: 18px;
+        }
+        /// A Table Header Row
+        th {
+            background-color: $color-light-more;
+            border: 0;
+            font-size: smaller;
+            text-transform: uppercase;
+        }
+        /// A Table Row
+        tr {
+            border-bottom: 1px solid $color-light;
+            border-top: 1px solid $color-grey;
+            display: inline-table;
+            table-layout: fixed;
+            width: 100%;
+
+            &:hover {
+                background-color: $color-light-more;
+            }
+        }
+        /// Table Data
+        td,
+        th {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /// The body of the table
+        tbody {
+            border-bottom: thin solid $color-white;
+        }
+    }
+
+    .banner {
+        @extend %noSelect;
+
+        @media only screen and (max-width: $max-width-desktop) {
+            height: 21em;
+            overflow-y: auto;
+        }
+    }
+
+    .btn-block {
+        border-bottom: 2px solid $color-grey-dark;
+        border-left: 0;
+        border-radius: 0;
+        border-right: 0;
+        border-top: 1px solid $color-blue-light;
+    }
+    /// A card like element with a large image or icon
+    /// @todo The user menu might be an extention of the callout class
+    .callout {
+        padding: 0;
+        text-align: center;
+
+        > .icon {
+            font-size: 3em;
+        }
+    }
+    /// A chat window
+    .chat {
+        background-color: $color-light-more;
+
+        & .pane {
+            height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        & .statement {
+            background-color: $color-orange;
+            border-bottom: 2px solid transparentize($color-grey-dark, .8);
+            border-top: 1px solid transparentize($color-grey-light, .8);
+            float: left;
+            padding: .5em 0;
+            width: 100%;
+
+            &:nth-child(odd) {
+                background-color: $color-statement-odd;
+            }
+
+            &:nth-child(even) {
+                background-color: $color-statement-even;
+            }
+        }
+
+        .thumb {
+            float: left;
+            margin-right: 1em;
+
+            & .user-photo {
+                border: 1px solid $color-grey-darker;
+                border-radius: 64px;
+                height: 64px;
+                margin: 4px 0 0 12px;
+                width: 64px;
+            }
+        }
+
+        .bubble {
+            float: left;
+            width: calc(100% - 124px);
+        }
+
+        .panel {
+            margin-top: 20px;
+            position: relative;
+
+            .panel-body {
+                background-color: $color-white;
+            }
+
+            .panel-heading {
+                cite {
+                    display: block;
+                    font-size: $font-size-small;
+                }
+
+                &::after,
+                &::before {
+                    border-color: transparent;
+                    border-style: solid solid outset;
+                    content: ' ';
+                    display: block;
+                    height: 0;
+                    left: -16px;
+                    pointer-events: none;
+                    position: absolute;
+                    right: 100%;
+                    top: 11px;
+                    width: 0;
+                }
+
+                &::after {
+                    border-right-color: $color-light-more;
+                    border-width: 7px;
+                    margin-left: 2px;
+                    margin-top: 1px;
+                }
+
+                &::before {
+                    border-right-color: $color-light-more;
+                    border-width: 8px;
+                }
+            }
+        }
+
+        footer {
+            padding: 1em;
+            position: relative;
+
+            textearea {
+                border: 2px solid $color-blue-light;
+                border-radius: 6px;
+                color: $color-white;
+                font-size: 18px;
+                font-weight: bold;
+                padding: .2em .5em;
+            }
+        }
+
+        .nav-pills {
+            > li {
                 display: block;
                 float: left;
-                height: $navbar-height;
-                width: $navbar-height;
-            }
-            > .menu {
                 list-style: none;
-                padding: 0;
-                width: 100%;
-                &[name='tabs'] {
-                    background-color: $color-blue;
-                    height: $navbar-height;
-                }
-                .nav-item {
-                    list-style: none;
+            }
+        }
+
+        .word-summary {
+            > li {
+                > a {
+                    color: $color-blue;
                 }
             }
-            ul {
-                & &.navheader {
+        }
+    }
+    /// A Console Dialog containing a list of entries
+    .console {
+        @include transition($transition-default);
+        background-color: adjust-color($color-black, $alpha: .75);
+        color: $color-grey-light;
+        display: block;
+        font-family: monospace;
+        font-size: 8pt;
+        line-height: 2em;
+        list-style: none;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 1em;
+    }
+    /*.dl-horizontal {
+        // Override the default bootstrap behavior where horizontal description lists
+        // will truncate terms that are too long to fit in the left column
+        dt {
+            white-space: normal;
+        }
+    }*/
+    .form-element {
+        .body {
+            /// A padded pane with an embedded textarea element
+            .pane {
+                padding: .4em;
+
+                > textarea {
+                    height: 10em;
+                }
+            }
+        }
+    }
+    /// A Container of form elements
+    .form-element-group {
+        border-bottom: thin solid $color-grey-light;
+        position: relative;
+        transition: position 800ms;
+        transition-delay: 300ms;
+    }
+    /// A clickable icon with embedded label
+    &.icon {
+        .label {
+            color: $color-black;
+            //font-family: sans-serif;
+            font-family: Lato;
+            padding: 0 0 0 4px;
+            text-transform: uppercase;
+            top: -3px;
+        }
+    }
+    /// Button that is used to trigger the addition of elements
+    .btn-add-element {
+        padding: .5em 0;
+        /*button {
+            display: block;
+            height: 128px;
+            margin: 0 auto;
+            width: 128px;
+        }*/
+    }
+    /// An Element that can contain child elements
+    .container {
+        @extend %wide-block;
+        /// A collection of navigation elements
+        > nav {
+            @extend %bevel-up;
+            background-color: $color-nav-background;
+            font-size: $font-size-normal;
+            height: $navbar-height;
+            min-height: $navbar-height;
+        }
+        /// A Container for article style content, grouped into sections
+        &.article {
+            border-bottom: 1px solid $color-grey;
+            border-top: 1px solid $color-grey-darker;
+            margin: 0 auto .8em;
+        }
+        /// A paged list of elements
+        &.index {
+            background-color: $color-shadow-neutral;
+            color: inherit;
+
+            .body {
+                > .banner {
+                    > header {
+                        background-color: $color-black;
+                        border-bottom: 1px solid $color-grey;
+                        color: $color-grey-light;
+                        padding: 0 .5em;
+                    }
+                }
+
+                > .pane {
+                    @extend %bevel-up;
+                    background-color: $color-grey-darker;
                     padding: 0;
                 }
             }
         }
-    }
-    &.article {
-        border-bottom: 1px solid $color-grey;
-        border-top: 1px solid $color-grey-darker;
-        margin: 0 auto .8em;
-    }
-    &.index {
-        background-color: $color-shadow-neutral;
-        color: inherit;
 
-        .body {
-            > .banner {
+        &.index-main {
+            > .body {
+                background-color: $color-grey-dark;
+
                 > header {
-                    background-color: $color-black;
-                    border-bottom: 1px solid $color-grey;
-                    color: $color-grey-light;
+                    @extend %bevel-up;
+                    background-color: $color-dark;
+                    color: $color-light;
                     padding: 0 .5em;
-                }
-            }
+                    text-transform: uppercase;
 
-            > .pane {
-                @extend %bevel-up;
-                background-color: $color-grey-darker;
-                padding: 0;
-            }
-        }
-    }
-    &.index-main {
-        > .body {
-            background-color: $color-grey-dark;
-            > header {
-                @extend %bevel-up;
-                background-color: $color-dark;
-                color: $color-light;
-                padding: 0 .5em;
-                text-transform: uppercase;
-                @media only screen and (max-width: $max-width-mobile) {
-                    display: none;
-                }
-            }
-            > .banner {
-                @extend %horizontal-center;
-                height: $thumbnail-height * 3 + 2em;
-                @media only screen and (max-width: $max-width-desktop) {
-                    height: $thumbnail-height * 2 + 1em;
-                }
-                overflow-y: auto;
-            }
-            > footer {
-                &.pagination {
-                    text-align: center;
                     @media only screen and (max-width: $max-width-mobile) {
                         display: none;
                     }
                 }
+
+                > .banner {
+                    @extend %horizontal-center;
+                    height: $thumbnail-height * 3 + 2em;
+
+                    @media only screen and (max-width: $max-width-desktop) {
+                        height: $thumbnail-height * 2 + 1em;
+                    }
+
+                    overflow-y: auto;
+                }
             }
         }
-    }
 
-    &.image-gallery {
-        color: inherit;
+        &.image-gallery {
+            color: inherit;
+
+            > .body {
+                & > header {
+                    color: $color-light;
+                    font-family: sans-serif;
+                    font-size: $font-size-small;
+                    font-weight: bold;
+                    padding: .2em 1em;
+                    text-align: right;
+                    text-transform: uppercase;
+                }
+
+                & > .banner {
+                    height: 500px;
+                    max-height: 500px;
+                    overflow-y: auto;
+                }
+            }
+
+            .thumbnail {
+                & > img {
+                    @extend %thumbnail-image;
+                    clear: both;
+                    float: none;
+                    max-height: 256px;
+                    max-width: 256px;
+                }
+            }
+        }
+        /// A full width block with impact
+        &.jumbotron {
+            @extend %noSelect;
+            padding: 0;
+
+            .pane {
+                /// A vignetted backdrop with optional background image
+                > .screen {
+                    @extend %gradient-vignette;
+                    @extend %wide-block;
+                    background-color: $jumbotron-bg-default;
+                    background-position: center top;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    color: $color-white;
+                    font-family: 'Raleway';
+                    font-weight: 300;
+                    height: $jumbotron-height;
+                    line-height: 2em;
+                    //margin: 0;
+                    overflow-y: hidden;
+                    //padding: 0;
+                    text-align: center;
+                    //width: 100%;
+                    header {
+                        color: $color-white;
+                        font-size: $font-size-extralarge;
+                        line-height: 3em;
+                        padding: 0 6px;
+                    }
+
+                    p {
+                        @extend %horizontal-center;
+                        font-weight: normal;
+                        padding: 0 2em;
+
+                        @media only screen and (max-width: $max-width-mobile) {
+                            font-size: 1.2em;
+                        }
+                    }
+                }
+            }
+        }
+        /// The primary Container element
+        &main,
+        &.main {
+            align-items: stretch;
+            box-shadow: 0 1em .5em .5em $color-shadow-neutral;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: $body-width;
+
+            > .body {
+                /// Consumes the available height of the page minus Nav Elements
+                > .pane {
+                    @extend %pane-tall;
+                    background-color: $color-grey;
+                }
+            }
+
+            aside {
+                /// A left aligned Container (sidebar) for the MAIN UI
+                &.sidebar {
+                    @extend %no-scroll-bar;
+                    @extend %pane-tall;
+                    @include boxShadow(0, 0, 3px, 0, $color-black);
+                    //@include transition($transition-default);
+                    @include transition(left $transition-speed $transition-motion);
+                    background-color: transparentize($color-black, .2);
+                    float: left;
+                    left: calc(#{$zero-px} - #{$sidebar-width});
+                    //margin-left: -100%; /// !important
+                    position: absolute;
+                    top: $navbar-height;
+                    width: $sidebar-width;
+                    z-index: 999;
+
+                    &.active {
+                        //animation: slideInLeft $transition-speed $transition-motion;
+                        left: 0;
+                        //display: block;
+                    }
+                }
+            }
+        }
 
         > .body {
-            & > header {
-                color: $color-light;
-                font-family: sans-serif;
-                font-size: $font-size-small;
-                font-weight: bold;
-                padding: .2em 1em;
-                text-align: right;
-                text-transform: uppercase;
-            }
+            background-color: $color-light;
+            box-sizing: border-box;
+            width: 100%;
 
-            & > .banner {
-                height: 500px;
-                max-height: 500px;
-                overflow-y: auto;
-            }
-        }
-
-        .thumbnail {
-            & > img {
-                @extend %thumbnail-image;
-                clear: both;
-                float: none;
-                max-height: 256px;
-                max-width: 256px;
+            > .pane {
+                @extend %no-scroll-bar;
+                @include transition($transition-default);
+                width: 100%;
             }
         }
     }
 
-    &.jumbotron {
-        @extend %noSelect;
-        padding: 0;
+    .index-thumbnail {
+        margin-bottom: 0;
+    }
 
-        .pane {
-            > .screen {
-                @extend %gradient-vignette;
-                background-color: $jumbotron-bg-default;
-                background-position: center top;
-                background-repeat: no-repeat;
-                background-size: cover;
-                color: $color-white;
-                font-family: 'Raleway';
-                font-weight: 300;
-                height: $jumbotron-height;
-                line-height: 2em;
-                margin: 0;
-                overflow-y: hidden;
-                padding: 0;
-                text-align: center;
+    .input-image-preview {
+        background-color: $color-white;
+        border: 4px solid $color-white;
+        border-radius: .3em;
+        height: auto;
+        margin: 1em;
+        max-width: 120px;
+        min-height: 64px;
+        min-width: 64px;
+        padding: .3em;
+    }
+    /// A Menu Element
+    .menu {
+        @extend %noSelect;
+        background-color: $color-nav-background;
+        // Collapsible
+        &.collapse {
+            height: 0;
+
+            &.in {
+                height: auto;
+            }
+        }
+        /// A Menu that has been selected
+        &.selected {
+            > header {
+                background-color: darken($color-nav-background, 35%);
+                text-decoration: none;
+            }
+        }
+        // Nested sub menu
+        > .menu {
+            > li {
                 width: 100%;
 
-                header {
-                    color: $color-white;
-                    font-size: $font-size-extralarge;
-                    line-height: 3em;
-                    padding: 0 6px;
+                > a {
+                    .icon, 
+                    .label {
+                        color: $color-red;
+                    }
                 }
 
-                p {
-                    @extend %horizontal-center;
-                    font-weight: normal;
-                    padding: 0 2em;
+                & + .menu {
+                    background-color: $color-orange;
+                }
+            }
+        }
+        /// A menu that contains user links and details
+        &[name='USER'] {
+            @include transition(right $transition-speed $transition-motion);
+            //animation: slideOutRight $transition-speed $transition-motion;
+            background-color: $color-grey-dark; //#373c40;
+            border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
+            border-radius: .2em;
+            box-shadow: 0 0 2px 0 $color-shadow-dark; // rgba(0, 0, 0, .8);
+            //display: none;
+            float: right;
+            max-height: 320px;
+            position: absolute;
+            right: -231px;
+            top: calc(#{$navbar-height} + 2px);
+            width: 230px;
 
-                    @media only screen and (max-width: $max-width-mobile) {
-                        font-size: 1.2em;
+            &.active {
+                //animation: slideInRight $transition-speed $transition-motion;
+                right: 1px;
+                //display: block;
+            }
+
+            > ul {
+                &.horizontal {
+                    flex-direction: row-reverse;
+                }
+            }
+            /// A collection of user details
+            .profile {
+                //background-color: $color-grey-dark;
+                color: $color-white;
+                font-family: $font-header;
+                text-align: center;
+
+                > img {
+                    &.picture {
+                        background-color: $color-grey;
+                        border: 2px solid $color-grey-light;
+                        border-radius: 128px;
+                        box-sizing: content-box;
+                        clear: both;
+                        display: block;
+                        float: none;
+                        height: 128px;
+                        margin: 1em auto;
+                        width: 128px;
+                    }
+                }
+
+                > .username {
+                    line-height: 1.4em;
+                }
+
+                > .quote {
+                    font-size: .8em;
+                    line-height: 1.4em;
+                    margin-bottom: 1em;
+                }
+            }
+        }
+        /// A header within a menu
+        /// @todo Consider that this should just be a Definition List style menu and this is the DT
+        > header {
+            @extend %bevel-down;
+            @extend %clickable;
+            @extend %noSelect;
+            background-color: darken($color-nav-background, 25%);
+            color: $color-light;
+            line-height: normal;
+            padding: 0 .2em;
+            text-transform: uppercase;
+
+            &:hover {
+                background-color: darken($color-nav-background, 35%);
+                text-decoration: none;
+            }
+            /// First ul after nav header
+            & ~ ul {
+                .nav {
+                    background-color: darken($color-nav-background, 50%);
+                }
+            }
+        }
+        /// A collection of list-items within this menu
+        > .list {
+            @extend %wide-block;
+            /// A collection of nav-items representing Tabs
+            &.tabs {
+                display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+                /// A tab style nav item
+                .nav-item {
+                    flex-basis: 3em;
+                    //flex-grow: 1;
+                    height: $navbar-height;
+                }
+                /// A stretchable, centered tab designed to consume remaining space
+                .wide-tab {
+                    flex-basis: auto;
+                    flex-grow: 2;
+                    text-align: center;
+                }
+            }
+            /// List items are made to scroll horizontally instead of vertically
+            &.horizontal {
+                @extend %horizontal-scroll;
+                @extend %no-scroll-bar;
+                //&.collapse {
+                //   height: 0;
+                //&.in {
+                //height: 4em;
+                //}
+                //}
+                /// Nav Items with a fixed width and height, acting as an icon
+                > .nav-item-icon {
+                    display: inline-block;
+
+                    &.active {
+                        background-color: $color-grey-light; // rgb(103, 102, 86);
+                        > a {
+                            span {
+                                color: $color-white;
+                            }
+                        }
+                    }
+
+                    > a {
+                        display: block;
+                        width: 8em;
+
+                        span {
+                            float: left;
+                            line-height: inherit;
+
+                            &.label {
+                                overflow: hidden;
+                                padding: 0 .3em;
+                                text-overflow: ellipsis;
+                                text-transform: uppercase;
+                                white-space: nowrap;
+                                width: 5em;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .nav-item {
+                @extend %clickable;
+                @include transition($transition-default);
+                background-color: $color-shadow-neutral;
+                border-left-color: transparent;
+                border-right-color: transparent;
+                box-sizing: border-box;
+                cursor: pointer;
+                float: left;
+                line-height: $navbar-height; // - 1em;
+                list-style: none;
+
+                &:hover {
+                    background-color: $color-shadow-light;
+                    border-left: 1px solid $color-shadow-neutral;
+                    border-right: 1px solid $color-shadow-neutral;
+                }
+
+                &.active {
+                    background-color: $color-grey-dark;
+                    box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+                }
+
+                &.wide-tab {
+                    font-weight: bold;
+
+                    &.active {
+                        > a {
+                            text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+                        }
+                    }
+                }
+
+                > a {
+                    color: $color-light;
+                    padding: 0 1em;
+
+                    &:hover {
+                        color: $color-light-more;
+                    }
+                }
+
+                &.nav-item-icon {
+                    &.active {
+                        color: $color-grey-dark;
+                    }
+
+                    > a {
+                        > .icon {
+                            > .label {
+                                display: block;
+                                font-size: $font-size-small;
+                                line-height: 1.5em;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-transform: uppercase;
+                                white-space: nowrap;
+                                width: 5em; //$icon-width;
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    &.main {
-        align-items: stretch;
-        box-shadow: 0 1em .5em .5em $color-shadow-neutral;
-        display: flex;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: $body-width;
-        > .body {
-            > .pane {
-                @extend %pane-tall;
-                background-color: $color-grey;
+    .navbar-search {
+        border: 0;
+        border-bottom: 1px solid $color-white;
+        padding: .3em;
+    }
+
+    .noSelect {
+        @extend %noSelect;
+    }
+
+    .preview {
+        background-color: $color-light-more;
+        border-bottom: 3px solid $color-grey-darker;
+        border-top: 3px solid $color-secondary-dark;
+        height: 400px;
+        margin: 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .preview-notes {
+        @extend %bevel-up;
+        background-color: $color-grey-light;
+        color: $color-grey-darker;
+        font-size: small;
+        font-weight: bold;
+        height: 2em;
+        line-height: 2em;
+        margin: 0;
+        overflow: hidden;
+        padding: 0 1em;
+    }
+
+    .textblock {
+        font-family: 'Raleway';
+        //background-color: red;
+        h1 {
+            border-bottom: 1px solid $color-grey;
+            margin: 4px 0 8px;
+            padding: 4px;
+        }
+
+        p {
+            line-height: 1.8em;
+            margin: .5em auto 2em;
+            max-width: $content-maxwidth;
+            padding: 0 1.8em;
+            text-align: justify;
+        }
+
+        .paragraph {
+            header {
+                @extend %bevel-down;
+                @extend %gradient-vertical-fade;
+                color: $color-light;
+                height: $navbar-height;
+                line-height: $navbar-height;
+                padding: 0 1em;
             }
         }
-        /// A left aligned Container (sidebar) for the MAIN UI
-        aside {
-            &.sidebar {
-                @extend %pane-tall;
-                @include boxShadow(0, 0, 3px, 0, $color-black);
-                @include no-scroll-bar;
-                //@include transition($transition-default);
-                @include transition(left $transition-speed $transition-motion);
-                background-color: transparentize($color-black, .2);
-                float: left;
-                left: calc(#{$zero-px} - #{$sidebar-width});
-                //margin-left: -100%; /// !important
-                position: absolute;
-                top: $navbar-height;
-                width: $sidebar-width;
-                z-index: 999;
-                &.active {
-                    //animation: slideInLeft $transition-speed $transition-motion;
-                    left: 0;
-                    //display: block;
+    }
+
+    .thumbnail {
+        @extend %bevel-up;
+        @extend %clickable;
+        background-color: $color-grey-dark;
+        border-radius: .4em;
+        font-family: 'Raleway';
+        height: $thumbnail-height;
+        margin: .5em;
+        padding: 0;
+        width: calc(50% - 1em);
+
+        @media only screen and (max-width: $max-width-desktop) {
+            border-radius: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        &.nav-item {
+            a {
+                height: $thumbnail-height;
+                line-height: 1.5em;
+                width: 100%;
+
+                img {
+                    @extend %thumbnail-image;
+                    clear: left;
+                    float: left;
+                    height: $thumbnail-height - 1em;
+                    margin: .5em;
+                    width: $thumbnail-height - 1em;
                 }
             }
         }
-    }
-    > .body {
-        background-color: $color-light;
-        box-sizing: border-box;
-        width: 100%;
 
-        .pane {
-            @include transition($transition-default);
-            @include no-scroll-bar;
-            width: 100%;
-        }
+        .body {
+            .pane {
+                background-color: $color-light;
+                color: $color-dark;
 
-        .woot {
-            width: 100%;
-        }
-    }
-}
-.index-thumbnail {
-	margin-bottom: 0;
-}
-.index-thumbnail-menulist {
-	max-height: 200px;
-	overflow-y: auto;
-}
-.input-image-preview {
-	background-color: $color-white;
-	border: 4px solid $color-white;
-	border-radius: .3em;
-	height: auto;
-	margin: 1em;
-	max-width: 120px;
-	min-height: 64px;
-	min-width: 64px;
-	padding: .3em;
-}
-
-.list-group {
-	.list-group-item {
-		:hover {
-			background-color: $color-light-more;
-		}
-	}
-}
-.menu {
-    @extend %noSelect;
-    background-color: $color-nav-background;
-
-    &.selected {
-        > header {
-            background-color: darken($color-nav-background, 35%);
-            text-decoration: none;
-        }
-    }
-
-    &.usermenu {
-        @include transition(right $transition-speed $transition-motion);
-        //animation: slideOutRight $transition-speed $transition-motion;
-        background-color: $color-grey-dark; //#373c40;
-        border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
-        border-radius: .2em;
-        box-shadow: 0 0 2px 0 $color-shadow-dark; // rgba(0, 0, 0, .8);
-        //display: none;
-        float: right;
-        max-height: 320px;
-        position: absolute;
-        right: -231px;
-        top: calc(#{$navbar-height} + 2px);
-        width: 230px;
-
-        &.active {
-            //animation: slideInRight $transition-speed $transition-motion;
-            right: 1px;
-            //display: block;
-        }
-
-        > ul {
-            &.horizontal {
-                flex-direction: row-reverse;
-            }
-        }
-
-        .profile {
-            //background-color: $color-grey-dark;
-            color: $color-white;
-            font-family: $font-header;
-            text-align: center;
-
-            > img {
-                &.picture {
-                    background-color: $color-grey;
-                    border: 2px solid $color-grey-light;
-                    border-radius: 128px;
-                    box-sizing: content-box;
-                    clear: both;
+                > header {
+                    clear: right;
+                    color: $color-light-less;
                     display: block;
-                    float: none;
+                    float: left;
+                    font-weight: bold;
+                    line-height: 3em;
+                    margin: .5em 0 0;
+                    padding: 0;
+                    text-transform: uppercase;
+                    width: calc(100% - 148px);
+                }
+
+                > img {
+                    background-color: $color-white;
+                    border: 1px solid $color-white;
+                    border-radius: .3em;
+                    clear: left;
+                    display: block;
+                    float: left;
                     height: 128px;
-                    margin: 1em auto;
+                    margin: .3em;
                     width: 128px;
                 }
-            }
 
-            > .username {
-                line-height: 1.4em;
-            }
+                > p {
+                    color: $color-light-less;
+                    float: left;
+                    font-size: smaller;
+                    height: 6em;
+                    margin: 0 .3em;
+                    overflow-y: auto;
+                    padding: 0 .8em;
+                    text-align: justify;
+                    width: calc(100% - 148px);
+                }
 
-            > .quote {
-                font-size: .8em;
-                line-height: 1.4em;
-                margin-bottom: 1em;
-            }
-        }
-    }
+                > .btn-group {
+                    bottom: 1.75em;
+                    position: absolute;
+                    right: 1.35em;
 
-    > header {
-        @extend %bevel-down;
-        @extend %clickable;
-        @extend %noSelect;
-        background-color: darken($color-nav-background, 25%);
-        color: $color-light;
-        line-height: normal;
-        padding: 0 .2em;
-        text-transform: uppercase;
-
-        &:hover {
-            background-color: darken($color-nav-background, 35%);
-            text-decoration: none;
-        }
-        // First ul after nav header
-        & ~ ul {
-            .nav {
-                background-color: darken($color-nav-background, 50%);
+                    > button {
+                        &.btn {
+                            border: 0;
+                            border-radius: .3em;
+                        }
+                    }
+                }
             }
         }
     }
 
-    > .list {
-        margin: 0;
-        padding: 0;
+    .vertical-align-center {
+        display: table-cell;
+        pointer-events: none;
+        vertical-align: middle;
+
+        .content {
+            margin: 0 auto;
+        }
+    }
+    /// Assist in vertical alignment
+    /// @link https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
+    .vertical-alignment-helper {
+        display: table;
+        height: 100%;
+        pointer-events: none; // This makes sure that we can still click outside of the modal to close it
         width: 100%;
-
-        &.tabs {
-            display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-            .nav-item {
-                flex-basis: 3em;
-                //flex-grow: 1;
-                height: $navbar-height;
-            }
-
-            .wide-tab {
-                flex-basis: auto;
-                flex-grow: 2;
-                text-align: center;
-            }
-        }
-
-        &.horizontal {
-            @extend %horizontal-scroll;
-            @include no-scroll-bar;
-            &.collapse {
-                height: 0;
-                &.in {
-                    height: 4em;
-                }
-            }
-            > .nav-item-icon {
-                display: inline-block;
-                &.active {
-                    background-color: $color-grey-light; // rgb(103, 102, 86);
-                    > a {
-                        span {
-                            color: $color-white;
-                        }
-                    }
-                }
-                > a {
-                    display: block;
-                    width: 8em;
-                    span {
-                        float: left;
-                        line-height: inherit;
-                        &.label {
-                            overflow: hidden;
-                            padding: 0 .3em;
-                            text-overflow: ellipsis;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5em;
-                        }
-                    }
-                }
-            }
-        }
-        .icon-label {
-            @extend %noSelect;
-        }
-        .nav-item {
-            @extend %clickable;
-            @include transition($transition-default);
-            background-color: $color-shadow-neutral;
-            border-left-color: transparent;
-            border-right-color: transparent;
-            box-sizing: border-box;
-            cursor: pointer;
-            float: left;
-            line-height: $navbar-height; // - 1em;
-            list-style: none;
-            &:hover {
-                background-color: $color-shadow-light;
-                border-left: 1px solid $color-shadow-neutral;
-                border-right: 1px solid $color-shadow-neutral;
-            }
-            &.active {
-                background-color: $color-grey-dark;
-                box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
-            }
-            &.wide-tab {
-                font-weight: bold;
-                &.active {
-                    > a {
-                        text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
-                    }
-                }
-            }
-            > a {
-                color: $color-light;
-                padding: 0 1em;
-                &:hover {
-                    color: $color-light-more;
-                }
-            }
-            &.nav-item-icon {
-                &.active {
-                    color: $color-grey-dark;
-                }
-                > a {
-                    > .icon {
-                        > .icon-label {
-                            display: block;
-                            font-size: $font-size-small;
-                            line-height: 1.5em;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            text-transform: uppercase;
-                            white-space: nowrap;
-                            width: 5em; //$icon-width;
-                        }
-                    }
-                }
-            }
-        }
     }
-}
-.toggle {
-	>.toggle-wide {
-		@extend %bevel-up;
-		background-color: $color-dark;
-		color: $color-light;
-		font-size: 8px;
-		font-weight: bolder;
-		height: 12px;
-		line-height: 12px;
-		padding: 0;
-		text-align: center;
-		text-transform: uppercase;
-	}
-}
-.navbar-search {
-	border: 0;
-	border-bottom: 1px solid $color-white;
-	padding: .3em;
-}
-.noSelect {
-	@extend %noSelect;
-}
-.preview {
-	background-color: $color-light-more;
-	border-bottom: 3px solid $color-grey-darker;
-	border-top: 3px solid $color-secondary-dark;
-	height: 400px;
-	margin: 0;
-	max-height: 400px;
-	overflow-y: auto;
-}
-.preview-notes {
-	@extend %bevel-up;
-	background-color: $color-grey-light;
-	color: $color-grey-darker;
-	font-size: small;
-	font-weight: bold;
-	height: 2em;
-	line-height: 2em;
-	margin: 0;
-	overflow: hidden;
-	padding: 0 1em;
-}
-.textblock {
-	font-family: 'Raleway';
-	//background-color: red;
-	h1 {
-		border-bottom: 1px solid $color-grey;
-		margin: 4px 0 8px;
-		padding: 4px;
-	}
-
-	p {
-		line-height: 1.8em;
-		margin: .5em auto 2em;
-		max-width: $content-maxwidth;
-		padding: 0 1.8em;
-		text-align: justify;
-	}
-
-	.paragraph {
-		header {
-			@extend %bevel-down;
-			@extend %gradient-vertical-fade;
-			color: $color-light;
-			height: $navbar-height;
-			line-height: $navbar-height;
-			padding: 0 1em;
-		}
-	}
-}
-.text-center {
-	text-align: center;
-}
-.thumbnail {
-	@extend %bevel-up;
-	@extend %clickable;
-	background-color: $color-grey-dark;
-	border-radius: .4em;
-	font-family: 'Raleway';
-	height: $thumbnail-height;
-	margin: .5em;
-	padding: 0;
-	width: calc(50% - 1em);
-	@media only screen and (max-width: $max-width-desktop) {
-		border-radius: 0;
-		margin: 0;
-		width: 100%;
-	}
-	&.nav-item {
-		a {
-			height: $thumbnail-height;
-			line-height: 1.5em;
-			width: 100%;
-			img {
-				@extend %thumbnail-image;
-				clear: left;
-				float: left;
-				height: $thumbnail-height - 1em;
-				margin: .5em;
-				width: $thumbnail-height - 1em;
-			}
-		}
-	}
-	.body {
-		.pane {
-			background-color: $color-light;
-			color: $color-dark;
-			>header {
-				clear: right;
-				color: $color-light-less;
-				display: block;
-				float: left;
-				font-weight: bold;
-				line-height: 3em;
-				margin: .5em 0 0;
-				padding: 0;
-				text-transform: uppercase;
-				width: calc(100% - 148px);
-			}
-			>img {
-				background-color: $color-white;
-				border: 1px solid $color-white;
-				border-radius: .3em;
-				clear: left;
-				display: block;
-				float: left;
-				height: 128px;
-				margin: .3em;
-				width: 128px;
-			}
-			>p {
-				color: $color-light-less;
-				float: left;
-				font-size: smaller;
-				height: 6em;
-				margin: 0 .3em;
-				overflow-y: auto;
-				padding: 0 .8em;
-				text-align: justify;
-				width: calc(100% - 148px);
-			}
-			>.btn-group {
-				bottom: 1.75em;
-				position: absolute;
-				right: 1.35em;
-				>button {
-					&.btn {
-						border: 0;
-						border-radius: .3em;
-					}
-				}
-			}
-		}
-	}
-}
-.vertical-align-center {
-	display: table-cell;
-	pointer-events: none;
-	vertical-align: middle;
-	.modal-content {
-		margin: 0 auto;
-	}
-}
-.vertical-alignment-helper {
-	// https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
-	display: table;
-	height: 100%;
-	pointer-events: none; // This makes sure that we can still click outside of the modal to close it
-	width: 100%;
 }

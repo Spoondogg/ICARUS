@@ -1,9 +1,5 @@
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../CONTAINER.js';
+import CONTAINER, {	ATTRIBUTES,	EL,	MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -19,9 +15,6 @@ export default class JUMBOTRON extends CONTAINER {
 		super(node, 'DIV', model);
 		this.addClass('jumbotron');
 	}
-	/** Override abstract method
-        @returns {void}
-    */
 	construct() {
 		return this.callback(() => {
 			if (this.dataId > 0) {
@@ -31,7 +24,7 @@ export default class JUMBOTRON extends CONTAINER {
 				this.createEditableElement('p', this.screen);
 				this.loadBgImage();
 				this.setBgColor();
-				this.body.expand();
+                this.body.expand();
 			}
 		});
 	}
@@ -41,7 +34,7 @@ export default class JUMBOTRON extends CONTAINER {
 	loadBgImage() {
 		if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
 			try {
-				$.getJSON('/FORMPOST/Get/' + parseInt(this.data.bgimage), (data) => {
+				$.getJSON('/FORMPOST/GET/' + parseInt(this.data.bgimage), (data) => {
 					try {
 						let parsed = JSON.parse(data.model.jsonResults);
 						parsed.filter(p => p.name === 'base64').map(v => this.setBgImage(v.value));

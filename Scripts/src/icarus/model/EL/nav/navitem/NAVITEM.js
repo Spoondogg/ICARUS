@@ -26,8 +26,8 @@ export default class NAVITEM extends LI {
 	    @param {MODEL} model NavBarNav model
 	    @returns {MENU} The newly created element
     */
-    addMenu(model) {
-        return this.addChild(new MENU(this, model));
+	addMenu(model) {
+		return this.addChild(new MENU(this, model));
 	}
 }
 export { ANCHOR, ATTRIBUTES, EL, LI, MENU, MODEL, UL }

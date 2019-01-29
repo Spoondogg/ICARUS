@@ -1,11 +1,5 @@
 /** @module */
-import FORMELEMENT, {
-	ATTRIBUTES,
-	CONTAINER,
-	EL,
-	INPUTTYPES,
-	MODEL
-} from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -182,11 +176,4 @@ export default class FORMINPUT extends FORMELEMENT {
 		return this;
 	}
 }
-export {
-	ATTRIBUTES,
-	CONTAINER,
-	EL,
-	FORMELEMENT,
-	INPUTTYPES,
-	MODEL
-};
+export { ATTRIBUTES, CONTAINER,	EL,	FORMELEMENT, INPUTTYPES, MODEL }

@@ -633,6 +633,7 @@
     <Content Include="Scripts\src\icarus\event\Deselect.js" />
     <Content Include="Scripts\src\icarus\event\Press.js" />
     <Content Include="Scripts\src\icarus\event\Select.js" />
+    <Content Include="Scripts\src\icarus\event\Swipe.js" />
     <Content Include="Scripts\src\icarus\helper\DATEOBJECT.js" />
     <Content Include="Scripts\src\icarus\helper\SERVICEWORKER.js" />
     <Content Include="Scripts\src\icarus\helper\WATERMARK.js" />
@@ -723,7 +724,6 @@
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\PROGRESSBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\menu\NAVHEADER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEARCH.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />
@@ -830,6 +830,7 @@
     <Content Include="Scripts\src\icarus\task\config\jsdoc.json" />
     <Content Include="Scripts\src\icarus\task\config\sasslint.json" />
     <Content Include="Scripts\src\icarus\index.md" />
+    <Content Include="Scripts\src\icarus\task\config\sassdoc.json" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>

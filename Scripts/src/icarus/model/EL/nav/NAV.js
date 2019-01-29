@@ -1,8 +1,6 @@
 /** @module */
-import EL, {
-	MODEL
-} from '../EL.js';
-import MENU from './menu/MENU.js';
+import EL, { MODEL } from '../EL.js';
+import MENU, { ANCHOR, NAVITEM } from './menu/MENU.js';
 /** Generic NAV Element 
     @class
     @extends MENU
@@ -16,7 +14,4 @@ export default class NAV extends MENU {
 		super(node, model, 'NAV');
 	}
 }
-export {
-	EL,
-	MODEL
-}
+export { ANCHOR, EL, MODEL, NAVITEM }

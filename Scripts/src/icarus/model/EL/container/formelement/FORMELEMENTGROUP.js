@@ -1,6 +1,6 @@
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	EL,	MODEL, createInputModel } from '../CONTAINER.js';
-import FORMINPUT, {	FORMELEMENT } from './forminput/FORMINPUT.js';
+import CONTAINER, { ATTRIBUTES, EL, MODEL, createInputModel } from '../CONTAINER.js';
+import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
@@ -16,7 +16,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'DIV', model);
 		this.addClass('form-element-group');
-		this.navBar.menu.list.get('ELEMENTS').empty();
+		this.navbar.options.get('ELEMENTS', 'MENU')[0].empty();
 		['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 	}
 	/** Perform any async actions and populate this Container
@@ -87,4 +87,4 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		});
 	}
 }
-export { ATTRIBUTES, createInputModel, EL, FORMELEMENT,	FORMELEMENTGROUP, MODEL }
+export { ATTRIBUTES, createInputModel, EL, FORMELEMENT, FORMELEMENTGROUP, MODEL }

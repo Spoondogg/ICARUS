@@ -1,7 +1,5 @@
 /** @module */
-import IFACE, {
-	EL
-} from '../IFACE.js';
+import IFACE, { EL } from '../IFACE.js';
 /** An interface for Move driven Events
     @class
     @extends IFACE
@@ -81,18 +79,15 @@ export default class Movable extends IFACE {
 	    @returns {void}
 	*/
 	up() {
-		this.navBar.toggle();
+		this.navbar.toggle();
 		this.moveUp();
 	}
 	/** Moves the Container down one slot in the DOM
 	    @returns {void}
 	*/
 	down() {
-		this.navBar.toggle();
+		this.navbar.toggle();
 		this.moveDown();
 	}
 }
-export {
-	EL,
-	IFACE
-}
+export { EL, IFACE }

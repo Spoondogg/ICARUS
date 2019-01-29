@@ -1,9 +1,5 @@
 /** @module */
-import DIALOG, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../DIALOG.js';
+import DIALOG, { ATTRIBUTES, EL, MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
@@ -30,26 +26,21 @@ export default class PROMPT extends DIALOG {
 			try {
 				if (model.formtype === 'FORMPOST') {
 					//loader.log(75, 'Generating FormPost').then(() => 
-					FORM.createFormPostForm(this.body, model).then((form) => {
-						this.configureForm(form, model).then((f) => resolve(f));
-					});
+					FORM.createFormPostForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 					//));
 				} else if (model.formtype === 'CONTAINER') {
 					//loader.log(75, 'Generating Container').then(() => 
-					FORM.createContainerForm(this.body, model).then((form) => {
-						this.configureForm(form, model).then((f) => resolve(f));
-					});
+                    FORM.createContainerForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 					//));
 				} else {
 					//loader.log(75).then(() => 
-					FORM.createEmptyForm(this.body, false).then((form) => {
-						this.configureForm(form, model).then((f) => resolve(f));
-					});
+					FORM.createEmptyForm(this.body, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 					//));
 				}
 			} catch (e) {
 				//loader.log(100, 'Failed to create Form').then(() => reject(e));
-				reject(e)
+                console.error('PROMPT.createForm() Failed to create Form', model, this);
+                reject(e)
 			}
 			//});
 		});
@@ -74,10 +65,4 @@ export default class PROMPT extends DIALOG {
 		});
 	}
 }
-export {
-	ATTRIBUTES,
-	DIALOG,
-	EL,
-	FORM,
-	MODEL
-};
+export { ATTRIBUTES, DIALOG, EL, FORM, MODEL }

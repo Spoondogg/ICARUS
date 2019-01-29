@@ -1,0 +1,14 @@
+﻿{
+  "dest": "Documentation/sassdoc",
+  "verbose": true,
+  "display": {
+    "access": [ "public", "private" ],
+    "alias": true,
+    "watermark": true
+  },
+  "groups": {
+    "undefined": "Icarus",
+    "styles": "Icarus.Styles"
+  },
+  "basePath": "https://github.com/Spoondogg/ICARUS/blob/master/Content/styles/src/icarus"
+}
