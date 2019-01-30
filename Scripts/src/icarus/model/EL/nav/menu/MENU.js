@@ -21,7 +21,11 @@ export default class MENU extends LIST {
 		this.setAttribute('name', model.name);
 		this.addCases(model);
 		this.implement(new Switchable(this));
-		this.el.addEventListener('activate', () => this.expand());
+        this.el.addEventListener('activate', () => this.expand());
+        /*this.el.addEventListener('activate', () => {
+            let pos = this.getMain().mousePos;
+
+        });*/
 		this.el.addEventListener('deactivate', () => this.collapse());
 	}
 	/** Adds relevant cases to this element

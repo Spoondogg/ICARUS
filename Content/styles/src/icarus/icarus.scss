@@ -1417,9 +1417,9 @@ $jumbotron-height: 420px;
                 width: 100%;
 
                 > a {
-                    .icon, 
+                    .icon,
                     .label {
-                        color: $color-red;
+                        color: $color-blue-light;
                     }
                 }
 
@@ -1533,7 +1533,7 @@ $jumbotron-height: 420px;
             /// List items are made to scroll horizontally instead of vertically
             &.horizontal {
                 @extend %horizontal-scroll;
-                @extend %no-scroll-bar;
+                //@extend %no-scroll-bar;
                 //&.collapse {
                 //   height: 0;
                 //&.in {
@@ -1542,8 +1542,7 @@ $jumbotron-height: 420px;
                 //}
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
-                    display: inline-block;
-
+                    //display: inline-block;
                     &.active {
                         background-color: $color-grey-light; // rgb(103, 102, 86);
                         > a {
@@ -1554,20 +1553,36 @@ $jumbotron-height: 420px;
                     }
 
                     > a {
+                        //background-color: purple;
+                        //border: 1px solid $color-white;
+                        //border-radius: .2em;
                         display: block;
-                        width: 8em;
+                        height: 4em;
+                        //justify-content: center;
+                        margin: 0 auto;
+                        //overflow: hidden;
+                        padding: 0;
+                        text-align: center;
+                        //width: 4em;
 
                         span {
-                            float: left;
-                            line-height: inherit;
+                            display: block;
+                            //float: left;
+                            line-height: 2em;
+                            //height: 2em;
+                            width: 100%;
+
+                            &.icon {
+
+                            }
 
                             &.label {
                                 overflow: hidden;
                                 padding: 0 .3em;
                                 text-overflow: ellipsis;
                                 text-transform: uppercase;
-                                white-space: nowrap;
-                                width: 5em;
+                                //white-space: nowrap;
+                                //width: 5em;
                             }
                         }
                     }

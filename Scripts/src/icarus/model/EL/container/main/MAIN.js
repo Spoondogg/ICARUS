@@ -36,8 +36,55 @@ export default class MAIN extends CONTAINER {
 		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
 		// CRUD
 		this.save = this.factory.save;
-		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-	}
+        this.quickSaveFormPost = model.factory.quickSaveFormPost;
+        // Detect mouse position for desktop 
+        this.mousePos = {
+            x: -1,
+            y: -1
+        };
+        document.onmousemove = (ev) => this.handleMouseMove(ev);
+        setInterval(() => this.getMousePosition(), 1000); // setInterval repeats every X ms
+
+    }
+    handleMouseMove(ev) {
+        //console.log('handlemousemove', ev);
+        let eventDoc = null;
+        let doc = null;
+        let body = null;
+        //let pageX = null;
+        //let pageY = null;
+
+        //event = event || window.event; // IE-ism
+
+        // If pageX/Y aren't available and clientX/Y are,
+        // calculate pageX/Y - logic taken from jQuery.
+        // (This is to support old IE)
+        if (ev.pageX === null && ev.clientX !== null) {
+            eventDoc = ev.target && ev.target.ownerDocument || document;
+            doc = eventDoc.documentElement;
+            body = eventDoc.body;
+
+            ev.pageX = ev.clientX +
+                (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                (doc && doc.clientLeft || body && body.clientLeft || 0);
+            ev.pageY = ev.clientY +
+                (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                (doc && doc.clientTop || body && body.clientTop || 0);
+        }
+
+        this.mousePos = {
+            x: ev.pageX,
+            y: ev.pageY
+        };
+        //console.log(this.mousePos);
+    }
+    getMousePosition() {
+        let w = document.body.clientWidth;
+        let h = document.body.clientHeight;
+        let xPct = (this.mousePos.x / w).toFixed(2) * 100;
+        let yPct = (this.mousePos.y / h).toFixed(2) * 100;
+        console.log(this.mousePos, w, h, xPct, yPct);
+    }
 	/** Perform any async actions and populate this Container
 	    @param {Array<MODEL>} children Array of elements to add to this container's body
 	    @returns {Promise<ThisType>} callback
