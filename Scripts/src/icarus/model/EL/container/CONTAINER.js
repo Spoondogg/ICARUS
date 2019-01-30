@@ -341,30 +341,12 @@ export default class CONTAINER extends GROUP {
             items.SAVE.el.onclick = () => this.save(true);
         });
 	}
-	/** Adds a button to the given menu that promises to construct the given CONTAINER name
-        @param {string} className CONTAINER class name to construct
-        @param {MENU} menu Parent Menu
-        param {boolean} close If true (default), menus are closed after click
-        @returns {NAVITEMICON} Clickable Nav Item 
-    */
-    addConstructContainerButton(className, menu) {
-        try {
-            let item = menu.addNavItemIcon(new MODEL().set({
-                icon: ICONS[className],
-                label: className
-            }));
-            return item;
-        } catch (e) {
-            console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
-        }
-	}
 	/** Performs addCase() for the given Element within a 
         Container of an element that extends Container
         Sets the constructor callback for this element
         and adds respective button to this container
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
-        @todo Verify if inline function can be shorthand
         @returns {void}
     */
 	addContainerCase(className, addButton = true) {
@@ -373,11 +355,8 @@ export default class CONTAINER extends GROUP {
 				if (typeof this.getMain() !== 'undefined') {
                     if (addButton) {
                         let menu = this.navbar.options.get('ELEMENTS', 'MENU');
-                        let item = menu[0].addNavItemIcon(new MODEL().set({
-                            icon: ICONS[className],
-                            label: className
-                        }));
-                        item.el.addEventListener('click', () => this.create(new MODEL(className).set('className', className)));
+                        let item = this.addContainerCaseButton(className, menu[0]);
+                        item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
                         item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
 					}
 					this.addCallback(className, (model) => {
@@ -394,7 +373,23 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Adds a button to the given menu that promises to construct the given CONTAINER name
+        @param {string} className CONTAINER class name to construct
+        @param {MENU} menu Parent Menu
+        param {boolean} close If true (default), menus are closed after click
+        @returns {NAVITEMICON} Clickable Nav Item 
+    */
+    addContainerCaseButton(className, menu) {
+        try {
+            return menu.addNavItemIcon(new MODEL().set({
+                icon: ICONS[className],
+                label: className
+            }));
+        } catch (e) {
+            console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
+        }
+    }
 	/** Returns the CONTAINER's name attribute
 	    @returns {string} Container name
 	*/

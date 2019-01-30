@@ -53,7 +53,7 @@ export default class Clickable extends IFACE {
 	}
 	setMethods(node) {
 		this.methods.click = () => this.toggle('active', new Activate(node), new Deactivate(node));
-		this.methods.dblclick = () => this.toggle('select', new Select(node), new Deselect(node));
+		this.methods.dblclick = () => this.toggle('selected', new Select(node), new Deselect(node));
 		this.methods.longclick = () => console.log('longclick-down', node);
 		/** On PressDown Event, starts a timer that triggers the Long Press Event
 		    @returns {Promise<any>} Promise to resolve given function

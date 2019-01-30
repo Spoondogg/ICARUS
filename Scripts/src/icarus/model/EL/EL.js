@@ -31,7 +31,10 @@ export default class EL extends MODEL {
 		    @property {Array<MODEL>} children 
 		*/
 		this.children = children;
-		this.callbacks = {};
+        /** A Collection of callback methods that accept a MODEL
+            ie: this.callbacks[foo]
+        */
+        this.callbacks = {};
 		//console.log('Creating element', this.element);
 		this.el = document.createElement(this.element);
 		this.make(this.el, node, model, innerHTML);
@@ -204,7 +207,7 @@ export default class EL extends MODEL {
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
         @param {strong} className Element Class
-	    @returns {Array<ITEM>} Child Item/Element Filtered Results
+	    @returns {Array<EL>} Child Item/Element Filtered Results
 	*/
     get(name = null, className = null) {
         let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
@@ -289,14 +292,12 @@ export default class EL extends MODEL {
 	getToken() {
 		return document.getElementsByTagName('meta').token.content;
 	}
-	/** Acts like a switch statement, performing actions from the given list of callbacks.
-        This is used because constructor functions persist across the inheritance chain,
-        whereas an actual SWITCH statement would be overridden on each inheritted class.
+	/** Attempts to call the constructor of the given MODEL
         @see https://stackoverflow.com/a/35769291/722785	    
-        @param {MODEL} model The object model for the element to be created
+        @param {MODEL} model MODEL
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
-	create(model) {
+    create(model) {
 		//console.log('EL.create()', model);
 		return new Promise((resolve, reject) => {
 			try {
@@ -310,26 +311,26 @@ export default class EL extends MODEL {
 	}
 	/** Wraps a Synchronous function inside a Promise that returns this element as a callback
 	    The function is called within a try/catch block and will reject on error
-	    @param {Array<Function>} funct An array of Synchronous functions in performing order
+	    @param {Array<Function>} fn An array of Synchronous functions in performing order
 	    @param {string} msg Optional message to display on error
 	    @returns {ThisType} Returns this object as a callback
 	*/
-	callback(funct, msg = 'Callback Error') {
+	callback(fn, msg = 'Callback Error') {
 		return new Promise((resolve, reject) => {
 			try {
-				if (Array.isArray(funct)) {
-					funct.map((f, i) => {
+				if (Array.isArray(fn)) {
+					fn.map((f, i) => {
 						console.log('function call[' + i + ']', f);
 						f();
 					});
 				} else {
-					funct();
+					fn();
 				}
 				resolve(this);
 			} catch (e) {
 				console.warn(msg, e);
 				if (e instanceof TypeError) {
-					console.log('Given Array', funct);
+					console.log('Given Array', fn);
 				}
 				reject(e);
 			}

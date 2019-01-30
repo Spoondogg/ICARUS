@@ -1,5 +1,4 @@
-/**
-    Bootstrap glyphicon references
+/** Bootstrap glyphicon references
     @readonly
     @enum {string}
 */
@@ -29,7 +28,8 @@ export const ICONS = {
 	EXCLAMATION: 'glyphicon-exclamation-sign',
 	FIELDSET: 'glyphicon-folder-close',
 	FORM: 'glyphicon-list-alt',
-	FORMELEMENTGROUP: 'glyphicon-tasks',
+    FORMELEMENTGROUP: 'glyphicon-tasks',
+    FULLSCREEN: 'glyphicon-new-window',
 	HOME: 'glyphicon-home',
 	IFRAME: 'glyphicon-new-window',
 	IMAGE: 'glyphicon-picture',
@@ -52,10 +52,12 @@ export const ICONS = {
 	RESET: 'glyphicon-refresh',
 	REFRESH: 'glyphicon-refresh',
 	REMOVE: 'glyphicon-remove-circle',
-	SAVE: 'glyphicon-save',
+    SAVE: 'glyphicon-save',
+    SAVEAS: 'glyphicon-save',
 	SECTION: 'glyphicon-indent-left',
 	SELECT: 'glyphicon-tasks',
-	SIDEBAR: 'glyphicon-log-in',
+    SIDEBAR: 'glyphicon-log-in',
+    TABLE: 'glyphicon-th',
 	TEXTAREA: 'glyphicon-text-background',
 	THUMBNAIL: 'glyphicon-credit-card',
 	TOGGLE: 'glyphicon-check',
