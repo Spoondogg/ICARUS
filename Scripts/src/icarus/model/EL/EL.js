@@ -35,6 +35,19 @@ export default class EL extends MODEL {
             ie: this.callbacks[foo]
         */
         this.callbacks = {};
+
+        /** A collection of public Methods
+		    @property {Object.<Function>} methods
+		*/
+        this.methods = {};
+		/** A collection of public Events
+		    @property {Object.<Event>} events
+		*/
+        this.events = {};
+		/** A collection of public Event handlers
+		    @property {Object.<Function>} handlers
+		*/
+        this.handlers = {};
 		//console.log('Creating element', this.element);
 		this.el = document.createElement(this.element);
 		this.make(this.el, node, model, innerHTML);

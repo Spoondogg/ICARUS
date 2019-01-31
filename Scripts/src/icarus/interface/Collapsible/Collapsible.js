@@ -32,8 +32,4 @@ export default class Collapsible extends IFACE {
 		this.methods.expand = () => node.callback(() => $(node.el).collapse('show'));
 	}
 }
-export {
-	Collapse,
-	Expand,
-	IFACE
-}
+export { Collapse, Expand, IFACE }

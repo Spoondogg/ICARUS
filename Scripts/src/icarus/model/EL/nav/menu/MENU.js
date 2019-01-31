@@ -14,19 +14,22 @@ export default class MENU extends LIST {
 	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
         @param {string} element HTML Element Tag
+        @param {boolean} canActivate If false, the MENU will not expand on activation
 	*/
-	constructor(node, model, element = 'UL') {
+	constructor(node, model, element = 'UL', canActivate = true) {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
 		this.addCases(model);
-		this.implement(new Switchable(this));
-        this.el.addEventListener('activate', () => this.expand());
-        /*this.el.addEventListener('activate', () => {
-            let pos = this.getMain().mousePos;
-
-        });*/
-		this.el.addEventListener('deactivate', () => this.collapse());
+        this.implement(new Switchable(this));
+        if (canActivate) {
+            this.el.addEventListener('activate', this.expand);
+            this.el.addEventListener('deactivate', this.collapse);
+        }        
+        /** @todo Detect mouse x position to scroll left/right if greater than 80%
+         * this.el.addEventListener('activate', () => {
+         * let pos = this.getMain().mousePos;
+        });*/		
 	}
 	/** Adds relevant cases to this element
 	    @param {MODEL} model MENU Model
@@ -45,7 +48,8 @@ export default class MENU extends LIST {
 	*/
 	collapseOnFocusOut() {
 		this.el.onclick = (event) => {
-			if (event.target !== this.el) {
+            if (event.target !== this.el) {
+                console.log('Collapsing child menus...', this);
 				this.children.filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
 			}
 		};

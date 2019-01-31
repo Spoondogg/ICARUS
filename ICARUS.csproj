@@ -667,6 +667,8 @@
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\navfooter\NAVFOOTER.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\navheader\NAVHEADER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />

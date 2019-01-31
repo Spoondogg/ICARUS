@@ -28,7 +28,7 @@ export default class DIALOG extends EL {
 		this.header = new HEADER(this, new MODEL().set('label', model.label));
 		this.btnClose = new SWITCH(this.header, 'x');
 		this.btnClose.el.addEventListener('activate', () => this.closeDialog());
-		this.navbar = new NAVBAR(this, new MODEL().set('label', model.label));
+		this.navheader = new NAVBAR(this, new MODEL().set('label', model.label)); // @todo NAVHEADER
 		//this.navbar.expand().then(navbar => navbar.menu.expand());		
 		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
