@@ -13,15 +13,15 @@ export default class IFACE {
 		this.node = node;
 		node.addClass(name);
 		/** A collection of methods available on this interface
-		    @property {object} methods
+		    @property {Object.<Function>} methods
 		*/
 		this.methods = {};
 		/** A collection of events available on this interface
-		    @property {object} events
+		    @property {Object.<Event>} events
 		*/
 		this.events = {};
 		/** A collection of handlers available on this interface
-		    @property {object} handlers
+		    @property {Object.<Function>} handlers
 		*/
 		this.handlers = {};
 		// Configuration and Setup

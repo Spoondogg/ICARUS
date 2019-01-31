@@ -12,11 +12,13 @@ export default class USERMENU extends MENU {
 	    @param {MODEL} model Model
 	*/
 	constructor(node) {
-        super(node, new MODEL().set({ //'horizontal'
-			name: 'USER',
-			showHeader: 0,
-			collapsed: 0
-		}));
+        super(node, new MODEL('in').set('name', 'USER'));
+
+        /** The USERMENU slides in and should be expanded at all times */
+        this.el.removeEventListener('activate', this.expand);
+        this.el.removeEventListener('deactivate', this.collapse);
+        this.expand();
+
 		this.profile = new DIV(this, new MODEL('profile'));
 		this.image = new IMG(this.profile, new MODEL({
 			class: 'picture',
@@ -35,7 +37,7 @@ export default class USERMENU extends MENU {
             this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
         }
         this.options.expand();
-	}
+    }
 	/** Calls MAIN.logout()
 	    @returns {Promise<ThisType>} callback
 	*/

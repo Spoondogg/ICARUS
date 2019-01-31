@@ -79,14 +79,16 @@ export default class Movable extends IFACE {
 	    @returns {void}
 	*/
 	up() {
-		this.navbar.toggle();
+        this.navheader.toggle();
+        this.navfooter.toggle();
 		this.moveUp();
 	}
 	/** Moves the Container down one slot in the DOM
 	    @returns {void}
 	*/
 	down() {
-		this.navbar.toggle();
+        this.navheader.toggle();
+        this.navfooter.toggle();
 		this.moveDown();
 	}
 }

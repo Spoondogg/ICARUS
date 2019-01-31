@@ -3,7 +3,8 @@
 import COLLAPSIBLE, { Collapse, Collapsible, Expand } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../group/GROUP.js';
-import NAVBAR, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/NAVBAR.js';
+//import NAVBAR, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/NAVBAR.js';
+import NAVHEADER, { MENU, NAVBAR, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import Clickable from '../../../interface/Clickable/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
@@ -41,8 +42,8 @@ export default class CONTAINER extends GROUP {
 		this.shared = this.required(model.shared || 1);
 		this.status = this.required(model.status || STATUS.DEFAULT);
 		this.subsections = this.required(model.subsections ? model.subsections.split(',') : '0'); // Delimited list of child ids
-		this.navbar = new NAVBAR(this, new MODEL().set('label', this.label));
-		this.navbar.implement(new Draggable(this));
+		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label));
+		this.navheader.implement(new Draggable(this));
 		this.body = new COLLAPSIBLE(this, new MODEL('body'));
 		// Cascade state
 		
@@ -85,7 +86,7 @@ export default class CONTAINER extends GROUP {
 				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
 				btnAddElement.btn.el.onclick = () => {
-					this.navbar.expand().then(
+					this.navheader.expand().then(
 						(navBar) => navBar.menu.expand().then(
 							(nav) => nav.menu.expand().then(
 								(n) => n.get('ELEMENTS').expand())));
@@ -219,9 +220,9 @@ export default class CONTAINER extends GROUP {
 	*/
 	setDefaultVisibility(model) {
 		if (model.data) {
-            let a = model.data.collapsed === '1' ? this.navbar.tab.deactivate() : this.navbar.tab.activate();
+            let a = model.data.collapsed === '1' ? this.navheader.tab.deactivate() : this.navheader.tab.activate();
 			let b = model.data.collapsed === '1' ? this.body.collapse() : this.body.expand();
-			let c = model.data.showNav === '1' ? this.navbar.expand() : this.navbar.collapse();
+			let c = model.data.showNav === '1' ? this.navheader.expand() : this.navheader.collapse();
 			return [a, b, c];
 		}
 		return [false, false];
@@ -279,7 +280,7 @@ export default class CONTAINER extends GROUP {
     closeMenus(menu) {
         
 		console.log('closemenus', this);
-		return this.callback(() => menu.deactivate().then(() => this.navbar.toggle()));
+		return this.callback(() => menu.deactivate().then(() => this.navheader.toggle()));
 	}
 	/** Creates a NavItem that closes its menu on mouseup
 	    @param {string} className className
@@ -319,7 +320,7 @@ export default class CONTAINER extends GROUP {
 	*/
     addDomItems() {
         return this.callback(() => {
-            let menu = this.navbar.options.get('DOM', 'MENU');
+            let menu = this.navheader.options.get('DOM', 'MENU');
             let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
             items.UP.el.onclick = () => this.up();
             items.DOWN.el.onclick = () => this.down();
@@ -334,7 +335,7 @@ export default class CONTAINER extends GROUP {
 	*/
     addCrudItems() {
         return this.callback(() => {
-            let menu = this.navbar.options.get('CRUD', 'MENU');
+            let menu = this.navheader.options.get('CRUD', 'MENU');
             let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
             items.LOAD.el.onclick = () => this.load();
             items.SAVEAS.el.onclick = () => this.save();
@@ -354,7 +355,7 @@ export default class CONTAINER extends GROUP {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
                     if (addButton) {
-                        let menu = this.navbar.options.get('ELEMENTS', 'MENU');
+                        let menu = this.navheader.options.get('ELEMENTS', 'MENU');
                         let item = this.addContainerCaseButton(className, menu[0]);
                         item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
                         item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
@@ -519,7 +520,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	setLabel(label) {
-        this.navbar.tab.anchor.label.setInnerHTML(label);
+        this.navheader.tab.anchor.label.setInnerHTML(label);
 		this.label = label;
 	}
 	/** Sets the subsection array to the given value

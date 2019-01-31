@@ -604,9 +604,7 @@ $jumbotron-height: 420px;
                     animation: slideOutUp $transition-speed $transition-motion;
                 }
             }
-            //>nav {
-            //	display: none;
-            //}
+
             .body {
                 margin: .5em;
 
@@ -1170,12 +1168,9 @@ $jumbotron-height: 420px;
     /// Button that is used to trigger the addition of elements
     .btn-add-element {
         padding: .5em 0;
-        /*button {
-            display: block;
-            height: 128px;
-            margin: 0 auto;
-            width: 128px;
-        }*/
+        button {
+            width: 100%;
+        }
     }
     /// An Element that can contain child elements
     .container {
@@ -1187,6 +1182,7 @@ $jumbotron-height: 420px;
             font-size: $font-size-normal;
             height: $navbar-height;
             min-height: $navbar-height;
+            width: 100%;
         }
         /// A Container for article style content, grouped into sections
         &.article {
@@ -1330,6 +1326,39 @@ $jumbotron-height: 420px;
             margin-right: auto;
             max-width: $body-width;
 
+            > nav {
+                &.nav-header {
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                }
+
+                &.nav-footer {
+                    @include transition($transition-default);
+                    bottom: 0;
+                    left: 0;
+                    margin: 0;
+                    position: absolute;
+                    /// EDIT Container
+                    > .container {
+                        margin: .4em auto;
+                    }
+                    /// Footer is extended for EDIT Container
+                    &.active {
+                        height: $navbar-height * 5;
+                    }
+
+                    textarea {
+                        border-radius: 5px;
+                        color: $color-black;
+                        height: 180px;
+                        line-height: normal;
+                        margin: 1em;
+                        width: calc(100% - 25px);
+                    }
+                }
+            }
+
             > .body {
                 /// Consumes the available height of the page minus Nav Elements
                 > .pane {
@@ -1353,8 +1382,7 @@ $jumbotron-height: 420px;
                     position: absolute;
                     top: $navbar-height;
                     width: $sidebar-width;
-                    z-index: 999;
-
+                    //z-index: 999;
                     &.active {
                         //animation: slideInLeft $transition-speed $transition-motion;
                         left: 0;
@@ -1428,28 +1456,30 @@ $jumbotron-height: 420px;
                 }
             }
         }
-        /// A menu that contains user links and details
+        /// The USERMENU class, A menu that contains user links and details
         &[name='USER'] {
+            @extend %no-scroll-bar;
+            @extend %pane-tall;
+            @include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
+            //@include transition($transition-default);
             @include transition(right $transition-speed $transition-motion);
             //animation: slideOutRight $transition-speed $transition-motion;
             background-color: $color-grey-dark; //#373c40;
             border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
             border-radius: .2em;
-            box-shadow: 0 0 2px 0 $color-shadow-dark; // rgba(0, 0, 0, .8);
-            //display: none;
             float: right;
-            max-height: 320px;
+            right: calc(#{$zero-px} - #{$sidebar-width});
+            //margin-left: -100%; /// !important
             position: absolute;
-            right: -231px;
-            top: calc(#{$navbar-height} + 2px);
-            width: 230px;
+            top: $navbar-height;
+            width: $sidebar-width;
 
             &.active {
-                //animation: slideInRight $transition-speed $transition-motion;
-                right: 1px;
+                //animation: slideInLeft $transition-speed $transition-motion;
+                right: 0;
                 //display: block;
             }
-
+            //@include transition(right $transition-speed $transition-motion);
             > ul {
                 &.horizontal {
                     flex-direction: row-reverse;
@@ -1514,32 +1544,23 @@ $jumbotron-height: 420px;
         /// A collection of list-items within this menu
         > .list {
             @extend %wide-block;
-            /// A collection of nav-items representing Tabs
-            &.tabs {
-                display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-                /// A tab style nav item
-                .nav-item {
-                    flex-basis: 3em;
-                    //flex-grow: 1;
-                    height: $navbar-height;
-                }
-                /// A stretchable, centered tab designed to consume remaining space
-                .wide-tab {
-                    flex-basis: auto;
-                    flex-grow: 2;
-                    text-align: center;
-                }
-            }
             /// List items are made to scroll horizontally instead of vertically
             &.horizontal {
                 @extend %horizontal-scroll;
                 //@extend %no-scroll-bar;
-                //&.collapse {
-                //   height: 0;
-                //&.in {
-                //height: 4em;
-                //}
-                //}
+                display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+                /// A tab style nav item
+                .nav-item {
+                    flex-basis: 8em;
+                    //flex-grow: 1;
+                    //height: $navbar-height;
+                }
+                /// A stretchable, centered tab designed to consume remaining space
+                .tab-wide {
+                    flex-basis: auto;
+                    flex-grow: 2;
+                    //text-align: center;
+                }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
                     //display: inline-block;
@@ -1564,7 +1585,6 @@ $jumbotron-height: 420px;
                         padding: 0;
                         text-align: center;
                         //width: 4em;
-
                         span {
                             display: block;
                             //float: left;
@@ -1573,7 +1593,6 @@ $jumbotron-height: 420px;
                             width: 100%;
 
                             &.icon {
-
                             }
 
                             &.label {
@@ -1593,12 +1612,12 @@ $jumbotron-height: 420px;
                 @extend %clickable;
                 @include transition($transition-default);
                 background-color: $color-shadow-neutral;
-                border-left-color: transparent;
-                border-right-color: transparent;
+                border-left: 1px solid transparent;
+                border-right: 1px solid transparent;
                 box-sizing: border-box;
                 cursor: pointer;
-                float: left;
-                line-height: $navbar-height; // - 1em;
+                //float: left;
+                //line-height: $navbar-height; // - 1em;
                 list-style: none;
 
                 &:hover {

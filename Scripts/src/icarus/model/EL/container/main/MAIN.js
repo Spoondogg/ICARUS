@@ -4,10 +4,11 @@ import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
+import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
-import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
+//import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -20,7 +21,7 @@ export default class MAIN extends CONTAINER {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
 		this.addClass('main').then(() => this.body.pane.addClass('pane-tall'));
-		this.navbar.addClass('navbar-fixed-top').then(() => this.navbar.setAttribute('draggable', false));
+		this.navheader.setAttribute('draggable', false);
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -33,32 +34,50 @@ export default class MAIN extends CONTAINER {
 		this.activeContainer = null;
 		// ELEMENTS
 		this.sidebar = new SIDEBAR(this);
-		this.stickyFooter = new STICKYFOOTER(this, new MODEL());
+		//this.stickyFooter = new STICKYFOOTER(this, new MODEL());
+        this.navfooter = new NAVFOOTER(this, new MODEL());
 		// CRUD
 		this.save = this.factory.save;
         this.quickSaveFormPost = model.factory.quickSaveFormPost;
-        // Detect mouse position for desktop 
-        this.mousePos = {
-            x: -1,
-            y: -1
+
+        this.watchMousePosition();
+    }
+    /** Detects mouse position for desktop and caches its value every X ms
+        @param {number} delay Millisecond delay between caches
+        @returns {void}
+    */
+    watchMousePosition(delay = 50) {
+        this.mouse = {
+            x: 0,
+            y: 0,
+            w: document.body.clientWidth,
+            h: document.body.clientHeight,
+            xPct: 0,
+            yPct: 0
         };
         document.onmousemove = (ev) => this.handleMouseMove(ev);
-        setInterval(() => this.getMousePosition(), 1000); // setInterval repeats every X ms
-
+        document.body.onresize = () => this.handleResize();
+        setInterval(() => this.cacheMouse(), delay); // setInterval repeats every X ms ~41 ms == 24fps
     }
+
+    /** Updates the Mouse Position Cache
+        param {Event} ev Resize Event
+        @returns {void}
+    */
+    handleResize() {
+        this.mouse.w = document.body.clientWidth;
+        this.mouse.h = document.body.clientHeight;
+    }
+    /** Mouse Move Event Handler (Desktop Only)
+        @param {Event} ev Event
+        @returns {void}
+    */
     handleMouseMove(ev) {
-        //console.log('handlemousemove', ev);
         let eventDoc = null;
         let doc = null;
         let body = null;
-        //let pageX = null;
-        //let pageY = null;
 
-        //event = event || window.event; // IE-ism
-
-        // If pageX/Y aren't available and clientX/Y are,
-        // calculate pageX/Y - logic taken from jQuery.
-        // (This is to support old IE)
+        // If pageX/Y aren't available and clientX/Y are, calculate pageX/Y (This is to support old IE)
         if (ev.pageX === null && ev.clientX !== null) {
             eventDoc = ev.target && ev.target.ownerDocument || document;
             doc = eventDoc.documentElement;
@@ -72,18 +91,19 @@ export default class MAIN extends CONTAINER {
                 (doc && doc.clientTop || body && body.clientTop || 0);
         }
 
-        this.mousePos = {
-            x: ev.pageX,
-            y: ev.pageY
-        };
-        //console.log(this.mousePos);
+        // Cache mouse position
+        this.mouse.x = ev.pageX;
+        this.mouse.y = ev.pageY;
     }
-    getMousePosition() {
-        let w = document.body.clientWidth;
-        let h = document.body.clientHeight;
-        let xPct = (this.mousePos.x / w).toFixed(2) * 100;
-        let yPct = (this.mousePos.y / h).toFixed(2) * 100;
-        console.log(this.mousePos, w, h, xPct, yPct);
+    /** Set the Mouse Position and relative positioning
+        param {number} x X Coord
+        param {number} y Y Coord
+        @returns {void}
+    */
+    cacheMouse() {
+        this.mouse.xPct = (this.mouse.x / this.mouse.w).toFixed(2) * 100;
+        this.mouse.yPct = (this.mouse.y / this.mouse.h).toFixed(2) * 100;
+        //console.log(this.mouse);
     }
 	/** Perform any async actions and populate this Container
 	    @param {Array<MODEL>} children Array of elements to add to this container's body
@@ -92,9 +112,9 @@ export default class MAIN extends CONTAINER {
 	construct(children) {
 		return this.addNavOptions().then(
 			() => this.populate(children).then(
-				() => this.navbar.expand().then(
+				() => this.navheader.expand().then(
 					() => this.body.expand().then(
-						() => this.stickyFooter.expand()))));
+						() => this.navfooter.expand()))));
 	}
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
@@ -128,49 +148,48 @@ export default class MAIN extends CONTAINER {
 			//if (this.navbar.menu) {
 			//console.warn('Yes to addNavOptions');
 			// LEFT ALIGN
-            this.btnSidebar = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+            this.btnSidebar = this.navheader.tabs.addNavItemIcon(new MODEL().set({
                 icon: ICONS.SIDEBAR,
                 label: 'Sidebar'
             }));
 			this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
             this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
-            $(this.btnSidebar.el).insertBefore(this.navbar.tab.el);
+            $(this.btnSidebar.el).insertBefore(this.navheader.tab.el);
 
-            this.btnPrev = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+            this.btnPrev = this.navheader.tabs.addNavItemIcon(new MODEL().set({
                 icon: ICONS.CHEVRON_LEFT,
                 label: 'Prev'
             }));
 			this.btnPrev.el.onclick = () => this.navigateBack();
-			$(this.btnPrev.el).insertBefore(this.navbar.btnOptions.el);
+			$(this.btnPrev.el).insertBefore(this.navheader.tab.el);
 
 			// RIGHT ALIGN
-
-			//this.addTab = this.navbar.tabs.addNavItemIcon(new MODEL().set('icon', ICONS.PLUS));
-			//$(this.addTab.el).insertBefore(this.navbar.optionsTab.el);
 			// USER TAB / MENU
+            this.addUserTab();
 
-			this.addUserTab();
 			this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
-			//this.addDefaultMenuItems();
+
+            this.addDefaultMenuItems();
 			//} else {
 			//    console.warn('No to addNavOptions');
 			//}
 		});
 	}
 	/** Creates a USER Tab and its associated UserMenu
+        @param {MODEL} model Tab Model
 	    @returns {void}
 	    @deprecated
 	*/
-    addUserTab() {
-        let tab = this.navbar.tabs.addNavItemIcon(new MODEL().set({
+    addUserTab(model = new MODEL()) {
+        let tab = this.navheader.tabs.addNavItemIcon(model.set({
             icon: ICONS.USER,
             label: 'USER'
         }));
-        let menu = this.navbar.menus.addChild(new USERMENU(this.navbar.menus));
+        let menu = this.navheader.menus.addChild(new USERMENU(this.navheader.menus));
         if (this.getUser() === 'Guest') {
             tab.el.addEventListener('activate', () => this.login(tab));
         } else {
-            this.navbar.addTabbableElement(tab, menu);
+            this.navheader.addTabbableElement(tab, menu);
         }
 	}
 	/** Returns the MAIN LOADER 
@@ -197,16 +216,16 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		let optionsMenu = this.navbar.menu;
-		let domMenu = optionsMenu.get('DOM');
-		this.addNavItemIcon(domMenu, ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
+        let domMenu = this.navheader.options.get('DOM', 'MENU');
+		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
-		this.addNavItemIcon(domMenu, ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navbar.toggle());
-		this.addNavItemIcon(domMenu, ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
-		this.addNavItemIcon(domMenu, ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-		let crudMenu = optionsMenu.get('CRUD');
-		this.addNavItemIcon(crudMenu, ICONS.MAIN, 'New').el.onclick = () => this.createNew();
+        this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
+        this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
+        this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
+
+        let crudMenu = this.navheader.options.get('CRUD', 'MENU');
+        this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
@@ -228,7 +247,11 @@ export default class MAIN extends CONTAINER {
 								    page in this window
 								*/
 								let url = '/' + payload.model.id;
-								new PROMPT(new MODEL().set('label', 'Create a new page')).createForm().then((form) => {
+                                new PROMPT(new MODEL().set({
+                                    label: 'Create a new page',
+                                    caller: this,
+                                    container: this
+                                })).createForm().then((form) => {
 									form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 											window.open(url, '_blank');
@@ -271,11 +294,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     focusBody() {
+        console.log('focusbody');
         let ev = new Deactivate(this);
         this.sidebar.el.dispatchEvent(ev);
         this.btnSidebar.el.dispatchEvent(ev);
-        this.navbar.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navbar.tab).map((icon) => icon.el.dispatchEvent(ev));
-        this.navbar.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+        this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).map((icon) => icon.el.dispatchEvent(ev));
+        this.navheader.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+        //this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
+        this.navfooter.tabs.get(null, 'NAVITEMICON').map((icon) => icon.el.dispatchEvent(ev));
+        this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
 	/** Loads the specified app id into the Main Container
         Receives the MAIN model from Main/Get/id (if permitted)
@@ -459,14 +486,14 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	swipeUp() {
-		this.navbar.collapse();
+		this.navheader.collapse();
 		document.body.classList.add('compact');
 	}
 	/** Swipe Down Event
 	    @returns {void}
 	*/
 	swipeDown() {
-		this.navbar.expand();
+		this.navheader.expand();
 		document.body.classList.remove('compact');
 	}
 }
