@@ -833,6 +833,7 @@
     <Content Include="Scripts\src\icarus\task\config\sasslint.json" />
     <Content Include="Scripts\src\icarus\index.md" />
     <Content Include="Scripts\src\icarus\task\config\sassdoc.json" />
+    <Content Include="Views\Home\Robots.cshtml" />
     <None Include="Web.Debug.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>
@@ -846,6 +847,7 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
+    <Folder Include="Scripts\dist\" />
     <Folder Include="Scripts\test\errors\" />
   </ItemGroup>
   <ItemGroup>

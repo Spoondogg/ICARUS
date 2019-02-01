@@ -52,6 +52,17 @@ namespace ICARUS {
                     id = UrlParameter.Optional
                 }
             );
+            /** Robots.txt 
+                https://stackoverflow.com/questions/30578577/robots-txt-file-in-mvc-net-4 
+            */
+            routes.MapRoute(
+                name: "GetRobotsText",
+                url: "robots.txt",
+                defaults: new {
+                    controller = "Home",
+                    action = "RobotsText"
+                }
+            );
         }
     }
 }
