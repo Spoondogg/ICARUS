@@ -12,6 +12,7 @@ using ICARUS.Models.Icarus.Elements.Attributes;
 using System.Linq;
 using System.Data.Entity;
 using System.Configuration;
+using System.Text;
 
 namespace ICARUS.Controllers {
     /// <summary>
@@ -82,5 +83,27 @@ namespace ICARUS.Controllers {
         public override Task<ActionResult> Set(FormPost model) {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// See https://rehansaeed.com/dynamically-generating-robots-txt-using-asp-net-mvc/
+        /// </summary>
+        /// <returns></returns>
+        //[Route("robots.txt", Name = "GetRobotsText"), OutputCache(Duration = 86400)]
+        public ContentResult RobotsText() {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("user-agent: *");
+            stringBuilder.AppendLine("disallow: /Account/");
+            //stringBuilder.AppendLine("allow: /error/foo");
+            //stringBuilder.Append("sitemap: ");
+            //stringBuilder.AppendLine(this.Url.RouteUrl("GetSitemapXml", null, this.Request.Url.Scheme).TrimEnd('/'));
+
+            return this.Content(stringBuilder.ToString(), "text/plain", Encoding.UTF8);
+        }
+
+        /*[Route("sitemap.xml", Name = "GetSitemapXml"), OutputCache(Duration = 86400)]
+        public ContentResult SitemapXml() {
+            // I'll talk about this in a later blog post.
+        }*/
     }
 }
