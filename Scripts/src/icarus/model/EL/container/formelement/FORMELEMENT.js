@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	EL,	INPUTTYPES,	MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../CONTAINER.js';
 import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
     @abstract
@@ -19,4 +19,4 @@ export default class FORMELEMENT extends CONTAINER {
 		this.label = new LABEL(this.body.pane, model.label || element);
 	}
 }
-export { ATTRIBUTES, CONTAINER,	EL,	INPUTTYPES,	LABEL, MODEL }
+export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL }

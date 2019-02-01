@@ -35,76 +35,71 @@ export default class MAIN extends CONTAINER {
 		// ELEMENTS
 		this.sidebar = new SIDEBAR(this);
 		//this.stickyFooter = new STICKYFOOTER(this, new MODEL());
-        this.navfooter = new NAVFOOTER(this, new MODEL());
+		this.navfooter = new NAVFOOTER(this, new MODEL());
 		// CRUD
 		this.save = this.factory.save;
-        this.quickSaveFormPost = model.factory.quickSaveFormPost;
-
-        this.watchMousePosition();
-    }
-    /** Detects mouse position for desktop and caches its value every X ms
-        @param {number} delay Millisecond delay between caches
-        @returns {void}
-    */
-    watchMousePosition(delay = 50) {
-        this.mouse = {
-            x: 0,
-            y: 0,
-            w: document.body.clientWidth,
-            h: document.body.clientHeight,
-            xPct: 0,
-            yPct: 0
-        };
-        document.onmousemove = (ev) => this.handleMouseMove(ev);
-        document.body.onresize = () => this.handleResize();
-        setInterval(() => this.cacheMouse(), delay); // setInterval repeats every X ms ~41 ms == 24fps
-    }
-
-    /** Updates the Mouse Position Cache
-        param {Event} ev Resize Event
-        @returns {void}
-    */
-    handleResize() {
-        this.mouse.w = document.body.clientWidth;
-        this.mouse.h = document.body.clientHeight;
-    }
-    /** Mouse Move Event Handler (Desktop Only)
-        @param {Event} ev Event
-        @returns {void}
-    */
-    handleMouseMove(ev) {
-        let eventDoc = null;
-        let doc = null;
-        let body = null;
-
-        // If pageX/Y aren't available and clientX/Y are, calculate pageX/Y (This is to support old IE)
-        if (ev.pageX === null && ev.clientX !== null) {
-            eventDoc = ev.target && ev.target.ownerDocument || document;
-            doc = eventDoc.documentElement;
-            body = eventDoc.body;
-
-            ev.pageX = ev.clientX +
-                (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-                (doc && doc.clientLeft || body && body.clientLeft || 0);
-            ev.pageY = ev.clientY +
-                (doc && doc.scrollTop || body && body.scrollTop || 0) -
-                (doc && doc.clientTop || body && body.clientTop || 0);
-        }
-
-        // Cache mouse position
-        this.mouse.x = ev.pageX;
-        this.mouse.y = ev.pageY;
-    }
-    /** Set the Mouse Position and relative positioning
-        param {number} x X Coord
-        param {number} y Y Coord
-        @returns {void}
-    */
-    cacheMouse() {
-        this.mouse.xPct = (this.mouse.x / this.mouse.w).toFixed(2) * 100;
-        this.mouse.yPct = (this.mouse.y / this.mouse.h).toFixed(2) * 100;
-        //console.log(this.mouse);
-    }
+		this.quickSaveFormPost = model.factory.quickSaveFormPost;
+		this.watchMousePosition();
+	}
+	/** Detects mouse position for desktop and caches its value every X ms
+	    @param {number} delay Millisecond delay between caches
+	    @returns {void}
+	*/
+	watchMousePosition(delay = 50) {
+		this.mouse = {
+			x: 0,
+			y: 0,
+			w: document.body.clientWidth,
+			h: document.body.clientHeight,
+			xPct: 0,
+			yPct: 0
+		};
+		document.onmousemove = (ev) => this.handleMouseMove(ev);
+		document.body.onresize = () => this.handleResize();
+		setInterval(() => this.cacheMouse(), delay); // setInterval repeats every X ms ~41 ms == 24fps
+	}
+	/** Updates the Mouse Position Cache
+	    param {Event} ev Resize Event
+	    @returns {void}
+	*/
+	handleResize() {
+		this.mouse.w = document.body.clientWidth;
+		this.mouse.h = document.body.clientHeight;
+	}
+	/** Mouse Move Event Handler (Desktop Only)
+	    @param {Event} ev Event
+	    @returns {void}
+	*/
+	handleMouseMove(ev) {
+		let eventDoc = null;
+		let doc = null;
+		let body = null;
+		// If pageX/Y aren't available and clientX/Y are, calculate pageX/Y (This is to support old IE)
+		if (ev.pageX === null && ev.clientX !== null) {
+			eventDoc = ev.target && ev.target.ownerDocument || document;
+			doc = eventDoc.documentElement;
+			body = eventDoc.body;
+			ev.pageX = ev.clientX +
+				(doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+				(doc && doc.clientLeft || body && body.clientLeft || 0);
+			ev.pageY = ev.clientY +
+				(doc && doc.scrollTop || body && body.scrollTop || 0) -
+				(doc && doc.clientTop || body && body.clientTop || 0);
+		}
+		// Cache mouse position
+		this.mouse.x = ev.pageX;
+		this.mouse.y = ev.pageY;
+	}
+	/** Set the Mouse Position and relative positioning
+	    param {number} x X Coord
+	    param {number} y Y Coord
+	    @returns {void}
+	*/
+	cacheMouse() {
+		this.mouse.xPct = (this.mouse.x / this.mouse.w).toFixed(2) * 100;
+		this.mouse.yPct = (this.mouse.y / this.mouse.h).toFixed(2) * 100;
+		//console.log(this.mouse);
+	}
 	/** Perform any async actions and populate this Container
 	    @param {Array<MODEL>} children Array of elements to add to this container's body
 	    @returns {Promise<ThisType>} callback
@@ -148,28 +143,24 @@ export default class MAIN extends CONTAINER {
 			//if (this.navbar.menu) {
 			//console.warn('Yes to addNavOptions');
 			// LEFT ALIGN
-            this.btnSidebar = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                icon: ICONS.SIDEBAR,
-                label: 'Sidebar'
-            }));
+			this.btnSidebar = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+				icon: ICONS.SIDEBAR,
+				label: 'Sidebar'
+			}));
 			this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
-            this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
-            $(this.btnSidebar.el).insertBefore(this.navheader.tab.el);
-
-            this.btnPrev = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                icon: ICONS.CHEVRON_LEFT,
-                label: 'Prev'
-            }));
+			this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
+			$(this.btnSidebar.el).insertBefore(this.navheader.tab.el);
+			this.btnPrev = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+				icon: ICONS.CHEVRON_LEFT,
+				label: 'Prev'
+			}));
 			this.btnPrev.el.onclick = () => this.navigateBack();
 			$(this.btnPrev.el).insertBefore(this.navheader.tab.el);
-
 			// RIGHT ALIGN
 			// USER TAB / MENU
-            this.addUserTab();
-
+			this.addUserTab();
 			this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
-
-            this.addDefaultMenuItems();
+			this.addDefaultMenuItems();
 			//} else {
 			//    console.warn('No to addNavOptions');
 			//}
@@ -180,17 +171,17 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	    @deprecated
 	*/
-    addUserTab(model = new MODEL()) {
-        let tab = this.navheader.tabs.addNavItemIcon(model.set({
-            icon: ICONS.USER,
-            label: 'USER'
-        }));
-        let menu = this.navheader.menus.addChild(new USERMENU(this.navheader.menus));
-        if (this.getUser() === 'Guest') {
-            tab.el.addEventListener('activate', () => this.login(tab));
-        } else {
-            this.navheader.addTabbableElement(tab, menu);
-        }
+	addUserTab(model = new MODEL()) {
+		let tab = this.navheader.tabs.addNavItemIcon(model.set({
+			icon: ICONS.USER,
+			label: 'USER'
+		}));
+		let menu = this.navheader.menus.addChild(new USERMENU(this.navheader.menus));
+		if (this.getUser() === 'Guest') {
+			tab.el.addEventListener('activate', () => this.login(tab));
+		} else {
+			this.navheader.addTabbableElement(tab, menu);
+		}
 	}
 	/** Returns the MAIN LOADER 
 	    @returns {LOADER} A LOADER
@@ -216,16 +207,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-        let domMenu = this.navheader.options.get('DOM', 'MENU');
+		let domMenu = this.navheader.options.get('DOM', 'MENU');
 		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
-        this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
-        this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
-        this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-
-        let crudMenu = this.navheader.options.get('CRUD', 'MENU');
-        this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
+		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
+		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
+		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
+		let crudMenu = this.navheader.options.get('CRUD', 'MENU');
+		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
@@ -247,11 +237,11 @@ export default class MAIN extends CONTAINER {
 								    page in this window
 								*/
 								let url = '/' + payload.model.id;
-                                new PROMPT(new MODEL().set({
-                                    label: 'Create a new page',
-                                    caller: this,
-                                    container: this
-                                })).createForm().then((form) => {
+								new PROMPT(new MODEL().set({
+									label: 'Create a new page',
+									caller: this,
+									container: this
+								})).createForm().then((form) => {
 									form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 											window.open(url, '_blank');
@@ -293,16 +283,16 @@ export default class MAIN extends CONTAINER {
 	    as a Sidebar, Modal or an EDIT pane
 	    @returns {void}
 	*/
-    focusBody() {
-        console.log('focusbody');
-        let ev = new Deactivate(this);
-        this.sidebar.el.dispatchEvent(ev);
-        this.btnSidebar.el.dispatchEvent(ev);
-        this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).map((icon) => icon.el.dispatchEvent(ev));
-        this.navheader.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
-        //this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
-        this.navfooter.tabs.get(null, 'NAVITEMICON').map((icon) => icon.el.dispatchEvent(ev));
-        this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+	focusBody() {
+		console.log('focusbody');
+		let ev = new Deactivate(this);
+		this.sidebar.el.dispatchEvent(ev);
+		this.btnSidebar.el.dispatchEvent(ev);
+		this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).map((icon) => icon.el.dispatchEvent(ev));
+		this.navheader.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+		//this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
+		this.navfooter.tabs.get(null, 'NAVITEMICON').map((icon) => icon.el.dispatchEvent(ev));
+		this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
 	/** Loads the specified app id into the Main Container
         Receives the MAIN model from Main/Get/id (if permitted)
@@ -384,34 +374,34 @@ export default class MAIN extends CONTAINER {
 	    @todo Create AHREF to 'ForgotPassword'
 	    @returns {void}
 	*/
-    login(caller = this) {
-        console.log('Login Caller', caller);
+	login(caller = this) {
+		console.log('Login Caller', caller);
 		let label = 'LogIn';
-        this.loader.log(99, label).then(
-            (loader) => {
-                let prompt = new PROMPT(new MODEL().set({
-                    caller,
-                    container: this,
-                    label
-                }));
-                prompt.createForm(new MODEL().set({
-                    caller,
-                    container: prompt,
-                    label
-                })).then(
-                    (form) => form.footer.buttonGroup.empty().then(
-                        () => {
-                            form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
-                                this.loginOAuth('Google');
-                                return false;
-                            }
-                            //loader.log(100).then(() => form.getDialog().show());
-                            loader.log(100).then(() => prompt.show());
-                        }
-                    )
-                )
-            }
-        );
+		this.loader.log(99, label).then(
+			(loader) => {
+				let prompt = new PROMPT(new MODEL().set({
+					caller,
+					container: this,
+					label
+				}));
+				prompt.createForm(new MODEL().set({
+					caller,
+					container: prompt,
+					label
+				})).then(
+					(form) => form.footer.buttonGroup.empty().then(
+						() => {
+							form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
+								this.loginOAuth('Google');
+								return false;
+							}
+							//loader.log(100).then(() => form.getDialog().show());
+							loader.log(100).then(() => prompt.show());
+						}
+					)
+				)
+			}
+		);
 	}
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
@@ -445,11 +435,11 @@ export default class MAIN extends CONTAINER {
         @returns {Promise<boolean>} True on success
     */
 	logout() {
-        this.loader.log(99, 'Logging Out').then(
-            () => Promise.resolve(localStorage.clear()).then(
-                $.post('/Account/LogOff', {
-                    '__RequestVerificationToken': this.getToken()
-                }, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
+		this.loader.log(99, 'Logging Out').then(
+			() => Promise.resolve(localStorage.clear()).then(
+				$.post('/Account/LogOff', {
+					'__RequestVerificationToken': this.getToken()
+				}, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
 		/*this.loader.log(99, 'Logging Out').then(() => { // loader
             $.post('/Account/LogOff', {
 				'__RequestVerificationToken': this.getToken() //.token

@@ -47,11 +47,16 @@ gulp.slurped = false;
     @returns {void}
 */
 export const Watch = () => gulpfile.slurp();
-/** Instantiate a GulpFile and begin watching for changes
+/** Builds App
     @param {done} done Resolver/Callback
     @returns {void}
 */
 export const Build = (done) => gulpfile.build()(done);
+/** Builds Vendor Scripts
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const BuildVendor = (done) => gulpfile.buildVendorAll()(done);
 /** Beautify Scripts and Styles
     @param {done} done Resolver/Callback
     @returns {void}

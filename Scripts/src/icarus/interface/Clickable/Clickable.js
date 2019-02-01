@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, {	EL,	MODEL } from '../IFACE.js';
+import IFACE, { EL, MODEL } from '../IFACE.js';
 import Activate from '../../event/Activate.js';
 import Deactivate from '../../event/Deactivate.js';
 import Deselect from '../../event/Deselect.js';

@@ -21,15 +21,15 @@ export default class MENU extends LIST {
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
 		this.addCases(model);
-        this.implement(new Switchable(this));
-        if (canActivate) {
-            this.el.addEventListener('activate', this.expand);
-            this.el.addEventListener('deactivate', this.collapse);
-        }        
-        /** @todo Detect mouse x position to scroll left/right if greater than 80%
-         * this.el.addEventListener('activate', () => {
-         * let pos = this.getMain().mousePos;
-        });*/		
+		this.implement(new Switchable(this));
+		if (canActivate) {
+			this.el.addEventListener('activate', this.expand);
+			this.el.addEventListener('deactivate', this.collapse);
+		}
+		/** @todo Detect mouse x position to scroll left/right if greater than 80%
+		 * this.el.addEventListener('activate', () => {
+		 * let pos = this.getMain().mousePos;
+		});*/
 	}
 	/** Adds relevant cases to this element
 	    @param {MODEL} model MENU Model
@@ -48,8 +48,8 @@ export default class MENU extends LIST {
 	*/
 	collapseOnFocusOut() {
 		this.el.onclick = (event) => {
-            if (event.target !== this.el) {
-                console.log('Collapsing child menus...', this);
+			if (event.target !== this.el) {
+				console.log('Collapsing child menus...', this);
 				this.children.filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
 			}
 		};

@@ -17,11 +17,11 @@ export default class GROUP extends EL {
             console.warn('Group name not defined', model);
 		}*/
 		super(node, element, model);
-        this.implement(new Switchable(this));
-        /*if (typeof this.name === 'undefined') {
-            this.name = this.required(model.name || this.className);
-            this.setAttribute('name', this.required(model.name || this.className));
-        }*/
+		this.implement(new Switchable(this));
+		/*if (typeof this.name === 'undefined') {
+		    this.name = this.required(model.name || this.className);
+		    this.setAttribute('name', this.required(model.name || this.className));
+		}*/
 	}
 }
 export { Activate, ATTRIBUTES, Deactivate, EL, GROUP, MODEL }

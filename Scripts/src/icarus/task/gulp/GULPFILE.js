@@ -67,10 +67,14 @@ export default class GULPFILE {
 	*/
 	buildStyles(done, src = GULPPATHS.styles.src, dest = GULPPATHS.styles.dest, basename = 'icarus') {
 		return this.pipeEvents('BuildStyles',
-			() => this.gulp.src(src).pipe(sourcemaps.init()).pipe(sass()).on('error', (e) => this.logError(' - Failed to transcode Sass', e, done)).on('success', () => console.log(' - Successdully transcoded Sass')).pipe(rename({
+			() => this.gulp.src(src)
+			.pipe(sourcemaps.init())
+			.pipe(sass()).on('error', (e) => this.logError(' - Failed to transcode Sass', e, done)).on('success', () => console.log(' - Successdully transcoded Sass'))
+			.pipe(rename({
 				basename,
 				suffix: '.min'
-			})).pipe(postcss([
+			}))
+			.pipe(postcss([
 				autoprefixer({
 					browsers: ['last 2 versions'],
 					cascade: false
@@ -78,7 +82,9 @@ export default class GULPFILE {
 				postcsstouchcallout,
 				postcssmomentumscrolling,
 				postcssfontsmoothing
-			])).pipe(cleancss({ /*compatibility: 'ie8'*/ })).pipe(sourcemaps.write('.')) //'.'
+			]))
+			.pipe(cleancss({ /*compatibility: 'ie8'*/ }))
+			.pipe(sourcemaps.write('.')) //'.'
 			.pipe(this.gulp.dest(dest)), done);
 	}
 	/** Creates CSS Dependencies from external
@@ -211,9 +217,10 @@ export default class GULPFILE {
 	    @returns {gulp.series} A gulp 
 	*/
 	lintScriptsPipe(src) {
-		return this.gulp.src(src).pipe(plumber({
-			errorHandler: this.onError
-		})).pipe(eslint(require(GULPPATHS.config.eslint))).pipe(eslint.format());
+		return this.gulp.src(src)
+			.pipe(plumber({ errorHandler: this.onError }))
+			.pipe(eslint(require(GULPPATHS.config.eslint)))
+			.pipe(eslint.format());
 	}
 	/** Lints given Script Files with ESLint
 	    @param {any} done callback
@@ -224,7 +231,7 @@ export default class GULPFILE {
 	lintScripts(done, label, src) {
 		return this.pipeEvents(label, () => this.lintScriptsPipe(src), done);
 	}
-	/** Appends Generic Error, Success and End Events for the given Pipe
+	/** Appends Generic Error, Success and End Events for the given Pipe and passes done method where applicable
 	     @param {string} label Pipe Label
 	     @param {gulp.pipe} pipe Gulp Pipe
 	     @param {Function} done callback
@@ -521,11 +528,11 @@ export default class GULPFILE {
 		return this.gulp.series(
 			(done) => this.logCompletion('GULPFILE.build().start()', done),
 			(done) => this.beautifyAll()(done),
-			this.lintAll(),
+			(done) => this.lintAll()(done),
 			(done) => this.emptyDist(done),
 			(done) => this.lintStyles(done),
-			//this.stylification(),
-			this.buildAllScripts(),
+            (done) => this.buildStyles(done),
+			(done) => this.buildAllScripts()(done),
 			(done) => this.logCompletion('GULPFILE.build().end()', done));
 	}
 	/** Lint, Build on Success, then Publish
