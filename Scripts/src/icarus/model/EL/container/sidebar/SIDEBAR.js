@@ -9,7 +9,7 @@ export default class SIDEBAR extends CONTAINER {
 	    @param {CONTAINER} node Parent Container (Typically MAIN)
 	    @param {MODEL} model Model
 	*/
-    constructor(node, model = new MODEL().set('name', 'sidebar')) {
+	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model, ['SECTION', 'FORM', 'LIST']);
 		this.addClass('sidebar');
 		this.addClass(model.align || 'left');

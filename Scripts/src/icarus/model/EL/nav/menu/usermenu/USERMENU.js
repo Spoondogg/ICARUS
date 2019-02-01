@@ -12,13 +12,8 @@ export default class USERMENU extends MENU {
 	    @param {MODEL} model Model
 	*/
 	constructor(node) {
-        super(node, new MODEL('in').set('name', 'USER'));
-
-        /** The USERMENU slides in and should be expanded at all times */
-        this.el.removeEventListener('activate', this.expand);
-        this.el.removeEventListener('deactivate', this.collapse);
-        this.expand();
-
+		super(node, new MODEL('in').set('name', 'USER'));
+		this.overrideMenuDefaults();
 		this.profile = new DIV(this, new MODEL('profile'));
 		this.image = new IMG(this.profile, new MODEL({
 			class: 'picture',
@@ -27,17 +22,24 @@ export default class USERMENU extends MENU {
 		this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
 		this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
 		this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
-
-        this.options = this.addMenu(new MODEL('horizontal').set('name', 'USEROPTIONS'));
-        this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log In'));
+		this.options = this.addMenu(new MODEL('horizontal').set('name', 'USEROPTIONS'));
+		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log In'));
 		this.btnLogout.el.onclick = () => this.login();
-        this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
+		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
 		this.btnLogout.el.onclick = () => this.logout();
 		for (let i = 0; i < 5; i++) {
-            this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
-        }
-        this.options.expand();
-    }
+			this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
+		}
+		this.options.expand();
+	}
+	/** The USERMENU slides in and should be expanded at all times 
+	    @returns {void}
+	*/
+	overrideMenuDefaults() {
+		this.el.removeEventListener('activate', this.expand);
+		this.el.removeEventListener('deactivate', this.collapse);
+		this.expand();
+	}
 	/** Calls MAIN.logout()
 	    @returns {Promise<ThisType>} callback
 	*/

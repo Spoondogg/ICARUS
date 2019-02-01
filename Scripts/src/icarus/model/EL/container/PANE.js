@@ -13,8 +13,8 @@ export default class PANE extends DIV {
 	*/
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('pane');
-        this.implement(new Swipeable(this));
+		this.addClass('pane');
+		this.implement(new Swipeable(this));
 	}
 }
-export { CONTAINER,	EL,	MODEL }
+export { CONTAINER, EL, MODEL }

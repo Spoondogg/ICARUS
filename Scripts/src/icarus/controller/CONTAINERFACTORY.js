@@ -298,5 +298,5 @@ export default class CONTAINERFACTORY {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER,	EL,	MODEL }
+export { ATTRIBUTES, CONTAINER, EL, MODEL }
 /* eslint-enable */

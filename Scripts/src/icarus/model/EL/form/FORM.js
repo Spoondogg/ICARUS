@@ -48,22 +48,21 @@ export default class FORM extends CONTAINER {
 		//this.populate(model.children);
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
-        this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-
-        /*
-        let { menu } = this.navbar.options; // .get('CRUD', 'MENU')[0]
-        this.btnPost = menu.addNavItemIcon(new MODEL().set({
-            icon: ICONS.SAVE,
-            label: 'SAVE'
-        }));
-        this.btnPost.el.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            this.post();
-            return false;
-        });
-        this.btnPost.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-        //this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
-        */
+		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
+		/*
+		let { menu } = this.navbar.options; // .get('CRUD', 'MENU')[0]
+		this.btnPost = menu.addNavItemIcon(new MODEL().set({
+		    icon: ICONS.SAVE,
+		    label: 'SAVE'
+		}));
+		this.btnPost.el.addEventListener('click', (ev) => {
+		    ev.preventDefault();
+		    this.post();
+		    return false;
+		});
+		this.btnPost.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
+		//this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
+		*/
 	}
 	/** Perform any async actions and populate this Container
 	    @param {Array<MODEL>} children Array of elements to add to this container's body

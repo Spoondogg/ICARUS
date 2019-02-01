@@ -30,7 +30,7 @@ export default class PROMPT extends DIALOG {
 					//));
 				} else if (model.formtype === 'CONTAINER') {
 					//loader.log(75, 'Generating Container').then(() => 
-                    FORM.createContainerForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+					FORM.createContainerForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 					//));
 				} else {
 					//loader.log(75).then(() => 
@@ -39,8 +39,8 @@ export default class PROMPT extends DIALOG {
 				}
 			} catch (e) {
 				//loader.log(100, 'Failed to create Form').then(() => reject(e));
-                console.error('PROMPT.createForm() Failed to create Form', model, this);
-                reject(e)
+				console.error('PROMPT.createForm() Failed to create Form', model, this);
+				reject(e)
 			}
 			//});
 		});

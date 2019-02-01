@@ -102,16 +102,16 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 				console.log('CreateForm', container, typeof container);
 				new PROMPT(new MODEL().set({
 					label: 'Create FormPost Form',
-                    container,
-                    caller: this
+					container,
+					caller: this
 				})).createForm(new MODEL().set({
 					formtype: 'FORMPOST',
 					className,
 					type,
 					id,
 					inputNode,
-                    container,
-                    caller: this
+					container,
+					caller: this
 				})).then((form) => resolve(form.getDialog().show()));
 			} catch (e) {
 				console.warn('Failed to create FormPost Form', e, this);
@@ -120,4 +120,4 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER,	EL,	MODEL }
+export { ATTRIBUTES, CONTAINER, EL, MODEL }

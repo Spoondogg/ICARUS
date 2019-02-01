@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	EL,	MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -24,7 +24,7 @@ export default class JUMBOTRON extends CONTAINER {
 				this.createEditableElement('p', this.screen);
 				this.loadBgImage();
 				this.setBgColor();
-                this.body.expand();
+				this.body.expand();
 			}
 		});
 	}

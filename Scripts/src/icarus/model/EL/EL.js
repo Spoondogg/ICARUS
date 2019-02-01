@@ -31,23 +31,22 @@ export default class EL extends MODEL {
 		    @property {Array<MODEL>} children 
 		*/
 		this.children = children;
-        /** A Collection of callback methods that accept a MODEL
-            ie: this.callbacks[foo]
-        */
-        this.callbacks = {};
-
-        /** A collection of public Methods
+		/** A Collection of callback methods that accept a MODEL
+		    ie: this.callbacks[foo]
+		*/
+		this.callbacks = {};
+		/** A collection of public Methods
 		    @property {Object.<Function>} methods
 		*/
-        this.methods = {};
+		this.methods = {};
 		/** A collection of public Events
 		    @property {Object.<Event>} events
 		*/
-        this.events = {};
+		this.events = {};
 		/** A collection of public Event handlers
 		    @property {Object.<Function>} handlers
 		*/
-        this.handlers = {};
+		this.handlers = {};
 		//console.log('Creating element', this.element);
 		this.el = document.createElement(this.element);
 		this.make(this.el, node, model, innerHTML);
@@ -222,13 +221,13 @@ export default class EL extends MODEL {
         @param {strong} className Element Class
 	    @returns {Array<EL>} Child Item/Element Filtered Results
 	*/
-    get(name = null, className = null) {
-        let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
-        if (results.length === 0) {
-            console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
-        } /*else {
-            console.info(this.className + '.get(' + name + ', ' + className + ') results', results);
-        }*/
+	get(name = null, className = null) {
+		let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+		if (results.length === 0) {
+			console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
+		} /* else {
+		    console.info(this.className + '.get(' + name + ', ' + className + ') results', results);
+		}*/
 		return results;
 		//return this.children.filter((c) => c.el.name === name);
 	}
@@ -310,7 +309,7 @@ export default class EL extends MODEL {
         @param {MODEL} model MODEL
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
-    create(model) {
+	create(model) {
 		//console.log('EL.create()', model);
 		return new Promise((resolve, reject) => {
 			try {

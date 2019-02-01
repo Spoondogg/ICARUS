@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, {	ATTRIBUTES,	EL,	MODEL } from '../IFACE.js';
+import IFACE, { ATTRIBUTES, EL, MODEL } from '../IFACE.js';
 import Activate from '../../event/Activate.js';
 import Deactivate from '../../event/Deactivate.js';
 /** An interface for Toggle driven Events for a collapsable element
