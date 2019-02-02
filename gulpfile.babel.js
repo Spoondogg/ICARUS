@@ -52,6 +52,11 @@ export const Watch = () => gulpfile.slurp();
     @returns {void}
 */
 export const Build = (done) => gulpfile.build()(done);
+/** Builds App
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const Clean = (done) => gulpfile.clean()(done);
 /** Builds Vendor Scripts
     @param {done} done Resolver/Callback
     @returns {void}
