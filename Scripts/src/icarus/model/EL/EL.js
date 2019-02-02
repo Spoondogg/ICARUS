@@ -225,7 +225,8 @@ export default class EL extends MODEL {
 		let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
 		if (results.length === 0) {
 			console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
-		} /* else {
+		}
+		/* else {
 		    console.info(this.className + '.get(' + name + ', ' + className + ') results', results);
 		}*/
 		return results;

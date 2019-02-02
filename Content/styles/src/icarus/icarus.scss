@@ -1473,9 +1473,9 @@ $jumbotron-height: 420px;
 			border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
 			border-radius: .2em;
 			float: right;
-			right: calc(#{$zero-px} - #{$sidebar-width});
 			//margin-left: -100%; /// !important
 			position: absolute;
+			right: calc(#{$zero-px} - #{$sidebar-width});
 			top: $navbar-height;
 			width: $sidebar-width;
 			z-index: 999;
@@ -1609,7 +1609,9 @@ $jumbotron-height: 420px;
 							//height: 2em;
 							width: 100%;
 
-							&.icon {}
+							&.icon {
+								// todo
+							}
 
 							&.label {
 								overflow: hidden;
