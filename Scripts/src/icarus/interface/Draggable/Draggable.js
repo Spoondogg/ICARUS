@@ -1,7 +1,5 @@
 /** @module */
-import IFACE, {
-	EL
-} from '../IFACE.js';
+import IFACE, { EL } from '../IFACE.js';
 /** An interface for Drag driven Events
     @see https://www.w3schools.com/jsref/event_ondrag.asp
     @class
@@ -46,6 +44,4 @@ export default class Draggable extends IFACE {
 		};
 	}
 }
-export {
-	EL
-};
+export { EL }
