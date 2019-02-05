@@ -8,7 +8,6 @@ import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
-//import STICKYFOOTER from '../../footer/stickyfooter/STICKYFOOTER.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -66,29 +65,37 @@ export default class MAIN extends CONTAINER {
 		this.mouse.w = document.body.clientWidth;
 		this.mouse.h = document.body.clientHeight;
 	}
-	/** Mouse Move Event Handler (Desktop Only)
-	    @param {Event} ev Event
+	/** Additional MouseMove support for Internet Explorer
+	    If pageX/Y aren't available and clientX/Y are, calculate pageX/Y (This is to support old IE)
+	    @param {Event} event Event
 	    @returns {void}
 	*/
-	handleMouseMove(ev) {
-		let eventDoc = null;
-		let doc = null;
+	handleMouseMoveInternetExplorer(event) {
+		let eventDoc = event.target && event.target.ownerDocument || document;
+		let doc = eventDoc.documentElement;
 		let body = null;
-		// If pageX/Y aren't available and clientX/Y are, calculate pageX/Y (This is to support old IE)
-		if (ev.pageX === null && ev.clientX !== null) {
-			eventDoc = ev.target && ev.target.ownerDocument || document;
-			doc = eventDoc.documentElement;
-			body = eventDoc.body;
-			ev.pageX = ev.clientX +
-				(doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-				(doc && doc.clientLeft || body && body.clientLeft || 0);
-			ev.pageY = ev.clientY +
-				(doc && doc.scrollTop || body && body.scrollTop || 0) -
-				(doc && doc.clientTop || body && body.clientTop || 0);
+		({ body } = eventDoc.body);
+		let docLeft = doc && doc.scrollLeft || body && body.scrollLeft || 0;
+		let clientLeft = doc && doc.clientLeft || body && body.clientLeft || 0;
+		let docTop = doc && doc.scrollTop || body && body.scrollTop || 0;
+		let clientTop = doc && doc.clientTop || body && body.clientTop || 0;
+		event.pageX = event.clientX + docLeft - clientLeft;
+		event.pageY = event.clientY + docTop - clientTop;
+		return event;
+	}
+	/** Mouse Move Event Handler (Desktop Only) creates a cache of the mouse coordinates
+	    @param {Event} event Event
+	    @returns {void}
+	*/
+	handleMouseMove(event) {
+		if (event.pageX === null && event.clientX !== null) {
+			let ev = this.handleMouseMoveInternetExplorer(event);
+			this.mouse.x = ev.pageX;
+			this.mouse.y = ev.pageY;
+		} else {
+			this.mouse.x = event.pageX;
+			this.mouse.y = event.pageY;
 		}
-		// Cache mouse position
-		this.mouse.x = ev.pageX;
-		this.mouse.y = ev.pageY;
 	}
 	/** Set the Mouse Position and relative positioning
 	    param {number} x X Coord
@@ -458,9 +465,10 @@ export default class MAIN extends CONTAINER {
 				label: 'Register'
 			})).then((form) => {
 				form.setAction('/Account/Register');
-				form.id = 0;
+				form.setId(0);
+				//form.id = 0;
+                //form.el.setAttribute('id', 0);
 				form.label = 'Register';
-				form.el.setAttribute('id', 0);
 				form.addClass('register');
 				form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
