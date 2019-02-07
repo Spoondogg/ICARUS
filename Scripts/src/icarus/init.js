@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /** @module */
-import APP from './APP.js';
+import APP from './controller/APP.js';
 /** Initializes the Application
     @description The id, user and dev parameters are defined in Views/Shared/_Layout
     <ul>

@@ -1581,7 +1581,7 @@ $jumbotron-height: 420px;
 				>.nav-item-icon {
 					//display: inline-block;
 					&.active {
-						background-color: $color-grey-light; // rgb(103, 102, 86);
+						background-color: $color-grey-dark; // rgb(103, 102, 86);
 						>a {
 							span {
 								color: $color-white;
@@ -1609,9 +1609,9 @@ $jumbotron-height: 420px;
 							//height: 2em;
 							width: 100%;
 
-							&.icon {
-								// todo
-							}
+							//&.icon {
+							// todo
+							//}
 
 							&.label {
 								overflow: hidden;

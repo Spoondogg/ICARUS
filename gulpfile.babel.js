@@ -1,99 +1,91 @@
-/// <binding AfterBuild='publification_dev' />
-/** This file interacts with Visual Studio's Task Runner to call methods of a GULPFILE    
-    Where possible, GULPFILE.js should import all required Node Modules
-    and imports for this file should be reserved for modules that have been 
-    installed globally. (ie: 'gulp4') or paths and configurations
+/// <binding AfterBuild='BuildDocumentation, BuildVendorDependencies' ProjectOpened='Watch' />
+/** Interface between Task Runner and GULPFILE
     @module 
 */
-import GULPFILE from './Scripts/src/icarus/task/gulp/GULPFILE.js'; //GULPPATHS
-//import autoprefixer from 'autoprefixer';
-//import babel from 'gulp-babel';
-//import buffer from 'gulp-buffer';
-//import cleancss from 'gulp-clean-css';
-//import concat from 'gulp-concat';
-//import connect from 'connect';
-//import del from 'del';
-import doxygen from 'doxygen';
-//import eslint from 'gulp-eslint';
-//import fs from 'file-system';
+//import GULPFILE from './Scripts/src/icarus/task/gulp/GULPFILE.js'; //GULPPATHS
+import GulpBuild from './Scripts/src/icarus/task/gulp/GULPBuild/GulpBuild.js';
+import GulpDocument from './Scripts/src/icarus/task/gulp/GULPDocument/GulpDocument.js';
+import GulpPublish from './Scripts/src/icarus/task/gulp/GULPPublish/GulpPublish.js';
+import GulpSyntax from './Scripts/src/icarus/task/gulp/GULPSyntax/GulpSyntax.js';
+import GulpTest from './Scripts/src/icarus/task/gulp/GULPTest/GulpTest.js';
+import GulpWatch from './Scripts/src/icarus/task/gulp/GULPWatch/GulpWatch.js';
 import gulp from 'gulp4';
-//import gutil from 'gulp-util';
-//import http from 'http';
-//import jsdoc from 'gulp-jsdoc3';
-//import merge from 'merge2';
-//import notify from 'gulp-notify';
-//import path from 'path';
-//import plumber from 'gulp-plumber';
-//import postcss from 'gulp-postcss';
-//import postcssfontsmoothing from 'postcss-font-smoothing';
-//import postcssmomentumscrolling from 'postcss-momentum-scrolling';
-//import postcsstouchcallout from 'postcss-touch-callout';
-//import rename from 'gulp-rename';
-//import request from 'request';
-//import sass from 'gulp-sass';
-//import sassdoc from 'sassdoc';
-//import sasslint from 'gulp-sass-lint';
-//import servestatic from 'serve-static';
-//import source from 'vinyl-source-stream';
-//import sourcemaps from 'gulp-sourcemaps';
-//import terser from 'gulp-terser';
-/** The Gulp Helper Class */
-const gulpfile = new GULPFILE(gulp);
-/** Indicates if the file has been slurped
-    @see https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+gulp.slurped = false; // https://codepen.io/ScavaJripter/post/how-to-watch-the-same-gulpfile-js-with-gulp
+
+/** Determines if source (true) or distribution (false) 
+    assets are pushed to the target environment
+    @type {boolean}
 */
-gulp.slurped = false;
-/** Instantiate a GulpFile and begin watching for changes
-    @returns {void}
-*/
-export const Watch = () => gulpfile.slurp();
-/** Builds App
+const debug = false;
+const builder = new GulpBuild();
+const scribe = new GulpDocument();
+const publisher = new GulpPublish();
+const auditer = new GulpSyntax();
+const tester = new GulpTest();
+const watcher = new GulpWatch();
+/** Builds App using DEV profile
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const Build = (done) => gulpfile.build()(done);
-/** Builds App
+export const BuildDev = (done) => builder.build()(done);
+/** Builds App using PROD profile
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const Clean = (done) => gulpfile.clean()(done);
-/** Builds Vendor Scripts
+export const BuildProd = (done) => builder.build(false)(done);
+/** Audits Source and Beautifies Scripts and Styles
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const BuildVendor = (done) => gulpfile.buildVendorAll()(done);
-/** Beautify Scripts and Styles
+export const AuditStyle = (done) => auditer.beautifyAll()(done);
+/** Audits Source and Lints Scripts and Styles
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const Beautify = (done) => gulpfile.beautifyAll()(done);
-/** Lint Scripts and Styles
-    @param {done} done Resolver/Callback
-    @returns {void}
-*/
-export const Lint = (done) => gulpfile.lintAll()(done);
+export const AuditSyntax = (done) => auditer.lintAll()(done);
 /** Builds Documentation
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const BuildDocumentation = (done) => gulpfile.buildDocumentation(doxygen)(done);
+export const BuildDocumentation = (done) => scribe.buildDocumentation()(done);
 /** Builds Client Side Documentation
     @param {done} done Resolver/Callback
     @returns {void}
 */
-export const BuildClientDocumentation = (done) => gulpfile.documentClient()(done);
+export const BuildClientDocumentation = (done) => scribe.documentClient()(done);
+/** Builds Vendor Dependencies to DIST (Scripts, Styles and Fonts)
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const BuildVendorDependencies = (done) => builder.buildVendorAll()(done);
+/** Removes SRC folders from the DEV Server
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const CleanDev = (done) => builder.cleanDev()(done);
+/** Publish to DEV Server using DEV Profile
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const PublishToDev = (done) => publisher.publishToDev()(done);
+/** Publish to DEV Server using PROD Profile
+    @param {done} done Resolver/Callback
+    @returns {void}
+*/
+export const PublishToProd = (done) => publisher.publishToDev(false)(done);
 /** Serves Documentation
     @returns {void}
 */
-export const ServeDocumentation = () => gulpfile.serveDocumentation();
-// REQUIRED
-//const { expect } = require('chai');
-const _ = require('lodash');
-//const globalVariables = _.pick(global, ['browser', 'expect']);
-const globalVariables = _.pick(global, ['browser']);
+export const ServeDocumentation = () => scribe.serveDocumentation();
 /** Instantiate a GulpFile and begin watching for changes
     @param {global} global NodeJS.Global globalVariables
     @param {browser} browser WebdriverIO.Client
     @returns {void}
 */
-export const Test = () => gulpfile.test(globalVariables);
+//const _ = require('lodash');
+//const globalVariables = _.pick(NodeJS.global, ['browser']);
+export const Test = () => tester.test(); //globalVariables
+/** Instantiate a GulpFile and begin watching for changes
+    @returns {void}
+*/
+export const Watch = () => watcher.slurp();

@@ -389,7 +389,7 @@ export default class CONTAINER extends GROUP {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
 	}
-	/** Returns the CONTAINER's name attribute
+	/** Returns the CONTAINER Element id attribute
 	    @returns {string} Container name
 	*/
 	getId() {

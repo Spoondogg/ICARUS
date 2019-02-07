@@ -4,15 +4,18 @@ export const GULPPATHS = {
 		baseglob: 'Content/styles/**/**.*',
 		base: 'Content/styles/src/icarus',
 		basefile: './Content/styles/src/icarus/icarus.scss',
-		dest: 'Content/styles/dist/icarus',
+		dest: 'Content/styles',
 		src: 'Content/styles/src/icarus/**/*.scss'
 	},
+	fonts: {
+		dest: 'Content/fonts'
+	},
 	scripts: {
-		buildglob: 'Scripts/**/**.*',
+		//buildglob: 'Scripts/**/**.*',
 		base: 'Scripts/src/icarus',
-		baseglob: './Scripts/src/**/**.js',
+		baseglob: 'Scripts/src/**/**.js',
 		src: ['Scripts/src/icarus/**/*.js'],
-		dest: 'Scripts/dist/icarus'
+		dest: 'Scripts'
 	},
 	serverside: {
 		cs: ['Controllers/**/**.cs', 'Models/Icarus/**/**.cs'],
@@ -24,7 +27,6 @@ export const GULPPATHS = {
 	},
 	tests: {
 		src: 'Scripts/test/specs/**/*.js',
-		//buildglob: 'Scripts/test/**/**.*',
 		base: 'Scripts/test',
 		baseglob: 'Scripts/test/specs/**/*.js'
 	},
@@ -36,10 +38,10 @@ export const GULPPATHS = {
 		prod: 'I://iis/icarus/'
 	},
 	config: {
-		beautify: '../config/beautify.json',
-		doxygen: '../config/doxygen.json',
-		eslint: '../config/eslint.json',
-		sasslint: '../config/sasslint.json',
-		jsdoc: '../config/jsdoc.json'
+		beautify: '../../config/beautify.json',
+		doxygen: '../../config/doxygen.json',
+		eslint: '../../config/eslint.json',
+		sasslint: '../../config/sasslint.json',
+		jsdoc: '../../config/jsdoc.json'
 	}
 };

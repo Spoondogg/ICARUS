@@ -610,7 +610,7 @@
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
-    <Content Include="Scripts\src\icarus\controller\init.js" />
+    <Content Include="Scripts\src\icarus\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
     <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
     <Content Include="Scripts\src\icarus\enums\BUTTONTYPE.js" />
@@ -637,6 +637,7 @@
     <Content Include="Scripts\src\icarus\helper\DATEOBJECT.js" />
     <Content Include="Scripts\src\icarus\helper\SERVICEWORKER.js" />
     <Content Include="Scripts\src\icarus\helper\WATERMARK.js" />
+    <Content Include="Scripts\src\icarus\interface\Collapsible\Collapsible.js" />
     <Content Include="Scripts\src\icarus\interface\Draggable\Draggable.js" />
     <Content Include="Scripts\src\icarus\interface\Closeable\Closeable.js" />
     <Content Include="Scripts\src\icarus\interface\Editable\Editable.js" />
@@ -648,7 +649,6 @@
     <Content Include="Scripts\src\icarus\interface\Selectable\Selectable.js" />
     <Content Include="Scripts\src\icarus\interface\Switchable\Switchable.js" />
     <Content Include="Scripts\src\icarus\interface\Clickable\Clickable.js" />
-    <Content Include="Scripts\src\icarus\interface\Collapsible\Collapsible.js" />
     <Content Include="Scripts\src\icarus\model\ATTRIBUTES.js" />
     <Content Include="Scripts\src\icarus\model\el\a\A.js" />
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
@@ -747,6 +747,13 @@
     <Content Include="Scripts\src\icarus\model\el\list\console\CONSOLE.js" />
     <Content Include="Scripts\src\icarus\model\MODEL.js" />
     <Content Include="Scripts\src\icarus\STRING.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPOptimize\GulpOptimize.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPPublish\GulpPublish.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPWatch\GulpWatch.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPSyntax\GulpSyntax.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPBuild\GulpBuild.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPTest\GulpTest.js" />
+    <Content Include="Scripts\src\icarus\task\gulp\GULPDocument\GulpDocument.js" />
     <Content Include="Scripts\src\icarus\task\gulp\GULPFILE.js" />
     <Content Include="Scripts\src\icarus\task\gulp\GULPPATHS.js" />
     <Content Include="Scripts\test\fixtures\index2.html" />
@@ -847,7 +854,6 @@
     <Folder Include="Models\Icarus\Database\Columns\" />
     <Folder Include="Models\Icarus\Database\Tables\DataCaches\" />
     <Folder Include="Models\Icarus\Database\Tables\IndexLists\" />
-    <Folder Include="Scripts\dist\" />
     <Folder Include="Scripts\test\errors\" />
   </ItemGroup>
   <ItemGroup>
