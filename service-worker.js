@@ -1,14 +1,14 @@
 ﻿var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
     'https://fonts.googleapis.com/css?family=Lato|Raleway',
-    '/Scripts/dist/icarus/vendor.js',
-    '/Content/styles/dist/icarus/vendor.css',
-    '/Content/styles/dist/icarus/icarus.min.css',
-    '/Content/styles/dist/fonts/glyphicons-halflings-regular.eot',
-    '/Content/styles/dist/fonts/glyphicons-halflings-regular.svg',
-    '/Content/styles/dist/fonts/glyphicons-halflings-regular.ttf',
-    '/Content/styles/dist/fonts/glyphicons-halflings-regular.woff',
-    '/Content/styles/dist/fonts/glyphicons-halflings-regular.woff2',
+    '/Scripts/vendor.js',
+    '/Content/styles/vendor.css',
+    '/Content/styles/icarus.min.css',
+    '/Content/styles/fonts/glyphicons-halflings-regular.eot',
+    '/Content/styles/fonts/glyphicons-halflings-regular.svg',
+    '/Content/styles/fonts/glyphicons-halflings-regular.ttf',
+    '/Content/styles/fonts/glyphicons-halflings-regular.woff',
+    '/Content/styles/fonts/glyphicons-halflings-regular.woff2',
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'
 ];
