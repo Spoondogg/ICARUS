@@ -1,10 +1,6 @@
 /** @module */
-import MAIN, {
-	LOADER,
-	MODEL
-} from '../model/el/container/main/MAIN.js';
+import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
 import CONTAINERFACTORY from './CONTAINERFACTORY.js';
-//import DIALOG from '../model/EL/dialog/DIALOG.js';
 import WATERMARK from '../helper/WATERMARK.js';
 /** An Application Class
     @description Constructs the Application Controller and initializes the MAIN Container
@@ -36,18 +32,10 @@ export default class CONTROLLER extends MODEL {
 		});
 		document.body.className = "icarus";
 		this.watermark = new WATERMARK();
-		/** @property {string} name The application name
-        this.name = name;*/
-		/** @property {string} version The application version
-        this.version = version;*/
-		/** @property {string} token The session security token
-		this.token = token;*/
 		/** @property {Url} url An Url object */
 		this.url = new URL(window.location.href);
 		/** @property {boolean} debug If true, debug outputs are shown */
 		this.debug = true;
-		/** @property {number} recursionLimit The maximum amount of recursion before throwing an error		        
-        this.recursionLimit = recursionLimit;*/
 		/** @property {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
 		this.returnUrl = this.url.searchParams.get('ReturnUrl');
 		if (this.returnUrl) {
@@ -140,6 +128,4 @@ export default class CONTROLLER extends MODEL {
 		return this;
 	}
 }
-export {
-	CONTAINERFACTORY
-};
+export { CONTAINERFACTORY }
