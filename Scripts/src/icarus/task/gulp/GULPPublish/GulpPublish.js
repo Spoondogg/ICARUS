@@ -26,10 +26,10 @@ export default class GulpPublish extends GULPFILE {
 	    @param {string} dest Destination Path
 	    @returns {gulp} A gulp promise
 	*/
-    publish(done, label, src, dest) {
-        src.push('!**/deprec/**/**.*');
-        src.push('!**/test/**/**.*');
-        src.push('!**.(yml|md)');
+	publish(done, label, src, dest) {
+		src.push('!**/deprec/**/**.*');
+		src.push('!**/test/**/**.*');
+		src.push('!**.(yml|md)');
 		return this.addEvents('Publish > ' + label, () => this.publishStream(src, dest), done);
 	}
 	/** Publishes Distribution Scripts and Styles to the Production Server 
@@ -54,13 +54,13 @@ export default class GulpPublish extends GULPFILE {
         @param {string} dest Destination 
 	    @returns {gulp.series} Series
 	*/
-    scripts_lintbuildpublish(dev = true, src = GULPPATHS.scripts.src, dest = GULPPATHS.server.dev + GULPPATHS.scripts.dest) { // 'Scripts'
-        let profile = dev ? 'dev' : 'prod';
+	scripts_lintbuildpublish(dev = true, src = GULPPATHS.scripts.src, dest = GULPPATHS.server.dev + GULPPATHS.scripts.dest) { // 'Scripts'
+		let profile = dev ? 'dev' : 'prod';
 		return this.gulp.series(
 			(done) => this.logCompletion('GulpPublish.scripts_lintbuildpublish(' + profile + ')', done),
-            (done) => this.auditer.lintScripts(done, 'Scripts', src),
+			(done) => this.auditer.lintScripts(done, 'Scripts', src),
 			(done) => this.builder.buildScripts(done),
-            (done) => this.publish(done, 'PublishScripts', [GULPPATHS.scripts.baseglob], dest));
+			(done) => this.publish(done, 'PublishScripts', [GULPPATHS.scripts.baseglob], dest));
 	}
 	/** Lint, Build on Success, then publish a DEV (default) version of the application Styles
         @param {boolean} dev If true (default), then Sourcemaps are written
@@ -68,9 +68,9 @@ export default class GulpPublish extends GULPFILE {
         @param {string} dest Destination
 	    @returns {gulp.series} Series
 	*/
-    styles_lintbuildpublish(dev = true, src = GULPPATHS.styles.src, dest = GULPPATHS.styles.dest) {
-        return this.gulp.series(
-            (done) => this.logCompletion('GulpPublish.styles_lintbuildpublish()', done),
+	styles_lintbuildpublish(dev = true, src = GULPPATHS.styles.src, dest = GULPPATHS.styles.dest) {
+		return this.gulp.series(
+			(done) => this.logCompletion('GulpPublish.styles_lintbuildpublish()', done),
 			(done) => this.auditer.lintStyles(done),
 			(done) => this.builder.buildStyles(done, src, dest, 'icarus', dev),
 			(done) => this.publish(done, 'PublishStyles', [GULPPATHS.styles.baseglob], GULPPATHS.server.dev + dest));

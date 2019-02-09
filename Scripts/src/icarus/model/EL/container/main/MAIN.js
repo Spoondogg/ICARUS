@@ -467,7 +467,7 @@ export default class MAIN extends CONTAINER {
 				form.setAction('/Account/Register');
 				form.setId(0);
 				//form.id = 0;
-                //form.el.setAttribute('id', 0);
+				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
 				form.addClass('register');
 				form.children[0].children[0].addInputElements([ // fieldset.formElementGroup

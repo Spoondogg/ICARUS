@@ -81,18 +81,18 @@ export default class CONTAINER extends GROUP {
 	*/
 	ifEmpty() {
 		return this.callback(() => {
-            if (this.children.length === 0) {
-                let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
-                btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
-                btnAddElement.btn.el.onclick = () => {
-                    this.navheader.expand().then(
-                        (navBar) => navBar.menu.expand().then(
-                            (nav) => nav.menu.expand().then(
-                                (n) => n.get('ELEMENTS').expand())));
-                    btnAddElement.destroy();
-                    return false;
-                }
-            }
+			if (this.children.length === 0) {
+				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
+				btnAddElement.btn.el.onclick = () => {
+					this.navheader.expand().then(
+						(navBar) => navBar.menu.expand().then(
+							(nav) => nav.menu.expand().then(
+								(n) => n.get('ELEMENTS').expand())));
+					btnAddElement.destroy();
+					return false;
+				}
+			}
 		});
 	}
 	/** Creates an editable EL for this CONTAINER
@@ -543,8 +543,8 @@ export default class CONTAINER extends GROUP {
 			try {
 				let dialog = new DIALOG(new MODEL().set({
 					label: 'Remove ' + this.className + '{' + this.element + '}[' + this.id + '] from ' + this.container.className,
-                    container: this.getMain(),
-                    caller: this.getContainer() //.getMain()
+					container: this.getMain(),
+					caller: this.getContainer() //.getMain()
 				}));
 				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
