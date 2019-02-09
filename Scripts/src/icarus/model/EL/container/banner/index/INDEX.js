@@ -1,71 +1,121 @@
 /** @module  */
-//import CONTAINER, { MODEL } from '../../CONTAINER.js';
-import MENU, { MODEL } from '../../../nav/menu/MENU.js';
+import PANEL, { CONTAINER, MODEL } from '../../../dialog/panel/PANEL.js';
 import BANNER from '../BANNER.js';
-//import DIV from '../../../div/DIV.js';
-//import HEADER from '../../../header/HEADER.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
-//import MENULIST from '../../menulist/MENULIST.js';
-//import MODAL from '../../../modal/MODAL.js';
-//import P from '../../../p/P.js';
 /** Contains a high level view of all objects owned by this user
     @class
     @extends BANNER
 */
 export default class INDEX extends BANNER {
-	/** Constructs a SECTION Container Element
+	/** Constructs an INDEX Container Element for browsing CONTAINERS
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model	    
     */
 	constructor(node, model) {
 		super(node, model);
-		this.addClass('index');
+        this.addClass('index');
+        this.addContainersMenu();
+        this.navheader.expand();
 	}
-	construct() {
-		return new Promise((resolve, reject) => {
-			this.getLoader().log(20, this.className).then((loader) => {
-				try {
-					this.menu = new MENU(this.body.pane, new MODEL('horizontal').set({
-						label: 'INDEX',
-						collapsed: 1,
-						showHeader: 1,
-						name: 'index'
-					}));
-					['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'].forEach((element) => {
-						this.addThumbButtonActions(element, this.menu.addNavItemIcon(new MODEL().set({
-							icon: ICONS[element.toUpperCase()],
-							label: element,
-							dataId: -1,
-							data: {
-								header: element,
-								p: '&nbsp;'
-							}
-						})));
-					});
-					loader.log(100).then(() => resolve(this));
-				} catch (e) {
-					loader.log(0).then(() => reject(e));
-				}
-			});
-		});
-	}
+    /** Adds the Containers Menu, a collection of Container Types that can be browsed
+	    Adds a right aligned tab to show/hide the Container Menu
+	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+	    @returns {void}
+	*/
+    addContainersMenu() {
+        try {
+            // Create Primary Options tab and Menu
+            let btnContainers = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                icon: ICONS.COG,
+                label: 'ELEMENTS'
+            }));
+            let containerOptions = this.navheader.menus.addNavBar(new MODEL().set('name', 'ELEMENTS'));
+            this.navheader.addTabbableElement(btnContainers, containerOptions);
+            // Create Secondary Tabs and Horizontal Menus inside Menu
+            let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
+            allowed.map((name) => {
+                let tb = containerOptions.tabs.addNavItemIcon(new MODEL().set({
+                    label: name,
+                    icon: ICONS[name]
+                }));
+                let opt = containerOptions.menus.addMenu(new MODEL('horizontal').set('name', name));                
+                containerOptions.addTabbableElement(tb, opt);
+                this.addThumbButtonActions(name, tb, opt);
+
+                ////  YOU SHOULD CREATE A TABBABLE ELEMENT (CONTAINER-PREVIEW) that can be populated with the element
+            });
+        } catch (e) {
+            let modal = this.getProtoTypeByClass('MODAL');
+            if (modal === null) {
+                console.warn('Unable to retrieve MAIN Container', e);
+                throw e;
+            } else {
+                switch (modal.className) {
+                    case 'LOADER':
+                    case 'PROMPT':
+                        break;
+                    default:
+                        console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
+                        break;
+                }
+            }
+        }
+    }
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
 	    @param {string} element The name of the element 
 	    @param {NAVITEMICON} thumb A NAVITEMICON that represents the given element
+        @param {MENU} menu MENU relative to NAVITEMICON
 	    @returns {void}
 	    @async
 	*/
-	addThumbButtonActions(element, thumb) {
+	addThumbButtonActions(element, thumb, menu) {
 		return new Promise((resolve, reject) => {
 			try {
-				$.post('/' + element + '/List', {
+				$.post('/' + element + '/LIST', {
 					'__RequestVerificationToken': this.getToken()
 				}, (payload, status) => {
 					if (status === 'success') {
 						let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
-						thumb.el.setAttribute('title', str);
-						thumb.el.onclick = () => this.launchModal(payload.className, str, payload.className, payload.list);
+                        thumb.el.setAttribute('title', str);
+                        thumb.el.addEventListener('activate', () => console.warn('Payload for ' + element, payload));
+                        payload.list.forEach((li) => {
+                            let icon = menu.addNavItemIcon(new MODEL('card').set({
+                                label: li.id,
+                                icon: ICONS[element]
+                            }));
+                            icon.el.setAttribute('title', li.label);
+                            icon.el.addEventListener('activate', () => {
+                                let url = '/' + element + '/GET/' + li.id
+                                console.warn('Output for ' + url, li);
+                                $.getJSON(url, (result) => {
+                                    console.warn('Results for ' + url, result);
+                                    let panel = new PANEL(new MODEL().set({
+                                        label: url,
+                                        caller: icon,
+                                        container: this
+                                    }));
+                                    //let woot = new DIV(panel.body, new MODEL('woot'), 'woot: ' + result.model.id);
+                                    panel.body.addContainerCase(element);
+                                    panel.body.populate([result.model]).then((results) => {
+                                        try {
+                                            results.body.pane.children[1].navheader.expand();
+                                        } catch (e) {
+                                            console.warn('Unable to show navheader.  Likely async issue', results);
+                                        }
+                                        // This is cheating.  You should be waiting for an indication that the CONTAINER has loaded instead of 
+                                        // assuming that it will exist.  This will eventually break.
+                                        setTimeout(() => {
+                                            console.warn('!!! BAD BAD BADNESS !!!', results);
+                                            console.warn('INDEX Populated', results, results.body.pane.children);
+                                            // DO THE THING that you're not supposed to do this way
+                                            results.body.pane.children[1].navheader.expand();
+                                        }, 1000);
+                                        panel.showDialog();
+                                    });
+                                });
+                            })
+                        });
 					}
 					resolve(this);
 				});
@@ -74,61 +124,14 @@ export default class INDEX extends BANNER {
 			}
 		});
 	}
-	/** Creates the Modal that contains the list of objects for preview
-        @todo Consider paging these results
-        @param {string} header Header text
-        @param {string} p paragraph
-        @param {string} listClass element class
-        @param {Array} list A list
-        @returns {void}
-    */
-	launchModal(header, p, listClass, list) {
-		console.log(header, p, listClass, list);
-		/*
-        console.log('Launch Index Thumbnail Modal');
-		this.modal = new MODAL(header);
-		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
-		//this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL());
-		//this.modal.container.image.el.src = this.image.el.src;
-		this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set({
-			'label': header
-		}));
-		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
-			'style': 'height:auto;'
-		})), p);
-		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
-			'class': 'preview-notes'
-		})), '');
-		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'),
-			[listClass.toUpperCase()]);
-		this.modal.container.preview.el.setAttribute('style', 'height:400px;max-height:400px;overflow-y:auto;');
-		this.modal.container.menulist = new MENULIST(this.modal.container.body.pane, new MODEL(new ATTRIBUTES({
-			'style': 'max-height:200px;overflow-y:auto;'
-		})).set({
-			'name': 'preview-list',
-			'label': listClass + '(s)'
-		}));
-		for (let li = 0; li < list.length; li++) {
-			let title = list[li].label + ' (' + listClass + '[' + list[li].id + '])';
-			this.modal.container.menulist.menu.addNavItem(new MODEL().set({
-				'label': title
-			})).el.onclick = () => {
-				this.modal.container.preview.body.pane.empty();
-				this.launchPreview(500, listClass, list[li].id); // title, this.modal.container.preview.body.pane,
-			};
-		}
-		this.modal.expand();
-        */
-	}
-	/**
-	        Creates a modal and loads the specified container
-	        @param {number} delay Delay in milliseconds
-	        param {string} title Modal Title
-	        param {EL} node Modal node to append to
-	        @param {string} className Object class name
-	        @param {number} id Object id
-	        @returns {void}
-		*/
+	/** Creates a modal and loads the specified container
+	    @param {number} delay Delay in milliseconds
+	    param {string} title Modal Title
+	    param {EL} node Modal node to append to
+	    @param {string} className Object class name
+	    @param {number} id Object id
+	    @returns {void}
+	*/
 	launchPreview(delay = 500, className, id) { // title = 'Preview', // node
 		setTimeout(() => {
 			$.getJSON('/' + className + '/Get/' + id, (result) => {
@@ -145,3 +148,4 @@ export default class INDEX extends BANNER {
 		}, delay);
 	}
 }
+export { CONTAINER }

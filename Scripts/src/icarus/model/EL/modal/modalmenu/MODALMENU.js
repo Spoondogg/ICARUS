@@ -1,7 +1,5 @@
 /** @module */
-import MENU, {
-	MODEL
-} from '../../nav/menu/MENU.js';
+import MENU, { MODEL } from '../../nav/menu/MENU.js';
 import MODAL from '../MODAL.js';
 /** A modal prompt.
     @description Creates a modal and displays a text well and any buttons that have

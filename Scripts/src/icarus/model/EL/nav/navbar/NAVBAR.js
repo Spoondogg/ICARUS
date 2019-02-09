@@ -4,7 +4,7 @@ import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 //import SVG from '../../svg/SVG.js';
-/** A full width collapseable NAV Element
+/** A full width collapseable NAV Element that generally contains tabs
     @class
     @extends NAV
 */

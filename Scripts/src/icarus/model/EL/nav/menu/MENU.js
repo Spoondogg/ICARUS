@@ -2,6 +2,7 @@
 import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
 import UL, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL } from '../../list/ul/UL.js';
+import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
@@ -60,7 +61,14 @@ export default class MENU extends LIST {
 	*/
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
-	}
+    }
+    /** Constructs a Nav Item (Anchor)
+	    @param {MODEL} model Object model
+	    @returns {NAVBAR} NavBar
+	*/
+    addNavBar(model) {
+        return this.addChild(new NAVBAR(this, model)); //model.url, model.label
+    }
 	/** Constructs a Nav Item (Anchor)
 	    @param {MODEL} model Object model
 	    @returns {NAVITEM} Nav Item with Anchor
@@ -96,4 +104,4 @@ export default class MENU extends LIST {
 		return new NAVSEPARATOR(this.list);
 	}
 }
-export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVITEM, NAVITEMICON, UL }
+export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, UL }

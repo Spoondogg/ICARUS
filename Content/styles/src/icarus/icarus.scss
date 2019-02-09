@@ -448,104 +448,104 @@ $jumbotron-height: 420px;
 /// @link https://webdevstudios.com/2015/03/17/getting-started-with-sassdoc/
 /// @link Consider http://sass-lang.com/documentation/Sass/Script/Functions.html#saturate-instance_method
 .icarus {
-	@extend %gradient-vertical-fade;
-	@include font-smoothing;
-	@include transition($transition-default);
-	background-color: $color-dark-less;
-	color: $color-primary;
-	font-family: $font-primary;
-	font-size: $font-size-base;
-	font-weight: $font-primary-weight;
-	height: 100vh;
-	overflow: hidden;
-	padding-top: $navbar-height;
-	/* #region Styles */
-	/// Removes fixed padding consumed by MAIN.nav
-	&.compact {
-		padding-top: 0;
-	}
+    @extend %gradient-vertical-fade;
+    @include font-smoothing;
+    @include transition($transition-default);
+    background-color: $color-dark-less;
+    color: $color-primary;
+    font-family: $font-primary;
+    font-size: $font-size-base;
+    font-weight: $font-primary-weight;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: $navbar-height;
+    /* #region Styles */
+    /// Removes fixed padding consumed by MAIN.nav
+    &.compact {
+        padding-top: 0;
+    }
 
-	.clickable {
-		@extend %clickable;
-	}
+    .clickable {
+        @extend %clickable;
+    }
 
-	.edit {
-		@extend %edit;
-	}
+    .edit {
+        @extend %edit;
+    }
 
-	.selected {
-		@extend %selected;
-	}
-	/* #endregion */
-	/* #region Elements */
-	button {
-		@extend %button;
-	}
+    .selected {
+        @extend %selected;
+    }
+    /* #endregion */
+    /* #region Elements */
+    button {
+        @extend %button;
+    }
 
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6,
-	header {
-		@extend %header;
-	}
-	/* #endregion */
-	/// Bootstrap Modal and non-standard DIALOG Element
-	.modal {
-		animation: slideOutUp $transition-speed $transition-motion;
-		border: 0;
-		border-radius: .6rem;
-		box-shadow: 0 0 1em $color-black;
-		margin: 1em auto;
-		max-width: $body-width;
-		padding: 0;
-		position: absolute;
-		top: 0;
-		width: 100%;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    header {
+        @extend %header;
+    }
+    /* #endregion */
+    /// Bootstrap Modal and non-standard DIALOG Element
+    .modal {
+        animation: slideOutUp $transition-speed $transition-motion;
+        border: 0;
+        border-radius: .6rem;
+        box-shadow: 0 0 1em $color-black;
+        margin: 1em auto;
+        max-width: $body-width;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
 
-		&::backdrop {
-			animation: fadeIn $transition-speed $transition-motion;
-			background-color: $color-shadow-dark;
-			bottom: 0;
-			left: 0;
-			position: fixed;
-			right: 0;
-			top: 0;
-		}
+        &::backdrop {
+            animation: fadeIn $transition-speed $transition-motion;
+            background-color: $color-shadow-dark;
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+        }
 
-		&[open],
-		&.in {
-			animation: slideInTop $transition-speed $transition-motion;
+        &[open],
+        &.in {
+            animation: slideInTop $transition-speed $transition-motion;
 
-			&.hiding {
-				animation: slideOutUp $transition-speed $transition-motion;
+            &.hiding {
+                animation: slideOutUp $transition-speed $transition-motion;
 
-				&::backdrop {
-					animation: fadeOut $transition-speed $transition-motion;
-				}
-			}
-		}
-		/// A Prompt style Dialog
-		/// @group dialog
-		&.prompt {
-			animation: slideOutDown $transition-speed $transition-motion;
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
-			bottom: 0;
-			margin-bottom: 0;
-			top: auto;
+                &::backdrop {
+                    animation: fadeOut $transition-speed $transition-motion;
+                }
+            }
+        }
+        /// A Prompt style Dialog
+        /// @group dialog
+        &.prompt {
+            animation: slideOutDown $transition-speed $transition-motion;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            bottom: 0;
+            margin-bottom: 0;
+            top: auto;
 
-			&[open],
-			&.in {
-				animation: slideInTop $transition-speed $transition-motion;
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
 
-				&.hiding {
-					animation: slideOutUp $transition-speed $transition-motion;
-				}
-			}
-			/*> .form-footer {
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
+            /*> .form-footer {
                 border: 0;
 
                 button {
@@ -555,212 +555,241 @@ $jumbotron-height: 420px;
                     padding: 0;
                 }
             }*/
-		}
-		/// A Login Form embedded in a Prompt
-		/// @group dialog
-		&.login {
-			animation: slideOutRight $transition-speed $transition-motion;
-			float: right;
-			left: calc(100% - 270px);
-			top: 2em;
-			width: 250px;
+        }
+        /// A Panel style Dialog
+        /// @group dialog
+        &.panel {
+            animation: slideOutDown $transition-speed $transition-motion;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            bottom: 0;
+            margin-bottom: 0;
+            top: auto;
 
-			&[open],
-			&.in {
-				animation: slideInRight $transition-speed $transition-motion;
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
 
-				&.hiding {
-					animation: slideOutRight $transition-speed $transition-motion;
-				}
-			}
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
+            /*> .form-footer {
+                border: 0;
 
-			footer {
-				display: none;
-			}
-		}
-		/// A Loader Dialog
-		/// @group dialog
-		&.loader {
-			animation: slideOutDown $transition-speed $transition-motion;
-			background-color: $color-dark; // transparentize($color-light, .75);
-			border-radius: 0;
-			border-top: 1px solid transparentize($color-grey-light, .7);
-			bottom: 0;
-			height: auto;
-			margin-bottom: -.5em;
-			max-height: 260px;
-			top: auto;
-			width: 100%;
+                button {
+                    border-radius: 0;
+                    height: $navbar-height - 1em;
+                    line-height: $navbar-height - 1em;
+                    padding: 0;
+                }
+            }*/
+        }
+        /// A Login Form embedded in a Prompt
+        /// @group dialog
+        &.login {
+            animation: slideOutRight $transition-speed $transition-motion;
+            float: right;
+            left: calc(100% - 270px);
+            top: 2em;
+            width: 250px;
 
-			&::backdrop {
-				opacity: 0;
-			}
+            &[open],
+            &.in {
+                animation: slideInRight $transition-speed $transition-motion;
 
-			&[open],
-			&.in {
-				animation: slideInTop $transition-speed $transition-motion;
+                &.hiding {
+                    animation: slideOutRight $transition-speed $transition-motion;
+                }
+            }
 
-				&.hiding {
-					animation: slideOutUp $transition-speed $transition-motion;
-				}
-			}
+            footer {
+                display: none;
+            }
+        }
+        /// A Loader Dialog
+        /// @group dialog
+        &.loader {
+            animation: slideOutDown $transition-speed $transition-motion;
+            background-color: $color-dark; // transparentize($color-light, .75);
+            border-radius: 0;
+            border-top: 1px solid transparentize($color-grey-light, .7);
+            bottom: 0;
+            height: auto;
+            margin-bottom: -.5em;
+            max-height: 260px;
+            top: auto;
+            width: 100%;
 
-			.body {
-				margin: .5em;
+            &::backdrop {
+                opacity: 0;
+            }
 
-				.well {
-					font-size: smaller;
-					margin: 0;
-				}
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
 
-				.progress {
-					border-radius: 3px;
-					clear: both;
-					float: none;
-					margin: 0;
-					//height: calc(#{$navbar-height} - .5em);
-					.text {
-						clear: both;
-						float: none;
-						min-width: 400px;
-						overflow: visible;
-						padding: 0 .5em;
-						text-align: left;
-						text-decoration: none;
-						text-transform: uppercase;
-					}
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
 
-					.progress-bar {
-						border-radius: .3em;
-						overflow: visible;
-						text-shadow: 0 1px 4px $color-shadow-neutral;
-					}
+            .body {
+                margin: .5em;
 
-					&+ul {
-						border: 1px solid $color-grey-dark;
-						border-radius: 5px;
-						height: 0;
-						margin-top: 0;
-						padding: 0;
+                .well {
+                    font-size: smaller;
+                    margin: 0;
+                }
 
-						&.console {
-							@extend %no-scroll-bar;
+                .progress {
+                    border-radius: 3px;
+                    clear: both;
+                    float: none;
+                    margin: 0;
+                    //height: calc(#{$navbar-height} - .5em);
+                    .text {
+                        clear: both;
+                        float: none;
+                        min-width: 400px;
+                        overflow: visible;
+                        padding: 0 .5em;
+                        text-align: left;
+                        text-decoration: none;
+                        text-transform: uppercase;
+                    }
 
-							&.collapse {
-								&.in {
-									height: 12em;
-									margin-top: .5em;
-									//opacity: 1;
-									padding: initial;
-								}
-							}
+                    .progress-bar {
+                        border-radius: .3em;
+                        overflow: visible;
+                        text-shadow: 0 1px 4px $color-shadow-neutral;
+                    }
 
-							&.collapsing {
-								margin-top: .5em;
-							}
+                    & + ul {
+                        border: 1px solid $color-grey-dark;
+                        border-radius: 5px;
+                        height: 0;
+                        margin-top: 0;
+                        padding: 0;
 
-							li {
-								padding: 3px;
-							}
-						}
-					}
-				}
-			}
+                        &.console {
+                            @extend %no-scroll-bar;
 
-			footer,
-			header {
-				display: none;
-				height: $navbar-height;
-			}
-		}
-		/// The Dialog Header
-		/// @group dialog
-		>header {
-			background-color: $color-grey-dark;
-			color: $color-light;
-			height: 3em;
-			line-height: 3em;
-			padding: 0 .5em;
-			text-transform: uppercase;
+                            &.collapse {
+                                &.in {
+                                    height: 12em;
+                                    margin-top: .5em;
+                                    //opacity: 1;
+                                    padding: initial;
+                                }
+                            }
 
-			button {
-				//background-color: transparent;
-				//color: $color-white;
-				float: right;
-				//font-weight: bold;
-				//line-height: 1.5em;
-				//&:hover {
-				//    color: $color-light-less;
-				//}
-			}
-		}
+                            &.collapsing {
+                                margin-top: .5em;
+                            }
 
-		>.body {
-			@extend %modal-tall;
+                            li {
+                                padding: 3px;
+                            }
+                        }
+                    }
+                }
+            }
 
-			>form {
-				.form-footer {
-					height: auto;
-				}
-			}
-		}
+            footer,
+            header {
+                display: none;
+                height: $navbar-height;
+            }
+        }
+        /// The Dialog Header
+        /// @group dialog
+        > header {
+            background-color: $color-grey-dark;
+            color: $color-light;
+            height: 3em;
+            line-height: 3em;
+            padding: 0 .5em;
+            text-transform: uppercase;
 
-		footer {
-			&.form-footer {
-				border: 0;
-				//button {
-				//border-radius: 0;
-				//height: $navbar-height - 1em;
-				//line-height: $navbar-height - 1em;
-				//padding: 0;
-				//}
-			}
-		}
-	}
-	/// A vertically aligned button group
-	/// @todo This should just be a list...  shouldn't it?
-	/// @group review
-	.btn-group-vertical {
-		width: 100%;
+            button {
+                //background-color: transparent;
+                //color: $color-white;
+                float: right;
+                //font-weight: bold;
+                //line-height: 1.5em;
+                //&:hover {
+                //    color: $color-light-less;
+                //}
+            }
+        }
 
-		button {
-			&:first-child {
-				&:not(:last-child) {
-					border-radius: 0;
-				}
-			}
+        > .body {
+            @extend %modal-tall;
 
-			&:last-child {
-				&:not(:first-child) {
-					// override vendor
-					border-radius: 0;
-				}
-			}
+            > form {
+                .form-footer {
+                    height: auto;
+                }
+            }
+        }
 
-			.btn {
-				margin: 0;
-			}
-		}
-	}
-	/// Full width block affixed to the bottom of its container
-	/// @group elements
-	footer {
-		@extend %bevel-up;
-		@include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
-		background-color: $color-grey-dark;
-		clear: both;
-		color: $color-white;
-		display: block;
-		float: left;
-		font-size: smaller;
-		height: $navbar-height;
-		line-height: $navbar-height - 1em;
-		padding: 0;
-		width: 100%;
-		/// Button within a footer
-		/// @todo This may be somewhat redundant
-		/// @group review
-		/*button {
+        footer {
+            &.form-footer {
+                border: 0;
+                //button {
+                //border-radius: 0;
+                //height: $navbar-height - 1em;
+                //line-height: $navbar-height - 1em;
+                //padding: 0;
+                //}
+            }
+        }
+    }
+    /// A vertically aligned button group
+    /// @todo This should just be a list...  shouldn't it?
+    /// @group review
+    .btn-group-vertical {
+        width: 100%;
+
+        button {
+            &:first-child {
+                &:not(:last-child) {
+                    border-radius: 0;
+                }
+            }
+
+            &:last-child {
+                &:not(:first-child) {
+                    // override vendor
+                    border-radius: 0;
+                }
+            }
+
+            .btn {
+                margin: 0;
+            }
+        }
+    }
+    /// Full width block affixed to the bottom of its container
+    /// @group elements
+    footer {
+        @extend %bevel-up;
+        @include boxShadow(0, -1px, 2px, 0, $color-shadow-dark);
+        background-color: $color-grey-dark;
+        clear: both;
+        color: $color-white;
+        display: block;
+        float: left;
+        font-size: smaller;
+        height: $navbar-height;
+        line-height: $navbar-height - 1em;
+        padding: 0;
+        width: 100%;
+        /// Button within a footer
+        /// @todo This may be somewhat redundant
+        /// @group review
+        /*button {
             @include boxShadowInset(0, 2px, 2px, 0, $color-shadow-light);
             background-color: $color-grey-light;
             border-bottom-left-radius: 5px;
@@ -780,65 +809,65 @@ $jumbotron-height: 420px;
                 color: $color-secondary-neutral;
             }
         }*/
-		>cite {
-			float: right;
-			line-height: 16px;
-			text-align: right;
+        > cite {
+            float: right;
+            line-height: 16px;
+            text-align: right;
 
-			a {
-				@include anchor($color-white, $color-blue-lighter, true);
-				//color: $color-white;
-				//text-decoration: underline;
-				//&:hover {
-				//    color: $color-blue-lighter;
-				//}
-			}
-		}
-		/// Locks the footer to the bottom of the page
-		&.stickyfooter {
-			@extend %bevel-up;
-			@include transition($transition-default);
-			bottom: 0;
-			position: fixed;
-			/// EDIT Container
-			>.container {
-				margin: .4em auto;
-			}
-			/// Footer is extended for EDIT Container
-			&.active {
-				height: $navbar-height * 5;
-			}
+            a {
+                @include anchor($color-white, $color-blue-lighter, true);
+                //color: $color-white;
+                //text-decoration: underline;
+                //&:hover {
+                //    color: $color-blue-lighter;
+                //}
+            }
+        }
+        /// Locks the footer to the bottom of the page
+        &.stickyfooter {
+            @extend %bevel-up;
+            @include transition($transition-default);
+            bottom: 0;
+            position: fixed;
+            /// EDIT Container
+            > .container {
+                margin: .4em auto;
+            }
+            /// Footer is extended for EDIT Container
+            &.active {
+                height: $navbar-height * 5;
+            }
 
-			textarea {
-				border-radius: 5px;
-				color: $color-black;
-				height: 180px;
-				line-height: normal;
-				margin: 1em;
-				width: calc(100% - 25px);
-			}
-		}
-		/// A series of buttons for paged results
-		&.pagination {
+            textarea {
+                border-radius: 5px;
+                color: $color-black;
+                height: 180px;
+                line-height: normal;
+                margin: 1em;
+                width: calc(100% - 25px);
+            }
+        }
+        /// A series of buttons for paged results
+        &.pagination {
 
-			@extend %wide-block;
-			border-radius: 0;
-			display: flex;
-			//margin: 0;
-			//padding: 0;
-			text-align: center;
-			//width: 100%;
-			@media only screen and (max-width: $max-width-mobile) {
-				display: none;
-			}
-			/// A horizontally scrollable group of buttons
-			.btn-group {
-				@extend %horizontal-scroll;
-				//flex-basis: auto;
-				flex-grow: 2;
-			}
-			/// Button representing a paged result
-			/*button {
+            @extend %wide-block;
+            border-radius: 0;
+            display: flex;
+            //margin: 0;
+            //padding: 0;
+            text-align: center;
+            //width: 100%;
+            @media only screen and (max-width: $max-width-mobile) {
+                display: none;
+            }
+            /// A horizontally scrollable group of buttons
+            .btn-group {
+                @extend %horizontal-scroll;
+                //flex-basis: auto;
+                flex-grow: 2;
+            }
+            /// Button representing a paged result
+            /*button {
                 background-color: $color-grey-darker;
                 border: 0;
                 flex-basis: 5em;
@@ -857,698 +886,702 @@ $jumbotron-height: 420px;
                     outline: none;
                 }
             }*/
-		}
-	}
-	/// HTML FORM Element
-	form {
-		@extend %bevel-up;
+        }
+    }
+    /// HTML FORM Element
+    form {
+        @extend %bevel-up;
 
-		.login {
-			input,
-			label {
-				text-align: center;
-			}
-		}
-		/// A tab within a form
-		fieldset {
-			legend {
-				font-size: small;
-				line-height: 2em;
-				margin: 0;
-				padding: 0 .5em;
-			}
-		}
-		/// A footer that contains form event buttons
-		&.form-footer {
-			background-color: transparent;
-		}
-	}
-	/// Standard Input Elements
-	input,
-	select,
-	textarea {
-		margin: 0;
-		width: 100%;
+        .login {
+            input,
+            label {
+                text-align: center;
+            }
+        }
+        /// A tab within a form
+        fieldset {
+            legend {
+                font-size: small;
+                line-height: 2em;
+                margin: 0;
+                padding: 0 .5em;
+            }
+        }
+        /// A footer that contains form event buttons
+        &.form-footer {
+            background-color: transparent;
+        }
+    }
+    /// Standard Input Elements
+    input,
+    select,
+    textarea {
+        margin: 0;
+        width: 100%;
 
-		&[type='submit'] {
-			background-color: $color-blue-deep;
-			color: $color-white;
-			font-size: larger;
-			font-weight: bold;
-			height: 50px;
-			text-transform: uppercase;
-			width: 100%;
+        &[type='submit'] {
+            background-color: $color-blue-deep;
+            color: $color-white;
+            font-size: larger;
+            font-weight: bold;
+            height: 50px;
+            text-transform: uppercase;
+            width: 100%;
 
-			&:hover {
-				background-color: $color-blue-lighter;
-			}
+            &:hover {
+                background-color: $color-blue-lighter;
+            }
 
-			&:disabled {
-				background-color: $color-red-deep;
-			}
-		}
-	}
-	/// Clickable element that triggers focus
-	label {
-		clear: both;
-		color: $color-grey-darker;
-		display: block;
-		float: left;
-		font-size: smaller;
-		margin: .3em 0;
-		text-align: left;
-		text-transform: uppercase;
-		width: 100%;
+            &:disabled {
+                background-color: $color-red-deep;
+            }
+        }
+    }
+    /// Clickable element that triggers focus
+    label {
+        clear: both;
+        color: $color-grey-darker;
+        display: block;
+        float: left;
+        font-size: smaller;
+        margin: .3em 0;
+        text-align: left;
+        text-transform: uppercase;
+        width: 100%;
 
-		&.invalid {
-			color: $color-red;
+        &.invalid {
+            color: $color-red;
 
-			&+input {
-				background-color: $color-red;
-			}
-		}
-	}
-	/// A Table Element
-	table {
-		font-size: smaller;
-		/// A Table Header
-		thead {
-			border-bottom: 2px solid $color-white;
-			padding-right: 18px;
-		}
-		/// A Table Header Row
-		th {
-			background-color: $color-light-more;
-			border: 0;
-			font-size: smaller;
-			text-transform: uppercase;
-		}
-		/// A Table Row
-		tr {
-			border-bottom: 1px solid $color-light;
-			border-top: 1px solid $color-grey;
-			display: inline-table;
-			table-layout: fixed;
-			width: 100%;
+            & + input {
+                background-color: $color-red;
+            }
+        }
+    }
+    /// A Table Element
+    table {
+        font-size: smaller;
+        /// A Table Header
+        thead {
+            border-bottom: 2px solid $color-white;
+            padding-right: 18px;
+        }
+        /// A Table Header Row
+        th {
+            background-color: $color-light-more;
+            border: 0;
+            font-size: smaller;
+            text-transform: uppercase;
+        }
+        /// A Table Row
+        tr {
+            border-bottom: 1px solid $color-light;
+            border-top: 1px solid $color-grey;
+            display: inline-table;
+            table-layout: fixed;
+            width: 100%;
 
-			&:hover {
-				background-color: $color-light-more;
-			}
-		}
-		/// Table Data
-		td,
-		th {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		/// The body of the table
-		tbody {
-			border-bottom: thin solid $color-white;
-		}
-	}
+            &:hover {
+                background-color: $color-light-more;
+            }
+        }
+        /// Table Data
+        td,
+        th {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /// The body of the table
+        tbody {
+            border-bottom: thin solid $color-white;
+        }
+    }
 
-	.banner {
-		@extend %noSelect;
+    .banner {
+        @extend %noSelect;
 
-		@media only screen and (max-width: $max-width-desktop) {
-			height: 21em;
-			overflow-y: auto;
-		}
-	}
+        @media only screen and (max-width: $max-width-desktop) {
+            height: 21em;
+            overflow-y: auto;
+        }
+    }
 
-	.btn-block {
-		border-bottom: 2px solid $color-grey-dark;
-		border-left: 0;
-		border-radius: 0;
-		border-right: 0;
-		border-top: 1px solid $color-blue-light;
-	}
-	/// A card like element with a large image or icon
-	/// @todo The user menu might be an extention of the callout class
-	.callout {
-		padding: 0;
-		text-align: center;
+    .btn-block {
+        border-bottom: 2px solid $color-grey-dark;
+        border-left: 0;
+        border-radius: 0;
+        border-right: 0;
+        border-top: 1px solid $color-blue-light;
+    }
+    /// A card like element with a large image or icon
+    /// @todo The user menu might be an extention of the callout class
+    .callout {
+        padding: 0;
+        text-align: center;
 
-		>.icon {
-			font-size: 3em;
-		}
-	}
-	/// A chat window
-	.chat {
-		background-color: $color-light-more;
+        > .icon {
+            font-size: 3em;
+        }
+    }
+    /// A chat window
+    .chat {
+        background-color: $color-light-more;
 
-		& .pane {
-			height: 400px;
-			max-height: 400px;
-			overflow-y: auto;
-			width: 100%;
-		}
+        & .pane {
+            height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
+            width: 100%;
+        }
 
-		& .statement {
-			background-color: $color-orange;
-			border-bottom: 2px solid transparentize($color-grey-dark, .8);
-			border-top: 1px solid transparentize($color-grey-light, .8);
-			float: left;
-			padding: .5em 0;
-			width: 100%;
+        & .statement {
+            background-color: $color-orange;
+            border-bottom: 2px solid transparentize($color-grey-dark, .8);
+            border-top: 1px solid transparentize($color-grey-light, .8);
+            float: left;
+            padding: .5em 0;
+            width: 100%;
 
-			&:nth-child(odd) {
-				background-color: $color-statement-odd;
-			}
+            &:nth-child(odd) {
+                background-color: $color-statement-odd;
+            }
 
-			&:nth-child(even) {
-				background-color: $color-statement-even;
-			}
-		}
+            &:nth-child(even) {
+                background-color: $color-statement-even;
+            }
+        }
 
-		.thumb {
-			float: left;
-			margin-right: 1em;
+        .thumb {
+            float: left;
+            margin-right: 1em;
 
-			& .user-photo {
-				border: 1px solid $color-grey-darker;
-				border-radius: 64px;
-				height: 64px;
-				margin: 4px 0 0 12px;
-				width: 64px;
-			}
-		}
+            & .user-photo {
+                border: 1px solid $color-grey-darker;
+                border-radius: 64px;
+                height: 64px;
+                margin: 4px 0 0 12px;
+                width: 64px;
+            }
+        }
 
-		.bubble {
-			float: left;
-			width: calc(100% - 124px);
-		}
+        .bubble {
+            float: left;
+            width: calc(100% - 124px);
+        }
 
-		.panel {
-			margin-top: 20px;
-			position: relative;
+        .panel {
+            margin-top: 20px;
+            position: relative;
 
-			.panel-body {
-				background-color: $color-white;
-			}
+            .panel-body {
+                background-color: $color-white;
+            }
 
-			.panel-heading {
-				cite {
-					display: block;
-					font-size: $font-size-small;
-				}
+            .panel-heading {
+                cite {
+                    display: block;
+                    font-size: $font-size-small;
+                }
 
-				&::after,
-				&::before {
-					border-color: transparent;
-					border-style: solid solid outset;
-					content: ' ';
-					display: block;
-					height: 0;
-					left: -16px;
-					pointer-events: none;
-					position: absolute;
-					right: 100%;
-					top: 11px;
-					width: 0;
-				}
+                &::after,
+                &::before {
+                    border-color: transparent;
+                    border-style: solid solid outset;
+                    content: ' ';
+                    display: block;
+                    height: 0;
+                    left: -16px;
+                    pointer-events: none;
+                    position: absolute;
+                    right: 100%;
+                    top: 11px;
+                    width: 0;
+                }
 
-				&::after {
-					border-right-color: $color-light-more;
-					border-width: 7px;
-					margin-left: 2px;
-					margin-top: 1px;
-				}
+                &::after {
+                    border-right-color: $color-light-more;
+                    border-width: 7px;
+                    margin-left: 2px;
+                    margin-top: 1px;
+                }
 
-				&::before {
-					border-right-color: $color-light-more;
-					border-width: 8px;
-				}
-			}
-		}
+                &::before {
+                    border-right-color: $color-light-more;
+                    border-width: 8px;
+                }
+            }
+        }
 
-		footer {
-			padding: 1em;
-			position: relative;
+        footer {
+            padding: 1em;
+            position: relative;
 
-			textearea {
-				border: 2px solid $color-blue-light;
-				border-radius: 6px;
-				color: $color-white;
-				font-size: 18px;
-				font-weight: bold;
-				padding: .2em .5em;
-			}
-		}
+            textearea {
+                border: 2px solid $color-blue-light;
+                border-radius: 6px;
+                color: $color-white;
+                font-size: 18px;
+                font-weight: bold;
+                padding: .2em .5em;
+            }
+        }
 
-		.nav-pills {
-			>li {
-				display: block;
-				float: left;
-				list-style: none;
-			}
-		}
+        .nav-pills {
+            > li {
+                display: block;
+                float: left;
+                list-style: none;
+            }
+        }
 
-		.word-summary {
-			>li {
-				>a {
-					color: $color-blue;
-				}
-			}
-		}
-	}
-	/// A Console Dialog containing a list of entries
-	.console {
-		@include transition($transition-default);
-		background-color: adjust-color($color-black, $alpha: .75);
-		color: $color-grey-light;
-		display: block;
-		font-family: monospace;
-		font-size: 8pt;
-		line-height: 2em;
-		list-style: none;
-		margin: 0;
-		max-height: 200px;
-		overflow-y: auto;
-		padding: 1em;
-	}
-	/*.dl-horizontal {
+        .word-summary {
+            > li {
+                > a {
+                    color: $color-blue;
+                }
+            }
+        }
+    }
+    /// A Console Dialog containing a list of entries
+    .console {
+        @include transition($transition-default);
+        background-color: adjust-color($color-black, $alpha: .75);
+        color: $color-grey-light;
+        display: block;
+        font-family: monospace;
+        font-size: 8pt;
+        line-height: 2em;
+        list-style: none;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 1em;
+    }
+    /*.dl-horizontal {
         // Override the default bootstrap behavior where horizontal description lists
         // will truncate terms that are too long to fit in the left column
         dt {
             white-space: normal;
         }
     }*/
-	.form-element {
-		.body {
-			/// A padded pane with an embedded textarea element
-			.pane {
-				padding: .4em;
+    .form-element {
+        .body {
+            /// A padded pane with an embedded textarea element
+            .pane {
+                padding: .4em;
 
-				>textarea {
-					height: 10em;
-				}
-			}
-		}
-	}
-	/// A Container of form elements
-	.form-element-group {
-		border-bottom: thin solid $color-grey-light;
-		position: relative;
-		transition: position 800ms;
-		transition-delay: 300ms;
-	}
-	/// A clickable icon with embedded label
-	&.icon {
-		.label {
-			color: $color-black;
-			//font-family: sans-serif;
-			font-family: Lato;
-			padding: 0 0 0 4px;
-			text-transform: uppercase;
-			top: -3px;
-		}
-	}
-	/// Button that is used to trigger the addition of elements
-	.btn-add-element {
-		padding: .5em 0;
+                > textarea {
+                    height: 10em;
+                }
+            }
+        }
+    }
+    /// A Container of form elements
+    .form-element-group {
+        border-bottom: thin solid $color-grey-light;
+        position: relative;
+        transition: position 800ms;
+        transition-delay: 300ms;
+    }
+    /// A clickable icon with embedded label
+    &.icon {
+        .label {
+            color: $color-black;
+            //font-family: sans-serif;
+            font-family: Lato;
+            padding: 0 0 0 4px;
+            text-transform: uppercase;
+            top: -3px;
+        }
+    }
+    /// Button that is used to trigger the addition of elements
+    .btn-add-element {
+        padding: .5em 0;
 
-		button {
-			width: 100%;
-		}
-	}
-	/// An Element that can contain child elements
-	.container {
-		@extend %wide-block;
-		/// A collection of navigation elements
-		>nav {
-			@extend %bevel-up;
-			background-color: $color-nav-background;
-			border-radius: 0;
-			font-size: $font-size-normal;
-			height: $navbar-height;
-			min-height: $navbar-height;
-			width: 100%;
-		}
-		/// A Container for article style content, grouped into sections
-		&.article {
-			border-bottom: 1px solid $color-grey;
-			border-top: 1px solid $color-grey-darker;
-			margin: 0 auto .8em;
-		}
-		/// A paged list of elements
-		&.index {
-			background-color: $color-shadow-neutral;
-			color: inherit;
+        button {
+            width: 100%;
+        }
+    }
+    /// An Element that can contain child elements
+    .container {
+        @extend %wide-block;
+        /// A collection of navigation elements
+        > nav {
+            @extend %bevel-up;
+            background-color: $color-nav-background;
+            border-radius: 0;
+            font-size: $font-size-normal;
+            height: $navbar-height;
+            min-height: $navbar-height;
+            width: 100%;
+        }
+        /// A Container for article style content, grouped into sections
+        &.article {
+            border-bottom: 1px solid $color-grey;
+            border-top: 1px solid $color-grey-darker;
+            margin: 0 auto .8em;
+        }
+        /// A paged list of elements
+        &.index {
+            background-color: $color-shadow-neutral;
+            color: inherit;
 
-			.body {
-				>.banner {
-					>header {
-						background-color: $color-black;
-						border-bottom: 1px solid $color-grey;
-						color: $color-grey-light;
-						padding: 0 .5em;
-					}
-				}
+            .body {
+                > .banner {
+                    > header {
+                        background-color: $color-black;
+                        border-bottom: 1px solid $color-grey;
+                        color: $color-grey-light;
+                        padding: 0 .5em;
+                    }
+                }
 
-				>.pane {
-					@extend %bevel-up;
-					background-color: $color-grey-darker;
-					padding: 0;
-				}
-			}
-		}
+                > .pane {
+                    @extend %bevel-up;
+                    background-color: $color-grey-darker;
+                    padding: 0;
+                }
+            }
+        }
 
-		&.index-main {
-			>.body {
-				background-color: $color-grey-dark;
+        &.index-main {
+            > .body {
+                background-color: $color-grey-dark;
 
-				>header {
-					@extend %bevel-up;
-					background-color: $color-dark;
-					color: $color-light;
-					padding: 0 .5em;
-					text-transform: uppercase;
+                > header {
+                    @extend %bevel-up;
+                    background-color: $color-dark;
+                    color: $color-light;
+                    padding: 0 .5em;
+                    text-transform: uppercase;
 
-					@media only screen and (max-width: $max-width-mobile) {
-						display: none;
-					}
-				}
+                    @media only screen and (max-width: $max-width-mobile) {
+                        display: none;
+                    }
+                }
 
-				>.banner {
-					@extend %horizontal-center;
-					height: $thumbnail-height * 3 + 2em;
+                > .banner {
+                    @extend %horizontal-center;
+                    height: $thumbnail-height * 3 + 2em;
 
-					@media only screen and (max-width: $max-width-desktop) {
-						height: $thumbnail-height * 2 + 1em;
-					}
+                    @media only screen and (max-width: $max-width-desktop) {
+                        height: $thumbnail-height * 2 + 1em;
+                    }
 
-					overflow-y: auto;
-				}
-			}
-		}
+                    overflow-y: auto;
+                }
+            }
+        }
 
-		&.image-gallery {
-			color: inherit;
+        &.image-gallery {
+            color: inherit;
 
-			>.body {
-				&>header {
-					color: $color-light;
-					font-family: sans-serif;
-					font-size: $font-size-small;
-					font-weight: bold;
-					padding: .2em 1em;
-					text-align: right;
-					text-transform: uppercase;
-				}
+            > .body {
+                & > header {
+                    color: $color-light;
+                    font-family: sans-serif;
+                    font-size: $font-size-small;
+                    font-weight: bold;
+                    padding: .2em 1em;
+                    text-align: right;
+                    text-transform: uppercase;
+                }
 
-				&>.banner {
-					height: 500px;
-					max-height: 500px;
-					overflow-y: auto;
-				}
-			}
+                & > .banner {
+                    height: 500px;
+                    max-height: 500px;
+                    overflow-y: auto;
+                }
+            }
 
-			.thumbnail {
-				&>img {
-					@extend %thumbnail-image;
-					clear: both;
-					float: none;
-					max-height: 256px;
-					max-width: 256px;
-				}
-			}
-		}
-		/// A full width block with impact
-		&.jumbotron {
-			@extend %noSelect;
-			padding: 0;
+            .thumbnail {
+                & > img {
+                    @extend %thumbnail-image;
+                    clear: both;
+                    float: none;
+                    max-height: 256px;
+                    max-width: 256px;
+                }
+            }
+        }
+        /// A full width block with impact
+        &.jumbotron {
+            @extend %noSelect;
+            padding: 0;
 
-			.pane {
-				/// A vignetted backdrop with optional background image
-				>.screen {
-					@extend %gradient-vignette;
-					@extend %wide-block;
-					background-color: $jumbotron-bg-default;
-					background-position: center top;
-					background-repeat: no-repeat;
-					background-size: cover;
-					color: $color-white;
-					font-family: 'Raleway';
-					font-weight: 300;
-					height: $jumbotron-height;
-					line-height: 2em;
-					//margin: 0;
-					overflow-y: hidden;
-					//padding: 0;
-					text-align: center;
-					//width: 100%;
-					header {
-						color: $color-white;
-						font-size: $font-size-extralarge;
-						line-height: 3em;
-						padding: 0 6px;
-					}
+            .pane {
+                /// A vignetted backdrop with optional background image
+                > .screen {
+                    @extend %gradient-vignette;
+                    @extend %wide-block;
+                    background-color: $jumbotron-bg-default;
+                    background-position: center top;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    color: $color-white;
+                    font-family: 'Raleway';
+                    font-weight: 300;
+                    height: $jumbotron-height;
+                    line-height: 2em;
+                    //margin: 0;
+                    overflow-y: hidden;
+                    //padding: 0;
+                    text-align: center;
+                    //width: 100%;
+                    header {
+                        color: $color-white;
+                        font-size: $font-size-extralarge;
+                        line-height: 3em;
+                        padding: 0 6px;
+                    }
 
-					p {
-						@extend %horizontal-center;
-						font-weight: normal;
-						padding: 0 2em;
+                    p {
+                        @extend %horizontal-center;
+                        font-weight: normal;
+                        padding: 0 2em;
 
-						@media only screen and (max-width: $max-width-mobile) {
-							font-size: 1.2em;
-						}
-					}
-				}
-			}
-		}
-		/// The primary Container element
-		&main,
-		&.main {
-			align-items: stretch;
-			box-shadow: 0 1em .5em .5em $color-shadow-neutral;
-			display: flex;
-			margin-left: auto;
-			margin-right: auto;
-			max-width: $body-width;
+                        @media only screen and (max-width: $max-width-mobile) {
+                            font-size: 1.2em;
+                        }
 
-			>nav {
-				&.nav-header {
-					border-top: 0;
-					left: 0;
-					position: absolute;
-					top: 0;
-				}
+                        &.active {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+        /// The primary Container element
+        &main,
+        &.main {
+            align-items: stretch;
+            box-shadow: 0 1em .5em .5em $color-shadow-neutral;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: $body-width;
 
-				&.nav-footer {
-					@include transition($transition-default);
-					border-bottom: 0;
-					bottom: 0;
-					left: 0;
-					margin: 0;
-					position: absolute;
-					/// EDIT Container
-					>.container {
-						margin: .4em auto;
-					}
-					/// Footer is extended for EDIT Container
-					&.active {
-						height: $navbar-height * 5;
-					}
+            > nav {
+                &.nav-header {
+                    border-top: 0;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                }
 
-					textarea {
-						border-radius: 5px;
-						color: $color-black;
-						height: 180px;
-						line-height: normal;
-						margin: 1em;
-						width: calc(100% - 25px);
-					}
-				}
-			}
+                &.nav-footer {
+                    @include transition($transition-default);
+                    border-bottom: 0;
+                    bottom: 0;
+                    left: 0;
+                    margin: 0;
+                    position: absolute;
+                    /// EDIT Container
+                    > .container {
+                        margin: .4em auto;
+                    }
+                    /// Footer is extended for EDIT Container
+                    &.active {
+                        height: $navbar-height * 5;
+                    }
 
-			>.body {
-				/// Consumes the available height of the page minus Nav Elements
-				>.pane {
-					@extend %pane-tall;
-					background-color: $color-grey;
-				}
-			}
+                    textarea {
+                        border-radius: 5px;
+                        color: $color-black;
+                        height: 180px;
+                        line-height: normal;
+                        margin: 1em;
+                        width: calc(100% - 25px);
+                    }
+                }
+            }
 
-			aside {
-				/// A left aligned Container (sidebar) for the MAIN UI
-				&.sidebar {
-					@extend %no-scroll-bar;
-					@extend %pane-tall;
-					@include boxShadow(0, 0, 3px, 0, $color-black);
-					//@include transition($transition-default);
-					@include transition(left $transition-speed $transition-motion);
-					background-color: transparentize($color-black, .2);
-					float: left;
-					left: calc(#{$zero-px} - #{$sidebar-width});
-					//margin-left: -100%; /// !important
-					position: absolute;
-					top: $navbar-height;
-					width: $sidebar-width;
-					z-index: 999;
+            > .body {
+                /// Consumes the available height of the page minus Nav Elements
+                > .pane {
+                    @extend %pane-tall;
+                    background-color: $color-grey;
+                }
+            }
 
-					&.active {
-						//animation: slideInLeft $transition-speed $transition-motion;
-						left: 0;
-						//display: block;
-					}
-				}
-			}
-		}
+            aside {
+                /// A left aligned Container (sidebar) for the MAIN UI
+                &.sidebar {
+                    @extend %no-scroll-bar;
+                    @extend %pane-tall;
+                    @include boxShadow(0, 0, 3px, 0, $color-black);
+                    //@include transition($transition-default);
+                    @include transition(left $transition-speed $transition-motion);
+                    background-color: transparentize($color-black, .2);
+                    float: left;
+                    left: calc(#{$zero-px} - #{$sidebar-width});
+                    //margin-left: -100%; /// !important
+                    position: absolute;
+                    top: $navbar-height;
+                    width: $sidebar-width;
+                    z-index: 999;
 
-		>.body {
-			background-color: $color-light;
-			box-sizing: border-box;
-			width: 100%;
+                    &.active {
+                        //animation: slideInLeft $transition-speed $transition-motion;
+                        left: 0;
+                        //display: block;
+                    }
+                }
+            }
+        }
 
-			>.pane {
-				@extend %no-scroll-bar;
-				@include transition($transition-default);
-				width: 100%;
-			}
-		}
-	}
+        > .body {
+            background-color: $color-light;
+            box-sizing: border-box;
+            width: 100%;
 
-	.index-thumbnail {
-		margin-bottom: 0;
-	}
+            > .pane {
+                @extend %no-scroll-bar;
+                @include transition($transition-default);
+                width: 100%;
+            }
+        }
+    }
 
-	.input-image-preview {
-		background-color: $color-white;
-		border: 4px solid $color-white;
-		border-radius: .3em;
-		height: auto;
-		margin: 1em;
-		max-width: 120px;
-		min-height: 64px;
-		min-width: 64px;
-		padding: .3em;
-	}
-	/// A Menu Element
-	.menu {
-		@extend %noSelect;
-		background-color: $color-nav-background;
-		// Collapsible
-		&.collapse {
-			height: 0;
+    .index-thumbnail {
+        margin-bottom: 0;
+    }
 
-			&.in {
-				height: auto;
-			}
-		}
-		/// A Menu that has been selected
-		&.selected {
-			>header {
-				background-color: darken($color-nav-background, 35%);
-				text-decoration: none;
-			}
-		}
-		// Nested sub menu
-		>.menu {
-			>li {
-				width: 100%;
+    .input-image-preview {
+        background-color: $color-white;
+        border: 4px solid $color-white;
+        border-radius: .3em;
+        height: auto;
+        margin: 1em;
+        max-width: 120px;
+        min-height: 64px;
+        min-width: 64px;
+        padding: .3em;
+    }
+    /// A Menu Element
+    .menu {
+        @extend %noSelect;
+        background-color: $color-nav-background;
+        // Collapsible
+        &.collapse {
+            height: 0;
 
-				>a {
-					.icon,
-					.label {
-						color: $color-blue-light;
-					}
-				}
+            &.in {
+                height: auto;
+            }
+        }
+        /// A Menu that has been selected
+        &.selected {
+            > header {
+                background-color: darken($color-nav-background, 35%);
+                text-decoration: none;
+            }
+        }
+        // Nested sub menu
+        > .menu {
+            > li {
+                width: 100%;
 
-				&+.menu {
-					background-color: $color-orange;
-				}
-			}
-		}
-		/// The USERMENU class, A menu that contains user links and details
-		&[name='USER'] {
-			@extend %no-scroll-bar;
-			@extend %pane-tall;
-			@include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
-			//@include transition($transition-default);
-			@include transition(right $transition-speed $transition-motion);
-			//animation: slideOutRight $transition-speed $transition-motion;
-			background-color: $color-grey-dark; //#373c40;
-			border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
-			border-radius: .2em;
-			float: right;
-			//margin-left: -100%; /// !important
-			position: absolute;
-			right: calc(#{$zero-px} - #{$sidebar-width});
-			top: $navbar-height;
-			width: $sidebar-width;
-			z-index: 999;
+                > a {
+                    .icon,
+                    .label {
+                        color: $color-blue-light;
+                    }
+                }
 
-			&.active {
-				//animation: slideInLeft $transition-speed $transition-motion;
-				right: 0;
-				//display: block;
-			}
+                & + .menu {
+                    background-color: $color-orange;
+                }
+            }
+        }
+        /// The USERMENU class, A menu that contains user links and details
+        &[name='USER'] {
+            @extend %no-scroll-bar;
+            @extend %pane-tall;
+            @include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
+            //@include transition($transition-default);
+            @include transition(right $transition-speed $transition-motion);
+            //animation: slideOutRight $transition-speed $transition-motion;
+            background-color: $color-grey-dark; //#373c40;
+            border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
+            border-radius: .2em;
+            float: right;
+            //margin-left: -100%; /// !important
+            position: absolute;
+            right: calc(#{$zero-px} - #{$sidebar-width});
+            top: $navbar-height;
+            width: $sidebar-width;
+            z-index: 999;
 
-			&.collapse {
-				@extend %pane-tall;
+            &.active {
+                //animation: slideInLeft $transition-speed $transition-motion;
+                right: 0;
+                //display: block;
+            }
 
-				&.in {
-					@extend %pane-tall;
-				}
-			}
-			//@include transition(right $transition-speed $transition-motion);
-			>ul {
-				&.horizontal {
-					flex-direction: row-reverse;
-				}
-			}
-			/// A collection of user details
-			.profile {
-				//background-color: $color-grey-dark;
-				color: $color-white;
-				font-family: $font-header;
-				text-align: center;
+            &.collapse {
+                @extend %pane-tall;
 
-				>img {
-					&.picture {
-						background-color: $color-grey;
-						border: 2px solid $color-grey-light;
-						border-radius: 128px;
-						box-sizing: content-box;
-						clear: both;
-						display: block;
-						float: none;
-						height: 128px;
-						margin: 1em auto;
-						width: 128px;
-					}
-				}
+                &.in {
+                    @extend %pane-tall;
+                }
+            }
+            //@include transition(right $transition-speed $transition-motion);
+            > ul {
+                &.horizontal {
+                    flex-direction: row-reverse;
+                }
+            }
+            /// A collection of user details
+            .profile {
+                //background-color: $color-grey-dark;
+                color: $color-white;
+                font-family: $font-header;
+                text-align: center;
 
-				>.username {
-					line-height: 1.4em;
-				}
+                > img {
+                    &.picture {
+                        background-color: $color-grey;
+                        border: 2px solid $color-grey-light;
+                        border-radius: 128px;
+                        box-sizing: content-box;
+                        clear: both;
+                        display: block;
+                        float: none;
+                        height: 128px;
+                        margin: 1em auto;
+                        width: 128px;
+                    }
+                }
 
-				>.quote {
-					font-size: .8em;
-					line-height: 1.4em;
-					margin-bottom: 1em;
-				}
-			}
-		}
-		/// A header within a menu
-		/// @todo Consider that this should just be a Definition List style menu and this is the DT
-		>header {
-			@extend %bevel-down;
-			@extend %clickable;
-			@extend %noSelect;
-			background-color: darken($color-nav-background, 25%);
-			color: $color-light;
-			line-height: normal;
-			padding: 0 .2em;
-			text-transform: uppercase;
+                > .username {
+                    line-height: 1.4em;
+                }
 
-			&:hover {
-				background-color: darken($color-nav-background, 35%);
-				text-decoration: none;
-			}
-			/*
+                > .quote {
+                    font-size: .8em;
+                    line-height: 1.4em;
+                    margin-bottom: 1em;
+                }
+            }
+        }
+        /// A header within a menu
+        /// @todo Consider that this should just be a Definition List style menu and this is the DT
+        > header {
+            @extend %bevel-down;
+            @extend %clickable;
+            @extend %noSelect;
+            background-color: darken($color-nav-background, 25%);
+            color: $color-light;
+            line-height: normal;
+            padding: 0 .2em;
+            text-transform: uppercase;
+
+            &:hover {
+                background-color: darken($color-nav-background, 35%);
+                text-decoration: none;
+            }
+            /*
             /// First ul after nav header
             & ~ ul {
                 .nav {
@@ -1556,311 +1589,307 @@ $jumbotron-height: 420px;
                 }
             }
             */
-		}
-		/// A collection of list-items within this menu
-		>.list {
-			@extend %wide-block;
-			/// List items are made to scroll horizontally instead of vertically
-			&.horizontal {
-				@extend %horizontal-scroll;
-				//@extend %no-scroll-bar;
-				display: flex; // https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-				/// A tab style nav item
-				.nav-item {
-					flex-basis: 8em;
-					//flex-grow: 1;
-					//height: $navbar-height;
-				}
-				/// A stretchable, centered tab designed to consume remaining space
-				.tab-wide {
-					flex-basis: auto;
-					flex-grow: 2;
-					//text-align: center;
-				}
-				/// Nav Items with a fixed width and height, acting as an icon
-				>.nav-item-icon {
-					//display: inline-block;
-					&.active {
-						background-color: $color-grey-dark; // rgb(103, 102, 86);
-						>a {
-							span {
-								color: $color-white;
-							}
-						}
-					}
+        }
+        /// A collection of list-items within this menu
+        > .list {
+            @extend %wide-block;
+            /// List items are made to scroll horizontally instead of vertically
+            &.horizontal {
+                @extend %horizontal-scroll;
+                /// A tab style nav item
+                .nav-item {
+                    flex-basis: 8em;
+                    //flex-grow: 1;
+                    //height: $navbar-height;
+                }
+                /// A stretchable, centered tab designed to consume remaining space
+                .tab-wide {
+                    flex-basis: auto;
+                    flex-grow: 2;
+                    //text-align: center;
+                }
+                /// Nav Items with a fixed width and height, acting as an icon
+                > .nav-item-icon {
+                    //display: inline-block;
+                    &.active {
+                        background-color: $color-grey-dark; // rgb(103, 102, 86);
+                        > a {
+                            span {
+                                color: $color-white;
+                            }
+                        }
+                    }
 
-					>a {
-						//background-color: purple;
-						//border: 1px solid $color-white;
-						//border-radius: .2em;
-						display: block;
-						height: 4em;
-						//justify-content: center;
-						margin: 0 auto;
-						//overflow: hidden;
-						padding: 0;
-						text-align: center;
-						width: 4em;
+                    > a {
+                        //background-color: purple;
+                        //border: 1px solid $color-white;
+                        //border-radius: .2em;
+                        display: block;
+                        height: 4em;
+                        //justify-content: center;
+                        margin: 0 auto;
+                        //overflow: hidden;
+                        padding: 0;
+                        text-align: center;
+                        width: 4em;
 
-						span {
-							display: block;
-							//float: left;
-							line-height: 2em;
-							//height: 2em;
-							width: 100%;
+                        span {
+                            display: block;
+                            //float: left;
+                            line-height: 2em;
+                            //height: 2em;
+                            width: 100%;
+                            //&.icon {
+                            // todo
+                            //}
+                            &.label {
+                                overflow: hidden;
+                                padding: 0 .3em;
+                                text-overflow: ellipsis;
+                                text-transform: uppercase;
+                                //white-space: nowrap;
+                                //width: 5em;
+                            }
+                        }
+                    }
+                }
+            }
 
-							//&.icon {
-							// todo
-							//}
+            .nav-item {
+                @extend %clickable;
+                @include transition($transition-default);
+                background-color: $color-shadow-neutral;
+                border-left: 1px solid transparent;
+                border-right: 1px solid transparent;
+                box-sizing: border-box;
+                cursor: pointer;
+                //float: left;
+                //line-height: $navbar-height; // - 1em;
+                list-style: none;
 
-							&.label {
-								overflow: hidden;
-								padding: 0 .3em;
-								text-overflow: ellipsis;
-								text-transform: uppercase;
-								//white-space: nowrap;
-								//width: 5em;
-							}
-						}
-					}
-				}
-			}
+                &:hover {
+                    background-color: $color-shadow-light;
+                    border-left: 1px solid $color-shadow-neutral;
+                    border-right: 1px solid $color-shadow-neutral;
+                }
 
-			.nav-item {
-				@extend %clickable;
-				@include transition($transition-default);
-				background-color: $color-shadow-neutral;
-				border-left: 1px solid transparent;
-				border-right: 1px solid transparent;
-				box-sizing: border-box;
-				cursor: pointer;
-				//float: left;
-				//line-height: $navbar-height; // - 1em;
-				list-style: none;
+                &.active {
+                    background-color: $color-grey-dark;
+                    box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+                }
 
-				&:hover {
-					background-color: $color-shadow-light;
-					border-left: 1px solid $color-shadow-neutral;
-					border-right: 1px solid $color-shadow-neutral;
-				}
+                &.wide-tab {
+                    font-weight: bold;
 
-				&.active {
-					background-color: $color-grey-dark;
-					box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
-				}
+                    &.active {
+                        > a {
+                            text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+                        }
+                    }
+                }
 
-				&.wide-tab {
-					font-weight: bold;
+                > a {
+                    color: $color-light;
+                    padding: 0 1em;
 
-					&.active {
-						>a {
-							text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
-						}
-					}
-				}
+                    &:hover {
+                        color: $color-light-more;
+                    }
+                }
 
-				>a {
-					color: $color-light;
-					padding: 0 1em;
+                &.nav-item-icon {
+                    &.active {
+                        color: $color-grey-dark;
+                    }
 
-					&:hover {
-						color: $color-light-more;
-					}
-				}
+                    > a {
+                        > .icon {
+                            > .label {
+                                display: block;
+                                font-size: $font-size-small;
+                                line-height: 1.5em;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-transform: uppercase;
+                                white-space: nowrap;
+                                width: 5em; //$icon-width;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-				&.nav-item-icon {
-					&.active {
-						color: $color-grey-dark;
-					}
+    .navbar-search {
+        border: 0;
+        border-bottom: 1px solid $color-white;
+        padding: .3em;
+    }
 
-					>a {
-						>.icon {
-							>.label {
-								display: block;
-								font-size: $font-size-small;
-								line-height: 1.5em;
-								overflow: hidden;
-								text-overflow: ellipsis;
-								text-transform: uppercase;
-								white-space: nowrap;
-								width: 5em; //$icon-width;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+    .noSelect {
+        @extend %noSelect;
+    }
 
-	.navbar-search {
-		border: 0;
-		border-bottom: 1px solid $color-white;
-		padding: .3em;
-	}
+    .preview {
+        background-color: $color-light-more;
+        border-bottom: 3px solid $color-grey-darker;
+        border-top: 3px solid $color-secondary-dark;
+        height: 400px;
+        margin: 0;
+        max-height: 400px;
+        overflow-y: auto;
+    }
 
-	.noSelect {
-		@extend %noSelect;
-	}
+    .preview-notes {
+        @extend %bevel-up;
+        background-color: $color-grey-light;
+        color: $color-grey-darker;
+        font-size: small;
+        font-weight: bold;
+        height: 2em;
+        line-height: 2em;
+        margin: 0;
+        overflow: hidden;
+        padding: 0 1em;
+    }
 
-	.preview {
-		background-color: $color-light-more;
-		border-bottom: 3px solid $color-grey-darker;
-		border-top: 3px solid $color-secondary-dark;
-		height: 400px;
-		margin: 0;
-		max-height: 400px;
-		overflow-y: auto;
-	}
+    .textblock {
+        font-family: 'Raleway';
+        //background-color: red;
+        h1 {
+            border-bottom: 1px solid $color-grey;
+            margin: 4px 0 8px;
+            padding: 4px;
+        }
 
-	.preview-notes {
-		@extend %bevel-up;
-		background-color: $color-grey-light;
-		color: $color-grey-darker;
-		font-size: small;
-		font-weight: bold;
-		height: 2em;
-		line-height: 2em;
-		margin: 0;
-		overflow: hidden;
-		padding: 0 1em;
-	}
+        p {
+            line-height: 1.8em;
+            margin: .5em auto 2em;
+            max-width: $content-maxwidth;
+            padding: 0 1.8em;
+            text-align: justify;
+        }
 
-	.textblock {
-		font-family: 'Raleway';
-		//background-color: red;
-		h1 {
-			border-bottom: 1px solid $color-grey;
-			margin: 4px 0 8px;
-			padding: 4px;
-		}
+        .paragraph {
+            header {
+                @extend %bevel-down;
+                @extend %gradient-vertical-fade;
+                color: $color-light;
+                height: $navbar-height;
+                line-height: $navbar-height;
+                padding: 0 1em;
+            }
+        }
+    }
 
-		p {
-			line-height: 1.8em;
-			margin: .5em auto 2em;
-			max-width: $content-maxwidth;
-			padding: 0 1.8em;
-			text-align: justify;
-		}
+    .thumbnail {
+        @extend %bevel-up;
+        @extend %clickable;
+        background-color: $color-grey-dark;
+        border-radius: .4em;
+        font-family: 'Raleway';
+        height: $thumbnail-height;
+        margin: .5em;
+        padding: 0;
+        width: calc(50% - 1em);
 
-		.paragraph {
-			header {
-				@extend %bevel-down;
-				@extend %gradient-vertical-fade;
-				color: $color-light;
-				height: $navbar-height;
-				line-height: $navbar-height;
-				padding: 0 1em;
-			}
-		}
-	}
+        @media only screen and (max-width: $max-width-desktop) {
+            border-radius: 0;
+            margin: 0;
+            width: 100%;
+        }
 
-	.thumbnail {
-		@extend %bevel-up;
-		@extend %clickable;
-		background-color: $color-grey-dark;
-		border-radius: .4em;
-		font-family: 'Raleway';
-		height: $thumbnail-height;
-		margin: .5em;
-		padding: 0;
-		width: calc(50% - 1em);
+        &.nav-item {
+            a {
+                height: $thumbnail-height;
+                line-height: 1.5em;
+                width: 100%;
 
-		@media only screen and (max-width: $max-width-desktop) {
-			border-radius: 0;
-			margin: 0;
-			width: 100%;
-		}
+                img {
+                    @extend %thumbnail-image;
+                    clear: left;
+                    float: left;
+                    height: $thumbnail-height - 1em;
+                    margin: .5em;
+                    width: $thumbnail-height - 1em;
+                }
+            }
+        }
 
-		&.nav-item {
-			a {
-				height: $thumbnail-height;
-				line-height: 1.5em;
-				width: 100%;
+        .body {
+            .pane {
+                background-color: $color-light;
+                color: $color-dark;
 
-				img {
-					@extend %thumbnail-image;
-					clear: left;
-					float: left;
-					height: $thumbnail-height - 1em;
-					margin: .5em;
-					width: $thumbnail-height - 1em;
-				}
-			}
-		}
+                > header {
+                    clear: right;
+                    color: $color-light-less;
+                    display: block;
+                    float: left;
+                    font-weight: bold;
+                    line-height: 3em;
+                    margin: .5em 0 0;
+                    padding: 0;
+                    text-transform: uppercase;
+                    width: calc(100% - 148px);
+                }
 
-		.body {
-			.pane {
-				background-color: $color-light;
-				color: $color-dark;
+                > img {
+                    background-color: $color-white;
+                    border: 1px solid $color-white;
+                    border-radius: .3em;
+                    clear: left;
+                    display: block;
+                    float: left;
+                    height: 128px;
+                    margin: .3em;
+                    width: 128px;
+                }
 
-				>header {
-					clear: right;
-					color: $color-light-less;
-					display: block;
-					float: left;
-					font-weight: bold;
-					line-height: 3em;
-					margin: .5em 0 0;
-					padding: 0;
-					text-transform: uppercase;
-					width: calc(100% - 148px);
-				}
+                > p {
+                    color: $color-light-less;
+                    float: left;
+                    font-size: smaller;
+                    height: 6em;
+                    margin: 0 .3em;
+                    overflow-y: auto;
+                    padding: 0 .8em;
+                    text-align: justify;
+                    width: calc(100% - 148px);
+                }
 
-				>img {
-					background-color: $color-white;
-					border: 1px solid $color-white;
-					border-radius: .3em;
-					clear: left;
-					display: block;
-					float: left;
-					height: 128px;
-					margin: .3em;
-					width: 128px;
-				}
+                > .btn-group {
+                    bottom: 1.75em;
+                    position: absolute;
+                    right: 1.35em;
 
-				>p {
-					color: $color-light-less;
-					float: left;
-					font-size: smaller;
-					height: 6em;
-					margin: 0 .3em;
-					overflow-y: auto;
-					padding: 0 .8em;
-					text-align: justify;
-					width: calc(100% - 148px);
-				}
+                    > button {
+                        &.btn {
+                            border: 0;
+                            border-radius: .3em;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-				>.btn-group {
-					bottom: 1.75em;
-					position: absolute;
-					right: 1.35em;
+    .vertical-align-center {
+        display: table-cell;
+        pointer-events: none;
+        vertical-align: middle;
 
-					>button {
-						&.btn {
-							border: 0;
-							border-radius: .3em;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	.vertical-align-center {
-		display: table-cell;
-		pointer-events: none;
-		vertical-align: middle;
-
-		.content {
-			margin: 0 auto;
-		}
-	}
-	/// Assist in vertical alignment
-	/// @link https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
-	.vertical-alignment-helper {
-		display: table;
-		height: 100%;
-		pointer-events: none; // This makes sure that we can still click outside of the modal to close it
-		width: 100%;
-	}
+        .content {
+            margin: 0 auto;
+        }
+    }
+    /// Assist in vertical alignment
+    /// @link https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
+    .vertical-alignment-helper {
+        display: table;
+        height: 100%;
+        pointer-events: none; // This makes sure that we can still click outside of the modal to close it
+        width: 100%;
+    }
 }

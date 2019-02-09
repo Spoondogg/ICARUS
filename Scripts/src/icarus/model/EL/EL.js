@@ -3,9 +3,7 @@ import MODEL, { ATTRIBUTES } from '../MODEL.js';
 //import { HtmlElement } from '../../enums/HtmlElement.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
-import {
-	STATUS
-} from '../../enums/STATUS.js';
+import { STATUS } from '../../enums/STATUS.js';
 /** A Generic HTML Element Class
     @class
     @extends MODEL
@@ -19,7 +17,6 @@ export default class EL extends MODEL {
 	    @param {Array<MODEL>} children Array of child nodes
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), innerHTML, children = []) {
-		//console.log(typeof model, element, node);
 		super(model.attributes);
 		this.setContainer();
 		this.node = node;
@@ -237,7 +234,7 @@ export default class EL extends MODEL {
 	*/
 	getClass() {
 		return this.attributes.class || '';
-	}
+    }
 	/** Sets and returns the parent container for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/

@@ -29,8 +29,7 @@ export default class BANNER extends CONTAINER {
 	getContainer() {
 		return this.getProtoTypeByClass('CONTAINER');
 	}
-	/**
-	    Returns the MAIN container
+	/** Returns the MAIN container
 	    @method
 	    @returns {MAIN} The MAIN Container
 	    @throws Will throw an error 
