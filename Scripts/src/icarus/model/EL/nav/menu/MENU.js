@@ -61,14 +61,14 @@ export default class MENU extends LIST {
 	*/
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
-    }
-    /** Constructs a Nav Item (Anchor)
+	}
+	/** Constructs a Nav Item (Anchor)
 	    @param {MODEL} model Object model
 	    @returns {NAVBAR} NavBar
 	*/
-    addNavBar(model) {
-        return this.addChild(new NAVBAR(this, model)); //model.url, model.label
-    }
+	addNavBar(model) {
+		return this.addChild(new NAVBAR(this, model)); //model.url, model.label
+	}
 	/** Constructs a Nav Item (Anchor)
 	    @param {MODEL} model Object model
 	    @returns {NAVITEM} Nav Item with Anchor

@@ -13,54 +13,53 @@ export default class INDEX extends BANNER {
     */
 	constructor(node, model) {
 		super(node, model);
-        this.addClass('index');
-        this.addContainersMenu();
-        this.navheader.expand();
+		this.addClass('index');
+		this.addContainersMenu();
+		this.navheader.expand();
 	}
-    /** Adds the Containers Menu, a collection of Container Types that can be browsed
+	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
 	    @returns {void}
 	*/
-    addContainersMenu() {
-        try {
-            // Create Primary Options tab and Menu
-            let btnContainers = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                icon: ICONS.COG,
-                label: 'ELEMENTS'
-            }));
-            let containerOptions = this.navheader.menus.addNavBar(new MODEL().set('name', 'ELEMENTS'));
-            this.navheader.addTabbableElement(btnContainers, containerOptions);
-            // Create Secondary Tabs and Horizontal Menus inside Menu
-            let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
-            allowed.map((name) => {
-                let tb = containerOptions.tabs.addNavItemIcon(new MODEL().set({
-                    label: name,
-                    icon: ICONS[name]
-                }));
-                let opt = containerOptions.menus.addMenu(new MODEL('horizontal').set('name', name));                
-                containerOptions.addTabbableElement(tb, opt);
-                this.addThumbButtonActions(name, tb, opt);
-
-                ////  YOU SHOULD CREATE A TABBABLE ELEMENT (CONTAINER-PREVIEW) that can be populated with the element
-            });
-        } catch (e) {
-            let modal = this.getProtoTypeByClass('MODAL');
-            if (modal === null) {
-                console.warn('Unable to retrieve MAIN Container', e);
-                throw e;
-            } else {
-                switch (modal.className) {
-                    case 'LOADER':
-                    case 'PROMPT':
-                        break;
-                    default:
-                        console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
-                        break;
-                }
-            }
-        }
-    }
+	addContainersMenu() {
+		try {
+			// Create Primary Options tab and Menu
+			let btnContainers = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+				icon: ICONS.COG,
+				label: 'ELEMENTS'
+			}));
+			let containerOptions = this.navheader.menus.addNavBar(new MODEL().set('name', 'ELEMENTS'));
+			this.navheader.addTabbableElement(btnContainers, containerOptions);
+			// Create Secondary Tabs and Horizontal Menus inside Menu
+			let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
+			allowed.map((name) => {
+				let tb = containerOptions.tabs.addNavItemIcon(new MODEL().set({
+					label: name,
+					icon: ICONS[name]
+				}));
+				let opt = containerOptions.menus.addMenu(new MODEL('horizontal').set('name', name));
+				containerOptions.addTabbableElement(tb, opt);
+				this.addThumbButtonActions(name, tb, opt);
+				////  YOU SHOULD CREATE A TABBABLE ELEMENT (CONTAINER-PREVIEW) that can be populated with the element
+			});
+		} catch (e) {
+			let modal = this.getProtoTypeByClass('MODAL');
+			if (modal === null) {
+				console.warn('Unable to retrieve MAIN Container', e);
+				throw e;
+			} else {
+				switch (modal.className) {
+					case 'LOADER':
+					case 'PROMPT':
+						break;
+					default:
+						console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
+						break;
+				}
+			}
+		}
+	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
 	    @param {string} element The name of the element 
@@ -77,45 +76,45 @@ export default class INDEX extends BANNER {
 				}, (payload, status) => {
 					if (status === 'success') {
 						let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
-                        thumb.el.setAttribute('title', str);
-                        thumb.el.addEventListener('activate', () => console.warn('Payload for ' + element, payload));
-                        payload.list.forEach((li) => {
-                            let icon = menu.addNavItemIcon(new MODEL('card').set({
-                                label: li.id,
-                                icon: ICONS[element]
-                            }));
-                            icon.el.setAttribute('title', li.label);
-                            icon.el.addEventListener('activate', () => {
-                                let url = '/' + element + '/GET/' + li.id
-                                console.warn('Output for ' + url, li);
-                                $.getJSON(url, (result) => {
-                                    console.warn('Results for ' + url, result);
-                                    let panel = new PANEL(new MODEL().set({
-                                        label: url,
-                                        caller: icon,
-                                        container: this
-                                    }));
-                                    //let woot = new DIV(panel.body, new MODEL('woot'), 'woot: ' + result.model.id);
-                                    panel.body.addContainerCase(element);
-                                    panel.body.populate([result.model]).then((results) => {
-                                        try {
-                                            results.body.pane.children[1].navheader.expand();
-                                        } catch (e) {
-                                            console.warn('Unable to show navheader.  Likely async issue', results);
-                                        }
-                                        // This is cheating.  You should be waiting for an indication that the CONTAINER has loaded instead of 
-                                        // assuming that it will exist.  This will eventually break.
-                                        setTimeout(() => {
-                                            console.warn('!!! BAD BAD BADNESS !!!', results);
-                                            console.warn('INDEX Populated', results, results.body.pane.children);
-                                            // DO THE THING that you're not supposed to do this way
-                                            results.body.pane.children[1].navheader.expand();
-                                        }, 1000);
-                                        panel.showDialog();
-                                    });
-                                });
-                            })
-                        });
+						thumb.el.setAttribute('title', str);
+						thumb.el.addEventListener('activate', () => console.warn('Payload for ' + element, payload));
+						payload.list.forEach((li) => {
+							let icon = menu.addNavItemIcon(new MODEL('card').set({
+								label: li.id,
+								icon: ICONS[element]
+							}));
+							icon.el.setAttribute('title', li.label);
+							icon.el.addEventListener('activate', () => {
+								let url = '/' + element + '/GET/' + li.id
+								console.warn('Output for ' + url, li);
+								$.getJSON(url, (result) => {
+									console.warn('Results for ' + url, result);
+									let panel = new PANEL(new MODEL().set({
+										label: url,
+										caller: icon,
+										container: this
+									}));
+									//let woot = new DIV(panel.body, new MODEL('woot'), 'woot: ' + result.model.id);
+									panel.body.addContainerCase(element);
+									panel.body.populate([result.model]).then((results) => {
+										try {
+											results.body.pane.children[1].navheader.expand();
+										} catch (e) {
+											console.warn('Unable to show navheader.  Likely async issue', results);
+										}
+										// This is cheating.  You should be waiting for an indication that the CONTAINER has loaded instead of 
+										// assuming that it will exist.  This will eventually break.
+										setTimeout(() => {
+											console.warn('!!! BAD BAD BADNESS !!!', results);
+											console.warn('INDEX Populated', results, results.body.pane.children);
+											// DO THE THING that you're not supposed to do this way
+											results.body.pane.children[1].navheader.expand();
+										}, 1000);
+										panel.showDialog();
+									});
+								});
+							})
+						});
 					}
 					resolve(this);
 				});

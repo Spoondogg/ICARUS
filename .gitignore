@@ -27,6 +27,9 @@ ICARUS.code-workspace
 Documentation/
 Content/Images/**/*
 Scripts/deprec
+/ICARUS/Scripts/dist/icarus
+/Content/styles/icarus.min.css
+/Content/styles/icarus.min.css.map
 Properties
 packages
 package-lock.json
@@ -281,4 +284,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-/ICARUS/Scripts/dist/icarus

@@ -169,9 +169,9 @@ export default class GulpBuild extends GULPFILE {
 	    @returns {gulp.series} Series
 	*/
 	buildVendorAll() {
-        return this.gulp.series(
-            (done) => this.logCompletion('GULPFILE.buildVendorAll()', done),
-            (done) => this.buildVendorScripts(done),
+		return this.gulp.series(
+			(done) => this.logCompletion('GULPFILE.buildVendorAll()', done),
+			(done) => this.buildVendorScripts(done),
 			(done) => this.buildVendorStyles(done),
 			(done) => this.buildVendorFonts(done));
 	}
@@ -210,32 +210,32 @@ export default class GulpBuild extends GULPFILE {
         @param {boolean} buildVendor If true, vendor Styles, Scripts and Fonts are rebuilt
 	    @returns {void}
     */
-    cleanDev(buildVendor = true) {
-        return this.gulp.series(
-            (done) => this.logCompletion('GULPFILE.cleanDev()', done),
-            (done) => {
-                del([
-                    GULPPATHS.server.dev + GULPPATHS.scripts.dest,
-                    GULPPATHS.server.dev + GULPPATHS.fonts.dest,
-                    GULPPATHS.server.dev + GULPPATHS.styles.dest
-                ], { force: true });
-                done();
-            },
-            (done) => this.logCompletion('GULPFILE.buildVendor()', done),
-            (done) => {
-                if (buildVendor) {
-                    try {
-                        console.log('Building Vendor');
-                        return this.buildVendorAll()(done);
-                    } catch (e) {
-                        console.warn('FAIL');
-                        throw e;
-                    }
-                } else {
-                    console.log('Not building Vendor');
-                    done();
-                }
-            });
+	cleanDev(buildVendor = true) {
+		return this.gulp.series(
+			(done) => this.logCompletion('GULPFILE.cleanDev()', done),
+			(done) => {
+				del([
+					GULPPATHS.server.dev + GULPPATHS.scripts.dest,
+					GULPPATHS.server.dev + GULPPATHS.fonts.dest,
+					GULPPATHS.server.dev + GULPPATHS.styles.dest
+				], { force: true });
+				done();
+			},
+			(done) => this.logCompletion('GULPFILE.buildVendor()', done),
+			(done) => {
+				if (buildVendor) {
+					try {
+						console.log('Building Vendor');
+						return this.buildVendorAll()(done);
+					} catch (e) {
+						console.warn('FAIL');
+						throw e;
+					}
+				} else {
+					console.log('Not building Vendor');
+					done();
+				}
+			});
 	}
 	/** Post CSS Plugin with AutoPrefixer
 	    @returns {postcss} A Post CSS Processing Plugin
