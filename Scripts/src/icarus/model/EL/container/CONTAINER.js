@@ -603,33 +603,34 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
 	disable() {
-		return new Promise((resolve, reject) => {
-			this.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
+        return new Promise((resolve, reject) => {
+            let main = this.getContainer().getMain();
+			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
 					let dialog = new DIALOG(new MODEL().set({
 						label: 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']',
-						container: this.getMain()
+                        container: main, 
+                        caller: main
 					}));
-					dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE).el.onclick = () => {
-						this.getLoader().log(50, 'Disable', true).then(() => { //loader
-							this.destroy().then(() => {
-								try {
-									this.container.save(true).then(() => {
-										console.log('/' + this.className + '/DISABLE/' + this.id);
-										$.post('/' + this.className + '/DISABLE/' + this.id, {
-												'__RequestVerificationToken': this.getToken() //token.value
-											}, //this.ajaxRefreshIfSuccessful);
-											(data) => {
-												console.log('RESULTS', data);
-												resolve(dialog.close());
-											});
-									});
-								} catch (ee) {
-									reject(ee);
-								}
-							});
-						});
-					};
+                    dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE)
+                        .el.onclick = () => loader.log(50, 'Disable', true).then(
+                            () => this.destroy().then(
+                                () => {
+                                    try {
+                                        console.warn('TODO: Should save parent container (if exists)');
+                                        //this.container.save(true).then(() => {
+                                            console.log('/' + this.className + '/DISABLE/' + this.id);
+                                            $.post('/' + this.className + '/DISABLE/' + this.id, {
+                                                '__RequestVerificationToken': this.getToken()
+                                            }, (data) => {
+                                                    console.log('RESULTS', data);
+                                                    resolve(dialog.closeDialog());
+                                            });
+                                        //});
+                                    } catch (ee) {
+                                        reject(ee);
+                                    }
+                                }));
 					loader.log(100).then(() => dialog.show());
 				} catch (e) {
 					console.log('Unable to disable this ' + this.element, e);
