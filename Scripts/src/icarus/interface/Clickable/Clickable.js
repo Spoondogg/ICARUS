@@ -79,19 +79,18 @@ export default class Clickable extends IFACE {
 					node.touchtime = new Date().getTime();
 					setTimeout(() => {
 						if (node.touchtime !== 0) {
-							console.log('click-single', node.timer, node);
+							//console.log('click-single', node.timer, node);
 							this.resetTimer(node);
 							Promise.resolve(node.click());
 						}
 					}, this.options.delay);
 				} else if (new Date().getTime() - node.touchtime < this.options.delay) {
-					console.log('click-double', node.timer, node);
+					//console.log('click-double', node.timer, node);
 					this.resetTimer(node);
 					Promise.resolve(node.dblclick());
 				} else {
-					console.log('longclick-up', node.timer, node);
+					//console.log('longclick-up', node.timer, node);
 					this.resetTimer(node);
-					//Promise.resolve(longclick(ev));
 				}
 			} catch (e) {
 				console.warn('error', e);

@@ -23,18 +23,4 @@ export default class BANNER extends CONTAINER {
 	construct(children) {
 		return this.populate(children);
 	}
-	/** Returns the parent container for this container or null if it does not exist
-	    @returns {CONTAINER} The parent container for this container
-	*/
-	getContainer() {
-		return this.getProtoTypeByClass('CONTAINER');
-	}
-	/** Returns the MAIN container
-	    @method
-	    @returns {MAIN} The MAIN Container
-	    @throws Will throw an error 
-	*/
-	getMain() {
-		return this.getProtoTypeByClass('CONTAINER').getMain();
-	}
 }

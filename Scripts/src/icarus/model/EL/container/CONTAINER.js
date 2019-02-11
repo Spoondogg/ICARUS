@@ -419,33 +419,12 @@ export default class CONTAINER extends GROUP {
 	    @param {string} name The name to be set
 	    @returns {void}
 	*/
-	setName(name) {
-		this.el.setAttribute('name', name);
-		this.model.name = name;
+    setName(name) {
+        if (typeof name !== 'undefined' && name !== null) {
+            this.el.setAttribute('name', name);
+            this.model.name = name;
+        }
 	}
-	/** Expands the container's body
-        @returns {void}
-    
-	show() {
-		try {
-			$(this.body.el).collapse('show');
-		} catch (e) {
-			console.warn(e);
-		}
-    }*/
-	/** Collapses the NavBar
-	    @returns {void}
-    
-	hideNav() {
-	    console.log('Hiding ' + this.className + ' navBar', this);
-	    this.navbar.collapse();
-	}*/
-	/** Expands the NavBar
-	    @returns {ThisType} callback
-    
-	showNav() {
-	    return this.navbar.expand();
-	}*/
 	/** An abstract load method for a CONTAINER
         @abstract
         @throws {AbstractMethodError} Throws an AbstractMethodError if no load method specified
@@ -453,7 +432,29 @@ export default class CONTAINER extends GROUP {
     */
 	load() {
 		throw new AbstractMethodError('CONTAINER{' + this.className + '}.load() : Abstract method ' + this.className + '.load() not implemented.');
-	}
+    }
+    /** Loads the given MODEL into this CONTAINER
+        @param {MODEL} model Model
+        @param {Promise.resolve} resolve Promise resolver function
+        @param {Promise.reject} reject Promise reject function
+        @returns {Promise<ThisType>} callback
+    */
+    loadModel(model, resolve, reject) {
+        try {
+            if (model.label) {
+                document.title = model.label;
+            }
+            this.body.pane.empty().then(() => {
+                this.setId(model.id);
+                this.setLabel(model.label);
+                this.setName(model.name);
+                this.populate(model.children).then(() => resolve(this));
+            });
+        } catch (e) {
+            console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
+            reject(e);
+        }
+    }
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
     */

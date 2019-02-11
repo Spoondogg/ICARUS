@@ -112,7 +112,7 @@ export default class MODAL extends CONTAINER {
 	    @returns {null} A modal can not return a Container
 	*/
 	getContainer() {
-		console.warn('You are attempting to get the Container of a modal, however a Modal does not have a parent Container because it belongs to document.body');
+		console.warn('You are attempting to get the Container of a MODAL, however it does not have a parent Container because it belongs to document.body');
 		return null;
 	}
 }

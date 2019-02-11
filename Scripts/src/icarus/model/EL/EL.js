@@ -18,8 +18,10 @@ export default class EL extends MODEL {
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), innerHTML, children = []) {
 		super(model.attributes);
-		this.setContainer();
-		this.node = node;
+        this.setContainer();
+        this.setMain();
+        this.node = node;
+        //this.next = null;
 		this.className = this.constructor.name;
 		this.element = element;
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
@@ -240,8 +242,8 @@ export default class EL extends MODEL {
 	*/
 	getContainer() {
 		try {
-			if (typeof this.container === 'undefined') {
-				this.container = this.getProtoTypeByClass('CONTAINER');
+            if (typeof this.container === 'undefined') {
+                this.setContainer();
 				return this.container;
 			}
 			return this.container;
@@ -264,37 +266,17 @@ export default class EL extends MODEL {
 	    @returns {Promise<MAIN>} MAIN class
 	*/
 	getMain() {
-		console.log(this.className + '.getMain()');
+		console.log('EL.getMain()');
 		try {
-			let main = null;
-			if (typeof this.container === 'undefined') {
-				main = this.getProtoTypeByClass('MAIN');
-			} else {
-				main = this.getContainer().getMain();
+			if (typeof this.main === 'undefined') {
+                this.setMain();
+                return this.main;
 			}
-			return main;
+			return this.main;
 		} catch (e) {
-			console.error(e);
-			throw e;
+            console.warn(e);
+            throw new MissingContainerError(this.className + ' is unable to find a MAIN Container');
 		}
-		/*return new Promise((resolve, reject) => {
-		    try {
-		        //return this.getProtoTypeByClass('MAIN');
-		        if (typeof this.container === 'undefined') {
-		            resolve(this.getProtoTypeByClass('MAIN'));
-		        } else {
-		            try {
-		                resolve(this.getContainer().getMain());
-		            } catch (e) {
-		                console.warn('EL{' + this.className + '} Unable to retrieve MAIN Container', e);
-		                reject(e);
-		            }
-		        }
-		    } catch (ee) {
-		        console.error(ee);
-		        reject(ee);
-		    }
-		});*/
 	}
 	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token
@@ -441,12 +423,18 @@ export default class EL extends MODEL {
 			this.attributes.class = className;
 		});
 	}
-	/** Retrieves the container (if exists) and sets it
+	/** Gets the container (if exists) and sets it
 	    @returns {void}
 	*/
 	setContainer() {
-		this.container = this.getContainer(); //this.getProtoTypeByClass('CONTAINER');
-	}
+		this.container = this.getProtoTypeByClass('CONTAINER');
+    }
+    /** Gets the main (if exists) and sets it
+	    @returns {void}
+	*/
+    setMain() {
+        this.main = this.getProtoTypeByClass('MAIN');
+    }
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
 	    @returns {Promise<ThisType>} callback
@@ -494,8 +482,9 @@ export default class EL extends MODEL {
 		return new Promise((resolve, reject) => {
 			if (children) {
 				try {
-					let msg = this.className + '.populate(' + children.length + ');';
-					this.getMain().loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
+                    let msg = this.className + '.populate(' + children.length + ');';
+                    let main = this.getContainer().getMain();
+					main.loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
 				} catch (e) {
 					reject(e);
 				}

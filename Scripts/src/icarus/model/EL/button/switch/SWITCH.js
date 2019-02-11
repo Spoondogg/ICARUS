@@ -1,7 +1,7 @@
 /** @module */
 import BUTTON from '../BUTTON.js';
 import Clickable from '../../../../interface/Clickable/Clickable.js';
-/** Button that show/hides a list of options
+/** Button that can be switched on or off
     @class
     @extends BUTTON
 */
@@ -17,6 +17,4 @@ export default class SWITCH extends BUTTON {
 		this.implement(new Clickable(this));
 	}
 }
-export {
-	BUTTON
-}
+export { BUTTON }
