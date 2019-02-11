@@ -747,6 +747,7 @@
     <Content Include="Scripts\src\icarus\model\el\list\dl\DL.js" />
     <Content Include="Scripts\src\icarus\model\el\list\console\CONSOLE.js" />
     <Content Include="Scripts\src\icarus\model\MODEL.js" />
+    <Content Include="Scripts\src\icarus\model\LINKEDLIST.js" />
     <Content Include="Scripts\src\icarus\STRING.js" />
     <Content Include="Scripts\src\icarus\task\gulp\GULPOptimize\GulpOptimize.js" />
     <Content Include="Scripts\src\icarus\task\gulp\GULPPublish\GulpPublish.js" />

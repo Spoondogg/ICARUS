@@ -291,7 +291,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	focusBody() {
-		console.log('focusbody');
+		//console.log('focusbody');
 		let ev = new Deactivate(this);
 		this.sidebar.el.dispatchEvent(ev);
 		this.btnSidebar.el.dispatchEvent(ev);
@@ -320,20 +320,8 @@ export default class MAIN extends CONTAINER {
 				}
 				if (id >= 0) {
 					$.getJSON('MAIN/GET/' + id, (payload) => {
-						if (payload.result === 1) {
-							try {
-								if (payload.model.label) {
-									document.title = payload.model.label;
-								}
-								this.body.pane.empty().then(() => {
-									this.setId(this.id);
-									this.setLabel(payload.model.label);
-									this.populate(payload.model.children).then(() => resolve(this));
-								});
-							} catch (e) {
-								console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
-								reject(e);
-							}
+                        if (payload.result === 1) {
+                            this.loadModel(payload.model, resolve, reject);
 						} else {
 							reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
 						}
@@ -346,7 +334,7 @@ export default class MAIN extends CONTAINER {
 				reject(e);
 			}
 		});
-	}
+    }
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id
 	    @todo Create method to browse MAINs
@@ -361,7 +349,19 @@ export default class MAIN extends CONTAINER {
 	*/
 	getId() {
 		return this.id;
-	}
+    }
+    /** Gets the container (if exists) and sets it
+	    @returns {void}
+	*/
+    setContainer() {
+        this.container = this;
+    }
+    /** Gets the main (if exists) and sets it
+	    @returns {void}
+	*/
+    setMain() {
+        this.main = this;
+    }
 	/** Retrieves user data from localStorage
 	    and sets the user icon image accordingly
 	    @returns {void}

@@ -241,7 +241,7 @@ export default class CONTAINERFACTORY {
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(30, 'Saving {' + this.className + '}[' + type + ']').then((loader) => {
 				try {
-					if (this[type] > 0) {
+					if (this[type] > 0) { // ie: this['dataId']
 						new PROMPT(new MODEL().set({
 							container: this
 						})).createForm(new MODEL().set({
@@ -251,9 +251,8 @@ export default class CONTAINERFACTORY {
 							formPostId: this.id,
 							container: this
 						})).then((form) => form.post().then(() => loader.log(100).then(() => resolve(form.getDialog().close()))));
-					} else {
-						console.log('Creating ' + type + ' for ' + this.className);
-						resolve();
+					} else { 
+                        resolve(loader.log(100));
 					}
 				} catch (e) {
 					reject(e);

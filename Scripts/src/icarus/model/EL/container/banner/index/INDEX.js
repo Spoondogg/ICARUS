@@ -86,7 +86,7 @@ export default class INDEX extends BANNER {
 							icon.el.setAttribute('title', li.label);
 							icon.el.addEventListener('activate', () => {
 								let url = '/' + element + '/GET/' + li.id
-								console.warn('Output for ' + url, li);
+								//console.warn('Output for ' + url, li);
 								$.getJSON(url, (result) => {
 									console.warn('Results for ' + url, result);
 									let panel = new PANEL(new MODEL().set({
@@ -94,7 +94,6 @@ export default class INDEX extends BANNER {
 										caller: icon,
 										container: this
 									}));
-									//let woot = new DIV(panel.body, new MODEL('woot'), 'woot: ' + result.model.id);
 									panel.body.addContainerCase(element);
 									panel.body.populate([result.model]).then((results) => {
 										try {
@@ -105,8 +104,7 @@ export default class INDEX extends BANNER {
 										// This is cheating.  You should be waiting for an indication that the CONTAINER has loaded instead of 
 										// assuming that it will exist.  This will eventually break.
 										setTimeout(() => {
-											console.warn('!!! BAD BAD BADNESS !!!', results);
-											console.warn('INDEX Populated', results, results.body.pane.children);
+                                            console.warn('!!! BAD BAD BADNESS !!! INDEX Populated', results, results.body.pane.children);
 											// DO THE THING that you're not supposed to do this way
 											results.body.pane.children[1].navheader.expand();
 										}, 1000);
