@@ -1,7 +1,7 @@
 /** @module */
 import DIV, { EL, MODEL } from '../div/DIV.js';
 import CONTAINER from '../container/CONTAINER.js';
-import Swipeable from '../../../interface/Swipeable/Swipeable.js';
+import Swipeable from '../../../interface/Swipeable.js';
 /** A panel with swipe detection
     @class
     @extends EL

@@ -746,6 +746,21 @@ $jumbotron-height: 420px;
 			}
 		}
 	}
+	/// Full width NAV element
+	nav {
+		@extend %bevel-up;
+		background-color: $color-nav-background;
+		border-radius: 0;
+		font-size: $font-size-normal;
+		height: $navbar-height;
+		min-height: $navbar-height;
+		width: 100%;
+		// Override bootstrap
+		&.navbar {
+			border: 0;
+			margin-bottom: 0;
+		}
+	}
 	/// A vertically aligned button group
 	/// @todo This should just be a list...  shouldn't it?
 	/// @group review
@@ -1206,19 +1221,11 @@ $jumbotron-height: 420px;
 	.container {
 		@extend %wide-block;
 		/// A collection of navigation elements
-		>nav {
-			@extend %bevel-up;
-			background-color: $color-nav-background;
-			border-radius: 0;
-			font-size: $font-size-normal;
-			height: $navbar-height;
-			min-height: $navbar-height;
-			width: 100%;
-		}
 		/// A Container for article style content, grouped into sections
 		&.article {
 			border-bottom: 1px solid $color-grey;
 			border-top: 1px solid $color-grey-darker;
+            box-shadow: 0 2px 2px 0 $color-shadow-dark;
 			margin: 0 auto .8em;
 		}
 		/// A paged list of elements
@@ -1362,6 +1369,7 @@ $jumbotron-height: 420px;
 			max-width: $body-width;
 
 			>nav {
+				// Fixed
 				&.nav-header {
 					border-top: 0;
 					left: 0;

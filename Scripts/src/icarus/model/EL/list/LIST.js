@@ -1,5 +1,5 @@
 /** @module */
-import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible/Collapsible.js';
+import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible.js';
 import ITEM, { ATTRIBUTES, EL, MODEL } from './item/ITEM.js';
 import LI from './li/LI.js';
 import UL from './ul/UL.js';

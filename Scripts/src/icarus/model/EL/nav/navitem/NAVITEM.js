@@ -1,7 +1,7 @@
 /** @module */
 import UL, { ATTRIBUTES, EL, LI, MODEL } from '../../list/ul/UL.js';
 import ANCHOR from '../../a/anchor/ANCHOR.js';
-import Clickable from '../../../../interface/Clickable/Clickable.js';
+import Clickable from '../../../../interface/Clickable.js';
 import MENU from '../menu/MENU.js';
 /** A Navigation Item
     @class

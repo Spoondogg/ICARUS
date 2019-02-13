@@ -1,12 +1,9 @@
 /** @module */
-//import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import DIV, { ATTRIBUTES, EL, MODEL } from '../div/DIV.js';
+import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
 import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
-import Closeable from '../../../interface/Closeable/Closeable.js';
-import HEADER from '../header/HEADER.js';
+import NAVHEADER, { Activate, Deactivate, MENU } from '../nav/navbar/navheader/NAVHEADER.js';
+import Closeable from '../../../interface/Closeable.js';
 import { ICONS } from '../../../enums/ICONS.js';
-import NAVHEADER, { MENU } from '../nav/navbar/navheader/NAVHEADER.js';
-import SWITCH from '../button/switch/SWITCH.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
@@ -15,8 +12,9 @@ export default class DIALOG extends EL {
 	/** Constructs a generic DIALOG Element
 	    @constructs DIALOG
 	    @param {MODEL} model The object model
+        @param {boolean} showHeader If true (default), header is shown
 	*/
-	constructor(model) { // container
+	constructor(model, showHeader = true) { // container
 		super(document.body, 'DIV', model);
 		this.addClasses(['dialog', 'modal']);
 		this.implement(new Closeable(this));
@@ -25,17 +23,21 @@ export default class DIALOG extends EL {
 		this.hide = () => this.hideDialog();
 		this.caller = this.required(model.caller); // Switchable Element
 		this.container = this.required(model.container); // Container Element for callbacks
-		this.header = new HEADER(this, new MODEL().set('label', model.label));
+		//this.header = new HEADER(this, new MODEL().set('label', model.label));
 		//this.btnClose = new SWITCH(this.header, 'x');
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label)); // @todo NAVHEADER
-        this.btnClose = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
-            label: 'close',
-            icon: ICONS.CLOSE
-        }));
+		this.btnClose = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
+			label: 'close',
+			icon: ICONS.CLOSE
+		}));
         this.btnClose.el.addEventListener('activate', () => this.closeDialog());
-        this.navheader.expand();
+        if (showHeader) {
+            this.navheader.expand();
+        }
 		//this.navbar.expand().then(navbar => navbar.menu.expand());		
-		this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
+		//this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
+		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
+		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
@@ -83,4 +85,4 @@ export default class DIALOG extends EL {
 		});
 	}
 }
-export { ATTRIBUTES, DIV, EL, MENU, MODEL }
+export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL }

@@ -251,8 +251,8 @@ export default class CONTAINERFACTORY {
 							formPostId: this.id,
 							container: this
 						})).then((form) => form.post().then(() => loader.log(100).then(() => resolve(form.getDialog().close()))));
-					} else { 
-                        resolve(loader.log(100));
+					} else {
+						resolve(loader.log(100));
 					}
 				} catch (e) {
 					reject(e);

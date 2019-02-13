@@ -1,5 +1,5 @@
 /** @module */
-import IFACE from '../IFACE.js';
+import IFACE from './IFACE.js';
 //import Activate from '../../event/Activate.js';
 /** An interface for Click driven Events
     @class

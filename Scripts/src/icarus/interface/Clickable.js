@@ -1,11 +1,11 @@
 /** @module */
-import IFACE, { EL, MODEL } from '../IFACE.js';
-import Activate from '../../event/Activate.js';
-import Deactivate from '../../event/Deactivate.js';
-import Deselect from '../../event/Deselect.js';
-import Select from '../../event/Select.js';
-import Selectable from '../Selectable/Selectable.js';
-import Switchable from '../Switchable/Switchable.js';
+import IFACE, { EL, MODEL } from './IFACE.js';
+import Activate from '../event/Activate.js';
+import Deactivate from '../event/Deactivate.js';
+import Deselect from '../event/Deselect.js';
+import Select from '../event/Select.js';
+import Selectable from './Selectable.js';
+import Switchable from './Switchable.js';
 /** An interface for Click driven Events
     @class
     @extends IFACE

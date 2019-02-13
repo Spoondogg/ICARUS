@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, { EL } from '../IFACE.js';
+import IFACE, { EL } from './IFACE.js';
 /** An interface for Drag driven Events
     @see https://www.w3schools.com/jsref/event_ondrag.asp
     @class
@@ -14,17 +14,18 @@ export default class Draggable extends IFACE {
 		node.setAttribute('draggable', true);
 	}
 	addListeners(node) {
-		node.el.addEventListener('dragstart', (ev) => node.dragstart(ev));
-		node.el.addEventListener('drop', (ev) => node.drop(ev));
-		node.el.addEventListener('dragover', (ev) => node.dragover(ev));
-		node.el.addEventListener('dragend', (ev) => node.dragend(ev));
+		node.el.addEventListener('dragstart', (ev) => this.onError(node.dragstart, ev, 'DragStart Failed'));
+		node.el.addEventListener('drop', (ev) => this.onError(node.drop, ev, 'Drop Failed'));
+		node.el.addEventListener('dragover', (ev) => this.onError(node.dragover, ev, 'DragOver Failed'));
+		node.el.addEventListener('dragend', (ev) => this.onError(node.dragend, ev, 'DragEnd Failed'));
 	}
 	setMethods(node) {
 		// Drag the element
 		this.methods.dragstart = (ev) => {
 			console.log('Dragging: ' + node.className + '(' + node.id + ') ' + node.label);
 			//node.body.collapse();
-			ev.dataTransfer.setData("Container", node.id);
+            ev.dataTransfer.setData("Container", node.id);
+            ev.stopPropagation();
 		};
 		// Drop the element
 		this.methods.drop = (ev) => {
@@ -33,14 +34,17 @@ export default class Draggable extends IFACE {
 			//let container = $(document.getElementById(ev.dataTransfer.getData("Container")));
 			//container.insertBefore(node.el);
 			//container.collapse('show');
+            ev.stopPropagation();
 		};
 		// Allow drop on this element
 		this.methods.dragover = (ev) => {
 			console.log('Dragging over ' + node.className + '(' + node.id + ')');
-			ev.preventDefault();
+            ev.preventDefault();
+            ev.stopPropagation();
 		};
 		this.methods.dragend = () => {
-			console.log('Drag End ' + node.className + '(' + node.id + ')');
+            console.log('Drag End ' + node.className + '(' + node.id + ')');
+            ev.stopPropagation();
 		};
 	}
 }

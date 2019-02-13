@@ -28,14 +28,6 @@ export default class IFACE {
 		this.setMethods(node);
 		this.addListeners(node);
 	}
-	/** Appends Interface methods to class that implements them
-	    @param {EL} node Element to implement methods
-	    @returns {void}
-	*/
-	setMethods(node) {
-		console.log('node', node);
-		throw new AbstractMethodError('IFACE setMethods not set', this);
-	}
 	/** Adds listeners where applicable
 	    @param {EL} node Element to append listeners
 	    @returns {void}
@@ -43,7 +35,31 @@ export default class IFACE {
 	addListeners(node) {
 		console.log('node', node);
 		throw new AbstractMethodError('IFACE addListeners not set', this);
-	}
+    }
+    /** Wraps the given function in a try/catch, catches TypeErrors and throws unknown Error
+	    @param {Function} fn Function to call
+	    @param {Event} event Event
+	    @param {string} message Error Message to display
+	    @returns {void}
+	*/
+    onError(fn, event, message) {
+        try {
+            fn(event);
+        } catch (e) {
+            if (!(e instanceof TypeError)) {
+                console.warn(message, e);
+                throw e;
+            }
+        }
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
+    setMethods(node) {
+        console.log('node', node);
+        throw new AbstractMethodError('IFACE setMethods not set', this);
+    }
 	/** Toggles state of this element and triggers the appropriate event
 	    @param {string} className Existence of classname indicates on/off event to call
 	    @param {Event} eventOn Event to call if class does not yet exist

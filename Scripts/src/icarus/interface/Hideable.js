@@ -1,7 +1,5 @@
 /** @module */
-import IFACE, {
-	EL
-} from '../IFACE.js';
+import IFACE, {	EL } from './IFACE.js';
 /** An interface for Display driven Events
     @class
     @extends IFACE
@@ -32,7 +30,4 @@ export default class Hideable extends IFACE {
 		});
 	}
 }
-export {
-	EL,
-	IFACE
-}
+export { EL, IFACE }

@@ -67,4 +67,4 @@ export default class NAVHEADER extends NAVBAR {
 		}
 	}
 }
-export { ANCHOR, Collapse, Collapsible, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON }
+export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON }
