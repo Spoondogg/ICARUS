@@ -1,4 +1,9 @@
-﻿var CACHE_NAME = 'icarus-cache-v1';
+﻿/** PWA Service Worker
+    @author Ryan Dunphy
+    @see https://developers.google.com/web/fundamentals/primers/service-workers/
+    @see https://developers.google.com/web/fundamentals/web-app-manifest/
+*/
+var CACHE_NAME = 'icarus-cache-v1';
 var urlsToCache = [
     'https://fonts.googleapis.com/css?family=Lato|Raleway',
     '/Scripts/vendor.js',
@@ -12,16 +17,6 @@ var urlsToCache = [
     '/Content/Images/Logo.png',
     '/Content/favicon.ico'
 ];
-/*
-    @see https://developers.google.com/web/fundamentals/primers/service-workers/
-    @see https://developers.google.com/web/fundamentals/web-app-manifest/
-*/
-/*
-// inside service worker script
-self.onerror = (message) => {
-    console.log(message);
-};
-*/
 /** Service Worker error handling
     @see https://stackoverflow.com/questions/37736322/how-does-global-error-handling-work-in-service-workers
 */

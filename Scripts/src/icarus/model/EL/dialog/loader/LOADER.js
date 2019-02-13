@@ -1,9 +1,5 @@
 /** @module */
-import DIALOG, {
-	DIV,
-	EL,
-	MODEL
-} from '../../dialog/DIALOG.js'; //ATTRIBUTES
+import DIALOG, { DIV, EL, MODEL } from '../../dialog/DIALOG.js'; //ATTRIBUTES
 import CONSOLE from '../../list/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /** A Dialog showing loading details
@@ -24,7 +20,7 @@ export default class LOADER extends DIALOG {
 			container,
 			caller: container,
 			name: 'loader'
-		}));
+		}), false);
 		this.addClass('loader');
 		this.el.setAttribute('data-backdrop', false);
 		this.progress = new DIV(this.body, new MODEL('progress'));
@@ -65,10 +61,4 @@ export default class LOADER extends DIALOG {
 		});
 	}
 }
-export {
-	CONSOLE,
-	DIV,
-	EL,
-	MODEL,
-	PROGRESSBAR
-}
+export { CONSOLE, DIV, EL, MODEL, PROGRESSBAR }

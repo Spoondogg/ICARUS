@@ -1,6 +1,6 @@
 /** @module */
-import Deselect from '../../event/Deselect.js';
-import IFACE from '../IFACE.js';
+import Deselect from '../event/Deselect.js';
+import IFACE from './IFACE.js';
 /** An interface for Select driven Events
     @class
     @extends IFACE

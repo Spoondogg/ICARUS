@@ -104,7 +104,7 @@ export default class INDEX extends BANNER {
 										// This is cheating.  You should be waiting for an indication that the CONTAINER has loaded instead of 
 										// assuming that it will exist.  This will eventually break.
 										setTimeout(() => {
-                                            console.warn('!!! BAD BAD BADNESS !!! INDEX Populated', results, results.body.pane.children);
+											console.warn('!!! BAD BAD BADNESS !!! INDEX Populated', results, results.body.pane.children);
 											// DO THE THING that you're not supposed to do this way
 											results.body.pane.children[1].navheader.expand();
 										}, 1000);

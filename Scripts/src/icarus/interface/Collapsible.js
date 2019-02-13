@@ -1,7 +1,7 @@
 /** @module */
-import Collapse from '../../event/Collapse.js';
-import Expand from '../../event/Expand.js';
-import IFACE from '../IFACE.js';
+import Collapse from '../event/Collapse.js';
+import Expand from '../event/Expand.js';
+import IFACE from './IFACE.js';
 /** An interface for Collapse driven Events
     @class
     @extends IFACE

@@ -6,16 +6,16 @@ import GROUP, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../group/GRO
 //import NAVBAR, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/NAVBAR.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
-import Clickable from '../../../interface/Clickable/Clickable.js';
+import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
-import Draggable from '../../../interface/Draggable/Draggable.js';
+import Draggable from '../../../interface/Draggable.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LEGEND from '../legend/LEGEND.js';
-import Movable from '../../../interface/Movable/Movable.js';
+import Movable from '../../../interface/Movable.js';
 import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
@@ -44,6 +44,7 @@ export default class CONTAINER extends GROUP {
 		this.subsections = this.required(model.subsections ? model.subsections.split(',') : '0'); // Delimited list of child ids
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label));
 		this.navheader.implement(new Draggable(this));
+		this.implement(new Draggable(this));
 		this.body = new COLLAPSIBLE(this, new MODEL('body'));
 		// Cascade state
 		// Add Navbar Items
@@ -419,11 +420,11 @@ export default class CONTAINER extends GROUP {
 	    @param {string} name The name to be set
 	    @returns {void}
 	*/
-    setName(name) {
-        if (typeof name !== 'undefined' && name !== null) {
-            this.el.setAttribute('name', name);
-            this.model.name = name;
-        }
+	setName(name) {
+		if (typeof name !== 'undefined' && name !== null) {
+			this.el.setAttribute('name', name);
+			this.model.name = name;
+		}
 	}
 	/** An abstract load method for a CONTAINER
         @abstract
@@ -432,29 +433,29 @@ export default class CONTAINER extends GROUP {
     */
 	load() {
 		throw new AbstractMethodError('CONTAINER{' + this.className + '}.load() : Abstract method ' + this.className + '.load() not implemented.');
-    }
-    /** Loads the given MODEL into this CONTAINER
-        @param {MODEL} model Model
-        @param {Promise.resolve} resolve Promise resolver function
-        @param {Promise.reject} reject Promise reject function
-        @returns {Promise<ThisType>} callback
-    */
-    loadModel(model, resolve, reject) {
-        try {
-            if (model.label) {
-                document.title = model.label;
-            }
-            this.body.pane.empty().then(() => {
-                this.setId(model.id);
-                this.setLabel(model.label);
-                this.setName(model.name);
-                this.populate(model.children).then(() => resolve(this));
-            });
-        } catch (e) {
-            console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
-            reject(e);
-        }
-    }
+	}
+	/** Loads the given MODEL into this CONTAINER
+	    @param {MODEL} model Model
+	    @param {Promise.resolve} resolve Promise resolver function
+	    @param {Promise.reject} reject Promise reject function
+	    @returns {Promise<ThisType>} callback
+	*/
+	loadModel(model, resolve, reject) {
+		try {
+			if (model.label) {
+				document.title = model.label;
+			}
+			this.body.pane.empty().then(() => {
+				this.setId(model.id);
+				this.setLabel(model.label);
+				this.setName(model.name);
+				this.populate(model.children).then(() => resolve(this));
+			});
+		} catch (e) {
+			console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
+			reject(e);
+		}
+	}
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
     */
@@ -604,34 +605,34 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
 	disable() {
-        return new Promise((resolve, reject) => {
-            let main = this.getContainer().getMain();
+		return new Promise((resolve, reject) => {
+			let main = this.getContainer().getMain();
 			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
 					let dialog = new DIALOG(new MODEL().set({
 						label: 'Disable ' + this.className + '{' + this.element + '}[' + this.id + ']',
-                        container: main, 
-                        caller: main
+						container: main,
+						caller: main
 					}));
-                    dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE)
-                        .el.onclick = () => loader.log(50, 'Disable', true).then(
-                            () => this.destroy().then(
-                                () => {
-                                    try {
-                                        console.warn('TODO: Should save parent container (if exists)');
-                                        //this.container.save(true).then(() => {
-                                            console.log('/' + this.className + '/DISABLE/' + this.id);
-                                            $.post('/' + this.className + '/DISABLE/' + this.id, {
-                                                '__RequestVerificationToken': this.getToken()
-                                            }, (data) => {
-                                                    console.log('RESULTS', data);
-                                                    resolve(dialog.closeDialog());
-                                            });
-                                        //});
-                                    } catch (ee) {
-                                        reject(ee);
-                                    }
-                                }));
+					dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.className, ICONS.REMOVE)
+						.el.onclick = () => loader.log(50, 'Disable', true).then(
+							() => this.destroy().then(
+								() => {
+									try {
+										console.warn('TODO: Should save parent container (if exists)');
+										//this.container.save(true).then(() => {
+										console.log('/' + this.className + '/DISABLE/' + this.id);
+										$.post('/' + this.className + '/DISABLE/' + this.id, {
+											'__RequestVerificationToken': this.getToken()
+										}, (data) => {
+											console.log('RESULTS', data);
+											resolve(dialog.closeDialog());
+										});
+										//});
+									} catch (ee) {
+										reject(ee);
+									}
+								}));
 					loader.log(100).then(() => dialog.show());
 				} catch (e) {
 					console.log('Unable to disable this ' + this.element, e);

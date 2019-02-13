@@ -18,10 +18,10 @@ export default class EL extends MODEL {
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), innerHTML, children = []) {
 		super(model.attributes);
-        this.setContainer();
-        this.setMain();
-        this.node = node;
-        //this.next = null;
+		this.setContainer();
+		this.setMain();
+		this.node = node;
+		//this.next = null;
 		this.className = this.constructor.name;
 		this.element = element;
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
@@ -236,14 +236,14 @@ export default class EL extends MODEL {
 	*/
 	getClass() {
 		return this.attributes.class || '';
-    }
+	}
 	/** Sets and returns the parent container for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/
 	getContainer() {
 		try {
-            if (typeof this.container === 'undefined') {
-                this.setContainer();
+			if (typeof this.container === 'undefined') {
+				this.setContainer();
 				return this.container;
 			}
 			return this.container;
@@ -269,13 +269,13 @@ export default class EL extends MODEL {
 		console.log('EL.getMain()');
 		try {
 			if (typeof this.main === 'undefined') {
-                this.setMain();
-                return this.main;
+				this.setMain();
+				return this.main;
 			}
 			return this.main;
 		} catch (e) {
-            console.warn(e);
-            throw new MissingContainerError(this.className + ' is unable to find a MAIN Container');
+			console.warn(e);
+			throw new MissingContainerError(this.className + ' is unable to find a MAIN Container');
 		}
 	}
 	/** Retrieves the token value from the DOM Meta tags
@@ -428,13 +428,13 @@ export default class EL extends MODEL {
 	*/
 	setContainer() {
 		this.container = this.getProtoTypeByClass('CONTAINER');
-    }
-    /** Gets the main (if exists) and sets it
+	}
+	/** Gets the main (if exists) and sets it
 	    @returns {void}
 	*/
-    setMain() {
-        this.main = this.getProtoTypeByClass('MAIN');
-    }
+	setMain() {
+		this.main = this.getProtoTypeByClass('MAIN');
+	}
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
 	    @returns {Promise<ThisType>} callback
@@ -482,8 +482,8 @@ export default class EL extends MODEL {
 		return new Promise((resolve, reject) => {
 			if (children) {
 				try {
-                    let msg = this.className + '.populate(' + children.length + ');';
-                    let main = this.getContainer().getMain();
+					let msg = this.className + '.populate(' + children.length + ');';
+					let main = this.getContainer().getMain();
 					main.loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
 				} catch (e) {
 					reject(e);

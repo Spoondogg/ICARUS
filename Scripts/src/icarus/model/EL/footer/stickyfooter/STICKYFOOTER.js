@@ -1,6 +1,6 @@
 /** @module */
 import FOOTER, { EL } from '../FOOTER.js';
-import Collapsible from '../../../../interface/Collapsible/Collapsible.js';
+import Collapsible from '../../../../interface/Collapsible.js';
 /** A Footer that sticks to bottom of page    
     @class
     @extends FOOTER

@@ -320,8 +320,8 @@ export default class MAIN extends CONTAINER {
 				}
 				if (id >= 0) {
 					$.getJSON('MAIN/GET/' + id, (payload) => {
-                        if (payload.result === 1) {
-                            this.loadModel(payload.model, resolve, reject);
+						if (payload.result === 1) {
+							this.loadModel(payload.model, resolve, reject);
 						} else {
 							reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
 						}
@@ -334,7 +334,7 @@ export default class MAIN extends CONTAINER {
 				reject(e);
 			}
 		});
-    }
+	}
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id
 	    @todo Create method to browse MAINs
@@ -349,19 +349,19 @@ export default class MAIN extends CONTAINER {
 	*/
 	getId() {
 		return this.id;
-    }
-    /** Gets the container (if exists) and sets it
+	}
+	/** Gets the container (if exists) and sets it
 	    @returns {void}
 	*/
-    setContainer() {
-        this.container = this;
-    }
-    /** Gets the main (if exists) and sets it
+	setContainer() {
+		this.container = this;
+	}
+	/** Gets the main (if exists) and sets it
 	    @returns {void}
 	*/
-    setMain() {
-        this.main = this;
-    }
+	setMain() {
+		this.main = this;
+	}
 	/** Retrieves user data from localStorage
 	    and sets the user icon image accordingly
 	    @returns {void}

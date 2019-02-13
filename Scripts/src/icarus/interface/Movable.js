@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, { EL } from '../IFACE.js';
+import IFACE, { EL } from './IFACE.js';
 /** An interface for Move driven Events
     @class
     @extends IFACE

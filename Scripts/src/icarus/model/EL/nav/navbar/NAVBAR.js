@@ -1,7 +1,7 @@
 /** @module */
 import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
-import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 //import SVG from '../../svg/SVG.js';
 /** A full width collapseable NAV Element that generally contains tabs

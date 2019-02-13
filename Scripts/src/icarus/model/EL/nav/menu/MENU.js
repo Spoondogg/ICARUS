@@ -1,6 +1,6 @@
 /** @module */
 import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js';
-import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable/Switchable.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import UL, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL } from '../../list/ul/UL.js';
 import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';

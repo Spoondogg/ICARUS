@@ -1,6 +1,6 @@
 /** @module */
 //import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import Switchable, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../../../interface/Switchable/Switchable.js';
+import Switchable, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../../../interface/Switchable.js';
 /** A group acts as a named, Switchable element used for grouping items
     @class
     @extends EL
