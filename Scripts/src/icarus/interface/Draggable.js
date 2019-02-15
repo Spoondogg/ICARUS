@@ -30,10 +30,10 @@ export default class Draggable extends IFACE {
 		// Drop the element
 		this.methods.drop = (ev) => {
 			console.log('Dropping: ' + node.className + '(' + node.id + ')');
-			ev.preventDefault();
 			//let container = $(document.getElementById(ev.dataTransfer.getData("Container")));
 			//container.insertBefore(node.el);
 			//container.collapse('show');
+            ev.preventDefault();
             ev.stopPropagation();
 		};
 		// Allow drop on this element
@@ -41,8 +41,9 @@ export default class Draggable extends IFACE {
 			console.log('Dragging over ' + node.className + '(' + node.id + ')');
             ev.preventDefault();
             ev.stopPropagation();
-		};
-		this.methods.dragend = () => {
+        };
+        // Action(s) performed when drag events complete
+		this.methods.dragend = (ev) => {
             console.log('Drag End ' + node.className + '(' + node.id + ')');
             ev.stopPropagation();
 		};
