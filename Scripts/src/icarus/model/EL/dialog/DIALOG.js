@@ -14,7 +14,7 @@ export default class DIALOG extends EL {
 	    @param {MODEL} model The object model
         @param {boolean} showHeader If true (default), header is shown
 	*/
-	constructor(model, showHeader = true) { // container
+	constructor(model, showHeader = true) {
 		super(document.body, 'DIV', model);
 		this.addClasses(['dialog', 'modal']);
 		this.implement(new Closeable(this));
@@ -23,9 +23,7 @@ export default class DIALOG extends EL {
 		this.hide = () => this.hideDialog();
 		this.caller = this.required(model.caller); // Switchable Element
 		this.container = this.required(model.container); // Container Element for callbacks
-		//this.header = new HEADER(this, new MODEL().set('label', model.label));
-		//this.btnClose = new SWITCH(this.header, 'x');
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label)); // @todo NAVHEADER
+		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
 		this.btnClose = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
 			label: 'close',
 			icon: ICONS.CLOSE
@@ -34,8 +32,6 @@ export default class DIALOG extends EL {
         if (showHeader) {
             this.navheader.expand();
         }
-		//this.navbar.expand().then(navbar => navbar.menu.expand());		
-		//this.body = new DIV(this, new MODEL('body'), model.text); // .setInnerHTML(model.text)
 		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
