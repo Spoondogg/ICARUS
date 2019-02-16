@@ -174,25 +174,24 @@ export default class EL extends MODEL {
     /** Used to recursively verify if the reflected Prototype class of the given node
         matches a specified value.  This can be helpful in cases where you need to 
         identify the root super class, not just the current one
-        !!! WORK IN PROGRESS !!!
         @param {EL} node Self or reflection of self
         @param {string} className Class name to match
         @param {number} attempt Recursion loop attempt
+        @param {number} limit Recursion limit
         @returns {boolean} True if classname found in proto chain
         @throws {RecursionLimitError} A Recursion error is thrown if limits are exceeded
     */
-    checkReflectionPrototype(node, className, attempt = 0) {
-        //console.log('Reflection ' + attempt, className); //this // node
-        if (attempt < 10) {
-            let reflection = Reflect.getPrototypeOf(node);
-            if (reflection !== null) { //typeof reflection !== 'undefined' && 
-                //console.log(' - Checking if ' + reflection.constructor.name + ' is a ' + className); //node, this, reflection)
+    checkReflectionPrototype(node, className, attempt = 0, limit = 10) {
+        if (attempt < limit) {
+            let reflection = Reflect.getPrototypeOf(node); // Can this value be cached?            
+            if (reflection !== null) {
+                if (reflection.constructor.name === 'EL') { // No sense in going any further than EL
+                    return false;
+                }
                 if (reflection.constructor.name === className) {
-                    //return node;
                     return true;
                 }
-                let attempts = attempt + 1;
-                return this.checkReflectionPrototype(reflection, className, attempts);
+                return this.checkReflectionPrototype(reflection, className, attempt + 1);
             }
             return false;
         }
@@ -203,44 +202,33 @@ export default class EL extends MODEL {
         @param {string} className The value to search for within this key
         @param {EL} node Entry point to traversing the chain
         @param {number} attempt Recursion loop
+        @param {number} limit Recursion limit
         @returns {CONTAINER} The parent container
-        @todo There needs to be some sort of recursion for getPrototypeOf(node)
-        @todo Check if this can be swapped out for isPrototypeOf()
         @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf
         @throws Will throw an error if recursion attempt exceeds limit
     */
-	getProtoTypeByClass(className, node = this.node, attempt = 0) {
+	getProtoTypeByClass(className, node = this.node, attempt = 0, limit = 100) {
 		if (node === document.body) {
 			return null; //this.getMain(); // null You have reached the top of the chain
 		}
-		let depth = attempt + 1;
 		try {
-			if (depth < 100) {
-                /*if (Reflect.getPrototypeOf(Reflect.getPrototypeOf(Reflect.getPrototypeOf(node))).constructor.name === value.toString() ||
-                    Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() ||
-                    Reflect.getPrototypeOf(node).constructor.name === value.toString()
-                ) {
-					return node;
-				}*/
+			if (attempt < limit) {
                 if (this.checkReflectionPrototype(node, className)) {
                     return node;
                 }
-				return this.getProtoTypeByClass(className, node.node, depth);
+                return this.getProtoTypeByClass(className, node.node, attempt + 1);
 			}
 			throw new RecursionLimitError(this.className + '.getProtoTypeByClass(): Exceeded attempt limit. (Attempt ' + attempt + ')');
 		} catch (e) {
-			//TypeError: this.getProtoTypeByClass is not a function
-			if (e instanceof TypeError) {
-				// Cannot read property '__proto__' of undefined
-				/** 
-				    Show warning if enabled
-				    @todo There should be a global for this 
-				
-				if (1 === 0) {
-					console.warn('A TypeError was caught while attempting to find proto "' + value + '"\n');
-				}*/
+			if (e instanceof TypeError) {				
+				/** Possible TypeError(s) include:
+                    TypeError: this.getProtoTypeByClass is not a function
+                    TypeError: Reflect.getPrototypeOf called on non-object
+                    TypeError: Cannot read property '__proto__' of undefined
+				*/
+				// console.warn('A TypeError was caught while attempting to find proto', className, e);
 			} else {
-				console.log('An unknown error occurred');
+				console.warn('An unknown error occurred');
 				throw e;
 			}
 		}
