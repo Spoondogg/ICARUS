@@ -171,9 +171,36 @@ export default class EL extends MODEL {
 			console.log('EL{' + this.className + '}.getMain() error', this);
 		}
 	}
-	/** Retrieve an {@link EL} based on its __proto__
+    /** Used to recursively verify if the reflected Prototype class of the given node
+        matches a specified value.  This can be helpful in cases where you need to 
+        identify the root super class, not just the current one
+        !!! WORK IN PROGRESS !!!
+        @param {EL} node Self or reflection of self
+        @param {string} className Class name to match
+        @param {number} attempt Recursion loop attempt
+        @returns {boolean} True if classname found in proto chain
+        @throws {RecursionLimitError} A Recursion error is thrown if limits are exceeded
+    */
+    checkReflectionPrototype(node, className, attempt = 0) {
+        //console.log('Reflection ' + attempt, className); //this // node
+        if (attempt < 10) {
+            let reflection = Reflect.getPrototypeOf(node);
+            if (reflection !== null) { //typeof reflection !== 'undefined' && 
+                //console.log(' - Checking if ' + reflection.constructor.name + ' is a ' + className); //node, this, reflection)
+                if (reflection.constructor.name === className) {
+                    //return node;
+                    return true;
+                }
+                let attempts = attempt + 1;
+                return this.checkReflectionPrototype(reflection, className, attempts);
+            }
+            return false;
+        }
+        throw new RecursionLimitError(this.className + '.checkReflectionPrototype(): Exceeded attempt limit. (Attempt ' + attempt + ')');
+    }
+    /** Retrieve an {@link EL} based on its __proto__
         @description Recursively iterates through parent nodes until an object with the given prototype is found
-        @param {string} value The value to search for within this key
+        @param {string} className The value to search for within this key
         @param {EL} node Entry point to traversing the chain
         @param {number} attempt Recursion loop
         @returns {CONTAINER} The parent container
@@ -182,20 +209,23 @@ export default class EL extends MODEL {
         @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf
         @throws Will throw an error if recursion attempt exceeds limit
     */
-	getProtoTypeByClass(value, node = this.node, attempt = 0) {
+	getProtoTypeByClass(className, node = this.node, attempt = 0) {
 		if (node === document.body) {
 			return null; //this.getMain(); // null You have reached the top of the chain
 		}
 		let depth = attempt + 1;
 		try {
 			if (depth < 100) {
-				if (Reflect.getPrototypeOf(
-						Reflect.getPrototypeOf(
-							Reflect.getPrototypeOf(node)))
-					.constructor.name === value.toString() || Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() || Reflect.getPrototypeOf(node).constructor.name === value.toString()) {
+                /*if (Reflect.getPrototypeOf(Reflect.getPrototypeOf(Reflect.getPrototypeOf(node))).constructor.name === value.toString() ||
+                    Reflect.getPrototypeOf(Reflect.getPrototypeOf(node)).constructor.name === value.toString() ||
+                    Reflect.getPrototypeOf(node).constructor.name === value.toString()
+                ) {
 					return node;
-				}
-				return this.getProtoTypeByClass(value, node.node, depth);
+				}*/
+                if (this.checkReflectionPrototype(node, className)) {
+                    return node;
+                }
+				return this.getProtoTypeByClass(className, node.node, depth);
 			}
 			throw new RecursionLimitError(this.className + '.getProtoTypeByClass(): Exceeded attempt limit. (Attempt ' + attempt + ')');
 		} catch (e) {
