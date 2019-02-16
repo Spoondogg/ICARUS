@@ -15,7 +15,8 @@ export default class DIALOG extends EL {
         @param {boolean} showHeader If true (default), header is shown
 	*/
 	constructor(model, showHeader = true) {
-		super(document.body, 'DIV', model);
+        super(document.body, 'DIV', model);
+        this.className = 'DIALOG';
 		this.addClasses(['dialog', 'modal']);
 		this.implement(new Closeable(this));
 		this.show = () => this.showDialog();
