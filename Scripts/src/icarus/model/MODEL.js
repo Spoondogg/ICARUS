@@ -78,7 +78,7 @@ export default class MODEL {
 		this.attributes.set(key, value);
 		return this;
 	}
-	/** Gets a property from this MODEL
+	/** Gets a property from Self
 	    @param {string} key Name of property
 	    @returns {any} The value of the given key
 	*/
