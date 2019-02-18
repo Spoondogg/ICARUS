@@ -1,7 +1,7 @@
 /** @module */
 import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
 import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
-import NAVHEADER, { Activate, Deactivate, MENU } from '../nav/navbar/navheader/NAVHEADER.js';
+import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Closeable from '../../../interface/Closeable.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
@@ -25,11 +25,7 @@ export default class DIALOG extends EL {
 		this.caller = this.required(model.caller); // Switchable Element
 		this.container = this.required(model.container); // Container Element for callbacks
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
-		this.btnClose = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
-			label: 'close',
-			icon: ICONS.CLOSE
-		}));
-        this.btnClose.el.addEventListener('activate', () => this.closeDialog());
+        this.btnClose = this.createCloseButton();
         if (showHeader) {
             this.navheader.expand();
         }
@@ -41,9 +37,20 @@ export default class DIALOG extends EL {
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
 		$(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
 		$(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
-		$(this.el).on('hidden.bs.modal', () => { /**/ });
-		$(this.el).on('shown.bs.modal', () => { /**/ });
-	}
+		//$(this.el).on('hidden.bs.modal', () => { /**/ });
+		//$(this.el).on('shown.bs.modal', () => { /**/ });
+    }
+    /** Creates a close button in the nav header
+        @returns {NAVITEMICON} Close Button / Icon
+    */
+    createCloseButton() {
+        let btn = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
+            label: 'close',
+            icon: ICONS.CLOSE
+        }));
+        btn.el.addEventListener('activate', () => this.closeDialog());
+        return btn;
+    }
 	/** When DIALOG loses focus, it will be closed
 	    @returns {void}
 	*/
@@ -82,4 +89,4 @@ export default class DIALOG extends EL {
 		});
 	}
 }
-export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL }
+export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL, NAVITEMICON }
