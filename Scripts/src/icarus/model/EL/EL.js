@@ -94,7 +94,7 @@ export default class EL extends MODEL {
 	*/
 	addChild(model) {
 		this.children.push(model);
-		return this.children[this.children.length - 1];
+        return this.getTail();
 	}
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
@@ -276,7 +276,8 @@ export default class EL extends MODEL {
 	getLoader() {
 		try {
 			return this.getMain().getLoader();
-		} catch (e) {
+        } catch (e) {
+            console.warn('Unable to retrieve loader', this, e);
 			return null;
 		}
 	}
@@ -295,7 +296,33 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a MAIN Container');
 		}
-	}
+    }
+    /** Retrieves the last child in linked list / children 
+        @returns {EL} Tail Element/Model
+    */
+    getTail() {
+        return this.children[this.children.length - 1];
+    }
+    /** Retrieves the previous element (if exists) 
+        @returns {EL} Previous Sibling Element
+    */
+    getPrev() {
+        try {
+            return this.node.children[this.node.children.indexOf(this) - 1];
+        } catch (e) {
+            console.warn('Unable to retrieve previous element/sibling', this, e);
+        }
+    }
+    /** Retrieves the next element (if exists) 
+        @returns {EL} Next Sibling Element
+    */
+    getNext() {
+        try {
+            return this.node.children[this.node.children.indexOf(this) + 1];
+        } catch (e) {
+            console.warn('Unable to retrieve next element/sibling', this, e);
+        }
+    }
 	/** Retrieves the token value from the DOM Meta tags
 	    @returns {string} A request verification token
 	*/
@@ -388,7 +415,7 @@ export default class EL extends MODEL {
 			resolve(this);
 		});
 	}
-	/** Removes this element from the DOM
+	/** Removes this element from the DOM and its parent linked list
 	    @param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
@@ -397,8 +424,7 @@ export default class EL extends MODEL {
 			setTimeout(() => {
 				try {
 					this.el.parentNode.removeChild(this.el);
-					//this.node.children.splice(this.node.children.indexOf(this), 1);
-					//this.node.children.shift();
+					this.node.children.splice(this.node.children.indexOf(this), 1);					
 					resolve();
 				} catch (e) {
 					if (e instanceof TypeError) {
