@@ -17,10 +17,12 @@ export default class NAVITEM extends LI {
 		this.addClass('nav-item');
 		this.implement(new Clickable(this));
 		this.anchor = new ANCHOR(this, model);
-		this.addCallback('MENU', () => this.addMenu(model));
+        this.addCallback('MENU', () => this.addMenu(model));
+        /** @type {EL} target Target switchable EL for NAV related events */
+        this.target = model.target;
 		if (model.label) {
 			this.el.setAttribute('title', model.label);
-		}
+        }
 	}
 	/** Add a MENU to this MENU
 	    @param {MODEL} model NavBarNav model

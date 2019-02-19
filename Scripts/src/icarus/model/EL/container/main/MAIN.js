@@ -32,8 +32,11 @@ export default class MAIN extends CONTAINER {
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
-		this.sidebar = new SIDEBAR(this);
-		//this.stickyFooter = new STICKYFOOTER(this, new MODEL());
+        //this.sidebar = new SIDEBAR(this);
+        /*this.sidebarRight = new SIDEBAR(this, new MODEL().set({
+            name: 'sidebar-right',
+            align: 'right'
+        }));*/
 		this.navfooter = new NAVFOOTER(this, new MODEL());
 		// CRUD
 		this.save = this.factory.save;
@@ -147,49 +150,51 @@ export default class MAIN extends CONTAINER {
 	*/
 	addNavOptions() {
 		return this.callback(() => {
-			//if (this.navbar.menu) {
-			//console.warn('Yes to addNavOptions');
 			// LEFT ALIGN
-			this.btnSidebar = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-				icon: ICONS.SIDEBAR,
-				label: 'Sidebar'
-			}));
-			this.btnSidebar.el.addEventListener('activate', () => this.sidebar.activate());
-			this.btnSidebar.el.addEventListener('deactivate', () => this.sidebar.deactivate());
-			$(this.btnSidebar.el).insertBefore(this.navheader.tab.el);
-			this.btnPrev = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-				icon: ICONS.CHEVRON_LEFT,
-				label: 'Prev'
-			}));
-			this.btnPrev.el.onclick = () => this.navigateBack();
-			$(this.btnPrev.el).insertBefore(this.navheader.tab.el);
+            let sidebar = this.navheader.addTabbableElement(
+                this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                    icon: ICONS.SIDEBAR,
+                    label: 'SIDEBAR'
+                })),
+                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
+                    name: 'sidebar-left',
+                    align: 'left'
+                })))
+            );
+            $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
+
+
+            let btnPrev = this.navheader.addTabbableElement(
+                this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                    icon: ICONS.CHEVRON_LEFT,
+                    label: 'Prev'
+                })),
+                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
+                    name: 'sidebar-prev',
+                    align: 'right'
+                })))
+            );
+            //btnPrev.tab.el.onclick = () => this.navigateBack();
+            $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
+
 			// RIGHT ALIGN
 			// USER TAB / MENU
-			this.addUserTab();
-			this.body.el.onclick = () => this.focusBody(); // Hide Sidebar when container body is focused
+            let usermenu = this.navheader.addTabbableElement(
+                this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                    icon: ICONS.USER,
+                    label: 'USER'
+                })),
+                this.navheader.menus.addChild(new USERMENU(this.navheader.menus))
+            );
+            if (this.getUser() === 'Guest') {
+                usermenu.tab.el.addEventListener('activate', () => this.login(usermenu.tab));
+            } else {
+                this.navheader.addTabbableElement(usermenu.tab, usermenu.element);
+            }
+
 			this.addDefaultMenuItems();
-			//} else {
-			//    console.warn('No to addNavOptions');
-			//}
 		});
-	}
-	/** Creates a USER Tab and its associated UserMenu
-        @param {MODEL} model Tab Model
-	    @returns {void}
-	    @deprecated
-	*/
-	addUserTab(model = new MODEL()) {
-		let tab = this.navheader.tabs.addNavItemIcon(model.set({
-			icon: ICONS.USER,
-			label: 'USER'
-		}));
-		let menu = this.navheader.menus.addChild(new USERMENU(this.navheader.menus));
-		if (this.getUser() === 'Guest') {
-			tab.el.addEventListener('activate', () => this.login(tab));
-		} else {
-			this.navheader.addTabbableElement(tab, menu);
-		}
-	}
+    }
 	/** Returns the MAIN LOADER 
 	    @returns {LOADER} A LOADER
 	*/
@@ -293,12 +298,12 @@ export default class MAIN extends CONTAINER {
 	focusBody() {
 		//console.log('focusbody');
 		let ev = new Deactivate(this);
-		this.sidebar.el.dispatchEvent(ev);
-		this.btnSidebar.el.dispatchEvent(ev);
-		this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).map((icon) => icon.el.dispatchEvent(ev));
-		this.navheader.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+		//this.sidebar.el.dispatchEvent(ev);
+		//this.btnSidebar.el.dispatchEvent(ev);
+		this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
+		this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
 		//this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
-		this.navfooter.tabs.get(null, 'NAVITEMICON').map((icon) => icon.el.dispatchEvent(ev));
+        this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
 		this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
 	/** Loads the specified app id into the Main Container

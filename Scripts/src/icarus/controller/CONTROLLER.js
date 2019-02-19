@@ -42,28 +42,25 @@ export default class CONTROLLER extends MODEL {
 			this.returnUrl = this.url.origin + this.returnUrl;
 			location.href = this.returnUrl;
 		}
-		/** @property {LOADER} loader The default loader modal */
-		this.loader = new LOADER(0, 'Loading');
+		this.loader = new LOADER(0);
 		this.loader.log(10, 'Launching application...');
 		/** @property {PROMPT} prompt A dialog prompting the user for input
 			@type {PROMPT}
 			@todo There should never be more than one prompt in the DOM.
 		    @todo Create a queue to hold multiple prompts
-		*/
-		this.prompt = null;
+		
+		this.prompt = null;*/
 		/** @property {Array<string>} containers A list of allowed containers */
 		this.containers = ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'];
 		/** @property {MAIN} main The MAIN Container */
 		this.main = new MAIN(this);
-		if (user === 'Guest') {
-			this.showLoginPrompt();
-		}
-		// Add key bindings
+        this.showLoginPrompt(user === 'Guest');
 		this.keyBindings();
 	}
 	/** Sets application keybindings
 	    @returns {void}
 	    @see https://stackoverflow.com/a/14180949/722785
+        @todo Consider if this should be abstracted to an interface
 	*/
 	keyBindings() {
 		window.addEventListener('keydown', (event) => {
@@ -96,10 +93,11 @@ export default class CONTROLLER extends MODEL {
 	}
 	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
+        @param {boolean} proceed Optionally prevent any action from being taken
 	    @returns {boolean} If a login parameter exists, return true
 	*/
-	showLoginPrompt() {
-		if (this.url.searchParams.get('login')) {
+	showLoginPrompt(proceed = true) {
+		if (this.url.searchParams.get('login') && proceed) {
 			console.log('showLoginPrompt();');
 			this.main.login();
 		}
