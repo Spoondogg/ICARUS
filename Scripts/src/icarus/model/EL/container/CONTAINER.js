@@ -48,15 +48,28 @@ export default class CONTAINER extends GROUP {
         this.body = new COLLAPSIBLE(this, new MODEL('body'));
         // Conside this as a method instead of for ALL Containers
         this.body.implement(new Clickable(this.body));
-        this.body.el.addEventListener('select', () => console.log('Selected ' + this.className, this));
-        this.body.el.addEventListener('deselect', () => console.log('Deselected ' + this.className, this));
+        //this.body.el.addEventListener('select', () => console.log('Selected ' + this.className, this));
+        //this.body.el.addEventListener('deselect', () => console.log('Deselected ' + this.className, this));
+        this.body.el.addEventListener('select', () => {
+            console.log('Selected ' + this.className, this);
+            this.navheader.expand();
+            this.getMain().focusBody();
+        });
+        this.body.el.addEventListener('deselect', () => {
+            console.log('Deselected ' + this.className, this);
+            this.navheader.collapse();
+        });
+        //this.body.el.addEventListener('activate', () => console.log('Activated ' + this.className, this));
+        //this.body.el.addEventListener('deactivate', () => console.log('Deactivated ' + this.className, this));
         this.body.el.addEventListener('activate', () => {
             console.log('Activated ' + this.className, this);
-            this.navheader.expand();
+            //this.navheader.expand();
+            this.getMain().focusBody();
         });
         this.body.el.addEventListener('deactivate', () => {
             console.log('Deactivated ' + this.className, this);
-            this.navheader.collapse();
+            //this.navheader.collapse();
+            this.getMain().focusBody();
         });
 		// Cascade state
 		// Add Navbar Items

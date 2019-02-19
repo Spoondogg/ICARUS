@@ -31,13 +31,40 @@ export default class NAVBAR extends NAV {
 		this.menus.expand();
 	}
 	/** Sets the 'activate' and 'deactivate' so that the NAVITEM will trigger the EL
-	     @param {NAVITEM} navitem NAV Item that acts as a Tab
+	     @param {NAVITEM} tab NAV Item that acts as a Tab
 	     @param {EL} element A Switchable Element that is activated by this Tab
-	     @returns {void}
+	     @returns {Object} Newly configured tab and element
 	*/
-	addTabbableElement(navitem, element) {
-		navitem.el.addEventListener('activate', () => element.el.dispatchEvent(new Activate()));
-		navitem.el.addEventListener('deactivate', () => element.el.dispatchEvent(new Deactivate()));
-	}
+    addTabbableElement(tab, element) {
+        tab.target = element;
+        let deactivate = new Deactivate();
+        tab.el.addEventListener('activate', () => {
+            element.dispatchToSiblings(deactivate);
+            tab.target.el.dispatchEvent(new Activate()); // Activate Element
+        });
+        /** Deactivate Tab and Element */
+        tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
+        tab.el.addEventListener('deactivate', () => this.filterEventDomException(tab.target, deactivate));
+        tab.target.el.addEventListener('deactivate', () => tab.target.get().forEach((c) => c.el.dispatchEvent(new Deactivate())));
+        return {
+            tab,
+            element
+        };
+    }
+    /** Catches DOM Exception when event is already being dispatched
+        @param {EL} element Element Class to dispatch event
+        @param {Event} event Deactivate Event
+        @returns {void}
+    */
+    filterEventDomException(element, event) {
+        try {
+            element.el.dispatchEvent(event);
+        } catch (e) {
+            if (!(e instanceof DOMException)) { // DOMException: Event is already being dispatched
+                console.warn(e.message);
+                throw e;
+            }
+        }
+    }
 }
 export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, NAVITEM, NAVITEMICON }

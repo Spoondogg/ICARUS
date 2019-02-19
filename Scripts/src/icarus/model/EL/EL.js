@@ -123,7 +123,14 @@ export default class EL extends MODEL {
 	*/
 	append(target) {
 		return this.callback(() => target.insertBefore(this.el, target.firstChild));
-	}
+    }
+    /** Dispatches the given Event to this element's siblings
+        @param {Event} event Event to dispatch
+        @returns {void}
+    */
+    dispatchToSiblings(event) {
+        this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+    }
 	/** Creates a textarea input and populates with this element's contents
         @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
 	    @returns {void}
@@ -237,17 +244,15 @@ export default class EL extends MODEL {
 	    @param {string} name Element Name
         @param {strong} className Element Class
 	    @returns {Array<EL>} Child Item/Element Filtered Results
+        @description This might also be recognized as this.getChildren()
 	*/
 	get(name = null, className = null) {
-		let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+		/*let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
 		if (results.length === 0) {
 			console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
 		}
-		/* else {
-		    console.info(this.className + '.get(' + name + ', ' + className + ') results', results);
-		}*/
-		return results;
-		//return this.children.filter((c) => c.el.name === name);
+		return results;*/
+        return this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
 	}
 	/** Retrieves MODEL.ATTRIBUTES.class 
 	    @returns {string} Class Name
@@ -255,8 +260,8 @@ export default class EL extends MODEL {
 	getClass() {
 		return this.attributes.class || '';
 	}
-	/** Sets and returns the parent container for this element
-	    @returns {CONTAINER} The parent container for this container
+	/** Sets and returns the parent EL/CONTAINER for this element
+	    @returns {EL} The parent container for this container
 	*/
 	getContainer() {
 		try {

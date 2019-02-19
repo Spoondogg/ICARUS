@@ -46,7 +46,7 @@ export default class NAVHEADER extends NAVBAR {
 					label: name,
 					icon: ICONS[name]
 				}));
-				let opt = this.options.addMenu(new MODEL('horizontal').set('name', name));
+                let opt = this.options.addMenu(new MODEL('horizontal').set('name', name));
 				this.addTabbableElement(tb, opt);
 			});
 		} catch (e) {
