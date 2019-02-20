@@ -45,6 +45,7 @@ export default class NAVBAR extends NAV {
         /** Deactivate Tab and Element */
         tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
         tab.el.addEventListener('deactivate', () => this.filterEventDomException(tab.target, deactivate));
+        // Deactivate children
         tab.target.el.addEventListener('deactivate', () => tab.target.get().forEach((c) => c.el.dispatchEvent(new Deactivate())));
         return {
             tab,

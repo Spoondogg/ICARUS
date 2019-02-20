@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
@@ -178,19 +178,24 @@ export default class MAIN extends CONTAINER {
             $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 
 			// RIGHT ALIGN
-			// USER TAB / MENU
-            let usermenu = this.navheader.addTabbableElement(
+            let userBar = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.USER,
                     label: 'USER'
                 })),
-                this.navheader.menus.addChild(new USERMENU(this.navheader.menus))
+                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
+                    name: 'sidebar-user',
+                    align: 'right'
+                })))
             );
-            if (this.getUser() === 'Guest') {
+            let usermenu = new USERMENU(userBar.element);
+            usermenu.el.dispatchEvent(new Expand());
+            this.navheader.addTabbableElement(userBar.tab, userBar.element);
+            /*if (this.getUser() === 'Guest') {
                 usermenu.tab.el.addEventListener('activate', () => this.login(usermenu.tab));
             } else {
                 this.navheader.addTabbableElement(usermenu.tab, usermenu.element);
-            }
+            }*/
 
 			this.addDefaultMenuItems();
 		});

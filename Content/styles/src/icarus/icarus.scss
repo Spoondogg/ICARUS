@@ -496,6 +496,10 @@ $z-bottom: -1;
     header {
         @extend %header;
     }
+
+    .hidden {
+        display: block;
+    }
     /* #endregion */
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
@@ -1418,6 +1422,20 @@ $z-bottom: -1;
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
+
+                    &.focus-left {
+                        //background-color: $color-black;
+                        //filter: blur(1px);
+                        margin-left: 12px;
+                        //transform: scale(1.1);
+                    }
+
+                    &.focus-right {
+                        //background-color: $color-black;
+                        //filter: blur(1px);
+                        margin-left: -12px;
+                        //transform: scale(1.1);
+                    }
                 }
             }
 
@@ -1426,9 +1444,11 @@ $z-bottom: -1;
                 &.sidebar {
                     @extend %no-scroll-bar;
                     @extend %pane-tall;
-                    @include boxShadow(0, 0, 3px, 0, $color-black);
+                    //@include boxShadow(0, 0, 3px, 0, $color-black);
                     //@include transition($transition-default);
-                    background-color: transparentize($color-black, .2);
+                    //background-color: transparentize($color-black, .2);
+                    background-color: $color-grey-dark;
+                    box-sizing: border-box;
                     //margin-left: -100%; /// !important
                     position: absolute;
                     top: $navbar-height;
@@ -1437,7 +1457,10 @@ $z-bottom: -1;
 
                     &.left {
                         @include transition(margin-left $transition-speed $transition-motion);
+                        //border-right: 2px;
+                        display: block;
                         float: left;
+                        left: 0;
                         margin-left: calc(#{$zero-px} - #{$sidebar-width});
 
                         &.active {
@@ -1449,6 +1472,7 @@ $z-bottom: -1;
 
                     &.right {
                         @include transition(margin-right $transition-speed $transition-motion);
+                        display: block;
                         float: right;
                         margin-right: calc(#{$zero-px} - #{$sidebar-width});
                         right: 0;
@@ -1496,6 +1520,7 @@ $z-bottom: -1;
     .menu {
         @extend %noSelect;
         background-color: $color-nav-background;
+        padding: 0;
         // Collapsible
         &.collapse {
             height: 0;
@@ -1530,36 +1555,34 @@ $z-bottom: -1;
         }
         /// The USERMENU class, A menu that contains user links and details
         &[name='USER'] {
-            @extend %no-scroll-bar;
-            @extend %pane-tall;
-            @include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
+            //@extend %no-scroll-bar;
+            //@extend %pane-tall;
+            //@include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
             //@include transition($transition-default);
-            @include transition(right $transition-speed $transition-motion);
+            //@include transition(right $transition-speed $transition-motion);
             //animation: slideOutRight $transition-speed $transition-motion;
-            background-color: $color-grey-dark; //#373c40;
-            border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
-            border-radius: .2em;
-            float: right;
+            //background-color: $color-grey-dark; //#373c40;
+            //border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
+            //border-radius: .2em;
+            //float: right;
             //margin-left: -100%; /// !important
-            position: absolute;
-            right: calc(#{$zero-px} - #{$sidebar-width});
-            top: $navbar-height;
-            width: $sidebar-width;
-            z-index: 999;
-
-            &.active {
-                //animation: slideInLeft $transition-speed $transition-motion;
-                right: 0;
-                //display: block;
-            }
-
-            &.collapse {
+            //position: absolute;
+            //right: calc(#{$zero-px} - #{$sidebar-width});
+            //top: $navbar-height;
+            //width: $sidebar-width;
+            //z-index: 999;
+            //&.active {
+            //animation: slideInLeft $transition-speed $transition-motion;
+            //right: 0;
+            //display: block;
+            //}
+            /*&.collapse {
                 @extend %pane-tall;
 
                 &.in {
                     @extend %pane-tall;
                 }
-            }
+            }*/
             //@include transition(right $transition-speed $transition-motion);
             > ul {
                 &.horizontal {
