@@ -1,19 +1,46 @@
 /** @module */
-import CONTAINER, { MODEL } from '../CONTAINER.js';
+//import CONTAINER, { MODEL } from '../CONTAINER.js';
+import EL, { MODEL } from '../../EL.js';
+import Swipeable from '../../../../interface/Swipeable.js';
+import Switchable, { Deactivate } from '../../../../interface/Switchable.js';
+//import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A Sidebar Container
     @class
-    @extends CONTAINER
+    @extends EL
 */
-export default class SIDEBAR extends CONTAINER {
+export default class SIDEBAR extends EL {
 	/** A Sidebar Container Element
 	    @param {CONTAINER} node Parent Container (Typically MAIN)
 	    @param {MODEL} model Model
 	*/
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
-		super(node, 'ASIDE', model, ['SECTION', 'FORM', 'LIST']);
-		this.addClass('sidebar');
-		this.addClass(model.align || 'left');
-		this.deactivate();
-	}
+		super(node, 'ASIDE', model);
+        this.addClass('sidebar');
+        this.implement(new Swipeable(this));
+        this.implement(new Switchable(this));
+        this.align = model.align || 'left';
+        if (this.align === 'left') {
+            this.swipeLeft = () => this.deactivate();
+        } else {
+            this.swipeRight = () => this.deactivate();
+        }
+        this.addClass(this.align);
+        // Override activate/deactivate for custom animation timing
+        this.activate = () => {
+            this.removeClass('hidden');
+            setTimeout(() => {
+                this.addClass('active');
+                this.getMain().body.pane.addClass('focus-' + this.align);
+            }, 150);
+        }
+        this.deactivate = () => {
+            this.getMain().body.pane.removeClass('focus-' + this.align);
+            this.removeClass('active');
+            setTimeout(() => this.addClass('hidden'), 150);
+        }
+        // Default state
+        this.deactivate();
+    }
+    
 }
 export { MODEL }

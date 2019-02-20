@@ -1,7 +1,7 @@
 /** @module */
 import IFACE from './IFACE.js';
 //import Activate from '../../event/Activate.js';
-/** An interface for Click driven Events
+/** An interface for Swipe driven Events
     @class
     @extends IFACE
 */

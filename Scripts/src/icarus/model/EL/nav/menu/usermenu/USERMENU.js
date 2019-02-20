@@ -30,8 +30,9 @@ export default class USERMENU extends MENU {
 		for (let i = 0; i < 5; i++) {
 			this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
 		}
-		this.options.expand();
-	}
+        this.options.expand();
+    }
+
 	/** The USERMENU slides in and should be expanded at all times 
 	    @returns {void}
 	*/
