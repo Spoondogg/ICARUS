@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, Expand, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -17,15 +17,18 @@ export default class JUMBOTRON extends CONTAINER {
 	}
 	construct() {
 		return this.callback(() => {
-			if (this.dataId > 0) {
-				this.screen = new DIV(this.body.pane, new MODEL('screen'));
-				this.setScreenColor();
-				this.createEditableElement('header', this.screen);
-				this.createEditableElement('p', this.screen);
-				this.loadBgImage();
-				this.setBgColor();
-				this.body.expand();
-			}
+            if (this.dataId > 0) {
+                this.screen = new DIV(this.body.pane, new MODEL('screen'));
+                this.setScreenColor();
+                this.createEditableElement('header', this.screen);
+                this.createEditableElement('p', this.screen);
+                this.loadBgImage();
+                this.setBgColor();
+                this.body.expand();
+            } else {
+                console.log('No data exists for JUMBOTRON');
+                this.navheader.el.dispatchEvent(new Expand(this));
+            }
 		});
 	}
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
@@ -80,8 +83,4 @@ export default class JUMBOTRON extends CONTAINER {
 		}
 	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, EL, MODEL }

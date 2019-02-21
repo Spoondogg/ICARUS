@@ -4,6 +4,7 @@ import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
+import Hideable from '../../../../interface/Hideable.js';
 /** A container made up of a group of form elements
     @class
     @extends CONTAINER
@@ -15,7 +16,8 @@ export default class FORMELEMENTGROUP extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.addClass('form-element-group');
+        this.addClass('form-element-group');
+        this.implement(new Hideable(this));
 		this.navheader.options.get('ELEMENTS', 'MENU')[0].empty();
 		['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 	}

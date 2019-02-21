@@ -1,6 +1,6 @@
 /** @module */
 import FORMSELECT, { OPTION } from '../model/el/container/formelement/formselect/FORMSELECT.js';
-import MENU, { LI, UL } from '../model/el/nav/menu/MENU.js';
+import MENU, { Deactivate, LI, UL } from '../model/el/nav/menu/MENU.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from '../model/el/span/SPAN.js';
 import ARTICLE from '../model/el/article/ARTICLE.js';
 import BANNER from '../model/el/container/banner/BANNER.js';
@@ -216,8 +216,9 @@ export default class CONTAINERFACTORY {
 					formtype: 'CONTAINER',
 					container: this
 				})).then((form) => {
+                    let cont = form.getContainer();
+                    cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
 					form.afterSuccessfulPost = () => {
-						let cont = form.getContainer();
 						cont.setLabel(form.el.elements.label.value);
 						cont.quickSaveFormPost('dataId').then(() => cont.quickSaveFormPost('attributesId').then(
 							() => form.getDialog().close()));
@@ -243,7 +244,8 @@ export default class CONTAINERFACTORY {
 				try {
 					if (this[type] > 0) { // ie: this['dataId']
 						new PROMPT(new MODEL().set({
-							container: this
+                            container: this,
+                            caller: this
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
@@ -273,7 +275,8 @@ export default class CONTAINERFACTORY {
 						this[name].select();
 						new PROMPT(new MODEL().set({
 							label: 'Edit ' + this.className + ' : ' + name,
-							container: this
+                            container: this,
+                            caller: this
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
@@ -281,7 +284,10 @@ export default class CONTAINERFACTORY {
 							id: this.dataId,
 							container: this
 						})).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
-							form.getDialog().close = () => form.getDialog().hide().then(() => this.deselectAll());
+                            form.getDialog().close = () => form.getDialog().hide().then(() => {
+                                console.log('form,dialog', form, form.getDialog());
+                                form.getDialog().deselectAll();
+                            });
 							let input = form.el.elements[name];
 							input.focus();
 							input.onkeyup = () => this[name].setInnerHTML(input.value);

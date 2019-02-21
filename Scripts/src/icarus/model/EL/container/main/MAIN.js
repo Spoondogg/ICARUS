@@ -144,7 +144,26 @@ export default class MAIN extends CONTAINER {
 	*/
 	navigateForward() {
 		console.log('TODO: Forward');
-	}
+    }
+    /** Adds a single NAV Icon and Element to MAIN NAVHEADER 
+        @param {string} name Name
+        @param {string} label Label
+        @param {string} icon Icon
+        @param {string} align Alignment
+        @returns {{tab, element}} Tabbable Element {tab,element}
+    */
+    addNavOption(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
+        return this.navheader.addTabbableElement(
+            this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                icon,
+                label
+            })),
+            this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
+                name,
+                align
+            })))
+        );
+    }
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} callback
 	*/
@@ -153,7 +172,8 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 
             // Document Map for quick navigation and selection
-            let sidebar = this.navheader.addTabbableElement(
+            let sidebar = this.addNavOption('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+            /*let sidebar = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.SIDEBAR,
                     label: 'NAV'
@@ -162,11 +182,12 @@ export default class MAIN extends CONTAINER {
                     name: 'document-map',
                     align: 'left'
                 })))
-            );
+            );*/
             $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 
             // History / Prev / Back Navigation
-            let btnPrev = this.navheader.addTabbableElement(
+            let btnPrev = this.addNavOption('history', 'HISTORY', ICONS.CHEVRON_LEFT, 'left');
+            /*let btnPrev = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.CHEVRON_LEFT,
                     label: 'history'
@@ -175,12 +196,13 @@ export default class MAIN extends CONTAINER {
                     name: 'history',
                     align: 'left'
                 })))
-            );
+            );*/
             //btnPrev.tab.el.onclick = () => this.navigateBack();
             $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 
 			// RIGHT ALIGN
-            let userBar = this.navheader.addTabbableElement(
+            let userBar = this.addNavOption('sidebar-user', 'USER', ICONS.USER, 'right');
+            /*let userBar = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.USER,
                     label: 'USER'
@@ -189,7 +211,7 @@ export default class MAIN extends CONTAINER {
                     name: 'sidebar-user',
                     align: 'right'
                 })))
-            );
+            );*/
             let usermenu = new USERMENU(userBar.element);
             usermenu.el.dispatchEvent(new Expand());
             this.navheader.addTabbableElement(userBar.tab, userBar.element);
@@ -495,14 +517,16 @@ export default class MAIN extends CONTAINER {
 	/** Swipe Up Event
 	    @returns {void}
 	*/
-	swipeUp() {
+    swipeUp() {
+        console.log('MAIN.swipeUp()');
 		this.navheader.collapse();
 		document.body.classList.add('compact');
 	}
 	/** Swipe Down Event
 	    @returns {void}
 	*/
-	swipeDown() {
+    swipeDown() {
+        console.log('MAIN.swipeDown()');
 		this.navheader.expand();
 		document.body.classList.remove('compact');
 	}
