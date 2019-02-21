@@ -18,7 +18,7 @@ export default class PANE extends DIV {
         this.swipeUp = () => {
             this.getMain().focusBody();
             //console.log('collapsing navheader');
-            //this.getMain().navheader.collapse();
+            this.getContainer().navheader.collapse();   
         };
         this.swipeDown = () => {
             this.getMain().focusBody();
