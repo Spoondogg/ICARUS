@@ -133,8 +133,8 @@ export const DATAELEMENTS = {
 		],
 		attributes: []
 	},
-	JUMBOTRON: {
-		data: [
+    JUMBOTRON: {
+        data: defaultContainerData().concat([
 			createInputModel('INPUT', 'header', 'JT Header'),
 			createInputModel('TEXTAREA', 'p', 'JT Textarea'),
 			createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
@@ -142,7 +142,7 @@ export const DATAELEMENTS = {
 			}),
 			createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
 			createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
-		],
+		]),
 		attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
 	},
 	LIST: {

@@ -62,14 +62,27 @@ export default class CONTAINER extends GROUP {
         //this.body.el.addEventListener('activate', () => console.log('Activated ' + this.className, this));
         //this.body.el.addEventListener('deactivate', () => console.log('Deactivated ' + this.className, this));
         this.body.el.addEventListener('activate', () => {
-            console.log('Activated ' + this.className, this);
-            //this.navheader.expand();
-            this.getMain().focusBody();
+            try {
+                console.log('Activated ' + this.className, this);
+                //this.navheader.expand();
+                this.getMain().focusBody();
+            } catch (e) {
+                //console.warn('Unable to focus body', this);
+            }
         });
         this.body.el.addEventListener('deactivate', () => {
-            console.log('Deactivated ' + this.className, this);
+            //console.log('Deactivated ' + this.className, this);
             //this.navheader.collapse();
-            this.getMain().focusBody();
+            //this.getMain().focusBody();
+
+            try {
+                console.log('Deactivated ' + this.className, this);
+                //this.navheader.expand();
+                this.getMain().focusBody();
+            } catch (e) {
+                //console.warn('Unable to focus body', this);
+            }
+
         });
 		// Cascade state
 		// Add Navbar Items
@@ -144,7 +157,8 @@ export default class CONTAINER extends GROUP {
 						default:
 							console.warn(name + ' does not have a valid constructor');
 					}
-					this[name].implement(new Clickable(this[name]));
+                    this[name].implement(new Clickable(this[name]));
+                    this[name].el.addEventListener('select', () => this.editData(name));
 					//this[name].implement(new Selectable(this[name]));
 					//this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
 					resolve(this[name]);

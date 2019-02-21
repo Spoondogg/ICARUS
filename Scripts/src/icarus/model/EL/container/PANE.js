@@ -23,7 +23,7 @@ export default class PANE extends DIV {
         this.swipeDown = () => {
             this.getMain().focusBody();
             //console.log('expanding navheader');
-            //this.getMain().navheader.expand();            
+            this.getContainer().navheader.expand();            
         };
     }
     

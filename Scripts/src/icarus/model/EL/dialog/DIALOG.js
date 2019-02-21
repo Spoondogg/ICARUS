@@ -4,6 +4,7 @@ import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Closeable from '../../../interface/Closeable.js';
 import { ICONS } from '../../../enums/ICONS.js';
+import Selectable from '../../../interface/Selectable.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
@@ -18,7 +19,8 @@ export default class DIALOG extends EL {
         super(document.body, 'DIV', model);
         this.className = 'DIALOG';
 		this.addClasses(['dialog', 'modal']);
-		this.implement(new Closeable(this));
+        this.implement(new Closeable(this));
+        this.implement(new Selectable(this));
 		this.show = () => this.showDialog();
 		this.close = () => this.closeDialog();
 		this.hide = () => this.hideDialog();
@@ -87,6 +89,17 @@ export default class DIALOG extends EL {
 				reject(e);
 			}
 		});
-	}
+    }
+    getContainer() {
+        console.log('Getting dialog container');
+        return this.container;
+    }
+    getMain() {
+        try {
+            return this.getContainer().getMain();
+        } catch (e) {
+            console.warn('Unable to get MAIN for DIALOG', this);
+        }
+    }
 }
 export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL, NAVITEMICON }

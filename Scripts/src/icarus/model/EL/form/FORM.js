@@ -1,20 +1,8 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	AbstractMethodError,
-	EL,
-	ICONS,
-	INPUTTYPES,
-	MODEL
-} from '../container/CONTAINER.js';
-import {
-	DATAELEMENTS,
-	createInputModel
-} from '../../../enums/DATAELEMENTS.js';
-import {
-	ALIGN
-} from '../../../enums/ALIGN.js';
+import CONTAINER, {	ATTRIBUTES,	AbstractMethodError, EL, ICONS,	INPUTTYPES,	MODEL } from '../container/CONTAINER.js';
+import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
+import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
@@ -367,7 +355,7 @@ export default class FORM extends CONTAINER {
 		this.payload.isValid = false;
 		element.focus();
 		element.setAttribute('data-valid', this.payload.isValid);
-		console.log(element.name + ' is invalid', element);
+		console.log(element.name + ' is invalid', element, this.payload);
 		$(element.previousSibling).addClass('invalid'); // Set label class to 'invalid'
 		return false;
 	}
@@ -384,11 +372,23 @@ export default class FORM extends CONTAINER {
 	    @param {HTMLElement} element The Input element
 	    @returns {boolean} True if valid
 	*/
-	validateString(element) {
-		let isValid = true;
-		if (element.checkValidity()) {
-			isValid = element.value === '' ? this.setInvalid(element) : this.setValid(element);
-		}
+    validateString(element) {
+        let isValid = true;
+        switch (element.tagName) {
+            case 'INPUT':
+                if (element.checkValidity()) {
+                    isValid = element.value === '' ? this.setInvalid(element) : this.setValid(element);
+                }
+                break;
+            case 'TEXTAREA':
+                if (element.checkValidity()) {
+                    isValid = element.text === '' ? this.setInvalid(element) : this.setValid(element);
+                }
+                break;
+            default:
+                console.warn('Failed to validate ' + element.tagName);
+                this.setInvalid(element);
+        }
 		return isValid;
 	}
 	/** Simple number validation
@@ -569,14 +569,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export {
-	ATTRIBUTES,
-	EL,
-	FORMFOOTER,
-	FORMINPUT,
-	FORMPOST,
-	INPUTTYPES,
-	LOADER,
-	MODEL
-};
+export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT,	FORMPOST, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */
