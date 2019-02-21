@@ -29,27 +29,31 @@ export default class NAVHEADER extends NAVBAR {
 	/** Adds the Options/Config menu
 	    Adds a right aligned tab to show/hide the Options Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+        @param {string} name MENU Name
+        @param {string} label TAB Label
+        @param {string} icon TAB Icon
+        @param {Array<string>} secondaryTabs Array of Tab names
 	    @returns {void}
 	*/
-	addOptionsMenu() {
-		try {
-			// Create Primary Options tab and Menu
-			this.btnOptions = this.tabs.addNavItemIcon(new MODEL().set({
-				icon: ICONS.COG,
-				label: 'OPTIONS'
-			}));
-			this.options = this.menus.addMenu(new MODEL().set('name', 'OPTIONS'));
-			this.addTabbableElement(this.btnOptions, this.options);
-			// Create Secondary Tabs and Horizontal Menus inside Options Menu
-			['ELEMENTS', 'CRUD', 'DOM'].map((name) => {
-				let tb = this.options.addNavItemIcon(new MODEL().set({
-					label: name,
-					icon: ICONS[name]
-				}));
-                let opt = this.options.addMenu(new MODEL('horizontal').set('name', name));
-				this.addTabbableElement(tb, opt);
-			});
-		} catch (e) {
+    addOptionsMenu(name = 'OPTIONS', label = 'OPTIONS', icon = ICONS.COG, secondaryTabs = ['ELEMENTS', 'CRUD', 'DOM']) {
+        try {
+            // Create Primary tab and Menu
+            let tabbable = this.addTabbableElement(
+                this.tabs.addNavItemIcon(new MODEL().set({
+                    icon,
+                    label
+                })),
+                this.menus.addMenu(new MODEL().set('name', name))
+            );
+			// Create Secondary Tabs and Horizontal Menus inside Options Menu            
+            secondaryTabs.forEach((t) => this.addTabbableElement(
+                tabbable.element.addNavItemIcon(new MODEL().set({
+                    label: t,
+                    icon: ICONS[t]
+                })),
+                tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
+            ));
+        } catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
 			if (modal === null) {
 				console.warn('Unable to retrieve MAIN Container', e);
