@@ -71,10 +71,6 @@ export default class CONTAINER extends GROUP {
             }
         });
         this.body.el.addEventListener('deactivate', () => {
-            //console.log('Deactivated ' + this.className, this);
-            //this.navheader.collapse();
-            //this.getMain().focusBody();
-
             try {
                 console.log('Deactivated ' + this.className, this);
                 //this.navheader.expand();
@@ -82,7 +78,6 @@ export default class CONTAINER extends GROUP {
             } catch (e) {
                 //console.warn('Unable to focus body', this);
             }
-
         });
 		// Cascade state
 		// Add Navbar Items
