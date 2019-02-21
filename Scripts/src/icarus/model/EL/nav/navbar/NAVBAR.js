@@ -33,7 +33,7 @@ export default class NAVBAR extends NAV {
 	/** Sets the 'activate' and 'deactivate' so that the NAVITEM will trigger the EL
 	     @param {NAVITEM} tab NAV Item that acts as a Tab
 	     @param {EL} element A Switchable Element that is activated by this Tab
-	     @returns {Object} Newly configured tab and element
+	     @returns {{tab, element}} Tabbable Element {tab,element}
 	*/
     addTabbableElement(tab, element) {
         tab.target = element;
