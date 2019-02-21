@@ -32,11 +32,6 @@ export default class MAIN extends CONTAINER {
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
-        //this.sidebar = new SIDEBAR(this);
-        /*this.sidebarRight = new SIDEBAR(this, new MODEL().set({
-            name: 'sidebar-right',
-            align: 'right'
-        }));*/
 		this.navfooter = new NAVFOOTER(this, new MODEL());
 		// CRUD
 		this.save = this.factory.save;
@@ -173,45 +168,15 @@ export default class MAIN extends CONTAINER {
 
             // Document Map for quick navigation and selection
             let sidebar = this.addNavOption('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-            /*let sidebar = this.navheader.addTabbableElement(
-                this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                    icon: ICONS.SIDEBAR,
-                    label: 'NAV'
-                })),
-                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                    name: 'document-map',
-                    align: 'left'
-                })))
-            );*/
             $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 
             // History / Prev / Back Navigation
             let btnPrev = this.addNavOption('history', 'HISTORY', ICONS.CHEVRON_LEFT, 'left');
-            /*let btnPrev = this.navheader.addTabbableElement(
-                this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                    icon: ICONS.CHEVRON_LEFT,
-                    label: 'history'
-                })),
-                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                    name: 'history',
-                    align: 'left'
-                })))
-            );*/
             //btnPrev.tab.el.onclick = () => this.navigateBack();
             $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 
 			// RIGHT ALIGN
             let userBar = this.addNavOption('sidebar-user', 'USER', ICONS.USER, 'right');
-            /*let userBar = this.navheader.addTabbableElement(
-                this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                    icon: ICONS.USER,
-                    label: 'USER'
-                })),
-                this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                    name: 'sidebar-user',
-                    align: 'right'
-                })))
-            );*/
             let usermenu = new USERMENU(userBar.element);
             usermenu.el.dispatchEvent(new Expand());
             this.navheader.addTabbableElement(userBar.tab, userBar.element);
@@ -248,14 +213,14 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addDefaultMenuItems() {
-		let domMenu = this.navheader.options.get('DOM', 'MENU');
+        let domMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
 		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
 		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
 		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-		let crudMenu = this.navheader.options.get('CRUD', 'MENU');
+        let crudMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
 		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page

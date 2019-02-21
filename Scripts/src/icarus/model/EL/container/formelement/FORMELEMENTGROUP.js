@@ -18,7 +18,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		super(node, 'DIV', model);
         this.addClass('form-element-group');
         this.implement(new Hideable(this));
-		this.navheader.options.get('ELEMENTS', 'MENU')[0].empty();
+        this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
 		['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 	}
 	/** Perform any async actions and populate this Container

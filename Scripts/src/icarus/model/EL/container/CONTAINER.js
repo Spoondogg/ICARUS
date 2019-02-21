@@ -17,6 +17,7 @@ import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LEGEND from '../legend/LEGEND.js';
 import Movable from '../../../interface/Movable.js';
 import P from '../p/P.js';
+//import SIDEBAR from './sidebar/SIDEBAR.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract Container element with NAVBAR
@@ -353,7 +354,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addDomItems() {
 		return this.callback(() => {
-			let menu = this.navheader.options.get('DOM', 'MENU');
+            let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
 			items.UP.el.onclick = () => this.up();
 			items.DOWN.el.onclick = () => this.down();
@@ -368,7 +369,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addCrudItems() {
 		return this.callback(() => {
-			let menu = this.navheader.options.get('CRUD', 'MENU');
+            let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
 			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
 			items.LOAD.el.onclick = () => this.load();
 			items.SAVEAS.el.onclick = () => this.save();
@@ -388,7 +389,7 @@ export default class CONTAINER extends GROUP {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
 					if (addButton) {
-						let menu = this.navheader.options.get('ELEMENTS', 'MENU');
+                        let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU');
 						let item = this.addContainerCaseButton(className, menu[0]);
 						item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
 						item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
@@ -423,7 +424,7 @@ export default class CONTAINER extends GROUP {
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
-	}
+    }
 	/** Returns the CONTAINER Element id attribute
 	    @returns {string} Container name
 	*/
