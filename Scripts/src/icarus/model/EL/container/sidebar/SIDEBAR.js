@@ -1,8 +1,8 @@
 /** @module */
 //import CONTAINER, { MODEL } from '../CONTAINER.js';
 import EL, { MODEL } from '../../EL.js';
-import Swipeable from '../../../../interface/Swipeable.js';
 import Switchable, { Deactivate } from '../../../../interface/Switchable.js';
+import Swipeable from '../../../../interface/Swipeable.js';
 //import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A Sidebar Container
     @class
@@ -20,9 +20,15 @@ export default class SIDEBAR extends EL {
         this.implement(new Switchable(this));
         this.align = model.align || 'left';
         if (this.align === 'left') {
-            this.swipeLeft = () => this.deactivate();
+            this.swipeLeft = () => {
+                //this.deactivate();
+                this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
+            }
         } else {
-            this.swipeRight = () => this.deactivate();
+            this.swipeRight = () => {
+                //this.deactivate();
+                this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
+            }
         }
         this.addClass(this.align);
         // Override activate/deactivate for custom animation timing

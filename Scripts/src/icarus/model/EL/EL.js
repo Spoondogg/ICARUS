@@ -290,7 +290,7 @@ export default class EL extends MODEL {
 	    @returns {Promise<MAIN>} MAIN class
 	*/
 	getMain() {
-		console.log('EL.getMain()');
+		//console.log('EL.getMain()');
 		try {
 			if (typeof this.main === 'undefined') {
 				this.setMain();

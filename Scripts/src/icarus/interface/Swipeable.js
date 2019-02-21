@@ -7,12 +7,15 @@ import IFACE from './IFACE.js';
 */
 export default class Swipeable extends IFACE {
 	/** A series of Swipe Related Events and Methods
+        @see https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
         @param {EL} node Class to implement this interface (Typically 'this')
+        @param {number} swipeSensitivity Pixel sensitivity for short/long scroll
 	*/
-	constructor(node) {
+    constructor(node, swipeSensitivity = 50) {
 		super(node, 'swipeable');
 		node.xDown = null;
-		node.yDown = null;
+        node.yDown = null;
+        node.swipeSensitivity = swipeSensitivity;
 	}
 	addListeners(node) {
 		node.el.addEventListener('touchstart', this.handleTouchStart.bind(node), {
@@ -43,48 +46,52 @@ export default class Swipeable extends IFACE {
 	       @returns {Promise<ThisType>} callback
 	    */
 		this.methods.swipeRight = () => node.callback(() => console.log('Swipe Right', node));
-	}
+    }
 	/** Sets start coordinates
 		@param {Event} ev Event
 	    @returns {void}
 	*/
-	handleTouchStart(ev) {
-		this.xDown = ev.touches[0].clientX;
-		this.yDown = ev.touches[0].clientY;
-		ev.stopPropagation();
+    handleTouchStart(ev) {
+        ev.stopPropagation();
+        this.xDown = ev.touches[0].clientX;
+        this.yDown = ev.touches[0].clientY;
 	}
 	/** Process the swipe
-	    @see https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
 	    @param {Event} ev Event
 	    @returns {void}
 	*/
-	handleTouchMove(ev) {
-		if (!this.xDown || !this.yDown) {
+    handleTouchMove(ev) {
+        ev.stopPropagation();
+        if (!this.xDown || !this.yDown) {
 			return;
 		}
-		var xUp = ev.touches[0].clientX;
-		var yUp = ev.touches[0].clientY;
-		var xDiff = this.xDown - xUp;
-		var yDiff = this.yDown - yUp;
-		let dir = '';
-		if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant
-			dir = xDiff > 0 ? 'left' : 'right';
-			if (xDiff > 0) {
-				this.swipeLeft();
-			} else {
-				this.swipeRight();
-			}
-		} else if (yDiff > 0) {
-			dir = 'up';
-			this.swipeUp();
-		} else {
-			dir = 'down';
-			this.swipeDown();
-		}
-		console.log(this.className + ' ' + dir + ' swipe');
-		// Reset Values
-		this.xDown = null;
-		this.yDown = null;
-		ev.stopPropagation();
+        let xUp = ev.touches[0].clientX;
+        let yUp = ev.touches[0].clientY;
+		let xDiff = this.xDown - xUp;
+		let yDiff = this.yDown - yUp;
+        let dir = '';
+        let distance = Math.abs(xDiff) + Math.abs(yDiff);
+        if (distance > this.swipeSensitivity) { // Handle short swipes
+            if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant difference 
+                dir = xDiff > 0 ? 'left' : 'right';
+                if (xDiff > 0) {
+                    this.swipeLeft();
+                } else {
+                    this.swipeRight();
+                }
+            } else if (yDiff > 0) {
+                dir = 'up';
+                this.swipeUp();
+            } else {
+                dir = 'down';
+                this.swipeDown();
+            }
+            console.log(this.className + ' ' + dir + ' swipe', this);
+            // Reset Values
+            this.xDown = null;
+            this.yDown = null;
+        } /*else {
+            console.log(this.className + ' Swipe Sensitivity', distance / this.swipeSensitivity);
+        }*/
 	}
 }

@@ -14,7 +14,18 @@ export default class PANE extends DIV {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('pane');
-		this.implement(new Swipeable(this));
-	}
+        this.implement(new Swipeable(this));
+        this.swipeUp = () => {
+            this.getMain().focusBody();
+            //console.log('collapsing navheader');
+            //this.getMain().navheader.collapse();
+        };
+        this.swipeDown = () => {
+            this.getMain().focusBody();
+            //console.log('expanding navheader');
+            //this.getMain().navheader.expand();            
+        };
+    }
+    
 }
 export { CONTAINER, EL, MODEL }
