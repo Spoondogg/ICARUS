@@ -37,6 +37,7 @@ export default class NAVBAR extends NAV {
 	*/
     addTabbableElement(tab, element) {
         tab.target = element;
+        element.tab = tab;
         let deactivate = new Deactivate();
         tab.el.addEventListener('activate', () => {
             element.dispatchToSiblings(deactivate);

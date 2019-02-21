@@ -151,27 +151,29 @@ export default class MAIN extends CONTAINER {
 	addNavOptions() {
 		return this.callback(() => {
 			// LEFT ALIGN
+
+            // Document Map for quick navigation and selection
             let sidebar = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.SIDEBAR,
-                    label: 'SIDEBAR'
+                    label: 'NAV'
                 })),
                 this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                    name: 'sidebar-left',
+                    name: 'document-map',
                     align: 'left'
                 })))
             );
             $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 
-
+            // History / Prev / Back Navigation
             let btnPrev = this.navheader.addTabbableElement(
                 this.navheader.tabs.addNavItemIcon(new MODEL().set({
                     icon: ICONS.CHEVRON_LEFT,
-                    label: 'Prev'
+                    label: 'history'
                 })),
                 this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                    name: 'sidebar-prev',
-                    align: 'right'
+                    name: 'history',
+                    align: 'left'
                 })))
             );
             //btnPrev.tab.el.onclick = () => this.navigateBack();

@@ -6,6 +6,7 @@ import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
+import Swipeable from '../../../../interface/Swipeable.js';
 //import GROUP from '../../group/GROUP.js';
 /** A collapseable list of Nav Items
     @extends LIST
@@ -21,7 +22,8 @@ export default class MENU extends LIST {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
-		this.addCases(model);
+        this.addCases(model);
+        this.implement(new Swipeable(this, model.swipeSensitivity || 50));
 		this.implement(new Switchable(this));
 		if (canActivate) {
 			this.el.addEventListener('activate', this.expand);
