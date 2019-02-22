@@ -86,12 +86,6 @@ export default class CONTAINER extends GROUP {
 		this.construct(model.children).then(() => this.setDefaultVisibility(model));
 	}
 	/* eslint-enable max-statements */
-	/** Construct the Element
-	    @returns {Promise<ThisType>} callback
-	*/
-	construct() {
-		return Promise.resolve(this);
-	}
 	/** Creates the Id and Collection attributes for the given name
 	    @param {string} name ie: data, attributes, description
 	    @param {MODEL} model Container Model
