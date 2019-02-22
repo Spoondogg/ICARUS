@@ -19,7 +19,8 @@ export default class EL extends MODEL {
 	constructor(node, element = 'DIV', model = new MODEL(), innerHTML, children = []) {
 		super(model.attributes);
 		this.setContainer();
-		this.setMain();
+        this.setMain();
+        this.model = model;
 		this.node = node;
 		//this.next = null;
 		this.className = this.constructor.name;
@@ -46,28 +47,27 @@ export default class EL extends MODEL {
 		    @property {Object.<Function>} handlers
 		*/
 		this.handlers = {};
-		//console.log('Creating element', this.element);
-		this.el = document.createElement(this.element);
-		this.make(this.el, node, model, innerHTML);
+		
+		this.make(node, model, innerHTML);
 	}
 	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
-        @param {HTMLElement} el The HTML Element
+        param {HTMLElement} el The HTML Element
 	    @param {EL} node Parent node to append to
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {Promise<HTMLElement>} This element
 	*/
-	make(el, node, model, innerHTML) {
-		try {
+	make(node, model, innerHTML) {
+        try {
+            this.el = document.createElement(this.element);
 			if (node === document.body) {
-				//this.el = node.appendChild(document.createElement(this.element));
-				node.appendChild(el);
+                node.appendChild(this.el);
 			} else {
-				node.el.appendChild(el);
+                node.el.appendChild(this.el);
 			}
 			this.merge(model);
 			this.setInnerHTML(innerHTML);
-			return el;
+			return this.el;
 		} catch (e) {
 			console.warn('Unable to make ' + this.element);
 			throw e;
@@ -78,6 +78,12 @@ export default class EL extends MODEL {
 	    @param {Function} fn Function to call (should accept model)
 	    @returns {void}
 	*/
+    /** Construct the Element
+	    @returns {Promise<ThisType>} callback
+	*/
+    construct() {
+        return Promise.resolve(this);
+    }
 	addCallback(className, fn) {
 		/*try {
             this.callbacks[className].push(fn);
@@ -98,15 +104,20 @@ export default class EL extends MODEL {
 	}
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
+        @see https://stackoverflow.com/a/9229821/722785
 	    @returns {Promise<ThisType>} Returns this element for chaining purposes
 	*/
 	addClass(className) {
 		return this.callback(() => {
 			if (className === 'undefined') {
 				console.log('ClassName Undefined');
-			} else {
-				$(this.el).addClass(className);
-				this.attributes.class = this.getClass() + ' ' + className;
+            } else {
+                try {
+                    className.split(' ').forEach((c) => this.el.classList.add(c));
+                    this.attributes.class = this.el.className;
+                } catch (e) {
+                    console.warn('Unable to add class', className, this, e);
+                }
 			}
 		});
 	}
@@ -340,7 +351,7 @@ export default class EL extends MODEL {
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
-		//console.log('EL.create()', model);
+		console.log('EL{' + this.className + '}.create()', model);
 		return new Promise((resolve, reject) => {
 			try {
 				let result = this.callbacks[model.className].forEach((fn) => fn(model));
@@ -409,17 +420,25 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-	/** Empties contents of node element
+	/** Removes all child Elements from this Element
 	    @returns {ThisType} callback
 	*/
 	empty() {
 		return new Promise((resolve) => {
 			while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
-			}
+            }
+            //this.children.length = 0;
 			resolve(this);
 		});
-	}
+    }
+    /** Removes this HTMLElement from the DOM (MODEL is maintained within node.children)
+	    @param {number} delay Millisecond delay
+	    @returns {Promise} Callback on successful destroy()
+	*/
+    remove(delay = 300) {
+        return this.callback(() => this.el.parentNode.removeChild(this.el));
+    }
 	/** Removes this element from the DOM and its parent linked list
 	    @param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
@@ -427,13 +446,15 @@ export default class EL extends MODEL {
 	destroy(delay = 300) {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
-				try {
-					this.el.parentNode.removeChild(this.el);
-					this.node.children.splice(this.node.children.indexOf(this), 1);					
-					resolve();
+                try {
+                    this.el.parentNode.removeChild(this.el);
+                    this.remove().then((el) => {
+                        this.node.children.splice(this.node.children.indexOf(this), 1);
+                        resolve();
+                    });
 				} catch (e) {
 					if (e instanceof TypeError) {
-						//console.log('Unable to destroy this ' + this.element);
+						console.warn('Unable to destroy this ' + this.element, this);
 						//throw ee;
 						resolve();
 					} else {
@@ -524,10 +545,10 @@ export default class EL extends MODEL {
 		return $(this.el).hasClass(className);
 	}
 	/** Creates given elements as children of this element
-	    @param {array} children Array of children object models to be constructed
+	    @param {Array<EL>} children Array of child Elements
 	    @returns {Promise<ThisType>} callback
 	*/
-	populate(children) {
+    populate(children) {
 		return new Promise((resolve, reject) => {
 			if (children) {
 				try {
