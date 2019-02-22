@@ -7,7 +7,7 @@ import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
-import SIDEBAR from '../sidebar/SIDEBAR.js';
+//import SIDEBAR from '../sidebar/SIDEBAR.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -19,7 +19,8 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
-		this.addClass('main').then(() => this.body.pane.addClass('pane-tall'));
+        this.addClass('main');
+        this.body.pane.addClass('pane-tall');
 		this.navheader.setAttribute('draggable', false);
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
@@ -140,25 +141,6 @@ export default class MAIN extends CONTAINER {
 	navigateForward() {
 		console.log('TODO: Forward');
     }
-    /** Adds a single NAV Icon and Element to MAIN NAVHEADER 
-        @param {string} name Name
-        @param {string} label Label
-        @param {string} icon Icon
-        @param {string} align Alignment
-        @returns {{tab, element}} Tabbable Element {tab,element}
-    */
-    addNavOption(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
-        return this.navheader.addTabbableElement(
-            this.navheader.tabs.addNavItemIcon(new MODEL().set({
-                icon,
-                label
-            })),
-            this.navheader.menus.addChild(new SIDEBAR(this.navheader.menus, new MODEL().set({
-                name,
-                align
-            })))
-        );
-    }
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} callback
 	*/
@@ -167,16 +149,16 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 
             // Document Map for quick navigation and selection
-            let sidebar = this.addNavOption('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+            let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
             $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 
             // History / Prev / Back Navigation
-            let btnPrev = this.addNavOption('history', 'HISTORY', ICONS.CHEVRON_LEFT, 'left');
+            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
             //btnPrev.tab.el.onclick = () => this.navigateBack();
             $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 
 			// RIGHT ALIGN
-            let userBar = this.addNavOption('sidebar-user', 'USER', ICONS.USER, 'right');
+            let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
             let usermenu = new USERMENU(userBar.element);
             usermenu.el.dispatchEvent(new Expand());
             this.navheader.addTabbableElement(userBar.tab, userBar.element);
@@ -212,15 +194,16 @@ export default class MAIN extends CONTAINER {
 	/** Adds the default User, Crud and Dom menus to this Container
 	    @returns {void}
 	*/
-	addDefaultMenuItems() {
-        let domMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
+    addDefaultMenuItems() {
+        let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0];
+        let domMenu = optionsMenu.get('DOM', 'MENU');
 		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
 		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
 		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
 		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-        let crudMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
+        let crudMenu = optionsMenu.get('CRUD', 'MENU');
 		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page

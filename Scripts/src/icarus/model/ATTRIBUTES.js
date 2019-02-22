@@ -31,11 +31,10 @@ export default class ATTRIBUTES { // extends Map
 					}
 				}
 				break;
-			case 'undefined':
+            case 'undefined':
+                break;
 			default:
-				//break;
-				//default:
-				//console.warn('Unrecognized classname', className);
+				console.warn('Unrecognized classname', className);
 		}
 	}
 	/** Gets the specified attribute
