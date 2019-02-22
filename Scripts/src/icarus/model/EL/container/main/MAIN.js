@@ -195,15 +195,15 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     addDefaultMenuItems() {
-        let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU')[0];
-        let domMenu = optionsMenu.get('DOM', 'MENU');
+        let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU');
+        let domMenu = optionsMenu[0].get('DOM', 'MENU');
 		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
 		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
 		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
 		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-        let crudMenu = optionsMenu.get('CRUD', 'MENU');
+        let crudMenu = optionsMenu[0].get('CRUD', 'MENU');
 		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page

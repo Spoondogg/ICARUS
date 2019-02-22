@@ -26,13 +26,9 @@ export default class MENU extends LIST {
         this.implement(new Swipeable(this, model.swipeSensitivity || 50));
 		this.implement(new Switchable(this));
 		if (canActivate) {
-			this.el.addEventListener('activate', this.expand);
-			this.el.addEventListener('deactivate', this.collapse);
-		}
-		/** @todo Detect mouse x position to scroll left/right if greater than 80%
-		 * this.el.addEventListener('activate', () => {
-		 * let pos = this.getMain().mousePos;
-		});*/
+			this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
+			this.el.addEventListener('deactivate', () => this.el.dispatchEvent(new Collapse(this)));
+        }
 	}
 	/** Adds relevant cases to this element
 	    @param {MODEL} model MENU Model

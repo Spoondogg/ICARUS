@@ -1,5 +1,5 @@
 /** @module */
-import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js'; //, { ANCHOR } 
+import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js'; //, { ANCHOR } 
 /** A clickable icon with label 
     @class
     @extends LI
@@ -14,4 +14,4 @@ export default class NAVITEMICON extends NAVITEM {
 		this.addClass('nav-item-icon');
 	}
 }
-export { ANCHOR }
+export { ANCHOR, EL, MODEL }
