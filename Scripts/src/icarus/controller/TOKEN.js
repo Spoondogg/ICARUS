@@ -14,7 +14,7 @@ export default class TOKEN extends EL {
 	    @param {EL} node The parent object
 	 */
 	constructor(node) {
-		super(node, 'INPUT', new MODEL(new ATTRIBUTES('', '__RequestVerificationToken', 'HIDDEN', TOKEN.setToken().value)));
+		super(node, 'INPUT', new MODEL(new ATTRIBUTES('token', '__RequestVerificationToken', 'HIDDEN', TOKEN.setToken().value)));
 	}
 	/** Generates a Request Verification Token element if 
 		one exists in the DOM. (Usually a hidden input)

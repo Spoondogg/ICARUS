@@ -41,8 +41,7 @@ export default class SIDEBAR extends EL {
         }
         this.deactivate = () => {
             this.getMain().body.pane.removeClass('focus-' + this.align);
-            this.removeClass('active');
-            setTimeout(() => this.addClass('hidden'), 150);
+            this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
         }
         // Default state
         this.deactivate();
