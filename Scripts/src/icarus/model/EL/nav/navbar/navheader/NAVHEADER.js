@@ -1,5 +1,6 @@
 /** @module */
 import NAVBAR, { ANCHOR, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
+import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
     @extends NAVBAR
@@ -24,51 +25,53 @@ export default class NAVHEADER extends NAVBAR {
 		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate()));
 		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand()));
 		this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse()));
-		this.addOptionsMenu();
+        this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
 	}
-	/** Adds the Options/Config menu
-	    Adds a right aligned tab to show/hide the Options Menu
+	/** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
         @param {string} name MENU Name
         @param {string} label TAB Label
         @param {string} icon TAB Icon
         @param {Array<string>} secondaryTabs Array of Tab names
-	    @returns {void}
+	    @returns {{tab, element}} Tabbable Element with submenus {tab,element}
 	*/
-    addOptionsMenu(name = 'OPTIONS', label = 'OPTIONS', icon = ICONS.COG, secondaryTabs = ['ELEMENTS', 'CRUD', 'DOM']) {
-        try {
-            // Create Primary tab and Menu
-            let tabbable = this.addTabbableElement(
-                this.tabs.addNavItemIcon(new MODEL().set({
-                    icon,
-                    label
-                })),
-                this.menus.addMenu(new MODEL().set('name', name))
-            );
-			// Create Secondary Tabs and Horizontal Menus inside Options Menu            
-            secondaryTabs.forEach((t) => this.addTabbableElement(
-                tabbable.element.addNavItemIcon(new MODEL().set({
-                    label: t,
-                    icon: ICONS[t]
-                })),
-                tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
-            ));
-        } catch (e) {
-			let modal = this.getProtoTypeByClass('MODAL');
-			if (modal === null) {
-				console.warn('Unable to retrieve MAIN Container', e);
-				throw e;
-			} else {
-				switch (modal.className) {
-					case 'LOADER':
-					case 'PROMPT':
-						break;
-					default:
-						console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
-						break;
-				}
-			}
-		}
-	}
+    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = []) {
+        // Create Primary tab and Menu
+        let tabbable = this.addTabbableElement(
+            this.tabs.addNavItemIcon(new MODEL().set({
+                icon,
+                label
+            })),
+            this.menus.addMenu(new MODEL().set('name', name))
+        );
+		// Create Secondary Tabs and Horizontal Menus inside Menu            
+        secondaryTabs.forEach((t) => this.addTabbableElement(
+            tabbable.element.addNavItemIcon(new MODEL().set({
+                label: t,
+                icon: ICONS[t]
+            })),
+            tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
+        ));
+        return tabbable;
+    }
+    /** Adds a single NAV Icon and associated SIDEBAR
+        @param {string} name Name
+        @param {string} label Label
+        @param {string} icon Icon
+        @param {string} align Alignment
+        @returns {{tab, element}} Tabbable Element {tab,element}
+    */
+    addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
+        return this.addTabbableElement(
+            this.tabs.addNavItemIcon(new MODEL().set({
+                icon,
+                label
+            })),
+            this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
+                name,
+                align
+            })))
+        );
+    }
 }
-export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON }
+export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, SIDEBAR }
