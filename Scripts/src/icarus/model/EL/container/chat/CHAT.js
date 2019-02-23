@@ -96,8 +96,8 @@ export default class CHAT extends CONTAINER {
 				statement.bubble = new DIV(statement, new MODEL('bubble'));
 				statement.bubble.panel = new DIV(statement.bubble, new MODEL('panel panel-default'));
 				statement.bubble.panel.heading = new DIV(statement.bubble.panel, new MODEL('panel-heading'));
-				statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL(), username);
-				statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL(), 'commented X mins ago');
+				statement.bubble.panel.heading.strong = new STRONG(statement.bubble.panel.heading, new MODEL().set('innerHTML', username));
+				statement.bubble.panel.heading.cite = new CITE(statement.bubble.panel.heading, new MODEL().set('innerHTML', 'commented X mins ago'));
 				statement.bubble.panel.body = new DIV(statement.bubble.panel, new MODEL('panel-body'), string);
 				$(statement.el).fadeIn(500);
 				$(this.body.pane.el).animate({

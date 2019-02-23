@@ -1,8 +1,5 @@
 /** @module */
-import BUTTONGROUP, {
-	BUTTON,
-	MODEL
-} from '../../../group/buttongroup/BUTTONGROUP.js';
+import BUTTONGROUP, { BUTTON, MODEL } from '../../../group/buttongroup/BUTTONGROUP.js';
 import BANNER from '../BANNER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
@@ -22,9 +19,7 @@ export default class IMAGEGALLERY extends BANNER {
 		this.page = 0;
 		this.pageLength = 6;
 		this.pageTotal = 0;
-		this.header = new HEADER(this, new MODEL().set({
-			'label': 'Image Gallery'
-		}));
+        this.header = new HEADER(this, new MODEL().set('innerHTML', 'Image Gallery'));
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
 		this.footer = new FOOTER(this, new MODEL());

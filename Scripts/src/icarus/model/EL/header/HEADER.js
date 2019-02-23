@@ -11,7 +11,7 @@ export default class HEADER extends EL {
 	    @param {number} depth Headers can range from H1 to H6. Undefined returns a standard HEADER element
 	*/
 	constructor(node, model, depth = 0) {
-		super(node, depth ? 'H' + depth : 'HEADER', model, model.label || '');
+        super(node, depth ? 'H' + depth : 'HEADER', model);
 		this.depth = depth;
 	}
 }

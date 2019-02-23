@@ -1,5 +1,5 @@
 /** @module */
-import SPAN, { ATTRIBUTES, MODEL } from './SPAN.js';
+import SPAN, { ATTRIBUTES, EL, MODEL } from './SPAN.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** Bootstrap 3 Glyph Icon
     @class
@@ -7,7 +7,7 @@ import { ICONS } from '../../../enums/ICONS.js';
 */
 export default class GLYPHICON extends SPAN {
 	/** Construct a Glyphicon
-	    @param {EL} node parent object
+	    @param {EL} node Node
 	    @param {string} glyphicon The bootstrap glyphicon or ICON enum
 	*/
 	constructor(node, glyphicon) {
@@ -22,4 +22,4 @@ export default class GLYPHICON extends SPAN {
 		this.el.className = glyphicon;
 	}
 }
-export { ATTRIBUTES, ICONS, SPAN }
+export { ATTRIBUTES, EL, ICONS, SPAN }

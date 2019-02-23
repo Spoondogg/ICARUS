@@ -31,7 +31,7 @@ export default class MODAL extends CONTAINER {
 		this.content = new DIV(this.dialog, new MODEL('content'));
 		this.header = this.createModalHeader(title);
 		if (text) {
-			this.well = new WELL(this.content, new MODEL(), text);
+			this.well = new WELL(this.content, new MODEL().set('innerHTML', text));
 		}
 		//this.container = new CONTAINER(this.content, 'DIV', new MODEL('modal-body').set({
 		this.body = new DIV(this.content, new MODEL('modal-body'));
