@@ -1,8 +1,5 @@
 /** @module */
-import EL, {
-	ATTRIBUTES,
-	MODEL
-} from '../model/el/EL.js';
+import EL, { ATTRIBUTES, MODEL } from '../model/el/EL.js';
 import TokenError from '../error/TokenError.js';
 /** A Token to prevent Cross Site Request Forgery (CSRF)
     @class

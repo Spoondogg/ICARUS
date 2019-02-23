@@ -8,10 +8,9 @@ export default class SPAN extends EL {
 	/** Constructs a simple SPAN Element
 	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
-	    @param {string} innerHtml The object contents (html)
     */
-	constructor(node, model, innerHtml) {
-		super(node, 'SPAN', model, innerHtml);
+	constructor(node, model) {
+		super(node, 'SPAN', model);
 	}
 }
 export { ATTRIBUTES, EL, MODEL, SPAN }

@@ -139,7 +139,6 @@ export default class INDEX extends BANNER {
 		setTimeout(() => {
 			$.getJSON('/' + className + '/GetContainerParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
-				//this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});
 		}, delay);

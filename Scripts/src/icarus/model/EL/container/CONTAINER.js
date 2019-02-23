@@ -112,7 +112,7 @@ export default class CONTAINER extends GROUP {
 		return this.callback(() => {
 			if (this.children.length === 0) {
 				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
-				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL(), 'Add an Element to this ' + this.className);
+				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
 				btnAddElement.btn.el.onclick = () => {
 					this.navheader.expand().then(
 						(navBar) => navBar.menu.expand().then(
@@ -136,13 +136,13 @@ export default class CONTAINER extends GROUP {
 				if (this.data[name]) {
 					switch (name) {
 						case 'header':
-							this[name] = new HEADER(node, new MODEL().set('label', this.data[name]));
+							this[name] = new HEADER(node, new MODEL().set('innerHTML', this.data[name]));
 							break;
 						case 'p':
-							this[name] = new P(node, new MODEL(), this.htmlDecode(this.data[name]));
+							this[name] = new P(node, new MODEL().set('innerHTML', this.htmlDecode(this.data[name])));
 							break;
 						case 'legend':
-							this[name] = new LEGEND(node, new MODEL().set('label', this.data[name]));
+							this[name] = new LEGEND(node, new MODEL().set('innerHTML', this.data[name]));
 							break;
 						default:
 							console.warn(name + ' does not have a valid constructor');

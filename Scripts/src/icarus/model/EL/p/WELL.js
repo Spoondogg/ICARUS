@@ -1,21 +1,17 @@
-/**
-    @module
-*/
+/** @module */
 import P from './P.js';
-/**
-    A block of text contained within a Well.
+/** A block of text contained within a Well.
     @class
     @extends P
  */
 export default class WELL extends P {
-	/**
-	    Constructs a Well
+	/** Constructs a Well
 	    @param {EL} node The object to contain this element
 	    @param {MODEL} model The object
-	    @param {string} innerHtml Inner HTML within this paragraph
+	    param {string} innerHtml Inner HTML within this paragraph
 	*/
-	constructor(node, model, innerHtml) {
-		super(node, model, innerHtml);
+	constructor(node, model) {
+		super(node, model);
 		this.addClass('well');
 	}
 }

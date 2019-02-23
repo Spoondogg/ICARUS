@@ -1,6 +1,5 @@
 /** @module */
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
-//import { HtmlElement } from '../../enums/HtmlElement.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
@@ -13,10 +12,10 @@ export default class EL extends MODEL {
 	    @param {EL} node Parent Element Class
 	    @param {string} element HTML Element Tag
 	    @param {MODEL} model Model
-	    @param {string} innerHTML HTML Element Inner HTML
 	    @param {Array<MODEL>} children Array of child nodes
+        @todo The 'innerHTML' and 'children' params are an antipattern and should just be part of MODEL
 	*/
-	constructor(node, element = 'DIV', model = new MODEL(), innerHTML, children = []) {
+	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
         this.setMain();
@@ -28,9 +27,9 @@ export default class EL extends MODEL {
 		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
 		this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
 		/** An array of MODELS that are children of this EL
-		    @property {Array<MODEL>} children 
+		    @type {Array<MODEL>} children 
 		*/
-		this.children = children;
+		this.children = model.children || [];
 		/** A Collection of callback methods that accept a MODEL
 		    ie: this.callbacks[foo]
 		*/
@@ -48,7 +47,7 @@ export default class EL extends MODEL {
 		*/
 		this.handlers = {};
 		
-		this.make(node, model, innerHTML);
+        this.make(node, model); // innerHTML
 	}
 	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
         param {HTMLElement} el The HTML Element
@@ -57,7 +56,7 @@ export default class EL extends MODEL {
 	    @param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {Promise<HTMLElement>} This element
 	*/
-	make(node, model, innerHTML) {
+    make(node, model) { // innerHTML
         try {
             this.el = document.createElement(this.element);
 			if (node === document.body) {
@@ -66,7 +65,7 @@ export default class EL extends MODEL {
                 node.el.appendChild(this.el);
 			}
 			this.merge(model);
-			this.setInnerHTML(innerHTML);
+			this.setInnerHTML(model.innerHTML);
 			return this.el;
 		} catch (e) {
 			console.warn('Unable to make ' + this.element);
@@ -114,7 +113,7 @@ export default class EL extends MODEL {
             } else {
                 try {
                     className.split(' ').forEach((c) => this.el.classList.add(c));
-                    this.attributes.class = this.el.className;
+                    this.attributes.class = this.el.classList.value;
                 } catch (e) {
                     console.warn('Unable to add class', className, this, e);
                 }
@@ -410,7 +409,7 @@ export default class EL extends MODEL {
 	    If attribute is 'innerHTML', the element's innerHTML is modified
 	    @param {object} attributes A set of key/value pairs
 	    @returns {void}
-	 */
+	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
 			if (attr !== 'innerHTML') {
@@ -568,7 +567,8 @@ export default class EL extends MODEL {
 	    @returns {ThisType} This node for chaining
 	*/
 	setInnerHTML(innerHTML = '') {
-		this.el.innerHTML = innerHTML;
+        this.el.innerHTML = innerHTML;
+        //this.innerHTML = innerHTML;
 		return this;
 	}
 	/** Scrolls page to the top of this element
@@ -590,7 +590,4 @@ export default class EL extends MODEL {
 		return this.callback(() => $(this.el).toggleClass(className));
 	}
 }
-export {
-	MODEL,
-	ATTRIBUTES
-};
+export { MODEL, ATTRIBUTES }
