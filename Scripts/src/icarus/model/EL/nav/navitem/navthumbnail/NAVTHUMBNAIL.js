@@ -1,9 +1,5 @@
 /** @module */
-import NAVITEM, {
-	ATTRIBUTES,
-	EL,
-	MODEL
-} from '../../../nav/navitem/NAVITEM.js';
+import NAVITEM, { ATTRIBUTES, EL, MODEL } from '../../../nav/navitem/NAVITEM.js';
 import HEADER from '../../../header/header.js';
 import IMG from '../../../img/IMG.js';
 import P from '../../../p/P.js';
@@ -78,8 +74,4 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 		}
 	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, EL, MODEL }
