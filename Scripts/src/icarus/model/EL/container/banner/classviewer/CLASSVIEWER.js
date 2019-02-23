@@ -1,8 +1,5 @@
 /** @module */
-import FORM, {
-	ATTRIBUTES,
-	MODEL
-} from '../../../form/FORM.js';
+import FORM, { ATTRIBUTES, MODEL } from '../../../form/FORM.js';
 import BANNER from '../BANNER.js';
 import HEADER from '../../../header/HEADER.js';
 //import MENU from '../../../nav/menu/MENU.js';

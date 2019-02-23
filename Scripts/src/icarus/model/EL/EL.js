@@ -13,7 +13,6 @@ export default class EL extends MODEL {
 	    @param {string} element HTML Element Tag
 	    @param {MODEL} model Model
 	    @param {Array<MODEL>} children Array of child nodes
-        @todo The 'innerHTML' and 'children' params are an antipattern and should just be part of MODEL
 	*/
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
@@ -432,10 +431,10 @@ export default class EL extends MODEL {
 		});
     }
     /** Removes this HTMLElement from the DOM (MODEL is maintained within node.children)
-	    @param {number} delay Millisecond delay
+	    param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
-    remove(delay = 300) {
+    remove() { // delay = 300
         return this.callback(() => this.el.parentNode.removeChild(this.el));
     }
 	/** Removes this element from the DOM and its parent linked list
@@ -447,7 +446,7 @@ export default class EL extends MODEL {
 			setTimeout(() => {
                 try {
                     this.el.parentNode.removeChild(this.el);
-                    this.remove().then((el) => {
+                    this.remove().then(() => {
                         this.node.children.splice(this.node.children.indexOf(this), 1);
                         resolve();
                     });
