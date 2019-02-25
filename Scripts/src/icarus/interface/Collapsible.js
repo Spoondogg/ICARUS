@@ -22,13 +22,13 @@ export default class Collapsible extends IFACE {
 	setMethods(node) {
 		/** Collapses the node
 	        @returns {Promise<ThisType>} callback
+            //this.methods.collapse = () => node.removeClass('in');
 	    */
-		//this.methods.collapse = () => node.removeClass('in');
 		this.methods.collapse = () => node.callback(() => $(node.el).collapse('hide'));
 		/** Expands the node
 	        @returns {Promise<ThisType>} callback
+            //this.methods.expand = () => node.addClass('in');
 	    */
-		//this.methods.expand = () => node.addClass('in');
 		this.methods.expand = () => node.callback(() => $(node.el).collapse('show'));
 	}
 }

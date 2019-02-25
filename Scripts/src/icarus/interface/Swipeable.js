@@ -64,13 +64,13 @@ export default class Swipeable extends IFACE {
         ev.stopPropagation();
         if (!this.xDown || !this.yDown) {
 			return;
-		}
-        let xUp = ev.touches[0].clientX;
-        let yUp = ev.touches[0].clientY;
-		let xDiff = this.xDown - xUp;
-		let yDiff = this.yDown - yUp;
-        let dir = '';
-        let distance = Math.abs(xDiff) + Math.abs(yDiff);
+        }
+        let xUp = ev.touches[0].clientX,
+            yUp = ev.touches[0].clientY;
+        let xDiff = this.xDown - xUp,
+            yDiff = this.yDown - yUp;
+        let dir = '',
+            distance = Math.abs(xDiff) + Math.abs(yDiff);
         if (distance > this.swipeSensitivity) { // Handle short swipes
             if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant difference 
                 dir = xDiff > 0 ? 'left' : 'right';
