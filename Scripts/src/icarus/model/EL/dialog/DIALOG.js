@@ -35,12 +35,8 @@ export default class DIALOG extends EL {
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
-		this.closeOnFocusOut();
-		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
-		$(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
-		$(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
-		//$(this.el).on('hidden.bs.modal', () => { /**/ });
-		//$(this.el).on('shown.bs.modal', () => { /**/ });
+        this.closeOnFocusOut();
+        this.overrideBootstrap();
     }
     /** Creates a close button in the nav header
         @returns {NAVITEMICON} Close Button / Icon
@@ -100,6 +96,13 @@ export default class DIALOG extends EL {
         } catch (e) {
             console.warn('Unable to get MAIN for DIALOG', this);
         }
+    }
+    overrideBootstrap() {
+        // Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+        $(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
+        $(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
+		//$(this.el).on('hidden.bs.modal', () => { /**/ });
+		//$(this.el).on('shown.bs.modal', () => { /**/ });
     }
 }
 export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL, NAVITEMICON }
