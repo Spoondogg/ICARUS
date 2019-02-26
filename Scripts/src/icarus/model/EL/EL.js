@@ -19,10 +19,6 @@ export default class EL extends MODEL {
 		super(model.attributes);
 		this.setContainer();
         this.setMain();
-        /** Default/Given MODEL
-		    @see {model}
-		*/
-        this.model = model;
         /** Parent EL
 		    @type {EL} children 
 		*/
@@ -59,16 +55,16 @@ export default class EL extends MODEL {
 		*/
 		this.handlers = {};
 		
-        this.make();
+        this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
         param {HTMLElement} el The HTML Element
 	    param {EL} node Parent node to append to
-	    param {MODEL} model A set of key/value pairs for this element's model
+	    @param {MODEL} model A set of key/value pairs for this element's model
 	    param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {Promise<ThisType>} callback
 	*/
-    make() {
+    make(model) {
         return this.callback(() => {
             this.el = document.createElement(this.element);
             if (this.node === document.body) {
@@ -76,17 +72,18 @@ export default class EL extends MODEL {
             } else {
                 this.node.el.appendChild(this.el);
             }
-            this.merge(this.model).then(() => this.construct());
+            this.merge(model).then(() => this.construct(model));
         }, 'Unable to make ' + this.element);
 	}	
     /** Perform any async actions required to construct the Element
+        @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-    construct() {
-        if (this.model) {
-            return this.populate(this.model.children).then(() => this.ifEmpty());
+    construct(model) {
+        if (model.children) {
+            return this.populate(model.children);
         }
-        return Promise.resolve(this);
+        return this.ifEmpty();
     }
     /** If no children supplied...
 	    @returns {Promise<ThisType>} callback
@@ -368,7 +365,7 @@ export default class EL extends MODEL {
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
-		console.log('EL{' + this.className + '}.create()', model);
+		//console.log('EL{' + this.className + '}.create()', model);
 		return new Promise((resolve, reject) => {
 			try {
 				let result = this.callbacks[model.className].forEach((fn) => fn(model));
@@ -412,20 +409,27 @@ export default class EL extends MODEL {
     */
     merge(model) {
         return this.callback(() => {
-            if (this.constructor.name === this.className) {
+            //if (this.constructor.name === this.className) {
+            //console.log(typeof model); // 'object'
+            //if (typeof model === 'object') {
                 for (let prop in model) {
-                    if (prop === 'attributes') {
-                        this.processAttributes(model.attributes);
-                    } else if (prop === 'innerHTML') {
-                        this.setInnerHTML(model[prop]);
-                    } else {
-                        this[prop] = model[prop];
+                    if (typeof prop === 'string') {
+                        switch (prop) {
+                            case 'attributes':
+                                this.processAttributes(model.attributes);
+                                break;
+                            case 'innerHTML':
+                                this.setInnerHTML(model[prop]);
+                                break;
+                            case 'children':
+                                break;
+                            default:
+                                this[prop] = model[prop];
+                        }
                     }
                 }
-            } else {
-                console.warn('EL.merge(): Failed to merge ' + this.constructor.name + ' into ' + this.className);
-            }
-        });
+            //}
+        }, 'EL.merge(): Failed to merge ' + this.constructor.name + ' into ' + this.className);
 	}
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified

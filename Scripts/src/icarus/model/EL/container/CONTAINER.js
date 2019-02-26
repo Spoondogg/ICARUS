@@ -451,7 +451,7 @@ export default class CONTAINER extends GROUP {
 	setName(name) {
 		if (typeof name !== 'undefined' && name !== null) {
 			this.el.setAttribute('name', name);
-			this.model.name = name;
+            this.name = name;
 		}
 	}
 	/** An abstract load method for a CONTAINER
@@ -552,11 +552,11 @@ export default class CONTAINER extends GROUP {
 		this.label = label;
 	}
 	/** Sets the subsection array to the given value
-		@param {array} subsections Sub Section UID array
+		@param {Array<number>} subsections Sub Section UID array
 	    @returns {void}
 	*/
 	setSubSections(subsections) {
-		this.model.subsections = subsections;
+        this.subsections = subsections;
 	}
 	/** Toggles visibility of any child Container Headers
         @returns {Promise<ThisType>} callback

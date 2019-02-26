@@ -15,18 +15,21 @@ export default class FIELDSET extends CONTAINER {
 		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));		
 	}
 	/** Perform any async actions and populate this Container
-	    param {Array<MODEL>} children Array of elements to add to this container's body
+	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct() {
+	construct(model) {
 		return this.callback(() => {
 			if (this.dataId > 0) {
 				//if (this.label) {
 				//	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
 				//}
 			}
-			this.populate(this.model.children);
-		});
+            if (model.children) {
+                return this.populate(model.children);
+            }
+            return this.ifEmpty();
+        });
 		/*return new Promise((resolve, reject) => {
 		    try {
 		        this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));

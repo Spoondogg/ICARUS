@@ -23,7 +23,7 @@ export default class MODALMENU extends MODAL {
 	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct() {
-		return this.menu.populate(this.model.children);
+	construct(model) {
+		return this.menu.populate(model.children);
 	}
 }
