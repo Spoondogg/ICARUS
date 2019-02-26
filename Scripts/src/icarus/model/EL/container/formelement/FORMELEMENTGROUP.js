@@ -29,7 +29,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 			if (this.dataId > 0) {
 				this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 			}
-			this.populate(this.children);
+			this.populate(this.model.children);
 		});
 	}
 	/** Adds the given array of FORMELEMENT(s) to this group
