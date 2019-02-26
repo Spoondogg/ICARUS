@@ -59,7 +59,13 @@ export default class INDEX extends BANNER {
 				}
 			}
 		}
-	}
+    }
+    /** If no children supplied...
+	    @returns {Promise<ThisType>} callback
+	*/
+    ifEmpty() {
+        return Promise.resolve(this);
+    }
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
 	    @param {string} element The name of the element 
