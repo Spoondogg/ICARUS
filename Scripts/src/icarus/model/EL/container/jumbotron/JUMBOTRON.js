@@ -24,7 +24,7 @@ export default class JUMBOTRON extends CONTAINER {
                 this.createEditableElement('p', this.screen);
                 this.loadBgImage();
                 this.setBgColor();
-                this.body.expand();
+                this.body.el.dispatchEvent(new Expand(this));
             } else {
                 console.log('No data exists for JUMBOTRON');
                 this.navheader.el.dispatchEvent(new Expand(this));
