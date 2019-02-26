@@ -18,6 +18,12 @@ export default class FORMELEMENT extends CONTAINER {
         this.addClass('form-element');
         this.implement(new Hideable(this));
         this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', model.label || element));
-	}
+    }
+    /** If no children supplied...
+	    @returns {Promise<ThisType>} callback
+	*/
+    ifEmpty() {
+        return Promise.resolve(this);
+    }
 }
 export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL }
