@@ -27,8 +27,6 @@ export default class MAIN extends CONTAINER {
 		this.factory = model.factory;
 		/** @type {LOADER} */
 		this.loader = model.loader;
-		/** @type {string} */
-		this.token = model.token;
 		/** @type {URL} */
 		this.url = model.url;
 		/** The active container has access to keybindings */
@@ -38,7 +36,8 @@ export default class MAIN extends CONTAINER {
 		// CRUD
 		this.save = this.factory.save;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-		this.watchMousePosition();
+        this.watchMousePosition();
+        this.expandMain();
 	}
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
@@ -107,17 +106,14 @@ export default class MAIN extends CONTAINER {
 		this.mouse.yPct = (this.mouse.y / this.mouse.h).toFixed(2) * 100;
 		//console.log(this.mouse);
 	}
-	/** Perform any async actions and populate this Container
-	    @param {MODEL} model Model
-	    @returns {Promise<ThisType>} callback
-	*/
-	construct() {
-		return this.populate().then(() => {
-            this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            this.body.el.dispatchEvent(new Expand(this.body));
-            this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
-        });
-	}
+    /** Fires expand event for header, body and footer of Container
+        @returns {void}
+    */
+    expandMain() {
+        this.navheader.el.dispatchEvent(new Expand(this.navheader));
+        this.body.el.dispatchEvent(new Expand(this.body));
+        this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
+    }
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
