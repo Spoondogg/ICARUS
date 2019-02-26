@@ -17,7 +17,7 @@ export default class TGROUP extends EL {
 	*/
 	addRow(model) {
 		this.rows.push(new ROW(this, model));
-		return this.rows[this.children.length - 1];
+		return this.rows[this.model.children.length - 1];
 	}
 	/** Adds groups to the table
 	    @param {Array<TGROUP>} rows An array of groups

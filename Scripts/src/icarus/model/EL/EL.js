@@ -565,7 +565,7 @@ export default class EL extends MODEL {
 		return $(this.el).hasClass(className);
 	}
 	/** Creates given elements as children of this element
-	    @param {Array<EL>} children Array of child Elements
+	    @param {Array<EL>} children model.children
 	    @returns {Promise<ThisType>} callback
 	*/
     populate(children) {

@@ -286,19 +286,22 @@ export default class CONTAINER extends GROUP {
     */
 	htmlDecode(value) {
 		return $('<div/>').html(value).text();
-	}
-	/** Empties the Container Pane and reconstructs its contents 
-        based on the current model
+    }
+	/** Empties the Container Pane and reconstructs its contents based on the current model
         @returns {void}
     */
-	refresh() {
-		return this.callback(() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
-			this.body.pane.empty().then(() => { //container
-                const [...children] = this.body.pane.children;
-                this.body.pane.children = [];
-				this.construct().then(() => loader.log(100));
-			});
-		}));
+    refresh() {
+        console.log('Refreshing ' + this.className, this);
+        //return Promise.resolve(this);
+        return this.callback(
+            () => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
+                (loader) => this.body.pane.empty().then(
+                    () => this.construct().then(() => loader.log(100)))),
+                    /*() => {
+                        console.log('Populate', this.className, this);
+                        this.body.pane.populate(this.body.pane.children).then(() => loader.log(100));
+                    })),*/
+        'Unable to refresh ' + this.className);
 	}
 	/** Closes parent menus
 	    @param {MENU} menu Menu
