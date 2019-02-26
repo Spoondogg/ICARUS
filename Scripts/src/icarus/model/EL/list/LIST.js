@@ -22,22 +22,11 @@ export default class LIST extends ITEM {
         this.addCallback('LI', () => this.addLI(model));
         this.el.addEventListener('collapse', () => {
             if (this.el.children.length > 0) {
-                //console.log('EMPTYING LIST', this.children);
-                //this.empty();
-                console.log('TODO: EMPTIED ' + this.className + '[' + this.name + ']', this.className); //this
+                //console.log('TODO: EMPTYING ' + this.className + '[' + this.name + ']', this.className); //this
             }
         });
         this.el.addEventListener('expand', () => {
-            //this.populate(this.children);
-            //const [...children] = this.children;
-            //this.children.length = 0;
-            //this.populate(children);
-            console.log('TODO: POPULATING ' + this.className + '[' + this.name + ']');// this
-            //console.log(' - CHILDREN', children);
-            /*children.forEach((c) => {
-                //this.create(c);
-                console.log(' - ' + c.className, c.model, c.children);
-            });*/
+            //console.log('TODO: POPULATING ' + this.className + '[' + this.name + ']');
         });
 	}
 	/** Construct a generic List Item (LI) and append to this element's children
