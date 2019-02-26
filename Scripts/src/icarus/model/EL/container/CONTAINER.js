@@ -108,7 +108,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	ifEmpty() {
 		return this.callback(() => {
-            if (this.children.length === 0) {
+            if (this.get().length === 0) {
 				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
 				btnAddElement.btn.el.onclick = () => {

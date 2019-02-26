@@ -49,7 +49,7 @@ export default class MENU extends LIST {
 		this.el.onclick = (event) => {
 			if (event.target !== this.el) {
 				console.log('Collapsing child menus...', this);
-				this.children.filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
+                this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
 			}
 		};
 	}

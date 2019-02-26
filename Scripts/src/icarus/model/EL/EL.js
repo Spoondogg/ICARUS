@@ -59,24 +59,24 @@ export default class EL extends MODEL {
 		*/
 		this.handlers = {};
 		
-        this.make(this.node, this.model);
+        this.make();
 	}
-	/** Creates an HTMLElement based on the given MODEL and appends to the given Node Element
+	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
         param {HTMLElement} el The HTML Element
-	    @param {EL} node Parent node to append to
-	    @param {MODEL} model A set of key/value pairs for this element's model
-	    @param {string} innerHTML This text will be displayed within the HTML element
+	    param {EL} node Parent node to append to
+	    param {MODEL} model A set of key/value pairs for this element's model
+	    param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {Promise<ThisType>} callback
 	*/
-    make(node, model) {
+    make() {
         return this.callback(() => {
             this.el = document.createElement(this.element);
-            if (node === document.body) {
-                node.appendChild(this.el);
+            if (this.node === document.body) {
+                this.node.appendChild(this.el);
             } else {
-                node.el.appendChild(this.el);
+                this.node.el.appendChild(this.el);
             }
-            this.merge(model).then(() => this.construct());
+            this.merge(this.model).then(() => this.construct());
         }, 'Unable to make ' + this.element);
 	}	
     /** Perform any async actions required to construct the Element
@@ -114,7 +114,7 @@ export default class EL extends MODEL {
 	    @returns {EL} Child Element
 	*/
 	addChild(model) {
-		this.children.push(model);
+        this.get().push(model);
         return this.getTail();
 	}
 	/** Adds the given class name to the element's list of classes
@@ -278,7 +278,10 @@ export default class EL extends MODEL {
 			console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
 		}
 		return results;*/
-        return this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+        if (name === null && className === null) {
+            return this.children;
+        }
+        return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
 	}
 	/** Retrieves MODEL.ATTRIBUTES.class 
 	    @returns {string} Class Name
@@ -331,14 +334,14 @@ export default class EL extends MODEL {
         @returns {EL} Tail Element/Model
     */
     getTail() {
-        return this.children[this.children.length - 1];
+        return this.get()[this.get().length - 1];
     }
     /** Retrieves the previous element (if exists) 
         @returns {EL} Previous Sibling Element
     */
     getPrev() {
         try {
-            return this.node.children[this.node.children.indexOf(this) - 1];
+            return this.node.get()[this.node.get().indexOf(this) - 1];
         } catch (e) {
             console.warn('Unable to retrieve previous element/sibling', this, e);
         }
@@ -348,7 +351,7 @@ export default class EL extends MODEL {
     */
     getNext() {
         try {
-            return this.node.children[this.node.children.indexOf(this) + 1];
+            return this.node.get()[this.node.get().indexOf(this) + 1];
         } catch (e) {
             console.warn('Unable to retrieve next element/sibling', this, e);
         }
@@ -468,7 +471,7 @@ export default class EL extends MODEL {
                 try {
                     this.remove().then(() => {
                         if (this.node !== document.body) {
-                            this.node.children.splice(this.node.children.indexOf(this), 1);
+                            this.node.get().splice(this.node.get().indexOf(this), 1);
                         }
                         resolve();
                     });
