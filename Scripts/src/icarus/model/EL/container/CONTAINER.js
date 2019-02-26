@@ -3,7 +3,6 @@
 import COLLAPSIBLE, { Collapse, Collapsible, Expand } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../group/GROUP.js';
-//import NAVBAR, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/NAVBAR.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import Clickable from '../../../interface/Clickable.js';
@@ -17,7 +16,6 @@ import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LEGEND from '../legend/LEGEND.js';
 import Movable from '../../../interface/Movable.js';
 import P from '../p/P.js';
-//import SIDEBAR from './sidebar/SIDEBAR.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract Container element with NAVBAR
