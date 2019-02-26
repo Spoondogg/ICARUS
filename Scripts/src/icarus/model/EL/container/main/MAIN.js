@@ -112,10 +112,11 @@ export default class MAIN extends CONTAINER {
 	    @returns {Promise<ThisType>} callback
 	*/
 	construct() {
-		return this.populate().then(
-			() => this.navheader.expand().then(
-				() => this.body.expand().then(
-					() => this.navfooter.expand())));
+		return this.populate().then(() => {
+            this.navheader.el.dispatchEvent(new Expand(this.navheader));
+            this.body.el.dispatchEvent(new Expand(this.body));
+            this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
+        });
 	}
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
