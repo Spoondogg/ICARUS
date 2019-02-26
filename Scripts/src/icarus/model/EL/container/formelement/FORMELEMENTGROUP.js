@@ -21,27 +21,16 @@ export default class FORMELEMENTGROUP extends CONTAINER {
         this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
 		['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
 	}
-	/** Perform any async actions and populate this Container
-	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	/** Perform any async actions required to construct the Element
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct(children) {
+	construct() {
 		return this.callback(() => {
 			if (this.dataId > 0) {
 				this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 			}
-			this.populate(children);
+			this.populate(this.children);
 		});
-		/*return new Promise((resolve, reject) => {
-		    try {
-		        if (this.dataId > 0) {
-		            this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
-		        }
-		        this.populate(children).then(() => resolve(this));
-		    } catch (e) {
-		        reject(e);
-		    }
-		});*/
 	}
 	/** Adds the given array of FORMELEMENT(s) to this group
 	    @param {Array<FORMELEMENT>} inputs A list of inputs

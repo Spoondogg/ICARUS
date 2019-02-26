@@ -83,7 +83,7 @@ export default class CONTAINER extends GROUP {
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
-		this.construct(model.children).then(() => this.setDefaultVisibility(model));
+        this.setDefaultVisibility(model);
 	}
 	/* eslint-enable max-statements */
 	/** Creates the Id and Collection attributes for the given name
@@ -110,7 +110,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	ifEmpty() {
 		return this.callback(() => {
-			if (this.children.length === 0) {
+            if (this.children.length === 0) {
 				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
 				btnAddElement.btn.el.onclick = () => {
@@ -294,11 +294,9 @@ export default class CONTAINER extends GROUP {
 	refresh() {
 		return this.callback(() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then((loader) => {
 			this.body.pane.empty().then(() => { //container
-				const [...children] = this.body.pane.children;
-				this.body.pane.children = [];
-				this.construct(children)
-					//.then(() => this.populate(children))
-					.then(() => loader.log(100));
+                const [...children] = this.body.pane.children;
+                this.body.pane.children = [];
+				this.construct().then(() => loader.log(100));
 			});
 		}));
 	}

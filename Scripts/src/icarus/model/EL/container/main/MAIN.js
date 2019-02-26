@@ -21,7 +21,8 @@ export default class MAIN extends CONTAINER {
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
         this.addClass('main');
         this.body.pane.addClass('pane-tall');
-		this.navheader.setAttribute('draggable', false);
+        this.navheader.setAttribute('draggable', false);
+        this.addNavOptions();
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -107,15 +108,14 @@ export default class MAIN extends CONTAINER {
 		//console.log(this.mouse);
 	}
 	/** Perform any async actions and populate this Container
-	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct(children) {
-		return this.addNavOptions().then(
-			() => this.populate(children).then(
-				() => this.navheader.expand().then(
-					() => this.body.expand().then(
-						() => this.navfooter.expand()))));
+	construct() {
+		return this.populate().then(
+			() => this.navheader.expand().then(
+				() => this.body.expand().then(
+					() => this.navfooter.expand())));
 	}
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
@@ -231,7 +231,7 @@ export default class MAIN extends CONTAINER {
 									caller: this,
 									container: this
 								})).createForm().then((form) => {
-									form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
+                                    form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
@@ -452,7 +452,7 @@ export default class MAIN extends CONTAINER {
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
 				form.addClass('register');
-				form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+                form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')

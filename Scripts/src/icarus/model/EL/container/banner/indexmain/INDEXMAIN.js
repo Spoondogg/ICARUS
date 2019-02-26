@@ -9,6 +9,7 @@ import MODEL from '../../../../MODEL.js';
 /** Contains a list of THUMBNAILS for each MAIN Container available to this user
     @class
     @extends BANNER
+    @description This thing needs a lot of work...  Its ugly and outdated.
 */
 export default class INDEXMAIN extends BANNER {
 	/** Constructs a banner with a header affixed outside of the Container's pane
@@ -69,7 +70,6 @@ export default class INDEXMAIN extends BANNER {
 										this.pagination.buttonGroup.loaded = true;
 										this.pagination.buttonGroup.children[0].addClass('active');
 									}
-									//loader.log(100, '', true, 2000);
 									loader.log(100).then(() => resolve(this));
 								});
 							} else {
@@ -171,22 +171,6 @@ export default class INDEXMAIN extends BANNER {
 			this.page = page;
 			this.construct();
 		});
-		/*return new Promise((resolve, reject) => {
-		    try {
-		        this.header.setInnerHTML('Page ' + (page + 1));
-		        let buttons = this.pagination.buttonGroup.el.children;
-		        for (let b = 0; b < buttons.length; b++) {
-		            $(buttons[b]).removeClass('active');
-		        }
-		        $(buttons[page]).addClass('active');
-		        //this.menu.empty();
-		        this.page = page;
-		        this.construct().then(() => resolve(this));
-		    } catch (e) {
-		        console.log('Unable to load page.', e);
-		        reject(e);
-		    }
-		});*/
 	}
 	/** Loads the next page in sequence
 	    @returns {void}
@@ -224,8 +208,8 @@ export default class INDEXMAIN extends BANNER {
 			}, 1000);
 		} else {
 			this.isLoading = true;
-			while (this.menu.children.length > this.maxNavItems) {
-				this.menu.children.shift().destroy();
+            while (this.menu.children.length > this.maxNavItems) {
+                this.menu.children.shift().destroy();
 			}
 			this.isLoading = false;
 		}

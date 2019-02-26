@@ -1,8 +1,5 @@
 /** @module */
-import CONTAINER, {
-	ATTRIBUTES,
-	MODEL
-} from '../CONTAINER.js';
+import CONTAINER, {	ATTRIBUTES,	MODEL } from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
@@ -44,11 +41,7 @@ export default class CHAT extends CONTAINER {
             @todo this.form.afterSuccessfulPost = setTimeout(this.addStatement('ICARUS', payload.message), 1000, payload);
             @todo Needs testing
 		*/
-		this.form.afterSuccessfulPost = function(payload) {
-			setTimeout(() => {
-				this.addStatement('ICARUS', payload.message);
-			}, 1000);
-		}.bind(this);
+		this.form.afterSuccessfulPost = (payload) => setTimeout(() => this.addStatement('ICARUS', payload.message), 1000);
 		this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
 		console.log('Chat Input', this.chatInput);
 		this.chatInput.el.onkeypress = this.postStatement.bind(this);
@@ -56,9 +49,7 @@ export default class CHAT extends CONTAINER {
 	construct() {
 		return new Promise((resolve, reject) => {
 			try {
-				setTimeout(() => {
-					this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this));
-				}, 2000);
+				setTimeout(() => this.addStatement('ICARUS', 'Hello ' + this.user).then(() => resolve(this)), 2000);
 			} catch (e) {
 				reject(e);
 			}

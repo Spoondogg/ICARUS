@@ -52,13 +52,6 @@ export default class FORM extends CONTAINER {
 		//this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
 		*/
 	}
-	/** Perform any async actions and populate this Container
-	    @param {Array<MODEL>} children Array of elements to add to this container's body
-	    @returns {Promise<ThisType>} callback
-	*/
-	construct(children) {
-		return this.populate(children).then(() => this.ifEmpty());
-	}
 	/** Sets the focused container to this FORM to listen for appropriate key bindings
 	    @param {string} eventName Name of event
 	    @returns {void}
@@ -93,7 +86,7 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.children[0].children[0]).then(() => {
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.children[0].children[0]).then(() => {
 						if (payload.model.jsonResults) { // Set values based on existing 
 							JSON.parse(payload.model.jsonResults).forEach((inp) => {
 								form.el.elements[inp.name].value = inp.value;
@@ -183,7 +176,7 @@ export default class FORM extends CONTAINER {
 							break;
 					}
 				}
-				target.children.push(inp);
+                target.children.push(inp);
 				resolve(inp);
 			} catch (e) {
 				reject(e);
@@ -275,7 +268,7 @@ export default class FORM extends CONTAINER {
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
-		this.children.forEach((i) => {
+        this.children.forEach((i) => {
 			try {
 				switch (i.className) {
 					case 'FIELDSET':
@@ -300,7 +293,7 @@ export default class FORM extends CONTAINER {
 	*/
 	unlock() {
 		return new Promise((resolve, reject) => {
-			this.children.forEach((i) => {
+            this.children.forEach((i) => {
 				try {
 					switch (i.className) {
 						case 'FIELDSET':
