@@ -316,7 +316,6 @@ export default class EL extends MODEL {
 	    @returns {Promise<MAIN>} MAIN class
 	*/
 	getMain() {
-		//console.log('EL.getMain()');
 		try {
 			if (typeof this.main === 'undefined') {
 				this.setMain();
@@ -459,7 +458,7 @@ export default class EL extends MODEL {
     remove() { // delay = 300
         return this.callback(() => this.el.parentNode.removeChild(this.el));
     }
-	/** Removes this element from the DOM and its parent linked list
+	/** Removes this Element from the DOM and its Class from any linked lists
 	    @param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
@@ -573,10 +572,9 @@ export default class EL extends MODEL {
         return new Promise((resolve, reject) => {
             if (children) {
                 try {
-                    let msg = this.className + '.populate(' + children.length + ');';
-                    let main = this.getContainer().getMain();
-                    main.loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
+                    Promise.all(children.map((c) => this.create(c))).then(() => resolve(this));
                 } catch (e) {
+                    console.warn(this.className + '.populate() Failed to populate ' + this.className, children);
                     reject(e);
                 }
             } else {
