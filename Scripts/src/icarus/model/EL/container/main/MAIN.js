@@ -232,7 +232,7 @@ export default class MAIN extends CONTAINER {
 									caller: this,
 									container: this
 								})).createForm().then((form) => {
-                                    form.footer.buttonGroup.children[0].destroy().then(() => { //dialog
+                                    form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
@@ -453,7 +453,7 @@ export default class MAIN extends CONTAINER {
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
 				form.addClass('register');
-                form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+                form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
