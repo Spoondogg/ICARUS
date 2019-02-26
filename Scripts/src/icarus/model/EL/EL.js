@@ -80,8 +80,10 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} callback
 	*/
     construct(model) {
-        if (model.children) {
-            return this.populate(model.children);
+        if (model) {
+            if (model.children) {
+                return this.populate(model.children);
+            }
         }
         return this.ifEmpty();
     }
@@ -411,7 +413,8 @@ export default class EL extends MODEL {
         return this.callback(() => {
             //if (this.constructor.name === this.className) {
             //console.log(typeof model); // 'object'
-            //if (typeof model === 'object') {
+            if (typeof model === 'object') {
+                //console.log('Merging into ' + this.constructor.name, model);
                 for (let prop in model) {
                     if (typeof prop === 'string') {
                         switch (prop) {
@@ -422,13 +425,15 @@ export default class EL extends MODEL {
                                 this.setInnerHTML(model[prop]);
                                 break;
                             case 'children':
+                                //console.log(this.className + 'MERGE CHILDREN', model[prop], this.children);
+                                //this[prop] = model[prop];
                                 break;
                             default:
                                 this[prop] = model[prop];
                         }
                     }
                 }
-            //}
+            }
         }, 'EL.merge(): Failed to merge ' + this.constructor.name + ' into ' + this.className);
 	}
 	/** Iterates through attributes and sets accordingly
@@ -571,7 +576,7 @@ export default class EL extends MODEL {
 	hasClass(className) {
 		return $(this.el).hasClass(className);
 	}
-	/** Creates given elements as children of this element
+	/** Creates given Elements as children of this element
 	    @param {Array<EL>} children model.children
 	    @returns {Promise<ThisType>} callback
 	*/

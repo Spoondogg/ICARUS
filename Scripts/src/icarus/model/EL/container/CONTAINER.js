@@ -289,17 +289,13 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     refresh() {
-        console.log('Refreshing ' + this.className, this);
-        //return Promise.resolve(this);
+        console.log('Refresh', this);
         return this.callback(
             () => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
-                (loader) => this.body.pane.empty().then(
-                    () => this.construct().then(() => loader.log(100)))),
-                    /*() => {
-                        console.log('Populate', this.className, this);
-                        this.body.pane.populate(this.body.pane.children).then(() => loader.log(100));
-                    })),*/
-        'Unable to refresh ' + this.className);
+                (loader) => {
+                    console.log('Refreshing ' + this.className, this);
+                    loader.log(100);
+                }), 'Unable to refresh ' + this.className);
 	}
 	/** Closes parent menus
 	    @param {MENU} menu Menu
