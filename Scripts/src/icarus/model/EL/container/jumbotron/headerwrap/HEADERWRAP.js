@@ -21,11 +21,4 @@ export default class HEADERWRAP extends JUMBOTRON {
 		this.header.h1.icon = new GLYPHICON(this.header.h1, ICONS.PLUS);
         this.header.p = new P(this.header, new MODEL().set('innerHTML', 'Woot to the Woot'));
 	}
-	/** Perform any async actions and populate this Container
-	    @param {Array<MODEL>} children Array of elements to add to this container's body
-	    @returns {Promise<ThisType>} callback
-	*/
-	construct(children) {
-		return this.populate(children);
-	}
 }

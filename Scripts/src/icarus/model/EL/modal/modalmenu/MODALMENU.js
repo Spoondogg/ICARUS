@@ -20,10 +20,10 @@ export default class MODALMENU extends MODAL {
 		this.menu = new MENU(this.container.body.pane, new MODEL().set('name', 'menu'));
 	}
 	/** Perform any async actions and populate this Container
-	    @param {Array<MODEL>} children Array of elements to add to this container's body
+	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-	construct(children) {
-		return this.menu.populate(children);
+	construct() {
+		return this.menu.populate(this.model.children);
 	}
 }

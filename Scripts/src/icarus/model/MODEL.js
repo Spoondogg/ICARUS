@@ -13,7 +13,7 @@ export default class MODEL {
 	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), description = new ATTRIBUTES()) {
 		this.attributes = this.defaultAttributes(attributes);
 		this.data = this.defaultAttributes(data);
-		this.description = this.defaultAttributes(description);
+        this.description = this.defaultAttributes(description);
 	}
 	/** Resolves appropriate Attributes object based on input
 	    @param {string|ATTRIBUTES} attributes Attributes
@@ -101,6 +101,4 @@ export default class MODEL {
 		}
 	}
 }
-export {
-	ATTRIBUTES
-};
+export { ATTRIBUTES }

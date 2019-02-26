@@ -8,7 +8,8 @@ import { STATUS } from '../../enums/STATUS.js';
     @extends MODEL
 */
 export default class EL extends MODEL {
-	/** Constructs a generic html element
+	/** Constructs a Node representing an HTMLElement as part of a 
+        doubly linked list with a Main (Head) and a Tail (Last Child)
 	    @param {EL} node Parent Element Class
 	    @param {string} element HTML Element Tag
 	    @param {MODEL} model Model
@@ -18,13 +19,25 @@ export default class EL extends MODEL {
 		super(model.attributes);
 		this.setContainer();
         this.setMain();
+        /** Default/Given MODEL
+		    @see {model}
+		*/
         this.model = model;
+        /** Parent EL
+		    @type {EL} children 
+		*/
 		this.node = node;
 		//this.next = null;
-		this.className = this.constructor.name;
-		this.element = element;
-		this.status = STATUS.DEFAULT; // Element state changes depend on this.status 
-		this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
+        this.className = this.constructor.name;
+        /** HTML Element Tag ie: DIV 
+            @type {string} element
+        */
+        this.element = element;
+        /** State Indicator 
+            @type {number} status 
+        */
+		this.status = STATUS.DEFAULT; // 
+		//this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
@@ -46,42 +59,46 @@ export default class EL extends MODEL {
 		*/
 		this.handlers = {};
 		
-        this.make(node, model); // innerHTML
+        this.make(this.node, this.model);
 	}
-	/** Append the HTML element to the appropriate node and apply the given model and optional innerHTML
+	/** Creates an HTMLElement based on the given MODEL and appends to the given Node Element
         param {HTMLElement} el The HTML Element
 	    @param {EL} node Parent node to append to
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    @param {string} innerHTML This text will be displayed within the HTML element
-	    @returns {Promise<HTMLElement>} This element
+	    @returns {Promise<ThisType>} callback
 	*/
-    make(node, model) { // innerHTML
-        try {
+    make(node, model) {
+        return this.callback(() => {
             this.el = document.createElement(this.element);
-			if (node === document.body) {
+            if (node === document.body) {
                 node.appendChild(this.el);
-			} else {
+            } else {
                 node.el.appendChild(this.el);
-			}
-			this.merge(model);
-			this.setInnerHTML(model.innerHTML);
-			return this.el;
-		} catch (e) {
-			console.warn('Unable to make ' + this.element);
-			throw e;
-		}
-	}
-	/** Add a function to the list of callbacks for to the creator EL.create();
+            }
+            this.merge(model).then(() => this.construct());
+        }, 'Unable to make ' + this.element);
+	}	
+    /** Perform any async actions required to construct the Element
+	    @returns {Promise<ThisType>} callback
+	*/
+    construct() {
+        if (this.model) {
+            return this.populate(this.model.children).then(() => this.ifEmpty());
+        }
+        return Promise.resolve(this);
+    }
+    /** If no children supplied...
+	    @returns {Promise<ThisType>} callback
+	*/
+    ifEmpty() {
+        return Promise.resolve(this);
+    }
+    /** Add a function to the list of callbacks for to the creator EL.create();
 	    @param {string} className The Icarus Class name that this callback is meant to construct
 	    @param {Function} fn Function to call (should accept model)
 	    @returns {void}
 	*/
-    /** Construct the Element
-	    @returns {Promise<ThisType>} callback
-	*/
-    construct() {
-        return Promise.resolve(this);
-    }
 	addCallback(className, fn) {
 		/*try {
             this.callbacks[className].push(fn);
@@ -391,18 +408,22 @@ export default class EL extends MODEL {
         @param {MODEL} model A generic MODEL object
         @returns {void}
     */
-	merge(model) {
-		if (typeof model === 'object') {
-			for (let prop in model) {
-				if (prop === 'attributes') {
-					this.processAttributes(model.attributes);
-				} else {
-					this[prop] = model[prop];
-				}
-			}
-		} else {
-			console.log('EL.merge(): Given model is not a valid object');
-		}
+    merge(model) {
+        return this.callback(() => {
+            if (this.constructor.name === this.className) {
+                for (let prop in model) {
+                    if (prop === 'attributes') {
+                        this.processAttributes(model.attributes);
+                    } else if (prop === 'innerHTML') {
+                        this.setInnerHTML(model[prop]);
+                    } else {
+                        this[prop] = model[prop];
+                    }
+                }
+            } else {
+                console.warn('EL.merge(): Failed to merge ' + this.constructor.name + ' into ' + this.className);
+            }
+        });
 	}
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
@@ -411,14 +432,15 @@ export default class EL extends MODEL {
 	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
-			if (attr !== 'innerHTML') {
-				this.el.setAttribute(attr, attributes[attr]);
-			} else if (attr === 'innerHTML') {
-				this.el.innerHTML = attributes[attr];
-			}
+            if (attr !== 'innerHTML') {
+                this.el.setAttribute(attr, attributes[attr]);
+            } else if (attr === 'innerHTML') {
+                //this.el.innerHTML = attributes[attr];
+                this.setInnerHTML(attributes[attr]);
+            }
 		}
 	}
-	/** Removes all child Elements from this Element
+	/** Removes all child Elements of this Element from the DOM (Preserves this.children)
 	    @returns {ThisType} callback
 	*/
 	empty() {
@@ -445,9 +467,10 @@ export default class EL extends MODEL {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
                 try {
-                    this.el.parentNode.removeChild(this.el);
                     this.remove().then(() => {
-                        this.node.children.splice(this.node.children.indexOf(this), 1);
+                        if (this.node !== document.body) {
+                            this.node.children.splice(this.node.children.indexOf(this), 1);
+                        }
                         resolve();
                     });
 				} catch (e) {
@@ -547,27 +570,26 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} callback
 	*/
     populate(children) {
-		return new Promise((resolve, reject) => {
-			if (children) {
-				try {
-					let msg = this.className + '.populate(' + children.length + ');';
-					let main = this.getContainer().getMain();
-					main.loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
-				} catch (e) {
-					reject(e);
-				}
-			} else {
-				resolve(this);
-			}
-		});
-	}
+        return new Promise((resolve, reject) => {
+            if (children) {
+                try {
+                    let msg = this.className + '.populate(' + children.length + ');';
+                    let main = this.getContainer().getMain();
+                    main.loader.log(10, msg).then((loader) => Promise.all(children.map((c) => this.create(c))).then(() => loader.log(100).then(() => resolve(this))));
+                } catch (e) {
+                    reject(e);
+                }
+            } else {
+                resolve(this);
+            }
+        });
+    }
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
 	    @returns {ThisType} This node for chaining
 	*/
 	setInnerHTML(innerHTML = '') {
         this.el.innerHTML = innerHTML;
-        //this.innerHTML = innerHTML;
 		return this;
 	}
 	/** Scrolls page to the top of this element

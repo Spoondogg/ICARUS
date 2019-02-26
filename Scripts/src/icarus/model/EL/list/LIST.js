@@ -24,20 +24,20 @@ export default class LIST extends ITEM {
             if (this.el.children.length > 0) {
                 //console.log('EMPTYING LIST', this.children);
                 //this.empty();
-                console.log('EMPTIED ' + this.className + '[' + this.name + ']', this.className, this);
+                console.log('TODO: EMPTIED ' + this.className + '[' + this.name + ']', this.className); //this
             }
         });
         this.el.addEventListener('expand', () => {
             //this.populate(this.children);
-            const [...children] = this.children;
-            this.children.length = 0;
+            //const [...children] = this.children;
+            //this.children.length = 0;
             //this.populate(children);
-            console.log('POPULATING ' + this.className + '[' + this.name + ']', this);
-            console.log(' - CHILDREN', children);
-            children.forEach((c) => {
+            console.log('TODO: POPULATING ' + this.className + '[' + this.name + ']');// this
+            //console.log(' - CHILDREN', children);
+            /*children.forEach((c) => {
                 //this.create(c);
                 console.log(' - ' + c.className, c.model, c.children);
-            });
+            });*/
         });
 	}
 	/** Construct a generic List Item (LI) and append to this element's children
