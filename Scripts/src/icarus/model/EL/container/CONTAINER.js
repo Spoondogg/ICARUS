@@ -450,35 +450,57 @@ export default class CONTAINER extends GROUP {
             this.name = name;
 		}
 	}
-	/** An abstract load method for a CONTAINER
-        @abstract
-        @throws {AbstractMethodError} Throws an AbstractMethodError if no load method specified
-        @returns {void}
-    */
-	load() {
-		throw new AbstractMethodError('CONTAINER{' + this.className + '}.load() : Abstract method ' + this.className + '.load() not implemented.');
-	}
+	/** Loads the specified MODEL by UId into CONTAINER
+        Retrieves the MODEL from GET/{id} (if permitted)
+		then Populates accordingly
+	    @todo Prompt the user for an Id to load
+	    @todo create a simple application browser to retrieve a MAIN
+		@param {number} id App Id to load
+		@returns {MAIN} This MAIN
+	*/
+    load(id) {
+        return new Promise((resolve, reject) => {
+            try {
+				/*let returnUrl = this.url.searchParams.get('ReturnUrl');
+				if (returnUrl) {
+					returnUrl = this.url.origin + returnUrl;
+					location.href = returnUrl;
+				}*/
+                if (id >= 0) {
+                    $.getJSON(this.className + '/GET/' + id, (payload) => {
+                        if (payload.result === 1) {
+                            this.loadModel(payload.model, resolve);
+                        } else {
+                            reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
+                        }
+                    });
+                } else {
+                    console.log('Invalid Id to Load');
+                    resolve(this);
+                }
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
 	/** Loads the given MODEL into this CONTAINER
 	    @param {MODEL} model Model
 	    @param {Promise.resolve} resolve Promise resolver function
-	    @param {Promise.reject} reject Promise reject function
+	    param {Promise.reject} reject Promise reject function
 	    @returns {Promise<ThisType>} callback
 	*/
-	loadModel(model, resolve, reject) {
-		try {
-			if (model.label) {
-				document.title = model.label;
-			}
-			this.body.pane.empty().then(() => {
-				this.setId(model.id);
-				this.setLabel(model.label);
-				this.setName(model.name);
-				this.populate(model.children).then(() => resolve(this));
-			});
-		} catch (e) {
-			console.log(0, 'Unable to construct ' + this.className + '(' + this.id + ')');
-			reject(e);
-		}
+    loadModel(model, resolve) {
+        return this.callback(() => {
+            if (model.label) {
+                document.title = model.label;
+            }
+            this.body.pane.empty().then(() => {
+                this.setId(model.id);
+                this.setLabel(model.label);
+                this.setName(model.name);
+                resolve(this.populate(model.children));
+            });
+        }, 'Unable to construct ' + this.className + '(' + this.id + ')');
 	}
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
@@ -670,7 +692,13 @@ export default class CONTAINER extends GROUP {
 	*/
 	getDateCreated() {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
-	}
+    }
+    /** Retrieves the token value from the DOM Meta tags
+	    @returns {string} A request verification token
+	*/
+    getToken() {
+        return document.getElementsByTagName('meta').token.content;
+    }
 }
 export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVITEM, NAVITEMICON, STRING }
 /* eslint-enable max-lines */

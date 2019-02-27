@@ -1,6 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL } from '../container/CONTAINER.js';
-import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
+import FORMELEMENTGROUP, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../container/formelement/FORMELEMENTGROUP.js';
 /** Construct a Form Fieldset
     @class
     @extends CONTAINER
@@ -11,38 +10,7 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-		//this.addCase('FORMELEMENTGROUP', () => this.addFormElementGroup(model));		
-	}
-	/** Perform any async actions and populate this Container
-	    @param {MODEL} model Model
-	    @returns {Promise<ThisType>} callback
-	*/
-	construct(model) {
-		return this.callback(() => {
-			if (this.dataId > 0) {
-				//if (this.label) {
-				//	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
-				//}
-			}
-            if (model.children) {
-                return this.populate(model.children);
-            }
-            return this.ifEmpty();
-        });
-		/*return new Promise((resolve, reject) => {
-		    try {
-		        this.createEditableElement('legend', this.body.pane).then((legend) => $(legend.el).insertBefore(this.body.pane.el));
-		        if (this.dataId > 0) {
-		            //if (this.label) {
-		            //	this.legend = new LEGEND(this.body.pane, new MODEL(), this.data.legend);
-		            //}
-		        }
-		        this.populate(children).then(() => resolve(this));
-		    } catch (e) {
-		        reject(e);
-		    }
-		});*/
+		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);	
 	}
 	/** Constructs a Form Element Group for this Fieldset
         @todo Verify that this overrides the initial case constructor

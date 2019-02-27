@@ -280,40 +280,6 @@ export default class MAIN extends CONTAINER {
         this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
 		this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
-	/** Loads the specified app id into the Main Container
-        Receives the MAIN model from Main/Get/id (if permitted)
-		Then, sets the document title, application id and label
-		and Populates accordingly
-	    @todo Prompt the user for an Id to load
-	    @todo create a simple application browser to retrieve a MAIN
-		@param {number} id App Id to load
-		@returns {MAIN} This MAIN
-	*/
-	load(id = 1) {
-		return new Promise((resolve, reject) => {
-			try {
-				let returnUrl = this.url.searchParams.get('ReturnUrl');
-				if (returnUrl) {
-					returnUrl = this.url.origin + returnUrl;
-					location.href = returnUrl;
-				}
-				if (id >= 0) {
-					$.getJSON('MAIN/GET/' + id, (payload) => {
-						if (payload.result === 1) {
-							this.loadModel(payload.model, resolve, reject);
-						} else {
-							reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
-						}
-					});
-				} else {
-					console.log('Invalid Id to Load');
-					resolve(this);
-				}
-			} catch (e) {
-				reject(e);
-			}
-		});
-	}
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id
 	    @todo Create method to browse MAINs
@@ -426,11 +392,6 @@ export default class MAIN extends CONTAINER {
 				$.post('/Account/LogOff', {
 					'__RequestVerificationToken': this.getToken()
 				}, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
-		/*this.loader.log(99, 'Logging Out').then(() => { // loader
-            $.post('/Account/LogOff', {
-				'__RequestVerificationToken': this.getToken() //.token
-			}, this.ajaxRefreshIfSuccessful.bind(this), 'json');
-		});*/
 	}
 	/** Log into the application using the given credentials
         @param {string} email Username / Email 

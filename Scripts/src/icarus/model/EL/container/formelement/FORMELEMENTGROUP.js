@@ -67,4 +67,4 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		});
 	}
 }
-export { ATTRIBUTES, createInputModel, EL, FORMELEMENT, FORMELEMENTGROUP, MODEL }
+export { ATTRIBUTES, CONTAINER, createInputModel, EL, FORMELEMENT, FORMELEMENTGROUP, MODEL }
