@@ -15,8 +15,10 @@ export default class JUMBOTRON extends CONTAINER {
 		super(node, 'DIV', model);
 		this.addClass('jumbotron');
 	}
-	construct() {
-		return this.callback(() => {
+    construct() {
+        console.log(this.className + '.construct()');
+        return this.callback(() => {
+            console.log('JUMBOTRON callback', this);
             if (this.dataId > 0) {
                 this.screen = new DIV(this.body.pane, new MODEL('screen'));
                 this.setScreenColor();
@@ -29,7 +31,7 @@ export default class JUMBOTRON extends CONTAINER {
                 console.log('No data exists for JUMBOTRON');
                 this.navheader.el.dispatchEvent(new Expand(this));
             }
-		});
+		}, 'Unable to construct JUMBOTRON');
 	}
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage
         @returns {Promise<boolean>} Returns true on success

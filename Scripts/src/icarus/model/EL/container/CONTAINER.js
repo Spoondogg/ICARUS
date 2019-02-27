@@ -286,16 +286,20 @@ export default class CONTAINER extends GROUP {
 		return $('<div/>').html(value).text();
     }
 	/** Empties the Container Pane and reconstructs its contents based on the current model
-        @returns {void}
+        @param {MODEL} model By default, use this CONTAINER's model
+        @returns {Promise<ThisType>} callback
     */
-    refresh() {
+    refresh(model = this) { // Optionally retrieve a new MODEL
         console.log('Refresh', this);
         return this.callback(
             () => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
                 (loader) => {
                     console.log('Refreshing ' + this.className, this);
-                    loader.log(100);
-                }), 'Unable to refresh ' + this.className);
+                    this.body.pane.empty().then(
+                        () => this.loadModel(model, (result) => console.log('Loaded Model', result)).then(
+                            () => loader.log(100)));
+                }
+            ), 'Unable to refresh ' + this.className);
 	}
 	/** Closes parent menus
 	    @param {MENU} menu Menu
@@ -450,7 +454,7 @@ export default class CONTAINER extends GROUP {
             this.name = name;
 		}
 	}
-	/** Loads the specified MODEL by UId into CONTAINER
+	/** Loads the specified MODEL by UId into CONTAINER 
         Retrieves the MODEL from GET/{id} (if permitted)
 		then Populates accordingly
 	    @todo Prompt the user for an Id to load
@@ -460,12 +464,8 @@ export default class CONTAINER extends GROUP {
 	*/
     load(id) {
         return new Promise((resolve, reject) => {
+            // Consider verifying cache before retrieving
             try {
-				/*let returnUrl = this.url.searchParams.get('ReturnUrl');
-				if (returnUrl) {
-					returnUrl = this.url.origin + returnUrl;
-					location.href = returnUrl;
-				}*/
                 if (id >= 0) {
                     $.getJSON(this.className + '/GET/' + id, (payload) => {
                         if (payload.result === 1) {
@@ -483,25 +483,39 @@ export default class CONTAINER extends GROUP {
             }
         });
     }
-	/** Loads the given MODEL into this CONTAINER
+	/** Loads the given MODEL into CONTAINER.body.pane
 	    @param {MODEL} model Model
 	    @param {Promise.resolve} resolve Promise resolver function
 	    param {Promise.reject} reject Promise reject function
 	    @returns {Promise<ThisType>} callback
 	*/
     loadModel(model, resolve) {
+        console.log(this.className + '.loadModel()', model);
         return this.callback(() => {
             if (model.label) {
                 document.title = model.label;
             }
-            this.body.pane.empty().then(() => {
-                this.setId(model.id);
-                this.setLabel(model.label);
-                this.setName(model.name);
-                resolve(this.populate(model.children));
-            });
+            resolve(this.make(model));
+            /*
+            this.merge(model).then(
+                () => this.construct(model).then(
+                    () => this.body.pane.empty().then(
+                        () => resolve(this.populate(model.children)))));
+                //this.setElementAttributes(model).then(() => resolve(this.populate(model.children)));
+            */
         }, 'Unable to construct ' + this.className + '(' + this.id + ')');
-	}
+    }
+    /** Sets Id, Label and Name based on MODEL
+        @param {MODEL} model MODEL
+        @returns {Promise<ThisType>} callback
+    */
+    setElementAttributes(model) {
+        return this.callback(() => {
+            this.setId(model.id);
+            this.setLabel(model.label);
+            this.setName(model.name);
+        }, 'Unable to set ' + this.className + ' Attributes');
+    }
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
     */
