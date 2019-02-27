@@ -86,7 +86,7 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.children[0].children[0]).then(() => {
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.get()[0].get()[0]).then(() => {
 						if (payload.model.jsonResults) { // Set values based on existing 
 							JSON.parse(payload.model.jsonResults).forEach((inp) => {
 								form.el.elements[inp.name].value = inp.value;

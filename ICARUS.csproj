@@ -726,7 +726,6 @@
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\LOADER.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\loader\PROGRESSBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\modal\MODAL.js" />
-    <Content Include="Scripts\src\icarus\model\el\modal\modalmenu\MODALMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitemicon\NAVITEMICON.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEARCH.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVSEPARATOR.js" />

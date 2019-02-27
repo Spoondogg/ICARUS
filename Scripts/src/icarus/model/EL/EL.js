@@ -37,7 +37,7 @@ export default class EL extends MODEL {
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
-		this.children = model.children || [];
+        this.children = [];
 		/** A Collection of callback methods that accept a MODEL
 		    ie: this.callbacks[foo]
 		*/
@@ -145,10 +145,10 @@ export default class EL extends MODEL {
 	/** Inserts @see {this.el} as the first child of target
 	    @param {HTMLElement} target Target HTML Element
 	    @returns {ThisType} callback
-	*/
+	
 	append(target) {
 		return this.callback(() => target.insertBefore(this.el, target.firstChild));
-    }
+    }*/
     /** Dispatches the given Event to this element's siblings
         @param {Event} event Event to dispatch
         @returns {void}
@@ -193,7 +193,7 @@ export default class EL extends MODEL {
 	/** Calls the edit method for this.el on double click
 	    @todo Consider applying this method from the caller
 	    @returns {void}
-	*/
+	
 	enableEdit() {
 		try {
 			if (this.getMain().getDev()) {
@@ -202,7 +202,7 @@ export default class EL extends MODEL {
 		} catch (e) {
 			console.log('EL{' + this.className + '}.getMain() error', this);
 		}
-	}
+	}*/
     /** Used to recursively verify if the reflected Prototype class of the given node
         matches a specified value.  This can be helpful in cases where you need to 
         identify the root super class, not just the current one
@@ -272,11 +272,6 @@ export default class EL extends MODEL {
         @description This might also be recognized as this.getChildren()
 	*/
 	get(name = null, className = null) {
-		/*let results = this.children.filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
-		if (results.length === 0) {
-			console.warn(this.className + '.get(' + name + ', ' + className + ') returned 0 results');
-		}
-		return results;*/
         if (name === null && className === null) {
             return this.children;
         }
@@ -355,12 +350,6 @@ export default class EL extends MODEL {
             console.warn('Unable to retrieve next element/sibling', this, e);
         }
     }
-	/** Retrieves the token value from the DOM Meta tags
-	    @returns {string} A request verification token
-	*/
-	getToken() {
-		return document.getElementsByTagName('meta').token.content;
-	}
 	/** Attempts to call the constructor of the given MODEL
         @see https://stackoverflow.com/a/35769291/722785	    
         @param {MODEL} model MODEL
@@ -411,10 +400,7 @@ export default class EL extends MODEL {
     */
     merge(model) {
         return this.callback(() => {
-            //if (this.constructor.name === this.className) {
-            //console.log(typeof model); // 'object'
             if (typeof model === 'object') {
-                //console.log('Merging into ' + this.constructor.name, model);
                 for (let prop in model) {
                     if (typeof prop === 'string') {
                         switch (prop) {
@@ -425,8 +411,8 @@ export default class EL extends MODEL {
                                 this.setInnerHTML(model[prop]);
                                 break;
                             case 'children':
-                                //console.log(this.className + 'MERGE CHILDREN', model[prop], this.children);
-                                //this[prop] = model[prop];
+                                console.log(this.className + '.children', model[prop]);
+                                this[prop] = model[prop];
                                 break;
                             default:
                                 this[prop] = model[prop];
@@ -434,7 +420,7 @@ export default class EL extends MODEL {
                     }
                 }
             }
-        }, 'EL.merge(): Failed to merge ' + this.constructor.name + ' into ' + this.className);
+        }, 'EL.merge(): Failed to merge ' + this.constructor.name);
 	}
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
@@ -576,23 +562,12 @@ export default class EL extends MODEL {
 	hasClass(className) {
 		return $(this.el).hasClass(className);
 	}
-	/** Creates given Elements as children of this element
+	/** Creates given Elements as children of this Element
 	    @param {Array<EL>} children model.children
 	    @returns {Promise<ThisType>} callback
 	*/
     populate(children) {
-        return new Promise((resolve, reject) => {
-            if (children) {
-                try {
-                    Promise.all(children.map((c) => this.create(c))).then(() => resolve(this));
-                } catch (e) {
-                    console.warn(this.className + '.populate() Failed to populate ' + this.className, children);
-                    reject(e);
-                }
-            } else {
-                resolve(this);
-            }
-        });
+        return this.callback(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
     }
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
