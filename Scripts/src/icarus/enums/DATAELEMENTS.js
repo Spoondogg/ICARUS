@@ -71,14 +71,15 @@ export const DATAELEMENTS = {
 	FORMELEMENT: {
 		data: defaultContainerData().concat([
 			createInputModel('INPUT', 'type', 'TEXT'),
-			createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'label'),
 			createInputModel('INPUT', 'value')
 		]),
 		attributes: [
 			createInputModel('INPUT', 'type', 'TEXT'),
 			createInputModel('INPUT', 'name', 'text-input'),
 			createInputModel('INPUT', 'value', ''),
-			createInputModel('INPUT', 'placeholder')
+			createInputModel('INPUT', 'placeholder', '')
 		]
 	},
 	FORMELEMENTGROUP: {
@@ -89,19 +90,23 @@ export const DATAELEMENTS = {
 		data: [
 			createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
 			createInputModel('INPUT', 'type', 'TEXT'),
-			createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'label', 'Input Label'),
 			createInputModel('INPUT', 'value')
 		],
 		attributes: [
-			createInputModel('INPUT', 'name', 'text-input'),
-			createInputModel('INPUT', 'value')
+            createInputModel('INPUT', 'type', 'TEXT'),
+            createInputModel('INPUT', 'name', 'text-input'),
+            createInputModel('INPUT', 'value', ''),
+            createInputModel('INPUT', 'placeholder')
 		]
 	},
 	FORMTEXTAREA: {
 		data: [
 			createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
 			createInputModel('INPUT', 'type', 'TEXT'),
-			createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'name', 'Text Input'),
+            createInputModel('INPUT', 'label', 'Input Label'),
 			createInputModel('INPUT', 'value')
 		],
 		attributes: [
@@ -114,7 +119,7 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	FORMPOSTINPUT: {
-		data: [],
+        data: [createInputModel('INPUT', 'label', 'Input Label')],
 		attributes: []
 	},
 	INDEX: {
@@ -129,10 +134,10 @@ export const DATAELEMENTS = {
 		data: [
 			createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
 			createInputModel('INPUT', 'type', 'TEXT'),
-			createInputModel('INPUT', 'name', 'Text Input'),
-			createInputModel('INPUT', 'value', 'Text Value')
+			createInputModel('INPUT', 'name'),
+			createInputModel('INPUT', 'value')
 		],
-		attributes: []
+        attributes: [createInputModel('INPUT', 'placeholder')]
 	},
 	JUMBOTRON: {
 		data: defaultContainerData().concat([
@@ -165,8 +170,11 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	SECTION: {
-		data: [createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')],
-		attributes: []
+        data: [
+            createInputModel('INPUT', 'header'),
+            createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')
+        ],
+        attributes: [createInputModel('INPUT', 'name')]
 	},
 	SIDEBAR: {
 		data: [],
