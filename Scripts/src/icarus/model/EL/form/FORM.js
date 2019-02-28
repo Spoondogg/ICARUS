@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, {	ATTRIBUTES,	AbstractMethodError, EL, ICONS,	INPUTTYPES,	MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
@@ -23,10 +23,10 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model The object model
 	*/
 	constructor(node, model) {
-        super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
-        this.addClass('form');
+		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
+		this.addClass('form');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
-		this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
+		//this.createEditableElement('header', this.body);//.then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
@@ -53,16 +53,24 @@ export default class FORM extends CONTAINER {
 		//this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
 		*/
 	}
-	/** Sets the focused container to this FORM to listen for appropriate key bindings
-	    @param {string} eventName Name of event
-	    @returns {void}
-	*/
-	setFocus(eventName) {
-		try {
-			this.getContainer().getMain().activeContainer = eventName === 'focusin' ? this : null;
-		} catch (e) {
-			console.log('Unable to modify focus for this form', this);
-		}
+	construct(model) {
+		console.log(this.className + '.construct()');
+		return this.callback(() => {
+			console.log(this.className + ' callback', this);
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
+			} else {
+				console.log('No data exists for ' + this.className);
+				this.navheader.el.dispatchEvent(new Expand(this));
+			}
+			if (model) {
+				if (model.children) {
+					return this.populate(model.children).then(
+						() => this.body.el.dispatchEvent(new Expand(this)));
+				}
+			}
+			return this.ifEmpty();
+		}, 'Unable to construct ' + this.className);
 	}
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
@@ -87,7 +95,7 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.get()[0].get()[0]).then(() => {
+					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.get()[0].get()[0]).then(() => {
 						if (payload.model.jsonResults) { // Set values based on existing 
 							JSON.parse(payload.model.jsonResults).forEach((inp) => {
 								form.el.elements[inp.name].value = inp.value;
@@ -177,7 +185,7 @@ export default class FORM extends CONTAINER {
 							break;
 					}
 				}
-                target.children.push(inp);
+				target.children.push(inp);
 				resolve(inp);
 			} catch (e) {
 				reject(e);
@@ -269,7 +277,7 @@ export default class FORM extends CONTAINER {
 	    @returns {boolean} Returns true if successful
 	*/
 	lock() {
-        this.children.forEach((i) => {
+		this.children.forEach((i) => {
 			try {
 				switch (i.className) {
 					case 'FIELDSET':
@@ -294,7 +302,7 @@ export default class FORM extends CONTAINER {
 	*/
 	unlock() {
 		return new Promise((resolve, reject) => {
-            this.children.forEach((i) => {
+			this.children.forEach((i) => {
 				try {
 					switch (i.className) {
 						case 'FIELDSET':
@@ -341,6 +349,17 @@ export default class FORM extends CONTAINER {
 			throw e;
 		}
 	}
+	/** Sets the focused container to this FORM to listen for appropriate key bindings
+	    @param {string} eventName Name of event
+	    @returns {void}
+	*/
+	setFocus(eventName) {
+		try {
+			this.getContainer().getMain().activeContainer = eventName === 'focusin' ? this : null;
+		} catch (e) {
+			console.log('Unable to modify focus for this form', this);
+		}
+	}
 	/** Flags the given element as invalid 
 		@param {any} element The form element
 	    @returns {boolean} Returns false;
@@ -366,23 +385,23 @@ export default class FORM extends CONTAINER {
 	    @param {HTMLElement} element The Input element
 	    @returns {boolean} True if valid
 	*/
-    validateString(element) {
-        let isValid = true;
-        switch (element.tagName) {
-            case 'INPUT':
-                if (element.checkValidity()) {
-                    isValid = element.value === '' ? this.setInvalid(element) : this.setValid(element);
-                }
-                break;
-            case 'TEXTAREA':
-                if (element.checkValidity()) {
-                    isValid = element.text === '' ? this.setInvalid(element) : this.setValid(element);
-                }
-                break;
-            default:
-                console.warn('Failed to validate ' + element.tagName);
-                this.setInvalid(element);
-        }
+	validateString(element) {
+		let isValid = true;
+		switch (element.tagName) {
+			case 'INPUT':
+				if (element.checkValidity()) {
+					isValid = element.value === '' ? this.setInvalid(element) : this.setValid(element);
+				}
+				break;
+			case 'TEXTAREA':
+				if (element.checkValidity()) {
+					isValid = element.text === '' ? this.setInvalid(element) : this.setValid(element);
+				}
+				break;
+			default:
+				console.warn('Failed to validate ' + element.tagName);
+				this.setInvalid(element);
+		}
 		return isValid;
 	}
 	/** Simple number validation
@@ -563,5 +582,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT,	FORMPOST, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */

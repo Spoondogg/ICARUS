@@ -58,11 +58,12 @@ export const DATAELEMENTS = {
 	},
 	FIELDSET: {
 		data: [createInputModel('INPUT', 'legend')],
-		attributes: []
+		attributes: [createInputModel('INPUT', 'name', 'text-input')]
 	},
 	FORM: {
 		data: [createInputModel('INPUT', 'header')],
 		attributes: [
+			createInputModel('INPUT', 'name', 'text-input'),
 			createInputModel('INPUT', 'method', 'POST'),
 			createInputModel('INPUT', 'action', 'FORM/SUBMIT')
 		]
@@ -82,7 +83,7 @@ export const DATAELEMENTS = {
 	},
 	FORMELEMENTGROUP: {
 		data: [createInputModel('INPUT', 'header')],
-		attributes: []
+		attributes: [createInputModel('INPUT', 'name', 'text-input')]
 	},
 	FORMINPUT: {
 		data: [
@@ -133,8 +134,8 @@ export const DATAELEMENTS = {
 		],
 		attributes: []
 	},
-    JUMBOTRON: {
-        data: defaultContainerData().concat([
+	JUMBOTRON: {
+		data: defaultContainerData().concat([
 			createInputModel('INPUT', 'header', 'JT Header'),
 			createInputModel('TEXTAREA', 'p', 'JT Textarea'),
 			createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
