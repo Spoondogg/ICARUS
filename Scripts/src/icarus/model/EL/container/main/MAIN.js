@@ -17,7 +17,6 @@ export default class MAIN extends CONTAINER {
 	    @param {MODEL} model APP model
     */
 	constructor(model) {
-		document.title = model.label;
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
 		this.addClass('main');
 		this.body.pane.addClass('pane-tall');
@@ -38,7 +37,14 @@ export default class MAIN extends CONTAINER {
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.watchMousePosition();
 		this.expandMain();
-	}
+    }
+    constructElements() {
+        console.log('MAIN.constructElements()', this);
+        if (this.dataId > 0) {
+            this.label = this.data.title;
+        }
+        document.title = this.label; // model.label
+    }
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
 	    @returns {void}
@@ -265,16 +271,15 @@ export default class MAIN extends CONTAINER {
 	    as a Sidebar, Modal or an EDIT pane
 	    @returns {void}
 	*/
-	focusBody() {
-		//console.log('focusbody');
-		let ev = new Deactivate(this);
-		//this.sidebar.el.dispatchEvent(ev);
-		//this.btnSidebar.el.dispatchEvent(ev);
-		this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
-		this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
-		//this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
-		this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
-		this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+    focusBody() {
+        return this.callback(() => {
+            let ev = new Deactivate(this);
+            this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
+            this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
+            //this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
+            this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
+            this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+        }, 'Unable to restore focus to MAIN');
 	}
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id

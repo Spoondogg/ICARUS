@@ -161,7 +161,7 @@ export const DATAELEMENTS = {
 	},
 	MAIN: {
 		containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
-		data: [],
+        data: [createInputModel('INPUT', 'title', 'MAIN')],
 		attributes: [],
 		description: []
 	},
@@ -172,7 +172,7 @@ export const DATAELEMENTS = {
 	SECTION: {
         data: [
             createInputModel('INPUT', 'header'),
-            createInputModel('INPUT', 'collapsed', 'collapsed', '-1', 'NUMBER')
+            createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'NUMBER')
         ],
         attributes: [createInputModel('INPUT', 'name')]
 	},

@@ -52,26 +52,15 @@ export default class FORM extends CONTAINER {
 		this.btnPost.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 		//this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
 		*/
-	}
-	construct(model) {
-		console.log(this.className + '.construct()');
-		return this.callback(() => {
-			console.log(this.className + ' callback', this);
-			if (this.dataId > 0) {
-				this.createEditableElement('header', this.body.pane);
-			} else {
-				console.log('No data exists for ' + this.className);
-				this.navheader.el.dispatchEvent(new Expand(this));
-			}
-			if (model) {
-				if (model.children) {
-					return this.populate(model.children).then(
-						() => this.body.el.dispatchEvent(new Expand(this)));
-				}
-			}
-			return this.ifEmpty();
-		}, 'Unable to construct ' + this.className);
-	}
+    }
+    constructElements() {
+        if (this.dataId > 0) {
+            this.createEditableElement('header', this.body.pane);
+        } else {
+            console.log('No data exists for ' + this.className);
+            this.navheader.el.dispatchEvent(new Expand(this));
+        }
+    }
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element

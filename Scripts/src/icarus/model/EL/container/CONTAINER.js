@@ -13,6 +13,7 @@ import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
+import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
 import Movable from '../../../interface/Movable.js';
 import P from '../p/P.js';
@@ -24,7 +25,7 @@ import STRING from '../../../STRING.js';
     @extends GROUP
 */
 export default class CONTAINER extends GROUP {
-	/* eslint-disable max-statements */
+	// eslint-disable max-statements */
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
@@ -36,8 +37,11 @@ export default class CONTAINER extends GROUP {
 		this.implement(new Movable(this));
 		this.setId(model.id).addClass('container');
 		['data', 'attributes', 'description'].map((e) => this.createElementCollection(e, model));
-		this.label = this.required(model.label || element);
-		this.name = this.required(model.name || element);
+        /** @type {string} */
+        this.label = this.required(model.label || element);
+        /** @type {string} */
+        this.name = this.required(model.name || element);
+        /** @type {number} */
 		this.shared = this.required(model.shared || 1);
 		this.status = this.required(model.status || STATUS.DEFAULT);
 		this.subsections = this.required(model.subsections ? model.subsections.split(',') : '0'); // Delimited list of child ids
@@ -47,44 +51,42 @@ export default class CONTAINER extends GROUP {
         this.body = new COLLAPSIBLE(this, new MODEL('body'));
         // Conside this as a method instead of for ALL Containers
         this.body.implement(new Clickable(this.body));
-        //this.body.el.addEventListener('select', () => console.log('Selected ' + this.className, this));
-        //this.body.el.addEventListener('deselect', () => console.log('Deselected ' + this.className, this));
-        this.body.el.addEventListener('select', () => {
-            console.log('Selected ' + this.className, this);
-            this.navheader.expand();
-            this.getMain().focusBody();
-        });
-        this.body.el.addEventListener('deselect', () => {
-            console.log('Deselected ' + this.className, this);
-            this.navheader.collapse();
-        });
-        //this.body.el.addEventListener('activate', () => console.log('Activated ' + this.className, this));
-        //this.body.el.addEventListener('deactivate', () => console.log('Deactivated ' + this.className, this));
-        this.body.el.addEventListener('activate', () => {
-            try {
-                console.log('Activated ' + this.className, this);
-                //this.navheader.expand();
-                this.getMain().focusBody();
-            } catch (e) {
-                //console.warn('Unable to focus body', this);
-            }
-        });
-        this.body.el.addEventListener('deactivate', () => {
-            try {
-                console.log('Deactivated ' + this.className, this);
-                //this.navheader.expand();
-                this.getMain().focusBody();
-            } catch (e) {
-                //console.warn('Unable to focus body', this);
-            }
-        });
+        this.addEvents();
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
         this.setDefaultVisibility(model);
 	}
-	/* eslint-enable max-statements */
-	/** Creates the Id and Collection attributes for the given name
+	// eslint-enable max-statements */
+    /** Generic construct method for EL/CONTAINER async actions and population
+        @param {MODEL} model Model
+        @returns {Promise<ThisType>} callback
+    */
+    construct(model) {
+        console.log(this.className + '.construct()');
+        return this.callback(() => {
+            console.log(this.className + ' callback', this);
+            this.constructElements();
+            // Populate if model exists
+            if (model) {
+                if (model.children) {
+                    return this.populate(model.children).then(
+                        () => this.ifEmpty().then(
+                            () => this.body.el.dispatchEvent(new Expand(this))));
+                }
+            }
+            return this.ifEmpty();
+        }, 'Unable to construct ' + this.className);
+    }
+    /** Performs async actions and constructs initial elements for this Container
+        Called during the 'construct' phase of EL/CONTAINER building
+        @abstract
+	    @returns {Promise<DIALOG>} A Save PROMPT
+	*/
+	constructElements() {
+		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
+	}
+    /** Creates the Id and Collection attributes for the given name
 	    @param {string} name ie: data, attributes, description
 	    @param {MODEL} model Container Model
 	    @returns {void}
@@ -121,7 +123,40 @@ export default class CONTAINER extends GROUP {
 				}
 			}
 		});
-	}
+    }
+    addEvents() {
+        //this.body.el.addEventListener('select', () => console.log('Selected ' + this.className, this));
+        //this.body.el.addEventListener('deselect', () => console.log('Deselected ' + this.className, this));
+        this.body.el.addEventListener('select', () => {
+            console.log('Selected ' + this.className, this);
+            this.navheader.expand();
+            this.getMain().focusBody();
+        });
+        this.body.el.addEventListener('deselect', () => {
+            console.log('Deselected ' + this.className, this);
+            this.navheader.collapse();
+        });
+        //this.body.el.addEventListener('activate', () => console.log('Activated ' + this.className, this));
+        //this.body.el.addEventListener('deactivate', () => console.log('Deactivated ' + this.className, this));
+        this.body.el.addEventListener('activate', () => {
+            try {
+                console.log('Activated ' + this.className, this);
+                //this.navheader.expand();
+                this.getMain().focusBody();
+            } catch (e) {
+                //console.warn('Unable to focus body', this);
+            }
+        });
+        this.body.el.addEventListener('deactivate', () => {
+            try {
+                console.log('Deactivated ' + this.className, this);
+                //this.navheader.expand();
+                this.getMain().focusBody();
+            } catch (e) {
+                //console.warn('Unable to focus body', this);
+            }
+        });
+    }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
         @param {string} name The Element to create,
@@ -141,7 +176,10 @@ export default class CONTAINER extends GROUP {
 							break;
 						case 'legend':
 							this[name] = new LEGEND(node, new MODEL().set('innerHTML', this.data[name]));
-							break;
+                            break;
+                        case 'label':
+                            this[name] = new LABEL(node, new MODEL().set('innerHTML', this.data[name]));
+                            break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
 					}
@@ -351,7 +389,7 @@ export default class CONTAINER extends GROUP {
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
 			items.UP.el.onclick = () => this.up();
 			items.DOWN.el.onclick = () => this.down();
-			items.REFRESH.el.onclick = () => this.refresh();
+			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
 			items.REMOVE.el.onclick = () => this.remove();
 			items.DELETE.el.onclick = () => this.disable();
 			items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();

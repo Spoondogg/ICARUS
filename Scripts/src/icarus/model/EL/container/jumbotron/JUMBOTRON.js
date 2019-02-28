@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, Expand, MODEL } from '../CONTAINER.js';
+import CONTAINER, { Activate, ATTRIBUTES, EL, Expand, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -15,22 +15,24 @@ export default class JUMBOTRON extends CONTAINER {
 		super(node, 'DIV', model);
 		this.addClass('jumbotron');
 	}
-	construct() {
-		console.log(this.className + '.construct()');
-		return this.callback(() => {
-			console.log('JUMBOTRON callback', this);
-			if (this.dataId > 0) {
-				this.screen = new DIV(this.body.pane, new MODEL('screen'));
-				this.setScreenColor();
-				this.createEditableElement('header', this.screen);
-				this.createEditableElement('p', this.screen);
-				this.loadBgImage();
-				this.setBgColor();
-				this.body.el.dispatchEvent(new Expand(this));
-			} else {
-				console.log('No data exists for JUMBOTRON');
-				this.navheader.el.dispatchEvent(new Expand(this));
-			}
+    construct() {
+        console.log(this.className + '.construct()');
+        return this.callback(() => {
+            console.log('JUMBOTRON callback', this);
+            if (this.dataId > 0) {
+                this.screen = new DIV(this.body.pane, new MODEL('screen'));
+                this.setScreenColor();
+                this.createEditableElement('header', this.screen);
+                this.createEditableElement('p', this.screen);
+                this.loadBgImage();
+                this.setBgColor();
+                //this.body.el.dispatchEvent(new Expand(this));
+                let [tab] = this.navheader.tabs.get(null, 'NAVITEMICON');
+                tab.el.dispatchEvent(new Activate(tab));
+            } else {
+                console.log('No data exists for JUMBOTRON');
+                this.navheader.el.dispatchEvent(new Expand(this));
+            }
 		}, 'Unable to construct JUMBOTRON');
 	}
 	/** Attempt to retrieve a background image if one is specified in this.data.bgimage

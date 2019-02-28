@@ -20,26 +20,15 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		this.implement(new Hideable(this));
 		this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
 		['FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA' //'FORMELEMENT', 
-	}
-	construct(model) {
-		console.log(this.className + '.construct()');
-		return this.callback(() => {
-			console.log(this.className + ' callback', this);
-			if (this.dataId > 0) {
-				this.createEditableElement('header', this.body.pane);
-			} else {
-				console.log('No data exists for ' + this.className);
-				this.navheader.el.dispatchEvent(new Expand(this));
-			}
-			if (model) {
-				if (model.children) {
-					return this.populate(model.children).then(
-						() => this.body.el.dispatchEvent(new Expand(this)));
-				}
-			}
-			return this.ifEmpty();
-		}, 'Unable to construct ' + this.className);
-	}
+    }
+    constructElements() {
+        if (this.dataId > 0) {
+            this.createEditableElement('header', this.body.pane);
+        } else {
+            console.log('No data exists for ' + this.className);
+            this.navheader.el.dispatchEvent(new Expand(this));
+        }
+    }
 	/** Adds the given array of FORMELEMENT(s) to this group
 	    @param {Array<FORMELEMENT>} inputs A list of inputs
 	    @returns {ThisType} Returns this FORMELEMENTGROUP

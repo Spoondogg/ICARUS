@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, Expand, INPUTTYPES, LABEL, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -15,23 +15,34 @@ export default class FORMINPUT extends FORMELEMENT {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
-			class: 'form-control',
-			type: model.attributes.type || 'TEXT', // || this.data.type
-			list: model.attributes.name + '-options',
-			name: model.attributes.name,
-			value: model.attributes.value || '',
-			placeholder: model.attributes.placeholder || ''
-		})));
-		this.createInput();
-	}
-	/** Creates an INPUT Element
+    }
+    constructElements() {
+        console.log(this.className + '.constructElements()', this);
+        if (this.dataId > 0) {
+            this.createEditableElement('label', this.body.pane);
+        } else {
+            this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+            console.log('No data exists for ' + this.className);
+            //this.navheader.el.dispatchEvent(new Expand(this));
+        }
+
+        this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+            class: 'form-control',
+            type: this.attributes.type || 'TEXT', // || this.data.type
+            list: this.attributes.name + '-options',
+            name: this.attributes.name,
+            value: this.attributes.value || '',
+            placeholder: this.attributes.placeholder || ''
+        })));
+        this.configureInput();
+    }
+	/** Configures the INPUT Element
         @returns {INPUT} An INPUT EL
         @todo: This should use a factory constructor pattern to create specific input types
         @todo file, text, number, email, phone (html5 inputs) 
         @todo This should use a factory constructor pattern to create specific input types
     */
-	createInput() {
+	configureInput() {
 		switch (this.attributes.type) {
 			case 'HIDDEN':
 				this.body.collapse();

@@ -1247,45 +1247,36 @@ $z-bottom: -1;
         }
 
         &.fieldset {
-            .body {
-                .pane {
-                    legend {
+            > .body {
+                > .pane {
+                    > legend:first-of-type {
                         background-color: $color-blue;
                         border-bottom: 4px solid $color-blue-deep;
                         color: $color-white;
-                        font-weight: bold;
-                        padding-left: .5em;
-                        padding-right: .5em;
                     }
                 }
             }
         }
 
         &.form {
-            .body {
-                .pane {
-                    header {
+            > .body {
+                > .pane {
+                    > header:first-of-type {
                         background-color: $color-grey;
                         border-bottom: 4px solid $color-grey-light;
                         color: $color-white;
-                        font-weight: bold;
-                        padding-left: .5em;
-                        padding-right: .5em;
                     }
                 }
             }
         }
 
         &.form-element-group {
-            .body {
-                .pane {
-                    header {
+            > .body {
+                > .pane {
+                    > header:first-of-type {
                         background-color: $color-grey-light;
                         border-bottom: 4px solid $color-grey-lighter;
                         color: $color-white;
-                        font-weight: bold;
-                        padding-left: .5em;
-                        padding-right: .5em;
                     }
                 }
             }
@@ -1541,6 +1532,18 @@ $z-bottom: -1;
             }
         }
 
+        &.section {
+            > .body {
+                > .pane {
+                    > header:first-of-type {
+                        background-color: $color-red;
+                        border-bottom: 4px solid $color-red-deep;
+                        color: $color-white;
+                    }
+                }
+            }
+        }
+
         > .body {
             background-color: $color-light;
             box-sizing: border-box;
@@ -1551,6 +1554,12 @@ $z-bottom: -1;
                 @include transition($transition-default);
                 min-height: $navbar-height;
                 width: 100%;
+
+                > header:first-of-type {
+                    font-weight: bold;
+                    padding-left: .5em;
+                    padding-right: .5em;
+                }
             }
         }
     }

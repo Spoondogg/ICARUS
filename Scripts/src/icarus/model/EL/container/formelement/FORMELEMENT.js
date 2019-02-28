@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, Expand, INPUTTYPES, MODEL } from '../CONTAINER.js';
 import Hideable from '../../../../interface/Hideable.js';
 import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
@@ -14,11 +14,21 @@ export default class FORMELEMENT extends CONTAINER {
         @param {MODEL} model the data model
     */
 	constructor(node, element, model) {
-		super(node, 'DIV', model);
+        super(node, 'DIV', model);
+        this.element = element;
 		this.addClass('form-element');
 		this.implement(new Hideable(this));
-		this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', model.label || element));
-	}
+    }
+    constructElements() {
+        console.log(this.className + '.constructElements()', this);
+        if (this.dataId > 0) {
+            this.createEditableElement('label', this.body.pane);
+        } else {
+            this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+            console.log('No data exists for ' + this.className);
+            this.navheader.el.dispatchEvent(new Expand(this));
+        }
+    }
 	/** If no children supplied...
 	    @returns {Promise<ThisType>} callback
 	*/
@@ -26,4 +36,4 @@ export default class FORMELEMENT extends CONTAINER {
 		return Promise.resolve(this);
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL }
+export { ATTRIBUTES, CONTAINER, EL, Expand, INPUTTYPES, LABEL, MODEL }

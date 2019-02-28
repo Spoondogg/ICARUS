@@ -15,8 +15,11 @@ export default class INDEX extends BANNER {
 		super(node, model);
 		this.addClass('index');
 		this.addContainersMenu();
-		this.navheader.expand();
-	}
+		//this.navheader.expand();
+    }
+    constructElements() {
+        console.log(this.className + '.constructElements()');
+    }
 	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
