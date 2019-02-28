@@ -71,8 +71,8 @@ export default class CONTAINER extends GROUP {
             if (model) {
                 if (model.children) {
                     return this.populate(model.children).then(
-                        () => this.ifEmpty().then(
-                            () => this.body.el.dispatchEvent(new Expand(this))));
+                        //() => this.ifEmpty().then(
+                            () => this.body.el.dispatchEvent(new Expand(this)));
                 }
             }
             return this.ifEmpty();
@@ -390,7 +390,7 @@ export default class CONTAINER extends GROUP {
 			items.UP.el.onclick = () => this.up();
 			items.DOWN.el.onclick = () => this.down();
 			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
-			items.REMOVE.el.onclick = () => this.remove();
+            items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
 			items.DELETE.el.onclick = () => this.disable();
 			items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
 		});
@@ -638,7 +638,7 @@ export default class CONTAINER extends GROUP {
         Optionally, this should also delete the object from the database
         @returns {Promise} A promise to remove the element from the DOM
     */
-	remove() {
+	removeDialog() {
 		return new Promise((resolve, reject) => {
 			try {
 				let dialog = new DIALOG(new MODEL().set({
@@ -647,7 +647,8 @@ export default class CONTAINER extends GROUP {
 					caller: this.getContainer() //.getMain()
 				}));
 				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.className, ICONS.REMOVE).el.onclick = () => {
-					this.getLoader().log(50, 'Remove', true).then(() => { //loader
+                    this.getLoader().log(50, 'Remove', true).then(() => { //loader
+                        console.log('Removing...');
 						this.destroy().then(() => {
 							try {
 								this.container.save(true).then(() => {
