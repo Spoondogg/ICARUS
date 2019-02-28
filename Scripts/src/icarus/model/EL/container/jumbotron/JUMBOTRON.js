@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, ATTRIBUTES, EL, Expand, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, Activate, EL, Expand, MODEL } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -16,9 +16,9 @@ export default class JUMBOTRON extends CONTAINER {
 		this.addClass('jumbotron');
 	}
     construct() {
-        console.log(this.className + '.construct()');
+        //console.log(this.className + '.construct()');
         return this.callback(() => {
-            console.log('JUMBOTRON callback', this);
+            //console.log('JUMBOTRON callback', this);
             if (this.dataId > 0) {
                 this.screen = new DIV(this.body.pane, new MODEL('screen'));
                 this.setScreenColor();
@@ -26,7 +26,6 @@ export default class JUMBOTRON extends CONTAINER {
                 this.createEditableElement('p', this.screen);
                 this.loadBgImage();
                 this.setBgColor();
-                //this.body.el.dispatchEvent(new Expand(this));
                 let [tab] = this.navheader.tabs.get(null, 'NAVITEMICON');
                 tab.el.dispatchEvent(new Activate(tab));
             } else {

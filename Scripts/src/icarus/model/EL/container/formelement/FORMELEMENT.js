@@ -20,7 +20,7 @@ export default class FORMELEMENT extends CONTAINER {
 		this.implement(new Hideable(this));
     }
     constructElements() {
-        console.log(this.className + '.constructElements()', this);
+        //console.log(this.className + '.constructElements()', this);
         if (this.dataId > 0) {
             this.createEditableElement('label', this.body.pane);
         } else {

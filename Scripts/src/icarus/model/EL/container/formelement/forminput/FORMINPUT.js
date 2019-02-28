@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, Expand, INPUTTYPES, LABEL, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, LABEL, MODEL } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -17,7 +17,7 @@ export default class FORMINPUT extends FORMELEMENT {
 		super(node, 'DIV', model);
     }
     constructElements() {
-        console.log(this.className + '.constructElements()', this);
+        //console.log(this.className + '.constructElements()', this);
         if (this.dataId > 0) {
             this.createEditableElement('label', this.body.pane);
         } else {
