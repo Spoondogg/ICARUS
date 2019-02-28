@@ -19,10 +19,10 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		document.title = model.label;
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
-        this.addClass('main');
-        this.body.pane.addClass('pane-tall');
-        this.navheader.setAttribute('draggable', false);
-        this.addNavOptions();
+		this.addClass('main');
+		this.body.pane.addClass('pane-tall');
+		this.navheader.setAttribute('draggable', false);
+		this.addNavOptions();
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -36,8 +36,8 @@ export default class MAIN extends CONTAINER {
 		// CRUD
 		this.save = this.factory.save;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-        this.watchMousePosition();
-        this.expandMain();
+		this.watchMousePosition();
+		this.expandMain();
 	}
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
@@ -106,14 +106,14 @@ export default class MAIN extends CONTAINER {
 		this.mouse.yPct = (this.mouse.y / this.mouse.h).toFixed(2) * 100;
 		//console.log(this.mouse);
 	}
-    /** Fires expand event for header, body and footer of Container
-        @returns {void}
-    */
-    expandMain() {
-        this.navheader.el.dispatchEvent(new Expand(this.navheader));
-        this.body.el.dispatchEvent(new Expand(this.body));
-        this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
-    }
+	/** Fires expand event for header, body and footer of Container
+	    @returns {void}
+	*/
+	expandMain() {
+		this.navheader.el.dispatchEvent(new Expand(this.navheader));
+		this.body.el.dispatchEvent(new Expand(this.body));
+		this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
+	}
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -137,37 +137,33 @@ export default class MAIN extends CONTAINER {
 	*/
 	navigateForward() {
 		console.log('TODO: Forward');
-    }
+	}
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} callback
 	*/
 	addNavOptions() {
 		return this.callback(() => {
 			// LEFT ALIGN
-
-            // Document Map for quick navigation and selection
-            let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-            $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
-
-            // History / Prev / Back Navigation
-            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
-            //btnPrev.tab.el.onclick = () => this.navigateBack();
-            $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
-
+			// Document Map for quick navigation and selection
+			let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+			$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
+			// History / Prev / Back Navigation
+			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
+			//btnPrev.tab.el.onclick = () => this.navigateBack();
+			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
-            let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-            let usermenu = new USERMENU(userBar.element);
-            usermenu.el.dispatchEvent(new Expand());
-            this.navheader.addTabbableElement(userBar.tab, userBar.element);
-            /*if (this.getUser() === 'Guest') {
-                usermenu.tab.el.addEventListener('activate', () => this.login(usermenu.tab));
-            } else {
-                this.navheader.addTabbableElement(usermenu.tab, usermenu.element);
-            }*/
-
+			let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
+			let usermenu = new USERMENU(userBar.element);
+			usermenu.el.dispatchEvent(new Expand());
+			this.navheader.addTabbableElement(userBar.tab, userBar.element);
+			/*if (this.getUser() === 'Guest') {
+			    usermenu.tab.el.addEventListener('activate', () => this.login(usermenu.tab));
+			} else {
+			    this.navheader.addTabbableElement(usermenu.tab, usermenu.element);
+			}*/
 			this.addDefaultMenuItems();
 		});
-    }
+	}
 	/** Returns the MAIN LOADER 
 	    @returns {LOADER} A LOADER
 	*/
@@ -191,16 +187,16 @@ export default class MAIN extends CONTAINER {
 	/** Adds the default User, Crud and Dom menus to this Container
 	    @returns {void}
 	*/
-    addDefaultMenuItems() {
-        let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU');
-        let domMenu = optionsMenu[0].get('DOM', 'MENU');
+	addDefaultMenuItems() {
+		let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU');
+		let domMenu = optionsMenu[0].get('DOM', 'MENU');
 		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
 		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
 		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
 		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-        let crudMenu = optionsMenu[0].get('CRUD', 'MENU');
+		let crudMenu = optionsMenu[0].get('CRUD', 'MENU');
 		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
 	}
 	/** Requests a new {@link MAIN} from the server and redirects to that page
@@ -228,7 +224,7 @@ export default class MAIN extends CONTAINER {
 									caller: this,
 									container: this
 								})).createForm().then((form) => {
-                                    form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
+									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
@@ -277,7 +273,7 @@ export default class MAIN extends CONTAINER {
 		this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
 		this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
 		//this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
-        this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
+		this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
 		this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 	}
 	/** Allows the user to open a MAIN 
@@ -294,13 +290,13 @@ export default class MAIN extends CONTAINER {
 	*/
 	getId() {
 		return this.id;
-    }
-    /** Override CONTAINER.ifEmpty()
+	}
+	/** Override CONTAINER.ifEmpty()
 	    @returns {Promise<ThisType>} callback
 	*/
-    ifEmpty() {
-        return Promise.resolve(this);
-    }
+	ifEmpty() {
+		return Promise.resolve(this);
+	}
 	/** Gets the container (if exists) and sets it
 	    @returns {void}
 	*/
@@ -416,7 +412,7 @@ export default class MAIN extends CONTAINER {
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
 				form.addClass('register');
-                form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
+				form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
@@ -429,16 +425,16 @@ export default class MAIN extends CONTAINER {
 	/** Swipe Up Event
 	    @returns {void}
 	*/
-    swipeUp() {
-        console.log('MAIN.swipeUp()');
+	swipeUp() {
+		console.log('MAIN.swipeUp()');
 		this.navheader.collapse();
 		document.body.classList.add('compact');
 	}
 	/** Swipe Down Event
 	    @returns {void}
 	*/
-    swipeDown() {
-        console.log('MAIN.swipeDown()');
+	swipeDown() {
+		console.log('MAIN.swipeDown()');
 		this.navheader.expand();
 		document.body.classList.remove('compact');
 	}

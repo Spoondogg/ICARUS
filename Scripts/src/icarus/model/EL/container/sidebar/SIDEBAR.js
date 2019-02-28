@@ -15,37 +15,36 @@ export default class SIDEBAR extends EL {
 	*/
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model);
-        this.addClass('sidebar');
-        this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
-        this.implement(new Switchable(this));
-        this.align = model.align || 'left';
-        if (this.align === 'left') {
-            this.swipeLeft = () => {
-                //this.deactivate();
-                this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
-            }
-        } else {
-            this.swipeRight = () => {
-                //this.deactivate();
-                this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
-            }
-        }
-        this.addClass(this.align);
-        // Override activate/deactivate for custom animation timing
-        this.activate = () => {
-            this.removeClass('hidden');
-            setTimeout(() => {
-                this.addClass('active');
-                this.getMain().body.pane.addClass('focus-' + this.align);
-            }, 150);
-        }
-        this.deactivate = () => {
-            this.getMain().body.pane.removeClass('focus-' + this.align);
-            this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
-        }
-        // Default state
-        this.deactivate();
-    }
-    
+		this.addClass('sidebar');
+		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
+		this.implement(new Switchable(this));
+		this.align = model.align || 'left';
+		if (this.align === 'left') {
+			this.swipeLeft = () => {
+				//this.deactivate();
+				this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
+			}
+		} else {
+			this.swipeRight = () => {
+				//this.deactivate();
+				this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
+			}
+		}
+		this.addClass(this.align);
+		// Override activate/deactivate for custom animation timing
+		this.activate = () => {
+			this.removeClass('hidden');
+			setTimeout(() => {
+				this.addClass('active');
+				this.getMain().body.pane.addClass('focus-' + this.align);
+			}, 150);
+		}
+		this.deactivate = () => {
+			this.getMain().body.pane.removeClass('focus-' + this.align);
+			this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
+		}
+		// Default state
+		this.deactivate();
+	}
 }
 export { MODEL }
