@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, EL, Expand, MODEL, createInputModel } from '../CONTAINER.js';
 import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
@@ -16,10 +16,29 @@ export default class FORMELEMENTGROUP extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-        this.addClass('form-element-group');
-        this.implement(new Hideable(this));
-        this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
-		['FORMELEMENT', 'FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA'
+		this.addClass('form-element-group');
+		this.implement(new Hideable(this));
+		this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
+		['FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA' //'FORMELEMENT', 
+	}
+	construct(model) {
+		console.log(this.className + '.construct()');
+		return this.callback(() => {
+			console.log(this.className + ' callback', this);
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
+			} else {
+				console.log('No data exists for ' + this.className);
+				this.navheader.el.dispatchEvent(new Expand(this));
+			}
+			if (model) {
+				if (model.children) {
+					return this.populate(model.children).then(
+						() => this.body.el.dispatchEvent(new Expand(this)));
+				}
+			}
+			return this.ifEmpty();
+		}, 'Unable to construct ' + this.className);
 	}
 	/** Adds the given array of FORMELEMENT(s) to this group
 	    @param {Array<FORMELEMENT>} inputs A list of inputs
@@ -67,4 +86,4 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER, createInputModel, EL, FORMELEMENT, FORMELEMENTGROUP, MODEL }
+export { ATTRIBUTES, CONTAINER, createInputModel, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, MODEL }

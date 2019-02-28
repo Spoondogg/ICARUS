@@ -18,26 +18,26 @@ export default class EL extends MODEL {
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
-        this.setMain();
-        /** Parent EL
+		this.setMain();
+		/** Parent EL
 		    @type {EL} children 
 		*/
 		this.node = node;
 		//this.next = null;
-        this.className = this.constructor.name;
-        /** HTML Element Tag ie: DIV 
-            @type {string} element
-        */
-        this.element = element;
-        /** State Indicator 
-            @type {number} status 
-        */
+		this.className = this.constructor.name;
+		/** HTML Element Tag ie: DIV 
+		    @type {string} element
+		*/
+		this.element = element;
+		/** State Indicator 
+		    @type {number} status 
+		*/
 		this.status = STATUS.DEFAULT; // 
 		//this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
-        this.children = [];
+		this.children = [];
 		/** A Collection of callback methods that accept a MODEL
 		    ie: this.callbacks[foo]
 		*/
@@ -54,8 +54,7 @@ export default class EL extends MODEL {
 		    @property {Object.<Function>} handlers
 		*/
 		this.handlers = {};
-		
-        this.make(model);
+		this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
         param {HTMLElement} el The HTML Element
@@ -64,36 +63,36 @@ export default class EL extends MODEL {
 	    param {string} innerHTML This text will be displayed within the HTML element
 	    @returns {Promise<ThisType>} callback
 	*/
-    make(model) {
-        return this.callback(() => {
-            this.el = document.createElement(this.element);
-            if (this.node === document.body) {
-                this.node.appendChild(this.el);
-            } else {
-                this.node.el.appendChild(this.el);
-            }
-            this.merge(model).then(() => this.construct(model));
-        }, 'Unable to make ' + this.element);
-	}	
-    /** Perform any async actions required to construct the Element
+	make(model) {
+		return this.callback(() => {
+			this.el = document.createElement(this.element);
+			if (this.node === document.body) {
+				this.node.appendChild(this.el);
+			} else {
+				this.node.el.appendChild(this.el);
+			}
+			this.merge(model).then(() => this.construct(model));
+		}, 'Unable to make ' + this.element);
+	}
+	/** Perform any async actions required to construct the Element
         @param {MODEL} model Model
 	    @returns {Promise<ThisType>} callback
 	*/
-    construct(model) {
-        if (model) {
-            if (model.children) {
-                return this.populate(model.children);
-            }
-        }
-        return this.ifEmpty();
-    }
-    /** If no children supplied...
+	construct(model) {
+		if (model) {
+			if (model.children) {
+				return this.populate(model.children);
+			}
+		}
+		return this.ifEmpty();
+	}
+	/** If no children supplied...
 	    @returns {Promise<ThisType>} callback
 	*/
-    ifEmpty() {
-        return Promise.resolve(this);
-    }
-    /** Add a function to the list of callbacks for to the creator EL.create();
+	ifEmpty() {
+		return Promise.resolve(this);
+	}
+	/** Add a function to the list of callbacks for to the creator EL.create();
 	    @param {string} className The Icarus Class name that this callback is meant to construct
 	    @param {Function} fn Function to call (should accept model)
 	    @returns {void}
@@ -113,8 +112,8 @@ export default class EL extends MODEL {
 	    @returns {EL} Child Element
 	*/
 	addChild(model) {
-        this.get().push(model);
-        return this.getTail();
+		this.get().push(model);
+		return this.getTail();
 	}
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
@@ -125,13 +124,13 @@ export default class EL extends MODEL {
 		return this.callback(() => {
 			if (className === 'undefined') {
 				console.log('ClassName Undefined');
-            } else {
-                try {
-                    className.split(' ').forEach((c) => this.el.classList.add(c));
-                    this.attributes.class = this.el.classList.value;
-                } catch (e) {
-                    console.warn('Unable to add class', className, this, e);
-                }
+			} else {
+				try {
+					className.split(' ').forEach((c) => this.el.classList.add(c));
+					this.attributes.class = this.el.classList.value;
+				} catch (e) {
+					console.warn('Unable to add class', className, this, e);
+				}
 			}
 		});
 	}
@@ -149,13 +148,13 @@ export default class EL extends MODEL {
 	append(target) {
 		return this.callback(() => target.insertBefore(this.el, target.firstChild));
     }*/
-    /** Dispatches the given Event to this element's siblings
-        @param {Event} event Event to dispatch
-        @returns {void}
-    */
-    dispatchToSiblings(event) {
-        this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
-    }
+	/** Dispatches the given Event to this element's siblings
+	    @param {Event} event Event to dispatch
+	    @returns {void}
+	*/
+	dispatchToSiblings(event) {
+		this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+	}
 	/** Creates a textarea input and populates with this element's contents
         @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
 	    @returns {void}
@@ -203,56 +202,56 @@ export default class EL extends MODEL {
 			console.log('EL{' + this.className + '}.getMain() error', this);
 		}
 	}*/
-    /** Used to recursively verify if the reflected Prototype class of the given node
-        matches a specified value.  This can be helpful in cases where you need to 
-        identify the root super class, not just the current one
-        @param {EL} node Self or reflection of self
-        @param {string} className Class name to match
-        @param {number} attempt Recursion loop attempt
-        @param {number} limit Recursion limit
-        @returns {boolean} True if classname found in proto chain
-        @throws {RecursionLimitError} A Recursion error is thrown if limits are exceeded
-    */
-    checkReflectionPrototype(node, className, attempt = 0, limit = 10) {
-        if (attempt < limit) {
-            let reflection = Reflect.getPrototypeOf(node); // Can this value be cached?            
-            if (reflection !== null) {
-                if (reflection.constructor.name === 'EL') { // No sense in going any further than EL
-                    return false;
-                }
-                if (reflection.constructor.name === className) {
-                    return true;
-                }
-                return this.checkReflectionPrototype(reflection, className, attempt + 1);
-            }
-            return false;
-        }
-        throw new RecursionLimitError(this.className + '.checkReflectionPrototype(): Exceeded attempt limit. (Attempt ' + attempt + ')');
-    }
-    /** Retrieve an {@link EL} based on its __proto__
-        @description Recursively iterates through parent nodes until an object with the given prototype is found
-        @param {string} className The value to search for within this key
-        @param {EL} node Entry point to traversing the chain
-        @param {number} attempt Recursion loop
-        @param {number} limit Recursion limit
-        @returns {CONTAINER} The parent container
-        @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf
-        @throws Will throw an error if recursion attempt exceeds limit
-    */
+	/** Used to recursively verify if the reflected Prototype class of the given node
+	    matches a specified value.  This can be helpful in cases where you need to 
+	    identify the root super class, not just the current one
+	    @param {EL} node Self or reflection of self
+	    @param {string} className Class name to match
+	    @param {number} attempt Recursion loop attempt
+	    @param {number} limit Recursion limit
+	    @returns {boolean} True if classname found in proto chain
+	    @throws {RecursionLimitError} A Recursion error is thrown if limits are exceeded
+	*/
+	checkReflectionPrototype(node, className, attempt = 0, limit = 10) {
+		if (attempt < limit) {
+			let reflection = Reflect.getPrototypeOf(node); // Can this value be cached?            
+			if (reflection !== null) {
+				if (reflection.constructor.name === 'EL') { // No sense in going any further than EL
+					return false;
+				}
+				if (reflection.constructor.name === className) {
+					return true;
+				}
+				return this.checkReflectionPrototype(reflection, className, attempt + 1);
+			}
+			return false;
+		}
+		throw new RecursionLimitError(this.className + '.checkReflectionPrototype(): Exceeded attempt limit. (Attempt ' + attempt + ')');
+	}
+	/** Retrieve an {@link EL} based on its __proto__
+	    @description Recursively iterates through parent nodes until an object with the given prototype is found
+	    @param {string} className The value to search for within this key
+	    @param {EL} node Entry point to traversing the chain
+	    @param {number} attempt Recursion loop
+	    @param {number} limit Recursion limit
+	    @returns {CONTAINER} The parent container
+	    @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf
+	    @throws Will throw an error if recursion attempt exceeds limit
+	*/
 	getProtoTypeByClass(className, node = this.node, attempt = 0, limit = 100) {
 		if (node === document.body) {
 			return null; //this.getMain(); // null You have reached the top of the chain
 		}
 		try {
 			if (attempt < limit) {
-                if (this.checkReflectionPrototype(node, className)) {
-                    return node;
-                }
-                return this.getProtoTypeByClass(className, node.node, attempt + 1);
+				if (this.checkReflectionPrototype(node, className)) {
+					return node;
+				}
+				return this.getProtoTypeByClass(className, node.node, attempt + 1);
 			}
 			throw new RecursionLimitError(this.className + '.getProtoTypeByClass(): Exceeded attempt limit. (Attempt ' + attempt + ')');
 		} catch (e) {
-			if (e instanceof TypeError) {				
+			if (e instanceof TypeError) {
 				/** Possible TypeError(s) include:
                     TypeError: this.getProtoTypeByClass is not a function
                     TypeError: Reflect.getPrototypeOf called on non-object
@@ -272,10 +271,10 @@ export default class EL extends MODEL {
         @description This might also be recognized as this.getChildren()
 	*/
 	get(name = null, className = null) {
-        if (name === null && className === null) {
-            return this.children;
-        }
-        return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+		if (name === null && className === null) {
+			return this.children;
+		}
+		return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
 	}
 	/** Retrieves MODEL.ATTRIBUTES.class 
 	    @returns {string} Class Name
@@ -304,8 +303,8 @@ export default class EL extends MODEL {
 	getLoader() {
 		try {
 			return this.getMain().getLoader();
-        } catch (e) {
-            console.warn('Unable to retrieve loader', this, e);
+		} catch (e) {
+			console.warn('Unable to retrieve loader', this, e);
 			return null;
 		}
 	}
@@ -323,33 +322,33 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a MAIN Container');
 		}
-    }
-    /** Retrieves the last child in linked list / children 
-        @returns {EL} Tail Element/Model
-    */
-    getTail() {
-        return this.get()[this.get().length - 1];
-    }
-    /** Retrieves the previous element (if exists) 
-        @returns {EL} Previous Sibling Element
-    */
-    getPrev() {
-        try {
-            return this.node.get()[this.node.get().indexOf(this) - 1];
-        } catch (e) {
-            console.warn('Unable to retrieve previous element/sibling', this, e);
-        }
-    }
-    /** Retrieves the next element (if exists) 
-        @returns {EL} Next Sibling Element
-    */
-    getNext() {
-        try {
-            return this.node.get()[this.node.get().indexOf(this) + 1];
-        } catch (e) {
-            console.warn('Unable to retrieve next element/sibling', this, e);
-        }
-    }
+	}
+	/** Retrieves the last child in linked list / children 
+	    @returns {EL} Tail Element/Model
+	*/
+	getTail() {
+		return this.get()[this.get().length - 1];
+	}
+	/** Retrieves the previous element (if exists) 
+	    @returns {EL} Previous Sibling Element
+	*/
+	getPrev() {
+		try {
+			return this.node.get()[this.node.get().indexOf(this) - 1];
+		} catch (e) {
+			console.warn('Unable to retrieve previous element/sibling', this, e);
+		}
+	}
+	/** Retrieves the next element (if exists) 
+	    @returns {EL} Next Sibling Element
+	*/
+	getNext() {
+		try {
+			return this.node.get()[this.node.get().indexOf(this) + 1];
+		} catch (e) {
+			console.warn('Unable to retrieve next element/sibling', this, e);
+		}
+	}
 	/** Attempts to call the constructor of the given MODEL
         @see https://stackoverflow.com/a/35769291/722785	    
         @param {MODEL} model MODEL
@@ -398,34 +397,34 @@ export default class EL extends MODEL {
         @param {MODEL} model A generic MODEL object
         @returns {void}
     */
-    merge(model) {
-        return this.callback(() => {
-            if (typeof model === 'object') {
-                for (let prop in model) {
-                    if (typeof prop === 'string') {
-                        switch (prop) {
-                            case 'attributes':
-                                this.processAttributes(model.attributes);
-                                break;
-                            case 'innerHTML':
-                                this.setInnerHTML(model[prop]);
-                                break;
-                            case 'id':
-                            case 'name':
-                                this[prop] = model[prop];
-                                this.el.setAttribute(prop, model[prop]);
-                                break;
-                            case 'children':
-                                console.log(this.className + '.children', model[prop]);
-                                this[prop] = model[prop];
-                                break;
-                            default:
-                                this[prop] = model[prop];
-                        }
-                    }
-                }
-            }
-        }, 'EL.merge(): Failed to merge ' + this.constructor.name);
+	merge(model) {
+		return this.callback(() => {
+			if (typeof model === 'object') {
+				for (let prop in model) {
+					if (typeof prop === 'string') {
+						switch (prop) {
+							case 'attributes':
+								this.processAttributes(model.attributes);
+								break;
+							case 'innerHTML':
+								this.setInnerHTML(model[prop]);
+								break;
+							case 'id':
+							case 'name':
+								this[prop] = model[prop];
+								this.el.setAttribute(prop, model[prop]);
+								break;
+							case 'children':
+								console.log(this.className + '.children', model[prop]);
+								this[prop] = model[prop];
+								break;
+							default:
+								this[prop] = model[prop];
+						}
+					}
+				}
+			}
+		}, 'EL.merge(): Failed to merge ' + this.constructor.name);
 	}
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
@@ -434,12 +433,12 @@ export default class EL extends MODEL {
 	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
-            if (attr !== 'innerHTML') {
-                this.el.setAttribute(attr, attributes[attr]);
-            } else if (attr === 'innerHTML') {
-                //this.el.innerHTML = attributes[attr];
-                this.setInnerHTML(attributes[attr]);
-            }
+			if (attr !== 'innerHTML') {
+				this.el.setAttribute(attr, attributes[attr]);
+			} else if (attr === 'innerHTML') {
+				//this.el.innerHTML = attributes[attr];
+				this.setInnerHTML(attributes[attr]);
+			}
 		}
 	}
 	/** Removes all child Elements of this Element from the DOM (Preserves this.children)
@@ -449,18 +448,24 @@ export default class EL extends MODEL {
 		return new Promise((resolve) => {
 			while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
-            }
-            //this.children.length = 0;
+			}
+			//this.children.length = 0;
 			resolve(this);
 		});
-    }
-    /** Removes this HTMLElement from the DOM (MODEL is maintained within node.children)
+	}
+	/** Removes this HTMLElement from the DOM (MODEL is maintained within node.children)
 	    param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
-    remove() { // delay = 300
-        return this.callback(() => this.el.parentNode.removeChild(this.el));
-    }
+	remove() { // delay = 300
+		return this.callback(() => {
+			if (this.el.parentNode) {
+				this.el.parentNode.removeChild(this.el);
+			} else {
+				console.log(this.className + ' does not have a valid parent node', this);
+			}
+		}, 'Unable to remove ' + this.className + ' from parent');
+	}
 	/** Removes this Element from the DOM and its Class from any linked lists
 	    @param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
@@ -468,13 +473,13 @@ export default class EL extends MODEL {
 	destroy(delay = 300) {
 		return new Promise((resolve, reject) => {
 			setTimeout(() => {
-                try {
-                    this.remove().then(() => {
-                        if (this.node !== document.body) {
-                            this.node.get().splice(this.node.get().indexOf(this), 1);
-                        }
-                        resolve();
-                    });
+				try {
+					this.remove().then(() => {
+						if (this.node !== document.body) {
+							this.node.get().splice(this.node.get().indexOf(this), 1);
+						}
+						resolve();
+					});
 				} catch (e) {
 					if (e instanceof TypeError) {
 						console.warn('Unable to destroy this ' + this.element, this);
@@ -571,15 +576,15 @@ export default class EL extends MODEL {
 	    @param {Array<EL>} children model.children
 	    @returns {Promise<ThisType>} callback
 	*/
-    populate(children) {
-        return this.callback(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
-    }
+	populate(children) {
+		return this.callback(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
+	}
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
 	    @returns {ThisType} This node for chaining
 	*/
 	setInnerHTML(innerHTML = '') {
-        this.el.innerHTML = innerHTML;
+		this.el.innerHTML = innerHTML;
 		return this;
 	}
 	/** Scrolls page to the top of this element
