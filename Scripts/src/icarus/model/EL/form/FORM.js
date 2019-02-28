@@ -23,7 +23,8 @@ export default class FORM extends CONTAINER {
 	    @param {MODEL} model The object model
 	*/
 	constructor(node, model) {
-		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
+        super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
+        this.addClass('form');
 		//this.addCase('FIELDSET', () => this.addFieldset(model));
 		this.createEditableElement('header', this.body.pane).then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this);

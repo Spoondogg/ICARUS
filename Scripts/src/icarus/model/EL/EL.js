@@ -410,6 +410,11 @@ export default class EL extends MODEL {
                             case 'innerHTML':
                                 this.setInnerHTML(model[prop]);
                                 break;
+                            case 'id':
+                            case 'name':
+                                this[prop] = model[prop];
+                                this.el.setAttribute(prop, model[prop]);
+                                break;
                             case 'children':
                                 console.log(this.className + '.children', model[prop]);
                                 this[prop] = model[prop];

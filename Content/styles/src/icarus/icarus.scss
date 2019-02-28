@@ -1230,6 +1230,7 @@ $z-bottom: -1;
     /// An Element that can contain child elements
     .container {
         @extend %wide-block;
+        min-height: $navbar-height;
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
@@ -1238,6 +1239,10 @@ $z-bottom: -1;
             box-shadow: 0 2px 2px 0 $color-shadow-dark;
             margin: 0 auto .8em;
             min-height: $navbar-height;
+        }
+
+        &.form {
+            //
         }
         /// A paged list of elements
         &.index {
