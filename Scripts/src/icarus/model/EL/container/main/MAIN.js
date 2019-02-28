@@ -39,11 +39,11 @@ export default class MAIN extends CONTAINER {
 		this.expandMain();
     }
     constructElements() {
-        //console.log('MAIN.constructElements()', this);
         if (this.dataId > 0) {
-            this.label = this.data.title;
+            document.title = this.data.title;
+        } else {
+            document.title = this.label;
         }
-        document.title = this.label; // model.label
     }
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
