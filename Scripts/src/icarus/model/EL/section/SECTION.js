@@ -1,16 +1,25 @@
 /** @module */
-import CONTAINER from '../container/CONTAINER.js';
+import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
 /** A generic SECTION within an ARTICLE
     @class
     @extends CONTAINER
 */
 export default class SECTION extends CONTAINER {
 	/** Constructs a SECTION Container Element
-	    @param {ARTICLE} node The ARTICLE to contain the section
-	    @param {MODEL} model The SECTION object retrieves from the server
+	    @param {CONTAINER} node Node
+	    @param {MODEL} model Model
     */
 	constructor(node, model) {
 		super(node, 'SECTION', model, ['FORM']);
 		this.addClass('section');
-	}
+    }
+    constructElements() {
+        if (this.dataId > 0) {
+            this.createEditableElement('header', this.body.pane);
+        } else {
+            console.log('No data exists for ' + this.className);
+            this.navheader.el.dispatchEvent(new Expand(this));
+        }
+    }
 }
+export { MODEL }

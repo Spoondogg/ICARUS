@@ -1,6 +1,6 @@
 /** @module */
 import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../../formelement/FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
 import INPUT from '../../../input/INPUT.js';
 import PROMPT from '../../../dialog/prompt/PROMPT.js';
@@ -16,17 +16,21 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
-		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
-			class: 'form-control',
-			name: this.attributes.name,
-			value: this.attributes.value,
-			type: this.attributes.type || 'TEXT',
-			readonly: true
-		})));
-		this.form = null;
-		this.createInput();
-	}
+    }
+    constructElements() {
+        console.log(this.className + '.constructElements()');
+        this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+        this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
+        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+            class: 'form-control',
+            name: this.attributes.name,
+            value: this.attributes.value,
+            type: this.attributes.type || 'TEXT',
+            readonly: true
+        })));
+        this.form = null;
+        this.createInput();
+    }
 	/** Creates an Input Group with an INPUT element inside of it
         @returns {void}
     */
@@ -41,10 +45,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		let type = this.attributes.name;
 		let id = this.attributes.value;
 		if (id > 0) {
-			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'EDIT');
+            let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
 			btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
 		}
-		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon'), 'NEW');
+		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
 		btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
 	}
 	/** Sets the id of the original FormPostInput to the given value
