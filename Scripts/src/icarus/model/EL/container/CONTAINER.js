@@ -63,9 +63,9 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<ThisType>} callback
     */
     construct(model) {
-        console.log(this.className + '.construct()');
+        //console.log(this.className + '.construct()');
         return this.callback(() => {
-            console.log(this.className + ' callback', this);
+            //console.log(this.className + ' callback', this);
             this.constructElements();
             // Populate if model exists
             if (model) {

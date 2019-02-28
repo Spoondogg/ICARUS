@@ -415,7 +415,7 @@ export default class EL extends MODEL {
 								this.el.setAttribute(prop, model[prop]);
 								break;
 							case 'children':
-								console.log(this.className + '.children', model[prop]);
+								//console.log(this.className + '.children', model[prop]);
 								this[prop] = model[prop];
 								break;
 							default:

@@ -18,7 +18,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		super(node, 'DIV', model);
     }
     constructElements() {
-        console.log(this.className + '.constructElements()');
+        //console.log(this.className + '.constructElements()');
         this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
         this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
         this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({

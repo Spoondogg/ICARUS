@@ -39,7 +39,7 @@ export default class MAIN extends CONTAINER {
 		this.expandMain();
     }
     constructElements() {
-        console.log('MAIN.constructElements()', this);
+        //console.log('MAIN.constructElements()', this);
         if (this.dataId > 0) {
             this.label = this.data.title;
         }
