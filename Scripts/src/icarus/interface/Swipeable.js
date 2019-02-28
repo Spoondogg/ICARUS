@@ -10,6 +10,7 @@ export default class Swipeable extends IFACE {
         @see https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
         @param {EL} node Class to implement this interface (Typically 'this')
         @param {number} swipeSensitivity Pixel sensitivity for short/long scroll
+        @todo Rather than pixel based, have swipeSensitivity use a % based on current total width/height
 	*/
     constructor(node, swipeSensitivity = 50) {
 		super(node, 'swipeable');

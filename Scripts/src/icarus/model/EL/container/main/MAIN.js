@@ -294,7 +294,13 @@ export default class MAIN extends CONTAINER {
 	*/
 	getId() {
 		return this.id;
-	}
+    }
+    /** Override CONTAINER.ifEmpty()
+	    @returns {Promise<ThisType>} callback
+	*/
+    ifEmpty() {
+        return Promise.resolve(this);
+    }
 	/** Gets the container (if exists) and sets it
 	    @returns {void}
 	*/

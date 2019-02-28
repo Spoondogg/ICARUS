@@ -7,7 +7,7 @@ import DIV from '../../div/DIV.js';
     @extends CONTAINER
 */
 export default class JUMBOTRON extends CONTAINER {
-	/** Constructs a Bootstrap style Jumbotron
+	/** Constructs large banner with a single title and text block
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model        
     */

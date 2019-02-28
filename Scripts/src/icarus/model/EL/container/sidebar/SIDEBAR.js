@@ -16,7 +16,7 @@ export default class SIDEBAR extends EL {
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model);
         this.addClass('sidebar');
-        this.implement(new Swipeable(this));
+        this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
         this.implement(new Switchable(this));
         this.align = model.align || 'left';
         if (this.align === 'left') {

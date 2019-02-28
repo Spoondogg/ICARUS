@@ -40,7 +40,8 @@ export default class NAVHEADER extends NAVBAR {
         let tabbable = this.addTabbableElement(
             this.tabs.addNavItemIcon(new MODEL().set({
                 icon,
-                label
+                label,
+                name
             })),
             this.menus.addMenu(new MODEL().set('name', name))
         );
@@ -48,7 +49,8 @@ export default class NAVHEADER extends NAVBAR {
         secondaryTabs.forEach((t) => this.addTabbableElement(
             tabbable.element.addNavItemIcon(new MODEL().set({
                 label: t,
-                icon: ICONS[t]
+                icon: ICONS[t],
+                name: t
             })),
             tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
         ));
@@ -65,7 +67,8 @@ export default class NAVHEADER extends NAVBAR {
         return this.addTabbableElement(
             this.tabs.addNavItemIcon(new MODEL().set({
                 icon,
-                label
+                label,
+                name
             })),
             this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
                 name,
