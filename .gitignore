@@ -30,6 +30,8 @@ Scripts/deprec
 /ICARUS/Scripts/dist/icarus
 /Content/styles/icarus.min.css
 /Content/styles/icarus.min.css.map
+/html
+/latex
 Properties
 packages
 package-lock.json
