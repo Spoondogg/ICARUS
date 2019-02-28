@@ -12,13 +12,13 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: rgb(0, 0, 255);
+$color-blue: #306e90;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
 /// A vibrant light-blue color
 /// @type Color
-$color-blue-lighter: #00dcff;
+$color-blue-lighter: #43acbd;
 /// A deep blue color
 /// @type Color
 $color-blue-deep: #005879;
@@ -447,6 +447,11 @@ $z-bottom: -1;
 	}
 }
 /* #endregion */
+*,
+*::before,
+*::after { //https://css-tricks.com/international-box-sizing-awareness-day/
+    box-sizing: border-box;
+}
 /// A SASS stylesheet for Icarus, extending Bootstrap 3.3.7
 /// @author Ryan Dunphy
 /// @link SASS Variables: https://sass-lang.com/guide#topic-2-SCSS
@@ -760,6 +765,7 @@ $z-bottom: -1;
         @extend %bevel-up;
         background-color: $color-nav-background;
         border-radius: 0;
+        box-sizing: border-box;
         font-size: $font-size-normal;
         height: $navbar-height;
         min-height: $navbar-height;
@@ -1230,7 +1236,6 @@ $z-bottom: -1;
     /// An Element that can contain child elements
     .container {
         @extend %wide-block;
-        min-height: $navbar-height;
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
@@ -1241,8 +1246,49 @@ $z-bottom: -1;
             min-height: $navbar-height;
         }
 
+        &.fieldset {
+            .body {
+                .pane {
+                    legend {
+                        background-color: $color-blue;
+                        border-bottom: 4px solid $color-blue-deep;
+                        color: $color-white;
+                        font-weight: bold;
+                        padding-left: .5em;
+                        padding-right: .5em;
+                    }
+                }
+            }
+        }
+
         &.form {
-            //
+            .body {
+                .pane {
+                    header {
+                        background-color: $color-grey;
+                        border-bottom: 4px solid $color-grey-light;
+                        color: $color-white;
+                        font-weight: bold;
+                        padding-left: .5em;
+                        padding-right: .5em;
+                    }
+                }
+            }
+        }
+
+        &.form-element-group {
+            .body {
+                .pane {
+                    header {
+                        background-color: $color-grey-light;
+                        border-bottom: 4px solid $color-grey-lighter;
+                        color: $color-white;
+                        font-weight: bold;
+                        padding-left: .5em;
+                        padding-right: .5em;
+                    }
+                }
+            }
         }
         /// A paged list of elements
         &.index {
@@ -1503,6 +1549,7 @@ $z-bottom: -1;
             > .pane {
                 @extend %no-scroll-bar;
                 @include transition($transition-default);
+                min-height: $navbar-height;
                 width: 100%;
             }
         }
