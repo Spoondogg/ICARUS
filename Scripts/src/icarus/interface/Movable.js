@@ -12,8 +12,8 @@ export default class Movable extends IFACE {
 		super(node, 'movable');
 	}
 	addListeners(node) {
-		node.el.addEventListener('up', () => node.up());
-		node.el.addEventListener('down', () => node.down());
+        node.el.addEventListener('moveUp', () => node.moveUp());
+        node.el.addEventListener('moveDown', () => node.moveDown());
 		//node.el.addEventListener('left', () => node.left());
 		//node.el.addEventListener('right', () => node.right());
 	}
@@ -21,75 +21,11 @@ export default class Movable extends IFACE {
 		/** Moves the element up
 	        @returns {Promise<ThisType>} callback
 	    */
-		this.methods.up = () => node.callback(() => console.log('Move Up', node));
+		this.methods.moveUp = () => node.callback(() => console.log('Move Up', node));
 		/** Moves the element down
 		    @returns {Promise<ThisType>} callback
 		*/
-		this.methods.down = () => node.callback(() => console.log('Move Down', node));
-	}
-	/** Moves this element UP one slot
-	    @returns {ThisType} This Container
-	*/
-	moveUp() {
-		let node = $(this.el);
-		if (node.prev().length > 0) {
-			node.animate({
-				height: 'toggle'
-			}, 300);
-			setTimeout(() => {
-				node.prev().animate({
-					height: 'toggle'
-				}, 300).insertAfter(node).animate({
-					height: 'toggle'
-				}, 300);
-			}, 0);
-			setTimeout(() => {
-				node.animate({
-					height: 'toggle'
-				}, 300).delay(300);
-			}, 300);
-		}
-		return this;
-	}
-	/** Moves this element DOWN one slot
-	    @returns {ThisType} This Container
-	*/
-	moveDown() {
-		let node = $(this.el);
-		if (node.next().length > 0) {
-			node.animate({
-				height: 'toggle'
-			}, 300);
-			setTimeout(() => {
-				node.next().animate({
-					height: 'toggle'
-				}, 300).insertBefore(node).animate({
-					height: 'toggle'
-				}, 300).delay(300);
-			}, 0);
-			setTimeout(() => {
-				node.animate({
-					height: 'toggle'
-				}, 300);
-			}, 300);
-		}
-		return this;
-	}
-	/** Moves the Container up one slot in the DOM
-	    @returns {void}
-	*/
-	up() {
-		this.navheader.toggle();
-		this.navfooter.toggle();
-		this.moveUp();
-	}
-	/** Moves the Container down one slot in the DOM
-	    @returns {void}
-	*/
-	down() {
-		this.navheader.toggle();
-		this.navfooter.toggle();
-		this.moveDown();
+		this.methods.moveDown = () => node.callback(() => console.log('Move Down', node));
 	}
 }
 export { EL, IFACE }

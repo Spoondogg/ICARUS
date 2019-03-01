@@ -569,8 +569,9 @@ export default class EL extends MODEL {
 	    @param {string} className the class to be appended
 	    @returns {boolean} True if class exists
 	*/
-	hasClass(className) {
-		return $(this.el).hasClass(className);
+    hasClass(className) {
+        return this.el.classList.contains(className);
+		//return $(this.el).hasClass(className);
 	}
 	/** Creates given Elements as children of this Element
 	    @param {Array<EL>} children model.children

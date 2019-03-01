@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate } from '../container/CONTAINER.js';
+import CONTAINER, { Activate, Deactivate } from '../container/CONTAINER.js';
 import DIV, { EL, MODEL } from '../div/DIV.js';
 import Swipeable from '../../../interface/Swipeable.js';
 /** A panel with swipe detection
@@ -14,28 +14,36 @@ export default class PANE extends DIV {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('pane');
-		this.implement(new Swipeable(this, 150));
-		this.swipeUp = () => {
-			this.getMain().focusBody();
-			//console.log('collapsing navheader');
-			this.getContainer().navheader.collapse();
+        this.implement(new Swipeable(this));
+        this.swipeUp = () => {
+            console.log('swipeUp');
+            let navheader = this.getContainer().navheader;
+            this.getMain().focusBody().then(() => {
+                if (this.getContainer().body.hasClass('active')) {
+                    if (navheader.hasClass('active')) {
+                        navheader.el.dispatchEvent(new Deactivate(navheader));
+                    }
+                }
+            });
 		};
-		this.swipeDown = () => {
-			this.getMain().focusBody();
-			//console.log('expanding navheader');
-			this.getContainer().navheader.expand();
+        this.swipeDown = () => {
+            console.log('swipeDown');
+            let navheader = this.getContainer().navheader;
+            this.getMain().focusBody().then(() => {
+                if (this.getContainer().body.hasClass('active')) {
+                    if (!navheader.hasClass('active')) {
+                        navheader.el.dispatchEvent(new Activate(navheader));
+                    }
+                }
+            });
 		};
 		this.swipeLeft = () => {
 			let [navMenu] = this.getMain().navheader.tabs.get('sidebar-user', 'NAVITEMICON');
 			navMenu.el.dispatchEvent(new Activate(navMenu));
-			//console.log('expanding navheader');
-			//this.getContainer().navheader.expand();
 		};
 		this.swipeRight = () => {
-			let [navMenu] = this.getMain().navheader.tabs.get('document-map', 'NAVITEMICON');
+            let [navMenu] = this.getMain().navheader.tabs.get('document-map', 'NAVITEMICON');
 			navMenu.el.dispatchEvent(new Activate(navMenu));
-			//console.log('expanding navheader');
-			//this.getContainer().navheader.expand();
 		};
 	}
 }

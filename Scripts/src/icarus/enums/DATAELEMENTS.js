@@ -38,7 +38,8 @@ const defaultContainerData = () => [
 export const DATAELEMENTS = {
 	ARTICLE: {
 		data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
-		attributes: []
+        attributes: [createInputModel('INPUT', 'name')]
+
 	},
 	CALLOUT: {
 		data: [
@@ -185,7 +186,10 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	TEXTBLOCK: {
-		data: [createInputModel('INPUT', 'text', '')],
+        data: [
+            createInputModel('INPUT', 'header'),
+            createInputModel('TEXTAREA', 'p', ' ')
+        ],
 		attributes: []
 	},
 	THUMBNAIL: {
