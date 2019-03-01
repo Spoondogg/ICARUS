@@ -1244,15 +1244,33 @@ $z-bottom: -1;
             box-shadow: 0 2px 2px 0 $color-shadow-dark;
             margin: 0 auto .8em;
             min-height: $navbar-height;
+
+            > .body {
+                > .pane {
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-grey-dark;
+                            border-bottom: 1px solid $color-grey-darker;
+                            color: $color-white;
+                            font-size: smaller;
+                            padding: 2px 0;
+                            text-align: center;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+            }
         }
 
         &.fieldset {
             > .body {
                 > .pane {
-                    > legend:first-of-type {
-                        background-color: $color-blue;
-                        border-bottom: 4px solid $color-blue-deep;
-                        color: $color-white;
+                    > legend {
+                        &:first-of-type {
+                            background-color: $color-blue;
+                            border-bottom: 4px solid $color-blue-deep;
+                            color: $color-white;
+                        }
                     }
                 }
             }
@@ -1261,10 +1279,30 @@ $z-bottom: -1;
         &.form {
             > .body {
                 > .pane {
-                    > header:first-of-type {
-                        background-color: $color-grey;
-                        border-bottom: 4px solid $color-grey-light;
-                        color: $color-white;
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-grey;
+                            border-bottom: 4px solid $color-grey-light;
+                            color: $color-white;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.form-element {
+            > .body {
+                &.active {
+                    background-color: $color-blue-lighter;
+                }
+
+                > .pane {
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-grey-light;
+                            border-bottom: 4px solid $color-grey-lighter;
+                            color: $color-white;
+                        }
                     }
                 }
             }
@@ -1273,10 +1311,12 @@ $z-bottom: -1;
         &.form-element-group {
             > .body {
                 > .pane {
-                    > header:first-of-type {
-                        background-color: $color-grey-light;
-                        border-bottom: 4px solid $color-grey-lighter;
-                        color: $color-white;
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-grey-light;
+                            border-bottom: 4px solid $color-grey-lighter;
+                            color: $color-white;
+                        }
                     }
                 }
             }
@@ -1368,6 +1408,16 @@ $z-bottom: -1;
         &.jumbotron {
             @extend %noSelect;
             padding: 0;
+
+            > .body {
+                &.active {
+                    > .pane {
+                        > .screen {
+                            background-color: $color-blue-lighter;
+                        }
+                    }
+                }
+            }
 
             .pane {
                 /// A vignetted backdrop with optional background image
@@ -1535,12 +1585,34 @@ $z-bottom: -1;
         &.section {
             > .body {
                 > .pane {
-                    > header:first-of-type {
-                        background-color: $color-red;
-                        border-bottom: 4px solid $color-red-deep;
-                        color: $color-white;
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-dark;
+                            border-bottom: 4px solid $color-darker;
+                            color: $color-white;
+                        }
                     }
                 }
+            }
+        }
+
+        &.textblock {
+            > .body {
+                &.active {
+                    //background-color:
+                    > .pane {
+                        > header {
+                            &:first-of-type {
+                                background-color: $color-blue-lighter;
+                                //border-bottom: 4px solid $color-red-deep;
+                                //color: $color-white;
+                            }
+                        }
+                    }
+                }
+                /*> .pane {
+                    // 
+                }*/
             }
         }
 
@@ -1555,10 +1627,12 @@ $z-bottom: -1;
                 min-height: $navbar-height;
                 width: 100%;
 
-                > header:first-of-type {
-                    font-weight: bold;
-                    padding-left: .5em;
-                    padding-right: .5em;
+                > header {
+                    &:first-of-type {
+                        border-bottom: 1px solid $color-grey-light;
+                        font-weight: bold;
+                        padding: .3em .5em;
+                    }
                 }
             }
         }
@@ -1889,9 +1963,9 @@ $z-bottom: -1;
 
         p {
             line-height: 1.8em;
-            margin: .5em auto 2em;
+            margin: .5em auto 0;
             max-width: $content-maxwidth;
-            padding: 0 1.8em;
+            padding: 0 1.8em 1em;
             text-align: justify;
         }
 

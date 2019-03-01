@@ -10,7 +10,7 @@ export default class SECTION extends CONTAINER {
 	    @param {MODEL} model Model
     */
 	constructor(node, model) {
-		super(node, 'SECTION', model, ['FORM']);
+		super(node, 'SECTION', model, ['TEXTBLOCK', 'FORM']);
 		this.addClass('section');
     }
     constructElements() {

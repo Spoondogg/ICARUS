@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
+import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
 /** A generic ARTICLE Element
     @class
     @extends CONTAINER
@@ -14,7 +14,12 @@ export default class ARTICLE extends CONTAINER {
 		this.addClass('article');
     }
     constructElements() {
-        console.log(this.className + '.constructElements()');
+        if (this.dataId > 0) {
+            this.createEditableElement('header', this.body.pane);
+        } else {
+            console.log('No data exists for ' + this.className);
+            this.navheader.el.dispatchEvent(new Expand(this));
+        }
     }
 }
 export { MODEL }

@@ -52,6 +52,55 @@ export default class CONTAINER extends GROUP {
         // Conside this as a method instead of for ALL Containers
         this.body.implement(new Clickable(this.body));
         this.addEvents();
+        /** Moves this element UP one slot
+	        @returns {ThisType} This Container
+	    */
+        this.moveUp = () => {
+            console.log('container up');
+            let n = $(this.el);
+            if (n.prev().length > 0) {
+                n.animate({
+                    height: 'toggle'
+                }, 300);
+                setTimeout(() => {
+                    n.prev().animate({
+                        height: 'toggle'
+                    }, 300).insertAfter(n).animate({
+                        height: 'toggle'
+                    }, 300);
+                }, 0);
+                setTimeout(() => {
+                    n.animate({
+                        height: 'toggle'
+                    }, 300).delay(300);
+                }, 300);
+            }
+        };
+        /** Moves this element DOWN one slot
+            @returns {ThisType} This Container
+        */
+        this.moveDown = () => {
+            console.log('container down');
+            let n = $(this.el);
+            if (n.next().length > 0) {
+                n.animate({
+                    height: 'toggle'
+                }, 300);
+                setTimeout(() => {
+                    n.next().animate({
+                        height: 'toggle'
+                    }, 300).insertBefore(n).animate({
+                        height: 'toggle'
+                    }, 300).delay(300);
+                }, 0);
+                setTimeout(() => {
+                    n.animate({
+                        height: 'toggle'
+                    }, 300);
+                }, 300);
+            }
+            return this;
+        };
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
@@ -71,8 +120,7 @@ export default class CONTAINER extends GROUP {
             if (model) {
                 if (model.children) {
                     return this.populate(model.children).then(
-                        //() => this.ifEmpty().then(
-                            () => this.body.el.dispatchEvent(new Expand(this)));
+                        () => this.body.el.dispatchEvent(new Expand(this)));
                 }
             }
             return this.ifEmpty();
@@ -136,12 +184,9 @@ export default class CONTAINER extends GROUP {
             console.log('Deselected ' + this.className, this);
             this.navheader.collapse();
         });
-        //this.body.el.addEventListener('activate', () => console.log('Activated ' + this.className, this));
-        //this.body.el.addEventListener('deactivate', () => console.log('Deactivated ' + this.className, this));
         this.body.el.addEventListener('activate', () => {
             try {
-                console.log('Activated ' + this.className, this);
-                //this.navheader.expand();
+                console.log('Activated ' + this.className);
                 this.getMain().focusBody();
             } catch (e) {
                 //console.warn('Unable to focus body', this);
@@ -149,8 +194,7 @@ export default class CONTAINER extends GROUP {
         });
         this.body.el.addEventListener('deactivate', () => {
             try {
-                console.log('Deactivated ' + this.className, this);
-                //this.navheader.expand();
+                console.log('Deactivated ' + this.className);
                 this.getMain().focusBody();
             } catch (e) {
                 //console.warn('Unable to focus body', this);
@@ -185,6 +229,8 @@ export default class CONTAINER extends GROUP {
 					}
                     this[name].implement(new Clickable(this[name]));
                     this[name].el.addEventListener('select', () => this.editData(name));
+                    this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
+                    this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
 					//this[name].implement(new Selectable(this[name]));
 					//this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
 					resolve(this[name]);
@@ -387,8 +433,8 @@ export default class CONTAINER extends GROUP {
 		return this.callback(() => {
             let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
-			items.UP.el.onclick = () => this.up();
-			items.DOWN.el.onclick = () => this.down();
+			items.UP.el.onclick = () => this.moveUp();
+			items.DOWN.el.onclick = () => this.moveDown();
 			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
             items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
 			items.DELETE.el.onclick = () => this.disable();
