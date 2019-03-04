@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENTGROUP, { ATTRIBUTES, CONTAINER, EL, Expand, MODEL } from '../container/formelement/FORMELEMENTGROUP.js';
+import FORMELEMENTGROUP, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../container/formelement/FORMELEMENTGROUP.js';
 /** Construct a Form Fieldset
     @class
     @extends CONTAINER
@@ -14,12 +14,15 @@ export default class FIELDSET extends CONTAINER {
         this.addClass('fieldset');
 	}
     constructElements() {
-        if (this.dataId > 0) {
-            this.createEditableElement('legend', this.body.pane);
-        } else {
-            console.log('No data exists for ' + this.className);
-            this.navheader.el.dispatchEvent(new Expand(this));
-        }
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('legend', this.body.pane);
+            } else {
+                console.log('No data exists for ' + this.className);
+                this.ifEmpty();
+                //this.navheader.el.dispatchEvent(new Expand(this));
+            }
+        });
     }
 	/** Constructs a Form Element Group for this Fieldset
         @todo Verify that this overrides the initial case constructor

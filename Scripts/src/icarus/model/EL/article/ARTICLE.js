@@ -15,15 +15,17 @@ export default class ARTICLE extends CONTAINER {
 		this.addClass('article');
     }
     constructElements() {
-        if (this.dataId > 0) {
-            this.createEditableElement('header', this.body.pane);
-            let date = this.getDateCreated();
-            this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
-            this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
-        } else {
-            console.log('No data exists for ' + this.className);
-            this.navheader.el.dispatchEvent(new Expand(this));
-        }
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
+                let date = this.getDateCreated();
+                this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
+                this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
+            } else {
+                console.log('No data exists for ' + this.className);
+                this.navheader.el.dispatchEvent(new Expand(this));
+            }
+        });
     }
 }
 export { MODEL }

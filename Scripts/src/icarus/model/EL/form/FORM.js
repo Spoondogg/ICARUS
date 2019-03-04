@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
@@ -25,8 +25,6 @@ export default class FORM extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'FORM', model, ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']);
 		this.addClass('form');
-		//this.addCase('FIELDSET', () => this.addFieldset(model));
-		//this.createEditableElement('header', this.body);//.then((header) => $(header.el).insertBefore(this.body.pane.el));
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
@@ -34,32 +32,20 @@ export default class FORM extends CONTAINER {
 			this.post();
 			return false;
 		};
-		//this.populate(model.children);
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
 		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-		/*
-		let { menu } = this.navbar.options; // .get('CRUD', 'MENU')[0]
-		this.btnPost = menu.addNavItemIcon(new MODEL().set({
-		    icon: ICONS.SAVE,
-		    label: 'SAVE'
-		}));
-		this.btnPost.el.addEventListener('click', (ev) => {
-		    ev.preventDefault();
-		    this.post();
-		    return false;
-		});
-		this.btnPost.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-		//this.btnPost.el.addEventListener('mouseup', () => this.closeMenus(group));
-		*/
     }
     constructElements() {
-        if (this.dataId > 0) {
-            this.createEditableElement('header', this.body.pane);
-        } else {
-            console.log('No data exists for ' + this.className);
-            this.navheader.el.dispatchEvent(new Expand(this));
-        }
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
+            } else {
+                console.log('No data exists for ' + this.className);
+                this.ifEmpty();
+                //this.navheader.el.dispatchEvent(new Expand(this));
+            }
+        });
     }
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
@@ -84,7 +70,10 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(form.generateFormPostInputs(payload, className, type), form.get()[0].get()[0]).then(() => {
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
+                        form.generateFormPostInputs(payload, className, type),
+                        form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
+                    ).then(() => {
 						if (payload.model.jsonResults) { // Set values based on existing 
 							JSON.parse(payload.model.jsonResults).forEach((inp) => {
 								form.el.elements[inp.name].value = inp.value;
@@ -112,7 +101,10 @@ export default class FORM extends CONTAINER {
 		return new Promise((resolve, reject) => {
 			try {
 				FORM.createEmptyForm(node, model.hidden).then((frm) => {
-					frm.setAction(model.container.className + '/SET').addInputs(model.container.createContainerInputs()).then((f) => {
+                    frm.setAction(model.container.className + '/SET').addInputs(
+                        model.container.createContainerInputs(),
+                        frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
+                    ).then((f) => {
 						f.afterSuccessfulPost = () => f.getDialog().close();
 						resolve(f);
 					});
@@ -148,32 +140,37 @@ export default class FORM extends CONTAINER {
 		});
 	}
 	/** Adds the input to the FORM 
-	    @param {MODEL} input An input model
+	    @param {MODEL} model An input model
 	    @param {CONTAINER} target Target node
 	    @returns {Promise<FORMELEMENT>} Newly created Form Element
 	*/
-	addInput(input, target = this) {
+	addInput(model, target = this) {
 		return new Promise((resolve, reject) => {
-			try {
+            try {
+                model.set({
+                    container: this,
+                    loader: model.loader
+                });
 				let inp = null;
-				if (input.type === 'FORMPOSTINPUT') {
-					inp = new FORMPOSTINPUT(target.body.pane, input);
+				if (model.type === 'FORMPOSTINPUT') {
+					inp = new FORMPOSTINPUT(target.body.pane, model);
 				} else {
-					switch (input.element) {
+					switch (model.element) {
 						case 'TEXTAREA':
-							inp = new FORMTEXTAREA(target.body.pane, input);
+							inp = new FORMTEXTAREA(target.body.pane, model);
 							break;
 						case 'SELECT':
-							inp = new FORMSELECT(target.body.pane, input);
+							inp = new FORMSELECT(target.body.pane, model);
 							break;
 						case 'INPUT':
-							inp = new FORMINPUT(target.body.pane, input);
+							inp = new FORMINPUT(target.body.pane, model);
 							break;
 						default:
-							inp = new FORMINPUT(target.body.pane, input);
+							inp = new FORMINPUT(target.body.pane, model);
 							break;
 					}
-				}
+                }
+                
 				target.children.push(inp);
 				resolve(inp);
 			} catch (e) {
@@ -502,7 +499,13 @@ export default class FORM extends CONTAINER {
 				main = this.getDialog().getContainer().getMain();
 			}
 			/** @type {LOADER} */
-			let loader = main.getLoader();
+            let loader = null;
+            try {
+                loader = main.getLoader();
+            } catch (e) {
+                console.warn('Unable to get LOADER in FORM.POST', e);
+                throw e;
+            }
 			let data = this.getFormPost();
 			let url = this.getAction();
 			let statusCode = 0;
