@@ -17,15 +17,15 @@ export default class TEXTBLOCK extends CONTAINER {
 		this.addClass('textblock');
 	}
     constructElements() {
-        if (this.dataId > 0) {
-            this.createEditableElement('header', this.body.pane);
-            this.createEditableElement('p', this.body.pane);
-            //this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
-            //this.text.el.ondblclick = () => this.save()
-        } else {
-            console.log('No data exists for ' + this.className);
-            this.navheader.el.dispatchEvent(new Expand(this));
-        }
+        return this.callback(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
+                this.createEditableElement('p', this.body.pane);
+            } else {
+                console.log('No data exists for ' + this.className);
+                this.navheader.el.dispatchEvent(new Expand(this));
+            }
+        });
     }
 }
 export { MODEL }

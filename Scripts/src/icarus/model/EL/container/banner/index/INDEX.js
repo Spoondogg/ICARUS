@@ -18,7 +18,7 @@ export default class INDEX extends BANNER {
 		//this.navheader.expand();
     }
     constructElements() {
-        console.log(this.className + '.constructElements()');
+        return Promise.resolve(this);
     }
 	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
