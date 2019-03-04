@@ -17,7 +17,7 @@ export default class PANE extends DIV {
         this.implement(new Swipeable(this));
         this.swipeUp = () => {
             console.log('swipeUp');
-            let navheader = this.getContainer().navheader;
+            let { navheader } = this.getContainer();
             this.getMain().focusBody().then(() => {
                 if (this.getContainer().body.hasClass('active')) {
                     if (navheader.hasClass('active')) {
@@ -28,7 +28,7 @@ export default class PANE extends DIV {
 		};
         this.swipeDown = () => {
             console.log('swipeDown');
-            let navheader = this.getContainer().navheader;
+            let { navheader } = this.getContainer();
             this.getMain().focusBody().then(() => {
                 if (this.getContainer().body.hasClass('active')) {
                     if (!navheader.hasClass('active')) {
