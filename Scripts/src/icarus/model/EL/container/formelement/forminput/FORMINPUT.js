@@ -9,13 +9,6 @@ import INPUT from '../../../input/INPUT.js';
     @extends FORMELEMENT
 */
 export default class FORMINPUT extends FORMELEMENT {
-	/** Constructs a FORMINPUT element
-	    @param {EL} node Parent
-	    @param {MODEL} model The model
-    */
-	constructor(node, model) {
-		super(node, 'DIV', model);
-    }
     constructElements() {
         //console.log(this.className + '.constructElements()', this);
         if (this.dataId > 0) {
@@ -25,7 +18,8 @@ export default class FORMINPUT extends FORMELEMENT {
             console.log('No data exists for ' + this.className);
             //this.navheader.el.dispatchEvent(new Expand(this));
         }
-
+        // @todo This could use some work.  
+        console.log('FORMINPUT', this);
         this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
             class: 'form-control',
             type: this.attributes.type || 'TEXT', // || this.data.type
