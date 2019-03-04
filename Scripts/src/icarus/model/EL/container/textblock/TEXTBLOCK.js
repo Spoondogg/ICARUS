@@ -1,6 +1,5 @@
 /** @module */
-import CONTAINER, {	Expand, MODEL } from '../CONTAINER.js'; // DATAELEMENTS
-import DIV from '../../div/DIV.js';
+import CONTAINER, {	Expand, MODEL } from '../CONTAINER.js';
 /** Textblock Constructor
     @description A TEXTBLOCK is essentially a DIV that is designed to contain
     rich text (paragraph and span with formatting attributes) and images.

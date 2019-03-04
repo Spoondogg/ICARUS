@@ -1,10 +1,5 @@
 /** @module */
-import FORMELEMENT, {
-	ATTRIBUTES,
-	EL,
-	INPUTTYPES,
-	MODEL
-} from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import OPTION from '../../../option/OPTION.js';
 import SELECT from '../../../select/SELECT.js';
 //import STRING from '../../../../../STRING.js';
@@ -14,12 +9,12 @@ import SELECT from '../../../select/SELECT.js';
 */
 export default class FORMSELECT extends FORMELEMENT {
 	/** An Input/Select OPTION constructor.
-	    @param {EL} node The parent
+	    @param {EL} node Node
 	    @param {string} model The Form Select model
 	    @param {array} options A collection of key,value pairs
 	 */
 	constructor(node, model) {
-		super(node, 'DIV', model);
+		super(node, model);
 		this.dataElements = ['options'];
 		this.createSelect();
 	}
@@ -58,8 +53,4 @@ export default class FORMSELECT extends FORMELEMENT {
 		}
 	}
 }
-export {
-	EL,
-	INPUTTYPES,
-	OPTION
-};
+export { EL, INPUTTYPES, OPTION }
