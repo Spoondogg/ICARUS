@@ -10,3 +10,4 @@ export default class SELECT extends EL {
 		super(node, 'SELECT', model);
 	}
 }
+export { MODEL }
