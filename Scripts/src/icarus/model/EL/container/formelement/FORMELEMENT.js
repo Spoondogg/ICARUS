@@ -10,12 +10,10 @@ import LABEL from '../../label/LABEL.js';
 export default class FORMELEMENT extends CONTAINER {
 	/** Constructs a Form Element
         @param {FORMELEMENTGROUP} node The parent
-        @param {string} element INPUT, SELECT, TEXTAREA
         @param {MODEL} model the data model
     */
-	constructor(node, element, model) {
+	constructor(node, model) {
         super(node, 'DIV', model);
-        this.element = element;
 		this.addClass('form-element');
 		this.implement(new Hideable(this));
     }
