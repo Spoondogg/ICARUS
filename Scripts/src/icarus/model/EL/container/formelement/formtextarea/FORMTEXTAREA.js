@@ -1,10 +1,5 @@
 /** @module */
-import FORMELEMENT, {
-	ATTRIBUTES,
-	EL,
-	LABEL,
-	MODEL
-} from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, EL, LABEL, MODEL } from '../FORMELEMENT.js';
 import TEXTAREA from '../../../textarea/TEXTAREA.js';
 /** Represents a <TEXTAREA> for an Icarus Form       
     @class
@@ -16,17 +11,11 @@ export default class FORMTEXTAREA extends FORMELEMENT {
 	    @param {MODEL} model The textarea model
 	*/
 	constructor(node, model) {
-		super(node, 'DIV', model);
+		super(node, model);
 		this.input = new TEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({
-			'class': 'form-control',
-			'name': model.attributes.name
+			class: 'form-control',
+			name: model.attributes.name
 		})), model.attributes.value || '');
 	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	LABEL,
-	MODEL,
-	TEXTAREA
-};
+export { ATTRIBUTES, EL, LABEL,	MODEL, TEXTAREA }
