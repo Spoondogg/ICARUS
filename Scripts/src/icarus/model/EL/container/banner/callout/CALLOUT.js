@@ -16,7 +16,7 @@ export default class CALLOUT extends CONTAINER {
 		this.body.pane.addClass('callout');
 	}
 	construct() {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (this.dataId > 0) {
 				if (this.data.icon) {
 					this.icon = new GLYPHICON(this.body.pane, this.data.icon);

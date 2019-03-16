@@ -30,7 +30,7 @@ export default class FORMELEMENT extends CONTAINER {
         }
     }
 	/** If no children supplied...
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	ifEmpty() {
 		return Promise.resolve(this);

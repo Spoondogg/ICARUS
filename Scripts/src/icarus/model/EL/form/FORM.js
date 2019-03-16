@@ -124,7 +124,7 @@ export default class FORM extends CONTAINER {
 	}
 	/** Adds the provided buttons to the prompt
 	    @param {Array<BUTTON>} buttons An array of buttons ([label, glyphicon, buttonType])
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addButtons(buttons) {
 		return new Promise((resolve) => {
@@ -137,7 +137,7 @@ export default class FORM extends CONTAINER {
 	/** Adds the provided inputs to the FORM asynchronously
 	    @param {Array<MODEL>} inputs An array of inputs
         @param {CONTAINER} target Target node
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addInputs(inputs = [], target = this) {
 		return new Promise((resolve) => {
@@ -242,7 +242,7 @@ export default class FORM extends CONTAINER {
 	}
 	/** Sets the form method
 	    @param {string} method ie POST or GET
-	    @returns {ThisType} callback
+	    @returns {ThisType} Method Chain
 	*/
 	setMethod(method = 'POST') {
 		this.attributes.method = method;
@@ -287,7 +287,7 @@ export default class FORM extends CONTAINER {
 		return true;
 	}
 	/** Enables all fieldsets within this form
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	unlock() {
 		return new Promise((resolve, reject) => {

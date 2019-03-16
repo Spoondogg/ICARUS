@@ -48,7 +48,7 @@ export default class PROMPT extends DIALOG {
 	/** Adds buttons, inputs etc to the given FORM
 	    @param {FORM} form The form to configure
 	    @param {MODEL} model The FORM model
-	    @returns {Promise<FORM>} callback
+	    @returns {Promise<FORM>} Promise Chain
 	*/
 	configureForm(form, model) {
 		return new Promise((resolve, reject) => {
