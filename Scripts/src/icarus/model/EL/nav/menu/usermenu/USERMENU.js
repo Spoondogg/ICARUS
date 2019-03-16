@@ -45,14 +45,14 @@ export default class USERMENU extends MENU {
 		this.expand();
 	}
 	/** Calls MAIN.logout()
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	logout() {
 		console.log('USERMENU.logout()');
 		return this.flip().then(() => this.getMain().logout());
 	}
 	/** Calls MAIN.login()
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	login() {
 		console.log('USERMENU.login()');

@@ -158,10 +158,10 @@ export default class INDEXMAIN extends BANNER {
 	}
 	/** Loads the page
 	    @param {number} page Page to load
-	    @returns {Promise<this>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	loadPage(page) {
-		return this.callback(() => {
+		return this.chain(() => {
 			this.header.setInnerHTML('Page ' + (page + 1));
 			let buttons = this.pagination.buttonGroup.el.children;
 			for (let b = 0; b < buttons.length; b++) {

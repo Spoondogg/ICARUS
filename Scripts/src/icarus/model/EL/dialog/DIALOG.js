@@ -25,7 +25,7 @@ export default class DIALOG extends EL {
 		this.close = () => this.closeDialog();
 		this.hide = () => this.hideDialog();
 		this.caller = this.required(model.caller); // Switchable Element
-		this.container = this.required(model.container); // Container Element for callbacks
+		this.container = this.required(model.container); // Container Element for linked list head
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
         this.btnClose = this.createCloseButton();
         if (showHeader) {
@@ -60,7 +60,7 @@ export default class DIALOG extends EL {
 	    @returns {Promise<DIALOG>} Callback on successful display of dialog
 	*/
 	showDialog(delay = 0) {
-		return this.callback(() => setTimeout(() => $(this.el).modal('show'), delay));
+		return this.chain(() => setTimeout(() => $(this.el).modal('show'), delay));
 	}
 	/** Closes the DIALOG by hiding it and then removing it from the DOM
         @param {number} delay Millisecond delay until dialog is closed

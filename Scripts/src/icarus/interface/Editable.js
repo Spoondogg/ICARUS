@@ -17,19 +17,23 @@ export default class Editable extends IFACE {
 		node.el.addEventListener('edit', () => node.edit());
 		node.el.addEventListener('open', () => node.edit());
 		node.el.addEventListener('closed', () => node.edit());
-	}
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
 	setMethods(node) {
 		/** Edit the element
-	        @returns {Promise<ThisType>} callback
+	        @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.edit = () => node.callback(() => console.log('Edit', node));
+        this.methods.edit = () => node.chain(() => console.log('Edit', node));
 	}
 	/** Opens the ELEMENT up for editing.  This should create a link
 	    between the object on the server and its client side representation
 	    @returns {EL} This EL
 	
     open() {
-        return this.callback(() => {
+        return this.chain(() => {
             this.status = STATUS.OPEN;
             //this.el.setAttribute('data-status', 'open');
             try {
@@ -45,7 +49,7 @@ export default class Editable extends IFACE {
 	    @returns {EL} This EL
 	
     close() {
-        return this.callback(() => {
+        return this.chain(() => {
             this.status = STATUS.CLOSED;
         });
 	}*/

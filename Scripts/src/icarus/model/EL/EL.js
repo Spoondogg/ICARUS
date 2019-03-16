@@ -23,14 +23,16 @@ export default class EL extends MODEL {
 		    @type {EL} children 
 		*/
 		this.node = node;
-		//this.next = null;
+        /** String representation of this Element's Class Name
+            @type {string}
+        */
 		this.className = this.constructor.name;
 		/** HTML Element Tag ie: DIV 
-		    @type {string} element
+		    @type {string}
 		*/
 		this.element = element;
 		/** State Indicator 
-		    @type {number} status 
+		    @type {number} 
 		*/
 		this.status = STATUS.DEFAULT; // 
 		//this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
@@ -38,8 +40,8 @@ export default class EL extends MODEL {
 		    @type {Array<MODEL>} children 
 		*/
 		this.children = [];
-		/** A Collection of callback methods that accept a MODEL
-		    ie: this.callbacks[foo]
+		/** A Collection of Constructor methods
+		    ie: this.constructors[foo]
 		*/
 		this.callbacks = {};
 		/** A collection of public Methods
@@ -61,10 +63,10 @@ export default class EL extends MODEL {
 	    param {EL} node Parent node to append to
 	    @param {MODEL} model A set of key/value pairs for this element's model
 	    param {string} innerHTML This text will be displayed within the HTML element
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
-		return this.callback(() => {
+		return this.chain(() => {
 			this.el = document.createElement(this.element);
 			if (this.node === document.body) {
 				this.node.appendChild(this.el);
@@ -76,7 +78,7 @@ export default class EL extends MODEL {
 	}
 	/** Perform any async actions required to construct the Element
         @param {MODEL} model Model
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
 		if (model) {
@@ -87,7 +89,7 @@ export default class EL extends MODEL {
 		return this.ifEmpty();
 	}
 	/** If no children supplied...
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	ifEmpty() {
 		return Promise.resolve(this);
@@ -121,7 +123,7 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Returns this element for chaining purposes
 	*/
 	addClass(className) {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (className === 'undefined') {
 				console.log('ClassName Undefined');
 			} else {
@@ -136,17 +138,17 @@ export default class EL extends MODEL {
 	}
 	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addClasses(classNames) {
 		Promise.all(classNames.map((c) => this.addClass(c))).then(() => this);
 	}
 	/** Inserts @see {this.el} as the first child of target
 	    @param {HTMLElement} target Target HTML Element
-	    @returns {ThisType} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	
 	append(target) {
-		return this.callback(() => target.insertBefore(this.el, target.firstChild));
+		return this.chain(() => target.insertBefore(this.el, target.firstChild));
     }*/
 	/** Dispatches the given Event to this element's siblings
 	    @param {Event} event Event to dispatch
@@ -370,9 +372,9 @@ export default class EL extends MODEL {
 	    The function is called within a try/catch block and will reject on error
 	    @param {Array<Function>} fn An array of Synchronous functions in performing order
 	    @param {string} msg Optional message to display on error
-	    @returns {ThisType} Returns this object as a callback
+	    @returns {Promise<ThisType>} Returns this object as a callback
 	*/
-	callback(fn, msg = 'Callback Error') {
+	chain(fn, msg = 'Callback Error') {
 		return new Promise((resolve, reject) => {
 			try {
 				if (Array.isArray(fn)) {
@@ -398,7 +400,7 @@ export default class EL extends MODEL {
         @returns {void}
     */
 	merge(model) {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (typeof model === 'object') {
 				for (let prop in model) {
 					if (typeof prop === 'string') {
@@ -442,7 +444,7 @@ export default class EL extends MODEL {
 		}
 	}
 	/** Removes all child Elements of this Element from the DOM (Preserves this.children)
-	    @returns {ThisType} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	empty() {
 		return new Promise((resolve) => {
@@ -458,7 +460,7 @@ export default class EL extends MODEL {
 	    @returns {Promise} Callback on successful destroy()
 	*/
 	remove() { // delay = 300
-		return this.callback(() => {
+		return this.chain(() => {
 			if (this.el.parentNode) {
 				this.el.parentNode.removeChild(this.el);
 			} else {
@@ -495,10 +497,10 @@ export default class EL extends MODEL {
 	/** Sets the given attribute to the element and its model
 	     @param {string} key Attribute name
 	     @param {any} value Attribute value
-	     @returns {ThisType} callback
+	     @returns {Promise<ThisType>} Promise Chain
 	*/
 	setAttribute(key, value) {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (typeof value !== 'undefined' && value !== null) {
 				this.el.setAttribute(key, value);
 			}
@@ -516,7 +518,7 @@ export default class EL extends MODEL {
         @returns {EL} Returns this element for chaining purposes
     */
 	setClass(className) {
-		this.callback(() => {
+		this.chain(() => {
 			this.el.className = className;
 			this.attributes.class = className;
 		});
@@ -535,10 +537,10 @@ export default class EL extends MODEL {
 	}
 	/** Removes the given class name from the element's list of classes
 	    @param {string} className the class to be removed
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	removeClass(className) {
-		/*return this.callback(() => $(this.el).removeClass(className)).then((el) => {
+		/*return this.chain(() => $(this.el).removeClass(className)).then((el) => {
 		    el.attributes.set('class', el.attributes.get('class').split(' ').filter((v) => v !== className));
 		});*/
 		return new Promise((resolve, reject) => {
@@ -575,10 +577,10 @@ export default class EL extends MODEL {
 	}
 	/** Creates given Elements as children of this Element
 	    @param {Array<EL>} children model.children
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	populate(children) {
-		return this.callback(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
+		return this.chain(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
 	}
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
@@ -590,7 +592,7 @@ export default class EL extends MODEL {
 	}
 	/** Scrolls page to the top of this element
 	    @param {number} speed Millisecond duration
-	    @returns {ThisType} callback
+	    @returns {ThisType} Method Chain
 	*/
 	scrollTo(speed = 1000) {
 		console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
@@ -601,10 +603,10 @@ export default class EL extends MODEL {
 	}
 	/** Toggles the given class on this element
 	    @param {string} className The classname to toggle on this element
-	    @returns {ThisType} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	toggleClass(className = 'active') {
-		return this.callback(() => $(this.el).toggleClass(className));
+		return this.chain(() => $(this.el).toggleClass(className));
 	}
 }
 export { MODEL, ATTRIBUTES }
