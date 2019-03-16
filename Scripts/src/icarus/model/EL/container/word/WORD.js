@@ -15,7 +15,7 @@ export default class WORD extends CONTAINER {
 		super(node, 'DIV', model);
 	}
 	construct() {
-		return this.callback(() => {
+		return this.chain(() => {
 			console.log(this);
             this.header = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
 		});

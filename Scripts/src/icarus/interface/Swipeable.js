@@ -1,6 +1,5 @@
 /** @module */
-import IFACE from './IFACE.js';
-//import Activate from '../../event/Activate.js';
+import IFACE, { EL } from './IFACE.js';
 /** An interface for Swipe driven Events
     @class
     @extends IFACE
@@ -29,24 +28,28 @@ export default class Swipeable extends IFACE {
 		node.el.addEventListener('swipeDown', () => node.swipeDown());
 		node.el.addEventListener('swipeLeft', () => node.swipeLeft());
 		node.el.addEventListener('swipeRight', () => node.swipeRight());
-	}
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
 	setMethods(node) {
 		/** Triggers when upward swipe occurs on this element
-	       @returns {Promise<ThisType>} callback
+	       @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.swipeUp = () => node.callback(() => console.log('Swipe Up', node));
+        this.methods.swipeUp = () => node.chain(() => console.log('Swipe Up', node));
 		/** Triggers when downward swipe occurs on this element
-	       @returns {Promise<ThisType>} callback
+	       @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.swipeDown = () => node.callback(() => console.log('Swipe Down', node));
+        this.methods.swipeDown = () => node.chain(() => console.log('Swipe Down', node));
 		/** Triggers when left-to-right swipe occurs on this element
-	       @returns {Promise<ThisType>} callback
+	       @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.swipeLeft = () => node.callback(() => console.log('Swipe Left', node));
+        this.methods.swipeLeft = () => node.chain(() => console.log('Swipe Left', node));
 		/** Triggers when right-to-left swipe occurs on this element
-	       @returns {Promise<ThisType>} callback
+	       @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.swipeRight = () => node.callback(() => console.log('Swipe Right', node));
+        this.methods.swipeRight = () => node.chain(() => console.log('Swipe Right', node));
     }
 	/** Sets start coordinates
 		@param {Event} ev Event
@@ -96,3 +99,4 @@ export default class Swipeable extends IFACE {
         }*/
 	}
 }
+export { EL }

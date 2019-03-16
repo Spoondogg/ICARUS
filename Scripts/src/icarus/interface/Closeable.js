@@ -14,20 +14,24 @@ export default class Closeable extends Hideable {
 	addListeners(node) {
 		node.el.addEventListener('open', () => node.open());
 		node.el.addEventListener('close', () => node.close());
-	}
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
 	setMethods(node) {
 		/** Open this element
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
-		this.methods.open = () => node.callback(() => node.addClass('open'));
+		this.methods.open = () => node.chain(() => node.addClass('open'));
 		/** Shows the element
 	        @returns {Promise<DIALOG>} Callback on successful display of dialog
 	    */
-		this.methods.show = () => node.callback(() => $(this.el).modal('show'));
+        this.methods.show = () => node.chain(() => $(this.el).modal('show'));
 		/** Hides this element
 		    @param {number} delay Millisecond delay until element is closed
 		    @param {boolean} preserve If true, element is not deleted
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
 		this.methods.hide = (delay = 200, preserve = true) => new Promise((resolve, reject) => {
 			try {
@@ -49,7 +53,7 @@ export default class Closeable extends Hideable {
 		});
 		/** Close (Hide and Destroy) this element
 		    @param {number} delay Millisecond delay until element is closed
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
 		this.methods.close = (delay = 200) => node.hide(delay, false);
 	}

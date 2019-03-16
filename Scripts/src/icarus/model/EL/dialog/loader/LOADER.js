@@ -38,7 +38,7 @@ export default class LOADER extends DIALOG {
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
 	log(value, text = '', show = true, delay = 300) {
-		return this.callback(() => {
+		return this.chain(() => {
 			this.progressBar.el.style.width = value + '%';
 			this.progressBar.el.setAttribute('aria-valuenow', value);
 			if (text) {

@@ -32,7 +32,11 @@ export default class Clickable extends IFACE {
 		node.el.style.webkitTouchCallout = 'none';
 		node.timer = null;
 		node.touchtime = 0; // mobile double click detection           
-	}
+    }
+    /** Adds listeners where applicable
+	    @param {EL} node Element to append listeners
+	    @returns {void}
+	*/
 	addListeners(node) {
 		// Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
@@ -50,10 +54,23 @@ export default class Clickable extends IFACE {
 	resetTimer(node) {
 		node.touchtime = 0;
 		clearTimeout(node.timer);
-	}
-	setMethods(node) {
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
+    setMethods(node) {
+        /** Toggle the 'active' state of this Element and dispatch appropriate Event
+            @returns {void}
+        */
 		this.methods.click = () => this.toggle('active', new Activate(node), new Deactivate(node));
-		this.methods.dblclick = () => this.toggle('selected', new Select(node), new Deselect(node));
+        /** Toggle the 'selected' state of this Element and dispatch appropriate Event
+            @returns {void}
+        */
+        this.methods.dblclick = () => this.toggle('selected', new Select(node), new Deselect(node));
+        /** No event is called for a long-click at this time
+            @returns {void}
+        */
         this.methods.longclick = () => null; //console.log('longclick-down', node);
 		/** On PressDown Event, starts a timer that triggers the Long Press Event
             @param {Event} ev Event

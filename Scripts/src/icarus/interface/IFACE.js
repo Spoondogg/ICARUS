@@ -64,10 +64,10 @@ export default class IFACE {
 	    @param {string} className Existence of classname indicates on/off event to call
 	    @param {Event} eventOn Event to call if class does not yet exist
 	    @param {Event} eventOff Event to call if class already exists
-	    @returns {ThisType} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	toggle(className, eventOn, eventOff) {
-		return this.node.callback(
+		return this.node.chain(
 			() => this.node.el.dispatchEvent(this.node.hasClass(className) ? eventOff : eventOn));
 	}
 }

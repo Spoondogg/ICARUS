@@ -11,18 +11,26 @@ export default class Selectable extends IFACE {
 	*/
 	constructor(node) {
 		super(node, 'selectable');
-	}
+    }
+    /** Adds listeners where applicable
+	    @param {EL} node Element to append listeners
+	    @returns {void}
+	*/
 	addListeners(node) {
 		node.el.addEventListener('select', () => node.select());
 		node.el.addEventListener('selectAll', () => node.selectAll());
 		node.el.addEventListener('deselect', () => node.deselect());
 		node.el.addEventListener('deselectAll', () => node.deselectAll());
-	}
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
 	setMethods(node) {
 		/** Select this element
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
-		this.methods.select = () => node.callback(() => {
+        this.methods.select = () => node.chain(() => {
 			try {
 				//this.methods.deselectAll().then(() => node.addClass('selected'));
 				node.deselectAll().then(() => node.addClass('selected'));
@@ -37,13 +45,13 @@ export default class Selectable extends IFACE {
 		*/
 		this.methods.selectAll = () => Promise.resolve($('.selectable').addClass('selected'));
 		/** Deselect this element
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
 		this.methods.deselect = () => node.removeClass('selected');
 		/** Deselects any 'selected' elements 
 		    @returns {Promise<void>} callback
 		*/
-		this.methods.deselectAll = () => node.callback(() => {
+        this.methods.deselectAll = () => node.chain(() => {
 			let selected = $('.selected');
 			if (selected.length > 0) {
 				selected.each((i) => selected[i].dispatchEvent(new Deselect(node)));

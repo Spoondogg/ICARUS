@@ -145,10 +145,10 @@ export default class MAIN extends CONTAINER {
 		console.log('TODO: Forward');
 	}
 	/** Adds default Nav Items to the Nav Bar including the label
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addNavOptions() {
-		return this.callback(() => {
+		return this.chain(() => {
 			// LEFT ALIGN
 			// Document Map for quick navigation and selection
 			let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
@@ -272,7 +272,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     focusBody() {
-        return this.callback(() => {
+        return this.chain(() => {
             let ev = new Deactivate(this);
             this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
             this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
@@ -297,7 +297,7 @@ export default class MAIN extends CONTAINER {
 		return this.id;
 	}
 	/** Override CONTAINER.ifEmpty()
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	ifEmpty() {
 		return Promise.resolve(this);
@@ -364,10 +364,10 @@ export default class MAIN extends CONTAINER {
 	}
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	createLoginForm(form) {
-		return this.callback(() => {
+		return this.chain(() => {
 			form.setAction('/Account/Login');
 			form.addClass('login');
 			form.children[0].children[0].addInputElements([
