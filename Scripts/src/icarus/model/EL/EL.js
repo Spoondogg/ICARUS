@@ -374,7 +374,7 @@ export default class EL extends MODEL {
 	    @param {string} msg Optional message to display on error
 	    @returns {Promise<ThisType>} Returns this object as a callback
 	*/
-	chain(fn, msg = 'Callback Error') {
+	chain(fn, msg = 'Promise Chain Error') {
 		return new Promise((resolve, reject) => {
 			try {
 				if (Array.isArray(fn)) {

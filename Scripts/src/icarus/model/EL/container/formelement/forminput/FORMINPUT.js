@@ -10,7 +10,7 @@ import INPUT from '../../../input/INPUT.js';
 */
 export default class FORMINPUT extends FORMELEMENT {
     constructElements() {
-        return this.callback(() => {
+        return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('label', this.body.pane);
             } else {
