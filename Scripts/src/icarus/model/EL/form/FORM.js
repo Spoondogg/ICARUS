@@ -37,7 +37,7 @@ export default class FORM extends CONTAINER {
 		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
     }
     constructElements() {
-        return this.callback(() => {
+        return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this.body.pane);
             } else {

@@ -14,7 +14,7 @@ export default class FIELDSET extends CONTAINER {
         this.addClass('fieldset');
 	}
     constructElements() {
-        return this.callback(() => {
+        return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('legend', this.body.pane);
             } else {

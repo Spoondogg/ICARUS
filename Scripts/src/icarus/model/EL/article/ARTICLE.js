@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
+import CONTAINER, { Activate, Expand, MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class
@@ -15,7 +15,7 @@ export default class ARTICLE extends CONTAINER {
 		this.addClass('article');
     }
     constructElements() {
-        return this.callback(() => {
+        return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this.body.pane);
                 let date = this.getDateCreated();
@@ -23,7 +23,7 @@ export default class ARTICLE extends CONTAINER {
                 this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
             } else {
                 console.log('No data exists for ' + this.className);
-                this.navheader.el.dispatchEvent(new Expand(this));
+                this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
             }
         });
     }

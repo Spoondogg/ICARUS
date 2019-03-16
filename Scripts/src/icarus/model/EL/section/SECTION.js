@@ -14,7 +14,7 @@ export default class SECTION extends CONTAINER {
 		this.addClass('section');
     }
     constructElements() {
-        return this.callback(() => {
+        return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this.body.pane);
             } else {
