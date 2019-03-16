@@ -17,8 +17,8 @@ export default class JUMBOTRON extends CONTAINER {
 	}
     construct() {
         //console.log(this.className + '.construct()');
-        return this.callback(() => {
-            //console.log('JUMBOTRON callback', this);
+        return this.chain(() => {
+            //console.log('JUMBOTRON', this);
             if (this.dataId > 0) {
                 this.screen = new DIV(this.body.pane, new MODEL('screen'));
                 this.setScreenColor();

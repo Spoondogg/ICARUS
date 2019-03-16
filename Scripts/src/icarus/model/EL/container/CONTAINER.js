@@ -60,12 +60,11 @@ export default class CONTAINER extends GROUP {
 	// eslint-enable max-statements */
     /** Generic construct method for EL/CONTAINER async actions and population
         @param {MODEL} model Model
-        @returns {Promise<ThisType>} callback
+        @returns {Promise<ThisType>} Promise Chain
     */
     construct(model) {
         //console.log(this.className + '.construct()');
-        return this.callback(() => {
-            //console.log(this.className + ' callback', this);
+        return this.chain(() => {
             this.constructElements();
             // Populate if model exists
             if (model) {
@@ -81,7 +80,7 @@ export default class CONTAINER extends GROUP {
     /** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
         @abstract
-	    @returns {Promise<DIALOG>} A Save PROMPT
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
@@ -106,10 +105,10 @@ export default class CONTAINER extends GROUP {
 	}
 	/** If the Container has no children, display a button to create an element
 	    Should be overridden on CONTAINERs that should not have children
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	ifEmpty() {
-		return this.callback(() => {
+		return this.chain(() => {
             if (this.get().length === 0) {
 				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
@@ -297,7 +296,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	addElementItems(containerList) {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (containerList.length > 0) {
 				let defaultContainers = [];
 				containerList.splice(2, 0, ...defaultContainers);
@@ -325,11 +324,11 @@ export default class CONTAINER extends GROUP {
     }
 	/** Empties the Container Pane and reconstructs its contents based on the current model
         @param {MODEL} model By default, use this CONTAINER's model
-        @returns {Promise<ThisType>} callback
+        @returns {Promise<ThisType>} Promise Chain
     */
     refresh(model = this) { // Optionally retrieve a new MODEL
         console.log('Refresh', this);
-        return this.callback(
+        return this.chain(
             () => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
                 (loader) => {
                     console.log('Refreshing ' + this.className, this);
@@ -341,11 +340,11 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Closes parent menus
 	    @param {MENU} menu Menu
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	closeMenus(menu) {
 		console.log('closemenus', this);
-		return this.callback(() => menu.deactivate().then(() => this.navheader.toggle()));
+		return this.chain(() => menu.deactivate().then(() => this.navheader.toggle()));
 	}
 	/** Creates a NavItem that closes its menu on mouseup
 	    @param {string} className className
@@ -384,7 +383,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {GROUP} A Menu Group
 	*/
 	addDomItems() {
-		return this.callback(() => {
+		return this.chain(() => {
             let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
 			items.UP.el.onclick = () => this.up();
@@ -399,7 +398,7 @@ export default class CONTAINER extends GROUP {
         @returns {GROUP} A Menu Group
 	*/
 	addCrudItems() {
-		return this.callback(() => {
+		return this.chain(() => {
             let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
 			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
 			items.LOAD.el.onclick = () => this.load();
@@ -413,7 +412,7 @@ export default class CONTAINER extends GROUP {
         and adds respective button to this container
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
-        @returns {void}
+        @returns {Promise<ThisType>} Promise Chain
     */
 	addContainerCase(className, addButton = true) {
 		return new Promise((resolve, reject) => {
@@ -464,7 +463,7 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Sets this Container's unique identifier to the given id
 	    @param {number} id Container UId
-	    @returns {ThisType} callback
+	    @returns {ThisType} Method Chain
 	*/
 	setId(id) {
 		/** CONTAINER unique id
@@ -525,11 +524,11 @@ export default class CONTAINER extends GROUP {
 	    @param {MODEL} model Model
 	    @param {Promise.resolve} resolve Promise resolver function
 	    param {Promise.reject} reject Promise reject function
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
     loadModel(model, resolve) {
         console.log(this.className + '.loadModel()', model);
-        return this.callback(() => {
+        return this.chain(() => {
             if (model.label) {
                 document.title = model.label;
             }
@@ -545,10 +544,10 @@ export default class CONTAINER extends GROUP {
     }
     /** Sets Id, Label and Name based on MODEL
         @param {MODEL} model MODEL
-        @returns {Promise<ThisType>} callback
+        @returns {Promise<ThisType>} Promise Chain
     */
     setElementAttributes(model) {
-        return this.callback(() => {
+        return this.chain(() => {
             this.setId(model.id);
             this.setLabel(model.label);
             this.setName(model.name);
@@ -629,10 +628,10 @@ export default class CONTAINER extends GROUP {
         this.subsections = subsections;
 	}
 	/** Toggles visibility of any child Container Headers
-        @returns {Promise<ThisType>} callback
+        @returns {Promise<ThisType>} Promise Chain
 	*/
 	toggleHeaders() {
-		return this.callback(() => $(this.el).find('.container > nav').toggle());
+		return this.chain(() => $(this.el).find('.container > nav').toggle());
 	}
 	/** Creates a DIALOG and if user permits, deletes this CONTAINER from the DOM.
         Optionally, this should also delete the object from the database

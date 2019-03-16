@@ -10,22 +10,30 @@ export default class Hideable extends IFACE {
 	*/
 	constructor(node) {
 		super(node, 'hideable');
-	}
+    }
+    /** Adds listeners where applicable
+	    @param {EL} node Element to append listeners
+	    @returns {void}
+	*/
 	addListeners(node) {
 		node.el.addEventListener('hide', () => node.hide());
 		node.el.addEventListener('show', () => node.show());
-	}
+    }
+    /** Appends Interface methods to class that implements them
+	    @param {EL} node Element to implement methods
+	    @returns {void}
+	*/
 	setMethods(node) {
 		/** Hides the element
-	        @returns {Promise<ThisType>} callback
+	        @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.hide = () => node.callback(() => {
+        this.methods.hide = () => node.chain(() => {
 			node.el.style.display = 'none';
 		});
 		/** Shows the element
-		    @returns {Promise<ThisType>} callback
+		    @returns {Promise<ThisType>} Promise Chain
 		*/
-		this.methods.show = () => node.callback(() => {
+        this.methods.show = () => node.chain(() => {
 			node.el.style.display = 'block';
 		});
 	}

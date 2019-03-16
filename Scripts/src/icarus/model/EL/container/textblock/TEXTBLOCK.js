@@ -23,7 +23,7 @@ export default class TEXTBLOCK extends CONTAINER {
 	    @returns {void}
 	*/
 	construct() {
-		return this.callback(() => {
+		return this.chain(() => {
 			if (this.dataId > 0) {
 				this.text = new DIV(this.body.pane, new MODEL('text'), this.data.text);
 				this.text.el.ondblclick = () => this.save()

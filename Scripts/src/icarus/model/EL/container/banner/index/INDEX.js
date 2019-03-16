@@ -64,7 +64,7 @@ export default class INDEX extends BANNER {
 		}
     }
     /** If no children supplied...
-	    @returns {Promise<ThisType>} callback
+	    @returns {Promise<ThisType>} Promise Chain
 	*/
     ifEmpty() {
         return Promise.resolve(this);
