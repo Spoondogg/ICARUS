@@ -29,11 +29,55 @@ export default class NAVBAR extends NAV {
 		}
 		this.menus.activate();
 		this.menus.expand();
-	}
+    }
+    /** Adds the Options/Config menu
+	    Adds a 'right-aligned' or 'full-width' tab to show/hide the Options Menu
+        @param {string} label NAVITEMICON.label
+        @param {string} icon NAVITEMICON icon
+        @param {string} name MENU name
+        @param {Array<string>} children Sample child tabs
+	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+	    @returns {void}
+	*/
+    addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2']) {
+        try {
+            // Create Primary Options tab and Menu
+            this.btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
+                icon,
+                label
+            }));
+            this.options = this.menus.addMenu(new MODEL().set('name', name));
+            this.addTabbableElement(this.btnOptions, this.options);
+            // Create Secondary Tabs and Horizontal Menus inside Options Menu
+            children.map((str) => {
+                let tb = this.options.addNavItemIcon(new MODEL().set({
+                    label: str,
+                    icon: ICONS[str]
+                }));
+                let opt = this.options.addMenu(new MODEL('horizontal').set('name', str));
+                this.addTabbableElement(tb, opt);
+            });
+        } catch (e) {
+            let modal = this.getProtoTypeByClass('MODAL');
+            if (modal === null) {
+                console.warn('Unable to retrieve MAIN Container', e);
+                throw e;
+            } else {
+                switch (modal.className) {
+                    case 'LOADER':
+                    case 'PROMPT':
+                        break;
+                    default:
+                        console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
+                        break;
+                }
+            }
+        }
+    }
 	/** Sets the 'activate' and 'deactivate' so that the NAVITEM will trigger the EL
 	     @param {NAVITEM} tab NAV Item that acts as a Tab
 	     @param {EL} element A Switchable Element that is activated by this Tab
-	     @returns {{tab, element}} Tabbable Element {tab,element}
+	     @returns {{tab:NAVITEM, element:EL}} Tabbable Element {tab,element}
 	*/
     addTabbableElement(tab, element) {
         tab.target = element;
