@@ -30,9 +30,9 @@ export default class CONTAINER extends GROUP {
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
 	    @param {MODEL} model Model
-	    @param {Array<string>} containers An array of strings representing child Containers that this Container can create
+	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, element = 'DIV', model = new MODEL(), containers = []) {
+	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
 		super(node, element, model);
 		this.implement(new Movable(this));
 		this.setId(model.id).addClass('container');
@@ -54,7 +54,7 @@ export default class CONTAINER extends GROUP {
         this.addEvents();        
 		// Cascade state
 		// Add Navbar Items
-		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
+		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
         this.setDefaultVisibility(model);
 	}
 	// eslint-enable max-statements */
@@ -807,5 +807,5 @@ export default class CONTAINER extends GROUP {
         return document.getElementsByTagName('meta').token.content;
     }
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVITEM, NAVITEMICON, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
 /* eslint-enable max-lines */
