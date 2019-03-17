@@ -51,56 +51,7 @@ export default class CONTAINER extends GROUP {
         this.body = new COLLAPSIBLE(this, new MODEL('body'));
         // Conside this as a method instead of for ALL Containers
         this.body.implement(new Clickable(this.body));
-        this.addEvents();
-        /** Moves this element UP one slot
-	        @returns {ThisType} This Container
-	    */
-        this.moveUp = () => {
-            console.log('container up');
-            let n = $(this.el);
-            if (n.prev().length > 0) {
-                n.animate({
-                    height: 'toggle'
-                }, 300);
-                setTimeout(() => {
-                    n.prev().animate({
-                        height: 'toggle'
-                    }, 300).insertAfter(n).animate({
-                        height: 'toggle'
-                    }, 300);
-                }, 0);
-                setTimeout(() => {
-                    n.animate({
-                        height: 'toggle'
-                    }, 300).delay(300);
-                }, 300);
-            }
-        };
-        /** Moves this element DOWN one slot
-            @returns {ThisType} This Container
-        */
-        this.moveDown = () => {
-            console.log('container down');
-            let n = $(this.el);
-            if (n.next().length > 0) {
-                n.animate({
-                    height: 'toggle'
-                }, 300);
-                setTimeout(() => {
-                    n.next().animate({
-                        height: 'toggle'
-                    }, 300).insertBefore(n).animate({
-                        height: 'toggle'
-                    }, 300).delay(300);
-                }, 0);
-                setTimeout(() => {
-                    n.animate({
-                        height: 'toggle'
-                    }, 300);
-                }, 300);
-            }
-            return this;
-        };
+        this.addEvents();        
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
@@ -171,9 +122,10 @@ export default class CONTAINER extends GROUP {
 			}
 		});
     }
-    addEvents() {
-        //this.body.el.addEventListener('select', () => console.log('Selected ' + this.className, this));
-        //this.body.el.addEventListener('deselect', () => console.log('Deselected ' + this.className, this));
+    /** Adds 'select' and 'deselect' events to this CONTAINER
+        @returns {void}
+    */
+    addSelectEvents() {
         this.body.el.addEventListener('select', () => {
             console.log('Selected ' + this.className, this);
             this.navheader.expand();
@@ -183,6 +135,11 @@ export default class CONTAINER extends GROUP {
             console.log('Deselected ' + this.className, this);
             this.navheader.collapse();
         });
+    }
+    /** Adds 'activate' and 'deactivate' events to this CONTAINER
+        @returns {void}
+    */
+    addActivateEvents() {
         this.body.el.addEventListener('activate', () => {
             try {
                 console.log('Activated ' + this.className);
@@ -199,6 +156,68 @@ export default class CONTAINER extends GROUP {
                 //console.warn('Unable to focus body', this);
             }
         });
+    }
+    /** Adds 'moveUp' and 'moveDown' events to this CONTAINER
+        @returns {void}
+    */
+    addMoveEvents() {
+        /** Moves this element UP one slot
+	        @returns {ThisType} This Container
+	    */
+        this.moveUp = () => {
+            console.log('container up');
+            let n = $(this.el);
+            if (n.prev().length > 0) {
+                n.animate({
+                    height: 'toggle'
+                }, 300);
+                setTimeout(() => {
+                    n.prev().animate({
+                        height: 'toggle'
+                    }, 300).insertAfter(n).animate({
+                        height: 'toggle'
+                    }, 300);
+                }, 0);
+                setTimeout(() => {
+                    n.animate({
+                        height: 'toggle'
+                    }, 300).delay(300);
+                }, 300);
+            }
+        };
+        /** Moves this element DOWN one slot
+            @returns {ThisType} This Container
+        */
+        this.moveDown = () => {
+            console.log('container down');
+            let n = $(this.el);
+            if (n.next().length > 0) {
+                n.animate({
+                    height: 'toggle'
+                }, 300);
+                setTimeout(() => {
+                    n.next().animate({
+                        height: 'toggle'
+                    }, 300).insertBefore(n).animate({
+                        height: 'toggle'
+                    }, 300).delay(300);
+                }, 0);
+                setTimeout(() => {
+                    n.animate({
+                        height: 'toggle'
+                    }, 300);
+                }, 300);
+            }
+            return this;
+        };
+    }
+    /** Adds default CONTAINER Event Handlers 
+        @returns {void} 
+    */
+    addEvents() {
+        this.addSelectEvents();
+        this.addActivateEvents();
+        this.addMoveEvents();
     }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
@@ -546,8 +565,7 @@ export default class CONTAINER extends GROUP {
 		@returns {MAIN} This MAIN
 	*/
     load(id) {
-        return new Promise((resolve, reject) => {
-            // Consider verifying cache before retrieving
+        return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
             try {
                 if (id >= 0) {
                     $.getJSON(this.className + '/GET/' + id, (payload) => {
@@ -568,8 +586,6 @@ export default class CONTAINER extends GROUP {
     }
 	/** Loads the given MODEL into CONTAINER.body.pane
 	    @param {MODEL} model Model
-	    param {Promise.resolve} resolve Promise resolver function
-	    param {Promise.reject} reject Promise reject function
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
     loadModel(model) {
@@ -579,13 +595,6 @@ export default class CONTAINER extends GROUP {
                 document.title = model.label;
             }
             this.make(model);
-            /*
-            this.merge(model).then(
-                () => this.construct(model).then(
-                    () => this.body.pane.empty().then(
-                        () => resolve(this.populate(model.children)))));
-                //this.setElementAttributes(model).then(() => resolve(this.populate(model.children)));
-            */
         }, 'Unable to construct ' + this.className + '(' + this.id + ')');
     }
     /** Sets Id, Label and Name based on MODEL
