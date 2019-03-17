@@ -24,45 +24,5 @@ export default class NAVFOOTER extends NAVBAR {
 		// Create initial OPTIONS Tab and Menu
 		this.addOptionsMenu();
 	}
-	/** Adds the Options/Config menu
-	    Adds a right aligned tab to show/hide the Options Menu
-	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
-	    @returns {void}
-	*/
-	addOptionsMenu() {
-		try {
-			// Create Primary Options tab and Menu
-			this.btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
-				icon: ICONS.COG,
-				label: 'OPTIONS'
-			}));
-			this.options = this.menus.addMenu(new MODEL().set('name', 'OPTIONS'));
-			this.addTabbableElement(this.btnOptions, this.options);
-			// Create Secondary Tabs and Horizontal Menus inside Options Menu
-			['SUB1', 'SUB2'].map((name) => {
-				let tb = this.options.addNavItemIcon(new MODEL().set({
-					label: name,
-					icon: ICONS[name]
-				}));
-				let opt = this.options.addMenu(new MODEL('horizontal').set('name', name));
-				this.addTabbableElement(tb, opt);
-			});
-		} catch (e) {
-			let modal = this.getProtoTypeByClass('MODAL');
-			if (modal === null) {
-				console.warn('Unable to retrieve MAIN Container', e);
-				throw e;
-			} else {
-				switch (modal.className) {
-					case 'LOADER':
-					case 'PROMPT':
-						break;
-					default:
-						console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
-						break;
-				}
-			}
-		}
-	}
 }
 export { ANCHOR, Collapse, Collapsible, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON }

@@ -33,7 +33,7 @@ export default class NAVHEADER extends NAVBAR {
         @param {string} label TAB Label
         @param {string} icon TAB Icon
         @param {Array<string>} secondaryTabs Array of Tab names
-	    @returns {{tab, element}} Tabbable Element with submenus {tab,element}
+	    @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus {tab,element}
 	*/
     addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = []) {
         // Create Primary tab and Menu
@@ -61,7 +61,7 @@ export default class NAVHEADER extends NAVBAR {
         @param {string} label Label
         @param {string} icon Icon
         @param {string} align Alignment
-        @returns {{tab, element}} Tabbable Element {tab,element}
+        @returns {{tab:NAVITEMICON, element:SIDEBAR}} Tabbable Element {tab,element}
     */
     addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
         return this.addTabbableElement(
