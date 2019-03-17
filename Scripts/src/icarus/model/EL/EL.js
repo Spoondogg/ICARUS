@@ -66,14 +66,18 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
-		return this.chain(() => {
-			this.el = document.createElement(this.element);
-			if (this.node === document.body) {
-				this.node.appendChild(this.el);
-			} else {
-				this.node.el.appendChild(this.el);
-			}
-			this.merge(model).then(() => this.construct(model));
+        return this.chain(() => {
+            if (typeof this.el === 'undefined') {
+                this.el = document.createElement(this.element);
+                if (this.node === document.body) {
+                    this.node.appendChild(this.el);
+                } else {
+                    this.node.el.appendChild(this.el);
+                }
+            } else {
+                console.warn(this.className + '.make(): this.el already exists', typeof this.el);
+            }
+            this.merge(model).then(() => this.construct(model));
 		}, 'Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
