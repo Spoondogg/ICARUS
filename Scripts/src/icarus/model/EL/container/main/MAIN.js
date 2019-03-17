@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
@@ -7,7 +7,7 @@ import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import NAVITEMICON from '../../nav/navitemicon/NAVITEMICON.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
-//import SIDEBAR from '../sidebar/SIDEBAR.js';
+import SIDEBAR, { NAVBAR } from '../sidebar/SIDEBAR.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -151,15 +151,20 @@ export default class MAIN extends CONTAINER {
 		return this.chain(() => {
 			// LEFT ALIGN
 			// Document Map for quick navigation and selection
-			let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+            let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+            sidebar.element.navbar.addOptionsMenu(this.className + '(' + this.id + ')', ICONS[this.className], this.className, ['woot', 'snoot', 'boot']);
+            sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
 			$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 			// History / Prev / Back Navigation
 			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
 			//btnPrev.tab.el.onclick = () => this.navigateBack();
 			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
-			let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-			let usermenu = new USERMENU(userBar.element);
+            let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
+            userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['woot', 'snoot', 'boot']);
+            userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
+            let usermenu = new USERMENU(userBar.element);
+            $(usermenu.el).insertBefore(userBar.element.navbar.el);
 			usermenu.el.dispatchEvent(new Expand());
 			this.navheader.addTabbableElement(userBar.tab, userBar.element);
 			/*if (this.getUser() === 'Guest') {
@@ -444,4 +449,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, LOADER, MENU, MODEL, NAVITEMICON }
+export { Activate, CONTAINERFACTORY, Deactivate, LOADER, MENU, MODEL, NAVHEADER, NAVITEMICON }
