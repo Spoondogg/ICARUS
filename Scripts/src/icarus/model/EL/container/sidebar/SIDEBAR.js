@@ -1,5 +1,6 @@
 /** @module */
 import EL, { MODEL } from '../../EL.js';
+import NAVBAR, { Expand } from '../../nav/navbar/NAVBAR.js';
 import Switchable, { Deactivate } from '../../../../interface/Switchable.js';
 import Swipeable from '../../../../interface/Swipeable.js';
 /** A Sidebar Container
@@ -15,7 +16,9 @@ export default class SIDEBAR extends EL {
 		super(node, 'ASIDE', model);
 		this.addClass('sidebar');
 		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
-		this.implement(new Switchable(this));
+        this.implement(new Switchable(this));
+        this.navbar = new NAVBAR(this, new MODEL());
+        this.navbar.el.dispatchEvent(new Expand(this.navbar));
         this.setAlignmentOptions(model.align || 'left');
 		// Override activate/deactivate for custom animation timing
 		this.activate = () => {
@@ -49,4 +52,4 @@ export default class SIDEBAR extends EL {
         this.addClass(this.align);
     }
 }
-export { MODEL }
+export { EL, MODEL, NAVBAR }
