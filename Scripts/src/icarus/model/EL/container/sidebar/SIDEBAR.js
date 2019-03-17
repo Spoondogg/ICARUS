@@ -1,16 +1,14 @@
 /** @module */
-//import CONTAINER, { MODEL } from '../CONTAINER.js';
 import EL, { MODEL } from '../../EL.js';
 import Switchable, { Deactivate } from '../../../../interface/Switchable.js';
 import Swipeable from '../../../../interface/Swipeable.js';
-//import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A Sidebar Container
     @class
     @extends EL
 */
 export default class SIDEBAR extends EL {
 	/** A Sidebar Container Element
-	    @param {CONTAINER} node Parent Container (Typically MAIN)
+	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
 	*/
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
@@ -18,19 +16,7 @@ export default class SIDEBAR extends EL {
 		this.addClass('sidebar');
 		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
 		this.implement(new Switchable(this));
-		this.align = model.align || 'left';
-		if (this.align === 'left') {
-			this.swipeLeft = () => {
-				//this.deactivate();
-				this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
-			}
-		} else {
-			this.swipeRight = () => {
-				//this.deactivate();
-				this.tab.el.dispatchEvent(new Deactivate()); //.deactivate();
-			}
-		}
-		this.addClass(this.align);
+        this.setAlignmentOptions(model.align || 'left');
 		// Override activate/deactivate for custom animation timing
 		this.activate = () => {
 			this.removeClass('hidden');
@@ -45,6 +31,22 @@ export default class SIDEBAR extends EL {
 		}
 		// Default state
 		this.deactivate();
-	}
+    }
+    /** Sets the SIDEBAR alignment and configures 'swipeLeft' and 'swipeRight' accordingly
+        @param {string} align SIDEBAR alignment
+        @returns {void}
+    */
+    setAlignmentOptions(align) {
+        /** SIDEBAR alignment parameter
+            @type {string}
+        */
+        this.align = align;
+        if (this.align === 'left') {
+            this.swipeLeft = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
+        } else {
+            this.swipeRight = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
+        }
+        this.addClass(this.align);
+    }
 }
 export { MODEL }
