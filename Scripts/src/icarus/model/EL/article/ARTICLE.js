@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, Expand, MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
+import CONTAINER, { Activate, MODEL } from '../container/CONTAINER.js';
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class
@@ -21,10 +21,8 @@ export default class ARTICLE extends CONTAINER {
                 let date = this.getDateCreated();
                 this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
                 this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
-            } else {
-                console.log('No data exists for ' + this.className);
-                this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
             }
+            this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
         });
     }
 }
