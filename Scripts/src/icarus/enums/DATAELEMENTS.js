@@ -37,9 +37,9 @@ const defaultContainerData = () => [
 */
 export const DATAELEMENTS = {
 	ARTICLE: {
-		data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
+        containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+        data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
         attributes: [createInputModel('INPUT', 'name')]
-
 	},
 	CALLOUT: {
 		data: [
