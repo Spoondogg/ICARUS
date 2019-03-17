@@ -379,7 +379,7 @@ export default class CONTAINER extends GROUP {
                 (loader) => {
                     console.log('Refreshing ' + this.className, this);
                     this.body.pane.empty().then(
-                        () => this.loadModel(model, (result) => console.log('Loaded Model', result)).then(
+                        () => this.loadModel(model).then(
                             () => loader.log(100)));
                 }
             ), 'Unable to refresh ' + this.className);
@@ -552,7 +552,7 @@ export default class CONTAINER extends GROUP {
                 if (id >= 0) {
                     $.getJSON(this.className + '/GET/' + id, (payload) => {
                         if (payload.result === 1) {
-                            this.loadModel(payload.model, resolve);
+                            resolve(this.loadModel(payload.model));
                         } else {
                             reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
                         }
@@ -568,17 +568,17 @@ export default class CONTAINER extends GROUP {
     }
 	/** Loads the given MODEL into CONTAINER.body.pane
 	    @param {MODEL} model Model
-	    @param {Promise.resolve} resolve Promise resolver function
+	    param {Promise.resolve} resolve Promise resolver function
 	    param {Promise.reject} reject Promise reject function
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-    loadModel(model, resolve) {
+    loadModel(model) {
         console.log(this.className + '.loadModel()', model);
         return this.chain(() => {
             if (model.label) {
                 document.title = model.label;
             }
-            resolve(this.make(model));
+            this.make(model);
             /*
             this.merge(model).then(
                 () => this.construct(model).then(
