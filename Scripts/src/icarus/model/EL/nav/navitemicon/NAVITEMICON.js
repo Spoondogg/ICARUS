@@ -14,4 +14,4 @@ export default class NAVITEMICON extends NAVITEM {
 		this.addClass('nav-item-icon');
 	}
 }
-export { ANCHOR, EL, MODEL }
+export { ANCHOR, EL, MODEL, NAVITEM }
