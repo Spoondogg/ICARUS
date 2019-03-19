@@ -102,33 +102,72 @@ export default class CONTAINER extends GROUP {
             throw new MissingContainerError(this.className + ' is unable to find a parent Container');
         }
     }
-    /** Adds this container to parent in document map
+    /** Adds clickable DATA or ATTRIBUTE nav items to the Document Map
+        @param {MENU} menu This Container's reference menu
+        @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
+        @returns {void}
+    */
+    addDocumentMapAttributes(menu, submenuName) {
+        /** @type {[MENU]} */
+        let [dataMenu] = menu.get(submenuName, 'MENU');
+        console.log('dataMenu', dataMenu);
+        let nm = submenuName.toString().toLowerCase();
+        let lbl = nm + 'Elements';
+        console.log('Verifying elements', lbl, this[lbl]);
+        this[lbl].forEach((d) => {
+            dataMenu.addNavItem(new MODEL().set({
+                name: d.attributes.name,
+                label: d.label // + ' = ' + d.value
+            })).el.addEventListener('activate', () => {
+                console.log('Searching for "' + d.attributes.name + '" in ' + this.className + '.' + lbl);
+                this[lbl].filter((m) => m.attributes.name === d.attributes.name).forEach(
+                    (mdl) => {
+                        console.log('  -- Result', mdl);
+                    }
+                );
+            });
+        });
+    }
+    /** Adds this CONTAINER to parent reference in the Document Map
         @returns {void}
     */
     updateDocumentMap() {
-        //console.log(this.className + '.updateDocumentMap()');
         if (this.className !== 'MAIN') {
-            try {                
-                //// CREATE REFERENCE in DOCMAP for this container
+            try {
                 let parentName = this.getContainer().toString();
                 /** @type {NAVBAR} */
                 let parentRef = this.getContainer().reference;
-                //console.log('ParentRef NAVBAR', parentName, parentRef);
                 /** @type {[MENU]} */
-                let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU')
-                //console.log('ParentRef MENU', parentName, parentRefMenu);
+                let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
                 /** @type {[MENU]} */
                 let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
-                //console.log('ParentRef MENU>CHILDREN', childrenMenu);
-                ///  CREATE NEW NAVBAR
+                /** @type {NAVBAR} */
                 this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
                 this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+
+                // Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
+                /** @type {[MENU]} */
+                let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+                this.addDocumentMapAttributes(menu, 'DATA');
+                this.addDocumentMapAttributes(menu, 'ATTRIBUTES');
+                
+                // Allow only one active CHILD at a time
+                /** @type {[NAVITEMICON]} */
+                let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+                tab.el.addEventListener('activate', () => {
+                    console.log('DocumentMap > ' + this.toString(), this);
+                    this.scrollTo();
+                    childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
+                        (n) => n.tabs.children.forEach(
+                            (t) => t.el.dispatchEvent(new Deactivate(t))));
+                });
+
+                // Expand the NAVBAR and override its collapse Event
                 this.reference.el.dispatchEvent(new Expand(this.reference));
-                //console.log('ThisRef NAVBAR', this.toString(), this.reference);                
-                //console.log('DOC-MAP: ' + this.toString() + ' Reference', this.reference);
+                this.reference.collapse = () => true;
+
             } catch (e) {
                 console.warn('Unable to update document-map', this.className, e);
-                //throw e;
             }
         }
     }
