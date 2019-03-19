@@ -1,4 +1,5 @@
 /** @module */
+import EL from '../model/el/EL.js';
 /** An Element Activate Event
     @extends CustomEvent
 */
@@ -15,3 +16,4 @@ export default class Activate extends CustomEvent {
 		});
 	}
 }
+export { EL }
