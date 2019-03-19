@@ -21,10 +21,8 @@ export default class ARTICLE extends CONTAINER {
                 let date = this.getDateCreated();
                 this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
                 this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
-            } else {
-                console.log('No data exists for ' + this.className);
-                this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
             }
+            this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
         });
     }
 }
