@@ -30,31 +30,62 @@ export default class NAVBAR extends NAV {
 		this.menus.activate();
 		this.menus.expand();
     }
+    /** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
+	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+        @param {string} name MENU Name
+        @param {string} label TAB Label
+        @param {string} icon TAB Icon
+        @param {Array<string>} secondaryTabs Array of Tab names
+	    @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus {tab,element}
+	*/
+    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = []) {
+        // Create Primary tab and Menu
+        let tabbable = this.addTabbableElement(
+            this.tabs.addNavItemIcon(new MODEL().set({
+                icon,
+                label,
+                name
+            })),
+            this.menus.addMenu(new MODEL().set('name', name))
+        );
+        // Create Secondary Tabs and Horizontal Menus inside Menu            
+        secondaryTabs.forEach((t) => this.addTabbableElement(
+            tabbable.element.addNavItemIcon(new MODEL().set({
+                label: t,
+                icon: ICONS[t],
+                name: t
+            })),
+            tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
+        ));
+        return tabbable;
+    }
     /** Adds the Options/Config menu
 	    Adds a 'right-aligned' or 'full-width' tab to show/hide the Options Menu
         @param {string} label NAVITEMICON.label
         @param {string} icon NAVITEMICON icon
         @param {string} name MENU name
         @param {Array<string>} children Sample child tabs
+        @param {boolean} isHorizontal If true (default), sub-menu is horizontal with icons, else vertical
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
 	    @returns {void}
 	*/
-    addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2']) {
+    addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
         try {
             // Create Primary Options tab and Menu
-            this.btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
+            let btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
                 icon,
                 label
             }));
-            this.options = this.menus.addMenu(new MODEL().set('name', name));
-            this.addTabbableElement(this.btnOptions, this.options);
+            let menu = this.menus.addMenu(new MODEL().set('name', name));
+            this.addTabbableElement(btnOptions, menu);
             // Create Secondary Tabs and Horizontal Menus inside Options Menu
+            let optMenuClass = isHorizontal ? 'horizontal' : '';
             children.map((str) => {
-                let tb = this.options.addNavItemIcon(new MODEL().set({
+                let tb = menu.addNavItemIcon(new MODEL().set({
                     label: str,
                     icon: ICONS[str]
                 }));
-                let opt = this.options.addMenu(new MODEL('horizontal').set('name', str));
+                let opt = menu.addMenu(new MODEL(optMenuClass).set('name', str));
                 this.addTabbableElement(tb, opt);
             });
         } catch (e) {
