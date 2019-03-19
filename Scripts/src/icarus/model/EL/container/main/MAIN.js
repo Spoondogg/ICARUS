@@ -20,7 +20,7 @@ export default class MAIN extends CONTAINER {
 		this.addClass('main');
 		this.body.pane.addClass('pane-tall');
 		this.navheader.setAttribute('draggable', false);
-		this.addNavOptions();
+        this.addNavOptions();
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -148,9 +148,13 @@ export default class MAIN extends CONTAINER {
     */
     createDocumentMap() {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-        sidebar.element.navbar.addOptionsMenu(this.className + '(' + this.id + ')', ICONS[this.className], this.className, ['woot', 'snoot', 'boot']);
+        //console.log(this.className + '.createDocumentMap()', this); // this.children.map((c) => c.className)
+        sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false); //this.children.map((c) => c.className))
         sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
-        $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
+        $(sidebar.tab.el).insertBefore(this.navheader.tab.el);        
+        this.reference = sidebar.element.navbar;
+        //console.log('MAIN.reference', this.reference);
+        //console.log('DOC-MAP: ' + this.toString() + ' Reference', this.reference);
     }
     /** Creates a SIDEBAR with a USERMENU
         @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
