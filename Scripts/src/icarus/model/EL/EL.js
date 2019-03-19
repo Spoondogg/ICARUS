@@ -272,7 +272,7 @@ export default class EL extends MODEL {
 	}
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
-        @param {strong} className Element Class
+        @param {string} className Element Class
 	    @returns {Array<EL>} Child Item/Element Filtered Results
         @description This might also be recognized as this.getChildren()
 	*/
