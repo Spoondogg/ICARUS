@@ -110,10 +110,8 @@ export default class CONTAINER extends GROUP {
     addDocumentMapAttributes(menu, submenuName) {
         /** @type {[MENU]} */
         let [dataMenu] = menu.get(submenuName, 'MENU');
-        console.log('dataMenu', dataMenu);
         let nm = submenuName.toString().toLowerCase();
         let lbl = nm + 'Elements';
-        console.log('Verifying elements', lbl, this[lbl]);
         this[lbl].forEach((d) => {
             dataMenu.addNavItem(new MODEL().set({
                 name: d.attributes.name,
@@ -122,7 +120,7 @@ export default class CONTAINER extends GROUP {
                 console.log('Searching for "' + d.attributes.name + '" in ' + this.className + '.' + lbl);
                 this[lbl].filter((m) => m.attributes.name === d.attributes.name).forEach(
                     (mdl) => {
-                        console.log('  -- Result', mdl);
+                        console.log(' - Result', mdl);
                     }
                 );
             });
