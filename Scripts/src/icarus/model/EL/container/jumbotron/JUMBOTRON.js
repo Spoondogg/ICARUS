@@ -43,7 +43,7 @@ export default class JUMBOTRON extends CONTAINER {
 				$.getJSON('/FORMPOST/GET/' + parseInt(this.data.bgimage), (data) => {
 					try {
 						let parsed = JSON.parse(data.model.jsonResults);
-						parsed.filter(p => p.name === 'base64').map(v => this.setBgImage(v.value));
+						parsed.filter((p) => p.name === 'base64').map((v) => this.setBgImage(v.value));
 						/*for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
 							if (parsed[p].name === 'base64') {
                                 this.setBgImage(parsed[p].value);
