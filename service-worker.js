@@ -37,7 +37,7 @@ self.addEventListener('install', (event) => {
                 console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             }).catch((err) => {
-                console.log('Service Worker: Failed to open cache');
+                console.log('Service Worker: Failed to open cache', err);
                 return null;
             })
     );
@@ -59,14 +59,12 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('activate', (event) => {
     var cacheWhitelist = ['icarus-cache-v1'];
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        return caches.delete(cacheName);
-                    }
-                }));
-        }));
+        caches.keys().then((cacheNames) => Promise.all(
+            cacheNames.map((cacheName) => {
+                if (cacheWhitelist.indexOf(cacheName) === -1) {
+                    return caches.delete(cacheName);
+                }
+            }))));
 });
 
 // https://developers.google.com/web/fundamentals/app-install-banners/
