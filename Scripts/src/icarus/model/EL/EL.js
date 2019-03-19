@@ -147,7 +147,7 @@ export default class EL extends MODEL {
 	addClasses(classNames) {
 		Promise.all(classNames.map((c) => this.addClass(c))).then(() => this);
 	}
-	/** Inserts @see {this.el} as the first child of target
+	/* Inserts @see {this.el} as the first child of target
 	    @param {HTMLElement} target Target HTML Element
 	    @returns {Promise<ThisType>} Promise Chain
 	
@@ -594,15 +594,16 @@ export default class EL extends MODEL {
 		this.el.innerHTML = innerHTML;
 		return this;
 	}
-	/** Scrolls page to the top of this element
+	/** Scrolls MAIN to the top of this element
 	    @param {number} speed Millisecond duration
+        @param {string} easing JQuery Easing Type
 	    @returns {ThisType} Method Chain
 	*/
-	scrollTo(speed = 1000) {
-		console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
-		$(this.node.el).animate({
+    scrollTo(speed = 500, easing = 'swing') {
+        console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
+		$(this.getMain().body.pane.el).animate({
 			scrollTop: parseInt($(this.el).offset().top)
-		}, speed);
+        }, speed, easing);
 		return this;
 	}
 	/** Toggles the given class on this element
