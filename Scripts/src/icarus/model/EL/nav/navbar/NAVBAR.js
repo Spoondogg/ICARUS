@@ -74,7 +74,8 @@ export default class NAVBAR extends NAV {
             // Create Primary Options tab and Menu
             let btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
                 icon,
-                label
+                label,
+                name
             }));
             let menu = this.menus.addMenu(new MODEL().set('name', name));
             this.addTabbableElement(btnOptions, menu);
@@ -83,7 +84,8 @@ export default class NAVBAR extends NAV {
             children.map((str) => {
                 let tb = menu.addNavItemIcon(new MODEL().set({
                     label: str,
-                    icon: ICONS[str]
+                    icon: ICONS[str],
+                    name: str
                 }));
                 let opt = menu.addMenu(new MODEL(optMenuClass).set('name', str));
                 this.addTabbableElement(tb, opt);
