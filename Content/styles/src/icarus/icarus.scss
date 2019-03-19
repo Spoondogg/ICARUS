@@ -175,12 +175,12 @@ $z-bottom: -1;
 /// The object can be clicked or tapped
 %clickable {
 	cursor: pointer;
-	&:hover {
+	//&:hover {
 		//text-decoration: none;
-		>a {
-			//text-decoration: none;
-		}
-	}
+		//>a {
+		//	//text-decoration: none;
+		//}
+	//}
 	//*:not(input):not(textarea) {
 	//-webkit-user-select: none; /* disable selection/Copy of UIWebView */
 	//-webkit-touch-callout: none; /* disable the IOS popup when long-press on a link */
@@ -255,6 +255,8 @@ $z-bottom: -1;
 /// A content window that is the height of the page, minus header and footer
 %pane-tall {
 	$navheights: ($navbar-height * 2); // - 1em
+    border-bottom: 0;
+    border-top: 0;
 	height: calc(100vh - #{$navheights});
 	overflow-y: auto;
 }
@@ -1258,6 +1260,27 @@ $z-bottom: -1;
                             text-transform: uppercase;
                         }
                     }
+
+                    > .author, .date-created {
+                        background-color: $color-dark-less;
+                        color: $color-white;
+                        display: block;
+                        font-size: .8em;
+                        width: 50%;
+                    }
+
+                    > .date-created {
+                        clear: left;
+                        float: left;
+                        padding-left: .5em;
+                    }
+
+                    > .author {
+                        clear: right;
+                        float: right;
+                        padding-right: .5em;
+                        text-align: right;
+                    }
                 }
             }
         }
@@ -1537,7 +1560,7 @@ $z-bottom: -1;
             aside {
                 /// A SIDEBAR Element with fixed horizontal alignment within MAIN UI
                 &.sidebar {
-                    @extend %no-scroll-bar;
+                    //@extend %no-scroll-bar;
                     @extend %pane-tall;
                     //@include boxShadow(0, 0, 3px, 0, $color-black);
                     //@include transition($transition-default);
@@ -1549,6 +1572,33 @@ $z-bottom: -1;
                     top: $navbar-height;
                     width: $sidebar-width;
                     z-index: 999;
+                    /// A Tree structure view of the MAIN CONTAINER
+                    &[name='document-map'] {
+                        > nav {
+                            //@extend %no-scroll-bar;
+                            @extend %pane-tall;
+
+                            &.menu {
+                                border-bottom: 1px solid transparent;
+                                border-top: 1px solid transparent;
+
+                                &.active {
+                                    border-bottom: 1px solid $color-blue-light;
+                                    border-top: 1px solid $color-blue;
+                                }
+                            }
+
+                            ul {
+                                &[name='menus'] {
+                                    border-bottom: 2px solid transparent;
+
+                                    &.active {
+                                        border-bottom: 2px solid $color-grey-darker;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     &.left {
                         @include transition(margin-left $transition-speed $transition-motion);
