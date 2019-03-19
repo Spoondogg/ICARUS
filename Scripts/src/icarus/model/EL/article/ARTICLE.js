@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, MODEL } from '../container/CONTAINER.js'; //, { ATTRIBUTES, EL, MODEL }
+import CONTAINER, { Activate, MODEL } from '../container/CONTAINER.js';
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class
