@@ -161,7 +161,7 @@ export default class MAIN extends CONTAINER {
     */
     createUserMenu() {
         let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-        userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['woot', 'snoot', 'boot']);
+        userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['Profile', 'Settings']);
         userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
         let usermenu = new USERMENU(userBar.element);
         $(usermenu.el).insertBefore(userBar.element.navbar.el);
