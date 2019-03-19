@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
@@ -7,6 +7,7 @@ import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import PROMPT from '../../dialog/prompt/PROMPT.js';
+import SIDEBAR from '../sidebar/SIDEBAR.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -148,13 +149,18 @@ export default class MAIN extends CONTAINER {
     */
     createDocumentMap() {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-        //console.log(this.className + '.createDocumentMap()', this); // this.children.map((c) => c.className)
-        sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false); //this.children.map((c) => c.className))
-        sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
-        $(sidebar.tab.el).insertBefore(this.navheader.tab.el);        
+        sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
         this.reference = sidebar.element.navbar;
-        //console.log('MAIN.reference', this.reference);
-        //console.log('DOC-MAP: ' + this.toString() + ' Reference', this.reference);
+
+        // Add submenu items to DATA and ATTRIBUTES
+        /** @type {[MENU]} */
+        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
+        this.addDocumentMapAttributes(menu, 'DATA');
+        this.addDocumentMapAttributes(menu, 'ATTRIBUTES');
+
+        // Position and show the NAVBAR
+        $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
+        sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
     }
     /** Creates a SIDEBAR with a USERMENU
         @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
@@ -463,4 +469,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, LOADER, MENU, MODEL, NAVHEADER, NAVITEM, NAVITEMICON }
+export { Activate, CONTAINERFACTORY, Deactivate, EL, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
