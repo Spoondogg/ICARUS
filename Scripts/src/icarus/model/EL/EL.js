@@ -66,14 +66,18 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
-		return this.chain(() => {
-			this.el = document.createElement(this.element);
-			if (this.node === document.body) {
-				this.node.appendChild(this.el);
-			} else {
-				this.node.el.appendChild(this.el);
-			}
-			this.merge(model).then(() => this.construct(model));
+        return this.chain(() => {
+            if (typeof this.el === 'undefined') {
+                this.el = document.createElement(this.element);
+                if (this.node === document.body) {
+                    this.node.appendChild(this.el);
+                } else {
+                    this.node.el.appendChild(this.el);
+                }
+            } else {
+                console.warn(this.className + '.make(): this.el already exists', typeof this.el);
+            }
+            this.merge(model).then(() => this.construct(model));
 		}, 'Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
@@ -143,7 +147,7 @@ export default class EL extends MODEL {
 	addClasses(classNames) {
 		Promise.all(classNames.map((c) => this.addClass(c))).then(() => this);
 	}
-	/** Inserts @see {this.el} as the first child of target
+	/* Inserts @see {this.el} as the first child of target
 	    @param {HTMLElement} target Target HTML Element
 	    @returns {Promise<ThisType>} Promise Chain
 	
@@ -268,7 +272,7 @@ export default class EL extends MODEL {
 	}
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
-        @param {strong} className Element Class
+        @param {string} className Element Class
 	    @returns {Array<EL>} Child Item/Element Filtered Results
         @description This might also be recognized as this.getChildren()
 	*/
@@ -590,15 +594,16 @@ export default class EL extends MODEL {
 		this.el.innerHTML = innerHTML;
 		return this;
 	}
-	/** Scrolls page to the top of this element
+	/** Scrolls MAIN to the top of this element
 	    @param {number} speed Millisecond duration
+        @param {string} easing JQuery Easing Type
 	    @returns {ThisType} Method Chain
 	*/
-	scrollTo(speed = 1000) {
-		console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
-		$(this.node.el).animate({
+    scrollTo(speed = 500, easing = 'swing') {
+        console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
+		$(this.getMain().body.pane.el).animate({
 			scrollTop: parseInt($(this.el).offset().top)
-		}, speed);
+        }, speed, easing);
 		return this;
 	}
 	/** Toggles the given class on this element

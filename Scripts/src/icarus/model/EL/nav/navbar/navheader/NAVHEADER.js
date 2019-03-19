@@ -21,47 +21,18 @@ export default class NAVHEADER extends NAVBAR {
 			icon: ICONS.CERTIFICATE,
 			label: model.label
 		}));
-		node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate()));
-		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate()));
-		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand()));
-		this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse()));
+		node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate(this)));
+		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(this)));
+		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this)));
+		this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this)));
         this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
 	}
-	/** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
-	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
-        @param {string} name MENU Name
-        @param {string} label TAB Label
-        @param {string} icon TAB Icon
-        @param {Array<string>} secondaryTabs Array of Tab names
-	    @returns {{tab, element}} Tabbable Element with submenus {tab,element}
-	*/
-    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = []) {
-        // Create Primary tab and Menu
-        let tabbable = this.addTabbableElement(
-            this.tabs.addNavItemIcon(new MODEL().set({
-                icon,
-                label,
-                name
-            })),
-            this.menus.addMenu(new MODEL().set('name', name))
-        );
-		// Create Secondary Tabs and Horizontal Menus inside Menu            
-        secondaryTabs.forEach((t) => this.addTabbableElement(
-            tabbable.element.addNavItemIcon(new MODEL().set({
-                label: t,
-                icon: ICONS[t],
-                name: t
-            })),
-            tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
-        ));
-        return tabbable;
-    }
     /** Adds a single NAV Icon and associated SIDEBAR
         @param {string} name Name
         @param {string} label Label
         @param {string} icon Icon
         @param {string} align Alignment
-        @returns {{tab, element}} Tabbable Element {tab,element}
+        @returns {{tab:NAVITEMICON, element:SIDEBAR}} Tabbable Element {tab,element}
     */
     addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
         return this.addTabbableElement(

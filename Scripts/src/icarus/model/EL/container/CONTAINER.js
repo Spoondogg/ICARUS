@@ -15,7 +15,9 @@ import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
+import MissingContainerError from '../../../error/MissingContainerError.js';
 import Movable from '../../../interface/Movable.js';
+import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
@@ -30,17 +32,25 @@ export default class CONTAINER extends GROUP {
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
 	    @param {MODEL} model Model
-	    @param {Array<string>} containers An array of strings representing child Containers that this Container can create
+	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, element = 'DIV', model = new MODEL(), containers = []) {
+	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
 		super(node, element, model);
-		this.implement(new Movable(this));
+        this.implement(new Movable(this));
+        /** CONTAINER unique id
+		    @property {number} id
+		*/
+        this.id = 0;
 		this.setId(model.id).addClass('container');
 		['data', 'attributes', 'description'].map((e) => this.createElementCollection(e, model));
         /** @type {string} */
         this.label = this.required(model.label || element);
         /** @type {string} */
         this.name = this.required(model.name || element);
+        /** Represents an anchor/reference in the SIDEBAR NAV document-map 
+            @type {NAVBAR} Document Map Reference NAVBAR
+        */
+        this.reference = null;
         /** @type {number} */
 		this.shared = this.required(model.shared || 1);
 		this.status = this.required(model.status || STATUS.DEFAULT);
@@ -54,7 +64,8 @@ export default class CONTAINER extends GROUP {
         this.addEvents();        
 		// Cascade state
 		// Add Navbar Items
-		this.addElementItems(containers).then(() => this.addDomItems().then(() => this.addCrudItems()));
+        this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
+        this.updateDocumentMap();
         this.setDefaultVisibility(model);
 	}
 	// eslint-enable max-statements */
@@ -76,6 +87,91 @@ export default class CONTAINER extends GROUP {
             return this.ifEmpty();
         }, 'Unable to construct ' + this.className);
     }
+    /** Sets and returns the parent CONTAINER for this element
+	    @returns {CONTAINER} The parent container for this container
+	*/
+    getContainer() {
+        try {
+            if (typeof this.container === 'undefined') {
+                this.setContainer();
+                return this.container;
+            }
+            return this.container;
+        } catch (e) {
+            console.warn(e);
+            throw new MissingContainerError(this.className + ' is unable to find a parent Container');
+        }
+    }
+    /** Adds clickable DATA or ATTRIBUTE nav items to the Document Map
+        @param {MENU} menu This Container's reference menu
+        @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
+        @returns {void}
+    */
+    addDocumentMapAttributes(menu, submenuName) {
+        /** @type {[MENU]} */
+        let [dataMenu] = menu.get(submenuName, 'MENU');
+        console.log('dataMenu', dataMenu);
+        let nm = submenuName.toString().toLowerCase();
+        let lbl = nm + 'Elements';
+        console.log('Verifying elements', lbl, this[lbl]);
+        this[lbl].forEach((d) => {
+            dataMenu.addNavItem(new MODEL().set({
+                name: d.attributes.name,
+                label: d.label // + ' = ' + d.value
+            })).el.addEventListener('activate', () => {
+                console.log('Searching for "' + d.attributes.name + '" in ' + this.className + '.' + lbl);
+                this[lbl].filter((m) => m.attributes.name === d.attributes.name).forEach(
+                    (mdl) => {
+                        console.log('  -- Result', mdl);
+                    }
+                );
+            });
+        });
+    }
+    /** Adds this CONTAINER to parent reference in the Document Map
+        @returns {void}
+    */
+    updateDocumentMap() {
+        if (this.className !== 'MAIN') {
+            try {
+                let parentName = this.getContainer().toString();
+                /** @type {NAVBAR} */
+                let parentRef = this.getContainer().reference;
+                /** @type {[MENU]} */
+                let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
+                /** @type {[MENU]} */
+                let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
+                /** @type {NAVBAR} */
+                this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
+                this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+
+                // Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
+                /** @type {[MENU]} */
+                let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+                this.addDocumentMapAttributes(menu, 'DATA');
+                this.addDocumentMapAttributes(menu, 'ATTRIBUTES');
+                
+                // Allow only one active CHILD at a time
+                /** @type {[NAVITEMICON]} */
+                let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+                tab.el.addEventListener('activate', () => {
+                    console.log('DocumentMap > ' + this.toString(), this);
+                    this.scrollTo();
+                    childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
+                        (n) => n.tabs.children.forEach(
+                            (t) => t.el.dispatchEvent(new Deactivate(t))));
+                });
+
+                // Expand the NAVBAR and override its collapse Event
+                this.reference.el.dispatchEvent(new Expand(this.reference));
+                this.reference.collapse = () => true;
+
+            } catch (e) {
+                console.warn('Unable to update document-map', this.className, e);
+            }
+        }
+    }
+
     /** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
         @abstract
@@ -531,9 +627,6 @@ export default class CONTAINER extends GROUP {
 	    @returns {ThisType} Method Chain
 	*/
 	setId(id) {
-		/** CONTAINER unique id
-		    @property {number} id
-		*/
 		this.id = id;
 		this.el.setAttribute('id', id);
 		this.data.id = id;
@@ -555,14 +648,14 @@ export default class CONTAINER extends GROUP {
 			this.el.setAttribute('name', name);
             this.name = name;
 		}
-	}
+    }
 	/** Loads the specified MODEL by UId into CONTAINER 
         Retrieves the MODEL from GET/{id} (if permitted)
 		then Populates accordingly
 	    @todo Prompt the user for an Id to load
 	    @todo create a simple application browser to retrieve a MAIN
 		@param {number} id App Id to load
-		@returns {MAIN} This MAIN
+		@returns {Promise<ThisType>} Promise Chain
 	*/
     load(id) {
         return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
@@ -572,7 +665,7 @@ export default class CONTAINER extends GROUP {
                         if (payload.result === 1) {
                             resolve(this.loadModel(payload.model));
                         } else {
-                            reject(new Error('Failed to retrieve ' + this.className + '(' + this.id + ') from server\n' + payload.message));
+                            reject(new Error('Failed to retrieve ' + this.toString() + ' from server\n' + payload.message));
                         }
                     });
                 } else {
@@ -583,6 +676,12 @@ export default class CONTAINER extends GROUP {
                 reject(e);
             }
         });
+    }
+    /** Returns a string representation of this Container
+        @returns {string} Classname(id)
+    */
+    toString() {
+        return this.className + '(' + this.id + ')'
     }
 	/** Loads the given MODEL into CONTAINER.body.pane
 	    @param {MODEL} model Model
@@ -595,7 +694,7 @@ export default class CONTAINER extends GROUP {
                 document.title = model.label;
             }
             this.make(model);
-        }, 'Unable to construct ' + this.className + '(' + this.id + ')');
+        }, 'Unable to construct ' + this.toString());
     }
     /** Sets Id, Label and Name based on MODEL
         @param {MODEL} model MODEL
@@ -624,7 +723,7 @@ export default class CONTAINER extends GROUP {
 		return subsections;
 	}
 	/** Returns the MAIN container
-	    @returns {MAIN} The MAIN Container class
+	    @returns {CONTAINER} The MAIN Container class
 	    @throws Will throw an error 
 	*/
 	getMain() {
@@ -807,5 +906,5 @@ export default class CONTAINER extends GROUP {
         return document.getElementsByTagName('meta').token.content;
     }
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVITEM, NAVITEMICON, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
 /* eslint-enable max-lines */
