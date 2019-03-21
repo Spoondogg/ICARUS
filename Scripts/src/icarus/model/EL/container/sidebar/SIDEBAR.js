@@ -15,7 +15,7 @@ export default class SIDEBAR extends EL {
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model);
 		this.addClass('sidebar');
-		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75));
+		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75, true, true));
         this.implement(new Switchable(this));
         this.navbar = new NAVBAR(this, new MODEL());
         this.navbar.el.dispatchEvent(new Expand(this.navbar));
@@ -31,7 +31,7 @@ export default class SIDEBAR extends EL {
 		this.deactivate = () => {
 			this.getMain().body.pane.removeClass('focus-' + this.align);
 			this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
-		}
+        }
 		// Default state
 		this.deactivate();
     }
