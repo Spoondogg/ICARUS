@@ -25,7 +25,12 @@ export default class IFACE {
 		*/
 		this.handlers = {};
 		// Configuration and Setup
-		this.setMethods(node);
+        this.setMethods(node);
+        /** Configures Event Propagation and Default Behavior
+            @param {Event} ev Event
+            @returns {void}
+        */
+        this.methods.configureEvent = this.configureEvent.bind(node);
 		this.addListeners(node);
 	}
 	/** Adds listeners where applicable
@@ -35,6 +40,18 @@ export default class IFACE {
 	addListeners(node) {
 		console.log('node', node);
 		throw new AbstractMethodError('IFACE addListeners not set', this);
+    }
+    /** Configures Event Propagation and Default Behavior
+        @param {Event} ev Event
+        @returns {void}
+    */
+    configureEvent(ev) {
+        if (this.stopPropagation) {
+            ev.stopPropagation();
+        }
+        if (this.preventDefault) {
+            ev.preventDefault();
+        }
     }
     /** Wraps the given function in a try/catch, catches TypeErrors and throws unknown Error
 	    @param {Function} fn Function to call
