@@ -6,9 +6,7 @@ import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
-import Swipeable from '../../../../interface/Swipeable.js';
-//import GROUP from '../../group/GROUP.js';
-/** A collapseable list of Nav Items
+/** A collapseable list of NAVITEMS
     @extends LIST
 */
 export default class MENU extends LIST {
@@ -17,19 +15,36 @@ export default class MENU extends LIST {
 	    @param {MODEL} model Model
         @param {string} element HTML Element Tag
         @param {boolean} canActivate If false, the MENU will not expand on activation
+        @param {boolean} scrollIntoView If true, the menu is scrolled into view when activated
 	*/
-	constructor(node, model, element = 'UL', canActivate = true) {
+	constructor(node, model, element = 'UL', canActivate = true, scrollIntoView = false) {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
         this.addCases(model);
-        this.implement(new Swipeable(this, model.swipeSensitivity || 50));
 		this.implement(new Switchable(this));
 		if (canActivate) {
-			this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
+            this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
 			this.el.addEventListener('deactivate', () => this.el.dispatchEvent(new Collapse(this)));
         }
-	}
+        if (scrollIntoView) {
+            this.scrollOnExpand();
+        }
+    }
+    /** Scroll the menu into view on Expansion
+        @returns {void}
+    */
+    scrollOnExpand() {
+        $(this.el).on('shown.bs.collapse', (ev) => {
+            setTimeout(() => {
+                this.el.scrollIntoView({
+                    alignTo: false,
+                    behavior: 'smooth' // smooth not supported in Safari
+                });
+            }, 200);
+            ev.stopPropagation();
+        });
+    }
 	/** Adds relevant cases to this element
 	    @param {MODEL} model MENU Model
 	    @returns {void}
