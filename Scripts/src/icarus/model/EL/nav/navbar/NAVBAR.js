@@ -13,14 +13,15 @@ export default class NAVBAR extends NAV {
 	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
         @param {boolean} bottomUp If true, menus preceed tabs
+        @param {boolean} horizontalTabs If true (default), tabs are aligned horizontally
 	*/
-	constructor(node, model, bottomUp = false) {
+	constructor(node, model, bottomUp = false, horizontalTabs = true) {
 		super(node, model);
 		this.addClass('navbar');
 		this.implement(new Switchable(this));
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
-		this.tabs = new MENU(this, new MODEL('horizontal').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tabs = new MENU(this, new MODEL(horizontalTabs ? 'horizontal' : '').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
 		this.tabs.activate();
 		this.tabs.expand();
 		this.menus = new MENU(this, new MODEL().set('name', 'menus'));
@@ -36,9 +37,10 @@ export default class NAVBAR extends NAV {
         @param {string} label TAB Label
         @param {string} icon TAB Icon
         @param {Array<string>} secondaryTabs Array of Tab names
+        @param {boolean} isHorizontal If true (default), secondary tab menu is horizontal
 	    @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus {tab,element}
 	*/
-    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = []) {
+    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = [], isHorizontal = true) {
         // Create Primary tab and Menu
         let tabbable = this.addTabbableElement(
             this.tabs.addNavItemIcon(new MODEL().set({
@@ -55,7 +57,7 @@ export default class NAVBAR extends NAV {
                 icon: ICONS[t],
                 name: t
             })),
-            tabbable.element.addMenu(new MODEL('horizontal').set('name', t))
+            tabbable.element.addMenu(new MODEL(isHorizontal ? 'horizontal' : '').set('name', t))
         ));
         return tabbable;
     }
@@ -72,13 +74,13 @@ export default class NAVBAR extends NAV {
     addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
         try {
             // Create Primary Options tab and Menu
-            let btnOptions = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
+            let tab = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
                 icon,
                 label,
                 name
             }));
             let menu = this.menus.addMenu(new MODEL().set('name', name));
-            this.addTabbableElement(btnOptions, menu);
+            this.addTabbableElement(tab, menu);
             // Create Secondary Tabs and Horizontal Menus inside Options Menu
             let optMenuClass = isHorizontal ? 'horizontal' : '';
             children.map((str) => {
@@ -119,10 +121,14 @@ export default class NAVBAR extends NAV {
         tab.el.addEventListener('activate', () => {
             element.dispatchToSiblings(deactivate);
             tab.target.el.dispatchEvent(new Activate()); // Activate Element
+
         });
         /** Deactivate Tab and Element */
         tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
-        tab.el.addEventListener('deactivate', () => this.filterEventDomException(tab.target, deactivate));
+        tab.el.addEventListener('deactivate', () => {
+            this.filterEventDomException(tab.target, deactivate);
+            tab.target.el.dispatchEvent(new Deactivate()); // Deactivate Element
+        });
         // Deactivate children
         tab.target.el.addEventListener('deactivate', () => tab.target.get().forEach((c) => c.el.dispatchEvent(new Deactivate())));
         return {
