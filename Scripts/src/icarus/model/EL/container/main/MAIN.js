@@ -19,12 +19,11 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
 		this.addClass('main');
-        this.body.pane.addClass('pane-tall');
-        this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
-        this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
-
+		this.body.pane.addClass('pane-tall');
+		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
+		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
-        this.addNavOptions();
+		this.addNavOptions();
 		/** @type {CONTAINERFACTORY} */
 		this.factory = model.factory;
 		/** @type {LOADER} */
@@ -34,22 +33,21 @@ export default class MAIN extends CONTAINER {
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
-        this.navfooter = new NAVFOOTER(this, new MODEL());
-        $(this.navfooter.el).insertAfter(this.el);
-
+		this.navfooter = new NAVFOOTER(this, new MODEL());
+		$(this.navfooter.el).insertAfter(this.el);
 		// CRUD
 		this.save = this.factory.save;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-        this.watchMousePosition();
+		this.watchMousePosition();
 		this.expandMain();
-    }
-    constructElements() {
-        if (this.dataId > 0) {
-            document.title = this.data.title;
-        } else {
-            document.title = this.label;
-        }
-    }
+	}
+	constructElements() {
+		if (this.dataId > 0) {
+			document.title = this.data.title;
+		} else {
+			document.title = this.label;
+		}
+	}
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
 	    @returns {void}
@@ -148,49 +146,46 @@ export default class MAIN extends CONTAINER {
 	*/
 	navigateForward() {
 		console.log('TODO: Forward');
-    }
-    /** Creates a SIDEBAR that contains an outline of MAIN and its descendants
-        @returns {void}
-    */
-    createDocumentMap() {
-        let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-        sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
-        this.reference = sidebar.element.navbar;
-
-        // Add submenu items to DATA and ATTRIBUTES
-        /** @type {[MENU]} */
-        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-        ['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
-
-        // Position and show the NAVBAR
-        $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
-        sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
-    }
-    /** Creates a SIDEBAR with a USERMENU
-        @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
-    */
-    createUserMenu() {
-        let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-        userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['Profile', 'Settings']);
-        userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
-        let usermenu = new USERMENU(userBar.element);
-        $(usermenu.el).insertBefore(userBar.element.navbar.el);
-        usermenu.el.dispatchEvent(new Expand());
-        return this.navheader.addTabbableElement(userBar.tab, userBar.element);
-    }
+	}
+	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants
+	    @returns {void}
+	*/
+	createDocumentMap() {
+		let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+		this.reference = sidebar.element.navbar;
+		// Add submenu items to DATA and ATTRIBUTES
+		/** @type {[MENU]} */
+		let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
+		['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+		// Position and show the NAVBAR
+		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
+		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
+	}
+	/** Creates a SIDEBAR with a USERMENU
+	    @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
+	*/
+	createUserMenu() {
+		let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
+		userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['Profile', 'Settings']);
+		userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
+		let usermenu = new USERMENU(userBar.element);
+		$(usermenu.el).insertBefore(userBar.element.navbar.el);
+		usermenu.el.dispatchEvent(new Expand());
+		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
+	}
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addNavOptions() {
 		return this.chain(() => {
 			// LEFT ALIGN
-            this.createDocumentMap();
-            // History / Prev / Back Navigation
-            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
-            $(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
-
+			this.createDocumentMap();
+			// History / Prev / Back Navigation
+			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
+			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
-            this.createUserMenu();
+			this.createUserMenu();
 			/*if (this.getUser() === 'Guest') {
 			    usermenu.tab.el.addEventListener('activate', () => this.login(usermenu.tab));
 			} else {
@@ -300,15 +295,15 @@ export default class MAIN extends CONTAINER {
 	    as a Sidebar, Modal or an EDIT pane
 	    @returns {void}
 	*/
-    focusBody() {
-        return this.chain(() => {
-            let ev = new Deactivate(this);
-            this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
-            this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
-            //this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
-            this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
-            this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
-        }, 'Unable to restore focus to MAIN');
+	focusBody() {
+		return this.chain(() => {
+			let ev = new Deactivate(this);
+			this.navheader.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navheader.tab).forEach((icon) => icon.el.dispatchEvent(ev));
+			this.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(ev));
+			//this.navfooter.tabs.get(null, 'NAVITEMICON').filter((c) => c !== this.navfooter.tab).map((icon) => icon.el.dispatchEvent(ev));
+			this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
+			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
+		}, 'Unable to restore focus to MAIN');
 	}
 	/** Allows the user to open a MAIN 
 		@param {number} id MAIN id
@@ -318,12 +313,6 @@ export default class MAIN extends CONTAINER {
 	open(id = 0) {
 		console.log('TODO: APP.open(' + id + ')');
 		return false;
-	}
-	/** Returns the APP Id
-	    @returns {number} App Id
-	*/
-	getId() {
-		return this.id;
 	}
 	/** Override CONTAINER.ifEmpty()
 	    @returns {Promise<ThisType>} Promise Chain
