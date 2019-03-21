@@ -10,8 +10,8 @@ export default class Movable extends IFACE {
 	*/
 	constructor(node) {
 		super(node, 'movable');
-    }
-    /** Adds listeners where applicable
+	}
+	/** Adds listeners where applicable
 	    @param {EL} node Element to append listeners
 	    @returns {void}
 	*/
@@ -20,8 +20,8 @@ export default class Movable extends IFACE {
 		node.el.addEventListener('down', () => node.down());
 		//node.el.addEventListener('left', () => node.left());
 		//node.el.addEventListener('right', () => node.right());
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
@@ -29,11 +29,11 @@ export default class Movable extends IFACE {
 		/** Moves the element up
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.up = () => node.chain(() => console.log('Move Up', node));
+		this.methods.up = () => node.chain(() => console.log('Move Up', node));
 		/** Moves the element down
 		    @returns {Promise<ThisType>} Promise Chain
 		*/
-        this.methods.down = () => node.chain(() => console.log('Move Down', node));
+		this.methods.down = () => node.chain(() => console.log('Move Down', node));
 	}
 	/** Moves this element UP one slot
 	    @returns {ThisType} This Container

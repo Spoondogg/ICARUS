@@ -37,9 +37,10 @@ const defaultContainerData = () => [
 */
 export const DATAELEMENTS = {
 	ARTICLE: {
-        containers: ['JUMBOTRON', 'FORM', 'SECTION'],
-        data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
-        attributes: [createInputModel('INPUT', 'name')]
+		containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+		///data: defaultContainerData().concat([createInputModel('INPUT', 'header')]),
+		data: [createInputModel('INPUT', 'header')],
+		attributes: [createInputModel('INPUT', 'name')]
 	},
 	CALLOUT: {
 		data: [
@@ -72,8 +73,8 @@ export const DATAELEMENTS = {
 	FORMELEMENT: {
 		data: defaultContainerData().concat([
 			createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'label'),
+			createInputModel('INPUT', 'name', 'Text Input'),
+			createInputModel('INPUT', 'label'),
 			createInputModel('INPUT', 'value')
 		]),
 		attributes: [
@@ -91,23 +92,23 @@ export const DATAELEMENTS = {
 		data: [
 			createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
 			createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'label', 'Input Label'),
+			createInputModel('INPUT', 'name', 'Text Input'),
+			createInputModel('INPUT', 'label', 'Input Label'),
 			createInputModel('INPUT', 'value')
 		],
 		attributes: [
-            createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'text-input'),
-            createInputModel('INPUT', 'value', ''),
-            createInputModel('INPUT', 'placeholder')
+			createInputModel('INPUT', 'type', 'TEXT'),
+			createInputModel('INPUT', 'name', 'text-input'),
+			createInputModel('INPUT', 'value', ''),
+			createInputModel('INPUT', 'placeholder')
 		]
 	},
 	FORMTEXTAREA: {
 		data: [
 			createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
 			createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'label', 'Input Label'),
+			createInputModel('INPUT', 'name', 'Text Input'),
+			createInputModel('INPUT', 'label', 'Input Label'),
 			createInputModel('INPUT', 'value')
 		],
 		attributes: [
@@ -120,7 +121,7 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	FORMPOSTINPUT: {
-        data: [createInputModel('INPUT', 'label', 'Input Label')],
+		data: [createInputModel('INPUT', 'label', 'Input Label')],
 		attributes: []
 	},
 	INDEX: {
@@ -138,7 +139,7 @@ export const DATAELEMENTS = {
 			createInputModel('INPUT', 'name'),
 			createInputModel('INPUT', 'value')
 		],
-        attributes: [createInputModel('INPUT', 'placeholder')]
+		attributes: [createInputModel('INPUT', 'placeholder')]
 	},
 	JUMBOTRON: {
 		data: defaultContainerData().concat([
@@ -162,7 +163,7 @@ export const DATAELEMENTS = {
 	},
 	MAIN: {
 		containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
-        data: [createInputModel('INPUT', 'title', 'MAIN')],
+		data: [createInputModel('INPUT', 'title', 'MAIN')],
 		attributes: [],
 		description: []
 	},
@@ -171,11 +172,11 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	SECTION: {
-        data: [
-            createInputModel('INPUT', 'header'),
-            createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'NUMBER')
-        ],
-        attributes: [createInputModel('INPUT', 'name')]
+		data: [
+			createInputModel('INPUT', 'header'),
+			createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'NUMBER')
+		],
+		attributes: [createInputModel('INPUT', 'name')]
 	},
 	SIDEBAR: {
 		data: [],
@@ -186,10 +187,10 @@ export const DATAELEMENTS = {
 		attributes: []
 	},
 	TEXTBLOCK: {
-        data: [
-            createInputModel('INPUT', 'header'),
-            createInputModel('TEXTAREA', 'p', ' ')
-        ],
+		data: [
+			createInputModel('INPUT', 'header'),
+			createInputModel('TEXTAREA', 'p', ' ')
+		],
 		attributes: []
 	},
 	THUMBNAIL: {

@@ -18,7 +18,7 @@ export default class CLASSVIEWER extends BANNER {
 		this.classType = 'JUMBOTRON';
 	}
 	construct() {
-        this.h1 = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.classType + ' viewer'), 1);
+		this.h1 = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.classType + ' viewer'), 1);
 		this.form = FORM.createEmptyForm(this.body.pane);
 		let inputs = [
 			new MODEL(new ATTRIBUTES({

@@ -13,13 +13,13 @@ export default class Swipeable extends IFACE {
         @param {boolean} preventDefault If true (default is false) default behavior is prevented
         @todo Rather than pixel based, have swipeSensitivity use a % based on current total width/height
 	*/
-    constructor(node, swipeSensitivity = 50, stopPropagation = true, preventDefault = false) {
-        super(node, 'swipeable');
-        this.stopPropagation = stopPropagation;
-        this.preventDefault = preventDefault;
+	constructor(node, swipeSensitivity = 50, stopPropagation = true, preventDefault = false) {
+		super(node, 'swipeable');
+		this.stopPropagation = stopPropagation;
+		this.preventDefault = preventDefault;
 		node.xDown = null;
-        node.yDown = null;
-        node.swipeSensitivity = swipeSensitivity;
+		node.yDown = null;
+		node.swipeSensitivity = swipeSensitivity;
 	}
 	addListeners(node) {
 		node.el.addEventListener('touchstart', this.handleTouchStart.bind(node), {
@@ -32,8 +32,8 @@ export default class Swipeable extends IFACE {
 		node.el.addEventListener('swipeDown', () => node.swipeDown());
 		node.el.addEventListener('swipeLeft', () => node.swipeLeft());
 		node.el.addEventListener('swipeRight', () => node.swipeRight());
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
@@ -41,66 +41,67 @@ export default class Swipeable extends IFACE {
 		/** Triggers when upward swipe occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.swipeUp = () => node.chain(() => console.log('Swipe Up', node));
+		this.methods.swipeUp = () => node.chain(() => console.log('Swipe Up', node));
 		/** Triggers when downward swipe occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.swipeDown = () => node.chain(() => console.log('Swipe Down', node));
+		this.methods.swipeDown = () => node.chain(() => console.log('Swipe Down', node));
 		/** Triggers when left-to-right swipe occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.swipeLeft = () => node.chain(() => console.log('Swipe Left', node));
+		this.methods.swipeLeft = () => node.chain(() => console.log('Swipe Left', node));
 		/** Triggers when right-to-left swipe occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.swipeRight = () => node.chain(() => console.log('Swipe Right', node));
-    }
-    /** Sets start coordinates
+		this.methods.swipeRight = () => node.chain(() => console.log('Swipe Right', node));
+	}
+	/** Sets start coordinates
 		@param {Event} ev Event
 	    @returns {void}
 	*/
-    handleTouchStart(ev) {
-        this.configureEvent(ev);
-        this.xDown = ev.touches[0].clientX;
-        this.yDown = ev.touches[0].clientY;
+	handleTouchStart(ev) {
+		this.configureEvent(ev);
+		this.xDown = ev.touches[0].clientX;
+		this.yDown = ev.touches[0].clientY;
 	}
 	/** Process the swipe
 	    @param {Event} ev Event
 	    @returns {void}
 	*/
-    handleTouchMove(ev) {
-        this.configureEvent(ev);
-        if (!this.xDown || !this.yDown) {
+	handleTouchMove(ev) {
+		this.configureEvent(ev);
+		if (!this.xDown || !this.yDown) {
 			return;
-        }
-        let xUp = ev.touches[0].clientX,
-            yUp = ev.touches[0].clientY;
-        let xDiff = this.xDown - xUp,
-            yDiff = this.yDown - yUp;
-        let dir = '',
-            distance = Math.abs(xDiff) + Math.abs(yDiff);
-        if (distance > this.swipeSensitivity) { // Handle short swipes
-            if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant difference 
-                dir = xDiff > 0 ? 'left' : 'right';
-                if (xDiff > 0) {
-                    this.swipeLeft();
-                } else {
-                    this.swipeRight();
-                }
-            } else if (yDiff > 0) {
-                dir = 'up';
-                this.swipeUp();
-            } else {
-                dir = 'down';
-                this.swipeDown();
-            }
-            console.log(this.className + ' ' + dir + ' swipe', this);
-            // Reset Values
-            this.xDown = null;
-            this.yDown = null;
-        } /*else {
-            console.log(this.className + ' Swipe Sensitivity', distance / this.swipeSensitivity);
-        }*/
+		}
+		let xUp = ev.touches[0].clientX,
+			yUp = ev.touches[0].clientY;
+		let xDiff = this.xDown - xUp,
+			yDiff = this.yDown - yUp;
+		let dir = '',
+			distance = Math.abs(xDiff) + Math.abs(yDiff);
+		if (distance > this.swipeSensitivity) { // Handle short swipes
+			if (Math.abs(xDiff) > Math.abs(yDiff)) { // Most significant difference 
+				dir = xDiff > 0 ? 'left' : 'right';
+				if (xDiff > 0) {
+					this.swipeLeft();
+				} else {
+					this.swipeRight();
+				}
+			} else if (yDiff > 0) {
+				dir = 'up';
+				this.swipeUp();
+			} else {
+				dir = 'down';
+				this.swipeDown();
+			}
+			console.log(this.className + ' ' + dir + ' swipe', this);
+			// Reset Values
+			this.xDown = null;
+			this.yDown = null;
+		}
+		/*else {
+		           console.log(this.className + ' Swipe Sensitivity', distance / this.swipeSensitivity);
+		       }*/
 	}
 }
 export { EL }

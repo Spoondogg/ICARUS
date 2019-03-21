@@ -19,7 +19,7 @@ export default class IMAGEGALLERY extends BANNER {
 		this.page = 0;
 		this.pageLength = 6;
 		this.pageTotal = 0;
-        this.header = new HEADER(this, new MODEL().set('innerHTML', 'Image Gallery'));
+		this.header = new HEADER(this, new MODEL().set('innerHTML', 'Image Gallery'));
 		$(this.header.el).insertBefore(this.body.pane.el);
 		this.pagination = this.createPaginationFooter();
 		this.footer = new FOOTER(this, new MODEL());
@@ -127,6 +127,6 @@ export default class IMAGEGALLERY extends BANNER {
 	    @returns {void}
 	*/
 	launchMain(id) {
-		window.open(new URL(window.location.href).origin + '/FormPost/Get/' + id);
+		window.open(new URL(window.location.href).origin + '/FormPost/GET/' + id);
 	}
 }

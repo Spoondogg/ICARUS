@@ -1,5 +1,5 @@
 /** @module */
-import A, {	ATTRIBUTES, EL, MODEL, SPAN } from '../A.js';
+import A, { ATTRIBUTES, EL, MODEL, SPAN } from '../A.js';
 import GLYPHICON from '../../span/GLYPHICON.js';
 /** A hyperlink / page anchor    
     @class
@@ -19,4 +19,4 @@ export default class ANCHOR extends A {
 		this.label = new SPAN(this, new MODEL('label').set('innerHTML', model.label || ''));
 	}
 }
-export { A,	ATTRIBUTES,	EL,	GLYPHICON, MODEL }
+export { A, ATTRIBUTES, EL, GLYPHICON, MODEL }

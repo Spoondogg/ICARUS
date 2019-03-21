@@ -54,7 +54,7 @@ export default class CONTROLLER extends MODEL {
 		this.containers = ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'];
 		/** @property {MAIN} main The MAIN Container */
 		this.main = new MAIN(this);
-        this.showLoginPrompt(user === 'Guest');
+		this.showLoginPrompt(user === 'Guest');
 		this.keyBindings();
 	}
 	/** Sets application keybindings

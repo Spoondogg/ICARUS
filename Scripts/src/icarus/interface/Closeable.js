@@ -14,8 +14,8 @@ export default class Closeable extends Hideable {
 	addListeners(node) {
 		node.el.addEventListener('open', () => node.open());
 		node.el.addEventListener('close', () => node.close());
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
@@ -27,7 +27,7 @@ export default class Closeable extends Hideable {
 		/** Shows the element
 	        @returns {Promise<DIALOG>} Callback on successful display of dialog
 	    */
-        this.methods.show = () => node.chain(() => $(this.el).modal('show'));
+		this.methods.show = () => node.chain(() => $(this.el).modal('show'));
 		/** Hides this element
 		    @param {number} delay Millisecond delay until element is closed
 		    @param {boolean} preserve If true, element is not deleted

@@ -17,8 +17,8 @@ export default class HEADERWRAP extends JUMBOTRON {
 		super(node, model);
 		this.addClass('headerwrap');
 		this.header = new HEADER(this.body.pane, new MODEL('clearfix'));
-        this.header.h1 = new HEADER(this.header, new MODEL().set('innerHTML', 'Hello World'), 1);
+		this.header.h1 = new HEADER(this.header, new MODEL().set('innerHTML', 'Hello World'), 1);
 		this.header.h1.icon = new GLYPHICON(this.header.h1, ICONS.PLUS);
-        this.header.p = new P(this.header, new MODEL().set('innerHTML', 'Woot to the Woot'));
+		this.header.p = new P(this.header, new MODEL().set('innerHTML', 'Woot to the Woot'));
 	}
 }

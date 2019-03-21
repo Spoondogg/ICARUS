@@ -1,5 +1,5 @@
 /** @module */
-import INPUT, {	ATTRIBUTES,	EL,	MODEL } from '../../../../input/INPUT.js';
+import INPUT, { ATTRIBUTES, EL, MODEL } from '../../../../input/INPUT.js';
 /** Represents an INPUT TOKEN for an Icarus Form
     @class
     @extends FORMINPUT

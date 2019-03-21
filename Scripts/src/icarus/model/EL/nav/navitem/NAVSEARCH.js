@@ -6,7 +6,7 @@ import NAVITEM from '../navitem/NAVITEM.js';
     @todo Create a proper search type INPUT element
     @class
     @extends NAVITEM
- */
+*/
 export default class NAVSEARCH extends NAVITEM {
 	/** Construct a NAVSEARCH
 	    @param {EL} node Parent Node
@@ -34,4 +34,4 @@ export default class NAVSEARCH extends NAVITEM {
 		this.inputGroup.btnGroup.btn.icon = new EL(this.inputGroup.btnGroup.btn, 'I', new MODEL('glyphicon glyphicon-search'));
 	}
 }
-export { ATTRIBUTES, EL, MODEL,	NAVITEM }
+export { ATTRIBUTES, EL, MODEL, NAVITEM }

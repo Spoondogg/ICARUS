@@ -31,8 +31,8 @@ export default class ATTRIBUTES { // extends Map
 					}
 				}
 				break;
-            case 'undefined':
-                break;
+			case 'undefined':
+				break;
 			default:
 				console.warn('Unrecognized classname', className);
 		}

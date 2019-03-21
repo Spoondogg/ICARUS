@@ -2,9 +2,9 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
+import FORMFOOTER, { BUTTON } from './FORMFOOTER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
-import FORMFOOTER from './FORMFOOTER.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
@@ -35,18 +35,18 @@ export default class FORM extends CONTAINER {
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
 		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-    }
-    constructElements() {
-        return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
-            } else {
-                console.log('No data exists for ' + this.className);
-                this.ifEmpty();
-                //this.navheader.el.dispatchEvent(new Expand(this));
-            }
-        });
-    }
+	}
+	constructElements() {
+		return this.chain(() => {
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
+			} else {
+				console.log('No data exists for ' + this.className);
+				this.ifEmpty();
+				//this.navheader.el.dispatchEvent(new Expand(this));
+			}
+		});
+	}
 	/** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
@@ -70,10 +70,10 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
-                        form.generateFormPostInputs(payload, className, type),
-                        form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
-                    ).then(() => {
+					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
+						form.generateFormPostInputs(payload, className, type),
+						form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
+					).then(() => {
 						if (payload.model.jsonResults) { // Set values based on existing 
 							JSON.parse(payload.model.jsonResults).forEach((inp) => {
 								form.el.elements[inp.name].value = inp.value;
@@ -91,20 +91,24 @@ export default class FORM extends CONTAINER {
 			});
 		});
 	}
+	/** @typedef {Object} FORMMODEL A CONTAINER Form MODEL
+	    @property {CONTAINER} container The CONTAINER
+	    @property {boolean} hidden Hidden/Visible Flag
+	*/
 	/** Constructs a FORM based on a CONTAINER with a single fieldset and formelementgroup
         based on a FORMPOST MODEL
 	    @param {EL} node Parent node
-        @param {MODEL} model Model
+        @param {FORMMODEL} model Model
 	    @returns {Promise<FORM>} An empty form container
 	*/
 	static createContainerForm(node, model) {
 		return new Promise((resolve, reject) => {
 			try {
 				FORM.createEmptyForm(node, model.hidden).then((frm) => {
-                    frm.setAction(model.container.className + '/SET').addInputs(
-                        model.container.createContainerInputs(),
-                        frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
-                    ).then((f) => {
+					frm.setAction(model.container.className + '/SET').addInputs(
+						model.container.createContainerInputs(),
+						frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
+					).then((f) => {
 						f.afterSuccessfulPost = () => f.getDialog().close();
 						resolve(f);
 					});
@@ -146,11 +150,11 @@ export default class FORM extends CONTAINER {
 	*/
 	addInput(model, target = this) {
 		return new Promise((resolve, reject) => {
-            try {
-                model.set({
-                    container: this,
-                    loader: model.loader
-                });
+			try {
+				model.set({
+					container: this,
+					loader: model.loader
+				});
 				let inp = null;
 				if (model.type === 'FORMPOSTINPUT') {
 					inp = new FORMPOSTINPUT(target.body.pane, model);
@@ -169,8 +173,7 @@ export default class FORM extends CONTAINER {
 							inp = new FORMINPUT(target.body.pane, model);
 							break;
 					}
-                }
-                
+				}
 				target.children.push(inp);
 				resolve(inp);
 			} catch (e) {
@@ -499,13 +502,13 @@ export default class FORM extends CONTAINER {
 				main = this.getDialog().getContainer().getMain();
 			}
 			/** @type {LOADER} */
-            let loader = null;
-            try {
-                loader = main.getLoader();
-            } catch (e) {
-                console.warn('Unable to get LOADER in FORM.POST', e);
-                throw e;
-            }
+			let loader = null;
+			try {
+				loader = main.getLoader();
+			} catch (e) {
+				console.warn('Unable to get LOADER in FORM.POST', e);
+				throw e;
+			}
 			let data = this.getFormPost();
 			let url = this.getAction();
 			let statusCode = 0;
@@ -574,5 +577,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, BUTTON, CONTAINER, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */

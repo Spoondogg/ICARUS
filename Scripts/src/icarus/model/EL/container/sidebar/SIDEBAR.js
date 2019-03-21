@@ -16,10 +16,10 @@ export default class SIDEBAR extends EL {
 		super(node, 'ASIDE', model);
 		this.addClass('sidebar');
 		this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.75, true, true));
-        this.implement(new Switchable(this));
-        this.navbar = new NAVBAR(this, new MODEL());
-        this.navbar.el.dispatchEvent(new Expand(this.navbar));
-        this.setAlignmentOptions(model.align || 'left');
+		this.implement(new Switchable(this));
+		this.navbar = new NAVBAR(this, new MODEL());
+		this.navbar.el.dispatchEvent(new Expand(this.navbar));
+		this.setAlignmentOptions(model.align || 'left');
 		// Override activate/deactivate for custom animation timing
 		this.activate = () => {
 			this.removeClass('hidden');
@@ -31,25 +31,25 @@ export default class SIDEBAR extends EL {
 		this.deactivate = () => {
 			this.getMain().body.pane.removeClass('focus-' + this.align);
 			this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
-        }
+		}
 		// Default state
 		this.deactivate();
-    }
-    /** Sets the SIDEBAR alignment and configures 'swipeLeft' and 'swipeRight' accordingly
-        @param {string} align SIDEBAR alignment
-        @returns {void}
-    */
-    setAlignmentOptions(align) {
-        /** SIDEBAR alignment parameter
-            @type {string}
-        */
-        this.align = align;
-        if (this.align === 'left') {
-            this.swipeLeft = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
-        } else {
-            this.swipeRight = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
-        }
-        this.addClass(this.align);
-    }
+	}
+	/** Sets the SIDEBAR alignment and configures 'swipeLeft' and 'swipeRight' accordingly
+	    @param {string} align SIDEBAR alignment
+	    @returns {void}
+	*/
+	setAlignmentOptions(align) {
+		/** SIDEBAR alignment parameter
+		    @type {string}
+		*/
+		this.align = align;
+		if (this.align === 'left') {
+			this.swipeLeft = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
+		} else {
+			this.swipeRight = () => this.tab.el.dispatchEvent(new Deactivate(this.tab));
+		}
+		this.addClass(this.align);
+	}
 }
 export { EL, MODEL, NAVBAR }

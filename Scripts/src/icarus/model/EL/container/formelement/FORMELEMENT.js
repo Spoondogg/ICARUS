@@ -13,20 +13,20 @@ export default class FORMELEMENT extends CONTAINER {
         @param {MODEL} model the data model
     */
 	constructor(node, model) {
-        super(node, 'DIV', model);
+		super(node, 'DIV', model);
 		this.addClass('form-element');
 		this.implement(new Hideable(this));
-    }
-    constructElements() {
-        //console.log(this.className + '.constructElements()', this);
-        if (this.dataId > 0) {
-            this.createEditableElement('label', this.body.pane);
-        } else {
-            this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
-            console.log('No data exists for ' + this.className);
-            this.navheader.el.dispatchEvent(new Expand(this));
-        }
-    }
+	}
+	constructElements() {
+		//console.log(this.className + '.constructElements()', this);
+		if (this.dataId > 0) {
+			this.createEditableElement('label', this.body.pane);
+		} else {
+			this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+			console.log('No data exists for ' + this.className);
+			this.navheader.el.dispatchEvent(new Expand(this));
+		}
+	}
 	/** If no children supplied...
 	    @returns {Promise<ThisType>} Promise Chain
 	*/

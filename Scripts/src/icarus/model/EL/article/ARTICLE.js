@@ -13,17 +13,17 @@ export default class ARTICLE extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION']);
 		this.addClass('article');
-    }
-    constructElements() {
-        return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
-                let date = this.getDateCreated();
-                this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
-                this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
-            }
-            this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
-        });
-    }
+	}
+	constructElements() {
+		return this.chain(() => {
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
+				let date = this.getDateCreated();
+				this.articleDate = new SPAN(this.body.pane, new MODEL('date-created').set('innerHTML', date.date));
+				this.articleAuthor = new SPAN(this.body.pane, new MODEL('author').set('innerHTML', this.authorId));
+			}
+			this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
+		});
+	}
 }
 export { MODEL }

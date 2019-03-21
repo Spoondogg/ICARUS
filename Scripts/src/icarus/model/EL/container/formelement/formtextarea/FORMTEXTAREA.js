@@ -18,4 +18,4 @@ export default class FORMTEXTAREA extends FORMELEMENT {
 		})), model.attributes.value || '');
 	}
 }
-export { ATTRIBUTES, EL, LABEL,	MODEL, TEXTAREA }
+export { ATTRIBUTES, EL, LABEL, MODEL, TEXTAREA }

@@ -20,8 +20,8 @@ export default class LOADER extends DIALOG {
 			container,
 			caller: container,
 			name: 'loader'
-        }), false);
-        this.className = 'LOADER';
+		}), false);
+		this.className = 'LOADER';
 		this.addClass('loader');
 		this.el.setAttribute('data-backdrop', false);
 		this.progress = new DIV(this.body, new MODEL('progress'));
