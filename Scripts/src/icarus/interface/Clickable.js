@@ -32,8 +32,8 @@ export default class Clickable extends IFACE {
 		node.el.style.webkitTouchCallout = 'none';
 		node.timer = null;
 		node.touchtime = 0; // mobile double click detection           
-    }
-    /** Adds listeners where applicable
+	}
+	/** Adds listeners where applicable
 	    @param {EL} node Element to append listeners
 	    @returns {void}
 	*/
@@ -41,10 +41,10 @@ export default class Clickable extends IFACE {
 		// Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 		// Consider showing a simple press-timer animation after 100ms
-        node.el.addEventListener('mousedown', (ev) => node.pressDown(ev));
-        node.el.addEventListener('mouseup', (ev) => node.pressUp(ev));
-        node.el.addEventListener('touchstart', (ev) => node.pressDown(ev), { passive: true });
-        node.el.addEventListener('touchend', (ev) => node.pressUp(ev), { passive: true });
+		node.el.addEventListener('mousedown', (ev) => node.pressDown(ev));
+		node.el.addEventListener('mouseup', (ev) => node.pressUp(ev));
+		node.el.addEventListener('touchstart', (ev) => node.pressDown(ev), { passive: true });
+		node.el.addEventListener('touchend', (ev) => node.pressUp(ev), { passive: true });
 		node.el.addEventListener('click', (ev) => node.pressed(ev));
 	}
 	startTimer(node) {
@@ -54,43 +54,43 @@ export default class Clickable extends IFACE {
 	resetTimer(node) {
 		node.touchtime = 0;
 		clearTimeout(node.timer);
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
-    setMethods(node) {
-        /** Toggle the 'active' state of this Element and dispatch appropriate Event
-            @returns {void}
-        */
+	setMethods(node) {
+		/** Toggle the 'active' state of this Element and dispatch appropriate Event
+		    @returns {void}
+		*/
 		this.methods.click = () => this.toggle('active', new Activate(node), new Deactivate(node));
-        /** Toggle the 'selected' state of this Element and dispatch appropriate Event
-            @returns {void}
-        */
-        this.methods.dblclick = () => this.toggle('selected', new Select(node), new Deselect(node));
-        /** No event is called for a long-click at this time
-            @returns {void}
-        */
-        this.methods.longclick = () => null; //console.log('longclick-down', node);
+		/** Toggle the 'selected' state of this Element and dispatch appropriate Event
+		    @returns {void}
+		*/
+		this.methods.dblclick = () => this.toggle('selected', new Select(node), new Deselect(node));
+		/** No event is called for a long-click at this time
+		    @returns {void}
+		*/
+		this.methods.longclick = () => null; //console.log('longclick-down', node);
 		/** On PressDown Event, starts a timer that triggers the Long Press Event
             @param {Event} ev Event
 		    @returns {Promise<any>} Promise to resolve given function
 		*/
-        this.methods.pressDown = (ev) => {
+		this.methods.pressDown = (ev) => {
 			node.timer = window.setTimeout(() => {
-                ev.stopPropagation();
-                this.startTimer(node);
-                Promise.resolve(node.longclick());
+				ev.stopPropagation();
+				this.startTimer(node);
+				Promise.resolve(node.longclick());
 			}, this.options.longClickDelay);
 		}
 		/** On PressUp Event, cancels PressDown Timer
             @param {Event} ev Event
 		    @returns {void} 
 		*/
-        this.methods.pressUp = (ev) => {
-            ev.stopPropagation();
-            clearTimeout(node.timer);
-        }
+		this.methods.pressUp = (ev) => {
+			ev.stopPropagation();
+			clearTimeout(node.timer);
+		}
 		/** Press Event occurs after Press Down/Up events complete, 
 		    signalling that the element has been pressed
             @param {Event} ev Event
@@ -98,8 +98,8 @@ export default class Clickable extends IFACE {
 		*/
 		this.methods.pressed = (ev) => {
 			//console.log('Pressed', this.timer, ev);
-            ev.stopPropagation();
-            try {                
+			ev.stopPropagation();
+			try {
 				if (node.touchtime === 0) {
 					node.touchtime = new Date().getTime();
 					setTimeout(() => {
@@ -116,7 +116,7 @@ export default class Clickable extends IFACE {
 				} else {
 					//console.log('longclick-up', node.timer, node);
 					this.resetTimer(node);
-                }
+				}
 			} catch (e) {
 				console.warn('error', e);
 				this.resetTimer(node);

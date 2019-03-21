@@ -16,21 +16,21 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-    }
-    constructElements() {
-        //console.log(this.className + '.constructElements()');
-        this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
-        this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
-        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
-            class: 'form-control',
-            name: this.attributes.name,
-            value: this.attributes.value,
-            type: this.attributes.type || 'TEXT',
-            readonly: true
-        })));
-        this.form = null;
-        this.createInput();
-    }
+	}
+	constructElements() {
+		//console.log(this.className + '.constructElements()');
+		this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
+		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+			class: 'form-control',
+			name: this.attributes.name,
+			value: this.attributes.value,
+			type: this.attributes.type || 'TEXT',
+			readonly: true
+		})));
+		this.form = null;
+		this.createInput();
+	}
 	/** Creates an Input Group with an INPUT element inside of it
         @returns {void}
     */
@@ -45,7 +45,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		let type = this.attributes.name;
 		let id = this.attributes.value;
 		if (id > 0) {
-            let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
+			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
 			btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));

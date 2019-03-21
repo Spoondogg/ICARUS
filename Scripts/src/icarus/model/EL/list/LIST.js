@@ -19,15 +19,15 @@ export default class LIST extends ITEM {
 		this.addClass('list');
 		this.implement(new Collapsible(this));
 		this.addCallback('UL', () => this.addUL(model));
-        this.addCallback('LI', () => this.addLI(model));
-        this.el.addEventListener('collapse', () => {
-            if (this.el.children.length > 0) {
-                //console.log('TODO: EMPTYING ' + this.className + '[' + this.name + ']', this.className); //this
-            }
-        });
-        this.el.addEventListener('expand', () => {
-            //console.log('TODO: POPULATING ' + this.className + '[' + this.name + ']');
-        });
+		this.addCallback('LI', () => this.addLI(model));
+		this.el.addEventListener('collapse', () => {
+			if (this.el.children.length > 0) {
+				//console.log('TODO: EMPTYING ' + this.className + '[' + this.name + ']', this.className); //this
+			}
+		});
+		this.el.addEventListener('expand', () => {
+			//console.log('TODO: POPULATING ' + this.className + '[' + this.name + ']');
+		});
 	}
 	/** Construct a generic List Item (LI) and append to this element's children
 	    @param {MODEL} model Object Model

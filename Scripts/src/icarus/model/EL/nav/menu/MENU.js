@@ -21,30 +21,30 @@ export default class MENU extends LIST {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
-        this.addCases(model);
+		this.addCases(model);
 		this.implement(new Switchable(this));
 		if (canActivate) {
-            this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
+			this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
 			this.el.addEventListener('deactivate', () => this.el.dispatchEvent(new Collapse(this)));
-        }
-        if (scrollIntoView) {
-            this.scrollOnExpand();
-        }
-    }
-    /** Scroll the menu into view on Expansion
-        @returns {void}
-    */
-    scrollOnExpand() {
-        $(this.el).on('shown.bs.collapse', (ev) => {
-            setTimeout(() => {
-                this.el.scrollIntoView({
-                    alignTo: false,
-                    behavior: 'smooth' // smooth not supported in Safari
-                });
-            }, 200);
-            ev.stopPropagation();
-        });
-    }
+		}
+		if (scrollIntoView) {
+			this.scrollOnExpand();
+		}
+	}
+	/** Scroll the menu into view on Expansion
+	    @returns {void}
+	*/
+	scrollOnExpand() {
+		$(this.el).on('shown.bs.collapse', (ev) => {
+			setTimeout(() => {
+				this.el.scrollIntoView({
+					alignTo: false,
+					behavior: 'smooth' // smooth not supported in Safari
+				});
+			}, 200);
+			ev.stopPropagation();
+		});
+	}
 	/** Adds relevant cases to this element
 	    @param {MODEL} model MENU Model
 	    @returns {void}
@@ -64,7 +64,7 @@ export default class MENU extends LIST {
 		this.el.onclick = (event) => {
 			if (event.target !== this.el) {
 				console.log('Collapsing child menus...', this);
-                this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
+				this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
 			}
 		};
 	}

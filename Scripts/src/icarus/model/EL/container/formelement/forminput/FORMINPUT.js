@@ -9,28 +9,28 @@ import INPUT from '../../../input/INPUT.js';
     @extends FORMELEMENT
 */
 export default class FORMINPUT extends FORMELEMENT {
-    constructElements() {
-        return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('label', this.body.pane);
-            } else {
-                this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
-                console.log('No data exists for ' + this.className);
-                //this.navheader.el.dispatchEvent(new Expand(this));
-            }
-            // @todo This could use some work.  
-            //console.log('FORMINPUT', this);
-            this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
-                class: 'form-control',
-                type: this.attributes.type || 'TEXT', // || this.data.type
-                list: this.attributes.name + '-options',
-                name: this.attributes.name,
-                value: this.attributes.value || '',
-                placeholder: this.attributes.placeholder || ''
-            })));
-            this.configureInput();
-        });
-    }
+	constructElements() {
+		return this.chain(() => {
+			if (this.dataId > 0) {
+				this.createEditableElement('label', this.body.pane);
+			} else {
+				this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
+				console.log('No data exists for ' + this.className);
+				//this.navheader.el.dispatchEvent(new Expand(this));
+			}
+			// @todo This could use some work.  
+			//console.log('FORMINPUT', this);
+			this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+				class: 'form-control',
+				type: this.attributes.type || 'TEXT', // || this.data.type
+				list: this.attributes.name + '-options',
+				name: this.attributes.name,
+				value: this.attributes.value || '',
+				placeholder: this.attributes.placeholder || ''
+			})));
+			this.configureInput();
+		});
+	}
 	/** Configures the INPUT Element
         @returns {INPUT} An INPUT EL
         @todo: This should use a factory constructor pattern to create specific input types

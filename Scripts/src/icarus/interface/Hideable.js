@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, {	EL } from './IFACE.js';
+import IFACE, { EL } from './IFACE.js';
 /** An interface for Display driven Events
     @class
     @extends IFACE
@@ -10,16 +10,16 @@ export default class Hideable extends IFACE {
 	*/
 	constructor(node) {
 		super(node, 'hideable');
-    }
-    /** Adds listeners where applicable
+	}
+	/** Adds listeners where applicable
 	    @param {EL} node Element to append listeners
 	    @returns {void}
 	*/
 	addListeners(node) {
 		node.el.addEventListener('hide', () => node.hide());
 		node.el.addEventListener('show', () => node.show());
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
@@ -27,13 +27,13 @@ export default class Hideable extends IFACE {
 		/** Hides the element
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.hide = () => node.chain(() => {
+		this.methods.hide = () => node.chain(() => {
 			node.el.style.display = 'none';
 		});
 		/** Shows the element
 		    @returns {Promise<ThisType>} Promise Chain
 		*/
-        this.methods.show = () => node.chain(() => {
+		this.methods.show = () => node.chain(() => {
 			node.el.style.display = 'block';
 		});
 	}

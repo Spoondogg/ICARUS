@@ -18,8 +18,8 @@ export default class Scrollable extends IFACE {
 		node.el.addEventListener('scrollDown', () => node.scrollDown());
 		node.el.addEventListener('scrollLeft', () => node.scrollLeft());
 		node.el.addEventListener('scrollRight', () => node.scrollRight());
-    }
-    /** Appends Interface methods to class that implements them
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
@@ -27,19 +27,19 @@ export default class Scrollable extends IFACE {
 		/** Triggers when upward scroll occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.scrollUp = () => node.chain(() => console.log('ScrollUp', node));
+		this.methods.scrollUp = () => node.chain(() => console.log('ScrollUp', node));
 		/** Triggers when downward scroll occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.scrollDown = () => node.chain(() => console.log('ScrollDown', node));
+		this.methods.scrollDown = () => node.chain(() => console.log('ScrollDown', node));
 		/** Triggers when left-to-right scroll occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.scrollLeft = () => node.chain(() => console.log('ScrollLeft', node));
+		this.methods.scrollLeft = () => node.chain(() => console.log('ScrollLeft', node));
 		/** Triggers when right-to-left scroll occurs on this element
 	       @returns {Promise<ThisType>} Promise Chain
 	    */
-        this.methods.scrollRight = () => node.chain(() => console.log('ScrollRight', node));
+		this.methods.scrollRight = () => node.chain(() => console.log('ScrollRight', node));
 	}
 	/** Enables scroll Up/Down from the current MENU
 	    @param {Event} event Event

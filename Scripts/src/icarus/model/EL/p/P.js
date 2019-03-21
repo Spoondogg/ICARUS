@@ -9,7 +9,7 @@ export default class P extends EL {
 	    @param {EL} node Node
 	    @param {MODEL} model Model
 	*/
-    constructor(node, model) {
+	constructor(node, model) {
 		super(node, 'P', model);
 	}
 }

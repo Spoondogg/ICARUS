@@ -37,8 +37,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		this.modal = new MODAL(this.data.header);
 		this.modal.container.body.pane.addClass('thumbnail index-thumbnail');
 		this.modal.container.image = new IMG(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('src', this.image.el.src)));
-        this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set('innerHTML', this.data.header));
-        this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('style', 'height:auto;')).set('innerHTML', this.data.p));
+		this.modal.container.header = new HEADER(this.modal.container.body.pane, new MODEL().set('innerHTML', this.data.header));
+		this.modal.container.p = new P(this.modal.container.body.pane, new MODEL(new ATTRIBUTES('style', 'height:auto;')).set('innerHTML', this.data.p));
 		this.modal.container.previewNotes = new DIV(this.modal.container.body.pane, new MODEL('preview-notes'), '');
 		this.modal.container.preview = new CONTAINER(this.modal.container.body.pane, 'DIV', new MODEL('preview'), [this.data.listClass.toUpperCase()]);
 		return this.modal;

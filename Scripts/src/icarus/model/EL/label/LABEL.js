@@ -6,9 +6,9 @@ export default class LABEL extends EL {
 	    @param {EL} node Node
 	    @param {MODEL} model Model
 	*/
-    constructor(node, model) {
-        super(node, 'LABEL', model);
-        this.required(model.innerHTML);
+	constructor(node, model) {
+		super(node, 'LABEL', model);
+		this.required(model.innerHTML);
 	}
 }
 export { ATTRIBUTES, EL, MODEL }

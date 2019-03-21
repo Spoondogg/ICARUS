@@ -16,39 +16,39 @@ export default class DIALOG extends EL {
         @param {boolean} showHeader If true (default), header is shown
 	*/
 	constructor(model, showHeader = true) {
-        super(document.body, 'DIV', model);
-        this.className = 'DIALOG';
+		super(document.body, 'DIV', model);
+		this.className = 'DIALOG';
 		this.addClasses(['dialog', 'modal']);
-        this.implement(new Closeable(this));
-        this.implement(new Selectable(this));
+		this.implement(new Closeable(this));
+		this.implement(new Selectable(this));
 		this.show = () => this.showDialog();
 		this.close = () => this.closeDialog();
 		this.hide = () => this.hideDialog();
 		this.caller = this.required(model.caller); // Switchable Element
 		this.container = this.required(model.container); // Container Element for linked list head
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
-        this.btnClose = this.createCloseButton();
-        if (showHeader) {
-            this.navheader.expand();
-        }
+		this.btnClose = this.createCloseButton();
+		if (showHeader) {
+			this.navheader.expand();
+		}
 		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
-        this.closeOnFocusOut();
-        this.overrideBootstrap();
-    }
-    /** Creates a close button in the nav header
-        @returns {NAVITEMICON} Close Button / Icon
-    */
-    createCloseButton() {
-        let btn = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
-            label: 'close',
-            icon: ICONS.CLOSE
-        }));
-        btn.el.addEventListener('activate', () => this.closeDialog());
-        return btn;
-    }
+		this.closeOnFocusOut();
+		this.overrideBootstrap();
+	}
+	/** Creates a close button in the nav header
+	    @returns {NAVITEMICON} Close Button / Icon
+	*/
+	createCloseButton() {
+		let btn = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
+			label: 'close',
+			icon: ICONS.CLOSE
+		}));
+		btn.el.addEventListener('activate', () => this.closeDialog());
+		return btn;
+	}
 	/** When DIALOG loses focus, it will be closed
 	    @returns {void}
 	*/
@@ -85,24 +85,24 @@ export default class DIALOG extends EL {
 				reject(e);
 			}
 		});
-    }
-    getContainer() {
-        console.log('Getting dialog container');
-        return this.container;
-    }
-    getMain() {
-        try {
-            return this.getContainer().getMain();
-        } catch (e) {
-            console.warn('Unable to get MAIN for DIALOG', this);
-        }
-    }
-    overrideBootstrap() {
-        // Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
-        $(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
-        $(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
+	}
+	getContainer() {
+		console.log('Getting dialog container');
+		return this.container;
+	}
+	getMain() {
+		try {
+			return this.getContainer().getMain();
+		} catch (e) {
+			console.warn('Unable to get MAIN for DIALOG', this);
+		}
+	}
+	overrideBootstrap() {
+		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+		$(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
+		$(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
 		//$(this.el).on('hidden.bs.modal', () => { /**/ });
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
-    }
+	}
 }
 export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL, NAVITEMICON }

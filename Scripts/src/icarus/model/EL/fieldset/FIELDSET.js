@@ -10,20 +10,20 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-        super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
-        this.addClass('fieldset');
+		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
+		this.addClass('fieldset');
 	}
-    constructElements() {
-        return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('legend', this.body.pane);
-            } else {
-                console.log('No data exists for ' + this.className);
-                this.ifEmpty();
-                //this.navheader.el.dispatchEvent(new Expand(this));
-            }
-        });
-    }
+	constructElements() {
+		return this.chain(() => {
+			if (this.dataId > 0) {
+				this.createEditableElement('legend', this.body.pane);
+			} else {
+				console.log('No data exists for ' + this.className);
+				this.ifEmpty();
+				//this.navheader.el.dispatchEvent(new Expand(this));
+			}
+		});
+	}
 	/** Constructs a Form Element Group for this Fieldset
         @todo Verify that this overrides the initial case constructor
 	    @param {MODEL} model Object model

@@ -25,27 +25,27 @@ export default class NAVHEADER extends NAVBAR {
 		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(this)));
 		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this)));
 		this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this)));
-        this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
+		this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
 	}
-    /** Adds a single NAV Icon and associated SIDEBAR
-        @param {string} name Name
-        @param {string} label Label
-        @param {string} icon Icon
-        @param {string} align Alignment
-        @returns {{tab:NAVITEMICON, element:SIDEBAR}} Tabbable Element {tab,element}
-    */
-    addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
-        return this.addTabbableElement(
-            this.tabs.addNavItemIcon(new MODEL().set({
-                icon,
-                label,
-                name
-            })),
-            this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
-                name,
-                align
-            })))
-        );
-    }
+	/** Adds a single NAV Icon and associated SIDEBAR
+	    @param {string} name Name
+	    @param {string} label Label
+	    @param {string} icon Icon
+	    @param {string} align Alignment
+	    @returns {{tab:NAVITEMICON, element:SIDEBAR}} Tabbable Element {tab,element}
+	*/
+	addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
+		return this.addTabbableElement(
+			this.tabs.addNavItemIcon(new MODEL().set({
+				icon,
+				label,
+				name
+			})),
+			this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
+				name,
+				align
+			})))
+		);
+	}
 }
 export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, SIDEBAR }

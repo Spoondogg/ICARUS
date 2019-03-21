@@ -208,8 +208,8 @@ export default class INDEXMAIN extends BANNER {
 			}, 1000);
 		} else {
 			this.isLoading = true;
-            while (this.menu.children.length > this.maxNavItems) {
-                this.menu.children.shift().destroy();
+			while (this.menu.children.length > this.maxNavItems) {
+				this.menu.children.shift().destroy();
 			}
 			this.isLoading = false;
 		}

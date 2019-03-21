@@ -17,7 +17,7 @@ export default class WORD extends CONTAINER {
 	construct() {
 		return this.chain(() => {
 			console.log(this);
-            this.header = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
+			this.header = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.dataId > 0 ? this.data.value : 'Unknown'), 1);
 		});
 	}
 }

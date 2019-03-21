@@ -25,12 +25,12 @@ export default class IFACE {
 		*/
 		this.handlers = {};
 		// Configuration and Setup
-        this.setMethods(node);
-        /** Configures Event Propagation and Default Behavior
-            @param {Event} ev Event
-            @returns {void}
-        */
-        this.methods.configureEvent = this.configureEvent.bind(node);
+		this.setMethods(node);
+		/** Configures Event Propagation and Default Behavior
+		    @param {Event} ev Event
+		    @returns {void}
+		*/
+		this.methods.configureEvent = this.configureEvent.bind(node);
 		this.addListeners(node);
 	}
 	/** Adds listeners where applicable
@@ -40,43 +40,43 @@ export default class IFACE {
 	addListeners(node) {
 		console.log('node', node);
 		throw new AbstractMethodError('IFACE addListeners not set', this);
-    }
-    /** Configures Event Propagation and Default Behavior
-        @param {Event} ev Event
-        @returns {void}
-    */
-    configureEvent(ev) {
-        if (this.stopPropagation) {
-            ev.stopPropagation();
-        }
-        if (this.preventDefault) {
-            ev.preventDefault();
-        }
-    }
-    /** Wraps the given function in a try/catch, catches TypeErrors and throws unknown Error
+	}
+	/** Configures Event Propagation and Default Behavior
+	    @param {Event} ev Event
+	    @returns {void}
+	*/
+	configureEvent(ev) {
+		if (this.stopPropagation) {
+			ev.stopPropagation();
+		}
+		if (this.preventDefault) {
+			ev.preventDefault();
+		}
+	}
+	/** Wraps the given function in a try/catch, catches TypeErrors and throws unknown Error
 	    @param {Function} fn Function to call
 	    @param {Event} event Event
 	    @param {string} message Error Message to display
 	    @returns {void}
 	*/
-    onError(fn, event, message) {
-        try {
-            fn(event);
-        } catch (e) {
-            if (!(e instanceof TypeError)) {
-                console.warn(message, e);
-                throw e;
-            }
-        }
-    }
-    /** Appends Interface methods to class that implements them
+	onError(fn, event, message) {
+		try {
+			fn(event);
+		} catch (e) {
+			if (!(e instanceof TypeError)) {
+				console.warn(message, e);
+				throw e;
+			}
+		}
+	}
+	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
 	    @returns {void}
 	*/
-    setMethods(node) {
-        console.log('node', node);
-        throw new AbstractMethodError('IFACE setMethods not set', this);
-    }
+	setMethods(node) {
+		console.log('node', node);
+		throw new AbstractMethodError('IFACE setMethods not set', this);
+	}
 	/** Toggles state of this element and triggers the appropriate event
 	    @param {string} className Existence of classname indicates on/off event to call
 	    @param {Event} eventOn Event to call if class does not yet exist

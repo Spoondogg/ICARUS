@@ -12,16 +12,16 @@ export default class SECTION extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'SECTION', model, ['TEXTBLOCK', 'FORM']);
 		this.addClass('section');
-    }
-    constructElements() {
-        return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
-            } else {
-                console.log('No data exists for ' + this.className);
-                this.navheader.el.dispatchEvent(new Expand(this));
-            }
-        });
-    }
+	}
+	constructElements() {
+		return this.chain(() => {
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
+			} else {
+				console.log('No data exists for ' + this.className);
+				this.navheader.el.dispatchEvent(new Expand(this));
+			}
+		});
+	}
 }
 export { MODEL }

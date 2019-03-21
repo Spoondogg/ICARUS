@@ -16,10 +16,10 @@ export default class INDEX extends BANNER {
 		this.addClass('index');
 		this.addContainersMenu();
 		//this.navheader.expand();
-    }
-    constructElements() {
-        return Promise.resolve(this);
-    }
+	}
+	constructElements() {
+		return Promise.resolve(this);
+	}
 	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
@@ -62,13 +62,13 @@ export default class INDEX extends BANNER {
 				}
 			}
 		}
-    }
-    /** If no children supplied...
+	}
+	/** If no children supplied...
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-    ifEmpty() {
-        return Promise.resolve(this);
-    }
+	ifEmpty() {
+		return Promise.resolve(this);
+	}
 	/** Posts to the given element and retrieves a list of available instances, 
 	    then assigns relevant actions to it
 	    @param {string} element The name of the element 
