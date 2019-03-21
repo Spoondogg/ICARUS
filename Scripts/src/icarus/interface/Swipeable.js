@@ -9,10 +9,14 @@ export default class Swipeable extends IFACE {
         @see https://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
         @param {EL} node Class to implement this interface (Typically 'this')
         @param {number} swipeSensitivity Pixel sensitivity for short/long scroll
+        @param {boolean} stopPropagation If true (default), propagation is stopped
+        @param {boolean} preventDefault If true (default is false) default behavior is prevented
         @todo Rather than pixel based, have swipeSensitivity use a % based on current total width/height
 	*/
-    constructor(node, swipeSensitivity = 50) {
-		super(node, 'swipeable');
+    constructor(node, swipeSensitivity = 50, stopPropagation = true, preventDefault = false) {
+        super(node, 'swipeable');
+        this.stopPropagation = stopPropagation;
+        this.preventDefault = preventDefault;
 		node.xDown = null;
         node.yDown = null;
         node.swipeSensitivity = swipeSensitivity;
@@ -51,12 +55,12 @@ export default class Swipeable extends IFACE {
 	    */
         this.methods.swipeRight = () => node.chain(() => console.log('Swipe Right', node));
     }
-	/** Sets start coordinates
+    /** Sets start coordinates
 		@param {Event} ev Event
 	    @returns {void}
 	*/
     handleTouchStart(ev) {
-        ev.stopPropagation();
+        this.configureEvent(ev);
         this.xDown = ev.touches[0].clientX;
         this.yDown = ev.touches[0].clientY;
 	}
@@ -65,7 +69,7 @@ export default class Swipeable extends IFACE {
 	    @returns {void}
 	*/
     handleTouchMove(ev) {
-        ev.stopPropagation();
+        this.configureEvent(ev);
         if (!this.xDown || !this.yDown) {
 			return;
         }
