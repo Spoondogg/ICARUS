@@ -254,11 +254,13 @@ $z-bottom: -1;
 }
 /// A content window that is the height of the page, minus header and footer
 %pane-tall {
-	$navheights: ($navbar-height * 2); // - 1em
+	$navheights: ($navbar-height * 1); // - 1em
     border-bottom: 0;
     border-top: 0;
+    //bottom: $navbar-height;
 	height: calc(100vh - #{$navheights});
-	overflow-y: auto;
+	overflow-y: scroll;
+    //top: $navbar-height;
 }
 /// Limits max height of the modal so that the stickyfooter remains visible
 %modal-tall {
@@ -460,6 +462,7 @@ html {
     //font-size: 75%; // base 12px;
     font-size: 87.5%; // base 14px;
     //font-size: 100%; // base 16px;
+    scroll-behavior: smooth; //https://css-tricks.com/almanac/properties/s/scroll-behavior/
 }
 /// A SASS stylesheet for Icarus, extending Bootstrap 3.3.7
 /// @author Ryan Dunphy
@@ -777,12 +780,39 @@ html {
         box-sizing: border-box;
         font-size: $font-size-normal;
         height: $navbar-height;
-        min-height: $navbar-height;
+        //min-height: $navbar-height;
         width: 100%;
         // Override bootstrap
         &.navbar {
             border: 0;
             margin-bottom: 0;
+        }
+
+        &.nav-footer {
+            @include transition($transition-default);
+            border-bottom: 0;
+            bottom: 0;
+            display: none;
+            left: 0;
+            margin: 0;
+            position: fixed;
+            /// EDIT Container
+            > .container {
+                margin: .4rem auto;
+            }
+            /// Footer is extended for EDIT Container
+            &.active {
+                height: $navbar-height * 5;
+            }
+
+            textarea {
+                border-radius: 5px;
+                color: $color-black;
+                height: 180px;
+                line-height: normal;
+                margin: 1rem;
+                width: calc(100% - 25px);
+            }
         }
     }
     /// A vertically aligned button group
@@ -1512,32 +1542,6 @@ html {
                     position: absolute;
                     top: 0;
                 }
-
-                &.nav-footer {
-                    @include transition($transition-default);
-                    border-bottom: 0;
-                    bottom: 0;
-                    left: 0;
-                    margin: 0;
-                    position: absolute;
-                    /// EDIT Container
-                    > .container {
-                        margin: .4rem auto;
-                    }
-                    /// Footer is extended for EDIT Container
-                    &.active {
-                        height: $navbar-height * 5;
-                    }
-
-                    textarea {
-                        border-radius: 5px;
-                        color: $color-black;
-                        height: 180px;
-                        line-height: normal;
-                        margin: 1rem;
-                        width: calc(100% - 25px);
-                    }
-                }
             }
 
             > .body {
@@ -1577,10 +1581,9 @@ html {
                     box-sizing: border-box;
                     //margin-left: -100%; /// !important
                     position: absolute;
-                    top: calc($navbar-height - 2px);
+                    top: $navbar-height;
                     width: $sidebar-width;
-                    z-index: 999;
-
+                    //z-index: 999;
                     @media only screen and (max-width: $max-width-mobile) {
                         min-width: 120px;
                         width: 35%;
@@ -1589,8 +1592,7 @@ html {
                     &[name='document-map'] {
                         > nav {
                             //@extend %no-scroll-bar;
-                            @extend %pane-tall;
-
+                            //@extend %pane-tall;
                             &.menu {
                                 border-bottom: 0 solid transparent;
                                 border-top: 0 solid transparent;
@@ -1763,35 +1765,6 @@ html {
         }
         /// The USERMENU class, A menu that contains user links and details
         &[name='USER'] {
-            //@extend %no-scroll-bar;
-            //@extend %pane-tall;
-            //@include boxShadow(0, 0, 2px, 0, $color-shadow-dark);
-            //@include transition($transition-default);
-            //@include transition(right $transition-speed $transition-motion);
-            //animation: slideOutRight $transition-speed $transition-motion;
-            //background-color: $color-grey-dark; //#373c40;
-            //border: 1px solid transparentize($color-grey, .25); //rgba(160, 160, 160, .25);
-            //border-radius: .2rem;
-            //float: right;
-            //margin-left: -100%; /// !important
-            //position: absolute;
-            //right: calc(#{$zero-px} - #{$sidebar-width});
-            //top: $navbar-height;
-            //width: $sidebar-width;
-            //z-index: 999;
-            //&.active {
-            //animation: slideInLeft $transition-speed $transition-motion;
-            //right: 0;
-            //display: block;
-            //}
-            /*&.collapse {
-                @extend %pane-tall;
-
-                &.in {
-                    @extend %pane-tall;
-                }
-            }*/
-            //@include transition(right $transition-speed $transition-motion);
             > ul {
                 &.horizontal {
                     flex-direction: row-reverse;
