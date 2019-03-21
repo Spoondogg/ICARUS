@@ -113,10 +113,11 @@ export default class CONTAINER extends GROUP {
         let nm = submenuName.toString().toLowerCase();
         let lbl = nm + 'Elements';
         this[lbl].forEach((d) => {
-            dataMenu.addNavItem(new MODEL().set({
+            let tab = dataMenu.addNavItem(new MODEL().set({
                 name: d.attributes.name,
-                label: d.label // + ' = ' + d.value
-            })).el.addEventListener('activate', () => {
+                label: d.label
+            }));
+            tab.el.addEventListener('activate', () => {
                 console.log('Searching for "' + d.attributes.name + '" in ' + this.className + '.' + lbl);
                 this[lbl].filter((m) => m.attributes.name === d.attributes.name).forEach(
                     (mdl) => {
@@ -130,40 +131,37 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     updateDocumentMap() {
-        if (this.className !== 'MAIN') {
+        if (this.className !== 'MAIN' && this.getContainer() !== null) {
             try {
                 let parentName = this.getContainer().toString();
                 /** @type {NAVBAR} */
                 let parentRef = this.getContainer().reference;
-                /** @type {[MENU]} */
-                let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
-                /** @type {[MENU]} */
-                let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
-                /** @type {NAVBAR} */
-                this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
-                this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
-
-                // Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
-                /** @type {[MENU]} */
-                let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-                this.addDocumentMapAttributes(menu, 'DATA');
-                this.addDocumentMapAttributes(menu, 'ATTRIBUTES');
-                
-                // Allow only one active CHILD at a time
-                /** @type {[NAVITEMICON]} */
-                let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-                tab.el.addEventListener('activate', () => {
-                    console.log('DocumentMap > ' + this.toString(), this);
-                    this.scrollTo();
-                    childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
-                        (n) => n.tabs.children.forEach(
-                            (t) => t.el.dispatchEvent(new Deactivate(t))));
-                });
-
-                // Expand the NAVBAR and override its collapse Event
-                this.reference.el.dispatchEvent(new Expand(this.reference));
-                this.reference.collapse = () => true;
-
+                if (parentRef !== null) {
+                    /** @type {[MENU]} */
+                    let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
+                    /** @type {[MENU]} */
+                    let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
+                    /** @type {NAVBAR} */
+                    this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
+                    this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+                    /// Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
+                    /** @type {[MENU]} */
+                    let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+                    ['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+                    /// Allow only one active CHILD at a time
+                    /** @type {[NAVITEMICON]} */
+                    let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+                    tab.el.addEventListener('activate', () => {
+                        //console.log('DocumentMap > ' + this.toString(), this);
+                        this.scrollTo();
+                        childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
+                            (n) => n.tabs.children.forEach(
+                                (t) => t.el.dispatchEvent(new Deactivate(t))));
+                    });
+                    /// Expand the NAVBAR and override its collapse Event
+                    this.reference.el.dispatchEvent(new Expand(this.reference));
+                    this.reference.collapse = () => true;
+                }
             } catch (e) {
                 console.warn('Unable to update document-map', this.className, e);
             }
