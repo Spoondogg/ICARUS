@@ -31,7 +31,7 @@ import WORD from '../model/el/container/word/WORD.js';
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
- */
+*/
 export default class CONTAINERFACTORY {
 	/* eslint-disable max-lines-per-function, complexity, max-statements */
 	/** Gets this Container from the database via ajax GET request.
@@ -48,7 +48,8 @@ export default class CONTAINERFACTORY {
 		let span = new SPAN(node, new MODEL());
 		let index = node.children.push(span); // Reserve the slot in the array        
 		return $.getJSON('/' + className + '/GET/' + id, (payload) => {
-			let obj = null;
+			/** @type {CONTAINER} */
+			let container = null;
 			if (payload.className === 'ERROR') {
 				if (payload.exception === 'AuthenticationException') {
 					try {
@@ -63,127 +64,143 @@ export default class CONTAINERFACTORY {
 			} else {
 				switch (className) {
 					case 'ARTICLE':
-						obj = new ARTICLE(span, payload.model);
+						container = new ARTICLE(span, payload.model);
 						break;
 					case 'BANNER':
-						obj = new BANNER(span, payload.model);
+						container = new BANNER(span, payload.model);
 						break;
 					case 'CALLOUT':
-						obj = new CALLOUT(span, payload.model);
+						container = new CALLOUT(span, payload.model);
 						break;
 					case 'CHAT':
-						obj = new CHAT(span, payload.model);
+						container = new CHAT(span, payload.model);
 						break;
 					case 'CLASSVIEWER':
-						obj = new CLASSVIEWER(span, payload.model);
+						container = new CLASSVIEWER(span, payload.model);
 						break;
 					case 'DICTIONARY':
-						obj = new DICTIONARY(span, payload.model);
+						container = new DICTIONARY(span, payload.model);
 						break;
 					case 'FORM':
-						obj = new FORM(span, payload.model);
+						container = new FORM(span, payload.model);
 						break;
 					case 'FIELDSET':
-						obj = new FIELDSET(span, payload.model);
+						container = new FIELDSET(span, payload.model);
 						break;
 					case 'FORMELEMENT':
 						if (payload.model.type === 'FORMPOSTINPUT') {
-							obj = new FORMPOSTINPUT(span, payload.model);
+							container = new FORMPOSTINPUT(span, payload.model);
 						} else {
 							switch (payload.model.element) {
 								case 'TEXTAREA':
-									obj = new FORMTEXTAREA(span, payload.model);
+									container = new FORMTEXTAREA(span, payload.model);
 									break;
 								case 'SELECT':
-									obj = new FORMSELECT(span, payload.model);
+									container = new FORMSELECT(span, payload.model);
 									break;
 								case 'INPUT':
-									obj = new FORMINPUT(span, payload.model);
+									container = new FORMINPUT(span, payload.model);
 									break;
 								default:
-									obj = new FORMINPUT(span, payload.model);
+									container = new FORMINPUT(span, payload.model);
 									break;
 							}
 						}
 						break;
 					case 'FORMELEMENTGROUP':
-						obj = new FORMELEMENTGROUP(span, payload.model);
+						container = new FORMELEMENTGROUP(span, payload.model);
 						break;
 					case 'FORMINPUT':
-						obj = new FORMINPUT(span, payload.model);
+						container = new FORMINPUT(span, payload.model);
 						break;
 					case 'FORMSELECT':
-						obj = new FORMSELECT(span, payload.model);
+						container = new FORMSELECT(span, payload.model);
 						break;
 					case 'FORMTEXTAREA':
-						obj = new FORMTEXTAREA(span, payload.model);
+						container = new FORMTEXTAREA(span, payload.model);
 						break;
 					case 'IMAGEGALLERY':
-						obj = new IMAGEGALLERY(span, payload.model);
+						container = new IMAGEGALLERY(span, payload.model);
 						break;
 					case 'INDEX':
-						obj = new INDEX(span, payload.model);
+						container = new INDEX(span, payload.model);
 						break;
 					case 'INDEXMAIN':
-						obj = new INDEXMAIN(span, payload.model);
+						container = new INDEXMAIN(span, payload.model);
 						break;
 					case 'INDEXTHUMBNAIL':
-						obj = new INDEXTHUMBNAIL(span, payload.model);
+						container = new INDEXTHUMBNAIL(span, payload.model);
 						break;
 					case 'JUMBOTRON':
-						obj = new JUMBOTRON(span, payload.model);
+						container = new JUMBOTRON(span, payload.model);
 						break;
 					case 'LI':
-						obj = new LI(span, payload.model);
+						container = new LI(span, payload.model);
 						break;
 						//case 'LIST':
-						//    obj = new LIST(span, payload.model);
+						//    container = new LIST(span, payload.model);
 						//    break;
 						//case 'LISTITEM':
-						//    obj = new LISTITEM(span, payload.model);
+						//    container = new LISTITEM(span, payload.model);
 						//    break;
 					case 'MENU':
-						obj = new MENU(span, payload.model);
+						container = new MENU(span, payload.model);
 						break;
 					case 'NAVITEM':
-						obj = new NAVITEM(span, payload.model);
+						container = new NAVITEM(span, payload.model);
 						break;
 					case 'NAVSEPARATOR':
-						obj = new NAVSEPARATOR(span, payload.model);
+						container = new NAVSEPARATOR(span, payload.model);
 						break;
 					case 'OPTION':
-						obj = new OPTION(span, payload.model);
+						container = new OPTION(span, payload.model);
 						break;
 					case 'SECTION':
-						obj = new SECTION(span, payload.model);
+						container = new SECTION(span, payload.model);
 						break;
 					case 'SPAN':
-						obj = new SPAN(span, payload.model);
+						container = new SPAN(span, payload.model);
 						break;
 					case 'TEXTBLOCK':
-						obj = new TEXTBLOCK(span, payload.model);
+						container = new TEXTBLOCK(span, payload.model);
 						break;
 					case 'THUMBNAIL':
-						obj = new NAVTHUMBNAIL(span, payload.model);
+						container = new NAVTHUMBNAIL(span, payload.model);
 						break;
 					case 'UL':
-						obj = new UL(span, payload.model);
+						container = new UL(span, payload.model);
 						break;
 					case 'WORD':
-						obj = new WORD(span, payload.model);
+						container = new WORD(span, payload.model);
 						break;
 					default:
 						throw Error('No constructor exists for CONTAINER{' + className + '}');
 				}
-				node.children[index] = obj;
+				node.children[index] = container;
 				try {
-					// Inject CRUD actions and dependencies
-					obj.container = obj.getProtoTypeByClass('CONTAINER');
-					obj.save = this.save;
-					obj.quickSaveFormPost = this.quickSaveFormPost;
-					obj.editData = this.editData;
+					/// WHY AM I DOING THIS????
+					/// It really doesn't make sense to do this, unless...  there was magic involved.
+					/// - [ ] Verify if magic was involved
+					/// 2019-03-21
+					/// Ok, so you inject the CRUD actions into the CONTAINER because...
+					/// - You don't want to import a PROMPT and all the CRUD stuff on each instantiation...?
+					/// - Yes...  Creating a FORM inside a CONTAINER would create a cyclic redundancy error
+					/// MAGIC CONFIRMED
+					/// So, can you bind the method or use an arrow function instead?
+					/// You also might be able to bypass a whole bunch of chaining to get back to MAIN
+					///  - Consider calling MAIN from the FACTORY...  Could that be done?
+					// Inject CRUD actions and dependencies // Consider a Crudable Interface (IFACE)
+					/** Saves the state of the given Container
+                        @param {boolean} noPrompt If false (default), no prompt is displayed
+                        @abstract
+                        @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
+	                    @returns {Promise} A Promise to save this Container
+	                */
+					container.save = (noPrompt) => this.save(noPrompt, container, container);
+					container.quickSaveFormPost = this.quickSaveFormPost;
+					container.editData = this.editData;
 					// Overwrite span with 
-					span.el.parentNode.replaceChild(obj.el, span.el);
+					span.el.parentNode.replaceChild(container.el, span.el);
 				} catch (e) {
 					span.destroy();
 					node.children.splice(index, 1);
@@ -200,24 +217,25 @@ export default class CONTAINERFACTORY {
 	}
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 	/** Saves the state of the CONTAINER
-        @param {BOOLEAN} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
+        @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
 	save(noPrompt = false, container = this, caller = this) {
+		console.log(caller.toString() + ' is attempting to SAVE ' + container.toString());
 		return new Promise((resolve) => {
-			this.getLoader().log(25).then((loader) => {
+			caller.getLoader().log(25).then((loader) => {
 				new PROMPT(new MODEL().set({
-					label: 'Save ' + this.className + '[' + this.id + ']',
+					label: 'Save ' + container.toString(),
 					container,
 					caller
 				})).createForm(new MODEL().set({
 					formtype: 'CONTAINER',
-					container: this
+					container
 				})).then((form) => {
-                    let cont = form.getContainer();
-                    cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
+					let cont = form.getContainer();
+					cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
 					form.afterSuccessfulPost = () => {
 						cont.setLabel(form.el.elements.label.value);
 						cont.quickSaveFormPost('dataId').then(() => cont.quickSaveFormPost('attributesId').then(
@@ -244,8 +262,8 @@ export default class CONTAINERFACTORY {
 				try {
 					if (this[type] > 0) { // ie: this['dataId']
 						new PROMPT(new MODEL().set({
-                            container: this,
-                            caller: this
+							container: this,
+							caller: this
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
@@ -275,8 +293,8 @@ export default class CONTAINERFACTORY {
 						this[name].select();
 						new PROMPT(new MODEL().set({
 							label: 'Edit ' + this.className + ' : ' + name,
-                            container: this,
-                            caller: this
+							container: this,
+							caller: this
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
@@ -284,10 +302,10 @@ export default class CONTAINERFACTORY {
 							id: this.dataId,
 							container: this
 						})).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
-                            form.getDialog().close = () => form.getDialog().hide().then(() => {
-                                console.log('form,dialog', form, form.getDialog());
-                                form.getDialog().deselectAll();
-                            });
+							form.getDialog().close = () => form.getDialog().hide().then(() => {
+								console.log('form,dialog', form, form.getDialog());
+								form.getDialog().deselectAll();
+							});
 							let input = form.el.elements[name];
 							input.focus();
 							input.onkeyup = () => this[name].setInnerHTML(input.value);
