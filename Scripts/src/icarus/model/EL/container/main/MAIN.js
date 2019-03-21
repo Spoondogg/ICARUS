@@ -19,7 +19,10 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
 		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
 		this.addClass('main');
-		this.body.pane.addClass('pane-tall');
+        this.body.pane.addClass('pane-tall');
+        this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
+        this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
+
 		this.navheader.setAttribute('draggable', false);
         this.addNavOptions();
 		/** @type {CONTAINERFACTORY} */
@@ -31,11 +34,13 @@ export default class MAIN extends CONTAINER {
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
-		this.navfooter = new NAVFOOTER(this, new MODEL());
+        this.navfooter = new NAVFOOTER(this, new MODEL());
+        $(this.navfooter.el).insertAfter(this.el);
+
 		// CRUD
 		this.save = this.factory.save;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
-		this.watchMousePosition();
+        this.watchMousePosition();
 		this.expandMain();
     }
     constructElements() {
@@ -155,8 +160,7 @@ export default class MAIN extends CONTAINER {
         // Add submenu items to DATA and ATTRIBUTES
         /** @type {[MENU]} */
         let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-        this.addDocumentMapAttributes(menu, 'DATA');
-        this.addDocumentMapAttributes(menu, 'ATTRIBUTES');
+        ['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
 
         // Position and show the NAVBAR
         $(sidebar.tab.el).insertBefore(this.navheader.tab.el);
@@ -457,7 +461,7 @@ export default class MAIN extends CONTAINER {
 	*/
 	swipeUp() {
 		console.log('MAIN.swipeUp()');
-		this.navheader.collapse();
+		//this.navheader.collapse();
 		document.body.classList.add('compact');
 	}
 	/** Swipe Down Event
@@ -465,7 +469,7 @@ export default class MAIN extends CONTAINER {
 	*/
 	swipeDown() {
 		console.log('MAIN.swipeDown()');
-		this.navheader.expand();
+		//this.navheader.expand();
 		document.body.classList.remove('compact');
 	}
 }
