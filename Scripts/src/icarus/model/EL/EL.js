@@ -23,9 +23,9 @@ export default class EL extends MODEL {
 		    @type {EL} children 
 		*/
 		this.node = node;
-        /** String representation of this Element's Class Name
-            @type {string}
-        */
+		/** String representation of this Element's Class Name
+		    @type {string}
+		*/
 		this.className = this.constructor.name;
 		/** HTML Element Tag ie: DIV 
 		    @type {string}
@@ -66,18 +66,18 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
-        return this.chain(() => {
-            if (typeof this.el === 'undefined') {
-                this.el = document.createElement(this.element);
-                if (this.node === document.body) {
-                    this.node.appendChild(this.el);
-                } else {
-                    this.node.el.appendChild(this.el);
-                }
-            } else {
-                console.warn(this.className + '.make(): this.el already exists', typeof this.el);
-            }
-            this.merge(model).then(() => this.construct(model));
+		return this.chain(() => {
+			if (typeof this.el === 'undefined') {
+				this.el = document.createElement(this.element);
+				if (this.node === document.body) {
+					this.node.appendChild(this.el);
+				} else {
+					this.node.el.appendChild(this.el);
+				}
+			} else {
+				console.warn(this.className + '.make(): this.el already exists', typeof this.el);
+			}
+			this.merge(model).then(() => this.construct(model));
 		}, 'Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
@@ -531,6 +531,7 @@ export default class EL extends MODEL {
 	    @returns {void}
 	*/
 	setContainer() {
+		/** @type {EL} */
 		this.container = this.getProtoTypeByClass('CONTAINER');
 	}
 	/** Gets the main (if exists) and sets it
@@ -575,8 +576,8 @@ export default class EL extends MODEL {
 	    @param {string} className the class to be appended
 	    @returns {boolean} True if class exists
 	*/
-    hasClass(className) {
-        return this.el.classList.contains(className);
+	hasClass(className) {
+		return this.el.classList.contains(className);
 		//return $(this.el).hasClass(className);
 	}
 	/** Creates given Elements as children of this Element
@@ -599,11 +600,11 @@ export default class EL extends MODEL {
         @param {string} easing JQuery Easing Type
 	    @returns {ThisType} Method Chain
 	*/
-    scrollTo(speed = 500, easing = 'swing') {
-        console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
+	scrollTo(speed = 500, easing = 'swing') {
+		console.log('Scrolling to this element at ' + parseInt($(this.el).offset().top));
 		$(this.getMain().body.pane.el).animate({
 			scrollTop: parseInt($(this.el).offset().top)
-        }, speed, easing);
+		}, speed, easing);
 		return this;
 	}
 	/** Toggles the given class on this element
@@ -612,6 +613,12 @@ export default class EL extends MODEL {
 	*/
 	toggleClass(className = 'active') {
 		return this.chain(() => $(this.el).toggleClass(className));
+	}
+	/** Returns a string representation of this Element
+	    @returns {string} Classname
+	*/
+	toString() {
+		return this.className;
 	}
 }
 export { MODEL, ATTRIBUTES }
