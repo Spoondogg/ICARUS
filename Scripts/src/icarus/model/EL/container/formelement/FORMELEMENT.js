@@ -9,18 +9,17 @@ import LABEL from '../../label/LABEL.js';
 */
 export default class FORMELEMENT extends CONTAINER {
 	/** Constructs a Form Element
-        @param {FORMELEMENTGROUP} node Parent Node
+        @param {EL} node Parent Node
         @param {MODEL} model Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model);
         this.addClass('form-element');
-        console.log('FORMELEMENT>' + this.toString(), model);
         this.implement(new Hideable(this));
         /** The Form Element Label
             @type {LABEL}
         */
-        this.inputLabel = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label));
+        this.inputLabel = new LABEL(this.body.pane, new MODEL().set('innerHTML', model.label));
         /** The primary INPUT Element and data holder for this Form Element
             @type {INPUT}
         */
