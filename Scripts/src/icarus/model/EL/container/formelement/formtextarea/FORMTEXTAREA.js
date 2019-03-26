@@ -6,16 +6,13 @@ import TEXTAREA from '../../../textarea/TEXTAREA.js';
     @extends FORMELEMENT
 */
 export default class FORMTEXTAREA extends FORMELEMENT {
-	/** Construct a Text Area
-	    @param {EL} node The parent object
-	    @param {MODEL} model The textarea model
-	*/
-	constructor(node, model) {
-		super(node, model);
-		this.input = new TEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({
-			class: 'form-control',
-			name: model.attributes.name
-		})), model.attributes.value || '');
-	}
+    constructElements() {
+        return this.chain(() => {
+            this.input = new TEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({
+                class: 'form-control',
+                name: this.attributes.name
+            })), this.attributes.value || '');
+        });
+    }
 }
 export { ATTRIBUTES, EL, LABEL, MODEL, TEXTAREA }

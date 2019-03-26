@@ -1,6 +1,6 @@
 /** @module */
 import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
 import INPUT from '../../../input/INPUT.js';
 import PROMPT from '../../../dialog/prompt/PROMPT.js';
@@ -15,29 +15,37 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @param {MODEL} model The model
     */
 	constructor(node, model) {
-		super(node, 'DIV', model);
+        super(node, 'DIV', model);
 	}
 	constructElements() {
-		//console.log(this.className + '.constructElements()');
-		this.label = new LABEL(this.body.pane, new MODEL().set('innerHTML', this.label || this.element));
-		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
-		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+        /** The input-group contains the input element
+            @type {DIV}
+        */
+        this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
+        /** The primary INPUT Element for this FORMPOSTINPUT
+            @type {INPUT}
+        */
+        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
 			class: 'form-control',
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',
 			readonly: true
-		})));
+        })));
+        /** @type {FORM} */
 		this.form = null;
 		this.createInput();
 	}
-	/** Creates an Input Group with an INPUT element inside of it
+	/** Creates a Container/Group with an INPUT element inside of it
         @returns {void}
     */
-	createInput() {
-		if (this.attributes.type === 'HIDDEN') {
-			this.body.collapse();
-		}
+    createInput() {
+        //console.log(' - Creating INPUT', this);
+        if (this.attributes.type === 'HIDDEN') {
+            this.body.el.dispatchEvent(new Collapse(this.body));
+        } else {
+            this.body.el.dispatchEvent(new Expand(this.body));
+        }
 		if (this.attributes.readonly) {
 			this.input.el.setAttribute('readonly', 'readonly');
 		}
@@ -51,13 +59,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
 		btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
 	}
-	/** Sets the id of the original FormPostInput to the given value
+	/* Sets the id of the original FormPostInput to the given value
         @param {number} id Id to set
         @returns {void}
-    */
+    
 	updateInput(id) {
 		this.input.el.value = id;
-	}
+	}*/
 	/** Returns the default Input array
 	    @param {object} data Payload
 	    @returns {Array} An array of INPUT models
@@ -124,4 +132,4 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, MODEL }
+export { ATTRIBUTES, CONTAINER, EL, LABEL, MODEL }
