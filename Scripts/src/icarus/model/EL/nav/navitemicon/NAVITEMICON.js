@@ -1,5 +1,5 @@
 /** @module */
-import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js'; //, { ANCHOR } 
+import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js';
 /** A clickable icon with label 
     @class
     @extends LI
