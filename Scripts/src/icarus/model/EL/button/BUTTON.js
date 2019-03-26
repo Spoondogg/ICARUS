@@ -15,8 +15,8 @@ export default class BUTTON extends EL {
 	*/
 	constructor(node, label, glyphicon, buttonType = 'BUTTON') {
 		super(node, 'BUTTON', new MODEL());
-		this.addClass('btn glyphicon');
-		this.attributes.set('type', buttonType);
+        this.addClass('btn glyphicon');
+        this.setAttribute('type', buttonType);
 		this.icon = new GLYPHICON(this, glyphicon);
 		this.label = new SPAN(this, new MODEL('button-label').set('innerHTML', label));
 	}
