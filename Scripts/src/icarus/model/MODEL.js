@@ -8,24 +8,30 @@ export default class MODEL {
         @param {ATTRIBUTES} attributes A collection of attributes
         @param {ATTRIBUTES} data A collection of data attributes
         @param {ATTRIBUTES} description A collection of description attributes
-        @todo Consider renaming description to meta
     */
 	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), description = new ATTRIBUTES()) {
-		this.attributes = this.defaultAttributes(attributes);
-		this.data = this.defaultAttributes(data);
+        /** A collection of key/value pairs representing custom attributes for this MODEL's Element */
+        this.attributes = this.defaultAttributes(attributes);
+        /** A collection of key/value pairs representing editable data for this MODEL's Element */
+        this.data = this.defaultAttributes(data);
+        /** A collection of key/value pairs representing metadata for this MODEL's Class 
+            @todo Consider renaming description to meta
+        */
 		this.description = this.defaultAttributes(description);
 	}
 	/** Resolves appropriate Attributes object based on input
 	    @param {string|ATTRIBUTES} attributes Attributes
 	    @returns {ATTRIBUTES} Resolved attributes class
-	 */
+	*/
 	defaultAttributes(attributes) {
-		let attr = null;
+        /** @type {ATTRIBUTES} */
+        let attr = null;
 		switch (typeof attributes) {
 			case 'string':
 				attr = new ATTRIBUTES(attributes);
 				break;
-			case 'object':
+            case 'object':
+                //console.log(' - MODEL.defaultAttributes()', attributes);
 				attr = attributes;
 				break;
 			default:
