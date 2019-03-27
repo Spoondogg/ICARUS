@@ -101,6 +101,27 @@ namespace ICARUS.Controllers {
                 }
             }
         }
+        /// <summary>
+        /// Retrieves a FORMPOST from the database (by id) and binds the 
+        /// results to the given EL model (if permitted to access)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="attr"></param>
+        /// <param name="id"></param>
+        private void attachFormPost(EL model, ATTRIBUTES attr, int id) {
+            if (id > 0) {
+                FormPost data = (FormPost)db.dbSets["FormPost"].Find(id);
+                if (data.authorId == User.Identity.Name || data.shared == 1) {
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(data.xmlResults);
+
+                    XmlNodeList node = xml.SelectNodes("/root/*");
+                    foreach (XmlNode xn in node) {
+                        attr.Add(xn.Name, xn.InnerText);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Constructs the object and returns as Json
@@ -127,50 +148,9 @@ namespace ICARUS.Controllers {
                     }
                 } catch (Exception ex) { /*message += "\n No children exist or " + ex.Message; */ }
 
-                // Attach formPost (if exists)
-                if (model.dataId > 0) {
-                    FormPost data = (FormPost)db.dbSets["FormPost"].Find(model.dataId);
-
-                    if (data.authorId == User.Identity.Name || data.shared == 1) {
-                        XmlDocument xml = new XmlDocument();
-                        xml.LoadXml(data.xmlResults);
-
-                        XmlNodeList node = xml.SelectNodes("/root/*");
-                        foreach (XmlNode xn in node) {
-                            model.data.Add(xn.Name, xn.InnerText);
-                        }
-                    }
-                }
-
-                // Attach formPost (if exists)
-                if (model.attributesId > 0) {
-                    FormPost attributes = (FormPost)db.dbSets["FormPost"].Find(model.attributesId);
-
-                    if(attributes.authorId == User.Identity.Name || attributes.shared == 1) {
-                        XmlDocument xml = new XmlDocument();
-                        xml.LoadXml(attributes.xmlResults);
-
-                        XmlNodeList node = xml.SelectNodes("/root/*");
-                        foreach (XmlNode xn in node) {
-                            model.attributes.Add(xn.Name, xn.InnerText);
-                        }
-                    }                    
-                }
-
-                // Attach formPost (if exists)
-                if (model.descriptionId > 0) {
-                    FormPost description = (FormPost)db.dbSets["FormPost"].Find(model.descriptionId);
-
-                    if (description.authorId == User.Identity.Name || description.shared == 1) {
-                        XmlDocument xml = new XmlDocument();
-                        xml.LoadXml(description.xmlResults);
-
-                        XmlNodeList node = xml.SelectNodes("/root/*");
-                        foreach (XmlNode xn in node) {
-                            model.attributes.Add(xn.Name, xn.InnerText);
-                        }
-                    }
-                }
+                this.attachFormPost(model, model.data, model.dataId);
+                this.attachFormPost(model, model.attributes, model.attributesId);
+                this.attachFormPost(model, model.description, model.descriptionId);
 
                 // Return the fully constructed model
                 return Json(new Payload(
