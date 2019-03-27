@@ -33,6 +33,12 @@ namespace ICARUS.Models.Icarus.Elements {
         public ATTRIBUTES attributes;
 
         /// <summary>
+        /// A collection of MetaData
+        /// </summary>
+        [NotMapped]
+        public ATTRIBUTES description;
+
+        /// <summary>
         /// Optional label to be displayed
         /// </summary>
         [StringLength(128, MinimumLength = 3), Required]
@@ -42,9 +48,10 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a generic MODEL
         /// </summary>
         /// <param name="attributes"></param>
-        public MODEL(ATTRIBUTES attributes = null, ATTRIBUTES data = null) { //, string label = null
+        public MODEL(ATTRIBUTES attributes = null, ATTRIBUTES data = null, ATTRIBUTES description = null) {
             this.attributes = attributes == null ? new ATTRIBUTES() : attributes;
             this.data = data == null ? new ATTRIBUTES() : data;
+            this.description = description == null ? new ATTRIBUTES() : description;
         }
 
         /// <summary>
