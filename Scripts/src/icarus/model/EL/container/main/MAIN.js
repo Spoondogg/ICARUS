@@ -17,7 +17,7 @@ export default class MAIN extends CONTAINER {
 	    @param {MODEL} model APP model
     */
 	constructor(model) {
-		super(document.body, 'MAIN', model, DATAELEMENTS.MAIN.containers);
+        super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
 		this.addClass('main');
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
@@ -45,8 +45,8 @@ export default class MAIN extends CONTAINER {
 		if (this.dataId > 0) {
 			document.title = this.data.title;
 		} else {
-			document.title = this.label;
-		}
+            document.title = this.label;
+        }
 	}
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches

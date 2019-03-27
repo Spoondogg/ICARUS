@@ -10,13 +10,6 @@ import SPAN from '../../../span/SPAN.js';
     @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
-	/** Constructs an INPUT element
-	    @param {EL} node Parent
-	    @param {MODEL} model The model
-    */
-	constructor(node, model) {
-        super(node, 'DIV', model);
-	}
 	constructElements() {
         /** The input-group contains the input element
             @type {DIV}
@@ -85,12 +78,12 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	generateInputs(payload, className, type) {
 		let inputs = this.defaultInputArray(payload);
 		this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
-		switch (type) {
-			case 'dataId':
-				DATAELEMENTS[className].data.forEach((i) => inputs.push(i));
+        switch (type) {
+            case 'dataId':
+                DATAELEMENTS.get(className).data.forEach((i) => inputs.push(i));
 				break;
 			case 'attributesId':
-				DATAELEMENTS[className].attributes.forEach((i) => inputs.push(i));
+                DATAELEMENTS.get(className).attributes.forEach((i) => inputs.push(i));
 				break;
 			case 'descriptionId':
 				inputs.push(createInputModel('TEXTAREA', 'description'));
