@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { MODEL } from '../CONTAINER.js';
+import CONTAINER, { Expand, MODEL } from '../CONTAINER.js';
 /** Textblock Constructor
     @description A TEXTBLOCK is essentially a DIV that is designed to contain
     rich text (paragraph and span with formatting attributes) and images.
@@ -21,9 +21,13 @@ export default class TEXTBLOCK extends CONTAINER {
 	*/
 	construct() {
 		return this.chain(() => {
-			if (this.dataId > 0) {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
 				this.createEditableElement('p', this.body.pane);
-			}
+            } else {
+                console.log('No data exists for ' + this.toString());
+                this.navheader.el.dispatchEvent(new Expand(this.navheader));
+            }
 		});
 	}
 }

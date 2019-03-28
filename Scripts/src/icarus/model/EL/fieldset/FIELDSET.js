@@ -18,9 +18,7 @@ export default class FIELDSET extends CONTAINER {
 			if (this.dataId > 0) {
 				this.createEditableElement('legend', this.body.pane);
 			} else {
-				console.log('No data exists for ' + this.className);
 				this.ifEmpty();
-				//this.navheader.el.dispatchEvent(new Expand(this));
 			}
 		});
 	}
