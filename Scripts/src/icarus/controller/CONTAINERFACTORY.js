@@ -238,8 +238,11 @@ export default class CONTAINERFACTORY {
 					cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
 					form.afterSuccessfulPost = () => {
 						cont.setLabel(form.el.elements.label.value);
-						cont.quickSaveFormPost('dataId').then(() => cont.quickSaveFormPost('attributesId').then(
-							() => form.getDialog().close()));
+                        // @todo This is ugly
+                        cont.quickSaveFormPost('data').then(
+                            () => cont.quickSaveFormPost('attributes').then(
+                                () => cont.quickSaveFormPost('meta').then(
+                                    () => form.getDialog().close())));
 					}
 					loader.log(100).then(() => {
 						if (noPrompt) {
@@ -252,11 +255,13 @@ export default class CONTAINERFACTORY {
 			});
 		});
 	}
-	/** If dataId or attributesId exists, extract the appropriate values and save
-	    @param {string} type Data type (dataId, attributesId, descriptionId)
-	    @returns {void}
+	/** If data collection exists, (ie: data, attributes, meta) 
+        extract the appropriate values and save
+	    @param {string} type Data type (dataId, attributesId, metaId)
+	    @returns {Promise<LOADER>} Promise to return loader
 	*/
-	quickSaveFormPost(type) {
+    quickSaveFormPost(type) {
+        console.log(this.toString() + '.quickSaveFormPost(' + type + ')');
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(30, 'Saving {' + this.className + '}[' + type + ']').then((loader) => {
 				try {
@@ -274,18 +279,21 @@ export default class CONTAINERFACTORY {
 					} else {
 						resolve(loader.log(100));
 					}
-				} catch (e) {
+                } catch (e) {
+                    console.error(this.toString() + '.quickSaveFormPost(' + type + ')', e);
 					reject(e);
 				}
 			});
 		});
 	}
 	/** Launches a FORM POST editor for the specified element
-	    param {EL} element The EL who's model.data is being edited
+        @todo Some map/reduce magic and this can turn into a proper collection for data, attr, meta
+        
 	    @param {string} name The name of the input we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-	editData(name) {
+    editData(name) {
+        console.log(this.toString() + '.editData("' + name + '")');
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
 				try {
@@ -298,7 +306,7 @@ export default class CONTAINERFACTORY {
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
-							type: 'dataId',
+							type: 'data',
 							id: this.dataId,
 							container: this
 						})).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {

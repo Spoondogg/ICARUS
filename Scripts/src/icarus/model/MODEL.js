@@ -7,17 +7,15 @@ export default class MODEL {
 	/** Constructs a generic MODEL
         @param {ATTRIBUTES} attributes A collection of attributes
         @param {ATTRIBUTES} data A collection of data attributes
-        @param {ATTRIBUTES} description A collection of description attributes
+        @param {ATTRIBUTES} meta A collection of description attributes
     */
-	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), description = new ATTRIBUTES()) {
+	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), meta = new ATTRIBUTES()) {
         /** A collection of key/value pairs representing custom attributes for this MODEL's Element */
         this.attributes = this.defaultAttributes(attributes);
         /** A collection of key/value pairs representing editable data for this MODEL's Element */
         this.data = this.defaultAttributes(data);
-        /** A collection of key/value pairs representing metadata for this MODEL's Class 
-            @todo Consider renaming description to meta
-        */
-		this.description = this.defaultAttributes(description);
+        /** A collection of key/value pairs representing metadata for this MODEL's Class */
+		this.meta = this.defaultAttributes(meta);
 	}
 	/** Resolves appropriate Attributes object based on input
 	    @param {string|ATTRIBUTES} attributes Attributes
@@ -31,8 +29,11 @@ export default class MODEL {
 				attr = new ATTRIBUTES(attributes);
 				break;
             case 'object':
-                //console.log(' - MODEL.defaultAttributes()', attributes);
-				attr = attributes;
+                if (attributes.constructor.name === 'ATTRIBUTES') {
+                    attr = attributes;
+                } else {
+                    attr = new ATTRIBUTES(attributes);
+                }
 				break;
 			default:
 				console.log('Attributes is not properly defined', attributes, this);

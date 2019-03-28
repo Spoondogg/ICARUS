@@ -63,7 +63,7 @@ export default class CONTAINER extends GROUP {
             @type {Map<string, Array<MODEL>>}
         */
         this.elements = new Map();
-        ['data', 'attributes', 'description', 'meta'].map((e) => this.createElementCollection(e, model));
+        ['data', 'attributes', 'meta'].map((e) => this.createElementCollection(e, model));
         
         /** A Human Friendly label for a CONTAINER
 		    @type {string}
@@ -197,46 +197,33 @@ export default class CONTAINER extends GROUP {
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
 	}
-	/** Creates the Id and Collection attributes for the given name
-	    @param {string} name ie: data, attributes, description
+	/** Creates this CONTAINER's MODEL collections based on the 
+        default MODEL for this container type in DATAELEMENTS
+	    @param {string} name ie: data, attributes, meta
 	    @param {MODEL} model Container Model
 	    @returns {void}
 	*/
     createElementCollection(name, model) {
-        //console.log(this.toString() + ': Creating ' + this.toString() + '.elements.' + name, model);
-		//console.log('Add Elements to Collection', DATAELEMENTS.CONTAINER[name], DATAELEMENTS[this.className][name]);
-		// @type {Array<MODEL>}
+        console.log(this.toString() + '.createElementCollection()', name);
         try {
             let arr = this.elements.set(name, []).get(name);
-
             /** @type {ATTRIBUTES} */
             let collection = model[name];            
             if (collection) {
                 Object.keys(collection).forEach((key) => arr.push(createInputModel('INPUT', key, collection[key])));
             }
-
             /** @type {Array<MODEL>} */
-            //let containerData = DATAELEMENTS.CONTAINER[name];
             let containerData = DATAELEMENTS.get('CONTAINER')[name];
             if (containerData) {
-               // DATAELEMENTS.CONTAINER[name].forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
-               DATAELEMENTS.get('CONTAINER')[name].forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
+                containerData.forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
             }
-
             /** @type {Array<MODEL>} */
-            //let thisContainerData = DATAELEMENTS[this.className][name];
             let thisContainerData = DATAELEMENTS.get(this.className)[name];
             if (thisContainerData) {
-                //DATAELEMENTS[this.className][name].forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
-                DATAELEMENTS.get(this.className)[name].forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
+                thisContainerData.forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
             }
-
-            //console.log('Created ' + this.toString() + '.elements.' + name, this);
-            
 		} catch (e) {
-			//if (!(e instanceof TypeError)) {
 			console.warn('Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
-			//}
 		}
 	}
 	/** If the Container has no children, display a button to create an element
@@ -387,8 +374,6 @@ export default class CONTAINER extends GROUP {
 					this[name].el.addEventListener('select', () => this.editData(name));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
 					this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
-					//this[name].implement(new Selectable(this[name]));
-					//this[name].clickHandler(() => false, () => this[name].select(), () => this.editData(name));
 					resolve(this[name]);
 				}
 			} catch (e) {
@@ -406,7 +391,6 @@ export default class CONTAINER extends GROUP {
 		return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
 	}
 	/** Launches a FORM POST editor for the specified element
-        param {EL} element The EL who's model.data is being edited
         @param {string} name The name of the input we are editing
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns editData() to this CONTAINER
@@ -421,19 +405,18 @@ export default class CONTAINER extends GROUP {
 	    @returns {Array<MODEL>} An array of input models
 	*/
 	createContainerInputs() {
-		console.log(this.toString() + '.createContainerInputs()', this);
+		//console.log(this.toString() + '.createContainerInputs()', this);
 		let subsections = this.getSubSections();
 		return [
 			createInputModel('INPUT', 'className', this.className, 'className', 'TEXT', true),
 			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
-			//createInputModel('INPUT', 'label', typeof this.label === 'object' ? this.label.el.innerHTML.toString() : this.label.toString(), 'Label'),
             createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
 			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'TEXT', true),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'descriptionId', this.descriptionId.toString(), 'descriptionId', 'FORMPOSTINPUT'),
+            createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
             createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
 		];
 	}
@@ -449,7 +432,7 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Extract the appropriate values and save
         @param {string} type Data type
-	    @returns {void}
+	    @returns {Promise} Promise
 	*/
 	quickSaveFormPost(type) {
 		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '] : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');

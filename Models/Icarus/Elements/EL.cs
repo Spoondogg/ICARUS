@@ -83,10 +83,10 @@ namespace ICARUS.Models.Icarus {
         public int attributesId { get; set; }
 
         /// <summary>
-        /// A related form post containing a description of this Element
+        /// A related form post containing a meta data (description, tags etc) for this Element
         /// </summary>
         [Required]
-        public int descriptionId { get; set; }
+        public int metaId { get; set; }
 
         /// <summary>
         /// Constructs a generic element
