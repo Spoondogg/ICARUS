@@ -174,7 +174,7 @@ namespace ICARUS.Controllers {
             columns.Add("attributesId");
             columns.Add("dataId");
             columns.Add("shared");
-            columns.Add("descriptionId");
+            columns.Add("metaId");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "discriminator", this.className));

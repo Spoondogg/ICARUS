@@ -41,9 +41,7 @@ export default class FORM extends CONTAINER {
 			if (this.dataId > 0) {
 				this.createEditableElement('header', this.body.pane);
 			} else {
-				console.log('No data exists for ' + this.className);
 				this.ifEmpty();
-				//this.navheader.el.dispatchEvent(new Expand(this));
 			}
 		});
 	}
@@ -73,7 +71,8 @@ export default class FORM extends CONTAINER {
 			FORM.createEmptyForm(node, hidden).then((form) => {
 				form.setAction('FORMPOST/SET');
 				try { // frm.setId(payload.model.id);
-					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
+                    $.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
+
 						form.generateFormPostInputs(payload, className, type),
 						form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
 					).then(() => {
@@ -98,9 +97,7 @@ export default class FORM extends CONTAINER {
     */
     setTextInputValue(inp) {
         let { name, value } = inp;
-        console.log('Setting value of ' + name + ' to ' + value, inp);
         try {
-            // @type {HTMLFormElement} let element = this.el.elements[name];
             if (this.el.elements[name].type === 'textarea') {
                 this.el.elements[name].innerHTML = value;
             } else {
@@ -108,12 +105,11 @@ export default class FORM extends CONTAINER {
             }
         } catch (e) {
             if (!(e instanceof TypeError)) {
-                console.warn('Unable to set value of ' + name + ' to ' + value, inp, this.el.elements);
+                console.warn(this.toString() + '.setTextInputValue() Unable to set value of ' + name + ' to ' + value, inp, this.el.elements);
                 throw e;
             }
         }
     }
-
 	/** @typedef {Object} FORMMODEL A CONTAINER Form MODEL
 	    @property {CONTAINER} container The CONTAINER
 	    @property {boolean} hidden Hidden/Visible Flag
@@ -181,8 +177,7 @@ export default class FORM extends CONTAINER {
                 /** @type {CONTAINER} */
 				let inp = null;
                 if (model.type === 'FORMPOSTINPUT') {
-                    console.log(this.toString() + '.addInput(): FORMPOSTINPUT', model)
-					inp = new FORMPOSTINPUT(target.body.pane, model);
+                    inp = new FORMPOSTINPUT(target.body.pane, model);
 				} else {
 					switch (model.element) {
 						case 'TEXTAREA':
@@ -217,29 +212,18 @@ export default class FORM extends CONTAINER {
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST
-	    @param {any} payload The FormPost Payload
+        @param {any} payload The FormPost Payload
 	    @param {string} className The container className
-	    @param {string} type The key (dataId, attributesId, descriptionId) to add object to
+	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @returns {Array<MODEL>} An array of MODEL inputs
 	*/
-	generateFormPostInputs(payload, className, type) {
+	generateFormPostInputs(payload, className, type) { // SEE CONTAINER.createElementCollection
         let inputs = this.defaultFormPostInputArray(payload);
         try {
-            switch (type) {
-                case 'dataId':
-                    DATAELEMENTS.get(className).data.forEach((i) => inputs.push(i));
-                    break;
-                case 'attributesId':
-                    DATAELEMENTS.get(className).attributes.forEach((i) => inputs.push(i));
-                    break;
-                case 'descriptionId':
-                    inputs.push(createInputModel('TEXTAREA', 'description'));
-                    break;
-                default:
-                    console.log('Unidentified attribute name', type);
-            }
+            DATAELEMENTS.get('CONTAINER')[type].forEach((i) => inputs.push(i));
+            DATAELEMENTS.get(className)[type].forEach((i) => inputs.push(i));
         } catch (e) {
-            console.warn(this.toString() + '.generateFormPostInputs()', e);
+            console.warn(this.toString() + '.generateFormPostInputs()', className, type, inputs, e);
         }
 		return inputs;
 	}
@@ -462,41 +446,52 @@ export default class FORM extends CONTAINER {
 
 		for (let e = 0; e < this.el.elements.length; e++) {
             let element = this.el.elements[e];
-            if (element.name === 'undefined' || element.name === '') {
-                console.warn('Unnamed element exists in ' + this.toString(), this.el.elements);
-            } else {
-                switch (element.type) {
-                    case 'hidden':
-                    case 'input':
-                    case 'text':
-                    case 'email':
-                    case 'tel':
-                    case 'password':
-                    case 'textarea':
-                        this.validateString(element);
-                        break;
-                    case 'number':
-                        this.validateNumber(element, this.payload);
-                        break;
-                    case 'checkbox':
-                        this.validateCheckbox(element, this.payload);
-                        break;
-                    case 'select-one':
-                        this.validateSelect(element, this.payload);
-                        break;
-                    case 'fieldset':
-                    case 'submit':
-                        break;
-                    default:
-                        console.warn('Unable to validate unidentified form element type.', element.type, element.value);
-                }
+            switch (element.tagName) {
+                case 'INPUT':
+                case 'TEXTAREA':
+                case 'SELECT':
+                    this.validateInput(element);
+                    break;
+                case 'FIELDSET':
+                case 'BUTTON':
+                    break;
+                default:
+                    console.warn(this.toString() + '.validate()', element.tagName);
             }
 		}
 		if (!this.payload.isValid) {
 			console.log('Validation Result: ' + this.payload.isValid);
 		}
 		return this.payload;
-	}
+    }
+    validateInput(element) {
+        if (element.name === 'undefined' || element.name === '') {
+            console.warn('Unnamed element exists in ' + this.toString(), element);
+        } else {
+            switch (element.type) {
+                case 'hidden':
+                case 'input':
+                case 'text':
+                case 'email':
+                case 'tel':
+                case 'password':
+                case 'textarea':
+                    this.validateString(element);
+                    break;
+                case 'number':
+                    this.validateNumber(element, this.payload);
+                    break;
+                case 'checkbox':
+                    this.validateCheckbox(element, this.payload);
+                    break;
+                case 'select-one':
+                    this.validateSelect(element, this.payload);
+                    break;
+                default:
+                    console.warn('Unable to validate unidentified form element type.', element.type, element.value);
+            }
+        }
+    }
 	/** Resets the form and any validation notifications.
         @returns {void}
 	*/
@@ -525,31 +520,22 @@ export default class FORM extends CONTAINER {
 	/** Post FORM values to server
 	    @returns {Promise<object>} The results of the Form Post
 	*/
-	post() {
+    post() {
 		return new Promise((resolve, reject) => {
 			/** @type {CONTAINER} */
-			//let main = this.getMain();
 			let main = null;
 			try {
 				main = this.getContainer().getMain();
 			} catch (e) {
 				main = this.getDialog().getContainer().getMain();
 			}
-			/** @type {LOADER} 
-			let loader = null;
-			try {
-				loader = main.getLoader();
-			} catch (e) {
-				console.warn('Unable to get LOADER in FORM.POST ' + this.toString(), main, this);
-				throw e;
-			}*/
 			let data = this.getFormPost();
 			let url = this.getAction();
 			let statusCode = 0;
 			let message = '';
 			if (data) {
 				try {
-                    console.log('Posting values to ' + url, data);
+                    console.log(this.toString() + '.post()', url, data);
                     this.lock();
                     $.ajax({
                         url,
@@ -578,7 +564,7 @@ export default class FORM extends CONTAINER {
                             403(response) { // Forbidden
                                 statusCode = 403;
                                 message += response.message;
-                                console.log('StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message);
+                                console.log(this.toString() + '.post() StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message);
                                 //console.log('403 Error', response);
                                 resolve(main.login());
                             },
@@ -588,8 +574,8 @@ export default class FORM extends CONTAINER {
                             }
                         },
                         success: (payload) => {
-                            console.log('StatusCode: ' + statusCode + '\n' + message);
-                            console.log('Payload Result: ' + payload.result);
+                            console.log(this.toString() + '.post() StatusCode: ' + statusCode + '\n' + message);
+                            //console.log('Payload Result: ' + payload.result);
                             if (payload.result === 0) {
                                 main.login();
                             }
@@ -599,12 +585,12 @@ export default class FORM extends CONTAINER {
                         }
                     });
 				} catch (e) {
-                    console.log('Post Failed to submit');
-                    reject(new Error('Post Failed to submit'));
+                    console.warn(this.toString() + '.post() Post Failed to submit', e);
+                    reject(e); //new Error('Post Failed to submit')
 				}
 			} else {
-                console.log('Invalid FormPost');
-                reject(new Error('Invalid FormPost'));
+                console.warn(this.toString() + '.post() Invalid FormPost');
+                reject(new Error(this.toString() + '.post() Invalid FormPost'));
 			}
 		});
 	}

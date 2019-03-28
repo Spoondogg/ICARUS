@@ -1,5 +1,4 @@
 /** @module */
-import { DATAELEMENTS, createInputModel } from '../../../../../enums/DATAELEMENTS.js';
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import DIV from '../../../div/DIV.js';
 import INPUT from '../../../input/INPUT.js';
@@ -33,7 +32,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         @returns {void}
     */
     createInput() {
-        //console.log(' - Creating INPUT', this);
         if (this.attributes.type === 'HIDDEN') {
             this.body.el.dispatchEvent(new Collapse(this.body));
         } else {
@@ -42,60 +40,26 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		if (this.attributes.readonly) {
 			this.input.el.setAttribute('readonly', 'readonly');
 		}
-		let className = this.input.el.form.className.value;
-		let type = this.attributes.name;
+        let className = this.input.el.form.className.value;
+        /** Value arrives from FORMPOSTINPUT button labeld as 'dataId' or 'metaId'
+            Remove the 'id'  
+            @todo There has to be a more elegant solution here.
+            @type {string}
+        */
+        let type = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-			btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
+            btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-		btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
-	}
-	/* Sets the id of the original FormPostInput to the given value
-        @param {number} id Id to set
-        @returns {void}
-    
-	updateInput(id) {
-		this.input.el.value = id;
-	}*/
-	/** Returns the default Input array
-	    @param {object} data Payload
-	    @returns {Array} An array of INPUT models
-	*/
-	defaultInputArray(data) {
-		return [
-			createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
-			createInputModel('INPUT', 'shared', data.model.shared, 'shared', 'CHECKBOX')
-		];
-	}
-	/** Generates the appropriate INPUT(s) for this FORMPOST
-	    @param {any} payload The FormPost Payload
-	    @param {string} className The container className
-	    @param {string} type The key (dataId, attributesId, descriptionId) to add object to
-	    @returns {Array<MODEL>} An array of MODEL inputs
-	*/
-	generateInputs(payload, className, type) {
-		let inputs = this.defaultInputArray(payload);
-		this.input.el.setAttribute('value', payload.model.id); // Set INPUT element to model.id 
-        switch (type) {
-            case 'dataId':
-                DATAELEMENTS.get(className).data.forEach((i) => inputs.push(i));
-				break;
-			case 'attributesId':
-                DATAELEMENTS.get(className).attributes.forEach((i) => inputs.push(i));
-				break;
-			case 'descriptionId':
-				inputs.push(createInputModel('TEXTAREA', 'description'));
-				break;
-			default:
-				console.log('Unidentified attribute name', type);
-		}
-		return inputs;
+        btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
+        let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
+        btnLoad.el.onclick = () => console.log('TODO: Browse FORMPOST(s)');
 	}
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
-	    @param {string} type The key (dataId, attributesId, descriptionId) to add object to
+	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @param {number} id Optional FormPost Id to edit
 	    @param {INPUT} inputNode The input that spawned this DIALOG
 	    @returns {Promise<string>} Promise to create a new FormPost DIALOG and return it

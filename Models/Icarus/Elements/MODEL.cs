@@ -36,7 +36,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// A collection of MetaData
         /// </summary>
         [NotMapped]
-        public ATTRIBUTES description;
+        public ATTRIBUTES meta;
 
         /// <summary>
         /// Optional label to be displayed
@@ -48,10 +48,10 @@ namespace ICARUS.Models.Icarus.Elements {
         /// Construct a generic MODEL
         /// </summary>
         /// <param name="attributes"></param>
-        public MODEL(ATTRIBUTES attributes = null, ATTRIBUTES data = null, ATTRIBUTES description = null) {
+        public MODEL(ATTRIBUTES attributes = null, ATTRIBUTES data = null, ATTRIBUTES meta = null) {
             this.attributes = attributes == null ? new ATTRIBUTES() : attributes;
             this.data = data == null ? new ATTRIBUTES() : data;
-            this.description = description == null ? new ATTRIBUTES() : description;
+            this.meta = meta == null ? new ATTRIBUTES() : meta;
         }
 
         /// <summary>

@@ -56,7 +56,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.status = 1;
             this.attributesId = 0;
             this.dataId = 0;
-            this.descriptionId = 0;
+            this.metaId = 0;
             this.shared = 0;
             this.dateCreated = DateTime.UtcNow.ToLocalTime();
             this.dateLastModified = DateTime.UtcNow.ToLocalTime();
@@ -86,7 +86,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.id = formPost.parseInt("id", -1);
             this.attributesId = formPost.parseInt("attributesId");
             this.dataId = formPost.parseInt("dataId");
-            this.descriptionId = formPost.parseInt("descriptionId");
+            this.metaId = formPost.parseInt("metaId");
             this.shared = formPost.parseInt("shared");
             this.dateLastModified = DateTime.UtcNow.ToLocalTime();
         }

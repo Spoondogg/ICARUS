@@ -150,7 +150,7 @@ namespace ICARUS.Controllers {
 
                 this.attachFormPost(model, model.data, model.dataId);
                 this.attachFormPost(model, model.attributes, model.attributesId);
-                this.attachFormPost(model, model.description, model.descriptionId);
+                this.attachFormPost(model, model.meta, model.metaId);
 
                 // Return the fully constructed model
                 return Json(new Payload(
