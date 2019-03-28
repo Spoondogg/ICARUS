@@ -8,8 +8,7 @@ import { STATUS } from '../../enums/STATUS.js';
     @extends MODEL
 */
 export default class EL extends MODEL {
-	/** Constructs a Node representing an HTMLElement as part of a 
-        doubly linked list with a Main (Head) and a Tail (Last Child)
+	/** Constructs a Node representing an HTMLElement as part of a linked list
 	    @param {EL} node Parent Element Class
 	    @param {string} element HTML Element Tag
 	    @param {MODEL} model Model
@@ -18,9 +17,9 @@ export default class EL extends MODEL {
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
-		this.setMain();
+        this.setMain();        
 		/** Parent EL
-		    @type {EL} children 
+		    @type {EL}
 		*/
 		this.node = node;
 		/** String representation of this Element's Class Name
@@ -30,33 +29,38 @@ export default class EL extends MODEL {
 		/** HTML Element Tag ie: DIV 
 		    @type {string}
 		*/
-		this.element = element;
+        this.element = element;
 		/** State Indicator 
 		    @type {number} 
 		*/
-		this.status = STATUS.DEFAULT; // 
-		//this.transition = null; // Transition type: ie: collapse, accordion, fade etc @todo Transition Event
+		this.status = STATUS.DEFAULT;
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
 		this.children = [];
-		/** A Collection of Constructor methods
+		/** A Collection of methods
 		    ie: this.constructors[foo]
+            @type {Object<string, Function>}
 		*/
-		this.callbacks = {};
+        this.callbacks = {};
+        /** A Collection of Constructor methods
+		    ie: this.constructors[foo]
+            @type {Object<string, Function>}
+		*/
+        this.constructors = {};
 		/** A collection of public Methods
-		    @property {Object.<Function>} methods
+		    @type {Object<string, Function>}
 		*/
-		this.methods = {};
-		/** A collection of public Events
-		    @property {Object.<Event>} events
+        this.methods = {};
+        /** A collection of Event Handlers
+            @type {Object<string, Function>}
+        */
+        this.events = {};
+        /** A collection of public Event handlers
+		     @type {Object<string, Function>}
 		*/
-		this.events = {};
-		/** A collection of public Event handlers
-		    @property {Object.<Function>} handlers
-		*/
-		this.handlers = {};
-		this.make(model);
+        this.handlers = {};
+        this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
         param {HTMLElement} el The HTML Element
@@ -68,7 +72,10 @@ export default class EL extends MODEL {
 	make(model) {
 		return this.chain(() => {
 			if (typeof this.el === 'undefined') {
-				this.el = document.createElement(this.element);
+                /** The HTML Element shown in the DOM
+                    @type {HTMLElement}
+                */
+                this.el = document.createElement(this.element);
 				if (this.node === document.body) {
 					this.node.appendChild(this.el);
 				} else {
@@ -104,12 +111,6 @@ export default class EL extends MODEL {
 	    @returns {void}
 	*/
 	addCallback(className, fn) {
-		/*try {
-            this.callbacks[className].push(fn);
-        } catch (e) {
-            this.callbacks[className] = [fn];
-            //this.callbacks[className].push(fn);
-        }*/
 		this.callbacks[className] = [];
 		this.callbacks[className].push(fn);
 	}
@@ -417,15 +418,15 @@ export default class EL extends MODEL {
 								break;
 							case 'id':
 							case 'name':
-								this[prop] = model[prop];
-								this.el.setAttribute(prop, model[prop]);
+								this.set(prop, model[prop]);
+								this.setAttribute(prop, model[prop]);
 								break;
 							case 'children':
 								//console.log(this.className + '.children', model[prop]);
-								this[prop] = model[prop];
+                                this.set(prop, model[prop]);
 								break;
 							default:
-								this[prop] = model[prop];
+                                this.set(prop, model[prop]);
 						}
 					}
 				}
@@ -440,9 +441,8 @@ export default class EL extends MODEL {
 	processAttributes(attributes) {
 		for (let attr in attributes) {
 			if (attr !== 'innerHTML') {
-				this.el.setAttribute(attr, attributes[attr]);
+                this.setAttribute(attr, attributes[attr]);
 			} else if (attr === 'innerHTML') {
-				//this.el.innerHTML = attributes[attr];
 				this.setInnerHTML(attributes[attr]);
 			}
 		}
@@ -500,31 +500,21 @@ export default class EL extends MODEL {
 	}
 	/** Sets the given attribute to the element and its model
 	     @param {string} key Attribute name
-	     @param {any} value Attribute value
+	     @param {string|number} value Attribute value
 	     @returns {Promise<ThisType>} Promise Chain
 	*/
 	setAttribute(key, value) {
 		return this.chain(() => {
-			if (typeof value !== 'undefined' && value !== null) {
-				this.el.setAttribute(key, value);
+			if (typeof key === 'string' && typeof value !== 'undefined' && value !== null) {
+                this.el.setAttribute(key, value);
+                try {
+                    this.attributes.set(key, value);
+                } catch (e) {
+                    if (e instanceof TypeError) {
+                        this.attributes = new ATTRIBUTES().set(key, value);
+                    }
+                }
 			}
-			try {
-				this.attributes.set(key, value);
-			} catch (e) {
-				if (e instanceof TypeError) {
-					this.attributes = new ATTRIBUTES().set(key, value);
-				}
-			}
-		});
-	}
-	/** Override this element's class with the given value
-        @param {string} className A class
-        @returns {EL} Returns this element for chaining purposes
-    */
-	setClass(className) {
-		this.chain(() => {
-			this.el.className = className;
-			this.attributes.class = className;
 		});
 	}
 	/** Gets the container (if exists) and sets it
@@ -549,9 +539,8 @@ export default class EL extends MODEL {
 		    el.attributes.set('class', el.attributes.get('class').split(' ').filter((v) => v !== className));
 		});*/
 		return new Promise((resolve, reject) => {
-			try {
-				$(this.el).removeClass(className);
-				//this.attributes.set('class', this.attributes.get('class').replace(className, ''));
+            try {
+                this.el.classList.remove(className);
 				this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
 				resolve(this);
 			} catch (e) {
