@@ -506,6 +506,10 @@
     <Compile Include="Migrations\201811120455060_20181111__001.Designer.cs">
       <DependentUpon>201811120455060_20181111__001.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903281514380_2019-03-28__ContainerMeta.cs" />
+    <Compile Include="Migrations\201903281514380_2019-03-28__ContainerMeta.Designer.cs">
+      <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -1083,6 +1087,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811120455060_20181111__001.resx">
       <DependentUpon>201811120455060_20181111__001.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903281514380_2019-03-28__ContainerMeta.resx">
+      <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
