@@ -25,8 +25,8 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		if (this.dataId > 0) {
 			this.createEditableElement('header', this.body.pane);
 		} else {
-			console.log('No data exists for ' + this.className);
-			this.navheader.el.dispatchEvent(new Expand(this));
+			//console.log('No data exists for ' + this.className);
+			this.navheader.el.dispatchEvent(new Expand(this.navheader));
 		}
 	}
 	/** Adds the given array of FORMELEMENT(s) to this group
