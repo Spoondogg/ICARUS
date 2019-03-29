@@ -9,10 +9,9 @@ import { STATUS } from '../../enums/STATUS.js';
 */
 export default class EL extends MODEL {
 	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {EL} node Parent Element Class
-	    @param {string} element HTML Element Tag
+	    @param {EL} node Parent Node
+	    @param {string} element HTMLElement tagName
 	    @param {MODEL} model Model
-	    @param {Array<MODEL>} children Array of child nodes
 	*/
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);

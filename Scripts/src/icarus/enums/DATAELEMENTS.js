@@ -23,11 +23,6 @@ export const createInputModel = (element, name, value = '', label = name, type =
 	label,
 	type
 }).setAttribute(attr);
-/** @typedef {Object} DATAEL A generic Data Element collection for a CONTAINER 
-    @property {Array<string>} containers A list of container Classes that this CONTAINER can contain
-    @property {Array<MODEL>} data A collection of editable data available to this CONTAINER
-    @property {Array<MODEL>} attributes A collection of key/value pairs representing the CONTAINER Element's attributes
-*/
 /** Stores the default DATA ELEMENTS collections for each Class
     
     @description When working with a CONTAINER class, it makes more sense
@@ -107,36 +102,40 @@ export const DATAELEMENTS = new Map([
             attributes: [createInputModel('INPUT', 'name', 'text-input')]
         }
     ],
-    ['FORMINPUT', {
-        data: [
-            createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'label', 'Input Label'),
-            createInputModel('INPUT', 'value')
-        ],
-        attributes: [
-            createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'text-input'),
-            createInputModel('INPUT', 'value', ''),
-            createInputModel('INPUT', 'placeholder', '')
-        ]
-    }],
+    [
+        'FORMINPUT', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
     ['FORMPOST', {}],
     ['FORMPOSTINPUT', {}],
-    ['FORMTEXTAREA', {
-        data: [
-            createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'Text Input'),
-            createInputModel('INPUT', 'label', 'Input Label'),
-            createInputModel('INPUT', 'value')
-        ],
-        attributes: [
-            createInputModel('INPUT', 'type', 'TEXT'),
-            createInputModel('INPUT', 'name', 'text-input'),
-            createInputModel('INPUT', 'value', ''),
-            createInputModel('INPUT', 'placeholder', '')
-        ]
-    }],
+    [
+        'FORMTEXTAREA', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
     ['INDEX', {}],
     ['INDEXMAIN', {}],
     [
