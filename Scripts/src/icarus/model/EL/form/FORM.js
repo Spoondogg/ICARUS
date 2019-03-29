@@ -110,10 +110,6 @@ export default class FORM extends CONTAINER {
             }
         }
     }
-	/** @typedef {Object} FORMMODEL A CONTAINER Form MODEL
-	    @property {CONTAINER} container The CONTAINER
-	    @property {boolean} hidden Hidden/Visible Flag
-	*/
 	/** Constructs a FORM based on a CONTAINER with a single fieldset and formelementgroup
         based on a FORMPOST MODEL
 	    @param {EL} node Parent node

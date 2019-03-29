@@ -304,9 +304,9 @@ export default class MAIN extends CONTAINER {
 			this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
 			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 		}, 'Unable to restore focus to MAIN');
-	}
+    }
 	/** Allows the user to open a MAIN 
-		@param {number} id MAIN id
+		@param {UId} id Unique Id
 	    @todo Create method to browse MAINs
 	    @returns {boolean} True on success
 	*/

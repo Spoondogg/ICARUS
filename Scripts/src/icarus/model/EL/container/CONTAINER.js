@@ -50,11 +50,10 @@ export default class CONTAINER extends GROUP {
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
-	}
+    }
 	/** Instantiates CONTAINER defaults, UId's, 
         elements etc based on the CONTAINER model
-
-	    @param {MODEL} model Model
+	    @param {CONTAINERMODEL|MODEL} model Model
 	    @returns {void}
 	*/
 	setContainerDefaults(model) {
@@ -481,7 +480,7 @@ export default class CONTAINER extends GROUP {
 		return [false, false];
 	}
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
-	    @param {Array} containerList An array of container class names
+	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
 	addElementItems(containerList) {
