@@ -290,24 +290,26 @@ export default class CONTAINERFACTORY {
         @todo Some map/reduce magic and this can turn into a proper collection for data, attr, meta
         
 	    @param {string} name The name of the input we are editing
+        @param {string} type The Type of data (data, meta, attr) we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editData(name) {
-        console.log(this.toString() + '.editData("' + name + '")');
+    editData(name, type = 'data') {
+        console.log(this.toString() + '.editData()', name, type);
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
-				try {
-					if (this.dataId > 0) {
+                try {
+                    let typeIdStr = type + 'Id';
+                    if (this[typeIdStr] > 0) {
 						this[name].select();
 						new PROMPT(new MODEL().set({
-							label: 'Edit ' + this.className + ' : ' + name,
+							label: 'Edit ' + this.toString + '[' + type + '].' + name,
 							container: this,
 							caller: this
 						})).createForm(new MODEL().set({
 							formtype: 'FORMPOST',
 							className: this.className,
-							type: 'data',
-							id: this.dataId,
+							type,
+                            id: this[typeIdStr],
 							container: this
 						})).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
 							form.getDialog().close = () => form.getDialog().hide().then(() => {
@@ -320,7 +322,7 @@ export default class CONTAINERFACTORY {
 							loader.log(100).then(() => resolve(form.getDialog().show()));
 						}));
 					} else {
-						loader.log(100, this.className + '[' + name + '] does not have a data FORMPOST').then(() => resolve(false));
+						loader.log(this.toString + '.elements[' + type + '].' + name + ' does not have a data FORMPOST').then(() => resolve(false));
 					}
 				} catch (e) {
 					loader.log(100, 'Unable to edit').then(() => reject(e));

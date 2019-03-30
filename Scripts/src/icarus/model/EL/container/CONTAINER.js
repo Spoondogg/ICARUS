@@ -131,20 +131,21 @@ export default class CONTAINER extends GROUP {
 	addDocumentMapAttributes(menu, submenuName) {
 		/** @type {[MENU]} */
 		let [dataMenu] = menu.get(submenuName, 'MENU');
-		let nm = submenuName.toString().toLowerCase();
-		//let lbl = nm + 'Elements';
-        this.elements.get(nm).forEach((d) => {
+		let type = submenuName.toString().toLowerCase();
+        this.elements.get(type).forEach((d) => {
+            let { name } = d.attributes;
 			let tab = dataMenu.addNavItem(new MODEL().set({
-				name: d.attributes.name,
+				name,
 				label: d.label
 			}));
-			tab.el.addEventListener('activate', () => {
-                console.log('Searching for "' + d.attributes.name + '" in ' + this.toString() + '.elements.' + nm);
-                this.elements.get(nm).filter((m) => m.attributes.name === d.attributes.name).forEach(
+            tab.el.addEventListener('activate', () => {                
+                console.log('Searching for "' + name + '" in ' + this.toString() + '.elements.' + type);
+                this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
 					(mdl) => {
 						console.log(' - Result', mdl);
 					}
-				);
+                );
+                this.editData(name, type); 
 			});
 		});
 	}
@@ -164,11 +165,11 @@ export default class CONTAINER extends GROUP {
 					let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
 					/** @type {NAVBAR} */
 					this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
-					this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+					this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
 					/// Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
 					/** @type {[MENU]} */
 					let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-					['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+					['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
 					/// Allow only one active CHILD at a time
 					/** @type {[NAVITEMICON]} */
 					let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
@@ -203,7 +204,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     createElementCollection(name, model) {
-        console.log(this.toString() + '.createElementCollection()', name);
+        //console.log(this.toString() + '.createElementCollection()', name);
         try {
             let arr = this.elements.set(name, []).get(name);
             /** @type {ATTRIBUTES} */
@@ -391,12 +392,13 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Launches a FORM POST editor for the specified element
         @param {string} name The name of the input we are editing
+        @param {string} type The Type of data (data, meta, attr) we are editing
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns editData() to this CONTAINER
 	    @returns {Promise<DIALOG>} A Save PROMPT
 	*/
-	editData(name) {
-		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + name + '] : Abstract method ' + this.className + '.editData(' + name + ') not implemented.');
+    editData(name, type = 'data') {
+		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.className + '.editData(' + name + ') not implemented.');
 	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
