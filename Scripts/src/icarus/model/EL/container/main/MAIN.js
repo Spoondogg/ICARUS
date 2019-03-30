@@ -24,8 +24,12 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
-		/** @type {CONTAINERFACTORY} */
-		this.factory = model.factory;
+		/** @type {CONTAINERFACTORY} A CONTAINER FACTORY */
+        this.factory = model.factory;
+        /** MAIN doesnt get injected with editData but instead
+            calls directly from its factory
+        */
+        this.editData = this.factory.editData.bind(this);
 		/** @type {LOADER} */
 		this.loader = model.loader;
 		/** @type {URL} */

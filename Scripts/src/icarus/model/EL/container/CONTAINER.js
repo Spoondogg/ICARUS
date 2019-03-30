@@ -139,7 +139,7 @@ export default class CONTAINER extends GROUP {
 				label: d.label
 			}));
             tab.el.addEventListener('activate', () => {                
-                console.log('Searching for "' + name + '" in ' + this.toString() + '.elements.' + type);
+                console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
                 this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
 					(mdl) => {
 						console.log(' - Result', mdl);
