@@ -1580,7 +1580,7 @@ html {
             aside {
                 /// A SIDEBAR Element with fixed horizontal alignment within MAIN UI
                 &.sidebar {
-                    //@extend %no-scroll-bar;
+                    @extend %no-scroll-bar;
                     @extend %pane-tall;
                     //@include boxShadow(0, 0, 3px, 0, $color-black);
                     //@include transition($transition-default);
