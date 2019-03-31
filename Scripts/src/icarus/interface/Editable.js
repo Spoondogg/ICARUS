@@ -1,7 +1,5 @@
 /** @module */
-import IFACE, {
-	EL
-} from '../IFACE.js';
+import IFACE, {	EL } from '../IFACE.js';
 /** An interface for Modification/Edit driven Events
     @class
     @extends IFACE
@@ -54,7 +52,4 @@ export default class Editable extends IFACE {
         });
 	}*/
 }
-export {
-	EL,
-	IFACE
-}
+export { EL, IFACE }
