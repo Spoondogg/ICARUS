@@ -145,7 +145,7 @@ export default class CONTAINER extends GROUP {
 						console.log(' - Result', mdl);
 					}
                 );
-                this.editData(name, type); 
+                this.editProperty(name, type); 
 			});
 		});
 	}
@@ -179,7 +179,11 @@ export default class CONTAINER extends GROUP {
 						childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
 							(n) => n.tabs.children.forEach(
 								(t) => t.el.dispatchEvent(new Deactivate(t))));
-					});
+                    });
+                    tab.el.addEventListener('select', () => {
+                        console.log('TODO: Launch SAVE() for ' + this.toString());
+                        this.save(false);
+                    });
 					/// Expand the NAVBAR and override its collapse Event
 					this.reference.el.dispatchEvent(new Expand(this.reference));
 					this.reference.collapse = () => true;
@@ -371,7 +375,7 @@ export default class CONTAINER extends GROUP {
 							console.warn(name + ' does not have a valid constructor');
 					}
 					this[name].implement(new Clickable(this[name]));
-					this[name].el.addEventListener('select', () => this.editData(name));
+					this[name].el.addEventListener('select', () => this.editProperty(name));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
 					this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
 					resolve(this[name]);
@@ -394,11 +398,11 @@ export default class CONTAINER extends GROUP {
         @param {string} name The name of the input we are editing
         @param {string} type The Type of data (data, meta, attr) we are editing
         @abstract
-        @see CONTAINERFACTORY The CONTAINERFACTORY assigns editData() to this CONTAINER
+        @see CONTAINERFACTORY The CONTAINERFACTORY assigns editProperty() to this CONTAINER
 	    @returns {Promise<DIALOG>} A Save PROMPT
 	*/
-    editData(name, type = 'data') {
-		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.className + '.editData(' + name + ') not implemented.');
+    editProperty(name, type = 'data') {
+        throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.toString() + '.editProperty(' + name + ') not implemented.');
 	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values

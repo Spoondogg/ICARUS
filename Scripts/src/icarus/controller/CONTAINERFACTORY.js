@@ -198,7 +198,7 @@ export default class CONTAINERFACTORY {
 	                */
 					container.save = (noPrompt) => this.save(noPrompt, container, container);
 					container.quickSaveFormPost = this.quickSaveFormPost;
-					container.editData = this.editData;
+					container.editProperty = this.editProperty;
 					// Overwrite span with 
 					span.el.parentNode.replaceChild(container.el, span.el);
 				} catch (e) {
@@ -293,14 +293,14 @@ export default class CONTAINERFACTORY {
         @param {string} type The Type of data (data, meta, attr) we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editData(name, type = 'data') {
-        console.log(this.toString() + '.editData()', name, type);
+    editProperty(name, type = 'data') {
+        console.log(this.toString() + '.editProperty()', name, type);
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
                 try {
                     let typeIdStr = type + 'Id';
                     if (this[typeIdStr] > 0) {
-						this[name].select();
+						//this[name].select();
 						new PROMPT(new MODEL().set({
 							label: 'Edit ' + this.toString + '[' + type + '].' + name,
 							container: this,
@@ -322,10 +322,12 @@ export default class CONTAINERFACTORY {
 							loader.log(100).then(() => resolve(form.getDialog().show()));
 						}));
 					} else {
-						loader.log(this.toString + '.elements[' + type + '].' + name + ' does not have a data FORMPOST').then(() => resolve(false));
+                        console.warn(this.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+                        resolve(false);
 					}
 				} catch (e) {
-					loader.log(100, 'Unable to edit').then(() => reject(e));
+                    console.warn('Unable to edit', e);
+                    reject(e);
 				}
 			});
 		});

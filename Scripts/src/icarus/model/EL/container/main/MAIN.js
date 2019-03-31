@@ -26,10 +26,10 @@ export default class MAIN extends CONTAINER {
 		this.addNavOptions();
 		/** @type {CONTAINERFACTORY} A CONTAINER FACTORY */
         this.factory = model.factory;
-        /** MAIN doesnt get injected with editData but instead
+        /** MAIN doesnt get injected with editProperty but instead
             calls directly from its factory
         */
-        this.editData = this.factory.editData.bind(this);
+        this.editProperty = this.factory.editProperty.bind(this);
 		/** @type {LOADER} */
 		this.loader = model.loader;
 		/** @type {URL} */
@@ -156,12 +156,18 @@ export default class MAIN extends CONTAINER {
 	*/
 	createDocumentMap() {
 		let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'CHILDREN'], false);
+		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
 		this.reference = sidebar.element.navbar;
 		// Add submenu items to DATA and ATTRIBUTES
+        /** @type {[NAVITEMICON]} */
+        let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+        tab.el.addEventListener('select', () => {
+            console.log('TODO: Launch SAVE() for ' + this.toString());
+            this.save(false);
+        });
 		/** @type {[MENU]} */
 		let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-		['DATA', 'ATTRIBUTES'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+		['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
 		// Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
