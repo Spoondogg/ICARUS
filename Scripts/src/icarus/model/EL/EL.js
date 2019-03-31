@@ -162,11 +162,11 @@ export default class EL extends MODEL {
 		this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
 	}
 	/** Creates a textarea input and populates with this element's contents
-        @todo Consider aligning with CONTAINER.editData() / JUMBOTRON.editData()
+        @todo Consider aligning with CONTAINER.editProperty() / JUMBOTRON.editProperty()
 	    @returns {void}
 	*/
 	edit() {
-		console.log('EL.edit()');
+		console.log(this.toString() + '.edit()');
 		try {
 			let footer = this.getMain().stickyFooter;
 			this.addClass('edit');

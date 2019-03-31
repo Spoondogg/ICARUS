@@ -217,9 +217,13 @@ export default class FORM extends CONTAINER {
         let inputs = this.defaultFormPostInputArray(payload);
         try {
             DATAELEMENTS.get('CONTAINER')[type].forEach((i) => inputs.push(i));
+        } catch (e) {
+            //console.warn(this.toString() + '.generateFormPostInputs()', className, type, inputs, e);
+        }
+        try {
             DATAELEMENTS.get(className)[type].forEach((i) => inputs.push(i));
         } catch (e) {
-            console.warn(this.toString() + '.generateFormPostInputs()', className, type, inputs, e);
+            // No data element exists for 'className'
         }
 		return inputs;
 	}
