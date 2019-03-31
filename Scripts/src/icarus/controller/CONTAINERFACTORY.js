@@ -296,40 +296,40 @@ export default class CONTAINERFACTORY {
     editProperty(name, type = 'data') {
         console.log(this.toString() + '.editProperty()', name, type);
 		return new Promise((resolve, reject) => {
-			this.getLoader().log(25, 'Launching Editor', true).then((loader) => {
-                try {
-                    let typeIdStr = type + 'Id';
-                    if (this[typeIdStr] > 0) {
-						//this[name].select();
-						new PROMPT(new MODEL().set({
-							label: 'Edit ' + this.toString + '[' + type + '].' + name,
-							container: this,
-							caller: this
-						})).createForm(new MODEL().set({
-							formtype: 'FORMPOST',
-							className: this.className,
-							type,
-                            id: this[typeIdStr],
-							container: this
-						})).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
-							form.getDialog().close = () => form.getDialog().hide().then(() => {
-								console.log('form,dialog', form, form.getDialog());
-								form.getDialog().deselectAll();
-							});
-							let input = form.el.elements[name];
-							input.focus();
-							input.onkeyup = () => this[name].setInnerHTML(input.value);
-							loader.log(100).then(() => resolve(form.getDialog().show()));
-						}));
-					} else {
-                        console.warn(this.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
-                        resolve(false);
-					}
-				} catch (e) {
-                    console.warn('Unable to edit', e);
-                    reject(e);
-				}
-			});
+            console.log(25, 'Launching Editor');
+            try {
+                let typeIdStr = type + 'Id';
+                if (this[typeIdStr] > 0) {
+                    new PROMPT(new MODEL().set({
+                        label: 'Edit ' + this.toString + '[' + type + '].' + name,
+                        container: this,
+                        caller: this
+                    })).createForm(new MODEL().set({
+                        formtype: 'FORMPOST',
+                        className: this.className,
+                        type,
+                        id: this[typeIdStr],
+                        container: this
+                    })).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
+                        /* @todo This should trigger on a 'close' event */
+                        form.getDialog().close = () => form.getDialog().hide().then(() => {
+                            console.log('form,dialog', form, form.getDialog());
+                            form.getDialog().deselectAll();
+                        });
+                        let input = form.el.elements[name];
+                        input.focus();
+                        input.onkeyup = () => this[name].setInnerHTML(input.value);
+                        console.log(100);
+                        resolve(form.getDialog().show());
+                    }));
+                } else {
+                    console.warn(this.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+                    resolve(false);
+                }
+            } catch (e) {
+                console.warn('Unable to edit', e);
+                reject(e);
+            }
 		});
 	}
 }
