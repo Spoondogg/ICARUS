@@ -1564,14 +1564,18 @@ html {
                     &.focus-left {
                         //background-color: $color-black;
                         //filter: blur(1px);
-                        margin-left: 12px;
+                        @media only screen and (max-width: $max-width-mobile) {
+                            margin-left: 12px;
+                        }
                         //transform: scale(1.1);
                     }
 
                     &.focus-right {
                         //background-color: $color-black;
                         //filter: blur(1px);
-                        margin-left: -12px;
+                        @media only screen and (max-width: $max-width-mobile) {
+                            margin-left: -12px;
+                        }
                         //transform: scale(1.1);
                     }
                 }
@@ -1582,16 +1586,12 @@ html {
                 &.sidebar {
                     @extend %no-scroll-bar;
                     @extend %pane-tall;
-                    //@include boxShadow(0, 0, 3px, 0, $color-black);
-                    //@include transition($transition-default);
-                    //background-color: transparentize($color-black, .2);
                     background-color: $color-grey-dark;
                     box-sizing: border-box;
-                    //margin-left: -100%; /// !important
                     position: absolute;
                     top: $navbar-height;
                     width: $sidebar-width;
-                    //z-index: 999;
+
                     @media only screen and (max-width: $max-width-mobile) {
                         min-width: 120px;
                         width: 35%;
@@ -1599,8 +1599,6 @@ html {
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
                         > nav {
-                            //@extend %no-scroll-bar;
-                            //@extend %pane-tall;
                             &.menu {
                                 border-bottom: 0 solid transparent;
                                 border-top: 0 solid transparent;
@@ -1632,7 +1630,6 @@ html {
 
                     &.left {
                         @include transition(margin-left $transition-speed $transition-motion);
-                        //border-right: 2px;
                         display: block;
                         float: left;
                         left: 0;
