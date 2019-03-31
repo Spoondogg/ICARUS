@@ -161,53 +161,6 @@ export default class EL extends MODEL {
 	dispatchToSiblings(event) {
 		this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
 	}
-	/** Creates a textarea input and populates with this element's contents
-        @todo Consider aligning with CONTAINER.editProperty() / JUMBOTRON.editProperty()
-	    @returns {void}
-	*/
-	edit() {
-		console.log(this.toString() + '.edit()');
-		try {
-			let footer = this.getMain().stickyFooter;
-			this.addClass('edit');
-			this.status = STATUS.LOCKED;
-			this.editor = new EL(footer, 'TEXTAREA', new MODEL(new ATTRIBUTES({
-				'value': this.el.innerHTML
-			})), this.el.innerHTML);
-			this.editor.el.onkeyup = () => this.setInnerHTML(this.editor.el.value);
-			this.editor.el.onblur = () => {
-				try {
-					let container = this.getContainer();
-					container.data[this.className.toLowerCase()] = this.editor.el.value;
-					this.editor.destroy();
-					this.removeClass('edit');
-					if (container.quickSave(container, true)) {
-						this.getMain().stickyFooter.hide();
-					}
-				} catch (e) {
-					throw e;
-				}
-			}
-			this.editor.el.focus();
-			footer.show();
-			event.stopPropagation();
-		} catch (ee) {
-			console.log(ee);
-		}
-	}
-	/** Calls the edit method for this.el on double click
-	    @todo Consider applying this method from the caller
-	    @returns {void}
-	
-	enableEdit() {
-		try {
-			if (this.getMain().getDev()) {
-				this.el.ondblclick = this.edit.bind(this);
-			}
-		} catch (e) {
-			console.log('EL{' + this.className + '}.getMain() error', this);
-		}
-	}*/
 	/** Used to recursively verify if the reflected Prototype class of the given node
 	    matches a specified value.  This can be helpful in cases where you need to 
 	    identify the root super class, not just the current one
@@ -466,10 +419,8 @@ export default class EL extends MODEL {
 		return this.chain(() => {
 			if (this.el.parentNode) {
 				this.el.parentNode.removeChild(this.el);
-			} else {
-				console.log(this.className + ' does not have a valid parent node', this);
-			}
-		}, 'Unable to remove ' + this.className + ' from parent');
+            }
+        }, 'Unable to remove ' + this.toString() + ' from ' + this.node.toString());
 	}
 	/** Removes this Element from the DOM and its Class from any linked lists
 	    @param {number} delay Millisecond delay
@@ -606,7 +557,7 @@ export default class EL extends MODEL {
 	    @returns {string} Classname
 	*/
 	toString() {
-		return this.className;
+		return this.className + '()';
 	}
 }
 export { MODEL, ATTRIBUTES }
