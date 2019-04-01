@@ -1,8 +1,8 @@
 /** @module */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, FACTORY, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
+//import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -15,8 +15,10 @@ import SIDEBAR from '../sidebar/SIDEBAR.js';
 export default class MAIN extends CONTAINER {
 	/** Constructs a MAIN Container and populates the DOM with any relevant elements
 	    @param {MODEL} model APP model
+        @param {LOADER} loader APP loader
+        @param {FACTORY} factory APP Container Factory
     */
-	constructor(model) {
+	constructor(model, loader, factory) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
 		this.addClass('main');
 		this.body.pane.addClass('pane-tall');
@@ -24,16 +26,17 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
-		/** @type {CONTAINERFACTORY} A CONTAINER FACTORY */
-        this.factory = model.factory;
+		/** @type {FACTORY} A CONTAINER FACTORY */
+        this.factory = this.required(factory);
         /** MAIN doesnt get injected with editProperty but instead
             calls directly from its factory
         */
         this.editProperty = this.factory.editProperty.bind(this);
 		/** @type {LOADER} */
-		this.loader = model.loader;
-		/** @type {URL} */
-		this.url = model.url;
+        this.loader = this.required(loader);
+        /** @type {boolean} debug If true, debug outputs are shown */
+        this.debug = true;
+        this.setUrlProperties();
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
@@ -41,10 +44,35 @@ export default class MAIN extends CONTAINER {
 		$(this.navfooter.el).insertAfter(this.el);
 		// CRUD
 		this.save = this.factory.save;
-		this.quickSaveFormPost = model.factory.quickSaveFormPost;
+		this.quickSaveFormPost = this.factory.quickSaveFormPost;
 		this.watchMousePosition();
 		this.expandMain();
-	}
+    }
+    /** Sets URL Properties in the MAIN Constructor
+        @returns {void}
+    */
+    setUrlProperties() {
+        /** @type {URL} */
+        this.url = new URL(window.location.href);
+        /** @type {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
+        this.returnUrl = this.url.searchParams.get('ReturnUrl');
+        if (this.returnUrl) {
+            this.returnUrl = this.url.origin + this.returnUrl;
+            location.href = this.returnUrl;
+        }
+    }
+    /** Determines if a 'login' parameter exists in the Url, and if true, 
+	    shows the login prompt.
+        @param {boolean} proceed Optionally prevent any action from being taken
+	    @returns {boolean} If a login parameter exists, return true
+	*/
+    showLoginPrompt(proceed = true) {
+        if (this.url.searchParams.get('login') && proceed) {
+            console.log('showLoginPrompt();');
+            this.login();
+        }
+        return this;
+    }
 	constructElements() {
 		if (this.dataId > 0) {
 			document.title = this.data.title;
@@ -134,7 +162,7 @@ export default class MAIN extends CONTAINER {
 		return this.user;
 	}
 	/** Returns the MAIN Factory
-	    @returns {CONTAINERFACTORY} The Main Container Factory
+	    @returns {FACTORY} The Main Container Factory
 	*/
 	getFactory() {
 		return this.factory;
@@ -472,4 +500,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, Deactivate, EL, FACTORY, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }

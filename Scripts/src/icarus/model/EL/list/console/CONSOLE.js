@@ -1,8 +1,5 @@
 /** @module */
-import LIST, {
-	EL,
-	MODEL
-} from '../LIST.js';
+import LIST, { EL, MODEL } from '../LIST.js';
 /** A console like panel (UL) that contains entries as list items (LI)
     @class
     @extends UL
@@ -22,11 +19,9 @@ export default class CONSOLE extends LIST {
 	*/
 	addEntry(text) {
 		let li = this.addLI(new MODEL().set('label', text));
-		$(this.el).prepend(li.el);
+        $(this.el).prepend(li.el);
+        console.log(text);
 		return li;
 	}
 }
-export {
-	EL,
-	MODEL
-}
+export { EL, MODEL }

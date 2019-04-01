@@ -37,12 +37,7 @@ export default class EL extends MODEL {
 		    @type {Array<MODEL>} children 
 		*/
 		this.children = [];
-		/** A Collection of methods
-		    ie: this.constructors[foo]
-            @type {Object<string, Function>}
-		*/
-        this.callbacks = {};
-        /** A Collection of Constructor methods
+        /** A Collection of async Constructor methods
 		    ie: this.constructors[foo]
             @type {Object<string, Function>}
 		*/
@@ -81,10 +76,10 @@ export default class EL extends MODEL {
 					this.node.el.appendChild(this.el);
 				}
 			} else {
-				console.warn(this.className + '.make(): this.el already exists', typeof this.el);
+				console.warn(this.toString() + '.make(): this.el already exists', typeof this.el);
 			}
 			this.merge(model).then(() => this.construct(model));
-		}, 'Unable to make ' + this.element);
+		}, this.toString() + '.make() Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
         @param {MODEL} model Model
@@ -103,22 +98,30 @@ export default class EL extends MODEL {
 	*/
 	ifEmpty() {
 		return Promise.resolve(this);
-	}
-	/** Add a function to the list of callbacks for to the creator EL.create();
+    }
+    /** A callback Function that accepts a MODEL as a parameter
+        @typedef {Function<MODEL>} ModelFunction A Function that accepts a MODEL
+        @param {MODEL} model
+    */
+
+	/** Add a constructor style function to this classes constructor collection
 	    @param {string} className The Icarus Class name that this callback is meant to construct
-	    @param {Function} fn Function to call (should accept model)
+	    @param {ModelFunction} fn Callback Function
 	    @returns {void}
 	*/
-	addCallback(className, fn) {
-		this.callbacks[className] = [];
-		this.callbacks[className].push(fn);
+    addConstructor(className, fn) {
+        //console.log(this.toString() + '.addConstructor()', className);
+		//this.constructors[className] = [];
+		//this.constructors[className].push(fn);
+        this.constructors[className] = fn;
 	}
 	/** Adds given child element to this element's children
 	    @param {EL} model Model
 	    @returns {EL} Child Element
 	*/
 	addChild(model) {
-		this.get().push(model);
+        this.get().push(model);
+        //console.log('Added Child', this.getTail());
 		return this.getTail();
 	}
 	/** Adds the given class name to the element's list of classes
@@ -314,16 +317,13 @@ export default class EL extends MODEL {
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
-		//console.log('EL{' + this.className + '}.create()', model);
-		return new Promise((resolve, reject) => {
-			try {
-				let result = this.callbacks[model.className].forEach((fn) => fn(model));
-				resolve(result);
-			} catch (e) {
-				console.warn(0, this.className + '.create(): No constructor exists for className "' + model.className + '"', this, e);
-				reject(e);
-			}
-		});
+		//console.log(this.toString() + '.create()', model.className, this.constructors);
+        try {
+            return this.constructors[model.className](model);
+        } catch (e) {
+            console.warn(this.toString() + '.create(): No constructor exists for className "' + model.className + '"', this, e);
+            return Promise.reject(e);
+        }
 	}
 	/** Wraps a Synchronous function inside a Promise that returns this element as a callback
 	    The function is called within a try/catch block and will reject on error
@@ -373,9 +373,9 @@ export default class EL extends MODEL {
 								this.set(prop, model[prop]);
 								this.setAttribute(prop, model[prop]);
 								break;
-							case 'children':
-								//console.log(this.className + '.children', model[prop]);
-                                this.set(prop, model[prop]);
+                            case 'children':
+                                /** @description model.children are processed during this.make() */
+                                //this.createChildren(model[prop]);
 								break;
 							default:
                                 this.set(prop, model[prop]);
@@ -383,8 +383,8 @@ export default class EL extends MODEL {
 					}
 				}
 			}
-		}, 'EL.merge(): Failed to merge ' + this.constructor.name);
-	}
+		}, this.toString() + '.merge(): Failed to merge');
+    }
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
 	    @param {object} attributes A set of key/value pairs
@@ -412,7 +412,6 @@ export default class EL extends MODEL {
 		});
 	}
 	/** Removes this HTMLElement from the DOM (MODEL is maintained within node.children)
-	    param {number} delay Millisecond delay
 	    @returns {Promise} Callback on successful destroy()
 	*/
 	remove() { // delay = 300
@@ -438,8 +437,7 @@ export default class EL extends MODEL {
 					});
 				} catch (e) {
 					if (e instanceof TypeError) {
-						console.warn('Unable to destroy this ' + this.element, this);
-						//throw ee;
+						console.warn('Unable to destroy ' + this.toString(), this);
 						resolve();
 					} else {
 						reject(e);
@@ -524,8 +522,8 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	populate(children) {
-		return this.chain(() => Promise.all(children.map((c) => this.create(c))), this.className + '.populate() Failed to populate ' + this.className);
-	}
+        return this.chain(() => Promise.all(children.map((c) => this.create(c))), this.toString() + '.populate() Failed to populate ' + this.toString());
+    }
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
 	    @returns {ThisType} This node for chaining

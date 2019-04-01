@@ -17,9 +17,8 @@ export default class CONTROLLER extends MODEL {
         @param {string} name The application name
         @param {string} version The application version
         @param {string} token The session token
-        @param {CONTAINERFACTORY} factory The container constructor factory 
     */
-	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token, factory) { // eslint-disable-line max-params
+	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token) { // eslint-disable-line max-params
 		super().set({
 			id,
 			user,
@@ -27,36 +26,32 @@ export default class CONTROLLER extends MODEL {
 			recursionLimit,
 			name,
 			version,
-			token,
-			factory
+			token
 		});
-		document.body.className = "icarus";
-		this.watermark = new WATERMARK();
-		/** @property {Url} url An Url object */
-		this.url = new URL(window.location.href);
-		/** @property {boolean} debug If true, debug outputs are shown */
-		this.debug = true;
-		/** @property {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
-		this.returnUrl = this.url.searchParams.get('ReturnUrl');
-		if (this.returnUrl) {
-			this.returnUrl = this.url.origin + this.returnUrl;
-			location.href = this.returnUrl;
-		}
+        document.body.className = "icarus";
+        this.watermark = new WATERMARK();
+        /** The Application LOADER */
 		this.loader = new LOADER(0);
-		this.loader.log(10, 'Launching application...');
-		/** @property {PROMPT} prompt A dialog prompting the user for input
-			@type {PROMPT}
-			@todo There should never be more than one prompt in the DOM.
-		    @todo Create a queue to hold multiple prompts
-		
-		this.prompt = null;*/
-		/** @property {Array<string>} containers A list of allowed containers */
-		this.containers = ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'];
-		/** @property {MAIN} main The MAIN Container */
-		this.main = new MAIN(this);
-		this.showLoginPrompt(user === 'Guest');
-		this.keyBindings();
-	}
+		this.loader.log(10, 'Launching App(' + id + ')');
+        /** Retrieve the MAIN MODEL and instantiate MAIN Class */
+        if (id >= 0) {
+            $.getJSON('MAIN/GET/' + id, (payload) => {
+                if (payload.result === 1) {
+                    /** The Application MAIN Container Class */
+                    this.main = new MAIN(payload.model, this.loader, new CONTAINERFACTORY());
+                    this.main.showLoginPrompt(user === 'Guest');
+                    this.keyBindings();
+                } else {
+                    console.error(this.toString() + ' Unable to retrieve MAIN(' + id + ')');
+                }
+            });
+        } else {
+            console.error(this.toString() + ' Invalid Id to Load');
+        }
+    }
+    debug() {
+        console.log(this.toString() + '.debug()', this);
+    }
 	/** Sets application keybindings
 	    @returns {void}
 	    @see https://stackoverflow.com/a/14180949/722785
@@ -91,39 +86,4 @@ export default class CONTROLLER extends MODEL {
 			}
 		});
 	}
-	/** Determines if a 'login' parameter exists in the Url, and if true, 
-	    shows the login prompt.
-        @param {boolean} proceed Optionally prevent any action from being taken
-	    @returns {boolean} If a login parameter exists, return true
-	*/
-	showLoginPrompt(proceed = true) {
-		if (this.url.searchParams.get('login') && proceed) {
-			console.log('showLoginPrompt();');
-			this.main.login();
-		}
-		return this;
-	}
-	/** If conditions are met, launches OAuth Login Prompt
-	    @returns {boolean} If a login parameter exists, return true
-	
-    showExternalLoginPrompt() {
-        let provider = this.url.searchParams.get('provider');
-        let returnUrl = this.url.searchParams.get('returnUrl');
-        if (provider && returnUrl) {
-            console.log('showExternalLoginPrompt()');
-            //this.main.loader.log(50, 'Processing OAuth[' + provider + ']...', true).then(() => this.main.loginOAuth(provider));
-        }
-        return this;
-    }*/
-	/** If a ReturnUrl is provided, redirect to that Url
-	    @returns {APP} This APP
-	*/
-	redirectToReturnUrl() {
-		let returnUrl = this.url.searchParams.get('ReturnUrl');
-		if (returnUrl) {
-			location.href = this.url.origin + this.returnUrl;
-		}
-		return this;
-	}
 }
-export { CONTAINERFACTORY }

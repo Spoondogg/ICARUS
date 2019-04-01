@@ -22,14 +22,14 @@ export default class NAVBAR extends NAV {
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
 		this.tabs = new MENU(this, new MODEL(horizontalTabs ? 'horizontal' : '').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
-		this.tabs.activate();
-		this.tabs.expand();
+		this.tabs.el.dispatchEvent(new Activate(this.tabs));
+		this.tabs.el.dispatchEvent(new Expand(this.tabs));
 		this.menus = new MENU(this, new MODEL().set('name', 'menus'));
 		if (bottomUp) {
 			$(this.menus.el).insertBefore(this.tabs.el);
 		}
-		this.menus.activate();
-		this.menus.expand();
+		this.menus.el.dispatchEvent(new Activate(this.menus));
+		this.menus.el.dispatchEvent(new Expand(this.menus));
 	}
 	/** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL

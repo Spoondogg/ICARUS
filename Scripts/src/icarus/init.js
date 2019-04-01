@@ -10,12 +10,13 @@ import APP from './controller/APP.js';
     </ul>
 */
 $(document).ready(() => {
-	var app = new APP(id, user, dev);
+	const app = new APP(id, user, dev);
 	//let login = app.url.searchParams.get('login');
 	//let provider = app.url.searchParams.get('provider');
 	//let returnUrl = app.url.searchParams.get('returnUrl');
 	//app.showLoginPrompt().showExternalLoginPrompt().main.load(id);
-	//app.showLoginPrompt().main.load(id);
-	app.main.load(id);
+    //app.main.showLoginPrompt().load(id);
+	//app.main.load(id);
+    app.debug();
 });
 /* eslint-enable no-undef */

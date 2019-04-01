@@ -18,8 +18,8 @@ export default class BUTTONGROUP extends GROUP {
 			this.addClass('btn-group-vertical');
 		}
 		/* Add cases for each relevant constructor that inherited class does not have */
-		this.addCallback('BUTTON', () => this.addButton('BUTTON'));
-		this.addCallback('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
+		this.addConstructor('BUTTON', () => this.addButton('BUTTON'));
+		this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
 	}
 	/** Creates a button and adds it to this button group, then adds it to the buttons array
 	    @param {string} label The label

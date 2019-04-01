@@ -13,8 +13,8 @@ export default class DL extends LIST {
 	*/
 	constructor(node, model) {
 		super(node, 'DL', model);
-		this.addCallback('DT', () => this.addDT(model));
-		this.addCallback('DD', () => this.addDD(model));
+		this.addConstructor('DT', () => this.addDT(model));
+		this.addConstructor('DD', () => this.addDD(model));
 	}
 	/** Construct a Description Term (DT) and append to this element's children
 	    @param {MODEL} model Model
