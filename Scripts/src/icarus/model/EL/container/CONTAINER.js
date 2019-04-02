@@ -335,7 +335,8 @@ export default class CONTAINER extends GROUP {
 						height: 'toggle'
 					}, 300).delay(300);
 				}, 300);
-			}
+            }
+            return this;
 		};
 		/** Moves this element DOWN one slot
 		    @returns {ThisType} This Container
