@@ -84,7 +84,13 @@ export default class MODEL {
 	setAttribute(key, value = null) {
 		this.attributes.set(key, value);
 		return this;
-	}
+    }
+    /** Returns a string representation of this MODEL
+	    @returns {string} Classname
+	*/
+    toString() {
+        return this.constructor.name + '()';
+    }
 	/** Gets a property from Self
 	    @param {string} key Name of property
 	    @returns {any} The value of the given key
