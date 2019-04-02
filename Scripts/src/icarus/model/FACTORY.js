@@ -5,9 +5,13 @@ import SPAN, { ATTRIBUTES, EL, MODEL } from '../model/el/span/SPAN.js';
     @class
 */
 export default class FACTORY {
-	super() {
-		this.type = '';
-	}
+    /** Constructs an Abstract FACTORY
+        @param {string} type Factory Type (ie: CONTAINER, EL (void elements))
+    */
+    constructor(type = '') {
+        /** The FACTORY type indicates what type of EL Classes this factory will create */
+        this.type = type;
+    }
 	toString() {
 		return this.type + 'FACTORY';
 	}
@@ -45,7 +49,7 @@ export default class FACTORY {
 	    @param {number} id Container UId
 	    @returns {CONTAINER} A newly constructed container
 	*/
-	get(node, className, id = 0) {
+    get(node, className, id = 0) {
 		let span = new SPAN(node, new MODEL());
 		let index = node.children.push(span); // Reserve the slot in the array        
 		return $.getJSON('/' + className + '/GET/' + id, (payload) => {
