@@ -10,11 +10,11 @@ export default class MODEL {
         @param {ATTRIBUTES} meta A collection of description attributes
     */
 	constructor(attributes = new ATTRIBUTES(), data = new ATTRIBUTES(), meta = new ATTRIBUTES()) {
-        /** A collection of key/value pairs representing custom attributes for this MODEL's Element */
-        this.attributes = this.defaultAttributes(attributes);
-        /** A collection of key/value pairs representing editable data for this MODEL's Element */
-        this.data = this.defaultAttributes(data);
-        /** A collection of key/value pairs representing metadata for this MODEL's Class */
+		/** A collection of key/value pairs representing custom attributes for this MODEL's Element */
+		this.attributes = this.defaultAttributes(attributes);
+		/** A collection of key/value pairs representing editable data for this MODEL's Element */
+		this.data = this.defaultAttributes(data);
+		/** A collection of key/value pairs representing metadata for this MODEL's Class */
 		this.meta = this.defaultAttributes(meta);
 	}
 	/** Resolves appropriate Attributes object based on input
@@ -22,18 +22,18 @@ export default class MODEL {
 	    @returns {ATTRIBUTES} Resolved attributes class
 	*/
 	defaultAttributes(attributes) {
-        /** @type {ATTRIBUTES} */
-        let attr = null;
+		/** @type {ATTRIBUTES} */
+		let attr = null;
 		switch (typeof attributes) {
 			case 'string':
 				attr = new ATTRIBUTES(attributes);
 				break;
-            case 'object':
-                if (attributes.constructor.name === 'ATTRIBUTES') {
-                    attr = attributes;
-                } else {
-                    attr = new ATTRIBUTES(attributes);
-                }
+			case 'object':
+				if (attributes.constructor.name === 'ATTRIBUTES') {
+					attr = attributes;
+				} else {
+					attr = new ATTRIBUTES(attributes);
+				}
 				break;
 			default:
 				console.log('Attributes is not properly defined', attributes, this);
@@ -84,13 +84,13 @@ export default class MODEL {
 	setAttribute(key, value = null) {
 		this.attributes.set(key, value);
 		return this;
-    }
-    /** Returns a string representation of this MODEL
+	}
+	/** Returns a string representation of this MODEL
 	    @returns {string} Classname
 	*/
-    toString() {
-        return this.constructor.name + '()';
-    }
+	toString() {
+		return this.constructor.name + '()';
+	}
 	/** Gets a property from Self
 	    @param {string} key Name of property
 	    @returns {any} The value of the given key

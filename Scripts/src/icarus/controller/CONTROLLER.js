@@ -28,30 +28,30 @@ export default class CONTROLLER extends MODEL {
 			version,
 			token
 		});
-        document.body.className = "icarus";
-        this.watermark = new WATERMARK();
-        /** The Application LOADER */
+		document.body.className = "icarus";
+		this.watermark = new WATERMARK();
+		/** The Application LOADER */
 		this.loader = new LOADER(0);
 		this.loader.log(10, 'Launching App(' + id + ')');
-        /** Retrieve the MAIN MODEL and instantiate MAIN Class */
-        if (id >= 0) {
-            $.getJSON('MAIN/GET/' + id, (payload) => {
-                if (payload.result === 1) {
-                    /** The Application MAIN Container Class */
-                    this.main = new MAIN(payload.model, this.loader, new CONTAINERFACTORY());
-                    this.main.showLoginPrompt(user === 'Guest');
-                    this.keyBindings();
-                } else {
-                    console.error(this.toString() + ' Unable to retrieve MAIN(' + id + ')');
-                }
-            });
-        } else {
-            console.error(this.toString() + ' Invalid Id to Load');
-        }
-    }
-    debug() {
-        console.log(this.toString() + '.debug()', this);
-    }
+		/** Retrieve the MAIN MODEL and instantiate MAIN Class */
+		if (id >= 0) {
+			$.getJSON('MAIN/GET/' + id, (payload) => {
+				if (payload.result === 1) {
+					/** The Application MAIN Container Class */
+					this.main = new MAIN(payload.model, this.loader, new CONTAINERFACTORY());
+					this.main.showLoginPrompt(user === 'Guest');
+					this.keyBindings();
+				} else {
+					console.error(this.toString() + ' Unable to retrieve MAIN(' + id + ')');
+				}
+			});
+		} else {
+			console.error(this.toString() + ' Invalid Id to Load');
+		}
+	}
+	debug() {
+		console.log(this.toString() + '.debug()', this);
+	}
 	/** Sets application keybindings
 	    @returns {void}
 	    @see https://stackoverflow.com/a/14180949/722785

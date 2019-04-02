@@ -21,13 +21,13 @@ export default class TEXTBLOCK extends CONTAINER {
 	*/
 	construct() {
 		return this.chain(() => {
-            if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
+			if (this.dataId > 0) {
+				this.createEditableElement('header', this.body.pane);
 				this.createEditableElement('p', this.body.pane);
-            } else {
-                console.log('No data exists for ' + this.toString());
-                this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }
+			} else {
+				console.log('No data exists for ' + this.toString());
+				this.navheader.el.dispatchEvent(new Expand(this.navheader));
+			}
 		});
 	}
 }

@@ -11,8 +11,8 @@ export default class CALLOUT extends CONTAINER {
 	    @param {MODEL} model Object Model
     */
 	constructor(node, model) {
-        super(node, 'DIV', model);
-        this.setAttribute('class', 'col-lg-4');
+		super(node, 'DIV', model);
+		this.setAttribute('class', 'col-lg-4');
 		this.body.pane.addClass('callout');
 	}
 	construct() {

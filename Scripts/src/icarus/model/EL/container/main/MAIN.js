@@ -2,7 +2,6 @@
 import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, FACTORY, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-//import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -19,7 +18,7 @@ export default class MAIN extends CONTAINER {
         @param {FACTORY} factory APP Container Factory
     */
 	constructor(model, loader, factory) {
-        super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
+		super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
 		this.addClass('main');
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
@@ -27,16 +26,16 @@ export default class MAIN extends CONTAINER {
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
 		/** @type {FACTORY} A CONTAINER FACTORY */
-        this.factory = this.required(factory);
-        /** MAIN doesnt get injected with editProperty but instead
-            calls directly from its factory
-        */
-        this.editProperty = this.factory.editProperty.bind(this);
+		this.factory = this.required(factory);
+		/** MAIN doesnt get injected with editProperty but instead
+		    calls directly from its factory
+		*/
+		this.editProperty = this.factory.editProperty.bind(this);
 		/** @type {LOADER} */
-        this.loader = this.required(loader);
-        /** @type {boolean} debug If true, debug outputs are shown */
-        this.debug = true;
-        this.setUrlProperties();
+		this.loader = this.required(loader);
+		/** @type {boolean} debug If true, debug outputs are shown */
+		this.debug = true;
+		this.setUrlProperties();
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
 		// ELEMENTS
@@ -47,38 +46,38 @@ export default class MAIN extends CONTAINER {
 		this.quickSaveFormPost = this.factory.quickSaveFormPost;
 		this.watchMousePosition();
 		this.expandMain();
-    }
-    /** Sets URL Properties in the MAIN Constructor
-        @returns {void}
-    */
-    setUrlProperties() {
-        /** @type {URL} */
-        this.url = new URL(window.location.href);
-        /** @type {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
-        this.returnUrl = this.url.searchParams.get('ReturnUrl');
-        if (this.returnUrl) {
-            this.returnUrl = this.url.origin + this.returnUrl;
-            location.href = this.returnUrl;
-        }
-    }
-    /** Determines if a 'login' parameter exists in the Url, and if true, 
+	}
+	/** Sets URL Properties in the MAIN Constructor
+	    @returns {void}
+	*/
+	setUrlProperties() {
+		/** @type {URL} */
+		this.url = new URL(window.location.href);
+		/** @type {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
+		this.returnUrl = this.url.searchParams.get('ReturnUrl');
+		if (this.returnUrl) {
+			this.returnUrl = this.url.origin + this.returnUrl;
+			location.href = this.returnUrl;
+		}
+	}
+	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
         @param {boolean} proceed Optionally prevent any action from being taken
 	    @returns {boolean} If a login parameter exists, return true
 	*/
-    showLoginPrompt(proceed = true) {
-        if (this.url.searchParams.get('login') && proceed) {
-            console.log('showLoginPrompt();');
-            this.login();
-        }
-        return this;
-    }
+	showLoginPrompt(proceed = true) {
+		if (this.url.searchParams.get('login') && proceed) {
+			console.log('showLoginPrompt();');
+			this.login();
+		}
+		return this;
+	}
 	constructElements() {
 		if (this.dataId > 0) {
 			document.title = this.data.title;
 		} else {
-            document.title = this.label;
-        }
+			document.title = this.label;
+		}
 	}
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
@@ -187,12 +186,12 @@ export default class MAIN extends CONTAINER {
 		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
 		this.reference = sidebar.element.navbar;
 		// Add submenu items to DATA and ATTRIBUTES
-        /** @type {[NAVITEMICON]} */
-        let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => {
-            console.log('TODO: Launch SAVE() for ' + this.toString());
-            this.save(false);
-        });
+		/** @type {[NAVITEMICON]} */
+		let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+		tab.el.addEventListener('select', () => {
+			console.log('TODO: Launch SAVE() for ' + this.toString());
+			this.save(false);
+		});
 		/** @type {[MENU]} */
 		let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
 		['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
@@ -342,7 +341,7 @@ export default class MAIN extends CONTAINER {
 			this.navfooter.tabs.get(null, 'NAVITEMICON').forEach((icon) => icon.el.dispatchEvent(ev));
 			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 		}, 'Unable to restore focus to MAIN');
-    }
+	}
 	/** Allows the user to open a MAIN 
 		@param {UId} id Unique Id
 	    @todo Create method to browse MAINs

@@ -10,52 +10,52 @@ import SPAN from '../../../span/SPAN.js';
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
 	constructElements() {
-        /** The input-group contains the input element
-            @type {DIV}
-        */
-        this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
-        /** The primary INPUT Element for this FORMPOSTINPUT
-            @type {INPUT}
-        */
-        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+		/** The input-group contains the input element
+		    @type {DIV}
+		*/
+		this.inputGroup = new DIV(this.body.pane, new MODEL('input-group'));
+		/** The primary INPUT Element for this FORMPOSTINPUT
+		    @type {INPUT}
+		*/
+		this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
 			class: 'form-control',
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',
 			readonly: true
-        })));
-        /** @type {FORM} */
+		})));
+		/** @type {FORM} */
 		this.form = null;
 		this.createInput();
 	}
 	/** Creates a Container/Group with an INPUT element inside of it
         @returns {void}
     */
-    createInput() {
-        if (this.attributes.type === 'HIDDEN') {
-            this.body.el.dispatchEvent(new Collapse(this.body));
-        } else {
-            this.body.el.dispatchEvent(new Expand(this.body));
-        }
+	createInput() {
+		if (this.attributes.type === 'HIDDEN') {
+			this.body.el.dispatchEvent(new Collapse(this.body));
+		} else {
+			this.body.el.dispatchEvent(new Expand(this.body));
+		}
 		if (this.attributes.readonly) {
 			this.input.el.setAttribute('readonly', 'readonly');
 		}
-        let className = this.input.el.form.className.value;
-        /** Value arrives from FORMPOSTINPUT button labeld as 'dataId' or 'metaId'
-            Remove the 'id'  
-            @todo There has to be a more elegant solution here.
-            @type {string}
-        */
-        let type = this.attributes.name.substring(0, this.attributes.name.length - 2);
+		let className = this.input.el.form.className.value;
+		/** Value arrives from FORMPOSTINPUT button labeld as 'dataId' or 'metaId'
+		    Remove the 'id'  
+		    @todo There has to be a more elegant solution here.
+		    @type {string}
+		*/
+		let type = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-            btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
+			btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-        btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
-        let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
-        btnLoad.el.onclick = () => console.log('TODO: Browse FORMPOST(s)');
+		btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
+		let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
+		btnLoad.el.onclick = () => console.log('TODO: Browse FORMPOST(s)');
 	}
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)

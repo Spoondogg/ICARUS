@@ -16,7 +16,7 @@ export default class EL extends MODEL {
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
-        this.setMain();        
+		this.setMain();
 		/** Parent EL
 		    @type {EL}
 		*/
@@ -28,7 +28,7 @@ export default class EL extends MODEL {
 		/** HTML Element Tag ie: DIV 
 		    @type {string}
 		*/
-        this.element = element;
+		this.element = element;
 		/** State Indicator 
 		    @type {number} 
 		*/
@@ -37,24 +37,24 @@ export default class EL extends MODEL {
 		    @type {Array<MODEL>} children 
 		*/
 		this.children = [];
-        /** A Collection of async Constructor methods
+		/** A Collection of async Constructor methods
 		    ie: this.constructors[foo]
             @type {Object<string, Function>}
 		*/
-        this.constructors = {};
+		this.constructors = {};
 		/** A collection of public Methods
 		    @type {Object<string, Function>}
 		*/
-        this.methods = {};
-        /** A collection of Event Handlers
-            @type {Object<string, Function>}
-        */
-        this.events = {};
-        /** A collection of public Event handlers
+		this.methods = {};
+		/** A collection of Event Handlers
+		    @type {Object<string, Function>}
+		*/
+		this.events = {};
+		/** A collection of public Event handlers
 		     @type {Object<string, Function>}
 		*/
-        this.handlers = {};
-        this.make(model);
+		this.handlers = {};
+		this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
         param {HTMLElement} el The HTML Element
@@ -66,10 +66,10 @@ export default class EL extends MODEL {
 	make(model) {
 		return this.chain(() => {
 			if (typeof this.el === 'undefined') {
-                /** The HTML Element shown in the DOM
-                    @type {HTMLElement}
-                */
-                this.el = document.createElement(this.element);
+				/** The HTML Element shown in the DOM
+				    @type {HTMLElement}
+				*/
+				this.el = document.createElement(this.element);
 				if (this.node === document.body) {
 					this.node.appendChild(this.el);
 				} else {
@@ -98,30 +98,29 @@ export default class EL extends MODEL {
 	*/
 	ifEmpty() {
 		return Promise.resolve(this);
-    }
-    /** A callback Function that accepts a MODEL as a parameter
-        @typedef {Function<MODEL>} ModelFunction A Function that accepts a MODEL
-        @param {MODEL} model
-    */
-
+	}
+	/** A callback Function that accepts a MODEL as a parameter
+	    @typedef {Function<MODEL>} ModelFunction A Function that accepts a MODEL
+	    @param {MODEL} model
+	*/
 	/** Add a constructor style function to this classes constructor collection
 	    @param {string} className The Icarus Class name that this callback is meant to construct
 	    @param {ModelFunction} fn Callback Function
 	    @returns {void}
 	*/
-    addConstructor(className, fn) {
-        //console.log(this.toString() + '.addConstructor()', className);
+	addConstructor(className, fn) {
+		//console.log(this.toString() + '.addConstructor()', className);
 		//this.constructors[className] = [];
 		//this.constructors[className].push(fn);
-        this.constructors[className] = fn;
+		this.constructors[className] = fn;
 	}
 	/** Adds given child element to this element's children
 	    @param {EL} model Model
 	    @returns {EL} Child Element
 	*/
 	addChild(model) {
-        this.get().push(model);
-        //console.log('Added Child', this.getTail());
+		this.get().push(model);
+		//console.log('Added Child', this.getTail());
 		return this.getTail();
 	}
 	/** Adds the given class name to the element's list of classes
@@ -318,12 +317,12 @@ export default class EL extends MODEL {
     */
 	create(model) {
 		//console.log(this.toString() + '.create()', model.className, this.constructors);
-        try {
-            return this.constructors[model.className](model);
-        } catch (e) {
-            console.warn(this.toString() + '.create(): No constructor exists for className "' + model.className + '"', this, e);
-            return Promise.reject(e);
-        }
+		try {
+			return this.constructors[model.className](model);
+		} catch (e) {
+			console.warn(this.toString() + '.create(): No constructor exists for className "' + model.className + '"', this, e);
+			return Promise.reject(e);
+		}
 	}
 	/** Wraps a Synchronous function inside a Promise that returns this element as a callback
 	    The function is called within a try/catch block and will reject on error
@@ -373,18 +372,18 @@ export default class EL extends MODEL {
 								this.set(prop, model[prop]);
 								this.setAttribute(prop, model[prop]);
 								break;
-                            case 'children':
-                                /** @description model.children are processed during this.make() */
-                                //this.createChildren(model[prop]);
+							case 'children':
+								/** @description model.children are processed during this.make() */
+								//this.createChildren(model[prop]);
 								break;
 							default:
-                                this.set(prop, model[prop]);
+								this.set(prop, model[prop]);
 						}
 					}
 				}
 			}
 		}, this.toString() + '.merge(): Failed to merge');
-    }
+	}
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
 	    @param {object} attributes A set of key/value pairs
@@ -393,7 +392,7 @@ export default class EL extends MODEL {
 	processAttributes(attributes) {
 		for (let attr in attributes) {
 			if (attr !== 'innerHTML') {
-                this.setAttribute(attr, attributes[attr]);
+				this.setAttribute(attr, attributes[attr]);
 			} else if (attr === 'innerHTML') {
 				this.setInnerHTML(attributes[attr]);
 			}
@@ -418,8 +417,8 @@ export default class EL extends MODEL {
 		return this.chain(() => {
 			if (this.el.parentNode) {
 				this.el.parentNode.removeChild(this.el);
-            }
-        }, 'Unable to remove ' + this.toString() + ' from ' + this.node.toString());
+			}
+		}, 'Unable to remove ' + this.toString() + ' from ' + this.node.toString());
 	}
 	/** Removes this Element from the DOM and its Class from any linked lists
 	    @param {number} delay Millisecond delay
@@ -454,14 +453,14 @@ export default class EL extends MODEL {
 	setAttribute(key, value) {
 		return this.chain(() => {
 			if (typeof key === 'string' && typeof value !== 'undefined' && value !== null) {
-                this.el.setAttribute(key, value);
-                try {
-                    this.attributes.set(key, value);
-                } catch (e) {
-                    if (e instanceof TypeError) {
-                        this.attributes = new ATTRIBUTES().set(key, value);
-                    }
-                }
+				this.el.setAttribute(key, value);
+				try {
+					this.attributes.set(key, value);
+				} catch (e) {
+					if (e instanceof TypeError) {
+						this.attributes = new ATTRIBUTES().set(key, value);
+					}
+				}
 			}
 		});
 	}
@@ -487,8 +486,8 @@ export default class EL extends MODEL {
 		    el.attributes.set('class', el.attributes.get('class').split(' ').filter((v) => v !== className));
 		});*/
 		return new Promise((resolve, reject) => {
-            try {
-                this.el.classList.remove(className);
+			try {
+				this.el.classList.remove(className);
 				this.attributes.set('class', this.attributes.get('class').split(' ').filter((v) => v !== className));
 				resolve(this);
 			} catch (e) {
@@ -522,8 +521,8 @@ export default class EL extends MODEL {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	populate(children) {
-        return this.chain(() => Promise.all(children.map((c) => this.create(c))), this.toString() + '.populate() Failed to populate ' + this.toString());
-    }
+		return this.chain(() => Promise.all(children.map((c) => this.create(c))), this.toString() + '.populate() Failed to populate ' + this.toString());
+	}
 	/** Sets the inner HTML of this element
 	    @param {string} innerHTML Html string to be parsed into HTML
 	    @returns {ThisType} This node for chaining
