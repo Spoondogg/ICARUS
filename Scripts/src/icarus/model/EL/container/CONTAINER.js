@@ -9,6 +9,7 @@ import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
+//import FACTORY from '../../FACTORY.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
@@ -96,7 +97,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
-		//console.log(this.className + '.construct()');
+		console.log(this.toString() + '.construct()');
 		return this.chain(() => {
 			this.constructElements();
             if (model) { // Populate if model exists
@@ -106,7 +107,7 @@ export default class CONTAINER extends GROUP {
 				}
 			}
 			return this.ifEmpty();
-		}, 'Unable to construct ' + this.className);
+		}, this.toString() + '.construct() Failed');
 	}
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -256,13 +257,13 @@ export default class CONTAINER extends GROUP {
 	*/
 	addSelectEvents() {
 		this.body.el.addEventListener('select', () => {
-			console.log('Selected ' + this.className, this);
-			this.navheader.expand();
+            console.log('Selected ' + this.toString(), this);
+            this.navheader.el.dispatchEvent(new Expand(this.navheader));
 			this.getMain().focusBody();
 		});
 		this.body.el.addEventListener('deselect', () => {
-			console.log('Deselected ' + this.className, this);
-			this.navheader.collapse();
+            console.log('Deselected ' + this.toString(), this);
+            this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});
 	}
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
@@ -271,15 +272,26 @@ export default class CONTAINER extends GROUP {
 	addActivateEvents() {
 		this.body.el.addEventListener('activate', () => {
 			try {
-				console.log('Activated ' + this.className);
-				this.getMain().focusBody();
+				console.log('Activated ' + this.toString());
+                this.getMain().focusBody();
+                let siblings = this.getContainer().get().filter((c) => c.id !== this.id);
+                console.log(' - Siblings', siblings);
+                siblings.forEach((s) => {
+                    console.log('  -> Sibling', s.id, s);
+                    /*try {
+                        s.el.dispatchEvent(new Deactivate(s));
+                        //s.body.removeClass('active');
+                    } catch (e) {
+                        console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
+                    }*/
+                });
 			} catch (e) {
 				//console.warn('Unable to focus body', this);
 			}
 		});
 		this.body.el.addEventListener('deactivate', () => {
 			try {
-				console.log('Deactivated ' + this.className);
+                console.log('Deactivated ' + this.toString());
 				this.getMain().focusBody();
 			} catch (e) {
 				//console.warn('Unable to focus body', this);
@@ -424,7 +436,22 @@ export default class CONTAINER extends GROUP {
             createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
             createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
 		];
-	}
+    }
+    /** Dispatches the given Event to this CONTAINER's children
+	    @param {Event} event Event to dispatch
+	    @returns {void}
+	*/
+    dispatchToChildren(event) {
+        console.log(this.toString() + '.dispatchToChildren()');
+        this.get().forEach((c) => {
+            console.log(' - Child', c.toString(), c);
+            try {
+                c.el.dispatchEvent(event);
+            } catch (e) {
+                console.warn('Unable to dispatch event to child', c, event);
+            }
+        });
+    }
 	/** Saves the state of the given Container
         @param {boolean} noPrompt If false (default), no prompt is displayed
         @abstract
@@ -477,10 +504,11 @@ export default class CONTAINER extends GROUP {
 	    @returns {Array<boolean>} Array of results
 	*/
 	setDefaultVisibility(model) {
-		if (model.data) {
-			let a = model.data.collapsed === '1' ? this.navheader.tab.deactivate() : this.navheader.tab.activate();
-			let b = model.data.collapsed === '1' ? this.body.collapse() : this.body.expand();
-			let c = model.data.showNav === '1' ? this.navheader.expand() : this.navheader.collapse();
+        if (model.data) {
+            let { tab } = this.navheader;
+            let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
+			let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
+            let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Expand(this.navheader)) : this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 			return [a, b, c];
 		}
 		return [false, false];
@@ -600,9 +628,7 @@ export default class CONTAINER extends GROUP {
 			items.SAVE.el.onclick = () => this.save(true);
 		});
 	}
-	/** Performs addCase() for the given Element within a 
-        Container of an element that extends Container
-        Sets the constructor callback for this element
+	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
@@ -618,9 +644,9 @@ export default class CONTAINER extends GROUP {
 						item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
 						item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
 					}
-					this.addCallback(className, (model) => {
+					this.addConstructor(className, (model) => {
 						try {
-							resolve(this.getMain().getFactory().get(this.body.pane, className, model.id || 0));
+							resolve(this.getFactory().get(this.body.pane, className, model.id || 0));
 						} catch (ee) {
 							console.warn('Unable to retrieve factory for Container Case', ee);
 							reject(ee);
@@ -628,11 +654,17 @@ export default class CONTAINER extends GROUP {
 					});
 				}
 			} catch (e) {
-				console.warn(this.className + '.addContainerCase(' + className + '): Unable to add Container Case', e);
+				console.warn(this.toString() + '.addContainerCase(' + className + '): Unable to add Container Case', e);
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Returns the MAIN Factory
+	    @returns {FACTORY} The Main Container Factory
+	*/
+    getFactory() {
+        return this.getMain().getFactory();
+    }
 	/** Adds a button to the given menu that promises to construct the given CONTAINER name
 	    @param {string} className CONTAINER class name to construct
 	    @param {MENU} menu Parent Menu
@@ -727,7 +759,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	loadModel(model) {
-		console.log(this.className + '.loadModel()', model);
+		console.log(this.toString() + '.loadModel()', model);
 		return this.chain(() => {
 			if (model.label) {
 				document.title = model.label;
@@ -949,5 +981,5 @@ export default class CONTAINER extends GROUP {
 		return document.getElementsByTagName('meta').token.content;
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
 /* eslint-enable max-lines */
