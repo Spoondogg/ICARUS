@@ -310,7 +310,7 @@ export default class CONTAINERFACTORY {
                         type,
                         id: this[typeIdStr],
                         container: this
-                    })).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
+                    })).then((form) => this.hideElements(form.get()[0].get()[0].get(), name).then(() => {
                         /* @todo This should trigger on a 'close' event */
                         form.getDialog().close = () => form.getDialog().hide().then(() => {
                             console.log('form,dialog', form, form.getDialog());
