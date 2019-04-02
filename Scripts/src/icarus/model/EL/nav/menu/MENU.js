@@ -14,20 +14,24 @@ export default class MENU extends LIST {
 	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
         @param {string} element HTML Element Tag
+        @param {{canActivate: boolean, scrollIntoView: boolean}} options Optional Parameters
         @param {boolean} canActivate If false, the MENU will not expand on activation
         @param {boolean} scrollIntoView If true, the menu is scrolled into view when activated
 	*/
-	constructor(node, model, element = 'UL', canActivate = true, scrollIntoView = false) {
+	constructor(node, model, element = 'UL', options = {
+		canActivate: true,
+		scrollIntoView: false
+	}) {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);
 		this.addCases(model);
 		this.implement(new Switchable(this));
-		if (canActivate) {
+		if (options.canActivate) {
 			this.el.addEventListener('activate', () => this.el.dispatchEvent(new Expand(this)));
 			this.el.addEventListener('deactivate', () => this.el.dispatchEvent(new Collapse(this)));
 		}
-		if (scrollIntoView) {
+		if (options.scrollIntoView) {
 			this.scrollOnExpand();
 		}
 	}
