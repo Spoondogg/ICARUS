@@ -23,19 +23,45 @@ import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+import PANE from '../container/PANE.js';
 import PROMPT from '../dialog/prompt/PROMPT.js';
 import SECTION from '../section/SECTION.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 import WORD from './word/WORD.js';
-/** Constructs various Containers and returns them to be appended
-    Each Container child must be imported individually
-    to avoid cyclic redundancy of dependencies
+/** Constructs various CONTAINER Classes and returns them to be appended
+    Each CONTAINER child must be imported individually to avoid cyclic redundancy of dependencies
     @class
     @extends FACTORY
 */
 export default class CONTAINERFACTORY extends FACTORY {
-    /* eslint-disable max-lines-per-function, complexity, max-statements */
-	/** Builds the Class
+    /** Constructs a FACTORY to build CONTAINER Classes */
+    constructor() {
+        super('CONTAINER');
+    }
+	processFormElement(payload, span) {
+		let element = null;
+		if (payload.model.type === 'FORMPOSTINPUT') {
+			element = new FORMPOSTINPUT(span, payload.model);
+		} else {
+			switch (payload.model.element) {
+				case 'TEXTAREA':
+					element = new FORMTEXTAREA(span, payload.model);
+					break;
+				case 'SELECT':
+					element = new FORMSELECT(span, payload.model);
+					break;
+				case 'INPUT':
+					element = new FORMINPUT(span, payload.model);
+					break;
+				default:
+					element = new FORMINPUT(span, payload.model);
+					break;
+			}
+		}
+		return element;
+	}
+	/* eslint-disable max-lines-per-function, complexity, max-statements */
+	/** Builds the CONTAINER Class
         @param {SPAN} span Parent Node temporary element
 	    @param {string} className Container Constructor Name
 	    @param {number} id Container UId
@@ -43,149 +69,134 @@ export default class CONTAINERFACTORY extends FACTORY {
         @returns {EL} Newly contructed Class
     */
     build(span, className, id, payload) {
-        /** @type {CONTAINER} */
-        let element = null;
-        switch (className) {
-            case 'ARTICLE':
-                element = new ARTICLE(span, payload.model);
+        let parentContainer = span.getContainer();
+        console.log(parentContainer.toString() + ' is building a(n) ' + className, parentContainer);
+		/** @type {CONTAINER} */
+		let element = null;
+		switch (className) {
+			case 'ARTICLE':
+				element = new ARTICLE(span, payload.model);
+				break;
+			case 'BANNER':
+				element = new BANNER(span, payload.model);
+				break;
+			case 'CALLOUT':
+				element = new CALLOUT(span, payload.model);
+				break;
+			case 'CHAT':
+				element = new CHAT(span, payload.model);
+				break;
+			case 'CLASSVIEWER':
+				element = new CLASSVIEWER(span, payload.model);
+				break;
+			case 'DICTIONARY':
+				element = new DICTIONARY(span, payload.model);
+				break;
+			case 'FORM':
+				element = new FORM(span, payload.model);
+				break;
+			case 'FIELDSET':
+				element = new FIELDSET(span, payload.model);
+				break;
+			case 'FORMELEMENT':
+				element = this.processFormElement();
+				break;
+			case 'FORMELEMENTGROUP':
+				element = new FORMELEMENTGROUP(span, payload.model);
+				break;
+			case 'FORMINPUT':
+				element = new FORMINPUT(span, payload.model);
+				break;
+			case 'FORMSELECT':
+				element = new FORMSELECT(span, payload.model);
+				break;
+			case 'FORMTEXTAREA':
+				element = new FORMTEXTAREA(span, payload.model);
+				break;
+			case 'IMAGEGALLERY':
+				element = new IMAGEGALLERY(span, payload.model);
+				break;
+			case 'INDEX':
+				element = new INDEX(span, payload.model);
+				break;
+			case 'INDEXMAIN':
+				element = new INDEXMAIN(span, payload.model);
+				break;
+			case 'INDEXTHUMBNAIL':
+				element = new INDEXTHUMBNAIL(span, payload.model);
+				break;
+			case 'JUMBOTRON':
+				element = new JUMBOTRON(span, payload.model);
+				break;
+			case 'LI':
+				element = new LI(span, payload.model);
+				break;
+				//case 'LIST':
+				//    container = new LIST(span, payload.model);
+				//    break;
+				//case 'LISTITEM':
+				//    container = new LISTITEM(span, payload.model);
+				//    break;
+			case 'MENU':
+				element = new MENU(span, payload.model);
+				break;
+			case 'NAVITEM':
+				element = new NAVITEM(span, payload.model);
+				break;
+			case 'NAVSEPARATOR':
+				element = new NAVSEPARATOR(span, payload.model);
+				break;
+			case 'OPTION':
+				element = new OPTION(span, payload.model);
                 break;
-            case 'BANNER':
-                element = new BANNER(span, payload.model);
-                break;
-            case 'CALLOUT':
-                element = new CALLOUT(span, payload.model);
-                break;
-            case 'CHAT':
-                element = new CHAT(span, payload.model);
-                break;
-            case 'CLASSVIEWER':
-                element = new CLASSVIEWER(span, payload.model);
-                break;
-            case 'DICTIONARY':
-                element = new DICTIONARY(span, payload.model);
-                break;
-            case 'FORM':
-                element = new FORM(span, payload.model);
-                break;
-            case 'FIELDSET':
-                element = new FIELDSET(span, payload.model);
-                break;
-            case 'FORMELEMENT':
-                if (payload.model.type === 'FORMPOSTINPUT') {
-                    element = new FORMPOSTINPUT(span, payload.model);
-                } else {
-                    switch (payload.model.element) {
-                        case 'TEXTAREA':
-                            element = new FORMTEXTAREA(span, payload.model);
-                            break;
-                        case 'SELECT':
-                            element = new FORMSELECT(span, payload.model);
-                            break;
-                        case 'INPUT':
-                            element = new FORMINPUT(span, payload.model);
-                            break;
-                        default:
-                            element = new FORMINPUT(span, payload.model);
-                            break;
-                    }
-                }
-                break;
-            case 'FORMELEMENTGROUP':
-                element = new FORMELEMENTGROUP(span, payload.model);
-                break;
-            case 'FORMINPUT':
-                element = new FORMINPUT(span, payload.model);
-                break;
-            case 'FORMSELECT':
-                element = new FORMSELECT(span, payload.model);
-                break;
-            case 'FORMTEXTAREA':
-                element = new FORMTEXTAREA(span, payload.model);
-                break;
-            case 'IMAGEGALLERY':
-                element = new IMAGEGALLERY(span, payload.model);
-                break;
-            case 'INDEX':
-                element = new INDEX(span, payload.model);
-                break;
-            case 'INDEXMAIN':
-                element = new INDEXMAIN(span, payload.model);
-                break;
-            case 'INDEXTHUMBNAIL':
-                element = new INDEXTHUMBNAIL(span, payload.model);
-                break;
-            case 'JUMBOTRON':
-                element = new JUMBOTRON(span, payload.model);
-                break;
-            case 'LI':
-                element = new LI(span, payload.model);
-                break;
-            //case 'LIST':
-            //    container = new LIST(span, payload.model);
-            //    break;
-            //case 'LISTITEM':
-            //    container = new LISTITEM(span, payload.model);
-            //    break;
-            case 'MENU':
-                element = new MENU(span, payload.model);
-                break;
-            case 'NAVITEM':
-                element = new NAVITEM(span, payload.model);
-                break;
-            case 'NAVSEPARATOR':
-                element = new NAVSEPARATOR(span, payload.model);
-                break;
-            case 'OPTION':
-                element = new OPTION(span, payload.model);
-                break;
-            case 'SECTION':
-                element = new SECTION(span, payload.model);
-                break;
-            case 'SPAN':
-                element = new SPAN(span, payload.model);
-                break;
-            case 'TEXTBLOCK':
-                element = new TEXTBLOCK(span, payload.model);
-                break;
-            case 'THUMBNAIL':
-                element = new NAVTHUMBNAIL(span, payload.model);
-                break;
-            case 'UL':
-                element = new UL(span, payload.model);
-                break;
-            case 'WORD':
-                element = new WORD(span, payload.model);
-                break;
-            default:
-                throw Error('No constructor exists for {' + className + '}');
-        }
-        return element;
-    }
-    /** Injects dependencies into the given Element/Class
-        @param {EL} node Parent node (Generally append to node.body.pane)
-        @param {SPAN} span Parent Node temporary element
-        @param {number} index Slot reserved in children array
-        @param {EL} element Element/Class
-        @returns {void}
-    */
-    injectDependencies(node, span, index, element) {
-        try {
-            /** Saves the state of the given Container
-                @param {boolean} noPrompt If false (default), no prompt is displayed
-                @abstract
-                @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
-                @returns {Promise} A Promise to save this Container
-            */
-            element.save = (noPrompt) => this.save(noPrompt, element, element);
-            element.quickSaveFormPost = this.quickSaveFormPost;
-            element.editProperty = this.editProperty;
-        } catch (e) {
-            span.destroy();
-            node.children.splice(index, 1);
-            console.log(e);
-        }
-    }
-    /* eslint-enable max-lines-per-function, complexity, max-statements */
+			case 'SECTION':
+				element = new SECTION(span, payload.model);
+				break;
+			case 'SPAN':
+				element = new SPAN(span, payload.model);
+				break;
+			case 'TEXTBLOCK':
+				element = new TEXTBLOCK(span, payload.model);
+				break;
+			case 'THUMBNAIL':
+				element = new NAVTHUMBNAIL(span, payload.model);
+				break;
+			case 'UL':
+				element = new UL(span, payload.model);
+				break;
+			case 'WORD':
+				element = new WORD(span, payload.model);
+				break;
+			default:
+                throw Error(this.toString() + ' No constructor exists for {' + className + '}', parentContainer);
+		}
+		return element;
+	}
+	/** Injects dependencies into the given Element/Class
+	    @param {EL} node Parent node (Generally append to node.body.pane)
+	    @param {SPAN} span Parent Node temporary element
+	    @param {number} index Slot reserved in children array
+	    @param {EL} element Element/Class
+	    @returns {void}
+	*/
+	injectDependencies(node, span, index, element) {
+		try {
+			/** Saves the state of the given Container
+			    @param {boolean} noPrompt If false (default), no prompt is displayed
+			    @abstract
+			    @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
+			    @returns {Promise} A Promise to save this Container
+			*/
+			element.save = (noPrompt) => this.save(noPrompt, element, element);
+			element.quickSaveFormPost = this.quickSaveFormPost;
+			element.editProperty = this.editProperty;
+		} catch (e) {
+			span.destroy();
+			node.children.splice(index, 1);
+			console.log(e);
+		}
+	}
+	/* eslint-enable max-lines-per-function, complexity, max-statements */
 	/** Saves the state of the CONTAINER
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
@@ -208,11 +219,11 @@ export default class CONTAINERFACTORY extends FACTORY {
 					cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
 					form.afterSuccessfulPost = () => {
 						cont.setLabel(form.el.elements.label.value);
-                        // @todo This is ugly
-                        cont.quickSaveFormPost('data').then(
-                            () => cont.quickSaveFormPost('attributes').then(
-                                () => cont.quickSaveFormPost('meta').then(
-                                    () => form.getDialog().close())));
+						// @todo This is ugly
+						cont.quickSaveFormPost('data').then(
+							() => cont.quickSaveFormPost('attributes').then(
+								() => cont.quickSaveFormPost('meta').then(
+									() => form.getDialog().close())));
 					}
 					loader.log(100).then(() => {
 						if (noPrompt) {
@@ -230,8 +241,8 @@ export default class CONTAINERFACTORY extends FACTORY {
 	    @param {string} type Data type (dataId, attributesId, metaId)
 	    @returns {Promise<LOADER>} Promise to return loader
 	*/
-    quickSaveFormPost(type) {
-        console.log(this.toString() + '.quickSaveFormPost(' + type + ')');
+	quickSaveFormPost(type) {
+		console.log(this.toString() + '.quickSaveFormPost(' + type + ')');
 		return new Promise((resolve, reject) => {
 			this.getLoader().log(30, 'Saving {' + this.className + '}[' + type + ']').then((loader) => {
 				try {
@@ -249,8 +260,8 @@ export default class CONTAINERFACTORY extends FACTORY {
 					} else {
 						resolve(loader.log(100));
 					}
-                } catch (e) {
-                    console.error(this.toString() + '.quickSaveFormPost(' + type + ')', e);
+				} catch (e) {
+					console.error(this.toString() + '.quickSaveFormPost(' + type + ')', e);
 					reject(e);
 				}
 			});
@@ -263,43 +274,43 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {string} type The Type of data (data, meta, attr) we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editProperty(name, type = 'data') {
-        console.log(this.toString() + '.editProperty()', name, type);
+	editProperty(name, type = 'data') {
+		console.log(this.toString() + '.editProperty()', name, type);
 		return new Promise((resolve, reject) => {
-            console.log(25, 'Launching Editor');
-            try {
-                let typeIdStr = type + 'Id';
-                if (this[typeIdStr] > 0) {
-                    new PROMPT(new MODEL().set({
-                        label: 'Edit ' + this.toString() + '[' + type + '].' + name,
-                        container: this,
-                        caller: this
-                    })).createForm(new MODEL().set({
-                        formtype: 'FORMPOST',
-                        className: this.className,
-                        type,
-                        id: this[typeIdStr],
-                        container: this
-                    })).then((form) => this.hideElements(form.children[0].children[0].children, name).then(() => {
-                        /* @todo This should trigger on a 'close' event */
-                        form.getDialog().close = () => form.getDialog().hide().then(() => {
-                            console.log('form,dialog', form, form.getDialog());
-                            form.getDialog().deselectAll();
-                        });
-                        let input = form.el.elements[name];
-                        input.focus();
-                        input.onkeyup = () => this[name].setInnerHTML(input.value);
-                        console.log(100);
-                        resolve(form.getDialog().show());
-                    }));
-                } else {
-                    console.warn(this.toString() + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
-                    resolve(false);
-                }
-            } catch (e) {
-                console.warn('Unable to edit', e);
-                reject(e);
-            }
+			console.log(25, 'Launching Editor');
+			try {
+				let typeIdStr = type + 'Id';
+				if (this[typeIdStr] > 0) {
+					new PROMPT(new MODEL().set({
+						label: 'Edit ' + this.toString() + '[' + type + '].' + name,
+						container: this,
+						caller: this
+					})).createForm(new MODEL().set({
+						formtype: 'FORMPOST',
+						className: this.className,
+						type,
+						id: this[typeIdStr],
+						container: this
+					})).then((form) => this.hideElements(form.get()[0].get()[0].get(), name).then(() => {
+						/* @todo This should trigger on a 'close' event */
+						form.getDialog().close = () => form.getDialog().hide().then(() => {
+							console.log('form,dialog', form, form.getDialog());
+							form.getDialog().deselectAll();
+						});
+						let input = form.el.elements[name];
+						input.focus();
+						input.onkeyup = () => this[name].setInnerHTML(input.value);
+						console.log(100);
+						resolve(form.getDialog().show());
+					}));
+				} else {
+					console.warn(this.toString() + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+					resolve(false);
+				}
+			} catch (e) {
+				console.warn('Unable to edit', e);
+				reject(e);
+			}
 		});
 	}
 }
