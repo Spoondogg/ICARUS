@@ -23,7 +23,7 @@ import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
-    @description A container can be expanded or hidden and have elements added to itself
+    @description A CONTAINER is a groupable, expandable {@link EL} that can have children
     @class
     @extends GROUP
 */
@@ -39,19 +39,19 @@ export default class CONTAINER extends GROUP {
 		super(node, element, model);
 		this.addClass('container');
 		this.implement(new Movable(this));
-		this.setContainerDefaults(model);		
+		this.setContainerDefaults(model);
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label));
 		this.navheader.implement(new Draggable(this));
 		this.implement(new Draggable(this));
 		this.body = new COLLAPSIBLE(this, new MODEL('body'));
-        this.body.implement(new Clickable(this.body));
+		this.body.implement(new Clickable(this.body));
 		this.addEvents();
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
-    }
+	}
 	/** Instantiates CONTAINER defaults, UId's, 
         elements etc based on the CONTAINER model
 	    @param {CONTAINERMODEL|MODEL} model Model
@@ -62,10 +62,9 @@ export default class CONTAINER extends GROUP {
 		/** A collection of named Element MODELs
             @type {Map<string, Array<MODEL>>}
         */
-        this.elements = new Map();
-        ['data', 'attributes', 'meta'].map((e) => this.createElementCollection(e, model));
-        
-        /** A Human Friendly label for a CONTAINER
+		this.elements = new Map();
+		['data', 'attributes', 'meta'].map((e) => this.createElementCollection(e, model));
+		/** A Human Friendly label for a CONTAINER
 		    @type {string}
 		*/
 		this.label = this.required(model.label || this.element);
@@ -73,23 +72,23 @@ export default class CONTAINER extends GROUP {
             CONTAINER(s) are considered to be PUBLIC by default
             @type {number}
         */
-        this.shared = this.required(model.shared || 1);
-        /** Simple status indicator
-            @type {number}
-        */
-        this.status = this.required(model.status || STATUS.DEFAULT);
-        /** Array of CONTAINER UIds 
-            @type {Array<number>}
-        */
-        this.subsections = this.required(model.subsections ? model.subsections.split(',') : [0]);
-        /** A Machine Friendly name for a CONTAINER
+		this.shared = this.required(model.shared || 1);
+		/** Simple status indicator
+		    @type {number}
+		*/
+		this.status = this.required(model.status || STATUS.DEFAULT);
+		/** Array of CONTAINER UIds 
+		    @type {Array<number>}
+		*/
+		this.subsections = this.required(model.subsections ? model.subsections.split(',') : [0]);
+		/** A Machine Friendly name for a CONTAINER
 		    @type {string}
 		*/
-        this.name = this.required(model.name || this.element);
+		this.name = this.required(model.name || this.element);
 		/** Represents an anchor/reference in the SIDEBAR NAV document-map 
 		    @type {NAVBAR} Document Map Reference NAVBAR
 		*/
-        this.reference = null;
+		this.reference = null;
 	}
 	// eslint-enable max-statements */
 	/** Generic construct method for EL/CONTAINER async actions and population
@@ -100,7 +99,7 @@ export default class CONTAINER extends GROUP {
 		//console.log(this.toString() + '.construct()');
 		return this.chain(() => {
 			this.constructElements();
-            if (model) { // Populate if model exists
+			if (model) { // Populate if model exists
 				if (model.children) {
 					return this.populate(model.children).then(
 						() => this.body.el.dispatchEvent(new Expand(this)));
@@ -108,19 +107,19 @@ export default class CONTAINER extends GROUP {
 			}
 			return this.ifEmpty();
 		}, this.toString() + '.construct() Failed');
-    }
-    /** Get child element by Name and optionally by Class
+	}
+	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
         @param {string} className Element Class
 	    @returns {Array<EL>} Child Item/Element Filtered Results
         @description This might also be recognized as this.getChildren()
 	*/
-    get(name = null, className = null) {
-        if (name === null && className === null) {
-            return this.body.pane.children;
-        }
-        return this.body.pane.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
-    }
+	get(name = null, className = null) {
+		if (name === null && className === null) {
+			return this.body.pane.children;
+		}
+		return this.body.pane.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+	}
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/
@@ -145,20 +144,20 @@ export default class CONTAINER extends GROUP {
 		/** @type {[MENU]} */
 		let [dataMenu] = menu.get(submenuName, 'MENU');
 		let type = submenuName.toString().toLowerCase();
-        this.elements.get(type).forEach((d) => {
-            let { name } = d.attributes;
+		this.elements.get(type).forEach((d) => {
+			let { name } = d.attributes;
 			let tab = dataMenu.addNavItem(new MODEL().set({
 				name,
 				label: d.label
 			}));
-            tab.el.addEventListener('activate', () => {                
-                console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
-                this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
+			tab.el.addEventListener('activate', () => {
+				console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
+				this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
 					(mdl) => {
 						console.log(' - Result', mdl);
 					}
-                );
-                this.editProperty(name, type); 
+				);
+				this.editProperty(name, type);
 			});
 		});
 	}
@@ -192,11 +191,11 @@ export default class CONTAINER extends GROUP {
 						childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
 							(n) => n.tabs.children.forEach(
 								(t) => t.el.dispatchEvent(new Deactivate(t))));
-                    });
-                    tab.el.addEventListener('select', () => {
-                        console.log('TODO: Launch SAVE() for ' + this.toString());
-                        this.save(false);
-                    });
+					});
+					tab.el.addEventListener('select', () => {
+						console.log('TODO: Launch SAVE() for ' + this.toString());
+						this.save(false);
+					});
 					/// Expand the NAVBAR and override its collapse Event
 					this.reference.el.dispatchEvent(new Expand(this.reference));
 					this.reference.collapse = () => true;
@@ -220,25 +219,25 @@ export default class CONTAINER extends GROUP {
 	    @param {MODEL} model Container Model
 	    @returns {void}
 	*/
-    createElementCollection(name, model) {
-        //console.log(this.toString() + '.createElementCollection()', name);
-        try {
-            let arr = this.elements.set(name, []).get(name);
-            /** @type {ATTRIBUTES} */
-            let collection = model[name];            
-            if (collection) {
-                Object.keys(collection).forEach((key) => arr.push(createInputModel('INPUT', key, collection[key])));
-            }
-            /** @type {Array<MODEL>} */
-            let containerData = DATAELEMENTS.get('CONTAINER')[name];
-            if (containerData) {
-                containerData.forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
-            }
-            /** @type {Array<MODEL>} */
-            let thisContainerData = DATAELEMENTS.get(this.className)[name];
-            if (thisContainerData) {
-                thisContainerData.forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
-            }
+	createElementCollection(name, model) {
+		//console.log(this.toString() + '.createElementCollection()', name);
+		try {
+			let arr = this.elements.set(name, []).get(name);
+			/** @type {ATTRIBUTES} */
+			let collection = model[name];
+			if (collection) {
+				Object.keys(collection).forEach((key) => arr.push(createInputModel('INPUT', key, collection[key])));
+			}
+			/** @type {Array<MODEL>} */
+			let containerData = DATAELEMENTS.get('CONTAINER')[name];
+			if (containerData) {
+				containerData.forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
+			}
+			/** @type {Array<MODEL>} */
+			let thisContainerData = DATAELEMENTS.get(this.className)[name];
+			if (thisContainerData) {
+				thisContainerData.forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
+			}
 		} catch (e) {
 			console.warn('Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
 		}
@@ -269,13 +268,13 @@ export default class CONTAINER extends GROUP {
 	*/
 	addSelectEvents() {
 		this.body.el.addEventListener('select', () => {
-            console.log('Selected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Expand(this.navheader));
+			console.log('Selected ' + this.toString(), this);
+			this.navheader.el.dispatchEvent(new Expand(this.navheader));
 			this.getMain().focusBody();
 		});
 		this.body.el.addEventListener('deselect', () => {
-            console.log('Deselected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Collapse(this.navheader));
+			console.log('Deselected ' + this.toString(), this);
+			this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});
 	}
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
@@ -285,25 +284,25 @@ export default class CONTAINER extends GROUP {
 		this.body.el.addEventListener('activate', () => {
 			try {
 				console.log('Activated ' + this.toString());
-                this.getMain().focusBody();
-                let siblings = this.getContainer().get().filter((c) => c.id !== this.id);
-                console.log(' - Siblings', siblings);
-                siblings.forEach((s) => {
-                    console.log('  -> Sibling', s.id, s);
-                    /*try {
-                        s.el.dispatchEvent(new Deactivate(s));
-                        //s.body.removeClass('active');
-                    } catch (e) {
-                        console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
-                    }*/
-                });
+				this.getMain().focusBody();
+				let siblings = this.getContainer().get().filter((c) => c.id !== this.id);
+				//console.log(' - Siblings', siblings);
+				siblings.forEach((s) => {
+					//console.log('  -> Sibling', s.id, s);
+					try {
+						s.body.el.dispatchEvent(new Deactivate(s));
+						//s.body.removeClass('active');
+					} catch (e) {
+						console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
+					}
+				});
 			} catch (e) {
 				//console.warn('Unable to focus body', this);
 			}
 		});
 		this.body.el.addEventListener('deactivate', () => {
 			try {
-                console.log('Deactivated ' + this.toString());
+				console.log('Deactivated ' + this.toString());
 				this.getMain().focusBody();
 			} catch (e) {
 				//console.warn('Unable to focus body', this);
@@ -425,8 +424,8 @@ export default class CONTAINER extends GROUP {
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns editProperty() to this CONTAINER
 	    @returns {Promise<DIALOG>} A Save PROMPT
 	*/
-    editProperty(name, type = 'data') {
-        throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.toString() + '.editProperty(' + name + ') not implemented.');
+	editProperty(name, type = 'data') {
+		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.toString() + '.editProperty(' + name + ') not implemented.');
 	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
@@ -440,30 +439,30 @@ export default class CONTAINER extends GROUP {
 			createInputModel('INPUT', 'className', this.className, 'className', 'TEXT', true),
 			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
+			createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
 			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'TEXT', true),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
-            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
-            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
+			createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
+			createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
+			createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
 		];
-    }
-    /** Dispatches the given Event to this CONTAINER's children
+	}
+	/** Dispatches the given Event to this CONTAINER's children
 	    @param {Event} event Event to dispatch
 	    @returns {void}
 	*/
-    dispatchToChildren(event) {
-        console.log(this.toString() + '.dispatchToChildren()');
-        this.get().forEach((c) => {
-            console.log(' - Child', c.toString(), c);
-            try {
-                c.el.dispatchEvent(event);
-            } catch (e) {
-                console.warn('Unable to dispatch event to child', c, event);
-            }
-        });
-    }
+	dispatchToChildren(event) {
+		console.log(this.toString() + '.dispatchToChildren()');
+		this.get().forEach((c) => {
+			console.log(' - Child', c.toString(), c);
+			try {
+				c.el.dispatchEvent(event);
+			} catch (e) {
+				console.warn('Unable to dispatch event to child', c, event);
+			}
+		});
+	}
 	/** Saves the state of the given Container
         @param {boolean} noPrompt If false (default), no prompt is displayed
         @abstract
@@ -516,11 +515,11 @@ export default class CONTAINER extends GROUP {
 	    @returns {Array<boolean>} Array of results
 	*/
 	setDefaultVisibility(model) {
-        if (model.data) {
-            let { tab } = this.navheader;
-            let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
+		if (model.data) {
+			let { tab } = this.navheader;
+			let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
 			let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
-            let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Expand(this.navheader)) : this.navheader.el.dispatchEvent(new Collapse(this.navheader));
+			let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Expand(this.navheader)) : this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 			return [a, b, c];
 		}
 		return [false, false];
@@ -670,13 +669,13 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-    }
-    /** Returns the MAIN Factory
+	}
+	/** Returns the MAIN Factory
 	    @returns {FACTORY} The Main Container Factory
 	*/
-    getFactory() {
-        return this.getMain().getFactory();
-    }
+	getFactory() {
+		return this.getMain().getFactory();
+	}
 	/** Adds a button to the given menu that promises to construct the given CONTAINER name
 	    @param {string} className CONTAINER class name to construct
 	    @param {MENU} menu Parent Menu
@@ -704,15 +703,15 @@ export default class CONTAINER extends GROUP {
 	    @param {number} id Container UId
 	    @returns {ThisType} Method Chain
 	*/
-    setId(id) {
-        if (typeof id !== 'undefined' && id !== null) {
-            /** CONTAINER unique id
-                @property {number} id
-            */
-            this.id = id;
-            //this.attributes.id = id; // UId is read-only in 'this'
-            this.el.setAttribute('id', id);
-        }
+	setId(id) {
+		if (typeof id !== 'undefined' && id !== null) {
+			/** CONTAINER unique id
+			    @property {number} id
+			*/
+			this.id = id;
+			//this.attributes.id = id; // UId is read-only in 'this'
+			this.el.setAttribute('id', id);
+		}
 		return this;
 	}
 	/** Returns the CONTAINER's name attribute
@@ -726,8 +725,8 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	setName(name) {
-        if (typeof name !== 'undefined' && name !== null) {
-            this.attributes.name = name;
+		if (typeof name !== 'undefined' && name !== null) {
+			this.attributes.name = name;
 			this.el.setAttribute('name', name);
 			this.name = name;
 		}
@@ -763,7 +762,7 @@ export default class CONTAINER extends GROUP {
 	/** Returns a string representation of this Container
 	    @returns {string} Classname(id)
 	*/
-    toString() {
+	toString() {
 		return this.className + '(' + (this.id || 0).toString() + ')'
 	}
 	/** Loads the given MODEL into CONTAINER.body.pane
@@ -796,17 +795,17 @@ export default class CONTAINER extends GROUP {
 	getSubSections() {
 		//console.log(this.className + '.getSubsections()', this);
 		let id = null;
-        let subsections = [];
-        try {
-            for (let c = 0; c < this.body.pane.el.children.length; c++) {
-                id = parseInt(this.body.pane.el.children[c].id);
-                if (!isNaN(id)) {
-                    subsections.push(id);
-                }
-            }
-        } catch (e) {
-            console.warn(this.toString() + '.getSubSections()', e);
-        }
+		let subsections = [];
+		try {
+			for (let c = 0; c < this.body.pane.el.children.length; c++) {
+				id = parseInt(this.body.pane.el.children[c].id);
+				if (!isNaN(id)) {
+					subsections.push(id);
+				}
+			}
+		} catch (e) {
+			console.warn(this.toString() + '.getSubSections()', e);
+		}
 		return subsections;
 	}
 	/** Returns the MAIN container
