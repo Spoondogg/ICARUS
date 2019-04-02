@@ -23,7 +23,7 @@ import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
-    @description A container can be expanded or hidden and have elements added to itself
+    @description A CONTAINER is a groupable, expandable {@link EL} that can have children
     @class
     @extends GROUP
 */
@@ -270,25 +270,25 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	addActivateEvents() {
-		this.body.el.addEventListener('activate', () => {
-			try {
-				console.log('Activated ' + this.toString());
+        this.body.el.addEventListener('activate', () => {
+            try {
+                console.log('Activated ' + this.toString());
                 this.getMain().focusBody();
                 let siblings = this.getContainer().get().filter((c) => c.id !== this.id);
-                console.log(' - Siblings', siblings);
+                //console.log(' - Siblings', siblings);
                 siblings.forEach((s) => {
-                    console.log('  -> Sibling', s.id, s);
-                    /*try {
-                        s.el.dispatchEvent(new Deactivate(s));
+                    //console.log('  -> Sibling', s.id, s);
+                    try {
+                        s.body.el.dispatchEvent(new Deactivate(s));
                         //s.body.removeClass('active');
                     } catch (e) {
                         console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
-                    }*/
+                    }
                 });
-			} catch (e) {
-				//console.warn('Unable to focus body', this);
-			}
-		});
+            } catch (e) {
+                //console.warn('Unable to focus body', this);
+            }
+        });
 		this.body.el.addEventListener('deactivate', () => {
 			try {
                 console.log('Deactivated ' + this.toString());
@@ -981,5 +981,5 @@ export default class CONTAINER extends GROUP {
 		return document.getElementsByTagName('meta').token.content;
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
 /* eslint-enable max-lines */
