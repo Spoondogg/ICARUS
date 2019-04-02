@@ -1598,7 +1598,8 @@ html {
                     }
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
-                        > nav {
+                        nav {
+                            //margin-bottom: .5rem;
                             &.menu {
                                 border-bottom: 0 solid transparent;
                                 border-top: 0 solid transparent;
