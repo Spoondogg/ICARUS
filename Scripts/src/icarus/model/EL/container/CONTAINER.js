@@ -97,7 +97,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
-		console.log(this.toString() + '.construct()');
+		//console.log(this.toString() + '.construct()');
 		return this.chain(() => {
 			this.constructElements();
             if (model) { // Populate if model exists
@@ -108,7 +108,19 @@ export default class CONTAINER extends GROUP {
 			}
 			return this.ifEmpty();
 		}, this.toString() + '.construct() Failed');
-	}
+    }
+    /** Get child element by Name and optionally by Class
+	    @param {string} name Element Name
+        @param {string} className Element Class
+	    @returns {Array<EL>} Child Item/Element Filtered Results
+        @description This might also be recognized as this.getChildren()
+	*/
+    get(name = null, className = null) {
+        if (name === null && className === null) {
+            return this.body.pane.children;
+        }
+        return this.body.pane.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+    }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
 	*/
