@@ -50,11 +50,11 @@ export default class MENU extends LIST {
 	    @returns {void}
 	*/
 	addCases(model) {
-		this.addCallback('MENU', () => this.addMenu(model));
-		this.addCallback('NAVITEM', () => this.addNavItem(model));
-		this.addCallback('NAVITEMICON', () => this.addNavItemIcon(model));
-		this.addCallback('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
-		this.addCallback('NAVSEPARATOR', () => this.addNavSeparator());
+		this.addConstructor('MENU', () => this.addMenu(model));
+		this.addConstructor('NAVITEM', () => this.addNavItem(model));
+		this.addConstructor('NAVITEMICON', () => this.addNavItemIcon(model));
+		this.addConstructor('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
+		this.addConstructor('NAVSEPARATOR', () => this.addNavSeparator());
 	}
 	/** When MENU loses focus, it will collapse any child MENU(s)
 	    This ensures that only one menu is visible at any given time

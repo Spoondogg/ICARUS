@@ -18,8 +18,8 @@ export default class LIST extends ITEM {
 		super(node, model, element);
 		this.addClass('list');
 		this.implement(new Collapsible(this));
-		this.addCallback('UL', () => this.addUL(model));
-		this.addCallback('LI', () => this.addLI(model));
+		this.addConstructor('UL', () => this.addUL(model));
+		this.addConstructor('LI', () => this.addLI(model));
 		this.el.addEventListener('collapse', () => {
 			if (this.el.children.length > 0) {
 				//console.log('TODO: EMPTYING ' + this.className + '[' + this.name + ']', this.className); //this
