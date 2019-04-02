@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, EL, Expand, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, DATAELEMENTS, EL, Expand, MODEL, createInputModel } from '../CONTAINER.js';
 import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
@@ -15,11 +15,9 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	    @param {MODEL} model datamodel
     */
 	constructor(node, model) {
-		super(node, 'DIV', model);
+        super(node, 'DIV', model, DATAELEMENTS.get('FORMELEMENTGROUP').containers);
 		this.addClass('form-element-group');
 		this.implement(new Hideable(this));
-		this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU')[0].empty();
-		['FORMINPUT'].forEach((c) => this.addContainerCase(c)); // 'FORMSELECT', 'FORMTEXTAREA' //'FORMELEMENT', 
 	}
 	constructElements() {
 		if (this.dataId > 0) {

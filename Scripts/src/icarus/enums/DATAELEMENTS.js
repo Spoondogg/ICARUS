@@ -33,210 +33,212 @@ export const createInputModel = (element, name, value = '', label = name, type =
     @type {Map<string, DATAEL>}
 */
 export const DATAELEMENTS = new Map([
-    [
+	[
         'CONTAINER', {
-            data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
-                createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'NUMBER')
-            ],
-            attributes: [],
-            meta: [createInputModel('TEXTAREA', 'description')]
-        }
-    ],
-    [
-        'ARTICLE', {
-            containers: ['JUMBOTRON', 'FORM', 'SECTION'],
-            data: [createInputModel('INPUT', 'header')],
-            attributes: [createInputModel('INPUT', 'name')]
-        }
-    ],
-    [
-        'CALLOUT', {
-            data: [
-                createInputModel('INPUT', 'icon'),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('INPUT', 'p', 'Text')
-            ]
-        }
-    ],
-    [
-        'DICTIONARY', {
-            data: [createInputModel('INPUT', 'language')]
-        }
-    ],
-    [
-        'FIELDSET', {
-            data: [createInputModel('INPUT', 'legend')],
-            attributes: [createInputModel('INPUT', 'name', 'fieldset-name')]
-        }
-    ],
-    [
-        'FORM', {
-            data: [createInputModel('INPUT', 'header')],
-            attributes: [
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'method', 'POST'),
-                createInputModel('INPUT', 'action', 'FORM/SUBMIT')
-            ]
-        }
-    ],
-    [
-        'FORMELEMENT', {
-            data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
-            ],
-            attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
-            ]
-        }
-    ],
-    [
-        'FORMELEMENTGROUP', {
-            data: [createInputModel('INPUT', 'header')],
-            attributes: [createInputModel('INPUT', 'name', 'text-input')]
-        }
-    ],
-    [
-        'FORMINPUT', {
-            data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
-            ],
-            attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
-            ]
-        }
-    ],
-    ['FORMPOST', {}],
-    ['FORMPOSTINPUT', {}],
-    [
-        'FORMTEXTAREA', {
-            data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
-            ],
-            attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
-            ]
-        }
-    ],
-    ['INDEX', {}],
-    ['INDEXMAIN', {}],
-    [
-        'INPUT', {
-            data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('INPUT', 'value')
-            ],
-            attributes: [createInputModel('INPUT', 'placeholder')]
-        }
-    ],
-    [
-        'JUMBOTRON', {
-            data: [
-                createInputModel('INPUT', 'header', 'JT Header'),
-                createInputModel('TEXTAREA', 'p', 'JT Textarea'),
-                createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-                    inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
-                }),
-                createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
-                createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
-            ],
-            attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
-        }
-    ],
-    ['LIST', {}],
-    [
-        'LISTITEM', {
-            data: [createInputModel('INPUT', 'p', 'Text')]
-        }
-    ],
-    [
-        'MAIN', {
-            containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
-            data: [
-                createInputModel('INPUT', 'author', 'AuthorName'),
-                createInputModel('INPUT', 'title', 'MAIN')
-            ],
-            attributes: []
-        }
-    ],
-    [
-        'PARAGRAPH', {
-            data: [createInputModel('INPUT', 'p', 'Paragraph Text')]
-        }
-    ],
-    [
-        'SECTION', {
-            data: [createInputModel('INPUT', 'header')],
-            attributes: [createInputModel('INPUT', 'name')]
-        }
-    ],
-    ['SIDEBAR', {}],
-    ['TABLE', {}],
-    [
-        'TEXTBLOCK', {
-            data: [
-                createInputModel('INPUT', 'header'),
-                createInputModel('TEXTAREA', 'p', ' ')
-            ]
-        }
-    ],
-    [
-        'TEXTBLOCK', {
-            data: [
-                createInputModel('INPUT', 'header'),
-                createInputModel('TEXTAREA', 'p', ' ')
-            ]
-        }
-    ],
-    [
-        'TEXTBLOCK', {
-            data: [
-                createInputModel('INPUT', 'header'),
-                createInputModel('TEXTAREA', 'p', ' ')
-            ]
-        }
-    ],
-    [
-        'THUMBNAIL', {
-            data: [
-                createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-                    inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
-                }),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('INPUT', 'p', 'Text'),
-                createInputModel('INPUT', 'bgImage')
-            ]
-        }
-    ],
-    [
-        'WORD', {
-            data: [
-                createInputModel('INPUT', 'language'),
-                createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
-                createInputModel('INPUT', 'value'),
-                createInputModel('INPUT', 'definition')
-            ]
-        }
-    ]
+			data: [
+				createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+				createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'NUMBER')
+			],
+			attributes: [],
+			meta: [createInputModel('TEXTAREA', 'description')]
+		}
+	],
+	[
+		'ARTICLE', {
+			containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+			data: [createInputModel('INPUT', 'header')],
+			attributes: [createInputModel('INPUT', 'name')]
+		}
+	],
+	[
+		'CALLOUT', {
+			data: [
+				createInputModel('INPUT', 'icon'),
+				createInputModel('INPUT', 'header', 'Header'),
+				createInputModel('INPUT', 'p', 'Text')
+			]
+		}
+	],
+	[
+		'DICTIONARY', {
+			data: [createInputModel('INPUT', 'language')]
+		}
+	],
+	[
+		'FIELDSET', {
+			data: [createInputModel('INPUT', 'legend')],
+			attributes: [createInputModel('INPUT', 'name', 'fieldset-name')]
+		}
+	],
+	[
+		'FORM', {
+			containers: ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET'],
+			data: [createInputModel('INPUT', 'header')],
+			attributes: [
+				createInputModel('INPUT', 'name', 'text-input'),
+				createInputModel('INPUT', 'method', 'POST'),
+				createInputModel('INPUT', 'action', 'FORM/SUBMIT')
+			]
+		}
+	],
+	[
+		'FORMELEMENT', {
+			data: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'Text Input'),
+				createInputModel('INPUT', 'label', 'Input Label'),
+				createInputModel('INPUT', 'value')
+			],
+			attributes: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'text-input'),
+				createInputModel('INPUT', 'value', ''),
+				createInputModel('INPUT', 'placeholder', '')
+			]
+		}
+	],
+	[
+		'FORMELEMENTGROUP', {
+			containers: ['FORMINPUT'],
+			data: [createInputModel('INPUT', 'header')],
+			attributes: [createInputModel('INPUT', 'name', 'text-input')]
+		}
+	],
+	[
+		'FORMINPUT', {
+			data: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'Text Input'),
+				createInputModel('INPUT', 'label', 'Input Label'),
+				createInputModel('INPUT', 'value')
+			],
+			attributes: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'text-input'),
+				createInputModel('INPUT', 'value', ''),
+				createInputModel('INPUT', 'placeholder', '')
+			]
+		}
+	],
+	['FORMPOST', {}],
+	['FORMPOSTINPUT', {}],
+	[
+		'FORMTEXTAREA', {
+			data: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'Text Input'),
+				createInputModel('INPUT', 'label', 'Input Label'),
+				createInputModel('INPUT', 'value')
+			],
+			attributes: [
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name', 'text-input'),
+				createInputModel('INPUT', 'value', ''),
+				createInputModel('INPUT', 'placeholder', '')
+			]
+		}
+	],
+	['INDEX', {}],
+	['INDEXMAIN', {}],
+	[
+		'INPUT', {
+			data: [
+				createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+				createInputModel('INPUT', 'type', 'TEXT'),
+				createInputModel('INPUT', 'name'),
+				createInputModel('INPUT', 'value')
+			],
+			attributes: [createInputModel('INPUT', 'placeholder')]
+		}
+	],
+	[
+		'JUMBOTRON', {
+			data: [
+				createInputModel('INPUT', 'header', 'JT Header'),
+				createInputModel('TEXTAREA', 'p', 'JT Textarea'),
+				createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+					inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
+				}),
+				createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
+				createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
+			],
+			attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
+		}
+	],
+	['LIST', {}],
+	[
+		'LISTITEM', {
+			data: [createInputModel('INPUT', 'p', 'Text')]
+		}
+	],
+	[
+		'MAIN', {
+			containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+			data: [
+				createInputModel('INPUT', 'author', 'AuthorName'),
+				createInputModel('INPUT', 'title', 'MAIN')
+			],
+			attributes: []
+		}
+	],
+	[
+		'PARAGRAPH', {
+			data: [createInputModel('INPUT', 'p', 'Paragraph Text')]
+		}
+	],
+	[
+		'SECTION', {
+			data: [createInputModel('INPUT', 'header')],
+			attributes: [createInputModel('INPUT', 'name')]
+		}
+	],
+	['SIDEBAR', {}],
+	['TABLE', {}],
+	[
+		'TEXTBLOCK', {
+			data: [
+				createInputModel('INPUT', 'header'),
+				createInputModel('TEXTAREA', 'p', ' ')
+			]
+		}
+	],
+	[
+		'TEXTBLOCK', {
+			data: [
+				createInputModel('INPUT', 'header'),
+				createInputModel('TEXTAREA', 'p', ' ')
+			]
+		}
+	],
+	[
+		'TEXTBLOCK', {
+			data: [
+				createInputModel('INPUT', 'header'),
+				createInputModel('TEXTAREA', 'p', ' ')
+			]
+		}
+	],
+	[
+		'THUMBNAIL', {
+			data: [
+				createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+					inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
+				}),
+				createInputModel('INPUT', 'header', 'Header'),
+				createInputModel('INPUT', 'p', 'Text'),
+				createInputModel('INPUT', 'bgImage')
+			]
+		}
+	],
+	[
+		'WORD', {
+			data: [
+				createInputModel('INPUT', 'language'),
+				createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
+				createInputModel('INPUT', 'value'),
+				createInputModel('INPUT', 'definition')
+			]
+		}
+	]
 ]);
 /* eslint-enable max-params */
