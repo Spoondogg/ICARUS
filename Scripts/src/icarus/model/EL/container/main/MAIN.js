@@ -2,7 +2,7 @@
 import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import CONTAINERFACTORY from '../../../../controller/CONTAINERFACTORY.js';
+import CONTAINERFACTORY from '../CONTAINERFACTORY.js'; //'../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
