@@ -34,8 +34,147 @@ import WORD from './word/WORD.js';
     @class
     @deprecated
 */
-export default class CONTAINERFACTORY {
+export default class CONTAINERFACTORY extends FACTORY {
     /* eslint-disable max-lines-per-function, complexity, max-statements */
+    /** Constructs a FACTORY to build CONTAINER Classes */
+    constructor() {
+        super('CONTAINER');
+    }
+    /** Builds the CONTAINER Class
+        @param {SPAN} span Parent Node temporary element
+	    @param {string} className Container Constructor Name
+	    @param {number} id Container UId
+        @param {Object} payload JSON Payload
+        @returns {EL} Newly contructed Class
+    */
+    build(span, className, id, payload) {
+        let parentContainer = span.getContainer();
+        console.log(parentContainer.toString() + ' is building a(n) ' + className, parentContainer);
+        /** @type {CONTAINER} */
+        let element = null;
+        switch (className) {
+            case 'ARTICLE':
+                element = new ARTICLE(span, payload.model);
+                break;
+            case 'BANNER':
+                element = new BANNER(span, payload.model);
+                break;
+            case 'CALLOUT':
+                element = new CALLOUT(span, payload.model);
+                break;
+            case 'CHAT':
+                element = new CHAT(span, payload.model);
+                break;
+            case 'CLASSVIEWER':
+                element = new CLASSVIEWER(span, payload.model);
+                break;
+            case 'DICTIONARY':
+                element = new DICTIONARY(span, payload.model);
+                break;
+            case 'FORM':
+                element = new FORM(span, payload.model);
+                break;
+            case 'FIELDSET':
+                element = new FIELDSET(span, payload.model);
+                break;
+            case 'FORMELEMENT':
+                element = this.processFormElement(span, payload);
+                break;
+            case 'FORMELEMENTGROUP':
+                element = new FORMELEMENTGROUP(span, payload.model);
+                break;
+            case 'FORMINPUT':
+                element = new FORMINPUT(span, payload.model);
+                break;
+            case 'FORMSELECT':
+                element = new FORMSELECT(span, payload.model);
+                break;
+            case 'FORMTEXTAREA':
+                element = new FORMTEXTAREA(span, payload.model);
+                break;
+            case 'IMAGEGALLERY':
+                element = new IMAGEGALLERY(span, payload.model);
+                break;
+            case 'INDEX':
+                element = new INDEX(span, payload.model);
+                break;
+            case 'INDEXMAIN':
+                element = new INDEXMAIN(span, payload.model);
+                break;
+            case 'INDEXTHUMBNAIL':
+                element = new INDEXTHUMBNAIL(span, payload.model);
+                break;
+            case 'JUMBOTRON':
+                element = new JUMBOTRON(span, payload.model);
+                break;
+            case 'LI':
+                element = new LI(span, payload.model);
+                break;
+            //case 'LIST':
+            //    container = new LIST(span, payload.model);
+            //    break;
+            //case 'LISTITEM':
+            //    container = new LISTITEM(span, payload.model);
+            //    break;
+            case 'MENU':
+                element = new MENU(span, payload.model);
+                break;
+            case 'NAVITEM':
+                element = new NAVITEM(span, payload.model);
+                break;
+            case 'NAVSEPARATOR':
+                element = new NAVSEPARATOR(span, payload.model);
+                break;
+            case 'OPTION':
+                element = new OPTION(span, payload.model);
+                break;
+            case 'SECTION':
+                element = new SECTION(span, payload.model);
+                break;
+            case 'SPAN':
+                element = new SPAN(span, payload.model);
+                break;
+            case 'TEXTBLOCK':
+                element = new TEXTBLOCK(span, payload.model);
+                break;
+            case 'THUMBNAIL':
+                element = new NAVTHUMBNAIL(span, payload.model);
+                break;
+            case 'UL':
+                element = new UL(span, payload.model);
+                break;
+            case 'WORD':
+                element = new WORD(span, payload.model);
+                break;
+            default:
+                throw Error(this.toString() + ' No constructor exists for {' + className + '}', parentContainer);
+        }
+        return element;
+    }
+    /** Injects dependencies into the given Element/Class
+	    @param {EL} node Parent node (Generally append to node.body.pane)
+	    @param {SPAN} span Parent Node temporary element
+	    @param {number} index Slot reserved in children array
+	    @param {EL} element Element/Class
+	    @returns {void}
+	*/
+    injectDependencies(node, span, index, element) {
+        try {
+			/** Saves the state of the given Container
+			    @param {boolean} noPrompt If false (default), no prompt is displayed
+			    @abstract
+			    @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
+			    @returns {Promise} A Promise to save this Container
+			*/
+            element.save = (noPrompt) => this.save(noPrompt, element, element);
+            element.quickSaveFormPost = this.quickSaveFormPost;
+            element.editProperty = this.editProperty;
+        } catch (e) {
+            span.destroy();
+            node.children.splice(index, 1);
+            console.log(e);
+        }
+    }
     /** Create appropriate FORM ELEMENT based on payload.model
         @param {SPAN} span Container Temporary Holder
         @param {{model:Object}} payload Json Payload
@@ -81,14 +220,9 @@ export default class CONTAINERFACTORY {
             let container = null;
             if (payload.className === 'ERROR') {
                 if (payload.exception === 'AuthenticationException') {
-                    try {
-                        console.log('An Authentication Exception occurred');
-                        node.getContainer().getMain().login();
-                    } catch (e) {
-                        console.warn('Unable to launch login', e);
-                    }
+                    this.authenticationException(node);
                 } else {
-                    console.warn('An Error Occurred', className + '/Get/' + id, payload);
+                    console.warn(this.toString() + ' An Error Occurred', className + '/GET/' + id, payload);
                 }
             } else {
                 switch (className) {
