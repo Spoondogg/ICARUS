@@ -1,5 +1,5 @@
 /** @module */
-//import FACTORY, { ATTRIBUTES, EL, MODEL, SPAN } from '../FACTORY.js';
+import FACTORY, { ATTRIBUTES, EL, MODEL, SPAN } from '../FACTORY.js';
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import ARTICLE from '../article/ARTICLE.js';
@@ -28,7 +28,7 @@ import PROMPT from '../dialog/prompt/PROMPT.js';
 import SECTION from '../section/SECTION.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 import WORD from './word/WORD.js';
-/** DEPRECATED: Constructs various Containers and returns them to be appended
+/** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
@@ -36,7 +36,34 @@ import WORD from './word/WORD.js';
 */
 export default class CONTAINERFACTORY {
     /* eslint-disable max-lines-per-function, complexity, max-statements */
-	/** Gets this Container from the database via ajax GET request.
+    /** Create appropriate FORM ELEMENT based on payload.model
+        @param {SPAN} span Container Temporary Holder
+        @param {{model:Object}} payload Json Payload
+        @returns {FORMELEMENT} Form Element
+    */
+    processFormElement(span, payload) {
+        let element = null;
+        if (payload.model.type === 'FORMPOSTINPUT') {
+            element = new FORMPOSTINPUT(span, payload.model);
+        } else {
+            switch (payload.model.element) {
+                case 'TEXTAREA':
+                    element = new FORMTEXTAREA(span, payload.model);
+                    break;
+                case 'SELECT':
+                    element = new FORMSELECT(span, payload.model);
+                    break;
+                case 'INPUT':
+                    element = new FORMINPUT(span, payload.model);
+                    break;
+                default:
+                    element = new FORMINPUT(span, payload.model);
+                    break;
+            }
+        }
+        return element;
+    }
+    /** Gets this Container from the database via ajax GET request.
 	    Retrieves object model and returns the container.
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
@@ -90,24 +117,7 @@ export default class CONTAINERFACTORY {
                         container = new FIELDSET(span, payload.model);
                         break;
                     case 'FORMELEMENT':
-                        if (payload.model.type === 'FORMPOSTINPUT') {
-                            container = new FORMPOSTINPUT(span, payload.model);
-                        } else {
-                            switch (payload.model.element) {
-                                case 'TEXTAREA':
-                                    container = new FORMTEXTAREA(span, payload.model);
-                                    break;
-                                case 'SELECT':
-                                    container = new FORMSELECT(span, payload.model);
-                                    break;
-                                case 'INPUT':
-                                    container = new FORMINPUT(span, payload.model);
-                                    break;
-                                default:
-                                    container = new FORMINPUT(span, payload.model);
-                                    break;
-                            }
-                        }
+                        container = this.processFormElement(span, payload);
                         break;
                     case 'FORMELEMENTGROUP':
                         container = new FORMELEMENTGROUP(span, payload.model);
