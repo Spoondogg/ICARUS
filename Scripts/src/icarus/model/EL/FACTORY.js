@@ -1,5 +1,6 @@
 ﻿/** @module */
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
+import { AbstractMethodError } from './container/CONTAINER.js';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -39,7 +40,7 @@ export default class FACTORY {
     */
     injectDependencies(node, span, index, element) {
         try {
-            // Inject Dependencies
+            throw new AbstractMethodError('FACTORY.injectDependencies not set');
         } catch (e) {
             span.destroy();
             node.children.splice(index, 1);
