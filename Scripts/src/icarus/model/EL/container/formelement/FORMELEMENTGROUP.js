@@ -17,7 +17,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	constructor(node, model) {
         super(node, 'DIV', model, DATAELEMENTS.get('FORMELEMENTGROUP').containers);
 		this.addClass('form-element-group');
-		this.implement(new Hideable(this));
+        this.implement(new Hideable(this));
 	}
 	constructElements() {
 		if (this.dataId > 0) {
@@ -39,34 +39,63 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 				reject(e);
 			}
 		});
-	}
-	/** Adds the given FORMELEMENT to this group
-	    @param {MODEL} input A FORM INPUT MODEL
-	    @returns {FORMELEMENT} A FORMELEMENT object
+    }
+    /** Constructs a FORMPOSTINPUT for this FORMELEMENTGROUP
+	    @param {MODEL} model Model
+	    @returns {FORMPOSTINPUT} A FORMPOSTINPUT
 	*/
-	addInputElement(input) {
+    addFormPostInput(model) {
+        return this.addChild(new FORMPOSTINPUT(this.body.pane, model));
+    }
+    /** Constructs a FORMTEXTAREA for this FORMELEMENTGROUP
+	    @param {MODEL} model Model
+	    @returns {FORMTEXTAREA} A FORMTEXTAREA
+	*/
+    addFormTextArea(model) {
+        return this.addChild(new FORMTEXTAREA(this.body.pane, model));
+    }
+    /** Constructs a FORMSELECT for this FORMELEMENTGROUP
+	    @param {MODEL} model Model
+	    @returns {FORMSELECT} A FORMSELECT
+	*/
+    addFormSelect(model) {
+        return this.addChild(new FORMSELECT(this.body.pane, model));
+    }
+    /** Constructs a FORMINPUT for this FORMELEMENTGROUP
+	    @param {MODEL} model Model
+	    @returns {FORMINPUT} A FORMINPUT
+	*/
+    addFormInput(model) {
+        return this.addChild(new FORMINPUT(this.body.pane, model));
+    }
+	/** Adds the given FORMELEMENT to this group
+	    @param {MODEL} model A FORM INPUT MODEL
+	    @returns {FORMELEMENT} A FORMELEMENT object
+        @todo Consider making a FORMINPUTFACTORY
+	*/
+    addInputElement(model) {
 		return new Promise((resolve, reject) => {
 			try {
-				let inp = null;
-				if (input.type === 'FORMPOSTINPUT') {
-					inp = new FORMPOSTINPUT(this.body.pane, input);
+				let input = null;
+				if (model.type === 'FORMPOSTINPUT') {
+                    input = this.addFormPostInput(model);
 				} else {
-					switch (input.element) {
+					switch (model.element) {
 						case 'TEXTAREA':
-							inp = new FORMTEXTAREA(this.body.pane, input);
+                            input = this.addFormTextArea(model);
 							break;
 						case 'SELECT':
-							inp = new FORMSELECT(this.body.pane, input);
+                            input = this.addFormSelect(model);
 							break;
 						case 'INPUT':
-							inp = new FORMINPUT(this.body.pane, input);
+                            input = this.addFormInput(model);
 							break;
 						default:
-							inp = new FORMINPUT(this.body.pane, input);
+                            input = this.addFormInput(model);
 							break;
 					}
 				}
-				resolve(this.addChild(inp));
+                resolve(input);
 			} catch (e) {
 				reject(e);
 			}
