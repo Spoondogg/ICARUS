@@ -27,10 +27,11 @@ import PROMPT from '../model/el/dialog/prompt/PROMPT.js';
 import SECTION from '../model/el/section/SECTION.js';
 import TEXTBLOCK from '../model/el/container/textblock/TEXTBLOCK.js';
 import WORD from '../model/el/container/word/WORD.js';
-/** Constructs various Containers and returns them to be appended
+/** DEPRECATED: Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
+    @deprecated
 */
 export default class CONTAINERFACTORY {
 	/* eslint-disable max-lines-per-function, complexity, max-statements */
