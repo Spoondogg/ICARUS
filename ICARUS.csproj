@@ -612,7 +612,6 @@
     <Content Include="Content\Images\startup\startup-750x1334.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
-    <Content Include="Scripts\src\icarus\controller\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
@@ -657,6 +656,7 @@
     <Content Include="Scripts\src\icarus\model\el\a\A.js" />
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
     <Content Include="Scripts\src\icarus\model\el\button\switch\SWITCH.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
