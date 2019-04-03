@@ -152,6 +152,8 @@ export default class CONTAINERFACTORY extends FACTORY {
         return element;
     }
     /** Injects dependencies into the given Element/Class
+        @description In order to avoid cyclic redundancy on imports, 
+        CRUD actions are injected into the Class from its FACTORY
 	    @param {EL} node Parent node (Generally append to node.body.pane)
 	    @param {SPAN} span Parent Node temporary element
 	    @param {number} index Slot reserved in children array
@@ -202,8 +204,7 @@ export default class CONTAINERFACTORY extends FACTORY {
         }
         return element;
     }
-    /** Gets this Container from the database via ajax GET request.
-	    Retrieves object model and returns the container.
+    /** Constructs a CONTAINER based on the given id and appends to node
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
 	    @param {EL} node Parent node (Generally append to node.body.pane)
@@ -212,7 +213,6 @@ export default class CONTAINERFACTORY extends FACTORY {
 	    @returns {CONTAINER} A newly constructed container
 	*/
     get(node, className, id) {
-        //console.log('CONTAINERFACTORY.get(' + className + ',' + id + ');');
         let span = new SPAN(node, new MODEL());
         let index = node.children.push(span); // Reserve the slot in the array        
         return $.getJSON('/' + className + '/GET/' + id, (payload) => {
@@ -323,35 +323,7 @@ export default class CONTAINERFACTORY extends FACTORY {
                         throw Error('No constructor exists for CONTAINER{' + className + '}');
                 }
                 node.children[index] = container;
-                try {
-                    /// WHY AM I DOING THIS????
-                    /// It really doesn't make sense to do this, unless...  there was magic involved.
-                    /// - [ ] Verify if magic was involved
-                    /// 2019-03-21
-                    /// Ok, so you inject the CRUD actions into the CONTAINER because...
-                    /// - You don't want to import a PROMPT and all the CRUD stuff on each instantiation...?
-                    /// - Yes...  Creating a FORM inside a CONTAINER would create a cyclic redundancy error
-                    /// MAGIC CONFIRMED
-                    /// So, can you bind the method or use an arrow function instead?
-                    /// You also might be able to bypass a whole bunch of chaining to get back to MAIN
-                    ///  - Consider calling MAIN from the FACTORY...  Could that be done?
-                    // Inject CRUD actions and dependencies // Consider a Crudable Interface (IFACE)
-					/** Saves the state of the given Container
-                        @param {boolean} noPrompt If false (default), no prompt is displayed
-                        @abstract
-                        @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
-	                    @returns {Promise} A Promise to save this Container
-	                */
-                    container.save = (noPrompt) => this.save(noPrompt, container, container);
-                    container.quickSaveFormPost = this.quickSaveFormPost;
-                    container.editProperty = this.editProperty;
-                    // Overwrite span with 
-                    span.el.parentNode.replaceChild(container.el, span.el);
-                } catch (e) {
-                    span.destroy();
-                    node.children.splice(index, 1);
-                    console.log(e);
-                }
+                this.injectDependencies(node, span, index, container);
                 return node.children[index];
             }
         }).then(() => {
@@ -456,18 +428,28 @@ export default class CONTAINERFACTORY extends FACTORY {
                         type,
                         id: this[typeIdStr],
                         container: this
-                    })).then((form) => this.hideElements(form.get()[0].get()[0].get(), name).then(() => {
-                        /* @todo This should trigger on a 'close' event */
-                        form.getDialog().close = () => form.getDialog().hide().then(() => {
-                            console.log('form,dialog', form, form.getDialog());
-                            form.getDialog().deselectAll();
+                    })).then((form) => {
+                        console.log('EDITFORM', form.get()[0].get());
+                        /*
+                            FORMPOSTINPUTS do not correctly push INPUTS into
+                            this.body.pane.children but instead just INPUT.children
+
+                            In the future, look to merge this approach with standard
+                            FORM creation
+                        */
+                        form.hideElements(form.get()[0].get()[0].get(), name).then(() => {
+                            /* @todo This should trigger on a 'close' event */
+                            form.getDialog().close = () => form.getDialog().hide().then(() => {
+                                console.log('form,dialog', form, form.getDialog());
+                                form.getDialog().deselectAll();
+                            });
+                            let input = form.el.elements[name];
+                            input.focus();
+                            input.onkeyup = () => this[name].setInnerHTML(input.value);
+                            console.log(100);
+                            resolve(form.getDialog().show());
                         });
-                        let input = form.el.elements[name];
-                        input.focus();
-                        input.onkeyup = () => this[name].setInnerHTML(input.value);
-                        console.log(100);
-                        resolve(form.getDialog().show());
-                    }));
+                    });
                 } else {
                     console.warn(this.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
                     resolve(false);
@@ -479,5 +461,5 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, CONTAINER, EL, MODEL }
+export { ATTRIBUTES, CONTAINER, EL, FORM, MODEL }
 /* eslint-enable */
