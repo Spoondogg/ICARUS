@@ -1,6 +1,6 @@
 /** @module */
 import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
-import CONTAINERFACTORY from '../model/el/container/CONTAINERFACTORY.js'; //'./CONTAINERFACTORY.js';
+import FACTORY from '../model/el/FACTORY.js';
 import WATERMARK from '../helper/WATERMARK.js';
 /** An Application Class
     @description Constructs the Application Controller and initializes the MAIN Container
@@ -17,7 +17,7 @@ export default class CONTROLLER extends MODEL {
         @param {string} name The application name
         @param {string} version The application version
         @param {string} token The session token
-        @param {CONTAINERFACTORY} factory The container constructor factory 
+        @param {FACTORY} factory The default FACTORY
     */
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100, name, version, token, factory) { // eslint-disable-line max-params
 		super().set({
@@ -36,27 +36,24 @@ export default class CONTROLLER extends MODEL {
 		this.url = new URL(window.location.href);
 		/** @property {boolean} debug If true, debug outputs are shown */
 		this.debug = true;
-		/** @property {string} returnUrl If a ReturnUrl is provided, redirect to that Url */
-		this.returnUrl = this.url.searchParams.get('ReturnUrl');
-		if (this.returnUrl) {
-			this.returnUrl = this.url.origin + this.returnUrl;
-			location.href = this.returnUrl;
-		}
+        this.setReturnUrl();
 		this.loader = new LOADER(0);
 		this.loader.log(10, 'Launching application...');
-		/** @property {PROMPT} prompt A dialog prompting the user for input
-			@type {PROMPT}
-			@todo There should never be more than one prompt in the DOM.
-		    @todo Create a queue to hold multiple prompts
-		
-		this.prompt = null;*/
-		/** @property {Array<string>} containers A list of allowed containers */
-		this.containers = ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'];
-		/** @property {MAIN} main The MAIN Container */
 		this.main = new MAIN(this);
 		this.showLoginPrompt(user === 'Guest');
 		this.keyBindings();
-	}
+    }
+    /** If a ReturnUrl is provided, redirect to that Url
+        @returns {void}
+    */
+    setReturnUrl() {
+        /** @type {string} */
+        this.returnUrl = this.url.searchParams.get('ReturnUrl');
+        if (this.returnUrl) {
+            this.returnUrl = this.url.origin + this.returnUrl;
+            location.href = this.returnUrl;
+        }
+    }
 	/** Sets application keybindings
 	    @returns {void}
 	    @see https://stackoverflow.com/a/14180949/722785
@@ -126,4 +123,4 @@ export default class CONTROLLER extends MODEL {
 		return this;
 	}
 }
-export { CONTAINERFACTORY }
+export { FACTORY }
