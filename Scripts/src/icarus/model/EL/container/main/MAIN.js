@@ -1,8 +1,8 @@
 /** @module */
 import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINERFACTORY, { FORM } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import CONTAINERFACTORY from '../CONTAINERFACTORY.js'; //'../../../../controller/CONTAINERFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -472,4 +472,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, CONTAINERFACTORY, Deactivate, EL, FORM, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
