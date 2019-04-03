@@ -121,7 +121,22 @@ export const DATAELEMENTS = new Map([
 		}
 	],
 	['FORMPOST', {}],
-	['FORMPOSTINPUT', {}],
+    [
+        'FORMPOSTINPUT', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
 	[
 		'FORMTEXTAREA', {
 			data: [
