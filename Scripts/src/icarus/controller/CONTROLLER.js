@@ -1,6 +1,6 @@
 /** @module */
 import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
-import CONTAINERFACTORY from './CONTAINERFACTORY.js';
+import CONTAINERFACTORY from '../model/el/container/CONTAINERFACTORY.js'; //'./CONTAINERFACTORY.js';
 import WATERMARK from '../helper/WATERMARK.js';
 /** An Application Class
     @description Constructs the Application Controller and initializes the MAIN Container

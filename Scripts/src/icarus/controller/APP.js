@@ -1,6 +1,6 @@
 /** @namespace ICARUS */
 /** @module */
-import CONTAINERFACTORY from './CONTAINERFACTORY.js';
+import CONTAINERFACTORY from '../model/el/container/CONTAINERFACTORY.js'; //'./CONTAINERFACTORY.js';
 import CONTROLLER from './CONTROLLER.js';
 import TOKEN from './TOKEN.js';
 /** An Application Controller
@@ -16,8 +16,7 @@ export default class APP extends CONTROLLER {
 		@param {number} id The unique application id
 		@param {string} user A friendly username for the current user
 		@param {boolean} dev If true, dev-options are enabled
-		@param {number} recursionLimit Limits recursion depth 
-	    param {CONTAINERFACTORY} factory The container constructor factory
+		@param {number} recursionLimit Limits recursion depth
 	*/
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100) {
 		super(id, user, dev, recursionLimit, 'Icarus', '0.5.20190228', TOKEN.setToken().value, new CONTAINERFACTORY());
