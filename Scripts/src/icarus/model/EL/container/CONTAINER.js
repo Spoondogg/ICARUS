@@ -97,7 +97,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
-		console.log(this.toString() + '.construct()');
+		//console.log(this.toString() + '.construct()');
 		return this.chain(() => {
 			this.constructElements();
             if (model) { // Populate if model exists
@@ -283,31 +283,44 @@ export default class CONTAINER extends GROUP {
 	*/
 	addActivateEvents() {
         this.body.el.addEventListener('activate', () => {
+            console.log('Activated ' + this.toString(), this);
             try {
-                console.log('Activated ' + this.toString());
                 this.getMain().focusBody();
-                let siblings = this.getContainer().get().filter((c) => c.id !== this.id);
-                //console.log(' - Siblings', siblings);
+            } catch (e) {
+                if (!(e instanceof TypeError)) {
+                    console.warn(this.toString() + '.addActivateEvents()', e);
+                    throw e;
+                }
+            }
+            /// IF id is undefined, try comparing by attributes.name
+            try {
+                let siblings = this.node.get();
+                if (this.id) {                    
+                    siblings = siblings.filter((c) => c.id !== this.id);
+                } else if (this.name) {
+                    siblings = siblings.filter((c) => c.attributes.name !== this.attributes.name);                    
+                }
                 siblings.forEach((s) => {
-                    //console.log('  -> Sibling', s.id, s);
                     try {
                         s.body.el.dispatchEvent(new Deactivate(s));
-                        //s.body.removeClass('active');
                     } catch (e) {
                         console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
                     }
                 });
             } catch (e) {
-                //console.warn('Unable to focus body', this);
+                console.warn(this.toString() + '.addActivateEvents() Unable to focus body', e);
             }
         });
 		this.body.el.addEventListener('deactivate', () => {
-			try {
-                console.log('Deactivated ' + this.toString());
-				this.getMain().focusBody();
-			} catch (e) {
-				//console.warn('Unable to focus body', this);
-			}
+            console.log('Deactivated ' + this.toString());
+            try {
+                this.getMain().focusBody();
+            } catch (e) {
+                if (!(e instanceof TypeError)) {
+                    console.warn(this.toString() + '.addActivateEvents()', e);
+                    throw e;
+                }
+            }
 		});
 	}
 	/** Adds 'moveUp' and 'moveDown' events to this CONTAINER
@@ -417,7 +430,8 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise} Resolve on success
 	*/
 	hideElements(elements, name = '') {
-		return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
+        console.log(this.toString() + '.hideElements()', elements, name);
+        return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
 	}
 	/** Launches a FORM POST editor for the specified element
         @param {string} name The name of the input we are editing
