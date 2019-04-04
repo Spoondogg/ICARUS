@@ -27,3 +27,6 @@
     @property {ATTRIBUTES} data Data
     @property {ATTRIBUTES} meta Meta
 */
+/** @typedef {Object} FORMMODEL A Form Model Constructor TypeDef
+    @property {CONTAINER} container Container
+*/
