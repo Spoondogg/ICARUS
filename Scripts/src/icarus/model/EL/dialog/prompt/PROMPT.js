@@ -50,10 +50,12 @@ export default class PROMPT extends DIALOG {
 	    @param {MODEL} model The FORM model
 	    @returns {Promise<FORM>} Promise Chain
 	*/
-	configureForm(form, model) {
+    configureForm(form, model) {
+        console.log(this.toString() + '.configureForm()', form, model);
 		return new Promise((resolve, reject) => {
-			try {
-				form.addInputs(model.inputs);
+            try {
+                let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
+				form.addInputs(model.inputs, target);
 				form.addButtons(model.buttons);
 				form.getDialog = () => this;
 				form.getContainer = () => model.container;
