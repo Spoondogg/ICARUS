@@ -395,10 +395,12 @@ export default class MAIN extends CONTAINER {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	createLoginForm(form) {
-		return this.chain(() => {
+        console.log(this.toString() + '.createLoginForm()');
+        return this.chain(() => {
 			form.setAction('/Account/Login');
-			form.addClass('login');
-			form.children[0].children[0].addInputElements([
+            form.addClass('login');
+            //form.children[0].children[0].addInputElements([
+			form.get()[0].get()[0].addInputElements([
 				createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 				createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
