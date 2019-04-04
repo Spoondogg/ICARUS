@@ -60,35 +60,48 @@ export default class FORM extends CONTAINER {
 	    @returns {FORM} An empty form container
 	*/
 	static createFormPostForm(node, model) {
-		/** @type {{className:string, type:string, hidden:boolean, id:number}} */
+        /** @type {{className:string, type:string, hidden:boolean, id:number}} */
 		let {
 			className,
 			type,
 			hidden,
 			id
 		} = model;
-		return new Promise((resolve, reject) => {
-			FORM.createEmptyForm(node, hidden).then((form) => {
-				form.setAction('FORMPOST/SET');
-				try { // frm.setId(payload.model.id);
-					$.getJSON('/FORMPOST/GET/' + id, (payload) => form.addInputs(
-						form.generateFormPostInputs(payload, className, type),
-						form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
-					).then(() => {
-						if (payload.model.jsonResults) { // Set values based on existing 
-							JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
-						}
-						form.afterSuccessfulPost = () => form.getDialog().close();
-						if (model.inputNode) {
-							model.inputNode.el.setAttribute('value', form.el.elements.id.value);
-						}
-						resolve(form);
-					}));
-				} catch (e) {
-					reject(e);
-				}
-			});
-		});
+        return new Promise((resolve, reject) => FORM.createEmptyForm(node, hidden).then((form) => {
+            form.setAction('FORMPOST/SET');  
+
+            try { // frm.setId(payload.model.id);
+                $.getJSON('/FORMPOST/GET/' + id, (payload) => {
+                    let inputs = form.generateFormPostInputs(payload, className, type);
+                    let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
+                    /* 
+                    console.log('inputs', inputs);
+                    form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0].populate(inputs).then(() => {
+                        if (payload.model.jsonResults) { // Set values based on existing 
+                            JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
+                        }
+                        form.afterSuccessfulPost = () => form.getDialog().close();
+                        if (model.inputNode) {
+                            model.inputNode.el.setAttribute('value', form.el.elements.id.value);
+                        }
+                        resolve(form);
+                    });*/
+                    
+                    form.addInputs(inputs, target).then(() => {
+                        if (payload.model.jsonResults) { // Set values based on existing 
+                            JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
+                        }
+                        form.afterSuccessfulPost = () => form.getDialog().close();
+                        if (model.inputNode) {
+                            model.inputNode.el.setAttribute('value', form.el.elements.id.value);
+                        }
+                        resolve(form);
+                    });
+                });
+            } catch (e) {
+                reject(e);
+            }
+        }));
 	}
 	/** Attempts to set any child input elements of this form by name to given value
 	    @param {{name:string, value:string}} inp Input Object/Model
@@ -115,14 +128,13 @@ export default class FORM extends CONTAINER {
         @param {FORMMODEL} model Model
 	    @returns {Promise<FORM>} An empty form container
 	*/
-	static createContainerForm(node, model) {
+    static createContainerForm(node, model) {
 		return new Promise((resolve, reject) => {
 			try {
-				FORM.createEmptyForm(node, model.hidden).then((frm) => {
-					frm.setAction(model.container.className + '/SET').addInputs(
-						model.container.createContainerInputs(),
-						frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0]
-					).then((f) => {
+                FORM.createEmptyForm(node, model.hidden).then((frm) => {
+                    let inputs = model.container.createContainerInputs();
+                    let [target] = frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
+					frm.setAction(model.container.className + '/SET').addInputs(inputs, target).then((f) => {
 						f.afterSuccessfulPost = () => f.getDialog().close();
 						resolve(f);
 					});
@@ -149,7 +161,8 @@ export default class FORM extends CONTAINER {
         @param {CONTAINER} target Target node
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	addInputs(inputs = [], target = this) {
+    addInputs(inputs = [], target = this) {
+        console.log(this.toString() + '.addInputs()', inputs, target);
 		return new Promise((resolve) => {
 			if (inputs) {
 				Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
@@ -189,7 +202,7 @@ export default class FORM extends CONTAINER {
 							break;
 					}
 				}
-				target.children.push(inp);
+                target.body.pane.children.push(inp);
 				resolve(inp);
 			} catch (e) {
 				reject(e);
@@ -212,8 +225,8 @@ export default class FORM extends CONTAINER {
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @returns {Array<MODEL>} An array of MODEL inputs
 	*/
-	generateFormPostInputs(payload, className, type) { // SEE CONTAINER.createElementCollection
-		let inputs = this.defaultFormPostInputArray(payload);
+    generateFormPostInputs(payload, className, type) { // SEE CONTAINER.createElementCollection
+        let inputs = this.defaultFormPostInputArray(payload);
 		try {
 			DATAELEMENTS.get('CONTAINER')[type].forEach((i) => inputs.push(i));
 		} catch (e) {
@@ -232,7 +245,8 @@ export default class FORM extends CONTAINER {
 	    @param {boolean} hidden If true, form is hidden
 	    @returns {Promise<FORM>} An empty form container
 	*/
-	static createEmptyForm(node, hidden = false) {
+    static createEmptyForm(node, hidden = false) {
+        console.log('FORM.createEmptyForm()');
 		return new Promise((resolve, reject) => {
 			try {
 				let form = new FORM(node, new MODEL(new ATTRIBUTES('style', hidden ? 'display:none;' : '')).set('showNav', 0));
