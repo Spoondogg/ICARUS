@@ -36,6 +36,7 @@ $color-secondary-dark: #353e52;
 $color-statement-even: #98a594;
 $color-statement-odd: #6e7880;
 $color-scrollbar-face: #999;
+$color-transparent: rgba(0, 0, 0, 0);
 /// A neutral grey color
 /// @type Color
 $color-grey: #666;
@@ -523,7 +524,7 @@ html {
         animation: slideOutUp $transition-speed $transition-motion;
         border: 0;
         border-radius: .6rem;
-        box-shadow: 0 0 1rem $color-black;
+        box-shadow: 0 0 1rem $color-shadow-dark;
         margin: 1rem auto;
         max-width: $body-width;
         padding: 0;
@@ -1276,6 +1277,28 @@ html {
     .container {
         @extend %wide-block;
         box-sizing: border-box;
+
+        > nav {
+            // Fixed Nav
+            &.nav-header {
+                border-bottom: 1px solid $color-transparent;
+                box-shadow: 0 0 0 0 $color-transparent;
+
+                &.in {
+                    border-bottom: 1px solid $color-shadow-light;
+                    box-shadow: 0 1px 1px 0 $color-shadow-dark;
+                    /*> ul {
+                        &:first-of-type {
+                            box-shadow: 0 0 0 0 $color-transparent;
+
+                            &.in {
+                                box-shadow: 0 1px 1px 0 $color-shadow-dark;
+                            }
+                        }
+                    }*/
+                }
+            }
+        }
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
@@ -1533,7 +1556,7 @@ html {
         &main,
         &.main {
             //align-items: stretch;
-            box-shadow: 0 1rem .5rem .5rem $color-shadow-neutral;
+            box-shadow: 0 1rem .5rem .5rem $color-shadow-dark;
             //display: flex;
             margin-left: auto;
             margin-right: auto;
@@ -1548,18 +1571,6 @@ html {
                     left: 0;
                     position: absolute;
                     top: 0;
-
-                    > ul {
-                        &[name='menus'] {
-                            border-bottom: 1px solid grey;
-                            box-shadow: 0px 3px 3px 0px black;
-
-                            & .in {
-                                border-bottom: 1px solid gba(0, 0, 0, 0.00);
-                                box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.00);
-                            }
-                        }
-                    }
                 }
             }
 
@@ -1609,6 +1620,8 @@ html {
                     }
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
+
+
                         nav {
                             //margin-bottom: .5rem;
                             &.menu {
@@ -1642,6 +1655,8 @@ html {
 
                     &.left {
                         @include transition(margin-left $transition-speed $transition-motion);
+                        border-right: 1px solid $color-grey;
+                        box-shadow: 4px 2px 2px -2px $color-shadow-dark;
                         display: block;
                         float: left;
                         left: 0;
@@ -1656,6 +1671,8 @@ html {
 
                     &.right {
                         @include transition(margin-right $transition-speed $transition-motion);
+                        border-left: 1px solid $color-grey;
+                        box-shadow: -4px 2px 2px -2px $color-shadow-dark;
                         display: block;
                         float: right;
                         margin-right: calc(#{$zero-px} - #{$sidebar-width});
