@@ -1,6 +1,5 @@
 /** @module */
-import MAIN, { LOADER, MODEL } from '../model/el/container/main/MAIN.js';
-import FACTORY from '../model/el/FACTORY.js';
+import MAIN, { FACTORY, LOADER, MODEL } from '../model/el/container/main/MAIN.js';
 import WATERMARK from '../helper/WATERMARK.js';
 /** An Application Class
     @description Constructs the Application Controller and initializes the MAIN Container
@@ -10,11 +9,11 @@ import WATERMARK from '../helper/WATERMARK.js';
 */
 export default class CONTROLLER extends MODEL {
 	/** Constructs an Application
-        @param {number} id The unique application id
-        @param {string} user A friendly username
+        @param {UId} id The unique application id
+        @param {Name} user A machine friendly username
         @param {boolean} dev If true, dev-options are enabled
         @param {number} recursionLimit The maximum number of recursive loops before an error is thrown
-        @param {string} name The application name
+        @param {Name} name The application name
         @param {string} version The application version
         @param {string} token The session token
         @param {FACTORY} factory The default FACTORY
@@ -30,7 +29,7 @@ export default class CONTROLLER extends MODEL {
 			token,
 			factory
 		});
-		document.body.className = "icarus";
+		document.body.className = 'icarus';
 		this.watermark = new WATERMARK();
 		/** @property {Url} url An Url object */
 		this.url = new URL(window.location.href);
