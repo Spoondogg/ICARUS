@@ -1,17 +1,19 @@
-/** @module */
+/** A generic HTML Element Node Module
+    @module icarus/model/el
+*/
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
-/** A Generic HTML Element Class
+/** A Generic HTML Element Node
     @class
     @extends MODEL
 */
 export default class EL extends MODEL {
 	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {EL} node Parent Node
-	    @param {string} element HTMLElement tagName
-	    @param {MODEL} model Model
+	    @param {El} node Parent Node
+	    @param {Name} [element=DIV] HTMLElement tagName
+	    @param {MODEL} [model] Model
 	*/
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
@@ -22,7 +24,7 @@ export default class EL extends MODEL {
 		*/
 		this.node = node;
 		/** String representation of this Element's Class Name
-		    @type {string}
+		    @type {Name}
 		*/
 		this.className = this.constructor.name;
 		/** HTML Element Tag ie: DIV 
@@ -321,14 +323,14 @@ export default class EL extends MODEL {
         try {
             return this.constructors[model.className](model);
         } catch (e) {
-            console.warn(this.toString() + '.create(): No constructor exists for className "' + model.className + '"', this, e);
+            console.warn(this.toString() + '.create(): No constructor exists for className "' + model.className + '"', this, model, e);
             return Promise.reject(e);
         }
 	}
 	/** Wraps a Synchronous function inside a Promise that returns this element as a callback
 	    The function is called within a try/catch block and will reject on error
 	    @param {Array<Function>} fn An array of Synchronous functions in performing order
-	    @param {string} msg Optional message to display on error
+	    @param {string} [msg] Optional message to display on error
 	    @returns {Promise<ThisType>} Returns this object as a callback
 	*/
 	chain(fn, msg = 'Promise Chain Error') {
@@ -558,4 +560,4 @@ export default class EL extends MODEL {
 		return this.className + '()';
 	}
 }
-export { MODEL, ATTRIBUTES }
+export { ATTRIBUTES, MODEL }
