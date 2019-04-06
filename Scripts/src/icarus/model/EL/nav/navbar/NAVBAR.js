@@ -113,19 +113,22 @@ export default class NAVBAR extends NAV {
 	     @param {NAVITEM} tab NAV Item that acts as a Tab
 	     @param {EL} element A Switchable Element that is activated by this Tab
 	     @returns {{tab:NAVITEM, element:EL}} Tabbable Element {tab,element}
+         @todo Create TABBABLE Class
 	*/
 	addTabbableElement(tab, element) {
 		tab.target = element;
 		element.tab = tab;
 		let deactivate = new Deactivate();
 		tab.el.addEventListener('activate', () => {
-			element.dispatchToSiblings(deactivate);
+            element.dispatchToSiblings(deactivate);
+            tab.addClass('active');
 			tab.target.el.dispatchEvent(new Activate()); // Activate Element
 		});
 		/** Deactivate Tab and Element */
 		tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
 		tab.el.addEventListener('deactivate', () => {
-			this.filterEventDomException(tab.target, deactivate);
+            this.filterEventDomException(tab.target, deactivate);
+            tab.removeClass('active');
 			tab.target.el.dispatchEvent(new Deactivate()); // Deactivate Element
 		});
 		// Deactivate children
