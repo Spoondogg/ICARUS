@@ -73,7 +73,10 @@ export const DATAELEMENTS = new Map([
 	[
 		'FORM', {
 			containers: ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET'],
-			data: [createInputModel('INPUT', 'header')],
+            data: [
+                createInputModel('INPUT', 'header'),
+                createInputModel('INPUT', 'hidden', '0', 'hidden', 'CHECKBOX')
+            ],
 			attributes: [
 				createInputModel('INPUT', 'name', 'text-input'),
 				createInputModel('INPUT', 'method', 'POST'),
