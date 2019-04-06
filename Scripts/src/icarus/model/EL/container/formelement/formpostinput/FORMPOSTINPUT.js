@@ -1,8 +1,7 @@
 /** @module */
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
-import DIV from '../../../div/DIV.js';
-import INPUT from '../../../input/INPUT.js';
-import PROMPT from '../../../dialog/prompt/PROMPT.js';
+import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
+import PROMPT, { DIALOGMODEL, DIV } from '../../../dialog/prompt/PROMPT.js';
 import SPAN from '../../../span/SPAN.js';
 /** Represents an INPUT element inside a group of form elements
     @class
@@ -17,13 +16,13 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, new MODEL(new ATTRIBUTES({
+        this.input = new INPUT(this.inputGroup, new INPUTMODEL(new MODEL(), {
 			class: 'form-control',
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',
 			readonly: true
-        })));
+        }));
         /** @type {FORM} */
 		this.form = null;
 		this.createInput();
@@ -60,7 +59,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
-	    @param {number} id Optional FormPost Id to edit
+	    @param {UId} [id] FormPost Id to edit
 	    @param {INPUT} inputNode The input that spawned this DIALOG
 	    @returns {Promise<string>} Promise to create a new FormPost DIALOG and return it
 	*/
@@ -69,10 +68,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
 				console.log('CreateForm', container, typeof container);
-				new PROMPT(new MODEL().set({
-					label: 'Create FormPost Form',
+				new PROMPT(new DIALOGMODEL(new MODEL(), {
 					container,
-					caller: this
+                    caller: this,
+                    label: 'Create FormPost Form'
 				})).createForm(new MODEL().set({
 					formtype: 'FORMPOST',
 					className,

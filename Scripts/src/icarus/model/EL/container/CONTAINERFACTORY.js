@@ -2,6 +2,7 @@
 import FACTORY, { ATTRIBUTES, EL, MODEL, SPAN } from '../FACTORY.js';
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
+import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
@@ -24,7 +25,6 @@ import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 //import PANE from '../container/PANE.js';
-import PROMPT from '../dialog/prompt/PROMPT.js';
 import SECTION from '../section/SECTION.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 import WORD from './word/WORD.js';
@@ -461,5 +461,5 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, CONTAINER, EL, FORM, MODEL }
+export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PROMPT }
 /* eslint-enable */

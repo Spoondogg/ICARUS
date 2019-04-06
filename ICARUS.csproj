@@ -657,8 +657,13 @@
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
     <Content Include="Scripts\src\icarus\model\el\button\switch\SWITCH.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\FORMMODEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\TEST.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\panel\PANEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />

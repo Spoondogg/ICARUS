@@ -1,12 +1,12 @@
-/** @module */
+/** @module icarus/model/el/container/MAIN */
 import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
-import CONTAINERFACTORY, { FORM } from '../CONTAINERFACTORY.js';
+import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
+import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
-import PROMPT from '../../dialog/prompt/PROMPT.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 /** A top level View that holds all other child Containers
     @class
@@ -14,7 +14,7 @@ import SIDEBAR from '../sidebar/SIDEBAR.js';
 */
 export default class MAIN extends CONTAINER {
 	/** Constructs a MAIN Container and populates the DOM with any relevant elements
-	    @param {MODEL} model APP model
+	    @param {MAINMODEL} model APP model
     */
 	constructor(model) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
@@ -24,15 +24,12 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
-		/** @type {CONTAINERFACTORY} A CONTAINER FACTORY */
         this.factory = model.factory;
         /** MAIN doesnt get injected with editProperty but instead
             calls directly from its factory
         */
         this.editProperty = this.factory.editProperty.bind(this);
-		/** @type {LOADER} */
 		this.loader = model.loader;
-		/** @type {URL} */
 		this.url = model.url;
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
@@ -366,16 +363,16 @@ export default class MAIN extends CONTAINER {
 		let label = 'LogIn';
 		this.loader.log(99, label).then(
 			(loader) => {
-				let prompt = new PROMPT(new MODEL().set({
+				let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
 					caller,
 					container: this,
 					label
 				}));
-				prompt.createForm(new MODEL().set({
-					caller,
-					container: prompt,
-					label
-				})).then(
+                prompt.createForm(new DIALOGMODEL(new MODEL(), {
+                    caller,
+                    container: prompt,
+                    label
+                })).then(
 					(form) => form.footer.buttonGroup.empty().then(
 						() => {
 							form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
@@ -474,4 +471,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, FORM, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }

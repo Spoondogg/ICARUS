@@ -44,9 +44,10 @@ export default class MODEL {
 	/** Sets a property (or a collection of properties) for this MODEL
 	    @param {string} key Name of property || An object containing key/value pairs
 	    @param {any} value Value for property
+        @param {boolean} [allowEmpty=true] If true (default) empty values can be added
 	    @returns {MODEL} The object MODEL
 	*/
-	set(key, value) {
+	set(key, value, allowEmpty = true) {
 		if (typeof key === 'string') {
 			try {
 				this[key] = typeof value === 'undefined' ? key : value;
@@ -57,8 +58,10 @@ export default class MODEL {
 			}
 		}
 		for (let prop in key) {
-			if (typeof prop === 'string') {
-				this[prop] = key[prop];
+            if (typeof prop === 'string') {
+                if (allowEmpty || key[prop] !== 'undefined') {
+                    this[prop] = key[prop];
+                }             
 			}
 		}
 		return this;

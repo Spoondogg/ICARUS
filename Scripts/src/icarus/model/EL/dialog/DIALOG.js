@@ -3,6 +3,7 @@ import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBL
 import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Closeable from '../../../interface/Closeable.js';
+import DIALOGMODEL from './DIALOGMODEL.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import Selectable from '../../../interface/Selectable.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
@@ -12,8 +13,8 @@ import Selectable from '../../../interface/Selectable.js';
 export default class DIALOG extends EL {
 	/** Constructs a generic DIALOG Element
 	    @constructs DIALOG
-	    @param {MODEL} model The object model
-        @param {boolean} showHeader If true (default), header is shown
+	    @param {DIALOGMODEL} model Dialog Model
+        @param {boolean} [showHeader=true] If true (default), header is shown
 	*/
 	constructor(model, showHeader = true) {
 		super(document.body, 'DIV', model);
@@ -24,7 +25,9 @@ export default class DIALOG extends EL {
 		this.show = () => this.showDialog();
 		this.close = () => this.closeDialog();
 		this.hide = () => this.hideDialog();
-		this.caller = this.required(model.caller); // Switchable Element
+        /** @type {EL} Element that called this DIALOG */
+        this.caller = this.required(model.caller); // Switchable Element
+        /** @type {Container} DIALOG Container/Holder */
 		this.container = this.required(model.container); // Container Element for linked list head
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
 		this.btnClose = this.createCloseButton();
@@ -70,8 +73,8 @@ export default class DIALOG extends EL {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
-        @param {number} delay Millisecond delay until dialog is closed
-        @param {boolean} preserve If true, element is not deleted
+        @param {number} [delay=200] Millisecond delay until dialog is closed
+        @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
 	hideDialog(delay = 200, preserve = true) {
@@ -105,4 +108,4 @@ export default class DIALOG extends EL {
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 }
-export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIV, EL, MENU, MODEL, NAVITEMICON }
+export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, MENU, MODEL, NAVITEMICON }
