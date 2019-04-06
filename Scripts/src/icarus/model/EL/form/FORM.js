@@ -2,15 +2,12 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
+import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMSELECT, FORMTEXTAREA } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON } from './FORMFOOTER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
-import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
-import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.js';
-import FORMSELECT from '../container/formelement/formselect/FORMSELECT.js';
-import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
 import LOADER from '../dialog/loader/LOADER.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
@@ -20,10 +17,10 @@ import LOADER from '../dialog/loader/LOADER.js';
 export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
 	    @param {CONTAINER} node The parent object
-	    @param {MODEL} model The object model
+	    @param {FORMMODEL} model The object model
 	*/
 	constructor(node, model) {
-		super(node, 'FORM', model, DATAELEMENTS.get('FORM').containers); //['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET']
+		super(node, 'FORM', model, DATAELEMENTS.get('FORM').containers);
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
@@ -56,10 +53,11 @@ export default class FORM extends CONTAINER {
         populates based on the given FORMPOST MODEL
         @description This is a description
 	    @param {EL} node Parent node
-        @param {MODEL} model Model
-	    @returns {FORM} An empty form container
+        @param {FormPostFormModel} model Model
+	    @returns {Promise<FORM>} An empty form container
 	*/
-	static createFormPostForm(node, model) {
+    static createFormPostForm(node, model) {
+        console.log('FORM.createFormPostForm()', model);
         /** @type {{className:string, type:string, hidden:boolean, id:number}} */
 		let {
 			className,
@@ -74,9 +72,16 @@ export default class FORM extends CONTAINER {
                 $.getJSON('/FORMPOST/GET/' + id, (payload) => {
                     let inputs = form.generateFormPostInputs(payload, className, type);
                     let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
-                    /* 
+                     
                     console.log('inputs', inputs);
-                    form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP')[0].populate(inputs).then(() => {
+
+                    /** @type {FIELDSET} */
+                    let [fieldset] = form.get(null, 'FIELDSET');
+
+                    /** @type {FORMELEMENTGROUP} */
+                    let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+
+                    /*formelementgroup.populate(inputs).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
                             JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
                         }
@@ -86,7 +91,7 @@ export default class FORM extends CONTAINER {
                         }
                         resolve(form);
                     });*/
-                    
+                    /////////////////////////////////////
                     form.addInputs(inputs, target).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
                             JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
@@ -104,7 +109,7 @@ export default class FORM extends CONTAINER {
         }));
 	}
 	/** Attempts to set any child input elements of this form by name to given value
-	    @param {{name:string, value:string}} inp Input Object/Model
+	    @param {NameValuePair} inp Input Object/Model
 	    @returns {void}
 	*/
 	setTextInputValue(inp) {
@@ -125,7 +130,7 @@ export default class FORM extends CONTAINER {
 	/** Constructs a FORM based on a CONTAINER with a single fieldset and formelementgroup
         based on a FORMPOST MODEL
 	    @param {EL} node Parent node
-        @param {FORMMODEL} model Model
+        @param {FormModel} model Model
 	    @returns {Promise<FORM>} An empty form container
 	*/
     static createContainerForm(node, model) {
@@ -157,7 +162,7 @@ export default class FORM extends CONTAINER {
 		});
 	}
 	/** Adds the provided inputs to the FORM asynchronously
-	    @param {Array<MODEL>} inputs An array of inputs
+	    @param {Array<MODEL>} inputs An array of INPUT Models
         @param {CONTAINER} target Target node
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
@@ -171,18 +176,26 @@ export default class FORM extends CONTAINER {
 		});
 	}
 	/** Adds the input to the FORM 
-	    @param {MODEL} model An input model
-	    @param {CONTAINER} target Target node
+	    @param {ModelWithContainer} model An input model
+	    @param {FORMELEMENTGROUP} target Target Form Element Group
 	    @returns {Promise<FORMELEMENT>} Newly created Form Element
 	*/
-	addInput(model, target = this) {
+    addInput(model, target) {
+        console.log('FORM.addInput()', this, model, target);
+        /** @type {FIELDSET} */
+        let [fieldset] = this.get(null, 'FIELDSET');
+
+        /** @type {FORMELEMENTGROUP} */
+        let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+
 		return new Promise((resolve, reject) => {
 			try {
 				model.set({
 					container: this,
 					loader: model.loader
-				});
-				/** @type {CONTAINER} */
+                });
+                               
+				/** @type {FORMELEMENT} */
 				let inp = null;
 				if (model.type === 'FORMPOSTINPUT') {
 					inp = new FORMPOSTINPUT(target.body.pane, model);
@@ -608,5 +621,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, CONTAINER, EL, FORMFOOTER, FORMINPUT, FORMPOST, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, BUTTON, CONTAINER, EL, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */

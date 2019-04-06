@@ -1,9 +1,9 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
-import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT for an Icarus Form
     @class
     @extends FORMELEMENT
@@ -11,14 +11,14 @@ import INPUT from '../../../input/INPUT.js';
 export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
 		return this.chain(() => {
-			this.input = new INPUT(this.body.pane, new MODEL(new ATTRIBUTES({
+            this.input = new INPUT(this.body.pane, new INPUTMODEL(new MODEL(), {
 				class: 'form-control',
 				type: this.attributes.type || 'TEXT', // || this.data.type
 				list: this.attributes.name + '-options',
 				name: this.attributes.name,
 				value: this.attributes.value || '',
 				placeholder: this.attributes.placeholder || ''
-			})));
+			}));
 			this.configureInput();
 		});
 	}
@@ -31,7 +31,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	configureInput() {
 		switch (this.attributes.type) {
 			case 'HIDDEN':
-				this.body.collapse();
+                this.body.el.dispatchEvent(new Collapse(this.body));
 				break;
 			case 'CHECKBOX':
 				this.input.el.checked = this.attributes.value > 0;

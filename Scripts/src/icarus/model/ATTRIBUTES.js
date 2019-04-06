@@ -1,4 +1,4 @@
-/** @module */
+/** @module icarus/model */
 /** A generic set of ATTRIBUTES for an EL
     @class
     @todo Consider just extending Map()
@@ -7,10 +7,10 @@
 export default class ATTRIBUTES { // extends Map 
 	/** If the 'className' argument is an object, break it out into individual attributes
 	    Otherwise, map to className, name, type and value
-	    @param {Object|string} className A collection of attributes || className Element class attribute
-	    @param {string} name Optional Element name attribute
-	    @param {string} type Element type attribute
-	    @param {string} value Element value attribute
+	    @param {Object|string} [className] A collection of attributes || className Element class attribute
+	    @param {Name} [name] Optional Element name attribute
+	    @param {string} [type] Element type attribute
+	    @param {string} [value] Element value attribute
 	*/
 	constructor(className, name, type, value) {
 		switch (typeof className) {
