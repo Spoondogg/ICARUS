@@ -1,7 +1,7 @@
 /** @module */
 import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
 import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
-import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
+import NAVHEADER, { Activate, Deactivate, Expand, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Closeable from '../../../interface/Closeable.js';
 import DIALOGMODEL from './DIALOGMODEL.js';
 import { ICONS } from '../../../enums/ICONS.js';
@@ -32,10 +32,10 @@ export default class DIALOG extends EL {
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
 		this.btnClose = this.createCloseButton();
 		if (showHeader) {
-			this.navheader.expand();
+            this.navheader.el.dispatchEvent(new Expand(this.navheader));
 		}
 		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
-		this.navheader.tab.el.dispatchEvent(new Activate());
+        this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
@@ -82,7 +82,7 @@ export default class DIALOG extends EL {
 			try {
 				this.addClass('hiding').then(() => setTimeout(() => {
 					$(this.el).modal('hide');
-					resolve(preserve ? this : this.destroy().then(() => this.caller.deactivate()));
+                    resolve(preserve ? this : this.destroy().then(() => this.caller.el.dispatchEvent(new Deactivate(this.caller))));
 				}, delay));
 			} catch (e) {
 				reject(e);
