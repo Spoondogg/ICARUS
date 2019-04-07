@@ -183,10 +183,10 @@ export default class FORM extends CONTAINER {
     addInput(model, target) {
         console.log('FORM.addInput()', this, model, target);
         /** @type {FIELDSET} */
-        let [fieldset] = this.get(null, 'FIELDSET');
+        //let [fieldset] = this.get(null, 'FIELDSET');
 
         /** @type {FORMELEMENTGROUP} */
-        let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+        //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
 		return new Promise((resolve, reject) => {
 			try {
