@@ -76,10 +76,10 @@ export default class FORM extends CONTAINER {
                     console.log('inputs', inputs);
 
                     /** @type {FIELDSET} */
-                    let [fieldset] = form.get(null, 'FIELDSET');
+                    //let [fieldset] = form.get(null, 'FIELDSET');
 
                     /** @type {FORMELEMENTGROUP} */
-                    let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+                    //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
                     /*formelementgroup.populate(inputs).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
@@ -183,10 +183,10 @@ export default class FORM extends CONTAINER {
     addInput(model, target) {
         console.log('FORM.addInput()', this, model, target);
         /** @type {FIELDSET} */
-        let [fieldset] = this.get(null, 'FIELDSET');
+        //let [fieldset] = this.get(null, 'FIELDSET');
 
         /** @type {FORMELEMENTGROUP} */
-        let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+        //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
 		return new Promise((resolve, reject) => {
 			try {
