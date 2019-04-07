@@ -76,10 +76,10 @@ export default class FORM extends CONTAINER {
                     console.log('inputs', inputs);
 
                     /** @type {FIELDSET} */
-                    let [fieldset] = form.get(null, 'FIELDSET');
+                    //let [fieldset] = form.get(null, 'FIELDSET');
 
                     /** @type {FORMELEMENTGROUP} */
-                    let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+                    //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
                     /*formelementgroup.populate(inputs).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
