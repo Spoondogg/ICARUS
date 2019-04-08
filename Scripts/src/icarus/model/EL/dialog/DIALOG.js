@@ -69,7 +69,7 @@ export default class DIALOG extends EL {
         @param {number} delay Millisecond delay until dialog is closed
 	    @returns {Promise} Callback on successful close
 	*/
-	closeDialog(delay = 200) {
+	closeDialog(delay = 150) {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
@@ -77,10 +77,10 @@ export default class DIALOG extends EL {
         @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
-	hideDialog(delay = 200, preserve = true) {
+	hideDialog(delay = 150, preserve = true) {
 		return new Promise((resolve, reject) => {
-			try {
-				this.addClass('hiding').then(() => setTimeout(() => {
+            try {
+                this.addClass('hiding').then(() => setTimeout(() => {
 					$(this.el).modal('hide');
 					resolve(preserve ? this : this.destroy().then(() => this.caller.deactivate()));
 				}, delay));
@@ -102,8 +102,8 @@ export default class DIALOG extends EL {
 	}
 	overrideBootstrap() {
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
-		$(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
-		$(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
+        $(this.el).on('show.bs.modal', () => this.removeClass('hiding'));
+        $(this.el).on('hide.bs.modal', () => this.addClass('hiding'));
 		//$(this.el).on('hidden.bs.modal', () => { /**/ });
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
