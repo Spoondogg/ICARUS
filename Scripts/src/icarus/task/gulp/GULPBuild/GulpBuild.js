@@ -16,6 +16,7 @@ import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
 import through from 'through2';
+import utf8 from 'utf8';
 /** GulpFile that performs Build tasks
     @class
     @extends GULPFILE
@@ -132,6 +133,7 @@ export default class GulpBuild extends GULPFILE {
         return casedItems.join('');
     }
     /** Evaluates Sass Variables and generates a Javascript Module
+        @todo Investigate Encoding issues (UTF-8 encode)
         @param {string} sassBlob Sass Text Blob
         @returns {gulp.stream} A gulp stream
     */
