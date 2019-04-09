@@ -12,6 +12,7 @@ import postcsstouchcallout from 'postcss-touch-callout';
 import rename from 'gulp-rename';
 import request from 'request';
 import sass from 'gulp-sass';
+import sassVarsToJs from 'gulp-sass-vars-to-js';
 import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
@@ -36,7 +37,8 @@ export default class GulpBuild extends GULPFILE {
 			(done) => this.logCompletion('==============> GulpBuild.build(' + profile + ')', done),
 			(done) => this.auditor.beautifyAll()(done),
 			(done) => this.auditor.lintAll()(done),
-			(done) => this.buildStyles(done, GULPPATHS.styles.src, GULPPATHS.server.dev + GULPPATHS.styles.dest, 'icarus', dev),
+            (done) => this.buildStyles(done, GULPPATHS.styles.src, GULPPATHS.server.dev + GULPPATHS.styles.dest, 'icarus', dev),
+            (done) => this.buildSassVariables(done),
 			(done) => this.buildAllScripts(dev)(done));
 	}
 	/** Builds Source and Vendor Scripts
@@ -48,7 +50,7 @@ export default class GulpBuild extends GULPFILE {
 			(done) => this.buildScripts(done, GULPPATHS.scripts.src, GULPPATHS.server.dev + GULPPATHS.scripts.dest, dev),
 			(done) => this.buildVendorScripts(done));
 	}
-	/** Creates a Pipe for Building Scripts
+	/** Creates a Pipe for Building Stylesheets based on Sass
 	    @param {string} src Source Path
         @param {string} dest Destination path
         @param {string} basename Stylesheet filename
@@ -113,7 +115,35 @@ export default class GulpBuild extends GULPFILE {
 	*/
 	buildVendorStyles(done, dest = GULPPATHS.server.dev + GULPPATHS.styles.dest, filename = 'vendor') {
 		return this.addEvents('BuildVendorStyles', () => this.buildVendorStylesStream(dest, filename), done);
-	}
+    }
+    /** Creates a Pipe for Building a Javascript module based on 
+        the specified Sass file's variables
+	    @param {string} src Source Path
+        @param {string} dest Destination path
+        @param {string} [filename] Specifies the output filename
+	    @returns {gulp.pipe.stream} A gulp 
+	*/
+    buildSassVariablesStream(src, dest, filename = 'StyleVars.js') {
+        try {
+            let stream = this.gulp.src(src);
+            stream = stream.pipe(sassVarsToJs());
+            stream = stream.pipe(rename(filename));
+            stream = stream.pipe(this.gulp.dest(dest));            
+            return stream;
+        } catch (e) {
+            console.warn('Unable to construct Gulp Stream', e);
+            throw e;
+        }
+    }
+    /** Creates Javascript Variables based on Sass Variables
+	    @param {Function} done Callback
+	    @param {string} src Styles source path
+	    @param {string} dest Variables file destination path
+	    @returns {Promise} Gulp promise
+	*/
+    buildSassVariables(done, src = GULPPATHS.styles.src, dest = GULPPATHS.scripts.base + '/enums') {
+        return this.addEvents('BuildSassVariables', () => this.buildSassVariablesStream(src, dest), done);
+    }
 	/** Retrieves font dependencies from external (CDN) and saves locally (src,dist)
 	    @param {Function} done Callback
 	    @returns {void} 
