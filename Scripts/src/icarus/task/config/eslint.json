@@ -86,10 +86,7 @@
     "key-spacing": "error",
     "keyword-spacing": "error",
     "line-comment-position": "off",
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
+    "linebreak-style": 0,
     "lines-around-comment": "off",
     "lines-around-directive": "off",
     "lines-between-class-members": "off",
