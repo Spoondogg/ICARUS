@@ -45,7 +45,6 @@
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.1",
     "gulp-sass-lint": "^1.4.0",
-    "gulp-sass-vars-to-js": "^0.1.2",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-terser": "^1.1.5",
     "gulp-uglify": "^3.0.1",
@@ -67,6 +66,7 @@
     "sassdoc": "^2.5.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "serve-static": "^1.13.2",
+    "through2": "^3.0.1",
     "vinyl-source-stream": "^2.0.0",
     "wdio-spec-reporter": "^0.1.5"
   },
