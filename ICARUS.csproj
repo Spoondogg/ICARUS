@@ -613,6 +613,7 @@
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
+    <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
     <Content Include="Scripts\src\icarus\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
     <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
