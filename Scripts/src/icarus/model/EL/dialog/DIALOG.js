@@ -6,6 +6,7 @@ import Closeable from '../../../interface/Closeable.js';
 import DIALOGMODEL from './DIALOGMODEL.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import Selectable from '../../../interface/Selectable.js';
+import { TransitionSpeed } from '../../../enums/StyleVars.js';
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
@@ -17,7 +18,8 @@ export default class DIALOG extends EL {
         @param {boolean} [showHeader=true] If true (default), header is shown
 	*/
 	constructor(model, showHeader = true) {
-		super(document.body, 'DIV', model);
+        super(document.body, 'DIV', model);
+        
 		this.className = 'DIALOG';
 		this.addClasses(['dialog', 'modal']);
 		this.implement(new Closeable(this));
@@ -69,15 +71,15 @@ export default class DIALOG extends EL {
         @param {number} delay Millisecond delay until dialog is closed
 	    @returns {Promise} Callback on successful close
 	*/
-	closeDialog(delay = 150) {
+    closeDialog(delay = TransitionSpeed) {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
-        @param {number} [delay=200] Millisecond delay until dialog is closed
+        @param {number} [delay] Millisecond delay until dialog is closed
         @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
-	hideDialog(delay = 150, preserve = true) {
+    hideDialog(delay = TransitionSpeed, preserve = true) {
 		return new Promise((resolve, reject) => {
             try {
                 this.addClass('hiding').then(() => setTimeout(() => {
