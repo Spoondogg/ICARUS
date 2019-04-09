@@ -1,6 +1,7 @@
-// This file was automatically generated. Do not edit by hand.
-
-export const WootStyle = 520;
+/* eslint-disable */
+/** Sass Variables - @see Content/styles/icarus/icarus.scss
+	@module
+*/
 export const BodyWidth = 1024;
 export const ColorWhite = "#fff";
 export const ColorBlack = "#000";
