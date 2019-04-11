@@ -42,7 +42,7 @@ export default class FORM extends CONTAINER {
 			}
 		});
 	}
-	/** Constructs a Fieldset for this FORM
+    /** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
@@ -66,10 +66,9 @@ export default class FORM extends CONTAINER {
 			id
 		} = model;
         return new Promise((resolve, reject) => FORM.createEmptyForm(node, hidden).then((form) => {
-            form.setAction('FORMPOST/SET');  
-
-            try { // frm.setId(payload.model.id);
-                $.getJSON('/FORMPOST/GET/' + id, (payload) => {
+            form.setAction('FORMPOST/SET');
+            try {
+                form.getPayload(id).then((payload) => {
                     let inputs = form.generateFormPostInputs(payload, className, type);
                     let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
                      
@@ -181,7 +180,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<FORMELEMENT>} Newly created Form Element
 	*/
     addInput(model, target) {
-        console.log('FORM.addInput()', this, model, target);
+        //console.log('FORM.addInput()', this, model, target);
         /** @type {FIELDSET} */
         //let [fieldset] = this.get(null, 'FIELDSET');
 
@@ -532,14 +531,13 @@ export default class FORM extends CONTAINER {
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
 	getResultsAsArray() {
-		//console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
 		return $(this.el).serializeArray();
 	}
 	/** If valid, Returns a FormPost based on values in this form
-	    @returns {FormPost} A FormPost Object
+	    @returns {FORMPOST} A FormPost Object
 	*/
 	getFormPost() {
-		return this.validate().isValid ? new FORMPOST(this) : null;
+		return this.validate().isValid ? new FORMPOST(this.id, this.getResultsAsArray()) : null;
 	}
 	/* eslint-disable max-lines-per-function */
 	/** Post FORM values to server

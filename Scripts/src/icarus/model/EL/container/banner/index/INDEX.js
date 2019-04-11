@@ -87,19 +87,17 @@ export default class INDEX extends BANNER {
 						let str = 'There are ' + payload.list.length + ' instances of ' + payload.className;
 						thumb.el.setAttribute('title', str);
 						thumb.el.addEventListener('activate', () => console.warn('Payload for ' + element, payload));
-						payload.list.forEach((li) => {
+                        payload.list.forEach((li) => {
+                            let { id, label } = li;
 							let icon = menu.addNavItemIcon(new MODEL('card').set({
-								label: li.id,
+								label: id,
 								icon: ICONS[element]
 							}));
-							icon.el.setAttribute('title', li.label);
+							icon.el.setAttribute('title', label);
 							icon.el.addEventListener('activate', () => {
-								let url = '/' + element + '/GET/' + li.id
-								//console.warn('Output for ' + url, li);
-								$.getJSON(url, (result) => {
-									console.warn('Results for ' + url, result);
+                                this.getPayload(id, element).then((result) => {
 									let panel = new PANEL(new MODEL().set({
-										label: url,
+                                        label: element + '(' + id + ')',
 										caller: icon,
 										container: this
 									}));
@@ -139,14 +137,14 @@ export default class INDEX extends BANNER {
 	    @returns {void}
 	*/
 	launchPreview(delay = 500, className, id) { // title = 'Preview', // node
-		setTimeout(() => {
-			$.getJSON('/' + className + '/Get/' + id, (result) => {
+        setTimeout(() => {
+            this.getJson('/' + className + '/GET/' + id, (result) => {
 				console.log(className, result);
 				this.modal.container.preview.create(result.model);
 			});
 		}, delay);
-		setTimeout(() => {
-			$.getJSON('/' + className + '/GetContainerParents/' + id, (result) => {
+        setTimeout(() => {
+            this.getJson('/' + className + '/GetContainerParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});

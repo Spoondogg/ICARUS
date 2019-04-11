@@ -255,12 +255,6 @@
 		for(var c=0;c<document.forms['arguments'].length;c++){
 			var argument = document.forms['arguments'][c];
 			console.log('TODO:  Retrieving options for element: '+argument.name+'...');
-			// Pipe in default values from user's profile.  ie: default value for dateStart = DATEDIFF(DD,-1,GETDATE())
-			//$.getJSON('<c:url value="/getarguments?name=${argument.name}&token=${_csrf.token}" />', function(data) {
-
-				//console.log('woot');
-
-			//});
 		}
     </script>
 
@@ -269,7 +263,7 @@
     -->
     <script type="text/javascript">
 	    // Populate the report and chart from a JSON data source via ajax
-	    $.getJSON('#', function(data) {
+	    $.getJSON('#', (data) => {
 
 		    console.log("Loading argument list...");
 		    var argList = new EL(document.forms['arguments'], 'div', {'class':'argumentList','id':'arguments'});
