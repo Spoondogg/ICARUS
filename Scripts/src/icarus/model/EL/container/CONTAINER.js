@@ -2,21 +2,18 @@
 /** @module */
 import COLLAPSIBLE, { Collapse, Collapsible, Expand } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
-import GROUP, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../group/GROUP.js';
+import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
-import AbstractMethodError from '../../../error/AbstractMethodError.js';
 import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
-//import FACTORY from '../../FACTORY.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
-import MissingContainerError from '../../../error/MissingContainerError.js';
 import Movable from '../../../interface/Movable.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
@@ -135,7 +132,7 @@ export default class CONTAINER extends GROUP {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-	}
+    }
 	/** Adds clickable DATA or ATTRIBUTE nav items to the Document Map
 	    @param {MENU} menu This Container's reference menu
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
@@ -758,14 +755,14 @@ export default class CONTAINER extends GROUP {
 	load(id) {
 		return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
 			try {
-				if (id >= 0) {
-					$.getJSON(this.className + '/GET/' + id, (payload) => {
-						if (payload.result === 1) {
-							resolve(this.loadModel(payload.model));
-						} else {
-							reject(new Error('Failed to retrieve ' + this.toString() + ' from server\n' + payload.message));
-						}
-					});
+                if (id >= 0) {
+                    this.getPayload(id, this.className).then((payload) => {
+                        if (payload.result === 1) {
+                            resolve(this.loadModel(payload.model));
+                        } else {
+                            reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                        }
+                    });
 				} else {
 					console.log('Invalid Id to Load');
 					resolve(this);

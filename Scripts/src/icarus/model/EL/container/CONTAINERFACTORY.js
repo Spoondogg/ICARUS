@@ -1,5 +1,5 @@
 /** @module */
-import FACTORY, { ATTRIBUTES, EL, MODEL, SPAN } from '../FACTORY.js';
+import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
@@ -24,7 +24,6 @@ import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
-//import PANE from '../container/PANE.js';
 import SECTION from '../section/SECTION.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 import WORD from './word/WORD.js';
@@ -210,12 +209,12 @@ export default class CONTAINERFACTORY extends FACTORY {
 	    @param {EL} node Parent node (Generally append to node.body.pane)
 	    @param {string} className Container Constructor Name
 	    @param {number} id Container UId
-	    @returns {CONTAINER} A newly constructed container
+	    @returns {Promise<CONTAINER>} A newly constructed container
 	*/
     get(node, className, id) {
         let span = new SPAN(node, new MODEL());
-        let index = node.children.push(span); // Reserve the slot in the array        
-        return $.getJSON('/' + className + '/GET/' + id, (payload) => {
+        let index = node.children.push(span); // Reserve the slot in the array  
+        return span.getPayload(id, className).then((payload) => {
             /** @type {CONTAINER} */
             let container = null;
             if (payload.className === 'ERROR') {
@@ -461,5 +460,5 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PROMPT }
+export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
 /* eslint-enable */
