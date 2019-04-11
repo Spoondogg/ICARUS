@@ -42,6 +42,10 @@ export default class CONTAINER extends GROUP {
 		this.implement(new Draggable(this));
 		this.body = new COLLAPSIBLE(this, new MODEL('body'));
         this.body.implement(new Clickable(this.body));
+        this.btnNavHeader = new EL(this.body.pane, 'DIV', new MODEL('btn-navheader')).setInnerHTML('+');
+        this.btnNavHeader.implement(new Clickable(this.btnNavHeader));
+        this.btnNavHeader.el.addEventListener('activate', () => this.navheader.el.dispatchEvent(new Activate(this.btnNavHeader)));
+        this.btnNavHeader.el.addEventListener('deactivate', () => this.navheader.el.dispatchEvent(new Deactivate(this.btnNavHeader)));
 		this.addEvents();
 		// Cascade state
 		// Add Navbar Items
@@ -532,7 +536,7 @@ export default class CONTAINER extends GROUP {
             let { tab } = this.navheader;
             let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
 			let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
-            let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Expand(this.navheader)) : this.navheader.el.dispatchEvent(new Collapse(this.navheader));
+            let c = model.data.showNav === '1' ? this.btnNavHeader.el.dispatchEvent(new Activate(this.btnNavHeader)) : this.btnNavHeader.el.dispatchEvent(new Deactivate(this.btnNavHeader));
 			return [a, b, c];
 		}
 		return [false, false];
