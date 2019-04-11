@@ -1,5 +1,5 @@
 /** @module */
-import IFACE, { ATTRIBUTES, EL, MODEL } from './IFACE.js';
+import IFACE, { ATTRIBUTES, AbstractMethodError, EL, MODEL, MissingContainerError, RecursionLimitError } from './IFACE.js';
 import Activate from '../event/Activate.js';
 import Deactivate from '../event/Deactivate.js';
 /** An interface for Toggle driven Events for a collapsable element
@@ -44,4 +44,4 @@ export default class Switchable extends IFACE {
 		this.methods.flip = () => this.toggle('active', new Activate(node), new Deactivate(node));
 	}
 }
-export { Activate, ATTRIBUTES, Deactivate, EL, MODEL }
+export { AbstractMethodError, Activate, ATTRIBUTES, Deactivate, EL, MODEL, MissingContainerError, RecursionLimitError }
