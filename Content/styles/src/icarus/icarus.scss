@@ -254,6 +254,7 @@ $z-bottom: -1;
     border-top: 0;
     //bottom: $navbar-height;
     height: calc(100vh - #{$navheights});
+    overflow-x: hidden;
     overflow-y: scroll;
     //top: $navbar-height;
 }
@@ -275,6 +276,8 @@ $z-bottom: -1;
     color: $color-dark;
     font-family: $font-major;
     font-weight: $font-primary-weight;
+    float: none;
+    clear: both;
 
     &.active {
         text-decoration: underline;
@@ -985,8 +988,8 @@ html {
     input,
     select,
     textarea {
-        margin: 0;
-        width: 100%;
+        margin: 0 .5rem;
+        width: calc(100% - 1rem);
 
         &[type='submit'] {
             background-color: $color-blue-deep;
@@ -995,8 +998,7 @@ html {
             font-weight: bold;
             height: 50px;
             text-transform: uppercase;
-            width: 100%;
-
+            //width: 100%;
             &:hover {
                 background-color: $color-blue-lighter;
             }
@@ -1015,6 +1017,7 @@ html {
         font-size: smaller;
         line-height: 1.5rem;
         margin: .3rem 0;
+        padding: .5rem;
         text-align: left;
         text-transform: uppercase;
         width: 100%;
@@ -1238,7 +1241,7 @@ html {
         .body {
             /// A padded pane with an embedded textarea element
             .pane {
-                padding: .4rem;
+                padding: .4rem 0;
 
                 > textarea {
                     height: 10rem;
@@ -1298,6 +1301,55 @@ html {
                 }
             }
         }
+        /// A button that toggles the visibility of the navheader
+        /// This button is only visible if the container body is active
+        > .body {
+            > .pane {
+                /// A button to show hide navheader
+                .btn-navheader {
+                    @include transition($transition-default);
+                    background-color: $color-red;
+                    border-radius: .2rem;
+                    color: $color-white;
+                    float: right;
+                    font-family: $font-major;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    height: 2rem;
+                    line-height: 1rem;
+                    margin: -2rem 0 .2rem;
+                    opacity: 0;
+                    overflow-x: hidden;
+                    padding: .5rem;
+                    position: relative;
+                    right: calc(0% - 2.5em);
+                    text-align: center;
+                    top: 2.2rem;
+                    width: 2em;
+
+                    &.active {
+                        background-color: $color-red-deep;
+                    }
+                }
+            }
+
+            &.active {
+                > .pane {
+                    /// A button to show hide navheader
+                    > .btn-navheader {
+                        opacity: .8;
+                        right: 0;
+                    }
+
+                    > .screen { //jumbotron
+                        > .btn-navheader {
+                            opacity: .8;
+                            right: 0;
+                        }
+                    }
+                }
+            }
+        }
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
@@ -1333,20 +1385,21 @@ html {
                         color: $color-white;
                         display: block;
                         font-size: .8rem;
-                        width: 50%;
+                        text-align: center;
+                        //width: 50%;
                     }
 
                     > .date-created {
-                        clear: left;
-                        float: left;
-                        padding-left: .5rem;
+                        //clear: left;
+                        //float: left;
+                        //padding-left: .5rem;
                     }
 
                     > .author {
-                        clear: right;
-                        float: right;
+                        //clear: right;
+                        //float: right;
                         padding-right: .5rem;
-                        text-align: right;
+                        //text-align: right;
                     }
                 }
             }
@@ -1524,7 +1577,7 @@ html {
                     height: $jumbotron-height;
                     line-height: 2rem;
                     //margin: 0;
-                    overflow-y: hidden;
+                    overflow: hidden;
                     //padding: 0;
                     text-align: center;
                     //width: 100%;
@@ -1581,6 +1634,10 @@ html {
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
+                    /// A button to show hide navheader, hidden on MAIN
+                    > .btn-navheader {
+                        display: none;
+                    }
 
                     &.focus-left {
                         //background-color: $color-black;
