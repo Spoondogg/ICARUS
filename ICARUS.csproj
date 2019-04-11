@@ -662,8 +662,8 @@
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMMODEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
-    <Content Include="Scripts\src\icarus\model\el\TEST.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\panel\PANEL.js" />

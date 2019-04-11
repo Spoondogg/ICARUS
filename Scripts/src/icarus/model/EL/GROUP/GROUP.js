@@ -1,6 +1,5 @@
 /** @module */
-//import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import Switchable, { ATTRIBUTES, Activate, Deactivate, EL, MODEL } from '../../../interface/Switchable.js';
+import Switchable, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError, RecursionLimitError } from '../../../interface/Switchable.js';
 /** A group acts as a named, Switchable element used for grouping items
     @class
     @extends EL
@@ -24,4 +23,4 @@ export default class GROUP extends EL {
 		}*/
 	}
 }
-export { Activate, ATTRIBUTES, Deactivate, EL, GROUP, MODEL }
+export { AbstractMethodError, Activate, ATTRIBUTES, Deactivate, EL, GROUP, MissingContainerError, MODEL, RecursionLimitError }
