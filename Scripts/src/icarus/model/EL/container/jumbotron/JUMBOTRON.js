@@ -13,14 +13,15 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.addClass('jumbotron');
+        this.addClass('jumbotron');
+        this.screen = new DIV(this.body.pane, new MODEL('screen'));
+        this.screen.el.appendChild(this.btnNavHeader.el);
 	}
 	construct() {
 		//console.log(this.className + '.construct()');
 		return this.chain(() => {
 			//console.log('JUMBOTRON', this);
 			if (this.dataId > 0) {
-				this.screen = new DIV(this.body.pane, new MODEL('screen'));
 				this.setScreenColor();
 				this.createEditableElement('header', this.screen);
 				this.createEditableElement('p', this.screen);
