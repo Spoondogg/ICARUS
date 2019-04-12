@@ -104,20 +104,22 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ### Branches
 See [here](https://nvie.com/posts/a-successful-git-branching-model/)
 
-#### master
-Master
+Git branches are based on [Git Branches and Naming](https://stackoverflow.com/questions/273695/what-are-some-examples-of-commonly-used-practices-for-naming-git-branches), and more specifically this article on [git branching models](https://nvie.com/posts/a-successful-git-branching-model/)
 
-##### develop
-Master > Develop
-
-###### feature
-Master > Develop > Feature
-
-###### release
-Master > Develop > Release
-
-###### hotfix
-Master > Develop > Hotfix
+It breaks down as follows:
+- *master* branch containing merged release candidates
+  - *develop* branch off of *master*
+    - *feature* branch off of *develop*
+      - Name based on the name of the feature and related issue id. *ie: Feature_Scrollbar_123*
+      - Merges into **develop**  *(Not into the master or release branches)*
+  - *release* branch off of *master* to hold candidate releases
+    - Typical name *ie: rc1.1*
+    - Merges into **master**
+      - *bugfix* branch off of *release* **(No new features)**
+        - Name based on release candidate and related issue id. *ie: Bugfix_rc1.1_123*
+  - *hotfix* branch off of *master*
+    - Contains short-lived branches for changes that come from *master*
+    - Merges into *master* *(Without *develop* branch being involved)*
 
 ## Authors
 
