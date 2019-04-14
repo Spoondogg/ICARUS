@@ -137,13 +137,17 @@ export default class EL extends MODEL {
 		return this.chain(() => {
 			if (className === 'undefined') {
 				console.log('ClassName Undefined');
-			} else {
-				try {
-					className.split(' ').forEach((c) => this.el.classList.add(c));
-					this.attributes.class = this.el.classList.value;
-				} catch (e) {
-					console.warn('Unable to add class', className, this, e);
-				}
+            } else {
+                className.split(' ').forEach((c) => {
+                    try {
+                        if (c.length > 0) {
+                            this.el.classList.add(c);
+                        }
+                    } catch (e) {
+                        console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
+                    }
+                });
+                this.attributes.class = this.el.classList.value;
 			}
 		});
 	}
@@ -431,9 +435,14 @@ export default class EL extends MODEL {
 	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
-			if (attr !== 'innerHTML') {
-                this.setAttribute(attr, attributes[attr]);
-			} else if (attr === 'innerHTML') {
+            if (attr !== 'innerHTML') {
+                if (attr === 'class') {
+                    this.addClass(attributes[attr]);
+                } else {
+                    this.setAttribute(attr, attributes[attr]);
+                }
+            } else if (attr === 'innerHTML') {
+                console.log(this.toString() + '.processAttributes()', attr, attributes[attr]);
 				this.setInnerHTML(attributes[attr]);
 			}
 		}
