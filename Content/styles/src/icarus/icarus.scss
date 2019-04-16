@@ -755,6 +755,7 @@ html {
 
         > .body {
             @extend %modal-tall;
+            overflow-x: hidden;
 
             > form {
                 .form-footer {
@@ -1280,6 +1281,8 @@ html {
         @extend %wide-block;
         box-sizing: border-box;
 
+
+
         > nav {
             // Fixed Nav
             &.nav-header {
@@ -1301,10 +1304,40 @@ html {
                 }
             }
         }
-        /// A button that toggles the visibility of the navheader
-        /// This button is only visible if the container body is active
+
         > .body {
+            background-color: $color-light;
+            box-sizing: border-box;
+            width: 100%;
+
             > .pane {
+                @extend %no-scroll-bar;
+                @include transition($transition-default);
+                min-height: $navbar-height;
+                width: 100%;
+
+                > header {
+                    &:first-of-type {
+                        background-color: $color-dark;
+                        border-bottom: 4px solid $color-darker;
+                        //border-bottom: 1px solid $color-grey-light;
+                        box-sizing: content-box;
+                        color: $color-white;
+                        font-weight: bold;
+                        line-height: 2rem;
+                        padding: 0.2rem 0.5rem;
+                    }
+                }
+
+                > p {
+                    &:first-of-type {
+                        line-height: 1.8rem;
+                        margin: .5rem auto 0;
+                        max-width: $content-maxwidth;
+                        padding: 0 1.8rem 1rem;
+                        text-align: justify;
+                    }
+                }
                 /// A button to show hide navheader
                 .btn-navheader {
                     @include transition($transition-default);
@@ -1335,6 +1368,8 @@ html {
 
             &.active {
                 > .pane {
+                    /// A button that toggles the visibility of the navheader
+                    /// This button is only visible if the container body is active
                     /// A button to show hide navheader
                     > .btn-navheader {
                         opacity: .8;
@@ -1406,7 +1441,7 @@ html {
         }
 
         &.fieldset {
-            > .body {
+            /*> .body {
                 > .pane {
                     > legend {
                         &:first-of-type {
@@ -1416,11 +1451,11 @@ html {
                         }
                     }
                 }
-            }
+            }*/
         }
 
         &.form {
-            > .body {
+            /*> .body {
                 > .pane {
                     > header {
                         &:first-of-type {
@@ -1430,7 +1465,7 @@ html {
                         }
                     }
                 }
-            }
+            }*/
         }
 
         &.form-element {
@@ -1438,8 +1473,7 @@ html {
                 &.active {
                     background-color: $color-blue-lighter;
                 }
-
-                > .pane {
+                /*> .pane {
                     > header {
                         &:first-of-type {
                             background-color: $color-grey-light;
@@ -1447,7 +1481,7 @@ html {
                             color: $color-white;
                         }
                     }
-                }
+                }*/
             }
         }
 
@@ -1574,7 +1608,7 @@ html {
                     color: $color-white;
                     font-family: 'Raleway';
                     font-weight: 300;
-                    height: $jumbotron-height;
+                    //height: $jumbotron-height;
                     line-height: 2rem;
                     //margin: 0;
                     overflow: hidden;
@@ -1745,57 +1779,27 @@ html {
         }
 
         &.section {
-            > .body {
-                > .pane {
-                    > header {
-                        &:first-of-type {
-                            background-color: $color-dark;
-                            border-bottom: 4px solid $color-darker;
-                            color: $color-white;
-                        }
-                    }
-                }
-            }
+            //> .body {
+            //> .pane {
         }
 
         &.textblock {
             > .body {
                 &.active {
                     //background-color:
-                    > .pane {
-                        > header {
-                            &:first-of-type {
-                                background-color: $color-blue-lighter;
-                                //border-bottom: 4px solid $color-red-deep;
-                                //color: $color-white;
-                            }
+                    //> .pane {
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-blue-lighter;
+                            //border-bottom: 4px solid $color-red-deep;
+                            //color: $color-white;
                         }
                     }
+                    //}
                 }
                 /*> .pane {
                     // 
                 }*/
-            }
-        }
-
-        > .body {
-            background-color: $color-light;
-            box-sizing: border-box;
-            width: 100%;
-
-            > .pane {
-                @extend %no-scroll-bar;
-                @include transition($transition-default);
-                min-height: $navbar-height;
-                width: 100%;
-
-                > header {
-                    &:first-of-type {
-                        border-bottom: 1px solid $color-grey-light;
-                        font-weight: bold;
-                        padding: .3rem .5rem;
-                    }
-                }
             }
         }
     }
@@ -2093,15 +2097,13 @@ html {
             margin: 4px 0 8px;
             padding: 4px;
         }
-
-        p {
+        /*p {
             line-height: 1.8rem;
             margin: .5rem auto 0;
             max-width: $content-maxwidth;
             padding: 0 1.8rem 1rem;
             text-align: justify;
-        }
-
+        }*/
         .paragraph {
             header {
                 @extend %bevel-down;
