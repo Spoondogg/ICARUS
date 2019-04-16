@@ -23,7 +23,7 @@ export default class JUMBOTRON extends CONTAINER {
 			//console.log('JUMBOTRON', this);
 			if (this.dataId > 0) {
 				this.setScreenColor();
-				this.createEditableElement('header', this.screen);
+				this.createEditableElement('slogan', this.screen);
 				this.createEditableElement('p', this.screen);
 				this.loadBgImage();
 				this.setBgColor();
