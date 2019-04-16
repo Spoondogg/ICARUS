@@ -167,9 +167,12 @@ export default class CONTAINERFACTORY extends FACTORY {
 			    @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 			    @returns {Promise} A Promise to save this Container
 			*/
-            element.save = (noPrompt) => this.save(noPrompt, element, element);
+            //element.save = (noPrompt) => this.save(noPrompt, element, element);
+            element.save = this.save;
             element.quickSaveFormPost = this.quickSaveFormPost;
             element.editProperty = this.editProperty;
+            // Overwrite span with 
+            span.el.parentNode.replaceChild(element.el, span.el);
         } catch (e) {
             span.destroy();
             node.children.splice(index, 1);
@@ -337,10 +340,11 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
+        @param {string} name optional named element to focus
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
-    save(noPrompt = false, container = this, caller = this) {
-        console.log(caller.toString() + ' is attempting to SAVE ' + container.toString());
+    save(noPrompt = false, container = this, caller = this, name = null) {
+        console.log(caller.toString() + ' is attempting to SAVE ' + container.toString(), name);
         return new Promise((resolve) => {
             caller.getLoader().log(25).then((loader) => {
                 new PROMPT(new MODEL().set({
@@ -351,6 +355,9 @@ export default class CONTAINERFACTORY extends FACTORY {
                     formtype: 'CONTAINER',
                     container
                 })).then((form) => {
+                    if (name !== null) {
+                        form.hideElements(form.get()[0].get()[0].get(), name);
+                    }
                     let cont = form.getContainer();
                     cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
                     form.afterSuccessfulPost = () => {
@@ -411,7 +418,7 @@ export default class CONTAINERFACTORY extends FACTORY {
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
     editProperty(name, type = 'data') {
-        console.log(this.toString() + '.editProperty()', name, type);
+        //console.log(this.toString() + '.editProperty()', name, type);
         return new Promise((resolve, reject) => {
             console.log(25, 'Launching Editor');
             try {
@@ -442,11 +449,16 @@ export default class CONTAINERFACTORY extends FACTORY {
                                 console.log('form,dialog', form, form.getDialog());
                                 form.getDialog().deselectAll();
                             });
-                            let input = form.el.elements[name];
-                            input.focus();
-                            input.onkeyup = () => this[name].setInnerHTML(input.value);
-                            console.log(100);
-                            resolve(form.getDialog().show());
+                            try {
+                                let input = form.el.elements[name];
+                                input.focus();
+                                input.onkeyup = () => this[name].setInnerHTML(input.value);
+                                console.log(100);
+                                resolve(form.getDialog().show());
+                            } catch (ee) {
+                                console.warn('Error focusing element "' + name + '"', form.el.elements);
+                                resolve(form.getDialog().show());
+                            }                            
                         });
                     });
                 } else {
