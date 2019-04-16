@@ -146,7 +146,7 @@ export default class CONTAINER extends GROUP {
 		let [dataMenu] = menu.get(submenuName, 'MENU');
 		let type = submenuName.toString().toLowerCase();
         this.elements.get(type).forEach((d) => {
-            console.log(this.toString() + ' add doc-map attr', type, d);
+            //console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
 			let tab = dataMenu.addNavItem(new MODEL().set({
 				name,
