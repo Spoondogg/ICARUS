@@ -10,7 +10,7 @@ export default class FIELDSET extends CONTAINER {
 	    @param {MODEL} model The model
 	*/
 	constructor(node, model) {
-		super(node, 'FIELDSET', model, ['FORMELEMENTGROUP']);
+        super(node, 'FIELDSET', model, ['FORMELEMENTGROUP', 'TEXTBLOCK']);
 		this.addClass('fieldset');
 	}
 	constructElements() {
