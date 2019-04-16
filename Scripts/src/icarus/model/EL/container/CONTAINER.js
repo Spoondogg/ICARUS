@@ -11,6 +11,7 @@ import Draggable from '../../../interface/Draggable.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
+import INPUTMODEL from '../input/INPUTMODEL.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
@@ -53,8 +54,7 @@ export default class CONTAINER extends GROUP {
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
     }
-	/** Instantiates CONTAINER defaults, UId's, 
-        elements etc based on the CONTAINER model
+	/** Sets default properties of this CONTAINER to match the given MODEL
 	    @param {CONTAINERMODEL|MODEL} model Model
 	    @returns {void}
 	*/
@@ -103,8 +103,7 @@ export default class CONTAINER extends GROUP {
 			this.constructElements();
             if (model) { // Populate if model exists
 				if (model.children) {
-					return this.populate(model.children).then(
-						() => this.body.el.dispatchEvent(new Expand(this)));
+                    return this.populate(model.children);
 				}
 			}
 			return this.ifEmpty();
@@ -147,19 +146,25 @@ export default class CONTAINER extends GROUP {
 		let [dataMenu] = menu.get(submenuName, 'MENU');
 		let type = submenuName.toString().toLowerCase();
         this.elements.get(type).forEach((d) => {
+            console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
 			let tab = dataMenu.addNavItem(new MODEL().set({
 				name,
 				label: d.label
 			}));
-            tab.el.addEventListener('activate', () => {                
-                console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
-                this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
-					(mdl) => {
-						console.log(' - Result', mdl);
-					}
-                );
-                this.editProperty(name, type); 
+            tab.el.addEventListener('activate', () => {
+                try {
+                    console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
+                    this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
+                        (mdl) => {
+                            console.log(' - Result', mdl);
+                        }
+                    );
+                    this.editProperty(name, type);
+                } catch (e) {
+                    console.warn(this.toString() + ' is unable to edit "' + name + ', ' + type);
+                    tab.el.dispatchEvent(new Deactivate(tab.el));
+                }
 			});
 		});
 	}
@@ -224,17 +229,22 @@ export default class CONTAINER extends GROUP {
     createElementCollection(name, model) {
         //console.log(this.toString() + '.createElementCollection()', name);
         try {
-            let arr = this.elements.set(name, []).get(name);
+            let arr = null;
+            if (typeof this.elements.get(name) === 'undefined') {
+                arr = this.elements.set(name, []).get(name);
+            } else {
+                arr = this.elements.get(name);
+            }
             /** @type {ATTRIBUTES} */
             let collection = model[name];            
             if (collection) {
                 Object.keys(collection).forEach((key) => arr.push(createInputModel('INPUT', key, collection[key])));
             }
-            /** @type {Array<MODEL>} */
+            /** @type {Array<MODEL>} 
             let containerData = DATAELEMENTS.get('CONTAINER')[name];
             if (containerData) {
                 containerData.forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
-            }
+            }*/
             /** @type {Array<MODEL>} */
             let thisContainerData = DATAELEMENTS.get(this.className)[name];
             if (thisContainerData) {
@@ -284,7 +294,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addActivateEvents() {
         this.body.el.addEventListener('activate', () => {
-            console.log('Activated ' + this.toString(), this);
+            console.log('Activated ' + this.toString());
             try {
                 this.getMain().focusBody();
             } catch (e) {
@@ -332,7 +342,7 @@ export default class CONTAINER extends GROUP {
 	        @returns {ThisType} This Container
 	    */
 		this.moveUp = () => {
-			console.log('container up');
+			console.log(this.toString() + ': Move up');
 			let n = $(this.el);
 			if (n.prev().length > 0) {
 				n.animate({
@@ -357,7 +367,7 @@ export default class CONTAINER extends GROUP {
 		    @returns {ThisType} This Container
 		*/
 		this.moveDown = () => {
-			console.log('container down');
+            console.log(this.toString() + ': Move down');
 			let n = $(this.el);
 			if (n.next().length > 0) {
 				n.animate({
@@ -386,7 +396,41 @@ export default class CONTAINER extends GROUP {
 		this.addSelectEvents();
 		this.addActivateEvents();
 		this.addMoveEvents();
-	}
+    }
+    /** Creates an editable HEADER for this CONTAINER
+        @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
+        @param {EL} node Parent node
+	    @returns {HEADER} Header Element
+	*/
+    createEditableHeader(node) {
+        /** The CONTAINER Header is an optional editable element 
+            that can toggle visibility of the body on activation
+            @description The header has events that are bound to the CONTAINER navheader
+            In a way, this is redundant
+            @todo Consider creating styles for CONTAINER.navheader and using that instead
+            @todo Create edit method for navheader innerHTML
+        */
+        this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
+        try {
+            $(this.header.el).insertBefore(this.navheader.el);
+            if (typeof this.data.collapse !== 'undefined') {
+                if (this.data.showNav === '1') {
+                    console.log('shownav on, activating header');
+                    this.header.el.dispatchEvent(new Activate(this.header));
+                }
+            }
+            if (this.data.collapse !== '1') {
+                console.log('collapse off, activating header');
+                this.header.el.dispatchEvent(new Activate(this.header));
+            }
+            // Bind 
+            this.header.el.addEventListener('deactivate', () => this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab)));
+            this.header.el.addEventListener('activate', () => this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab)));
+            console.log(this.toString() + '.data', this.data);
+        } catch (e) {
+            console.warn('Unable to bind header with tab', e);
+        }
+    }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
         @param {string} name The Element to create,
@@ -399,8 +443,12 @@ export default class CONTAINER extends GROUP {
 				if (this.data[name]) {
 					switch (name) {
 						case 'header':
-							this[name] = new HEADER(node, new MODEL().set('innerHTML', this.data[name]));
-							break;
+                            //this.createEditableHeader(node);
+                            this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
+                            break;
+                        case 'slogan':
+                            this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
+                            break;
 						case 'p':
 							this[name] = new P(node, new MODEL().set('innerHTML', this.htmlDecode(this.data[name])));
 							break;
@@ -431,7 +479,7 @@ export default class CONTAINER extends GROUP {
 	    @returns {Promise} Resolve on success
 	*/
 	hideElements(elements, name = '') {
-        console.log(this.toString() + '.hideElements()', elements, name);
+        //console.log(this.toString() + '.hideElements()', elements, name);
         return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
 	}
 	/** Launches a FORM POST editor for the specified element
@@ -447,17 +495,16 @@ export default class CONTAINER extends GROUP {
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
         to represent this CONTAINER in a FORM
-	    @returns {Array<MODEL>} An array of input models
+	    @returns {Array<INPUTMODEL>} An array of input models
 	*/
 	createContainerInputs() {
 		//console.log(this.toString() + '.createContainerInputs()', this);
-		let subsections = this.getSubSections();
 		return [
 			createInputModel('INPUT', 'className', this.className, 'className', 'TEXT', true),
 			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
             createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
-			createInputModel('INPUT', 'subsections', subsections.length > 0 ? subsections.toString() : '0', 'SubSections', 'TEXT', true),
+            createInputModel('INPUT', 'subsections', this.getSubSections().toString() || '0', 'SubSections', 'TEXT', true),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
@@ -482,13 +529,16 @@ export default class CONTAINER extends GROUP {
     }
 	/** Saves the state of the given Container
         @param {boolean} noPrompt If false (default), no prompt is displayed
+        @param {CONTAINER} container Container to save (Default this)
+        @param {EL} caller Element that called the save (ie: switchable element resolved)
+        @param {string} name optional named element to focus
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 	    @returns {Promise} A Promise to save this Container
 	*/
-	save(noPrompt = false) {
+    save(noPrompt = false, container = this, caller = this, name = null) {
 		let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save(' + noPrompt + ') not implemented.';
-		throw new AbstractMethodError(msg, this);
+		throw new AbstractMethodError(msg, container, caller, name);
 	}
 	/** Extract the appropriate values and save
         @param {string} type Data type
@@ -531,15 +581,15 @@ export default class CONTAINER extends GROUP {
 	    @param {MODEL} model The CONTAINER object retrieved from the server
 	    @returns {Array<boolean>} Array of results
 	*/
-	setDefaultVisibility(model) {
+    setDefaultVisibility(model) {
         if (model.data) {
             let { tab } = this.navheader;
             let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
-			let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
+            let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
             let c = model.data.showNav === '1' ? this.btnNavHeader.el.dispatchEvent(new Activate(this.btnNavHeader)) : this.btnNavHeader.el.dispatchEvent(new Deactivate(this.btnNavHeader));
 			return [a, b, c];
 		}
-		return [false, false];
+		return [false, false, false];
 	}
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
 	    @param {Array<string>} containerList An array of container class names
@@ -687,7 +737,7 @@ export default class CONTAINER extends GROUP {
 			}
 		});
     }
-    /** Returns the MAIN Factory
+    /** Returns this Container's Factory
 	    @returns {FACTORY} The Main Container Factory
 	*/
     getFactory() {
@@ -810,20 +860,13 @@ export default class CONTAINER extends GROUP {
 	     @returns {array} A collection of subsection ids
     */
 	getSubSections() {
-		//console.log(this.className + '.getSubsections()', this);
-		let id = null;
-        let subsections = [];
         try {
-            for (let c = 0; c < this.body.pane.el.children.length; c++) {
-                id = parseInt(this.body.pane.el.children[c].id);
-                if (!isNaN(id)) {
-                    subsections.push(id);
-                }
-            }
+            //return this.get().filter((s) => s.id > 0).map((ss) => ss.id); // MODEL
+            return [...this.body.pane.el.children].filter((s) => s.id > 0).map((ss) => ss.id); // EL.el from HTMLElementCollection
         } catch (e) {
             console.warn(this.toString() + '.getSubSections()', e);
-        }
-		return subsections;
+            return [0];
+        }        
 	}
 	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container class
@@ -1009,5 +1052,5 @@ export default class CONTAINER extends GROUP {
 		return document.getElementsByTagName('meta').token.content;
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
 /* eslint-enable max-lines */
