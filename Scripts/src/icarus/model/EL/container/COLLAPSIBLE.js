@@ -1,7 +1,6 @@
 /** @module */
 import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible.js';
 import DIV, { ATTRIBUTES, EL, MODEL } from '../div/DIV.js';
-//import CONTAINER from '../container/CONTAINER.js';
 import PANE from './PANE.js';
 /** A collapsible DIV with an embedded PANE
     @class
