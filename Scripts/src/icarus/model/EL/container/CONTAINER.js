@@ -144,7 +144,10 @@ export default class CONTAINER extends GROUP {
 	addDocumentMapAttributes(menu, submenuName) {
 		/** @type {[MENU]} */
 		let [dataMenu] = menu.get(submenuName, 'MENU');
-		let type = submenuName.toString().toLowerCase();
+        let type = submenuName.toString().toLowerCase();
+        /*if (this.elements.get(type).length > 0) {
+            console.log(this.toString() + '.elements.' + type, this.elements.get(type).map((el) => el.label));
+        }*/
         this.elements.get(type).forEach((d) => {
             //console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
@@ -154,20 +157,29 @@ export default class CONTAINER extends GROUP {
 			}));
             tab.el.addEventListener('activate', () => {
                 try {
-                    console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
+                    /*console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
                     this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
                         (mdl) => {
                             console.log(' - Result', mdl);
                         }
-                    );
+                    );*/
                     this.editProperty(name, type);
                 } catch (e) {
                     console.warn(this.toString() + ' is unable to edit "' + name + ', ' + type);
                     tab.el.dispatchEvent(new Deactivate(tab.el));
                 }
-			});
+            });
 		});
-	}
+    }
+    /** Adds the default Document Map Attributes ('DATA', 'ATTRIBUTES', 'META') to the given MENU
+        @param {MENU} menu Document Map reference menu for this container
+        @returns {void}
+    */
+    addDefaultDocumentMapAttributes(menu) {
+        ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+        this.reference.menus.get()[0].get(null, 'NAVITEMICON').forEach(
+            (m) => m.el.addEventListener('select', () => this.editProperty('', m.name.toLowerCase())));
+    }
 	/** Adds this CONTAINER to parent reference in the Document Map
 	    @returns {void}
 	*/
@@ -183,12 +195,15 @@ export default class CONTAINER extends GROUP {
 					/** @type {[MENU]} */
 					let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
 					/** @type {NAVBAR} */
-					this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
-					this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
-					/// Add submenu items to DATA and ATTRIBUTES @see MAIN.createDocumentMap()
+                    this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
+
+                    this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
+                    
+					/// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
 					/** @type {[MENU]} */
 					let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-					['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+                    this.addDefaultDocumentMapAttributes(menu);
+
 					/// Allow only one active CHILD at a time
 					/** @type {[NAVITEMICON]} */
 					let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
@@ -223,10 +238,10 @@ export default class CONTAINER extends GROUP {
 	/** Creates this CONTAINER's MODEL collections based on the 
         default MODEL for this container type in DATAELEMENTS
 	    @param {string} name ie: data, attributes, meta
-	    @param {MODEL} model Container Model
+	    param {MODEL} model Container Model
 	    @returns {void}
 	*/
-    createElementCollection(name, model) {
+    createElementCollection(name) {
         //console.log(this.toString() + '.createElementCollection()', name);
         try {
             let arr = null;
@@ -235,16 +250,16 @@ export default class CONTAINER extends GROUP {
             } else {
                 arr = this.elements.get(name);
             }
-            /** @type {ATTRIBUTES} */
+            /** @type {ATTRIBUTES} 
             let collection = model[name];            
             if (collection) {
                 Object.keys(collection).forEach((key) => arr.push(createInputModel('INPUT', key, collection[key])));
-            }
-            /** @type {Array<MODEL>} 
+            }*/
+            /** @type {Array<MODEL>} */
             let containerData = DATAELEMENTS.get('CONTAINER')[name];
             if (containerData) {
                 containerData.forEach((m) => arr.push(m)); // Default CONTAINER Data Elements
-            }*/
+            }
             /** @type {Array<MODEL>} */
             let thisContainerData = DATAELEMENTS.get(this.className)[name];
             if (thisContainerData) {
@@ -483,13 +498,13 @@ export default class CONTAINER extends GROUP {
         return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
 	}
 	/** Launches a FORM POST editor for the specified element
-        @param {string} name The name of the input we are editing
-        @param {string} type The Type of data (data, meta, attr) we are editing
+        @param {string} [name] The name of the input we are editing
+        @param {string} [type] The Type of data (data, meta, attr) we are editing
         @abstract
         @see CONTAINERFACTORY The CONTAINERFACTORY assigns editProperty() to this CONTAINER
 	    @returns {Promise<DIALOG>} A Save PROMPT
 	*/
-    editProperty(name, type = 'data') {
+    editProperty(name = null, type = 'data') {
         throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.toString() + '.editProperty(' + name + ') not implemented.');
 	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
