@@ -1,5 +1,5 @@
 /** @module */
-import FACTORY, { ATTRIBUTES, EL, MODEL, SPAN } from '../FACTORY.js';
+import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
@@ -24,7 +24,6 @@ import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
-//import PANE from '../container/PANE.js';
 import SECTION from '../section/SECTION.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 import WORD from './word/WORD.js';
@@ -168,9 +167,12 @@ export default class CONTAINERFACTORY extends FACTORY {
 			    @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
 			    @returns {Promise} A Promise to save this Container
 			*/
-            element.save = (noPrompt) => this.save(noPrompt, element, element);
+            //element.save = (noPrompt) => this.save(noPrompt, element, element);
+            element.save = this.save;
             element.quickSaveFormPost = this.quickSaveFormPost;
             element.editProperty = this.editProperty;
+            // Overwrite span with 
+            span.el.parentNode.replaceChild(element.el, span.el);
         } catch (e) {
             span.destroy();
             node.children.splice(index, 1);
@@ -210,12 +212,12 @@ export default class CONTAINERFACTORY extends FACTORY {
 	    @param {EL} node Parent node (Generally append to node.body.pane)
 	    @param {string} className Container Constructor Name
 	    @param {number} id Container UId
-	    @returns {CONTAINER} A newly constructed container
+	    @returns {Promise<CONTAINER>} A newly constructed container
 	*/
     get(node, className, id) {
         let span = new SPAN(node, new MODEL());
-        let index = node.children.push(span); // Reserve the slot in the array        
-        return $.getJSON('/' + className + '/GET/' + id, (payload) => {
+        let index = node.children.push(span); // Reserve the slot in the array  
+        return span.getPayload(id, className).then((payload) => {
             /** @type {CONTAINER} */
             let container = null;
             if (payload.className === 'ERROR') {
@@ -338,10 +340,11 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
+        @param {string} name optional named element to focus
 	    @returns {Promise} Promise to Save (or prompt the user to save) 
 	*/
-    save(noPrompt = false, container = this, caller = this) {
-        console.log(caller.toString() + ' is attempting to SAVE ' + container.toString());
+    save(noPrompt = false, container = this, caller = this, name = null) {
+        console.log(caller.toString() + ' is attempting to SAVE ' + container.toString(), name);
         return new Promise((resolve) => {
             caller.getLoader().log(25).then((loader) => {
                 new PROMPT(new MODEL().set({
@@ -352,6 +355,9 @@ export default class CONTAINERFACTORY extends FACTORY {
                     formtype: 'CONTAINER',
                     container
                 })).then((form) => {
+                    if (name !== null) {
+                        form.hideElements(form.get()[0].get()[0].get(), name);
+                    }
                     let cont = form.getContainer();
                     cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
                     form.afterSuccessfulPost = () => {
@@ -407,14 +413,14 @@ export default class CONTAINERFACTORY extends FACTORY {
 	/** Launches a FORM POST editor for the specified element
         @todo Some map/reduce magic and this can turn into a proper collection for data, attr, meta
         
-	    @param {string} name The name of the input we are editing
-        @param {string} type The Type of data (data, meta, attr) we are editing
+	    @param {string} [name] The name of the input we are editing
+        @param {string} [type] The Type of data (data, meta, attr) we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editProperty(name, type = 'data') {
-        console.log(this.toString() + '.editProperty()', name, type);
+    editProperty(name = '', type = 'data') {
+        //console.log(this.toString() + '.editProperty()', name, type);
         return new Promise((resolve, reject) => {
-            console.log(25, 'Launching Editor');
+            //console.log(25, 'Launching Editor');
             try {
                 let typeIdStr = type + 'Id';
                 if (this[typeIdStr] > 0) {
@@ -429,24 +435,39 @@ export default class CONTAINERFACTORY extends FACTORY {
                         id: this[typeIdStr],
                         container: this
                     })).then((form) => {
-                        console.log('EDITFORM', form.get()[0].get());
+                        //console.log('EDITFORM', form.get()[0].get());
                         /*
                             FORMPOSTINPUTS do not correctly push INPUTS into
                             this.body.pane.children but instead just INPUT.children
 
                             In the future, look to merge this approach with standard
                             FORM creation
+
+                            ---
+
+                            Wrapping form.hideElements() in a chain to allow it as an
+                            optional sub function
                         */
-                        form.hideElements(form.get()[0].get()[0].get(), name).then(() => {
+                        form.chain(() => {
+                            if (name !== '') {
+                                //console.log('hiding elements');
+                                form.hideElements(form.get()[0].get()[0].get(), name);
+                            }
+                        }).then(() => {
                             /* @todo This should trigger on a 'close' event */
                             form.getDialog().close = () => form.getDialog().hide().then(() => {
-                                console.log('form,dialog', form, form.getDialog());
+                                //console.log('form,dialog', form, form.getDialog());
                                 form.getDialog().deselectAll();
                             });
-                            let input = form.el.elements[name];
-                            input.focus();
-                            input.onkeyup = () => this[name].setInnerHTML(input.value);
-                            console.log(100);
+                            if (name !== '') {
+                                try {
+                                    let input = form.el.elements[name];
+                                    input.focus();
+                                    input.onkeyup = () => this[name].setInnerHTML(input.value);                                    
+                                } catch (ee) {
+                                    console.warn('Error focusing element "' + name + '"', form.el.elements);
+                                }
+                            } 
                             resolve(form.getDialog().show());
                         });
                     });
@@ -461,5 +482,5 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PROMPT }
+export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
 /* eslint-enable */

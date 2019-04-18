@@ -23,10 +23,12 @@ export default class GULPFILE {
 		try {
 			return pipe()
 				.on('error', (e) => this.logError(' - ' + label + ': Error', e, done))
-				.on('success', () => console.log(' - ' + label + ': Success'), done)
+                .on('success', () => console.log(' - ' + label + ': Success'), done)
+                .on('finish', () => console.log(' - ' + label + ': Finish'), done)
 				.on('end', () => this.logCompletion(' - ' + label + ': End', done));
 		} catch (e) {
-			console.warn('Unable to add Events to Stream: ' + label, e);
+            console.warn('Unable to add Events to Stream: ' + label, e);
+            done();
 			throw e;
 		}
 	}
