@@ -163,8 +163,9 @@ export default class MAIN extends CONTAINER {
             this.save(false);
         });
 		/** @type {[MENU]} */
-		let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-		['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
+        this.addDefaultDocumentMapAttributes(menu);
+
 		// Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
@@ -235,7 +236,7 @@ export default class MAIN extends CONTAINER {
 		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
 		let crudMenu = optionsMenu[0].get('CRUD', 'MENU');
 		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
-	}
+    }
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF
         @returns {Promise<boolean>} Promised to return true if new MAIN created successfully
@@ -243,8 +244,8 @@ export default class MAIN extends CONTAINER {
 	createNew() {
 		return new Promise((resolve, reject) => {
 			try {
-				this.getLoader().log(20, 'Creating new MAIN Element', true).then((loader) => {
-					$.getJSON('/MAIN/Get/0', (payload) => {
+                this.getLoader().log(20, 'Creating new MAIN Element', true).then((loader) => {
+                    this.getPayload(0, 'MAIN').then((payload) => {
 						console.log(payload.message, payload);
 						if (payload.result === 0) {
 							resolve(this.login());
@@ -471,4 +472,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }

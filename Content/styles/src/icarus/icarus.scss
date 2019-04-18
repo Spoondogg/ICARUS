@@ -55,7 +55,6 @@ $color-darker: rgb(16, 16, 16);
 $color-dark: rgb(23, 23, 23);
 $color-dark-less: rgb(33, 33, 33);
 $content-maxwidth: 900px;
-$container-bgcolor: adjust-color($color-black, $alpha: .8);
 /// Header Font
 /// @type Font
 $font-header: 'Raleway', sans-serif;
@@ -255,6 +254,7 @@ $z-bottom: -1;
     border-top: 0;
     //bottom: $navbar-height;
     height: calc(100vh - #{$navheights});
+    overflow-x: hidden;
     overflow-y: scroll;
     //top: $navbar-height;
 }
@@ -276,6 +276,8 @@ $z-bottom: -1;
     color: $color-dark;
     font-family: $font-major;
     font-weight: $font-primary-weight;
+    float: none;
+    clear: both;
 
     &.active {
         text-decoration: underline;
@@ -753,6 +755,7 @@ html {
 
         > .body {
             @extend %modal-tall;
+            overflow-x: hidden;
 
             > form {
                 .form-footer {
@@ -986,8 +989,8 @@ html {
     input,
     select,
     textarea {
-        margin: 0;
-        width: 100%;
+        margin: 0 .5rem;
+        width: calc(100% - 1rem);
 
         &[type='submit'] {
             background-color: $color-blue-deep;
@@ -996,8 +999,7 @@ html {
             font-weight: bold;
             height: 50px;
             text-transform: uppercase;
-            width: 100%;
-
+            //width: 100%;
             &:hover {
                 background-color: $color-blue-lighter;
             }
@@ -1016,6 +1018,7 @@ html {
         font-size: smaller;
         line-height: 1.5rem;
         margin: .3rem 0;
+        padding: .5rem;
         text-align: left;
         text-transform: uppercase;
         width: 100%;
@@ -1239,7 +1242,7 @@ html {
         .body {
             /// A padded pane with an embedded textarea element
             .pane {
-                padding: .4rem;
+                padding: .4rem 0;
 
                 > textarea {
                     height: 10rem;
@@ -1278,6 +1281,8 @@ html {
         @extend %wide-block;
         box-sizing: border-box;
 
+
+
         > nav {
             // Fixed Nav
             &.nav-header {
@@ -1296,6 +1301,87 @@ html {
                             }
                         }
                     }*/
+                }
+            }
+        }
+
+        > .body {
+            background-color: $color-light;
+            box-sizing: border-box;
+            width: 100%;
+
+            > .pane {
+                @extend %no-scroll-bar;
+                @include transition($transition-default);
+                min-height: $navbar-height;
+                width: 100%;
+
+                > header {
+                    &:first-of-type {
+                        background-color: $color-dark;
+                        border-bottom: 4px solid $color-darker;
+                        //border-bottom: 1px solid $color-grey-light;
+                        box-sizing: content-box;
+                        color: $color-white;
+                        font-weight: bold;
+                        line-height: 2rem;
+                        padding: 0.2rem 0.5rem;
+                    }
+                }
+
+                > p {
+                    &:first-of-type {
+                        line-height: 1.8rem;
+                        margin: .5rem auto 0;
+                        max-width: $content-maxwidth;
+                        padding: 0 1.8rem 1rem;
+                        text-align: justify;
+                    }
+                }
+                /// A button to show hide navheader
+                .btn-navheader {
+                    @include transition($transition-default);
+                    background-color: $color-red;
+                    border-radius: .2rem;
+                    color: $color-white;
+                    float: right;
+                    font-family: $font-major;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    height: 2rem;
+                    line-height: 1rem;
+                    margin: -2rem 0 .2rem;
+                    opacity: 0;
+                    overflow-x: hidden;
+                    padding: .5rem;
+                    position: relative;
+                    right: calc(0% - 2.5em);
+                    text-align: center;
+                    top: 2.2rem;
+                    width: 2em;
+
+                    &.active {
+                        background-color: $color-red-deep;
+                    }
+                }
+            }
+
+            &.active {
+                > .pane {
+                    /// A button that toggles the visibility of the navheader
+                    /// This button is only visible if the container body is active
+                    /// A button to show hide navheader
+                    > .btn-navheader {
+                        opacity: .8;
+                        right: 0;
+                    }
+
+                    > .screen { //jumbotron
+                        > .btn-navheader {
+                            opacity: .8;
+                            right: 0;
+                        }
+                    }
                 }
             }
         }
@@ -1334,20 +1420,21 @@ html {
                         color: $color-white;
                         display: block;
                         font-size: .8rem;
-                        width: 50%;
+                        text-align: center;
+                        //width: 50%;
                     }
 
                     > .date-created {
-                        clear: left;
-                        float: left;
-                        padding-left: .5rem;
+                        //clear: left;
+                        //float: left;
+                        //padding-left: .5rem;
                     }
 
                     > .author {
-                        clear: right;
-                        float: right;
+                        //clear: right;
+                        //float: right;
                         padding-right: .5rem;
-                        text-align: right;
+                        //text-align: right;
                     }
                 }
             }
@@ -1386,8 +1473,7 @@ html {
                 &.active {
                     background-color: $color-blue-lighter;
                 }
-
-                > .pane {
+                /*> .pane {
                     > header {
                         &:first-of-type {
                             background-color: $color-grey-light;
@@ -1395,7 +1481,7 @@ html {
                             color: $color-white;
                         }
                     }
-                }
+                }*/
             }
         }
 
@@ -1522,10 +1608,10 @@ html {
                     color: $color-white;
                     font-family: 'Raleway';
                     font-weight: 300;
-                    height: $jumbotron-height;
+                    //height: $jumbotron-height;
                     line-height: 2rem;
                     //margin: 0;
-                    overflow-y: hidden;
+                    overflow: hidden;
                     //padding: 0;
                     text-align: center;
                     //width: 100%;
@@ -1582,6 +1668,10 @@ html {
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
+                    /// A button to show hide navheader, hidden on MAIN
+                    > .btn-navheader {
+                        display: none;
+                    }
 
                     &.focus-left {
                         //background-color: $color-black;
@@ -1689,57 +1779,27 @@ html {
         }
 
         &.section {
-            > .body {
-                > .pane {
-                    > header {
-                        &:first-of-type {
-                            background-color: $color-dark;
-                            border-bottom: 4px solid $color-darker;
-                            color: $color-white;
-                        }
-                    }
-                }
-            }
+            //> .body {
+            //> .pane {
         }
 
         &.textblock {
             > .body {
                 &.active {
                     //background-color:
-                    > .pane {
-                        > header {
-                            &:first-of-type {
-                                background-color: $color-blue-lighter;
-                                //border-bottom: 4px solid $color-red-deep;
-                                //color: $color-white;
-                            }
+                    //> .pane {
+                    > header {
+                        &:first-of-type {
+                            background-color: $color-blue-lighter;
+                            //border-bottom: 4px solid $color-red-deep;
+                            //color: $color-white;
                         }
                     }
+                    //}
                 }
                 /*> .pane {
                     // 
                 }*/
-            }
-        }
-
-        > .body {
-            background-color: $color-light;
-            box-sizing: border-box;
-            width: 100%;
-
-            > .pane {
-                @extend %no-scroll-bar;
-                @include transition($transition-default);
-                min-height: $navbar-height;
-                width: 100%;
-
-                > header {
-                    &:first-of-type {
-                        border-bottom: 1px solid $color-grey-light;
-                        font-weight: bold;
-                        padding: .3rem .5rem;
-                    }
-                }
             }
         }
     }
@@ -2037,15 +2097,13 @@ html {
             margin: 4px 0 8px;
             padding: 4px;
         }
-
-        p {
+        /*p {
             line-height: 1.8rem;
             margin: .5rem auto 0;
             max-width: $content-maxwidth;
             padding: 0 1.8rem 1rem;
             text-align: justify;
-        }
-
+        }*/
         .paragraph {
             header {
                 @extend %bevel-down;

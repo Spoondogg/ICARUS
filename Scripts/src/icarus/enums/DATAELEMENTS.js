@@ -1,5 +1,6 @@
 /** @module */
 import MODEL, { ATTRIBUTES } from '../model/MODEL.js';
+import INPUTMODEL from '../model/el/input/INPUT.js';
 /* eslint-disable max-params */
 /** Instantiates an INPUT MODEL with all required values
     @todo Refactor to MODELS, a class that handles the Application MODEL(s), caching, queueing etc
@@ -10,7 +11,7 @@ import MODEL, { ATTRIBUTES } from '../model/MODEL.js';
     @param {string} type The input type
     @param {boolean} readonly If true, element is readonly
     @param {number} showNav If 1, NavBar is shown
-    @returns {MODEL} An input model
+    @returns {INPUTMODEL} An input model
 */
 export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0, ...attr) => new MODEL(new ATTRIBUTES({
 	name,
@@ -33,97 +34,100 @@ export const createInputModel = (element, name, value = '', label = name, type =
     @type {Map<string, DATAEL>}
 */
 export const DATAELEMENTS = new Map([
-	[
+    [
         'CONTAINER', {
-			data: [
-				createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
-				createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'NUMBER')
-			],
-			attributes: [],
-			meta: [createInputModel('TEXTAREA', 'description')]
-		}
-	],
-	[
-		'ARTICLE', {
-			containers: ['JUMBOTRON', 'FORM', 'SECTION'],
-			data: [createInputModel('INPUT', 'header')],
-			attributes: [createInputModel('INPUT', 'name')]
-		}
-	],
-	[
-		'CALLOUT', {
-			data: [
-				createInputModel('INPUT', 'icon'),
-				createInputModel('INPUT', 'header', 'Header'),
-				createInputModel('INPUT', 'p', 'Text')
-			]
-		}
-	],
-	[
-		'DICTIONARY', {
-			data: [createInputModel('INPUT', 'language')]
-		}
-	],
-	[
-		'FIELDSET', {
-			data: [createInputModel('INPUT', 'legend')],
-			attributes: [createInputModel('INPUT', 'name', 'fieldset-name')]
-		}
-	],
-	[
-		'FORM', {
-			containers: ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET'],
             data: [
-                createInputModel('INPUT', 'header'),
+                createInputModel('INPUT', 'showNav', '1', 'showNav', 'CHECKBOX'),
+                createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'CHECKBOX')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'name'),
+                createInputModel('INPUT', 'class')
+            ],
+            meta: [createInputModel('TEXTAREA', 'description')]
+        }
+    ],
+    [
+        'ARTICLE', {
+            containers: ['JUMBOTRON', 'FORM', 'SECTION']
+            //data: [createInputModel('INPUT', 'header')]
+        }
+    ],
+    [
+        'CALLOUT', {
+            data: [
+                createInputModel('INPUT', 'icon'),
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('INPUT', 'p', 'Text')
+            ]
+        }
+    ],
+    [
+        'DICTIONARY', {
+            data: [createInputModel('INPUT', 'language')]
+        }
+    ],
+    [
+        'FIELDSET', {
+            data: [createInputModel('INPUT', 'legend')],
+            attributes: [createInputModel('INPUT', 'name', 'fieldset-name')]
+        }
+    ],
+    [
+        'FORM', {
+            containers: ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET'],
+            data: [
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description'),
                 createInputModel('INPUT', 'hidden', '0', 'hidden', 'CHECKBOX')
             ],
-			attributes: [
-				createInputModel('INPUT', 'name', 'text-input'),
-				createInputModel('INPUT', 'method', 'POST'),
-				createInputModel('INPUT', 'action', 'FORM/SUBMIT')
-			]
-		}
-	],
-	[
-		'FORMELEMENT', {
-			data: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'Text Input'),
-				createInputModel('INPUT', 'label', 'Input Label'),
-				createInputModel('INPUT', 'value')
-			],
-			attributes: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'text-input'),
-				createInputModel('INPUT', 'value', ''),
-				createInputModel('INPUT', 'placeholder', '')
-			]
-		}
-	],
-	[
-		'FORMELEMENTGROUP', {
-			containers: ['FORMINPUT'],
-			data: [createInputModel('INPUT', 'header')],
-			attributes: [createInputModel('INPUT', 'name', 'text-input')]
-		}
-	],
-	[
-		'FORMINPUT', {
-			data: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'Text Input'),
-				createInputModel('INPUT', 'label', 'Input Label'),
-				createInputModel('INPUT', 'value')
-			],
-			attributes: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'text-input'),
-				createInputModel('INPUT', 'value', ''),
-				createInputModel('INPUT', 'placeholder', '')
-			]
-		}
-	],
-	['FORMPOST', {}],
+            attributes: [
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'method', 'POST'),
+                createInputModel('INPUT', 'action', 'FORM/SUBMIT')
+            ]
+        }
+    ],
+    [
+        'FORMELEMENT', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
+    [
+        'FORMELEMENTGROUP', {
+            containers: ['FORMINPUT'],
+            data: [createInputModel('INPUT', 'header')],
+            attributes: [createInputModel('INPUT', 'name', 'text-input')]
+        }
+    ],
+    [
+        'FORMINPUT', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
+    ['FORMPOST', {}],
     [
         'FORMPOSTINPUT', {
             data: [
@@ -140,73 +144,75 @@ export const DATAELEMENTS = new Map([
             ]
         }
     ],
-	[
-		'FORMTEXTAREA', {
-			data: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'Text Input'),
-				createInputModel('INPUT', 'label', 'Input Label'),
-				createInputModel('INPUT', 'value')
-			],
-			attributes: [
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name', 'text-input'),
-				createInputModel('INPUT', 'value', ''),
-				createInputModel('INPUT', 'placeholder', '')
-			]
-		}
-	],
-	['INDEX', {}],
-	['INDEXMAIN', {}],
-	[
-		'INPUT', {
-			data: [
-				createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
-				createInputModel('INPUT', 'type', 'TEXT'),
-				createInputModel('INPUT', 'name'),
-				createInputModel('INPUT', 'value')
-			],
-			attributes: [createInputModel('INPUT', 'placeholder')]
-		}
-	],
-	[
-		'JUMBOTRON', {
-			data: [
-				createInputModel('INPUT', 'header', 'JT Header'),
-				createInputModel('TEXTAREA', 'p', 'JT Textarea'),
-				createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-					inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
-				}),
-				createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
-				createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
-			],
-			attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
-		}
-	],
-	['LIST', {}],
-	[
-		'LISTITEM', {
-			data: [createInputModel('INPUT', 'p', 'Text')]
-		}
-	],
-	[
-		'MAIN', {
-			containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
-			data: [
-				createInputModel('INPUT', 'author', 'AuthorName'),
-				createInputModel('INPUT', 'title', 'MAIN')
-			],
-			attributes: []
-		}
-	],
-	[
-		'PARAGRAPH', {
-			data: [createInputModel('INPUT', 'p', 'Paragraph Text')]
-		}
-	],
-	[
-		'SECTION', {
-			data: [createInputModel('INPUT', 'header')],
+    [
+        'FORMTEXTAREA', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
+    ['INDEX', {}],
+    ['INDEXMAIN', {}],
+    [
+        'INPUT', {
+            data: [
+                createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [createInputModel('INPUT', 'placeholder')]
+        }
+    ],
+    [
+        'JUMBOTRON', {
+            data: [
+                createInputModel('INPUT', 'slogan', 'JT Slogan'),
+                createInputModel('TEXTAREA', 'p', 'JT Textarea'),
+                createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
+                    inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
+                }),
+                createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
+                createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
+            ],
+            attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
+        }
+    ],
+    ['LIST', {}],
+    [
+        'LISTITEM', {
+            data: [createInputModel('INPUT', 'p', 'Text')]
+        }
+    ],
+    [
+        'MAIN', {
+            containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+            data: [
+                createInputModel('INPUT', 'author', 'AuthorName'),
+                createInputModel('INPUT', 'title', 'MAIN')
+            ]
+        }
+    ],
+    [
+        'PARAGRAPH', {
+            data: [createInputModel('INPUT', 'p', 'Paragraph Text')]
+        }
+    ],
+    [
+        'SECTION', {
+            data: [
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ],
 			attributes: [createInputModel('INPUT', 'name')]
 		}
 	],
@@ -215,24 +221,8 @@ export const DATAELEMENTS = new Map([
 	[
 		'TEXTBLOCK', {
 			data: [
-				createInputModel('INPUT', 'header'),
-				createInputModel('TEXTAREA', 'p', ' ')
-			]
-		}
-	],
-	[
-		'TEXTBLOCK', {
-			data: [
-				createInputModel('INPUT', 'header'),
-				createInputModel('TEXTAREA', 'p', ' ')
-			]
-		}
-	],
-	[
-		'TEXTBLOCK', {
-			data: [
-				createInputModel('INPUT', 'header'),
-				createInputModel('TEXTAREA', 'p', ' ')
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description')
 			]
 		}
 	],
@@ -242,8 +232,8 @@ export const DATAELEMENTS = new Map([
 				createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
 					inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
 				}),
-				createInputModel('INPUT', 'header', 'Header'),
-				createInputModel('INPUT', 'p', 'Text'),
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description'),
 				createInputModel('INPUT', 'bgImage')
 			]
 		}
@@ -260,3 +250,4 @@ export const DATAELEMENTS = new Map([
 	]
 ]);
 /* eslint-enable max-params */
+export { INPUTMODEL }
