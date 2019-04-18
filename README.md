@@ -95,11 +95,31 @@ See [EsLint](https://github.com/Spoondogg/ICARUS/blob/master/config/eslint.json)
 
 ## Contribute
 
-Please read [CONTRIBUTING](https://github.com/Spoondogg/ICARUS/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](https://github.com/Spoondogg/ICARUS/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
 
 ### Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Spoondogg/ICARUS/tags). 
+
+### Branches
+See [here](https://nvie.com/posts/a-successful-git-branching-model/)
+
+Git branches are based on [Git Branches and Naming](https://stackoverflow.com/questions/273695/what-are-some-examples-of-commonly-used-practices-for-naming-git-branches), and more specifically this article on [git branching models](https://nvie.com/posts/a-successful-git-branching-model/)
+
+It breaks down as follows:
+- *master* branch containing merged release candidates
+  - *develop* branch off of *master*
+    - *feature* branch off of *develop*
+      - Name based on the name of the feature and related issue id. *ie: Feature_Scrollbar_123*
+      - Merges into **develop**  *(Not into the master or release branches)*
+  - *release* branch off of *master* to hold candidate releases
+    - Typical name *ie: rc1.1*
+    - Merges into **master**
+      - *bugfix* branch off of *release* **(No new features)**
+        - Name based on release candidate and related issue id. *ie: Bugfix_rc1.1_123*
+  - *hotfix* branch off of *master*
+    - Contains short-lived branches for changes that come from *master*
+    - Merges into *master* *(Without *develop* branch being involved)*
 
 ## Authors
 

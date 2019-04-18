@@ -1,16 +1,17 @@
 /** @module */
-/** Represents a standardized data object that can be POSTed and validated
+/** Represents a standardized data-structure based on an HTML Form that can be POSTed and validated
     @class    
 */
 export default class FORMPOST {
 	/** Constructs a FORMPOST for the given form
-	    @param {FORM} form The form that generated this FORMPOST
+        @param {UId} formId Form UId
+        @param {Array} formResults Form Results An ordered array of key/value pairs as they appear in the FORM (form.getResultsAsArray())
     */
-	constructor(form) {
-		this.id = form.id;
-		this.formId = form.id;
-		//this.label = form.el.getAttribute('name');
-		this.results = form.getResultsAsArray(); // An ordered array of key/value pairs as they appear in the FORM
+	constructor(formId, formResults) {
+        this.id = formId;
+        /** The FORM UId that this FORMPOST belongs to */
+        this.formId = formId;
+        this.results = formResults;
 		this.message = '';
 		/* eslint-disable-next-line no-underscore-dangle */
 		this.__RequestVerificationToken = this.results[this.results.length - 1].value;
