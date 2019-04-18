@@ -13,16 +13,17 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
-		this.addClass('jumbotron');
+        this.addClass('jumbotron');
+        this.screen = new DIV(this.body.pane, new MODEL('screen'));
+        this.screen.el.appendChild(this.btnNavHeader.el);
 	}
 	construct() {
 		//console.log(this.className + '.construct()');
 		return this.chain(() => {
 			//console.log('JUMBOTRON', this);
 			if (this.dataId > 0) {
-				this.screen = new DIV(this.body.pane, new MODEL('screen'));
 				this.setScreenColor();
-				this.createEditableElement('header', this.screen);
+				this.createEditableElement('slogan', this.screen);
 				this.createEditableElement('p', this.screen);
 				this.loadBgImage();
 				this.setBgColor();
@@ -39,10 +40,10 @@ export default class JUMBOTRON extends CONTAINER {
     */
 	loadBgImage() {
 		if (this.data.bgimage !== '0' && this.data.bgimage !== '.') {
-			try {
-				$.getJSON('/FORMPOST/GET/' + parseInt(this.data.bgimage), (data) => {
+            try {
+                this.getPayload(parseInt(this.data.bgimage)).then((payload) => {
 					try {
-						let parsed = JSON.parse(data.model.jsonResults);
+						let parsed = JSON.parse(payload.model.jsonResults);
 						parsed.filter((p) => p.name === 'base64').map((v) => this.setBgImage(v.value));
 						/*for (let p = 0; p < parsed.length; p++) { // Extract the base64 values and create an image
 							if (parsed[p].name === 'base64') {

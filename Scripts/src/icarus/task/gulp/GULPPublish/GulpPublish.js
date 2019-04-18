@@ -72,7 +72,8 @@ export default class GulpPublish extends GULPFILE {
 		return this.gulp.series(
 			(done) => this.logCompletion('GulpPublish.styles_lintbuildpublish()', done),
 			(done) => this.auditer.lintStyles(done),
-			(done) => this.builder.buildStyles(done, src, dest, 'icarus', dev),
+            (done) => this.builder.buildStyles(done, src, dest, 'icarus', dev),
+            (done) => this.builder.buildSassVariables(done),
 			(done) => this.publish(done, 'PublishStyles', [GULPPATHS.styles.baseglob], GULPPATHS.server.dev + dest));
 	}
 }

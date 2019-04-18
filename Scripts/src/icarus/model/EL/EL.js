@@ -2,7 +2,9 @@
     @module icarus/model/el
 */
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
+import AbstractMethodError from '../../error/AbstractMethodError.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
+import PAYLOAD from './form/PAYLOAD.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
 /** A Generic HTML Element Node
@@ -135,13 +137,17 @@ export default class EL extends MODEL {
 		return this.chain(() => {
 			if (className === 'undefined') {
 				console.log('ClassName Undefined');
-			} else {
-				try {
-					className.split(' ').forEach((c) => this.el.classList.add(c));
-					this.attributes.class = this.el.classList.value;
-				} catch (e) {
-					console.warn('Unable to add class', className, this, e);
-				}
+            } else {
+                className.split(' ').forEach((c) => {
+                    try {
+                        if (c.length > 0) {
+                            this.el.classList.add(c);
+                        }
+                    } catch (e) {
+                        console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
+                    }
+                });
+                this.attributes.class = this.el.classList.value;
 			}
 		});
 	}
@@ -292,7 +298,42 @@ export default class EL extends MODEL {
 	*/
 	getTail() {
 		return this.get()[this.get().length - 1];
-	}
+    }
+    /** Performs an AJAX request and calls the given method with the JSON response
+        @param {string} url HTTP Request Url
+        @param {Function} fn Function that accepts the resulting payload as its only argument
+        @param {string} method Request Method (ie: 'POST','GET')
+        @returns {Object} A JSON object retrieved from the given url
+    */
+    getJson(url, fn, method = 'GET') {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let payload = JSON.parse(this.responseText);
+                fn(payload);
+            }
+        };
+        xmlhttp.open(method, url, true);
+        xmlhttp.send();
+    }
+    /** Retrieves a Payload matching the given params (if permitted)
+        @param {number} uid Type UId (ie: Formpost(123) = 123)
+        @param {string} [type] Payload type (default: FORMPOST)
+        @returns {Promise<PAYLOAD>} Promise to resolve a PAYLOAD Class
+        @todo Implement a non-jquery version 
+        @see https://www.w3schools.com/js/js_json_parse.asp 
+        @see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
+    */
+    getPayload(uid, type = 'FORMPOST') {
+        return new Promise((resolve, reject) => {
+            try {
+                this.getJson('/' + type + '/GET/' + uid, (payload) => resolve(new PAYLOAD(payload)));
+            } catch (e) {
+                console.warn('Unable to retrieve payload', type, uid, e);
+                reject(e);
+            }
+        });
+    }
 	/** Retrieves the previous element (if exists) 
 	    @returns {EL} Previous Sibling Element
 	*/
@@ -394,9 +435,14 @@ export default class EL extends MODEL {
 	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
-			if (attr !== 'innerHTML') {
-                this.setAttribute(attr, attributes[attr]);
-			} else if (attr === 'innerHTML') {
+            if (attr !== 'innerHTML') {
+                if (attr === 'class') {
+                    this.addClass(attributes[attr]);
+                } else {
+                    this.setAttribute(attr, attributes[attr]);
+                }
+            } else if (attr === 'innerHTML') {
+                console.log(this.toString() + '.processAttributes()', attr, attributes[attr]);
 				this.setInnerHTML(attributes[attr]);
 			}
 		}
@@ -560,4 +606,4 @@ export default class EL extends MODEL {
 		return this.className + '()';
 	}
 }
-export { ATTRIBUTES, MODEL }
+export { AbstractMethodError, ATTRIBUTES, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }

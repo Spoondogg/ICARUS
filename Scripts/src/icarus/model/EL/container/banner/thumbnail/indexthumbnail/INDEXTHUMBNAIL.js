@@ -64,8 +64,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
 	launchPreview(delay = 500, className, id) { //title = 'Preview', // node
-		setTimeout(() => {
-			$.getJSON('/' + className + '/Get/' + id, (result) => {
+        setTimeout(() => {
+            this.getJson('/' + className + '/GET/' + id, (result) => {
 				console.log(className, result);
 				this.modal.container.preview.create(result.model);
 			});
@@ -73,8 +73,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		/** Get a list of Parents for this Container
 		    @returns {void}
 		*/
-		setTimeout(() => {
-			$.getJSON('/' + className + '/GetContainerParents/' + id, (result) => {
+        setTimeout(() => {
+            this.getJson('/' + className + '/GetContainerParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});
