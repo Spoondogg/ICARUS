@@ -1441,7 +1441,7 @@ html {
         }
 
         &.fieldset {
-            /*> .body {
+            > .body {
                 > .pane {
                     > legend {
                         &:first-of-type {
@@ -1451,11 +1451,11 @@ html {
                         }
                     }
                 }
-            }*/
+            }
         }
 
         &.form {
-            /*> .body {
+            > .body {
                 > .pane {
                     > header {
                         &:first-of-type {
@@ -1465,7 +1465,7 @@ html {
                         }
                     }
                 }
-            }*/
+            }
         }
 
         &.form-element {
