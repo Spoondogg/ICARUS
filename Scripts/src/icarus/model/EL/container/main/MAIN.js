@@ -163,8 +163,9 @@ export default class MAIN extends CONTAINER {
             this.save(false);
         });
 		/** @type {[MENU]} */
-		let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-		['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
+        this.addDefaultDocumentMapAttributes(menu);
+
 		// Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));

@@ -32,16 +32,17 @@ export default class FORM extends CONTAINER {
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
 		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-	}
-	constructElements() {
-		return this.chain(() => {
-			if (this.dataId > 0) {
-				this.createEditableElement('header', this.body.pane);
-			} else {
-				this.ifEmpty();
-			}
-		});
-	}
+    }
+    constructElements() {
+        return this.chain(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
+                this.createEditableElement('p', this.body.pane);
+            } else {
+                this.ifEmpty();
+            }
+        });
+    }
     /** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
@@ -166,7 +167,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
     addInputs(inputs = [], target = this) {
-        console.log(this.toString() + '.addInputs()', inputs, target);
+        //console.log(this.toString() + '.addInputs()', inputs, target);
 		return new Promise((resolve) => {
 			if (inputs) {
 				Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
