@@ -413,14 +413,14 @@ export default class CONTAINERFACTORY extends FACTORY {
 	/** Launches a FORM POST editor for the specified element
         @todo Some map/reduce magic and this can turn into a proper collection for data, attr, meta
         
-	    @param {string} name The name of the input we are editing
-        @param {string} type The Type of data (data, meta, attr) we are editing
+	    @param {string} [name] The name of the input we are editing
+        @param {string} [type] The Type of data (data, meta, attr) we are editing
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editProperty(name, type = 'data') {
+    editProperty(name = '', type = 'data') {
         //console.log(this.toString() + '.editProperty()', name, type);
         return new Promise((resolve, reject) => {
-            console.log(25, 'Launching Editor');
+            //console.log(25, 'Launching Editor');
             try {
                 let typeIdStr = type + 'Id';
                 if (this[typeIdStr] > 0) {
@@ -435,30 +435,40 @@ export default class CONTAINERFACTORY extends FACTORY {
                         id: this[typeIdStr],
                         container: this
                     })).then((form) => {
-                        console.log('EDITFORM', form.get()[0].get());
+                        //console.log('EDITFORM', form.get()[0].get());
                         /*
                             FORMPOSTINPUTS do not correctly push INPUTS into
                             this.body.pane.children but instead just INPUT.children
 
                             In the future, look to merge this approach with standard
                             FORM creation
+
+                            ---
+
+                            Wrapping form.hideElements() in a chain to allow it as an
+                            optional sub function
                         */
-                        form.hideElements(form.get()[0].get()[0].get(), name).then(() => {
+                        form.chain(() => {
+                            if (name !== '') {
+                                //console.log('hiding elements');
+                                form.hideElements(form.get()[0].get()[0].get(), name);
+                            }
+                        }).then(() => {
                             /* @todo This should trigger on a 'close' event */
                             form.getDialog().close = () => form.getDialog().hide().then(() => {
-                                console.log('form,dialog', form, form.getDialog());
+                                //console.log('form,dialog', form, form.getDialog());
                                 form.getDialog().deselectAll();
                             });
-                            try {
-                                let input = form.el.elements[name];
-                                input.focus();
-                                input.onkeyup = () => this[name].setInnerHTML(input.value);
-                                console.log(100);
-                                resolve(form.getDialog().show());
-                            } catch (ee) {
-                                console.warn('Error focusing element "' + name + '"', form.el.elements);
-                                resolve(form.getDialog().show());
-                            }                            
+                            if (name !== '') {
+                                try {
+                                    let input = form.el.elements[name];
+                                    input.focus();
+                                    input.onkeyup = () => this[name].setInnerHTML(input.value);                                    
+                                } catch (ee) {
+                                    console.warn('Error focusing element "' + name + '"', form.el.elements);
+                                }
+                            } 
+                            resolve(form.getDialog().show());
                         });
                     });
                 } else {
