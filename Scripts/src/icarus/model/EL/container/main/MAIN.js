@@ -444,8 +444,8 @@ export default class MAIN extends CONTAINER {
 				//form.id = 0;
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
-				form.addClass('register');
-				form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')

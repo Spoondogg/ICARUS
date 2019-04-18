@@ -28,8 +28,8 @@ export default class FORMELEMENT extends CONTAINER {
         //this.body.el.addEventListener('activate', () => {
             //this.getContainer().dispatchToChildren(new Deactivate(this));
             /*console.log('Deactivating ' + this.toString() + '.siblings');
-            let [fs] = this.getContainer().get(null, 'FIELDSET');
-            let [felg] = fs.get(null, 'FORMELEMENTGROUP');
+            let [fs] = this.getContainer().getFieldset();
+            let [felg] = fs.getFormElementGroup();
             let els = felg.get();
             els.forEach((el) => {
                 console.log('EL', el);
