@@ -565,12 +565,13 @@ export default class CONTAINER extends GROUP {
 	/** Restore Container View to defaults and refresh parent Container
 	    @returns {void}
     */
-	refreshParentContainer() {
+    refreshParentContainer() {
+        console.log(this.toString() + '.refreshParentContainer()');
 		try {
 			this.getMain().focusBody();
 			//this.getMain().loader.hide();
 		} catch (e) {
-			console.log(e);
+			console.log('Unable to focus main');
 		}
 		try {
 			this.getContainer().refresh();
@@ -638,11 +639,11 @@ export default class CONTAINER extends GROUP {
 		return $('<div/>').html(value).text();
 	}
 	/** Empties the Container Pane and reconstructs its contents based on the current model
-        @param {MODEL} model By default, use this CONTAINER's model
+        @param {MODEL} [model] Optional MODEL to inject values from (Default behavior is to use this CONTAINER's MODEL)
         @returns {Promise<ThisType>} Promise Chain
     */
 	refresh(model = this) { // Optionally retrieve a new MODEL
-		console.log('Refresh', this);
+		console.log(this.toString() + '.refresh()', this);
 		return this.chain(
 			() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
 				(loader) => {
@@ -913,13 +914,6 @@ export default class CONTAINER extends GROUP {
 			console.log('Container.QuickSaveParent() No parent exists');
 			return false;
 		}
-	}
-	/** Actions performed after this container is saved
-        @param {Payload} payload Form Response Payload
-        @returns {void}
-    */
-	afterSuccessfulPost(payload) {
-		console.log(100, 'Post Results', payload);
 	}
 	/** Returns the label for this section
 	    @returns {string} The label
