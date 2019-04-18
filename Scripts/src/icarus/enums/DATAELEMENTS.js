@@ -98,7 +98,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
@@ -121,7 +120,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
@@ -154,7 +152,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
