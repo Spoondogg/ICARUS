@@ -512,7 +512,23 @@ export default class EL extends MODEL {
                 }
 			}
 		});
-	}
+    }
+    /** Removes the given attribute from the element and sets its model value to null
+        @param {string} key Attribute name
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    removeAttribute(key) {
+        return this.chain(() => {
+            if (typeof key === 'string') {
+                try {
+                    this.attributes.set(key, null);
+                    this.el.removeAttribute(key);
+                } catch (e) {
+                    console.warn(this.toString() + '.removeAttribute(' + key + '): Unable to remove attribute', e);
+                }
+            }
+        });
+    }
 	/** Gets the container (if exists) and sets it
 	    @returns {void}
 	*/

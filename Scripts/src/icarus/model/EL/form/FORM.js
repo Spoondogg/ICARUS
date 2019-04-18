@@ -49,7 +49,14 @@ export default class FORM extends CONTAINER {
 	*/
 	addFieldset(model) {
 		return this.addChild(new FIELDSET(this.body.pane, model));
-	}
+    }
+    /** Returns an array of FIELDSET(s), optionally filtered to the specified name
+        @param {string} [name] Optional name to filter search
+        @returns {Array<FIELDSET>} An array of FIELDSET(s)
+    */
+    getFieldset(name = null) {
+        return this.get(name, 'FIELDSET');
+    }
 	/** Adds a single FIELDSET and FORMELEMENTGROUP as children of this FORM and
         populates based on the given FORMPOST MODEL
         @description This is a description
@@ -71,28 +78,8 @@ export default class FORM extends CONTAINER {
             try {
                 form.getPayload(id).then((payload) => {
                     let inputs = form.generateFormPostInputs(payload, className, type);
-                    let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
-                     
-                    console.log('inputs', inputs);
-
-                    /** @type {FIELDSET} */
-                    //let [fieldset] = form.get(null, 'FIELDSET');
-
-                    /** @type {FORMELEMENTGROUP} */
-                    //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
-
-                    /*formelementgroup.populate(inputs).then(() => {
-                        if (payload.model.jsonResults) { // Set values based on existing 
-                            JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
-                        }
-                        form.afterSuccessfulPost = () => form.getDialog().close();
-                        if (model.inputNode) {
-                            model.inputNode.el.setAttribute('value', form.el.elements.id.value);
-                        }
-                        resolve(form);
-                    });*/
-                    /////////////////////////////////////
-                    form.addInputs(inputs, target).then(() => {
+                    console.log('inputs', inputs);                    
+                    form.getFieldset()[0].getFormElementGroup()[0].addInputElements(inputs).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
                             JSON.parse(payload.model.jsonResults).forEach((inp) => form.setTextInputValue(inp));
                         }
@@ -138,10 +125,11 @@ export default class FORM extends CONTAINER {
 			try {
                 FORM.createEmptyForm(node, model.hidden).then((frm) => {
                     let inputs = model.container.createContainerInputs();
-                    let [target] = frm.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
-					frm.setAction(model.container.className + '/SET').addInputs(inputs, target).then((f) => {
-						f.afterSuccessfulPost = () => f.getDialog().close();
-						resolve(f);
+                    let [target] = frm.getFieldset()[0].getFormElementGroup();
+                    frm.setAction(model.container.className + '/SET');
+                    target.addInputElements(inputs).then(() => {
+						frm.afterSuccessfulPost = () => frm.getDialog().close();
+						resolve(frm);
 					});
 				});
 			} catch (e) {
@@ -160,68 +148,26 @@ export default class FORM extends CONTAINER {
 			}
 			resolve(this);
 		});
-	}
-	/** Adds the provided inputs to the FORM asynchronously
-	    @param {Array<MODEL>} inputs An array of INPUT Models
-        @param {CONTAINER} target Target node
-	    @returns {Promise<ThisType>} Promise Chain
-	*/
-    addInputs(inputs = [], target = this) {
-        //console.log(this.toString() + '.addInputs()', inputs, target);
-		return new Promise((resolve) => {
-			if (inputs) {
-				Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
-			}
-			resolve(this);
-		});
-	}
-	/** Adds the input to the FORM 
-	    @param {ModelWithContainer} model An input model
-	    @param {FORMELEMENTGROUP} target Target Form Element Group
-	    @returns {Promise<FORMELEMENT>} Newly created Form Element
-	*/
-    addInput(model, target) {
-        //console.log('FORM.addInput()', this, model, target);
-        /** @type {FIELDSET} */
-        //let [fieldset] = this.get(null, 'FIELDSET');
-
-        /** @type {FORMELEMENTGROUP} */
-        //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
-
-		return new Promise((resolve, reject) => {
-			try {
-				model.set({
-					container: this,
-					loader: model.loader
-                });
-                               
-				/** @type {FORMELEMENT} */
-				let inp = null;
-				if (model.type === 'FORMPOSTINPUT') {
-					inp = new FORMPOSTINPUT(target.body.pane, model);
-				} else {
-					switch (model.element) {
-						case 'TEXTAREA':
-							inp = new FORMTEXTAREA(target.body.pane, model);
-							break;
-						case 'SELECT':
-							inp = new FORMSELECT(target.body.pane, model);
-							break;
-						case 'INPUT':
-							inp = new FORMINPUT(target.body.pane, model);
-							break;
-						default:
-							inp = new FORMINPUT(target.body.pane, model);
-							break;
-					}
-				}
-                target.body.pane.children.push(inp);
-				resolve(inp);
-			} catch (e) {
-				reject(e);
-			}
-		});
-	}
+    }
+    /** Actions performed after this CONTAINER is saved.
+        @description Typically, the form should be hidden or replaced with some sort of SUCCESS notification
+        @param {Payload} payload Form Response Payload
+        @returns {void}
+    */
+    afterSuccessfulPost(payload) {
+        console.log(100, 'Post Results', payload);
+        /** An array of form elements (fieldsets, buttons etc) that can be disabled
+            @type {Array<EL>} Collection of Form Elements
+        */
+        let toDisable = this.footer.buttonGroup.get().push(this.getFieldset());
+        toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
+        /** A button that restores functionality of the form */
+        let btnReset = this.footer.buttonGroup.addButton('Reset Form', ICONS.RESET); 
+        btnReset.el.onclick = () => {
+            toDisable.forEach((el) => el.removeAttribute('disabled'));
+            btnReset.destroy();
+        }
+    }
 	/** Returns the default Input array
 	    @param {object} data Payload
 	    @returns {Array} An array of INPUT models
