@@ -1,6 +1,7 @@
 ﻿/** @module */
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import { AbstractMethodError } from './container/CONTAINER.js';
+import PAYLOAD from './form/PAYLOAD.js';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -58,8 +59,8 @@ export default class FACTORY {
 	*/
 	get(node, className, id = 0) {
 		let span = new SPAN(node, new MODEL());
-		let index = node.children.push(span); // Reserve the slot in the array        
-		return $.getJSON('/' + className + '/GET/' + id, (payload) => {
+        let index = node.children.push(span); // Reserve the slot in the array  
+        return span.getPayload(id, className).then((payload) => {
 			if (payload.className === 'ERROR') {
 				if (payload.exception === 'AuthenticationException') {
                     this.authenticationException(node);
@@ -102,5 +103,5 @@ export default class FACTORY {
     }
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
-export { ATTRIBUTES, EL, MODEL, SPAN }
+export { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN }
 /* eslint-enable */

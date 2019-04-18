@@ -32,10 +32,10 @@ export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
 			if (this.data.img) {
 				if (Number.isInteger(parseInt(this.data.img))) { // If this.data.img is integer, retrieve relevant formpost
 					try { // Test to see if the formpost can be retrieved
-						$.getJSON('/FORMPOST/Get/' + parseInt(this.data.img), (data) => { // If access granted...
-							if (data.model) {
-								if (data.model.jsonResults) {
-									parsed = JSON.parse(data.model.jsonResults);
+                        this.getPayload(parseInt(this.data.img)).then((payload) => { // If access granted...
+							if (payload.model) {
+								if (payload.model.jsonResults) {
+									parsed = JSON.parse(payload.model.jsonResults);
 									let img = {}; // Extract the base64 values and create an image
 									parsed.forEach(({
 										name,

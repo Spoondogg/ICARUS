@@ -32,17 +32,18 @@ export default class FORM extends CONTAINER {
 		// Set focused container for relevant keyBindings
 		this.el.addEventListener('focusin', () => this.setFocus('focusin'));
 		this.el.addEventListener('focusout', () => this.setFocus('focusout'));
-	}
-	constructElements() {
-		return this.chain(() => {
-			if (this.dataId > 0) {
-				this.createEditableElement('header', this.body.pane);
-			} else {
-				this.ifEmpty();
-			}
-		});
-	}
-	/** Constructs a Fieldset for this FORM
+    }
+    constructElements() {
+        return this.chain(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.body.pane);
+                this.createEditableElement('p', this.body.pane);
+            } else {
+                this.ifEmpty();
+            }
+        });
+    }
+    /** Constructs a Fieldset for this FORM
 	    @param {MODEL} model Object model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
@@ -66,20 +67,19 @@ export default class FORM extends CONTAINER {
 			id
 		} = model;
         return new Promise((resolve, reject) => FORM.createEmptyForm(node, hidden).then((form) => {
-            form.setAction('FORMPOST/SET');  
-
-            try { // frm.setId(payload.model.id);
-                $.getJSON('/FORMPOST/GET/' + id, (payload) => {
+            form.setAction('FORMPOST/SET');
+            try {
+                form.getPayload(id).then((payload) => {
                     let inputs = form.generateFormPostInputs(payload, className, type);
                     let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
                      
                     console.log('inputs', inputs);
 
                     /** @type {FIELDSET} */
-                    let [fieldset] = form.get(null, 'FIELDSET');
+                    //let [fieldset] = form.get(null, 'FIELDSET');
 
                     /** @type {FORMELEMENTGROUP} */
-                    let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+                    //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
                     /*formelementgroup.populate(inputs).then(() => {
                         if (payload.model.jsonResults) { // Set values based on existing 
@@ -167,7 +167,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
     addInputs(inputs = [], target = this) {
-        console.log(this.toString() + '.addInputs()', inputs, target);
+        //console.log(this.toString() + '.addInputs()', inputs, target);
 		return new Promise((resolve) => {
 			if (inputs) {
 				Promise.all(inputs.map((i) => this.addInput(i, target))).then(() => resolve(this));
@@ -181,12 +181,12 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<FORMELEMENT>} Newly created Form Element
 	*/
     addInput(model, target) {
-        console.log('FORM.addInput()', this, model, target);
+        //console.log('FORM.addInput()', this, model, target);
         /** @type {FIELDSET} */
-        let [fieldset] = this.get(null, 'FIELDSET');
+        //let [fieldset] = this.get(null, 'FIELDSET');
 
         /** @type {FORMELEMENTGROUP} */
-        let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
+        //let [formelementgroup] = fieldset.get(null, 'FORMELEMENTGROUP');
 
 		return new Promise((resolve, reject) => {
 			try {
@@ -532,14 +532,13 @@ export default class FORM extends CONTAINER {
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
 	getResultsAsArray() {
-		//console.log('FORM.getResultsAsArray()', $(this.el).serializeArray());
 		return $(this.el).serializeArray();
 	}
 	/** If valid, Returns a FormPost based on values in this form
-	    @returns {FormPost} A FormPost Object
+	    @returns {FORMPOST} A FormPost Object
 	*/
 	getFormPost() {
-		return this.validate().isValid ? new FORMPOST(this) : null;
+		return this.validate().isValid ? new FORMPOST(this.id, this.getResultsAsArray()) : null;
 	}
 	/* eslint-disable max-lines-per-function */
 	/** Post FORM values to server

@@ -15,6 +15,8 @@ import sass from 'gulp-sass';
 import source from 'vinyl-source-stream';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
+import through from 'through2';
+import utf8 from 'utf8';
 /** GulpFile that performs Build tasks
     @class
     @extends GULPFILE
@@ -36,7 +38,8 @@ export default class GulpBuild extends GULPFILE {
 			(done) => this.logCompletion('==============> GulpBuild.build(' + profile + ')', done),
 			(done) => this.auditor.beautifyAll()(done),
 			(done) => this.auditor.lintAll()(done),
-			(done) => this.buildStyles(done, GULPPATHS.styles.src, GULPPATHS.server.dev + GULPPATHS.styles.dest, 'icarus', dev),
+            (done) => this.buildStyles(done, GULPPATHS.styles.src, GULPPATHS.server.dev + GULPPATHS.styles.dest, 'icarus', dev),
+            (done) => this.buildSassVariables(done),
 			(done) => this.buildAllScripts(dev)(done));
 	}
 	/** Builds Source and Vendor Scripts
@@ -48,7 +51,7 @@ export default class GulpBuild extends GULPFILE {
 			(done) => this.buildScripts(done, GULPPATHS.scripts.src, GULPPATHS.server.dev + GULPPATHS.scripts.dest, dev),
 			(done) => this.buildVendorScripts(done));
 	}
-	/** Creates a Pipe for Building Scripts
+	/** Creates a Pipe for Building Stylesheets based on Sass
 	    @param {string} src Source Path
         @param {string} dest Destination path
         @param {string} basename Stylesheet filename
@@ -113,7 +116,91 @@ export default class GulpBuild extends GULPFILE {
 	*/
 	buildVendorStyles(done, dest = GULPPATHS.server.dev + GULPPATHS.styles.dest, filename = 'vendor') {
 		return this.addEvents('BuildVendorStyles', () => this.buildVendorStylesStream(dest, filename), done);
-	}
+    }
+    /** Converts a Sass Variable name to a Javascript friendly variable name
+        @param {string} sassVar Sass Variable Name
+        @returns {string} Javascript Friendly Variable Name
+    */
+    createJSVarName(sassVar) {
+        let items = sassVar.split('-');
+        let casedItems = items.map((s) => {
+            let result = '';
+            if (s) {
+                result = s[0].toUpperCase() + s.substr(1);
+            }
+            return result;
+        });
+        return casedItems.join('');
+    }
+    /** Evaluates Sass Variables and generates a Javascript Module
+        @todo Investigate Encoding issues (UTF-8 encode)
+        @param {string} sassBlob Sass Text Blob
+        @returns {gulp.stream} A gulp stream
+    */
+    processSass(sassBlob) {
+        let stream = through();
+        try {
+            let lines = sassBlob.split(/(?:\r\n|\r|\n)/gu);
+            stream.write('/* eslint-disable */\n');
+            stream.write('/** Sass Variables - @see Content/styles/icarus/icarus.scss\n\t@module\n*/\n');
+            lines.forEach((line) => {
+                let match = line.match(/^\$(.*)\s*:\s*(.*);/u);
+                if (match) {
+                    let name = this.createJSVarName(match[1]);
+                    let [, , value] = match;
+                    let v = null;
+                    if (value[0] >= '0' && value[0] <= '9') {
+                        v = parseInt(value, 10);
+                    } else {
+                        v = '"' + value + '"';
+                    }
+                    stream.write("export const " + name + " = " + v + ";\n");
+                }
+            });
+        } catch (e) {
+            console.log('GulpBuild.processSass() Unable to process Sass', e);
+        }
+        return stream;
+    }
+    /** Generates a Javascript file based on a given Sass Document
+        @returns {Function} callback
+    */
+    gulpSassVarsToJs() {
+        return through.obj((file, encoding, callback) => {
+            try {
+                if (file.isBuffer()) {
+                    let input = String(file.contents);
+                    file.contents = this.processSass(input);
+                    console.log('Sass has been processed');
+                    return callback(null, file);
+                }
+                return callback(null, file);
+            } catch (e) {
+                console.log('GulpSassVarsToJs() An error occurred', e);
+                return callback(null, file);
+            }
+        });
+    }
+    /** Creates Javascript Variables based on Sass Variables
+	    @param {Function} done Callback
+	    @param {string} [src] Styles source path
+	    @param {string} [dest] Variables file destination path
+        @param {string} [filename] Specifies the output filename
+	    @returns {Promise} Gulp promise
+	*/
+    buildSassVariables(done, src = GULPPATHS.styles.src, dest = GULPPATHS.scripts.base + '/enums', filename = 'StyleVars.js') {
+        try {
+            this.gulp.src(src)
+                .pipe(this.gulpSassVarsToJs())
+                .pipe(rename(filename))
+                .pipe(this.gulp.dest(dest));
+            console.log('- SassVars Pipe completed.');
+            done();
+        } catch (e) {
+            console.warn('- Unable to construct Gulp Stream', e);
+            throw e;
+        }
+    }
 	/** Retrieves font dependencies from external (CDN) and saves locally (src,dist)
 	    @param {Function} done Callback
 	    @returns {void} 
