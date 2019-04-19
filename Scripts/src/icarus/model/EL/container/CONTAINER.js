@@ -294,15 +294,19 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	addSelectEvents() {
-		this.body.el.addEventListener('select', () => {
-            console.log('Selected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Expand(this.navheader));
-			this.getMain().focusBody();
+		/*this.body.el.addEventListener('select', (event) => {
+            console.log('Selected ' + this.toString());
+            //event.preventDefault();
+            event.stopPropagation();
+            //this.navheader.el.dispatchEvent(new Expand(this.navheader));
+			//this.getMain().focusBody();
 		});
 		this.body.el.addEventListener('deselect', () => {
-            console.log('Deselected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Collapse(this.navheader));
-		});
+            console.log('Deselected ' + this.toString());
+            //event.preventDefault();
+            event.stopPropagation();
+            //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
+		});*/
 	}
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
