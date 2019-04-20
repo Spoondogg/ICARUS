@@ -243,7 +243,7 @@ export default class EL extends MODEL {
 	    @returns {FACTORY} An element factory
 	*/
     getFactory() {
-        console.log(this.toString() + ': Retrieving ' + this.factory.toString());
+        //console.log(this.toString() + ': Retrieving ' + this.factory.toString());
         return this.factory;
     }
     /** Sets this element's factory
@@ -252,7 +252,7 @@ export default class EL extends MODEL {
     */
     setFactory(factory) {
         if (this.factory === null) {
-            console.log(this.toString() + '.factory set to ' + factory.toString());
+            //console.log(this.toString() + '.factory set to ' + factory.toString());
             this.factory = factory;
         }
     }
