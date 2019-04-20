@@ -3,6 +3,7 @@ import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NA
 import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
+import FORMFACTORY from '../formelement/FORMELEMENTFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
@@ -24,7 +25,7 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
-        this.factory = model.factory;
+        this.setFactory(model.factory);
         /** MAIN doesnt get injected with editProperty but instead
             calls directly from its factory
         */
@@ -40,7 +41,9 @@ export default class MAIN extends CONTAINER {
 		this.save = this.factory.save;
 		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.watchMousePosition();
-		this.expandMain();
+        this.expandMain();
+        /** Add factories */
+        this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
 	}
 	constructElements() {
 		if (this.dataId > 0) {
@@ -48,7 +51,7 @@ export default class MAIN extends CONTAINER {
 		} else {
             document.title = this.label;
         }
-	}
+    }
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
 	    @returns {void}
@@ -129,12 +132,6 @@ export default class MAIN extends CONTAINER {
 	*/
 	getUser() {
 		return this.user;
-	}
-	/** Returns the MAIN Factory
-	    @returns {CONTAINERFACTORY} The Main Container Factory
-	*/
-	getFactory() {
-		return this.factory;
 	}
 	/** Acts as an undo or back function
 	    @returns {void}
@@ -444,8 +441,8 @@ export default class MAIN extends CONTAINER {
 				//form.id = 0;
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
-				form.addClass('register');
-				form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
