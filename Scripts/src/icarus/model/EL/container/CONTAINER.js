@@ -34,7 +34,7 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
-		super(node, element, model);
+        super(node, element, model);
 		this.addClass('container');
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
@@ -294,15 +294,19 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	addSelectEvents() {
-		this.body.el.addEventListener('select', () => {
-            console.log('Selected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Expand(this.navheader));
-			this.getMain().focusBody();
+		/*this.body.el.addEventListener('select', (event) => {
+            console.log('Selected ' + this.toString());
+            //event.preventDefault();
+            event.stopPropagation();
+            //this.navheader.el.dispatchEvent(new Expand(this.navheader));
+			//this.getMain().focusBody();
 		});
 		this.body.el.addEventListener('deselect', () => {
-            console.log('Deselected ' + this.toString(), this);
-            this.navheader.el.dispatchEvent(new Collapse(this.navheader));
-		});
+            console.log('Deselected ' + this.toString());
+            //event.preventDefault();
+            event.stopPropagation();
+            //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
+		});*/
 	}
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
@@ -565,12 +569,13 @@ export default class CONTAINER extends GROUP {
 	/** Restore Container View to defaults and refresh parent Container
 	    @returns {void}
     */
-	refreshParentContainer() {
+    refreshParentContainer() {
+        console.log(this.toString() + '.refreshParentContainer()');
 		try {
 			this.getMain().focusBody();
 			//this.getMain().loader.hide();
 		} catch (e) {
-			console.log(e);
+			console.log('Unable to focus main');
 		}
 		try {
 			this.getContainer().refresh();
@@ -638,11 +643,11 @@ export default class CONTAINER extends GROUP {
 		return $('<div/>').html(value).text();
 	}
 	/** Empties the Container Pane and reconstructs its contents based on the current model
-        @param {MODEL} model By default, use this CONTAINER's model
+        @param {MODEL} [model] Optional MODEL to inject values from (Default behavior is to use this CONTAINER's MODEL)
         @returns {Promise<ThisType>} Promise Chain
     */
 	refresh(model = this) { // Optionally retrieve a new MODEL
-		console.log('Refresh', this);
+		console.log(this.toString() + '.refresh()', this);
 		return this.chain(
 			() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
 				(loader) => {
@@ -751,12 +756,6 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-    }
-    /** Returns this Container's Factory
-	    @returns {FACTORY} The Main Container Factory
-	*/
-    getFactory() {
-        return this.getMain().getFactory();
     }
 	/** Adds a button to the given menu that promises to construct the given CONTAINER name
 	    @param {string} className CONTAINER class name to construct
@@ -913,13 +912,6 @@ export default class CONTAINER extends GROUP {
 			console.log('Container.QuickSaveParent() No parent exists');
 			return false;
 		}
-	}
-	/** Actions performed after this container is saved
-        @param {Payload} payload Form Response Payload
-        @returns {void}
-    */
-	afterSuccessfulPost(payload) {
-		console.log(100, 'Post Results', payload);
 	}
 	/** Returns the label for this section
 	    @returns {string} The label
