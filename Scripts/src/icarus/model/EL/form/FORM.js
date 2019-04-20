@@ -159,8 +159,10 @@ export default class FORM extends CONTAINER {
         /** An array of form elements (fieldsets, buttons etc) that can be disabled
             @type {Array<EL>} Collection of Form Elements
         */
-        let toDisable = this.footer.buttonGroup.get().push(this.getFieldset());
+        let toDisable = this.footer.buttonGroup.get();
+        this.getFieldset().forEach((fs) => toDisable.push(fs));
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
+
         /** A button that restores functionality of the form */
         let btnReset = this.footer.buttonGroup.addButton('Reset Form', ICONS.RESET); 
         btnReset.el.onclick = () => {
