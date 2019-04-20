@@ -34,7 +34,7 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
-		super(node, element, model);
+        super(node, element, model);
 		this.addClass('container');
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
@@ -756,12 +756,6 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-    }
-    /** Returns this Container's Factory
-	    @returns {FACTORY} The Main Container Factory
-	*/
-    getFactory() {
-        return this.getMain().getFactory();
     }
 	/** Adds a button to the given menu that promises to construct the given CONTAINER name
 	    @param {string} className CONTAINER class name to construct

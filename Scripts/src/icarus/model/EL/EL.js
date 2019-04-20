@@ -3,6 +3,7 @@
 */
 import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import AbstractMethodError from '../../error/AbstractMethodError.js';
+import FACTORY from './FACTORY.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
 import PAYLOAD from './form/PAYLOAD.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
@@ -20,7 +21,11 @@ export default class EL extends MODEL {
 	constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
-        this.setMain();        
+        this.setMain();
+        /** An element FACTORY
+            @type {FACTORY}
+        */
+        this.factory = null;
 		/** Parent EL
 		    @type {EL}
 		*/
@@ -233,7 +238,24 @@ export default class EL extends MODEL {
 				throw e;
 			}
 		}
-	}
+    }
+    /** Returns the element's factory
+	    @returns {FACTORY} An element factory
+	*/
+    getFactory() {
+        console.log(this.toString() + ': Retrieving ' + this.factory.toString());
+        return this.factory;
+    }
+    /** Sets this element's factory
+        @param {FACTORY} factory An element factory
+        @returns {void}
+    */
+    setFactory(factory) {
+        if (this.factory === null) {
+            console.log(this.toString() + '.factory set to ' + factory.toString());
+            this.factory = factory;
+        }
+    }
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
         @param {string} className Element Class
@@ -622,4 +644,4 @@ export default class EL extends MODEL {
 		return this.className + '()';
 	}
 }
-export { AbstractMethodError, ATTRIBUTES, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
+export { AbstractMethodError, ATTRIBUTES, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
