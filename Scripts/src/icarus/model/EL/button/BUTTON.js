@@ -1,7 +1,6 @@
 /** @module */
-import EL, { MODEL } from '../EL.js';
+import SPAN, { EL, MODEL } from '../span/SPAN.js';
 import GLYPHICON from '../span/GLYPHICON.js';
-import SPAN from '../span/SPAN.js';
 /** A generic BUTTON Element with an Icon and Label
     @class
     @extends EL
@@ -11,7 +10,7 @@ export default class BUTTON extends EL {
 	    @param {EL} node The parent object
 	    @param {string} label The label
 	    @param {string} glyphicon The glyphicon (optional)
-	    @param {string} buttonType The type of button ie: [button, reset, submit]
+	    @param {string} [buttonType] The type of button ie: [button, reset, submit]
 	*/
 	constructor(node, label, glyphicon, buttonType = 'BUTTON') {
 		super(node, 'BUTTON', new MODEL());

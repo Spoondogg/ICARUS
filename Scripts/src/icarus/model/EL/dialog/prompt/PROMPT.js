@@ -37,7 +37,7 @@ export default class PROMPT extends DIALOG {
 			//});
 		});
 	}
-	/** Adds buttons, inputs etc to the given FORM
+	/** Sets required defaults for a PROMPT FORM
 	    @param {FORM} form The form to configure
 	    @param {ModelWithContainer} model The FORM model
 	    @returns {Promise<FORM>} Promise Chain
@@ -46,9 +46,6 @@ export default class PROMPT extends DIALOG {
         console.log(this.toString() + '.configureForm()', form, model);
 		return new Promise((resolve, reject) => {
             try {
-                let [target] = form.get(null, 'FIELDSET')[0].get(null, 'FORMELEMENTGROUP');
-				form.addInputs(model.inputs, target);
-				form.addButtons(model.buttons);
 				form.getDialog = () => this;
 				form.getContainer = () => model.container;
 				form.container = model.container;
