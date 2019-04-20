@@ -658,6 +658,7 @@
     <Content Include="Scripts\src\icarus\model\el\a\anchor\ANCHOR.js" />
     <Content Include="Scripts\src\icarus\model\el\button\switch\SWITCH.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\FORMELEMENTFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
