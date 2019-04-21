@@ -1,9 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
+import MENU from '../../../nav/menu/MENU.js';
 /** Represents an INPUT for an Icarus Form
     @class
     @extends FORMELEMENT
@@ -12,7 +13,6 @@ export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
 		return this.chain(() => {
             this.input = new INPUT(this.body.pane, new INPUTMODEL(new MODEL(), {
-				class: 'form-control',
 				type: this.attributes.type || 'TEXT', // || this.data.type
 				list: this.attributes.name + '-options',
 				name: this.attributes.name,
@@ -33,8 +33,43 @@ export default class FORMINPUT extends FORMELEMENT {
 			case 'HIDDEN':
                 this.body.el.dispatchEvent(new Collapse(this.body));
 				break;
-			case 'CHECKBOX':
-				this.input.el.checked = this.attributes.value > 0;
+            case 'CHECKBOX':
+                this.optionsMenu = new MENU(this.body.pane, new MODEL('checkmark-menu'));
+                this.optionsMenu.addNavItem(new MODEL().set({
+                    label: 'YES',
+                    name: 'yes'
+                }));
+                this.optionsMenu.get('yes')[0].el.addEventListener('activate', () => {
+                    this.input.el.checked = true;
+                    this.input.setAttribute('value', 1);
+                    //this.attributes.value = 1;
+                });
+
+                this.optionsMenu.addNavItem(new MODEL().set({
+                    label: 'NO',
+                    name: 'no'
+                }));
+                this.optionsMenu.get('no')[0].el.addEventListener('activate', () => {
+                    this.input.el.checked = false;
+                    this.input.setAttribute('value', -1);
+                    //this.attributes.value = -1;
+                });
+
+                this.optionsMenu.el.dispatchEvent(new Expand(this.optionsMenu));
+                
+                this.input.el.checked = parseInt(this.attributes.value) === 1;
+
+                //let [yes] = this.optionsMenu.get('yes', 'NAVITEM');
+                //let [no] = this.optionsMenu.get('no', 'NAVITEM');
+                if (parseInt(this.attributes.value) === 1) {
+                    console.log('setting checked');
+                    this.optionsMenu.get('yes')[0].el.dispatchEvent(new Activate(this.optionsMenu.get('yes')[0]));
+                    this.optionsMenu.get('no')[0].el.dispatchEvent(new Deactivate(this.optionsMenu.get('no')[0]));
+                } else {
+                    this.optionsMenu.get('no')[0].el.dispatchEvent(new Activate(this.optionsMenu.get('no')[0]));
+                    this.optionsMenu.get('yes')[0].el.dispatchEvent(new Deactivate(this.optionsMenu.get('yes')[0]));
+                }
+                
 				this.input.el.onchange = () => {
 					this.attributes.value = this.input.el.checked ? 1 : -1;
 					this.input.el.value = this.input.el.checked ? 1 : -1;

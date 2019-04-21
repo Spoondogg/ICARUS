@@ -17,7 +17,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
             @type {INPUT}
         */
         this.input = new INPUT(this.inputGroup, new INPUTMODEL(new MODEL(), {
-			class: 'form-control',
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',
