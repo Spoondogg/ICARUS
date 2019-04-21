@@ -11,26 +11,26 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Email, new { @class = "control-label" })
             <div class="element-group">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Password, new { @class = "control-label" })
             <div>
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.Password, new { @class = "" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
             <div>
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "" })
             </div>
         </div>
         @* http://www.dotnetcurry.com/aspnet-mvc/1102/aspnet-mvc-role-based-security *@
         <div class="form-group">
             @Html.Label("Role", new { @class = "control-label" })
             <div>
-                <select class="form-control" name="Name" id="Name" required="required">
+                <select name="Name" id="Name" required="required">
                     <option></option>
                     <option value="User">User</option>
                 </select>
