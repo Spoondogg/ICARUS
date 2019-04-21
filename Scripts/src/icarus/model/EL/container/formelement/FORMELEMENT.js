@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, Collapse, EL, Expand, INPUTTYPES, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, Activate, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL } from '../CONTAINER.js';
 import Hideable from '../../../../interface/Hideable.js';
 import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
@@ -20,6 +20,10 @@ export default class FORMELEMENT extends CONTAINER {
             @type {LABEL}
         */
         this.inputLabel = new LABEL(this.body.pane, new MODEL().set('innerHTML', model.label));
+        this.inputLabel.el.onclick = (event) => {
+            event.stopPropagation();
+            this.input.el.focus();
+        }
         /** The primary INPUT Element and data holder for this Form Element
             @type {INPUT}
         */
@@ -73,4 +77,4 @@ export default class FORMELEMENT extends CONTAINER {
 		return Promise.resolve(this);
     }
 }
-export { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, INPUTTYPES, LABEL, MODEL }
+export { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, LABEL, MODEL }
