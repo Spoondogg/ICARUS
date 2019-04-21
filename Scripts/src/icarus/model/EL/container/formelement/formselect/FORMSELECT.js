@@ -2,7 +2,6 @@
 import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import OPTION from '../../../option/OPTION.js';
 import SELECT from '../../../select/SELECT.js';
-//import STRING from '../../../../../STRING.js';
 /** Represents a <SELECT> for an Icarus Form    
     @class
     @extends FORMELEMENT
@@ -23,8 +22,7 @@ export default class FORMSELECT extends FORMELEMENT {
     */
 	createSelect() {
 		this.input = new SELECT(this.body.pane, new MODEL(new ATTRIBUTES({
-			'class': 'form-control',
-			'name': ('INPUT_' + String().guid()).friendly()
+			name: ('INPUT_' + String().guid()).friendly()
 		})));
 		if (this.dataId > 0) {
 			let options = this.data.options.split(',');
