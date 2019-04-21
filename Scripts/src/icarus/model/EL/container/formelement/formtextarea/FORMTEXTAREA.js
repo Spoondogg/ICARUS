@@ -9,7 +9,6 @@ export default class FORMTEXTAREA extends FORMELEMENT {
     constructElements() {
         return this.chain(() => {
             this.input = new TEXTAREA(this.body.pane, new MODEL(new ATTRIBUTES({
-                class: 'form-control',
                 name: this.attributes.name
             })), this.attributes.value || '');
         });

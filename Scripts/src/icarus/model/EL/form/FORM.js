@@ -479,9 +479,20 @@ export default class FORM extends CONTAINER {
 	/** Serialize the form into an array
 	    @returns {array} Form Results as an Array of key/value pairs
 	*/
-	getResultsAsArray() {
-		return $(this.el).serializeArray();
-	}
+    getResultsAsArray() {
+        return [...this.el.elements].filter((el) => el.tagName === 'INPUT' || el.tagName === 'TEXTAREA').map((e) => this.inputToResult(e));
+		//return $(this.el).serializeArray();
+    }
+    /** Creates a simple input key/value object from an input
+        @param {MODEL} inp INPUT Model
+        @return {{name:string, value:any}} key value pair
+    */
+    inputToResult(inp) {
+        return {
+            name: inp.name,
+            value: inp.value
+        };
+    }
 	/** If valid, Returns a FormPost based on values in this form
 	    @returns {FORMPOST} A FormPost Object
 	*/

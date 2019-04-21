@@ -2,16 +2,17 @@
 import FORMELEMENT, { ATTRIBUTES, EL, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
 import OPTION from '../../../option/OPTION.js';
 import SELECT from '../../../select/SELECT.js';
-/** Represents a <SELECT> for an Icarus Form    
+//import STRING from '../../../../../STRING.js';
+/** Represents an INPUT Checkbox for a Form    
     @class
     @extends FORMELEMENT
 */
-export default class FORMSELECT extends FORMELEMENT {
+export default class FORMCHECKBOX extends FORMELEMENT {
 	/** An Input/Select OPTION constructor.
 	    @param {EL} node Node
 	    @param {string} model The Form Select model
 	    @param {array} options A collection of key,value pairs
-	 */
+	*/
 	constructor(node, model) {
 		super(node, model);
 		this.dataElements = ['options'];
