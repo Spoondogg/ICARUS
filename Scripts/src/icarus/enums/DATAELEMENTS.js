@@ -105,7 +105,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'FORMELEMENTGROUP', {
-            containers: ['FORMINPUT'],
+            containers: ['FORMINPUT'], //, 'FORMTEXTAREA'
             data: [createInputModel('INPUT', 'header')],
             attributes: [createInputModel('INPUT', 'name', 'text-input')]
         }
