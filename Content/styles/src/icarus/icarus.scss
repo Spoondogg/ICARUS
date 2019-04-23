@@ -273,11 +273,12 @@ $z-bottom: -1;
 }
 /// A Header Element
 %header {
+    clear: both;
     color: $color-dark;
+    float: none;
     font-family: $font-major;
     font-weight: $font-primary-weight;
-    float: none;
-    clear: both;
+
 
     &.active {
         text-decoration: underline;
@@ -989,8 +990,61 @@ html {
     input,
     select,
     textarea {
+        background-color: $color-white;
+        border: 1px solid $color-grey-light;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px $color-shadow-light;
+        color: $color-grey-dark;
+        line-height: 1.5rem;
         margin: 0 .5rem;
+        padding: .5rem .8rem;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         width: calc(100% - 1rem);
+        /* Hide the browser's default checkbox */
+        &[type='checkbox'] {
+            display: none;
+            //width: 2rem;
+            //height: 2rem;
+            //cursor: pointer;
+            //height: 0;
+            //width: 0;
+            & ~ .checkmark-menu {
+                list-style: none;
+                li {
+                    background-color: $color-red;
+                    text-align: center;
+                    width: 50%;
+
+                    &:first-of-type { // yes
+                        background-color: $color-red;
+                        clear: left;
+                        float: left;
+                    }
+
+                    &:last-of-type { // no
+                        background-color: $color-blue;
+                        clear: right;
+                        float: right;
+                    }
+                }
+            }
+
+            &:checked {
+                background-color: $color-red;
+
+                & ~ .checkmark-menu {
+                    li {
+                        &:first-of-type { // yes
+                            background-color: $color-blue;
+                        }
+
+                        &:last-of-type { // no
+                            background-color: $color-red;
+                        }
+                    }
+                }
+            }
+        }
 
         &[type='submit'] {
             background-color: $color-blue-deep;
@@ -1022,6 +1076,11 @@ html {
         text-align: left;
         text-transform: uppercase;
         width: 100%;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
 
         &.invalid {
             color: $color-red;
@@ -1325,7 +1384,7 @@ html {
                         color: $color-white;
                         font-weight: bold;
                         line-height: 2rem;
-                        padding: 0.2rem 0.5rem;
+                        padding: .2rem .5rem;
                     }
                 }
 
@@ -1423,13 +1482,11 @@ html {
                         text-align: center;
                         //width: 50%;
                     }
-
-                    > .date-created {
-                        //clear: left;
-                        //float: left;
-                        //padding-left: .5rem;
-                    }
-
+                    //> .date-created {
+                    //clear: left;
+                    //float: left;
+                    //padding-left: .5rem;
+                    //}
                     > .author {
                         //clear: right;
                         //float: right;

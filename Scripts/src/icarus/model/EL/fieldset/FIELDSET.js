@@ -29,6 +29,13 @@ export default class FIELDSET extends CONTAINER {
 	*/
 	addFormElementGroup(model) {
 		return this.addChild(new FORMELEMENTGROUP(this.body.pane, model));
-	}
+    }
+    /** Returns an array of FORMELEMENTGROUP(s), optionally filtered to the specified name
+        @param {string} [name] Optional name to filter search
+        @returns {Array<FORMELEMENTGROUP>} An array of FORMELEMENTGROUP(s)
+    */
+    getFormElementGroup(name = null) {
+        return this.get(name, 'FORMELEMENTGROUP');
+    }
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTRIBUTES, EL, FORMELEMENTGROUP, MODEL }

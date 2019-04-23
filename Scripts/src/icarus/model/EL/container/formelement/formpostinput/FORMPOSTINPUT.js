@@ -17,7 +17,6 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
             @type {INPUT}
         */
         this.input = new INPUT(this.inputGroup, new INPUTMODEL(new MODEL(), {
-			class: 'form-control',
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',
@@ -61,7 +60,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @param {UId} [id] FormPost Id to edit
 	    @param {INPUT} inputNode The input that spawned this DIALOG
-	    @returns {Promise<string>} Promise to create a new FormPost DIALOG and return it
+	    @returns {Promise<PROMPT>} Promise to create a new FormPost DIALOG and return it
 	*/
 	createForm(className, type, id = 0, inputNode = null) {
 		return new Promise((resolve, reject) => {
