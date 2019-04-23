@@ -98,7 +98,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
@@ -106,7 +105,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'FORMELEMENTGROUP', {
-            containers: ['FORMINPUT'],
+            containers: ['FORMINPUT'], //, 'FORMTEXTAREA'
             data: [createInputModel('INPUT', 'header')],
             attributes: [createInputModel('INPUT', 'name', 'text-input')]
         }
@@ -121,7 +120,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
@@ -154,7 +152,6 @@ export const DATAELEMENTS = new Map([
             ],
             attributes: [
                 createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
             ]
@@ -212,8 +209,7 @@ export const DATAELEMENTS = new Map([
             data: [
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('TEXTAREA', 'p', 'Description')
-            ],
-			attributes: [createInputModel('INPUT', 'name')]
+            ]
 		}
 	],
 	['SIDEBAR', {}],

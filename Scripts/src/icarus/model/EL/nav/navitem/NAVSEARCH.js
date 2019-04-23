@@ -22,7 +22,6 @@ export default class NAVSEARCH extends NAVITEM {
 		this.inputGroup = new EL(this.form, 'DIV', new MODEL('input-group'));
 		this.inputGroup.q = new EL(this.inputGroup, 'INPUT', new MODEL(new ATTRIBUTES({
 			type: 'text',
-			class: 'form-control',
 			placeholder: 'Search',
 			name: 'q'
 		})));
