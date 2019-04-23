@@ -1,8 +1,8 @@
 ﻿/** @module */
+import CONTAINER, { Deactivate } from './container/CONTAINER.js';
+import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
-import Deactivate from '../../event/Deactivate.js';
 import PAYLOAD from './form/PAYLOAD.js';
-import PROMPT from './dialog/prompt/PROMPT.js';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -65,15 +65,6 @@ export default class FACTORY {
     */
     injectDependencies(node, span, index, element) {
         try {
-			/** Saves the state of the given Container
-			    @param {boolean} noPrompt If false (default), no prompt is displayed
-			    @abstract
-			    @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
-			    @returns {Promise} A Promise to save this Container
-			*/
-            element.save = this.save;
-            element.quickSaveFormPost = this.quickSaveFormPost;
-            element.editProperty = this.editProperty;
             element.setFactory(this);
             // Overwrite span with 
             span.el.parentNode.replaceChild(element.el, span.el);
@@ -124,24 +115,26 @@ export default class FACTORY {
         
 	    @param {string} [name] The name of the input we are editing
         @param {string} [type] The Type of data (data, meta, attr) we are editing
+        @param {CONTAINER} [container] Container that this property is being edited by
+        @param {EL} [caller] Caller
 	    @returns {Promise<PROMPT>} Save PROMPT
 	*/
-    editProperty(name = '', type = 'data') {
+    editProperty(name = '', type = 'data', container = this, caller = this) {
         //console.log(this.toString() + '.editProperty()', name, type);
         return new Promise((resolve, reject) => {
             try {
                 let typeIdStr = type + 'Id';
-                if (this[typeIdStr] > 0) {
-                    new PROMPT(new MODEL().set({
-                        label: 'Edit ' + this.toString + '[' + type + '].' + name,
-                        container: this,
-                        caller: this
+                if (container[typeIdStr] > 0) {
+                    new PROMPT(new DIALOGMODEL(new MODEL(), {
+                        caller,
+                        container,
+                        label: 'Edit ' + container.toString + '[' + type + '].' + name
                     })).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
-                        className: this.className,
+                        className: container.className,
                         type,
-                        id: this[typeIdStr],
-                        container: this
+                        id: container[typeIdStr],
+                        container
                     })).then((form) => {
                         //console.log('EDITFORM', form.get()[0].get());
                         /*
@@ -171,7 +164,7 @@ export default class FACTORY {
                                 try {
                                     let input = form.el.elements[name];
                                     input.focus();
-                                    input.onkeyup = () => this[name].setInnerHTML(input.value);
+                                    input.onkeyup = () => container[name].setInnerHTML(input.value);
                                 } catch (ee) {
                                     console.warn('Error focusing element "' + name + '"', form.el.elements);
                                 }
@@ -180,7 +173,7 @@ export default class FACTORY {
                         });
                     });
                 } else {
-                    console.warn(this.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+                    console.warn(container.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
                     resolve(false);
                 }
             } catch (e) {
@@ -192,29 +185,31 @@ export default class FACTORY {
     /** If data collection exists, (ie: data, attributes, meta)
         extract the appropriate values and save
 	    @param {string} type Data type (dataId, attributesId, metaId)
+        @param {CONTAINER} [container] Container that this property is being edited by
+        @param {EL} [caller] Caller
 	    @returns {Promise<LOADER>} Promise to return loader
 	*/
-    quickSaveFormPost(type) {
-        console.log(this.toString() + '.quickSaveFormPost(' + type + ')');
+    quickSaveFormPost(type, container, caller) {
+        console.log(container.toString() + '.quickSaveFormPost(' + type + ')');
         return new Promise((resolve, reject) => {
-            this.getLoader().log(30, 'Saving {' + this.className + '}[' + type + ']').then((loader) => {
+            container.getLoader().log(30, 'Saving {' + container.className + '}[' + type + ']').then((loader) => {
                 try {
-                    if (this[type] > 0) { // ie: this['dataId']
+                    if (container[type] > 0) { // ie: container['dataId']
                         new PROMPT(new MODEL().set({
-                            container: this,
-                            caller: this
+                            container,
+                            caller
                         })).createForm(new MODEL().set({
                             formtype: 'FORMPOST',
-                            className: this.className,
+                            className: container.className,
                             type,
-                            formPostId: this.id,
-                            container: this
+                            formPostId: container.id,
+                            container
                         })).then((form) => form.post().then(() => loader.log(100).then(() => resolve(form.getDialog().close()))));
                     } else {
                         resolve(loader.log(100));
                     }
                 } catch (e) {
-                    console.error(this.toString() + '.quickSaveFormPost(' + type + ')', e);
+                    console.error(container.toString() + '.quickSaveFormPost(' + type + ')', e);
                     reject(e);
                 }
             });
@@ -225,31 +220,34 @@ export default class FACTORY {
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
         @param {string} name optional named element to focus
-	    @returns {Promise} Promise to Save (or prompt the user to save) 
+	    @returns {Promise<PROMPT>} Promise to Save (or prompt the user to save) 
 	*/
     save(noPrompt = false, container = this, caller = this, name = null) {
         console.log(caller.toString() + ' is attempting to SAVE ' + container.toString(), name);
         return new Promise((resolve) => {
             caller.getLoader().log(25).then((loader) => {
-                new PROMPT(new MODEL().set({
+                let prompt = new PROMPT(new MODEL().set({
                     label: 'Save ' + container.toString(),
                     container,
                     caller
-                })).createForm(new MODEL().set({
+                }));
+                prompt.createForm(new MODEL().set({
                     formtype: 'CONTAINER',
                     container
                 })).then((form) => {
+                    prompt.form = form;
                     if (name !== null) {
                         form.hideElements(form.get()[0].get()[0].get(), name);
                     }
                     let cont = form.getContainer();
-                    cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(this)));
+                    cont.navheader.menus.get(null, 'MENU').forEach((menu) => menu.el.dispatchEvent(new Deactivate(container)));
                     form.afterSuccessfulPost = () => {
                         cont.setLabel(form.el.elements.label.value);
                         // @todo This is ugly
-                        cont.quickSaveFormPost('data').then(
-                            () => cont.quickSaveFormPost('attributes').then(
-                                () => cont.quickSaveFormPost('meta').then(
+                        let factory = cont.getFactory();
+                        factory.quickSaveFormPost('data', cont, cont).then(
+                            () => factory.quickSaveFormPost('attributes', cont, cont).then(
+                                () => factory.quickSaveFormPost('meta', cont, cont).then(
                                     () => form.getDialog().close())));
                     }
                     loader.log(100).then(() => {
@@ -265,5 +263,5 @@ export default class FACTORY {
     }
 	// eslint-enable max-lines-per-function, complexity, max-statements */
 }
-export { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN }
+export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
 // eslint-enable */
