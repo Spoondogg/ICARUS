@@ -13,7 +13,9 @@ export default class FACTORY {
     */
     constructor(type = '') {
         this.type = type;
-        this.markdownConverter = new showdown.Converter();
+        this.markdownConverter = new showdown.Converter({
+            smoothLivePreview: true
+        });
         /** A Collection of FACTORY Classes available to this FACTORY
             @type {Map<string, FACTORY>} A collection of factories
         */
