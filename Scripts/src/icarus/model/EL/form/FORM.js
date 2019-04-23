@@ -170,6 +170,22 @@ export default class FORM extends CONTAINER {
             btnReset.destroy();
         }
     }
+    /** Creates a new form post
+        @param {string} type ie: data, meta, attributes
+        @returns {void}
+    */
+    createNewFormPost(type) {
+        try {
+            let typeId = type + 'Id';
+            let [fs] = this.getFieldset();
+            let [fsg] = fs.getFormElementGroup();
+            let formPostInput = fsg.get(null, 'FORMPOSTINPUT'); //typeId, 'FORMPOSTINPUT'
+            let [formPostInputType] = formPostInput.filter((inp) => inp.attributes.name === typeId);
+            formPostInputType.createForm(this.className, type, 0, formPostInputType.input);
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to create a new FORMPOST for ' + type)
+        }
+    }
 	/** Returns the default Input array
 	    @param {object} data Payload
 	    @returns {Array} An array of INPUT models
