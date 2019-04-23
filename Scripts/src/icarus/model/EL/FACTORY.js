@@ -2,6 +2,7 @@
 import CONTAINER, { Deactivate } from './container/CONTAINER.js';
 import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
+import showdown from 'showdown';
 import PAYLOAD from './form/PAYLOAD.js';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
@@ -13,6 +14,7 @@ export default class FACTORY {
     */
     constructor(type = '') {
         this.type = type;
+        this.markdownConverter = new showdown.Converter();
         /** A Collection of FACTORY Classes available to this FACTORY
             @type {Map<string, FACTORY>} A collection of factories
         */
