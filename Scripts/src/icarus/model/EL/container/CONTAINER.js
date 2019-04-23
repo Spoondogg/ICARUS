@@ -417,40 +417,6 @@ export default class CONTAINER extends GROUP {
 		this.addActivateEvents();
 		this.addMoveEvents();
     }
-    /** Creates an editable HEADER for this CONTAINER
-        @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
-        @param {EL} node Parent node
-	    @returns {HEADER} Header Element
-	*/
-    createEditableHeader(node) {
-        /** The CONTAINER Header is an optional editable element 
-            that can toggle visibility of the body on activation
-            @description The header has events that are bound to the CONTAINER navheader
-            In a way, this is redundant
-            @todo Consider creating styles for CONTAINER.navheader and using that instead
-            @todo Create edit method for navheader innerHTML
-        */
-        this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
-        try {
-            $(this.header.el).insertBefore(this.navheader.el);
-            if (typeof this.data.collapse !== 'undefined') {
-                if (this.data.showNav === '1') {
-                    console.log('shownav on, activating header');
-                    this.header.el.dispatchEvent(new Activate(this.header));
-                }
-            }
-            if (this.data.collapse !== '1') {
-                console.log('collapse off, activating header');
-                this.header.el.dispatchEvent(new Activate(this.header));
-            }
-            // Bind 
-            this.header.el.addEventListener('deactivate', () => this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab)));
-            this.header.el.addEventListener('activate', () => this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab)));
-            console.log(this.toString() + '.data', this.data);
-        } catch (e) {
-            console.warn('Unable to bind header with tab', e);
-        }
-    }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
         @param {string} name The Element to create,
@@ -463,8 +429,8 @@ export default class CONTAINER extends GROUP {
 				if (this.data[name]) {
 					switch (name) {
 						case 'header':
-                            //this.createEditableHeader(node);
                             this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
+                            $(this.header.el).insertBefore(this.navheader.el);
                             break;
                         case 'slogan':
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
@@ -484,7 +450,16 @@ export default class CONTAINER extends GROUP {
 					this[name].implement(new Clickable(this[name]));
 					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
-					this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
+                    this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
+
+                    if (name === 'header') {
+                        if (parseInt(this.data.collapsed) === -1) {
+                            this.header.el.dispatchEvent(new Activate(this.header));
+                        }
+                        this[name].el.addEventListener('deactivate', () => this.navheader.tab.el.dispatchEvent(new Deactivate(this[name])));
+                        this[name].el.addEventListener('activate', () => this.navheader.tab.el.dispatchEvent(new Activate(this[name])));
+                    }
+
 					resolve(this[name]);
 				}
 			} catch (e) {
