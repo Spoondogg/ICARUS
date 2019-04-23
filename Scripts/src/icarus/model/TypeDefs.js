@@ -19,6 +19,9 @@
 /** A Machine Friendly String should only contain alphanumeric characters
     @typedef {string} Name - A machine-friendly string
 */
+/** A valid email address in the format of user@domain
+    @typedef {string} EmailAddress - A valid email address string
+*/
 /** A list of Container Class Names
     @typedef {Array<Name>} ContainerList - A list of Container Class Names
 */

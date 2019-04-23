@@ -3,6 +3,7 @@ import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NA
 import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
+import FORMFACTORY from '../formelement/FORMELEMENTFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
@@ -24,11 +25,7 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
-        this.factory = model.factory;
-        /** MAIN doesnt get injected with editProperty but instead
-            calls directly from its factory
-        */
-        this.editProperty = this.factory.editProperty.bind(this);
+        this.setFactory(model.factory);
 		this.loader = model.loader;
 		this.url = model.url;
 		/** The active container has access to keybindings */
@@ -36,11 +33,10 @@ export default class MAIN extends CONTAINER {
 		// ELEMENTS
 		this.navfooter = new NAVFOOTER(this, new MODEL());
 		$(this.navfooter.el).insertAfter(this.el);
-		// CRUD
-		this.save = this.factory.save;
-		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.watchMousePosition();
-		this.expandMain();
+        this.expandMain();
+        /** Add factories */
+        this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
 	}
 	constructElements() {
 		if (this.dataId > 0) {
@@ -48,7 +44,7 @@ export default class MAIN extends CONTAINER {
 		} else {
             document.title = this.label;
         }
-	}
+    }
 	/** Detects mouse position for desktop and caches its value every X ms
 	    @param {number} delay Millisecond delay between caches
 	    @returns {void}
@@ -130,12 +126,6 @@ export default class MAIN extends CONTAINER {
 	getUser() {
 		return this.user;
 	}
-	/** Returns the MAIN Factory
-	    @returns {CONTAINERFACTORY} The Main Container Factory
-	*/
-	getFactory() {
-		return this.factory;
-	}
 	/** Acts as an undo or back function
 	    @returns {void}
 	*/
@@ -158,10 +148,7 @@ export default class MAIN extends CONTAINER {
 		// Add submenu items to DATA and ATTRIBUTES
         /** @type {[NAVITEMICON]} */
         let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => {
-            console.log('TODO: Launch SAVE() for ' + this.toString());
-            this.save(false);
-        });
+        tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
 		/** @type {[MENU]} */
         let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
         this.addDefaultDocumentMapAttributes(menu);
@@ -444,8 +431,8 @@ export default class MAIN extends CONTAINER {
 				//form.id = 0;
 				//form.el.setAttribute('id', 0);
 				form.label = 'Register';
-				form.addClass('register');
-				form.get()[0].get()[0].addInputElements([ // fieldset.formElementGroup
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
 					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')

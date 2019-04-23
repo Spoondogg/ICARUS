@@ -277,7 +277,7 @@
 
 				    var groupInput = null;
 				    if(chartArguments[argument].argumentOptions.length>0){
-					    groupInput = new EL(groupEl.el,'select',{'class':'form-control','name':argument.substring(1,argument.length)});
+					    groupInput = new EL(groupEl.el,'select',{'name':argument.substring(1,argument.length)});
 					    for(var opt=0;opt<chartArguments[argument].argumentOptions.length;opt++){
 						    var optn = chartArguments[argument].argumentOptions[opt];
 						    var groupOpt = new EL(groupInput.el,'option',{'value':optn.value},optn.label);
@@ -285,7 +285,7 @@
 				    } else {
 					    switch(chartArguments[argument].type){
 						    case "nvarchar": {
-							    groupInput = new EL(groupEl.el,'input',{'type':'text','class':'form-control','name':argument.substring(1,argument.length)});
+							    groupInput = new EL(groupEl.el,'input',{'type':'text','name':argument.substring(1,argument.length)});
 							    for(var opt=0;opt<chartArguments[argument].argumentOptions.length;opt++){
 								    var optn = chartArguments[argument].argumentOptions[opt];
 								    var groupOpt = new EL(groupInput.el,'option',{'value':optn.value},optn.label);
@@ -293,19 +293,19 @@
 							    break;
 						    }
 						    case "date": {
-							    groupInput = new EL(groupEl.el,'input',{'type':'date','class':'form-control','name':argument.substring(1,argument.length)});
+							    groupInput = new EL(groupEl.el,'input',{'type':'date','name':argument.substring(1,argument.length)});
 							    break;
 						    }
 						    case "datetime": {
-							    groupInput = new EL(groupEl.el,'input',{'type':'datetime','class':'form-control','name':argument.substring(1,argument.length)});
+							    groupInput = new EL(groupEl.el,'input',{'type':'datetime','name':argument.substring(1,argument.length)});
 							    break;
 						    }
 						    case "int": {
-							    groupInput = new EL(groupEl.el,'input',{'type':'number','class':'form-control','name':argument.substring(1,argument.length)});
+							    groupInput = new EL(groupEl.el,'input',{'type':'number','name':argument.substring(1,argument.length)});
 							    break;
 						    }
 						    default: {
-							    groupInput = new EL(groupEl.el,'input',{'type':'text','class':'form-control','name':argument.substring(1,argument.length)});
+							    groupInput = new EL(groupEl.el,'input',{'type':'text','name':argument.substring(1,argument.length)});
 							    break;
 						    }
 					    }
