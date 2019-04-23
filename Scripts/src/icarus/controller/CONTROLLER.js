@@ -62,13 +62,19 @@ export default class CONTROLLER extends MODEL {
 		window.addEventListener('keydown', (event) => {
 			if (event.ctrlKey || event.metaKey) {
 				switch (String.fromCharCode(event.which).toLowerCase()) {
-					case 's':
+                    case 'a':
+                        event.stopPropagation();
+                        console.log('ctrl-a', 'No action exists');
+                        break;
+                    case 's':
 						event.preventDefault();
-						console.log('ctrl-s', this.main.activeContainer);
+						console.log('ctrl-s', this.toString());
 						try {
-							if (this.main.activeContainer.className === 'FORM') {
-								this.main.activeContainer.post();
-							}
+                            if (this.main.activeContainer.className === 'FORM') {
+                                this.main.activeContainer.post();
+                            } else {
+                                console.log(this.toString() + ': No key binding for ctrl-s exists');
+                            }
 						} catch (e) {
 							console.log('Failed keyBinding', e);
 						}
@@ -80,9 +86,9 @@ export default class CONTROLLER extends MODEL {
 					case 'g':
 						event.preventDefault();
 						console.log('ctrl-g', this.main.activeContainer);
-						break;
-					default:
-						//
+                        break;
+                    default:
+                        //
 				}
 			}
 		});
