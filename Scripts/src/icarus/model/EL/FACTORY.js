@@ -2,7 +2,6 @@
 import CONTAINER, { Deactivate } from './container/CONTAINER.js';
 import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
-import showdown from 'showdown';
 import PAYLOAD from './form/PAYLOAD.js';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
@@ -76,7 +75,7 @@ export default class FACTORY {
             console.log(e);
         }
     }
-	// eslint-disable max-lines-per-function, complexity, max-statements */
+	/* eslint-disable max-lines-per-function, complexity, max-statements */
 	/** Retrieves MODEL (in the form of a PAYLOAD) from the database and returns its constructed class
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
@@ -163,12 +162,23 @@ export default class FACTORY {
                                 form.getDialog().deselectAll();
                             });
                             if (name !== '') {
-                                try {
-                                    let input = form.el.elements[name];
+                                let input = form.el.elements[name];
+                                try {                                    
                                     input.focus();
-                                    input.onkeyup = () => container[name].setInnerHTML(input.value);
                                 } catch (ee) {
                                     console.warn('Error focusing element "' + name + '"', form.el.elements);
+                                }
+
+                                try {
+                                    input.onkeyup = () => {
+                                        let output = input.value;
+                                        if (input.name === 'p') {
+                                            output = this.markdownConverter.makeHtml(input.value);
+                                        }
+                                        container[name].setInnerHTML(output);
+                                    }
+                                } catch (eee) {
+                                    console.warn('Error updating contents of editable element');
                                 }
                             }
                             resolve(form.getDialog().show());
@@ -263,7 +273,7 @@ export default class FACTORY {
             });
         });
     }
-	// eslint-enable max-lines-per-function, complexity, max-statements */
+	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
 // eslint-enable */
