@@ -469,8 +469,8 @@ export default class CONTAINER extends GROUP {
                         case 'slogan':
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
                             break;
-						case 'p':
-							this[name] = new P(node, new MODEL().set('innerHTML', this.htmlDecode(this.data[name])));
+                        case 'p':
+                            this[name] = new P(node, new MODEL().set('innerHTML', this.getFactory().markdownConverter.makeHtml(this.data[name])));
 							break;
 						case 'legend':
 							this[name] = new LEGEND(node, new MODEL().set('innerHTML', this.data[name]));
