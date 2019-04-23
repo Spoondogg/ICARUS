@@ -1010,6 +1010,7 @@ html {
             //width: 0;
             & ~ .checkmark-menu {
                 list-style: none;
+
                 li {
                     background-color: $color-red;
                     text-align: center;
@@ -1339,8 +1340,19 @@ html {
     .container {
         @extend %wide-block;
         box-sizing: border-box;
-
-
+        /// editable header with toggle
+        > header {
+            &:first-of-type {
+                background-color: $color-dark;
+                border-bottom: 4px solid $color-darker;
+                //border-bottom: 1px solid $color-grey-light;
+                box-sizing: content-box;
+                color: $color-white;
+                font-weight: bold;
+                line-height: 2rem;
+                padding: .2rem .5rem;
+            }
+        }
 
         > nav {
             // Fixed Nav
@@ -1374,19 +1386,6 @@ html {
                 @include transition($transition-default);
                 min-height: $navbar-height;
                 width: 100%;
-
-                > header {
-                    &:first-of-type {
-                        background-color: $color-dark;
-                        border-bottom: 4px solid $color-darker;
-                        //border-bottom: 1px solid $color-grey-light;
-                        box-sizing: content-box;
-                        color: $color-white;
-                        font-weight: bold;
-                        line-height: 2rem;
-                        padding: .2rem .5rem;
-                    }
-                }
 
                 > p {
                     &:first-of-type {
@@ -1838,6 +1837,7 @@ html {
         &.section {
             //> .body {
             //> .pane {
+            margin-bottom: .8rem;
         }
 
         &.textblock {
