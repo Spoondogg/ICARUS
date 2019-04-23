@@ -27,7 +27,7 @@ export default class NAVHEADER extends NAVBAR {
         this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this)));
         this.tab.el.addEventListener('select', () => {
             let container = this.getContainer();
-            container.save(false, container, container, 'label');
+            container.getFactory().save(false, container, container, 'label');
         });
 		this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
 	}
