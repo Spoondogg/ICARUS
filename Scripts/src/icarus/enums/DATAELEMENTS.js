@@ -209,8 +209,7 @@ export const DATAELEMENTS = new Map([
             data: [
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('TEXTAREA', 'p', 'Description')
-            ],
-			attributes: [createInputModel('INPUT', 'name')]
+            ]
 		}
 	],
 	['SIDEBAR', {}],

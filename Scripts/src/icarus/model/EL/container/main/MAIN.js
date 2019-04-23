@@ -26,10 +26,6 @@ export default class MAIN extends CONTAINER {
 		this.navheader.setAttribute('draggable', false);
 		this.addNavOptions();
         this.setFactory(model.factory);
-        /** MAIN doesnt get injected with editProperty but instead
-            calls directly from its factory
-        */
-        this.editProperty = this.factory.editProperty.bind(this);
 		this.loader = model.loader;
 		this.url = model.url;
 		/** The active container has access to keybindings */
@@ -37,9 +33,6 @@ export default class MAIN extends CONTAINER {
 		// ELEMENTS
 		this.navfooter = new NAVFOOTER(this, new MODEL());
 		$(this.navfooter.el).insertAfter(this.el);
-		// CRUD
-		this.save = this.factory.save;
-		this.quickSaveFormPost = model.factory.quickSaveFormPost;
 		this.watchMousePosition();
         this.expandMain();
         /** Add factories */
@@ -155,10 +148,7 @@ export default class MAIN extends CONTAINER {
 		// Add submenu items to DATA and ATTRIBUTES
         /** @type {[NAVITEMICON]} */
         let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => {
-            console.log('TODO: Launch SAVE() for ' + this.toString());
-            this.save(false);
-        });
+        tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
 		/** @type {[MENU]} */
         let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
         this.addDefaultDocumentMapAttributes(menu);

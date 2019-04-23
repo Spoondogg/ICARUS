@@ -136,6 +136,15 @@ export default class CONTAINER extends GROUP {
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
     }
+    createNewFormPost(type, name = '') {
+        let typeId = type + 'Id';
+        if (this[typeId] === 0) {
+            console.log(this.toString() + '.addDocumentMapAttributes() needs to create a(n) ' + type + ' FORMPOST');
+            this.getFactory().save(false, this, this).then((prompt) => prompt.form.createNewFormPost(type));
+        } else {
+            this.getFactory().editProperty(name, type, this, this);
+        }
+    }
 	/** Adds clickable DATA or ATTRIBUTE nav items to the Document Map
 	    @param {MENU} menu This Container's reference menu
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
@@ -157,13 +166,7 @@ export default class CONTAINER extends GROUP {
 			}));
             tab.el.addEventListener('activate', () => {
                 try {
-                    /*console.log('Searching for "' + this.toString() + '.elements.' + type + '.' + name);
-                    this.elements.get(type).filter((m) => m.attributes.name === name).forEach(
-                        (mdl) => {
-                            console.log(' - Result', mdl);
-                        }
-                    );*/
-                    this.editProperty(name, type);
+                    this.createNewFormPost(type, name);
                 } catch (e) {
                     console.warn(this.toString() + ' is unable to edit "' + name + ', ' + type);
                     tab.el.dispatchEvent(new Deactivate(tab.el));
@@ -178,7 +181,8 @@ export default class CONTAINER extends GROUP {
     addDefaultDocumentMapAttributes(menu) {
         ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
         this.reference.menus.get()[0].get(null, 'NAVITEMICON').forEach(
-            (m) => m.el.addEventListener('select', () => this.editProperty('', m.name.toLowerCase())));
+            (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase()))
+        );
     }
 	/** Adds this CONTAINER to parent reference in the Document Map
 	    @returns {void}
@@ -214,10 +218,7 @@ export default class CONTAINER extends GROUP {
 							(n) => n.tabs.children.forEach(
 								(t) => t.el.dispatchEvent(new Deactivate(t))));
                     });
-                    tab.el.addEventListener('select', () => {
-                        console.log('TODO: Launch SAVE() for ' + this.toString());
-                        this.save(false);
-                    });
+                    tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
 					/// Expand the NAVBAR and override its collapse Event
 					this.reference.el.dispatchEvent(new Expand(this.reference));
 					this.reference.collapse = () => true;
@@ -481,7 +482,7 @@ export default class CONTAINER extends GROUP {
 							console.warn(name + ' does not have a valid constructor');
 					}
 					this[name].implement(new Clickable(this[name]));
-					this[name].el.addEventListener('select', () => this.editProperty(name));
+					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
 					this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
 					resolve(this[name]);
@@ -500,16 +501,6 @@ export default class CONTAINER extends GROUP {
 	hideElements(elements, name = '') {
         //console.log(this.toString() + '.hideElements()', elements, name);
         return Promise.all(elements.filter((ch) => ch.el.getAttribute('name') !== name).map((c) => c.hide()));
-	}
-	/** Launches a FORM POST editor for the specified element
-        @param {string} [name] The name of the input we are editing
-        @param {string} [type] The Type of data (data, meta, attr) we are editing
-        @abstract
-        @see CONTAINERFACTORY The CONTAINERFACTORY assigns editProperty() to this CONTAINER
-	    @returns {Promise<DIALOG>} A Save PROMPT
-	*/
-    editProperty(name = null, type = 'data') {
-        throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '][' + name + '] : Abstract method ' + this.toString() + '.editProperty(' + name + ') not implemented.');
 	}
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
@@ -546,26 +537,6 @@ export default class CONTAINER extends GROUP {
             }
         });
     }
-	/** Saves the state of the given Container
-        @param {boolean} noPrompt If false (default), no prompt is displayed
-        @param {CONTAINER} container Container to save (Default this)
-        @param {EL} caller Element that called the save (ie: switchable element resolved)
-        @param {string} name optional named element to focus
-        @abstract
-        @see CONTAINERFACTORY The CONTAINERFACTORY assigns save() to this CONTAINER
-	    @returns {Promise} A Promise to save this Container
-	*/
-    save(noPrompt = false, container = this, caller = this, name = null) {
-		let msg = 'CONTAINER{' + this.className + '} : Abstract method ' + this.className + '.save(' + noPrompt + ') not implemented.';
-		throw new AbstractMethodError(msg, container, caller, name);
-	}
-	/** Extract the appropriate values and save
-        @param {string} type Data type
-	    @returns {Promise} Promise
-	*/
-	quickSaveFormPost(type) {
-		throw new AbstractMethodError('CONTAINER{' + this.className + '}[' + type + '] : Abstract method ' + this.className + '.quickSaveFormPost() not implemented.');
-	}
 	/** Restore Container View to defaults and refresh parent Container
 	    @returns {void}
     */
@@ -591,8 +562,9 @@ export default class CONTAINER extends GROUP {
     */
 	saveParentContainer(noPrompt = false) {
 		console.log('Saving parent container', this.getContainer());
-		try {
-			this.getContainer().save(noPrompt); // false // dialog.body, this.getContainer(), 
+        try {
+            let container = this.getContainer();
+			container.getFactory().save(noPrompt, container, container); // false // dialog.body, this.getContainer(), 
 		} catch (e) {
 			console.log('Unable to save parent Container', e);
 		}
@@ -722,8 +694,8 @@ export default class CONTAINER extends GROUP {
 			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
 			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
 			items.LOAD.el.onclick = () => this.load();
-			items.SAVEAS.el.onclick = () => this.save();
-			items.SAVE.el.onclick = () => this.save(true);
+			items.SAVEAS.el.onclick = () => this.getFactory().save(false, this, this);
+			items.SAVE.el.onclick = () => this.getFactory().save(true, this, this);
 		});
 	}
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
