@@ -1,6 +1,5 @@
 /** @module */
 import CONTAINER, { Activate, COLLAPSIBLE, Expand, MODEL } from '../container/CONTAINER.js';
-//import DIV from '../div/DIV.js';
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class
@@ -23,11 +22,10 @@ export default class ARTICLE extends CONTAINER {
 				let date = this.getDateCreated();
                 this.articleDate = new SPAN(this.containerHeader.pane, new MODEL('date-created').set('innerHTML', date.date));
                 this.articleAuthor = new SPAN(this.containerHeader.pane, new MODEL('author').set('innerHTML', this.authorId));
-                if (this.data.showHeader === '1') {
+                if (parseInt(this.data.showHeader) === 1) {
                     this.containerHeader.el.dispatchEvent(new Expand(this.containerHeader));
                 }
 			}
-			//this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
 		});
 	}
 }

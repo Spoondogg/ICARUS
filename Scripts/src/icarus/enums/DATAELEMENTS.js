@@ -207,9 +207,9 @@ export const DATAELEMENTS = new Map([
     [
         'SECTION', {
             data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
                 createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')
+                createInputModel('TEXTAREA', 'p', 'Description')
             ]
 		}
 	],
