@@ -1,5 +1,7 @@
 ﻿# ICARUS
-A Single Page Application Sandbox.
+A mobile-friendly, sandbox-ish, restful, wiki-like, single-page web application / blog-type framework-ey thing for making all the things with.
+***
+or: *how I learned to stop using so many damn frameworks and just write it in vanilla*
 
 > 
 
@@ -11,23 +13,24 @@ See deployment for notes on how to deploy the project on a live system.
 ### Stack
 
   - C# ASP.NET MVC5 using Entity 6 on SQL Server 2017
-  - HTML5, CSS3, JavaScript (ES6) and Bootstrap 3.3.7
+  - HTML5, CSS3, JavaScript (ES6) and a little Bootstrap 3.3.7
 
 ### Prerequisites
 
-In a perfect world, there would be no dependencies...
+These are the things I use to build the things.  
 
 * MVC.NET 4.7.2
-* JQuery
-* Bootstrap 3.3.7
+* JQuery (Phasing out where possible)
+* Bootstrap 3.3.7 (Phasing out where possible)
 * Sass
 * Razor
 * Entity 6
 * SQL Server
+* Gulp
 
 ### Compatibility
 
-Primarily tested in WebKit 
+Primarily tested in WebKit and on an iPhone using Safari and Chrome
 
 * Chrome Canary
 
@@ -37,7 +40,7 @@ Limited DIALOG support will need to be corrected in future builds
 
 ### Install
 
-Clone repo and create the required credentials
+Clone repo and create the required credentials.
 
 #### App Settings
 
