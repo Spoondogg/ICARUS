@@ -14,16 +14,18 @@ export default class ARTICLE extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION']);
         this.addClass('article');
-        this.articleHeader = new COLLAPSIBLE(this.body.pane, new MODEL('header'));
+        this.containerHeader = new COLLAPSIBLE(this.body.pane, new MODEL('header'));
 	}
 	constructElements() {
 		return this.chain(() => {
             if (this.dataId > 0) {                
 				this.createEditableElement('header', this.body.pane);
 				let date = this.getDateCreated();
-                this.articleDate = new SPAN(this.articleHeader.pane, new MODEL('date-created').set('innerHTML', date.date));
-                this.articleAuthor = new SPAN(this.articleHeader.pane, new MODEL('author').set('innerHTML', this.authorId));
-                this.articleHeader.el.dispatchEvent(new Expand(this.articleHeader));
+                this.articleDate = new SPAN(this.containerHeader.pane, new MODEL('date-created').set('innerHTML', date.date));
+                this.articleAuthor = new SPAN(this.containerHeader.pane, new MODEL('author').set('innerHTML', this.authorId));
+                if (this.data.showHeader === '1') {
+                    this.containerHeader.el.dispatchEvent(new Expand(this.containerHeader));
+                }
 			}
 			this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
 		});
