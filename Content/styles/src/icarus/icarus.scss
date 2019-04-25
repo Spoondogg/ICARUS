@@ -1012,20 +1012,29 @@ html {
                 list-style: none;
 
                 li {
+                    @include transition($transition-default);
                     background-color: $color-red;
+                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     text-align: center;
                     width: 50%;
 
+
                     &:first-of-type { // yes
-                        background-color: $color-red;
+                        //background: linear-gradient(left, $color-white 0%, $color-red-deep 100%);
+                        background: linear-gradient(to right, $color-shadow-dark 0%, $color-shadow-light 100%, $color-shadow-light 100%);
+                        background-color: $color-white;
                         clear: left;
                         float: left;
+                        font-size: 1rem;
                     }
 
                     &:last-of-type { // no
+                        //background: linear-gradient(to right, #9e9e9e 25%,#9e9e9e 25%,#707070 75%);
+                        background: linear-gradient(to right, $color-shadow-light 0%, $color-shadow-light 0%, $color-shadow-dark 100%);
                         background-color: $color-blue;
                         clear: right;
                         float: right;
+                        font-size: 1.6rem;
                     }
                 }
             }
@@ -1035,12 +1044,19 @@ html {
 
                 & ~ .checkmark-menu {
                     li {
+                        @include transition($transition-default);
+
                         &:first-of-type { // yes
                             background-color: $color-blue;
+                            font-size: 1.6rem;
+                            //background: -webkit-linear-gradient(left, $color-white 0%,#13660d 100%);
+                            //background: linear-gradient(to right, $color-blue 0%, $color-grey-light 100%, $color-grey-light 100%);
                         }
 
                         &:last-of-type { // no
-                            background-color: $color-red;
+                            background-color: $color-white;
+                            font-size: 1rem;
+                            //background: linear-gradient(to right, $color-shadow-light 0%, $color-shadow-light 0%, $color-grey-dark 100%);
                         }
                     }
                 }
