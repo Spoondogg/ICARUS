@@ -27,7 +27,7 @@ export default class ARTICLE extends CONTAINER {
                     this.containerHeader.el.dispatchEvent(new Expand(this.containerHeader));
                 }
 			}
-			this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
+			//this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
 		});
 	}
 }
