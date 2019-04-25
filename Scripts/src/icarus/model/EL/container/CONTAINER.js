@@ -430,7 +430,7 @@ export default class CONTAINER extends GROUP {
 					switch (name) {
 						case 'header':
                             this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
-                            $(this.header.el).insertBefore(this.navheader.el);
+                            $(this.header.el).insertAfter(this.navheader.el);
                             break;
                         case 'slogan':
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
