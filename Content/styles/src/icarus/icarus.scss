@@ -1835,9 +1835,9 @@ html {
         }
 
         &.section {
-            //> .body {
-            //> .pane {
-            margin-bottom: .8rem;
+            > header {
+                background-color: $color-blue-deep;
+            }
         }
 
         &.textblock {
