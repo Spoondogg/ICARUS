@@ -49,8 +49,8 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'ARTICLE', {
-            containers: ['JUMBOTRON', 'FORM', 'SECTION']
-            //data: [createInputModel('INPUT', 'header')]
+            containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')]
         }
     ],
     [
@@ -207,6 +207,7 @@ export const DATAELEMENTS = new Map([
     [
         'SECTION', {
             data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('TEXTAREA', 'p', 'Description')
             ]

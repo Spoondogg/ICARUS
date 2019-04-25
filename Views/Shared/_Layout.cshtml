@@ -38,20 +38,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/vendor.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/icarus.min.css")" />
-    @* <script src="https://apis.google.com/js/platform.js" async defer></script> *@
+    @*<script src="http://spoonmedia.ca:9000/target/target-script-min.js#anonymous"></script>*@
+    @*<script src="http://localhost:1337/vorlon.js"></script>*@
+    @*<script src="http://spoonmedia.ca:1337/vorlon.js"></script>*@
+    @*<script src="https://apis.google.com/js/platform.js" async defer></script>*@
     <script src="@Url.Content("~/Scripts/vendor.js")"></script>
-    @*
-        <script>
-            // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
-            var manifest = document.querySelector('link[rel=manifest]');
-            if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
-        </script>
-    *@
+    @*<script>
+        // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
+        var manifest = document.querySelector('link[rel=manifest]');
+        if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
+    </script>*@
 </head>
 <body>
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
-    @if (IsSectionDefined("NoScript")) {  
+    @if (IsSectionDefined("NoScript")) {
         @RenderSection("NoScript", required: false)
     } else {
         <noscript>
