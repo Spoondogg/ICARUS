@@ -3,6 +3,7 @@ import CONTAINER, { Deactivate } from './container/CONTAINER.js';
 import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import PAYLOAD from './form/PAYLOAD.js';
+//import { showdown } from 'showdown';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -13,6 +14,14 @@ export default class FACTORY {
     */
     constructor(type = '') {
         this.type = type;
+        try {
+            this.markdownConverter = new showdown.Converter({
+                smoothLivePreview: true
+            });
+        } catch (e) {
+            console.warn('Failed to bind markdown converted');
+            throw e;
+        }
         /** A Collection of FACTORY Classes available to this FACTORY
             @type {Map<string, FACTORY>} A collection of factories
         */
@@ -74,7 +83,7 @@ export default class FACTORY {
             console.log(e);
         }
     }
-	// eslint-disable max-lines-per-function, complexity, max-statements */
+	/* eslint-disable max-lines-per-function, complexity, max-statements */
 	/** Retrieves MODEL (in the form of a PAYLOAD) from the database and returns its constructed class
 	    A placeholder object is created to ensure that values are loaded
 	    in the appropriate order, regardless of any delays from getJson()
@@ -106,7 +115,8 @@ export default class FACTORY {
 		}).then(() => {
 			if (id === 0) {
 				console.log('SAVE', node);
-				node.getContainer().save(true);
+                let container = node.getContainer();
+                this.save(true, container, container);
 			}
 		});
     }
@@ -161,12 +171,23 @@ export default class FACTORY {
                                 form.getDialog().deselectAll();
                             });
                             if (name !== '') {
-                                try {
-                                    let input = form.el.elements[name];
+                                let input = form.el.elements[name];
+                                try {                                    
                                     input.focus();
-                                    input.onkeyup = () => container[name].setInnerHTML(input.value);
                                 } catch (ee) {
                                     console.warn('Error focusing element "' + name + '"', form.el.elements);
+                                }
+
+                                try {
+                                    input.onkeyup = () => {
+                                        let output = input.value;
+                                        if (input.name === 'p') {
+                                            output = this.markdownConverter.makeHtml(input.value);
+                                        }
+                                        container[name].setInnerHTML(output);
+                                    }
+                                } catch (eee) {
+                                    console.warn('Error updating contents of editable element');
                                 }
                             }
                             resolve(form.getDialog().show());
@@ -219,7 +240,7 @@ export default class FACTORY {
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
-        @param {string} name optional named element to focus
+        @param {string} name optional named element to focus in PROMPT.form
 	    @returns {Promise<PROMPT>} Promise to Save (or prompt the user to save) 
 	*/
     save(noPrompt = false, container = this, caller = this, name = null) {
@@ -261,7 +282,7 @@ export default class FACTORY {
             });
         });
     }
-	// eslint-enable max-lines-per-function, complexity, max-statements */
+	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
 // eslint-enable */
