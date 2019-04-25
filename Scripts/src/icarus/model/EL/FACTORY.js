@@ -3,6 +3,7 @@ import CONTAINER, { Deactivate } from './container/CONTAINER.js';
 import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import PAYLOAD from './form/PAYLOAD.js';
+//import { showdown } from 'showdown';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -13,9 +14,14 @@ export default class FACTORY {
     */
     constructor(type = '') {
         this.type = type;
-        this.markdownConverter = new showdown.Converter({
-            smoothLivePreview: true
-        });
+        try {
+            this.markdownConverter = new showdown.Converter({
+                smoothLivePreview: true
+            });
+        } catch (e) {
+            console.warn('Failed to bind markdown converted');
+            throw e;
+        }
         /** A Collection of FACTORY Classes available to this FACTORY
             @type {Map<string, FACTORY>} A collection of factories
         */
@@ -109,7 +115,8 @@ export default class FACTORY {
 		}).then(() => {
 			if (id === 0) {
 				console.log('SAVE', node);
-				node.getContainer().save(true);
+                let container = node.getContainer();
+                this.save(true, container, container);
 			}
 		});
     }
@@ -233,7 +240,7 @@ export default class FACTORY {
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
         @param {EL} caller Element that called the save (ie: switchable element resolved)
-        @param {string} name optional named element to focus
+        @param {string} name optional named element to focus in PROMPT.form
 	    @returns {Promise<PROMPT>} Promise to Save (or prompt the user to save) 
 	*/
     save(noPrompt = false, container = this, caller = this, name = null) {
