@@ -273,7 +273,9 @@ export default class GulpBuild extends GULPFILE {
 					request('https://code.jquery.com/jquery-3.3.1.min.js').pipe(source('jquery.js')),
 					request('http://code.jquery.com/ui/1.12.1/jquery-ui.min.js').pipe(source('jqueryUI.js')),
 					request('https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js').pipe(source('jqueryValidate.js')),
-					request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js').pipe(source('bootstrap.js')))
+                    request('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js').pipe(source('bootstrap.js')),
+                    request('https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js').pipe(source('showdown.js'))
+                )
 				.pipe(this.pluginPlumber())
 				.pipe(buffer())
 				.pipe(concat(filename + '.js'))
