@@ -26,7 +26,7 @@ export default class SECTION extends CONTAINER {
                 console.log('No data exists for ' + this.toString());
 				this.navheader.el.dispatchEvent(new Expand(this.navheader));
             }
-            this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
+            //this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
 		});
 	}
 }
