@@ -49,8 +49,8 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'ARTICLE', {
-            containers: ['JUMBOTRON', 'FORM', 'SECTION']
-            //data: [createInputModel('INPUT', 'header')]
+            containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'NUMBER')]
         }
     ],
     [
@@ -208,7 +208,8 @@ export const DATAELEMENTS = new Map([
         'SECTION', {
             data: [
                 createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                createInputModel('TEXTAREA', 'p', 'Description'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'NUMBER')
             ]
 		}
 	],

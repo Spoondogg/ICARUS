@@ -1471,26 +1471,30 @@ html {
                             text-transform: uppercase;
                         }
                     }
-
-                    > .author,
-                    .date-created {
-                        background-color: $color-dark-less;
-                        color: $color-white;
-                        display: block;
-                        font-size: .8rem;
-                        text-align: center;
-                        //width: 50%;
-                    }
-                    //> .date-created {
-                    //clear: left;
-                    //float: left;
-                    //padding-left: .5rem;
-                    //}
-                    > .author {
-                        //clear: right;
-                        //float: right;
-                        padding-right: .5rem;
-                        //text-align: right;
+                    /// Collapsible
+                    > .header {
+                        > .pane {
+                            > .author,
+                            .date-created {
+                                background-color: $color-dark-less;
+                                color: $color-white;
+                                display: block;
+                                font-size: .8rem;
+                                text-align: center;
+                                //width: 50%;
+                            }
+                            //> .date-created {
+                            //clear: left;
+                            //float: left;
+                            //padding-left: .5rem;
+                            //}
+                            > .author {
+                                //clear: right;
+                                //float: right;
+                                padding-right: .5rem;
+                                //text-align: right;
+                            }
+                        }
                     }
                 }
             }
