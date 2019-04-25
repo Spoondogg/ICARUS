@@ -50,7 +50,7 @@ export const DATAELEMENTS = new Map([
     [
         'ARTICLE', {
             containers: ['JUMBOTRON', 'FORM', 'SECTION'],
-            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'NUMBER')]
+            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')]
         }
     ],
     [
@@ -209,7 +209,7 @@ export const DATAELEMENTS = new Map([
             data: [
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'NUMBER')
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')
             ]
 		}
 	],
