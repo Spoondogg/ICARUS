@@ -48,11 +48,16 @@ namespace ICARUS.Models.Icarus {
         public int status { get; set; }
 
         /// <summary>
-        /// Indicates if the object is active/inactive on the database, 
-        /// or any other states that might be needed
+        /// Indicates if the object is shared with multiple users
         /// </summary>
         [Required]
         public int shared { get; set; }
+
+        /// <summary>
+        /// Indicates if the object is available to the public, or private to the author
+        /// </summary>
+        [Required]
+        public int isPublic { get; set; }
 
         /// <summary>
         /// An HTML string that will be added to this node/element
