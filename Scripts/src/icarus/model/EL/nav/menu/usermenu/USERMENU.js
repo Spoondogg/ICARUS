@@ -26,10 +26,14 @@ export default class USERMENU extends MENU {
 			name: 'USEROPTIONS',
 			swipeSensitivity: 150
 		}));
-		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log In'));
-		this.btnLogout.el.onclick = () => this.login();
+		this.btnLogin = this.options.addNavItem(new MODEL().set('label', 'Log In'));
+		this.btnLogin.el.onclick = () => this.login();
 		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
-		this.btnLogout.el.onclick = () => this.logout();
+        this.btnLogout.el.onclick = () => this.logout();
+
+        this.btnRegister = this.options.addNavItem(new MODEL().set('label', 'Register'));
+        this.btnRegister.el.onclick = () => this.register();
+
 		for (let i = 0; i < 5; i++) {
 			this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
 		}
@@ -56,6 +60,13 @@ export default class USERMENU extends MENU {
 	login() {
 		console.log('USERMENU.login()');
 		return this.flip().then(() => this.getMain().login());
-	}
+    }
+    /** Calls MAIN.register()
+	    @returns {Promise<ThisType>} Promise Chain
+	*/
+    register() {
+        console.log('USERMENU.register()');
+        return this.flip().then(() => this.getMain().register());
+    }
 }
 export { ATTRIBUTES, EL, MENU, MODEL }

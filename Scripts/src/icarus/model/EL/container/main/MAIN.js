@@ -374,7 +374,53 @@ export default class MAIN extends CONTAINER {
 				)
 			}
 		);
-	}
+    }
+    /** Log into the application using the given credentials
+		param {string} email Username / Email 
+		param {string} password Account Password
+        <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
+			<input name="__RequestVerificationToken" type="hidden" value="woot">
+            <div id="socialLoginList">
+			<p>
+			    <button type="submit"
+			        class="btn btn-default" id="Google"
+			        name="provider" value="Google"
+			        title="Log in using your Google account"
+			    >Google</button>
+			</p>
+			</div>
+		</form>
+	    @todo Create AHREF to 'ForgotPassword'
+	    @returns {void}
+	*/
+    login_LEGACY() {
+        let prompt = new PROMPT('Login');
+        prompt.form.setAction('/Account/Login');
+        prompt.form.id = 0;
+        prompt.form.label = 'Login';
+        prompt.form.el.setAttribute('id', 0);
+        prompt.form.addClass('login');
+        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
+            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+        ]);
+        prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
+        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = this.loginExternal;
+
+        prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
+            let url = new URL(window.location.href);
+            let returnUrl = url.origin + '/signin-google';
+            //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
+            let provider = 'Google';
+            //prompt.form.el.elements['provider'].setAttribute('value', provider);
+            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
+            location.href = postUrl;
+        };
+
+        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+        prompt.show();
+    }
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
 	    @returns {Promise<ThisType>} Promise Chain
@@ -421,26 +467,28 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
 	register() {
-		this.loader.log(99, 'Register', true).then((loader) => {
-			new PROMPT(new MODEL().set('label', 'Register')).createForm(new MODEL().set({
-				container: this,
-				label: 'Register'
-			})).then((form) => {
-				form.setAction('/Account/Register');
-				form.setId(0);
-				//form.id = 0;
-				//form.el.setAttribute('id', 0);
-				form.label = 'Register';
+        this.loader.log(99, 'Register', true).then((loader) => new PROMPT(new DIALOGMODEL(
+                new MODEL(), {
+                    container: this,
+                    caller: this,
+                    label: 'Register'
+            })).createForm(new MODEL().set({
+                label: 'Register',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/Register');
+                form.setId(0);
+                form.label = 'Register';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
-				]);
-				form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-				loader.log(100).then(() => form.getDialog().show());
-			});
-		});
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
 	}
 	/** Swipe Up Event
 	    @returns {void}
