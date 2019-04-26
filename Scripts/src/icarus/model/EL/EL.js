@@ -84,9 +84,9 @@ export default class EL extends MODEL {
 				} else {
 					this.node.el.appendChild(this.el);
 				}
-			} else {
+			} /*else {
 				console.warn(this.toString() + '.make(): this.el already exists', typeof this.el);
-			}
+			}*/
 			this.merge(model).then(() => this.construct(model));
 		}, this.toString() + '.make() Unable to make ' + this.element);
 	}
@@ -503,12 +503,12 @@ export default class EL extends MODEL {
 						if (this.node !== document.body) {
 							this.node.get().splice(this.node.get().indexOf(this), 1);
 						}
-						resolve();
+						resolve(true);
 					});
 				} catch (e) {
 					if (e instanceof TypeError) {
 						console.warn('Unable to destroy ' + this.toString(), this);
-						resolve();
+						resolve(false);
 					} else {
 						reject(e);
 					}
