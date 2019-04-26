@@ -402,7 +402,7 @@ export default class MAIN extends CONTAINER {
 	*/
 	loginOAuth(provider) {
 		this.body.collapse().then(() => {
-			location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
+			window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
 		});
 	}
 	/** Logs the current user out 
