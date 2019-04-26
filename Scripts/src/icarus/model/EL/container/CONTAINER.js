@@ -590,20 +590,36 @@ export default class CONTAINER extends GROUP {
 		return $('<div/>').html(value).text();
 	}
 	/** Empties the Container Pane and reconstructs its contents based on the current model
-        @param {MODEL} [model] Optional MODEL to inject values from (Default behavior is to use this CONTAINER's MODEL)
         @returns {Promise<ThisType>} Promise Chain
     */
-	refresh(model = this) { // Optionally retrieve a new MODEL
-		console.log(this.toString() + '.refresh()', this);
+    refresh() {
 		return this.chain(
-			() => this.getLoader().log(20, 'Refreshing CONTAINER{' + this.className + '}[' + this.id + ']').then(
-				(loader) => {
-					console.log('Refreshing ' + this.className, this);
-					this.body.pane.empty().then(
-						() => this.loadModel(model).then(
-							() => loader.log(100)));
-				}
-			), 'Unable to refresh ' + this.className);
+			() => this.getLoader().log(20, this.toString() + '.refresh()').then(
+                (loader) => {
+                    this.getPayload(this.getId(), this.className).then(
+                        (payload) => {
+                            let tempStyleDisplay = this.el.style.display;
+                            this.el.style.display = 'none';
+                            let promises = Object.keys(this.data).map((dataEl) => {
+                                try {
+                                    this[dataEl].destroy(0);
+                                    return [dataEl, true];
+                                } catch (e) {
+                                    return [dataEl, e.name];
+                                }
+                            });
+                            Promise.all(promises).then(() => { //results
+                                this.body.pane.empty().then(
+                                    () => this.make(payload.model).then(() => {
+                                        this.el.style.display = tempStyleDisplay;
+                                        //console.log(this.toString() + '.refresh().results', results);
+                                        loader.log(100)
+                                    })
+                                );
+                            });
+                        }
+                    );
+                }), this.toString() + ' failed to refresh');
 	}
 	/** Closes parent menus
 	    @param {MENU} menu Menu
@@ -773,7 +789,7 @@ export default class CONTAINER extends GROUP {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
                         if (payload.result === 1) {
-                            resolve(this.loadModel(payload.model));
+                            resolve(this.make(payload.model));
                         } else {
                             reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
                         }
@@ -792,19 +808,6 @@ export default class CONTAINER extends GROUP {
 	*/
     toString() {
 		return this.className + '(' + (this.id || 0).toString() + ')'
-	}
-	/** Loads the given MODEL into CONTAINER.body.pane
-	    @param {MODEL} model Model
-	    @returns {Promise<ThisType>} Promise Chain
-	*/
-	loadModel(model) {
-		console.log(this.toString() + '.loadModel()', model);
-		return this.chain(() => {
-			if (model.label) {
-				document.title = model.label;
-			}
-			this.make(model);
-		}, 'Unable to construct ' + this.toString());
 	}
 	/** Sets Id, Label and Name based on MODEL
 	    @param {MODEL} model MODEL
