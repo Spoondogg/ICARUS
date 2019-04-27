@@ -193,7 +193,8 @@ export default class FORM extends CONTAINER {
 	defaultFormPostInputArray(data) {
 		return [
 			createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
-			createInputModel('INPUT', 'shared', data.model.shared, 'shared', 'CHECKBOX')
+            createInputModel('INPUT', 'shared', data.model.shared, 'shared', 'CHECKBOX'),
+            createInputModel('INPUT', 'isPublic', data.model.isPublic, 'isPublic', 'CHECKBOX')
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST
