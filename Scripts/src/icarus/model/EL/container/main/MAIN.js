@@ -3,7 +3,7 @@ import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NA
 import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import FORMFACTORY from '../formelement/FORMELEMENTFACTORY.js';
+import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
