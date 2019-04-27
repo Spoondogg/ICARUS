@@ -70,11 +70,14 @@ export default class CONTAINER extends GROUP {
 		    @type {string}
 		*/
 		this.label = this.required(model.label || this.element);
-		/** Indicates if this CONTAINER is public or private
-            CONTAINER(s) are considered to be PUBLIC by default
+		/** Indicates if this CONTAINER can be edited by anyone, or just by the author
             @type {number}
         */
-        this.shared = this.required(model.shared || 1);
+        this.shared = this.required(model.shared || 0);
+        /** Indicates if this CONTAINER can be edited by anyone, or just by the author
+            @type {number}
+        */
+        this.isPublic = this.required(model.isPublic || 0);
         /** Simple status indicator
             @type {number}
         */
@@ -494,7 +497,8 @@ export default class CONTAINER extends GROUP {
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
-            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
+            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX'),
+            createInputModel('INPUT', 'isPublic', this.isPublic.toString(), 'isPublic', 'CHECKBOX')
 		];
     }
     /** Dispatches the given Event to this CONTAINER's children
@@ -562,11 +566,11 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
-	addElementItems(containerList) {
+    addElementItems(containerList) {
 		return this.chain(() => {
 			if (containerList.length > 0) {
-				let defaultContainers = [];
-				containerList.splice(2, 0, ...defaultContainers);
+				//let defaultContainers = []; // First two are normal
+				//containerList.splice(2, 0, ...defaultContainers);
 				Promise.all([containerList.map((c) => this.addContainerCase(c))]);
 			}
 		});
