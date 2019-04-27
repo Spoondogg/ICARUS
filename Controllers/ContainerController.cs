@@ -66,7 +66,7 @@ namespace ICARUS.Controllers {
                 m.id == id && m.status != -1
                 && (
                     m.authorId == User.Identity.Name
-                    || m.shared == 1
+                    || m.isPublic == 1
                 )
             );
         }
@@ -82,7 +82,7 @@ namespace ICARUS.Controllers {
                 m.status != -1
                 && (
                     m.authorId == User.Identity.Name
-                    || m.shared == 1
+                    || m.isPublic == 1
                 )
             );
         }
@@ -210,7 +210,7 @@ namespace ICARUS.Controllers {
             Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
-                m => m.authorId == User.Identity.Name || m.shared == 1
+                m => m.authorId == User.Identity.Name || m.isPublic == 1
             ).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
@@ -324,7 +324,7 @@ namespace ICARUS.Controllers {
                 // Set new values
                 int result = 0;
                 if (model != null) {
-                    if(model.authorId == User.Identity.Name) {
+                    if(model.authorId == User.Identity.Name || model.shared == 1) {
                         model.status = 1;
 
                         model.updateContainerModel(formPost);

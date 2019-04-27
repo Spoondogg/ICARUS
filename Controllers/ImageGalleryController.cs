@@ -108,7 +108,7 @@ namespace ICARUS.Controllers {
             Procedure procedure = new Procedure("ICARUS.GetImageIndex", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
-                m => m.authorId == User.Identity.Name || m.shared == 1
+                m => m.authorId == User.Identity.Name || m.isPublic == 1
             ).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
