@@ -111,7 +111,7 @@ namespace ICARUS.Controllers {
         private void attachFormPost(EL model, ATTRIBUTES attr, int id) {
             if (id > 0) {
                 FormPost data = (FormPost)db.dbSets["FormPost"].Find(id);
-                if (data.authorId == User.Identity.Name || data.shared == 1) {
+                if (data.authorId == User.Identity.Name || data.isPublic == 1) {
                     XmlDocument xml = new XmlDocument();
                     xml.LoadXml(data.xmlResults);
 
@@ -130,7 +130,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public virtual JsonResult getJson(int id) {            
             EL model = (EL)db.dbSets[this.className].Find(id);
-            if (model.status != -1 && (model.authorId == User.Identity.Name || model.shared == 1)) {
+            if (model.status != -1 && (model.authorId == User.Identity.Name || model.isPublic == 1)) {
 
                 string message = "Successfully retrieved " + this.className + ", subsections (" +
                     model.subsections + ")";
@@ -142,7 +142,7 @@ namespace ICARUS.Controllers {
                     for (int s = 0; s < subsections.Length; s++) {
                         var child = db.dbSets["Container"].Find(Int32.Parse(subsections[s]));
                         EL ch = (EL)child;
-                        if (ch.getAuthorId() == User.Identity.Name || ch.shared == 1) {
+                        if (ch.getAuthorId() == User.Identity.Name || ch.isPublic == 1) {
                             model.addChild(child);
                         }
                     }

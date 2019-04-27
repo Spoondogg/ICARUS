@@ -142,7 +142,7 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override JsonResult getJson(int id) {
             FormPost model = (FormPost) db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name || model.shared == 1) {
+            if (model.authorId == User.Identity.Name || model.isPublic == 1) {
 
                 string message = "Successfully retrieved " + this.className;
                 return Json(new Payload(
@@ -166,6 +166,7 @@ namespace ICARUS.Controllers {
                 formPost.resultsToXml();
                 int id = formPost.parseInt("id", -1);
                 int shared = formPost.parseInt("shared", 0);
+                int isPublic = formPost.parseInt("isPublic", 0);
 
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
@@ -182,6 +183,7 @@ namespace ICARUS.Controllers {
                 model.jsonResults = formPost.jsonResults;
                 model.formId = formPost.formId;
                 model.shared = shared;
+                model.isPublic = isPublic;
 
                 // Save the object
                 ctx.FormPosts.Add(model);

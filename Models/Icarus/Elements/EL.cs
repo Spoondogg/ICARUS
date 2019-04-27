@@ -48,13 +48,15 @@ namespace ICARUS.Models.Icarus {
         public int status { get; set; }
 
         /// <summary>
-        /// Indicates if the object is shared with multiple users
+        /// Indicates if the object is shared with multiple users. 
+        /// An element with shared enabled can be modified by anyone
         /// </summary>
         [Required]
         public int shared { get; set; }
 
         /// <summary>
         /// Indicates if the object is available to the public, or private to the author
+        /// An element with isPublic enabled can be viewed by anyone
         /// </summary>
         [Required]
         public int isPublic { get; set; }
@@ -106,6 +108,7 @@ namespace ICARUS.Models.Icarus {
             this.children = new List<Object>();
             this.status = 1;
             this.shared = 0;
+            this.isPublic = 0;
         }
 
         /// <summary>
