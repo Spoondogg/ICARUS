@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ATTRIBUTES, EL, MODEL } from '../MENU.js'
+import MENU, { ATTRIBUTES, Activate, EL, Expand, MODEL, NAVBAR } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
@@ -20,44 +20,52 @@ export default class USERMENU extends MENU {
             class: 'avatar',
             src: this.getAvatar()
         }));
-        try {            
-            
+        try {
             this.username = new DIV(this.profile, new MODEL('username').set('innerHTML', localStorage.getItem('name')));
             this.email = new DIV(this.profile, new MODEL('email').set('innerHTML', this.getUser()));
             this.roles = new DIV(this.profile, new MODEL('roles').set('innerHTML', this.getRole()));
         } catch (e) {
             console.warn(e);
         }
-		//this.details = new DIV(this.profile, new MODEL('details').set('innerHTML', 'Lorem Ipsum'));
-		this.options = this.addMenu(new MODEL('horizontal').set({
-			name: 'USEROPTIONS',
-			swipeSensitivity: 150
-        }));
+        this.createOptions();        
+        this.navbar.el.dispatchEvent(new Expand(this.navbar));
+    }
+    /** Creates the Options Menu for this active user
+        @returns {void}
+    */
+    createOptions() {
+        /** @type {NAVBAR} */
+        this.navbar = this.node.navbar;
+        this.navbar.addClass('options-nav');
+        let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
+        optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
+        this.options = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, [], true);
+        this.options.element.swipeSensitivity = 150;
+
         if (this.getRole() === 'Guest') {
-            this.btnLogin = this.options.addNavItemIcon(new MODEL().set({
+            this.btnLogin = this.options.element.addNavItemIcon(new MODEL().set({
                 label: 'Log In',
                 icon: ICONS.USER,
                 name: 'log-in'
             }));
             this.btnLogin.el.onclick = () => this.login();
         } else {
-            this.btnLogout = this.options.addNavItemIcon(new MODEL().set({
+            this.btnLogout = this.options.element.addNavItemIcon(new MODEL().set({
                 label: 'Log Out',
                 icon: ICONS.USER,
                 name: 'log-out'
             }));
-            this.btnLogout.el.onclick = () => this.logout();            
+            this.btnLogout.el.onclick = () => this.logout();
         }
-        
-        /* There is no reason to have this available to anyone.  Use OAuth instead */
-        this.btnRegister = this.options.addNavItemIcon(new MODEL().set({
+        /* You should probably use OAuth instead */
+        this.btnRegister = this.options.element.addNavItemIcon(new MODEL().set({
             label: 'Register',
             icon: ICONS.USER,
             name: 'register'
         }));
         this.btnRegister.el.onclick = () => this.register();
-		this.options.expand();
-	}
+    }
+
 	/** The USERMENU slides in and should be expanded at all times 
 	    @returns {void}
 	*/
