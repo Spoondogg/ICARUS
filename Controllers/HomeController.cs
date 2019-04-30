@@ -55,7 +55,7 @@ namespace ICARUS.Controllers {
                 var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
                 var message = new MailMessage();
                 message.To.Add(new MailAddress(ConfigurationManager.AppSettings["toEmail"]));
-                message.From = new MailAddress(ConfigurationManager.AppSettings["toEmail"]);
+                message.From = new MailAddress(ConfigurationManager.AppSettings["fromEmail"]);
                 if (model.toEmail != null){
                     message.To.Add(new MailAddress(model.toEmail));  // replace with valid value 
                 }
