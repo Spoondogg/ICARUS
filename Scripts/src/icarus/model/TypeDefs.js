@@ -61,7 +61,7 @@
     @property {UIdList} [subsections] Child Container UIds
     @property {string} [name] Name
 */
-/**Represents a LOADER Class Structure
+/** Represents a LOADER Class Structure
     @typedef {Object} LoaderLike A Container-like Object Model
     @property {string} [name] Name
 */
