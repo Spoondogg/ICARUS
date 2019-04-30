@@ -11,13 +11,20 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using ICARUS.Models;
+using System.Configuration;
+using System.Net.Mail;
 
 namespace ICARUS {
 
     public class EmailService : IIdentityMessageService {
         public Task SendAsync(IdentityMessage message) {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            SmtpClient client = new SmtpClient();
+            return client.SendMailAsync(
+                ConfigurationManager.AppSettings["fromEmail"],
+                message.Destination,
+                message.Subject,
+                message.Body
+            );
         }
     }
 
