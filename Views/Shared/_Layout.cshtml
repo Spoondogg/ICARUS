@@ -12,6 +12,16 @@
     <meta name="theme-color" content="#FFF" />
     <meta name="token" content="" />
     <meta name="user" content="@User.Identity.Name" />
+    @using Microsoft.AspNet.Identity
+    @using Microsoft.AspNet.Identity.Owin;
+    @if (Request.IsAuthenticated) {
+        var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        var userRoles = userManager.GetRoles(User.Identity.GetUserId());
+        var role = String.Join(",", userRoles);
+        <meta name="roles" content="@role" />
+    } else {
+        <meta name="roles" content="Guest" />
+    }
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts
@@ -44,10 +54,10 @@
     @*<script src="https://apis.google.com/js/platform.js" async defer></script>*@
     <script src="@Url.Content("~/Scripts/vendor.js")"></script>
     @*<script>
-        // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
-        var manifest = document.querySelector('link[rel=manifest]');
-        if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
-    </script>*@
+            // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
+            var manifest = document.querySelector('link[rel=manifest]');
+            if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
+        </script>*@
 </head>
 <body>
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@

@@ -288,7 +288,24 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-	}
+    }
+    /** Performs an AJAX request and calls the given method with the JSON response
+        @param {string} url HTTP Request Url
+        @param {Function} fn Function that accepts the resulting payload as its only argument
+        @param {string} method Request Method (ie: 'POST','GET')
+        @returns {Object} A JSON object retrieved from the given url
+    */
+    getJson(url, fn, method = 'GET') {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let payload = JSON.parse(this.responseText);
+                fn(payload);
+            }
+        };
+        xmlhttp.open(method, url, true);
+        xmlhttp.send();
+    }
 	/** Retrieve the application loader
 	    @returns {LOADER} Loader
 	*/
@@ -321,23 +338,30 @@ export default class EL extends MODEL {
 	getTail() {
 		return this.get()[this.get().length - 1];
     }
-    /** Performs an AJAX request and calls the given method with the JSON response
-        @param {string} url HTTP Request Url
-        @param {Function} fn Function that accepts the resulting payload as its only argument
-        @param {string} method Request Method (ie: 'POST','GET')
-        @returns {Object} A JSON object retrieved from the given url
-    */
-    getJson(url, fn, method = 'GET') {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let payload = JSON.parse(this.responseText);
-                fn(payload);
-            }
-        };
-        xmlhttp.open(method, url, true);
-        xmlhttp.send();
+    /** Retrieves the token value from the DOM Meta tags
+	    @returns {string} A request verification token
+	*/
+    getToken() {
+        return document.getElementsByTagName('meta').token.content || '';
     }
+    /** Retrieves the user value from the DOM Meta tags
+	    @returns {string} Current User
+	*/
+    getUser() {
+        return document.getElementsByTagName('meta').user.content || 'Guest';
+    }
+    /** Retrieves the user's profile picture / avatar if available
+	    @returns {string} Current User
+	*/
+    getAvatar() {
+        return localStorage.getItem('picture') || './Content/Images/user256.png';
+    }
+    /** Retrieves the roles value from the DOM Meta tags
+	    @returns {string} Current User Role(s) (comma delimited)
+	*/
+    getRole() {
+        return document.getElementsByTagName('meta').roles.content || '';
+    } 
     /** Retrieves a Payload matching the given params (if permitted)
         @param {number} uid Type UId (ie: Formpost(123) = 123)
         @param {string} [type] Payload type (default: FORMPOST)
