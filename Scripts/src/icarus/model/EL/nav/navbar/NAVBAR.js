@@ -69,7 +69,7 @@ export default class NAVBAR extends NAV {
         @param {Array<string>} children Sample child tabs
         @param {boolean} isHorizontal If true (default), sub-menu is horizontal with icons, else vertical
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
-	    @returns {void}
+	    @returns {{tab:NAVITEMICON, menu:MENU}} Tab and Menu
 	*/
 	addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
 		try {
@@ -91,7 +91,12 @@ export default class NAVBAR extends NAV {
 				}));
 				let opt = menu.addMenu(new MODEL(optMenuClass).set('name', str));
 				this.addTabbableElement(tb, opt);
-			});
+            });
+
+            return {
+                tab,
+                menu
+            }
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
 			if (modal === null) {
