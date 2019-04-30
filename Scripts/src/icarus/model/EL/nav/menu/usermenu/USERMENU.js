@@ -1,6 +1,7 @@
 /** @module */
 import MENU, { ATTRIBUTES, EL, MODEL } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
 /** User Menu 
     @class
@@ -13,30 +14,48 @@ export default class USERMENU extends MENU {
 	*/
 	constructor(node) {
 		super(node, new MODEL('in').set('name', 'USER'));
-		this.overrideMenuDefaults();
-		this.profile = new DIV(this, new MODEL('profile'));
-		this.image = new IMG(this.profile, new MODEL({
-			class: 'picture',
-			src: localStorage.getItem('picture')
-		}));
-		this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
-		this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
-		this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
+        this.overrideMenuDefaults();
+        this.profile = new DIV(this, new MODEL('profile'));
+        this.image = new IMG(this.profile, new MODEL({
+            class: 'avatar',
+            src: this.getAvatar()
+        }));
+        try {            
+            
+            this.username = new DIV(this.profile, new MODEL('username').set('innerHTML', localStorage.getItem('name')));
+            this.email = new DIV(this.profile, new MODEL('email').set('innerHTML', this.getUser()));
+            this.roles = new DIV(this.profile, new MODEL('roles').set('innerHTML', this.getRole()));
+        } catch (e) {
+            console.warn(e);
+        }
+		//this.details = new DIV(this.profile, new MODEL('details').set('innerHTML', 'Lorem Ipsum'));
 		this.options = this.addMenu(new MODEL('horizontal').set({
 			name: 'USEROPTIONS',
 			swipeSensitivity: 150
-		}));
-		this.btnLogin = this.options.addNavItem(new MODEL().set('label', 'Log In'));
-		this.btnLogin.el.onclick = () => this.login();
-		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
-        this.btnLogout.el.onclick = () => this.logout();
-
-        this.btnRegister = this.options.addNavItem(new MODEL().set('label', 'Register'));
+        }));
+        if (this.getRole() === 'Guest') {
+            this.btnLogin = this.options.addNavItemIcon(new MODEL().set({
+                label: 'Log In',
+                icon: ICONS.USER,
+                name: 'log-in'
+            }));
+            this.btnLogin.el.onclick = () => this.login();
+        } else {
+            this.btnLogout = this.options.addNavItemIcon(new MODEL().set({
+                label: 'Log Out',
+                icon: ICONS.USER,
+                name: 'log-out'
+            }));
+            this.btnLogout.el.onclick = () => this.logout();            
+        }
+        
+        /* There is no reason to have this available to anyone.  Use OAuth instead */
+        this.btnRegister = this.options.addNavItemIcon(new MODEL().set({
+            label: 'Register',
+            icon: ICONS.USER,
+            name: 'register'
+        }));
         this.btnRegister.el.onclick = () => this.register();
-
-		for (let i = 0; i < 5; i++) {
-			this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
-		}
 		this.options.expand();
 	}
 	/** The USERMENU slides in and should be expanded at all times 
