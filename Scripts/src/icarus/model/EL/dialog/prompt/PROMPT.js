@@ -24,11 +24,11 @@ export default class PROMPT extends DIALOG {
 		return new Promise((resolve, reject) => {
 			try {
 				if (model.formtype === 'FORMPOST') {
-					FORM.createFormPostForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+					FORM.createFormPostForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else if (model.formtype === 'CONTAINER') {
-					FORM.createContainerForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createContainerForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else {
-					FORM.createEmptyForm(this.body, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createEmptyForm(this.body.pane, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				}
 			} catch (e) {
 				console.error('PROMPT.createForm() Failed to create Form', model, this);

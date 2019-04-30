@@ -608,12 +608,14 @@
     <Content Include="Content\icon50.png" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\icon512.png" />
+    <Content Include="Content\Images\favicon.ico" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Content\Images\startup\startup-1125x2436.png" />
     <Content Include="Content\Images\startup\startup-1242x2208.png" />
     <Content Include="Content\Images\startup\startup-750x1334.png" />
+    <Content Include="Content\Images\user256.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
@@ -792,6 +794,8 @@
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="Content\Images\Logo.psd" />
+    <Content Include="Content\Images\User.psd" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>

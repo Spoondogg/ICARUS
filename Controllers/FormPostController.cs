@@ -92,13 +92,11 @@ namespace ICARUS.Controllers {
                 // Save the object
                 getObjectDbContext().FormPosts.Add(formPost);
                 int success = getObjectDbContext().SaveChanges();
-                //this.sendEmail(success, formPost);
-
                 // Return the success response
                 return Json(new Payload(
                     1, "FORMPOST", formPost,
                     formPost.getMessage()
-                ));                
+                ));
             } catch (Exception e) {
                 var message = e.Message;
                 return Json(new Payload(0, e, "FormPostController.submit(" + e.GetType() + ")" + formPost.getMessage() + "\n\n" + e.Message));
@@ -106,34 +104,29 @@ namespace ICARUS.Controllers {
         }
         /// <summary>
         /// Sends the FormPost as an email
+        /// See http://www.mikesdotnetting.com/article/268/how-to-send-email-in-asp-net-mvc
         /// </summary>
         /// <param name="success"></param>
         /// <param name="formPost"></param>
-        private void sendEmail(int success, FormPost formPost) {
-            // Send an email in a seperate thread so as not to hold up the form
-            // https://stackoverflow.com/questions/363377/how-do-i-run-a-simple-bit-of-code-in-a-new-thread
+        private async Task<Boolean> sendEmailAsync(int success, FormPost formPost) {
             if (success == 1) {
-                new Thread(async () => {
-                    // http://www.mikesdotnetting.com/article/268/how-to-send-email-in-asp-net-mvc
-                    // Construct the message
-                    var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
-                    var message = new MailMessage();
-                    message.To.Add(new MailAddress(User.Identity.Name));
-                    message.From = new MailAddress(User.Identity.Name);
-                    message.Subject = "Form ID: " + formPost.id;
-                    message.Body = string.Format(
-                        body, User.Identity.Name, User.Identity.Name,
-                        "Success: " + success + "\n\n" + formPost.getMessage()
-                    );
-                    message.IsBodyHtml = true;
+                var body = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p>";
+                var message = new MailMessage();
+                message.To.Add(new MailAddress(User.Identity.Name));
+                message.From = new MailAddress(User.Identity.Name);
+                message.Subject = "Form ID: " + formPost.id;
+                message.Body = string.Format(
+                    body, User.Identity.Name, User.Identity.Name,
+                    "Success: " + success + "\n\n" + formPost.getMessage()
+                );
+                message.IsBodyHtml = true;
 
-                    // Send the email asynchronously
-                    using (var smtp = new SmtpClient()) {
-                        await smtp.SendMailAsync(message);
-                    }
-
-                }).Start();
+                // Send the email asynchronously
+                using (var smtp = new SmtpClient()) {
+                    await smtp.SendMailAsync(message);
+                }
             }
+            return true;
         }
         /// <summary>
         /// Constructs the object and returns as Json

@@ -261,6 +261,7 @@ $z-bottom: -1;
 /// Limits max height of the modal so that the stickyfooter remains visible
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
+    height: calc(50vh - #{$navbar-height});
     max-height: calc(50vh - #{$navbar-height});
     overflow-y: auto;
 }
@@ -525,6 +526,7 @@ html {
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
         animation: slideOutUp $transition-speed $transition-motion;
+        background-color: blue;
         border: 0;
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;
@@ -557,6 +559,39 @@ html {
                 }
             }
         }
+        /// The Dialog Header
+        /// @group dialog
+        > header {
+            background-color: $color-grey-dark;
+            color: $color-light;
+            height: 3rem;
+            line-height: 3rem;
+            padding: 0 .5rem;
+            text-transform: uppercase;
+
+            button {
+                //background-color: transparent;
+                //color: $color-white;
+                float: right;
+                //font-weight: bold;
+                //line-height: 1.5rem;
+                //&:hover {
+                //    color: $color-light-less;
+                //}
+            }
+        }
+
+        footer {
+            &.form-footer {
+                border: 0;
+                //button {
+                //border-radius: 0;
+                //height: $navbar-height - 1rem;
+                //line-height: $navbar-height - 1rem;
+                //padding: 0;
+                //}
+            }
+        }
         /// A Prompt style Dialog
         /// @group dialog
         &.prompt {
@@ -585,6 +620,59 @@ html {
                     padding: 0;
                 }
             }*/
+            > .body {
+                overflow-x: hidden;
+
+                > .pane {
+                    @extend %modal-tall;
+                    //height: calc(50vh - #{$navbar-height});
+                    //max-height: calc(50vh - #{$navbar-height});
+                    overflow-x: hidden;
+
+                    > form {
+                        .form-footer {
+                            height: auto;
+                        }
+                    }
+                }
+            }
+            /// A Login Form embedded in a Prompt
+            /// @group dialog
+            &.login {
+                $login-width: 250px;
+                //$navheights: ($navbar-height * 2);
+                //#{$navbar-height}
+                //@extend %modal-tall;
+                animation: slideOutRight $transition-speed $transition-motion;
+                border-radius: 0;
+                float: right;
+                left: calc(100% - #{$login-width});
+                margin: 0;
+                max-height: calc(100vh - #{$navbar-height});
+                height: calc(100vh - #{$navbar-height});
+                top: $navbar-height;
+                width: $login-width;
+
+                &[open],
+                &.in {
+                    animation: slideInRight $transition-speed $transition-motion;
+
+                    &.hiding {
+                        animation: slideOutRight $transition-speed $transition-motion;
+                    }
+                }
+
+                > .body {
+                    > .pane {
+                        //background-color: red;
+                        height: calc(100vh - 11rem);
+                        max-height: calc(100vh - 11rem);
+                    }
+                }
+                //footer {
+                //display: none;
+                //}
+            }
         }
         /// A Panel style Dialog
         /// @group dialog
@@ -614,28 +702,6 @@ html {
                     padding: 0;
                 }
             }*/
-        }
-        /// A Login Form embedded in a Prompt
-        /// @group dialog
-        &.login {
-            animation: slideOutRight $transition-speed $transition-motion;
-            float: right;
-            left: calc(100% - 270px);
-            top: 2rem;
-            width: 250px;
-
-            &[open],
-            &.in {
-                animation: slideInRight $transition-speed $transition-motion;
-
-                &.hiding {
-                    animation: slideOutRight $transition-speed $transition-motion;
-                }
-            }
-
-            footer {
-                display: none;
-            }
         }
         /// A Loader Dialog
         /// @group dialog
@@ -730,50 +796,6 @@ html {
             header {
                 display: none;
                 height: $navbar-height;
-            }
-        }
-        /// The Dialog Header
-        /// @group dialog
-        > header {
-            background-color: $color-grey-dark;
-            color: $color-light;
-            height: 3rem;
-            line-height: 3rem;
-            padding: 0 .5rem;
-            text-transform: uppercase;
-
-            button {
-                //background-color: transparent;
-                //color: $color-white;
-                float: right;
-                //font-weight: bold;
-                //line-height: 1.5rem;
-                //&:hover {
-                //    color: $color-light-less;
-                //}
-            }
-        }
-
-        > .body {
-            @extend %modal-tall;
-            overflow-x: hidden;
-
-            > form {
-                .form-footer {
-                    height: auto;
-                }
-            }
-        }
-
-        footer {
-            &.form-footer {
-                border: 0;
-                //button {
-                //border-radius: 0;
-                //height: $navbar-height - 1rem;
-                //line-height: $navbar-height - 1rem;
-                //padding: 0;
-                //}
             }
         }
     }
@@ -962,6 +984,28 @@ html {
             }*/
         }
     }
+    /// Showdown.js Markdown (Github flavor) for checkboxes (ie: - [ ])
+    .markdown {
+        ul {
+            li {
+                &.task-list-item {
+                    line-height: 1.2rem;
+                    padding: .4rem 0;
+
+                    input {
+                        &[type='checkbox'] {
+                            display: block;
+                            float: left;
+                            height: 1.2rem;
+                            line-height: 1.2rem;
+                            margin-top: 4px;
+                            width: 1.2rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
     /// HTML FORM Element
     form {
         @extend %bevel-up;
@@ -1014,10 +1058,9 @@ html {
                 li {
                     @include transition($transition-default);
                     background-color: $color-red;
-                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     text-align: center;
+                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     width: 50%;
-
 
                     &:first-of-type { // yes
                         //background: linear-gradient(left, $color-white 0%, $color-red-deep 100%);
@@ -1400,7 +1443,7 @@ html {
             > .pane {
                 @extend %no-scroll-bar;
                 @include transition($transition-default);
-                min-height: $navbar-height;
+                //min-height: $navbar-height;
                 width: 100%;
 
                 > p {
@@ -1462,10 +1505,8 @@ html {
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
-            //border-bottom: 1px solid $color-grey;
-            //border-top: 1px solid $color-grey-darker;
             box-shadow: 0 0 .5rem 0 $color-shadow-dark;
-            margin: .8rem auto;
+            margin: 0 auto;
             min-height: $navbar-height;
 
             &:first-of-type {
@@ -1474,8 +1515,6 @@ html {
 
             > .body {
                 > .pane {
-                    padding-bottom: 1rem;
-
                     > header {
                         &:first-of-type {
                             background-color: $color-grey-dark;
@@ -1946,10 +1985,11 @@ html {
                 //background-color: $color-grey-dark;
                 color: $color-white;
                 font-family: $font-header;
+                padding: .5rem 0;
                 text-align: center;
 
                 > img {
-                    &.picture {
+                    &.avatar {
                         background-color: $color-grey;
                         border: 2px solid $color-grey-light;
                         border-radius: 128px;
@@ -1967,10 +2007,17 @@ html {
                     line-height: 1.4rem;
                 }
 
-                > .quote {
+                > .email {
                     font-size: .8rem;
                     line-height: 1.4rem;
                     margin-bottom: 1rem;
+                }
+
+                > .roles {
+                    border-top: 1px solid $color-white;
+                    line-height: 1.4rem;
+                    margin: 0 1rem 1rem;
+                    padding-top: .4rem;
                 }
             }
         }

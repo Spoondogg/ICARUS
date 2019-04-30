@@ -17,8 +17,10 @@ export default class FACTORY {
         try {
             this.markdownConverter = new showdown.Converter({
                 smoothLivePreview: true,
-                strikethrough: true
+                strikethrough: true,
+                tasklists: true
             });
+            this.markdownConverter.setFlavor('github');
         } catch (e) {
             console.warn('Failed to bind markdown converted');
             throw e;

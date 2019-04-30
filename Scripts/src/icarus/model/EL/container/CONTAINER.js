@@ -439,7 +439,7 @@ export default class CONTAINER extends GROUP {
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
                             break;
                         case 'p':
-                            this[name] = new P(node, new MODEL().set('innerHTML', this.getFactory().markdownConverter.makeHtml(this.data[name])));
+                            this[name] = new P(node, new MODEL('markdown').set('innerHTML', this.getFactory().markdownConverter.makeHtml(this.data[name])));
 							break;
 						case 'legend':
 							this[name] = new LEGEND(node, new MODEL().set('innerHTML', this.data[name]));
@@ -449,7 +449,7 @@ export default class CONTAINER extends GROUP {
 							break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
-					}
+                    }
 					this[name].implement(new Clickable(this[name]));
 					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
@@ -1005,12 +1005,6 @@ export default class CONTAINER extends GROUP {
 	*/
 	getDateCreated() {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
-	}
-	/** Retrieves the token value from the DOM Meta tags
-	    @returns {string} A request verification token
-	*/
-	getToken() {
-		return document.getElementsByTagName('meta').token.content;
 	}
 }
 export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
