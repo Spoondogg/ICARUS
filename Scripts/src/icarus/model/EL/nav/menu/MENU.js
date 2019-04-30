@@ -94,7 +94,7 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEM(this, model)); //model.url, model.label
 	}
 	/** Constructs a Nav Item Icon
-	    @param {MODEL} model Object model
+	    @param {MODEL|{label:string, icon:string, name:string}} model Object model
 	    @returns {NAVITEMICON} Nav Item with Anchor
 	*/
 	addNavItemIcon(model) {
