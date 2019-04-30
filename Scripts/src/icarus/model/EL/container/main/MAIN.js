@@ -161,12 +161,10 @@ export default class MAIN extends CONTAINER {
 	    @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
 	*/
 	createUserMenu() {
-		let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-		userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['Profile', 'Settings']);
-		userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
+        let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
 		let usermenu = new USERMENU(userBar.element);
 		$(usermenu.el).insertBefore(userBar.element.navbar.el);
-		usermenu.el.dispatchEvent(new Expand());
+        usermenu.el.dispatchEvent(new Expand(usermenu));
 		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
 	}
 	/** Adds default Nav Items to the Nav Bar including the label
@@ -351,75 +349,37 @@ export default class MAIN extends CONTAINER {
 		let label = 'LogIn';
 		this.loader.log(99, label).then(
 			(loader) => {
-				let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
+				let prompt = new PROMPT(new DIALOGMODEL(new MODEL('login'), {
 					caller,
 					container: this,
 					label
 				}));
-                prompt.createForm(new DIALOGMODEL(new MODEL(), {
+                prompt.createForm(new DIALOGMODEL(new MODEL('login'), {
                     caller,
                     container: prompt,
-                    label
+                    label: 'Login'
                 })).then(
-					(form) => form.footer.buttonGroup.empty().then(
-						() => {
-							form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
-								this.loginOAuth('Google');
-								return false;
-							}
-							//loader.log(100).then(() => form.getDialog().show());
-							loader.log(100).then(() => prompt.show());
-						}
-					)
-				)
+                    (form) => {
+                        form.setAction('/Account/Login');
+                        form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+                        ]);
+                        form.footer.buttonGroup.addButton('Google').el.onclick = () => {
+                            this.loginOAuth('Google');
+                            return false;
+                        }
+                        form.footer.buttonGroup.addButton('Register').el.onclick = () => {
+                            this.register();
+                            return false;
+                        }
+                        form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                        loader.log(100).then(() => prompt.show());
+                    }
+                );
 			}
 		);
-    }
-    /** Log into the application using the given credentials
-		param {string} email Username / Email 
-		param {string} password Account Password
-        <form action="/Account/ExternalLogin?ReturnUrl=%2F" method="post">
-			<input name="__RequestVerificationToken" type="hidden" value="woot">
-            <div id="socialLoginList">
-			<p>
-			    <button type="submit"
-			        class="btn btn-default" id="Google"
-			        name="provider" value="Google"
-			        title="Log in using your Google account"
-			    >Google</button>
-			</p>
-			</div>
-		</form>
-	    @todo Create AHREF to 'ForgotPassword'
-	    @returns {void}
-	*/
-    login_LEGACY() {
-        let prompt = new PROMPT('Login');
-        prompt.form.setAction('/Account/Login');
-        prompt.form.id = 0;
-        prompt.form.label = 'Login';
-        prompt.form.el.setAttribute('id', 0);
-        prompt.form.addClass('login');
-        prompt.form.children[0].children[0].addInputElements([ // fieldset.formElementGroup
-            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
-        ]);
-        prompt.form.footer.buttonGroup.addButton('Register').el.onclick = this.register;
-        prompt.form.footer.buttonGroup.addButton('OAuth').el.onclick = this.loginExternal;
-
-        prompt.form.footer.buttonGroup.addButton('OAuth - Google').el.onclick = () => {
-            let url = new URL(window.location.href);
-            let returnUrl = url.origin + '/signin-google';
-            //prompt.form.el.elements['ReturnUrl'].setAttribute('value', returnUrl);
-            let provider = 'Google';
-            //prompt.form.el.elements['provider'].setAttribute('value', provider);
-            let postUrl = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(returnUrl);
-            location.href = postUrl;
-        };
-
-        prompt.form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-        prompt.show();
     }
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
@@ -468,11 +428,11 @@ export default class MAIN extends CONTAINER {
     */
 	register() {
         this.loader.log(99, 'Register', true).then((loader) => new PROMPT(new DIALOGMODEL(
-                new MODEL(), {
+                new MODEL('login'), {
                     container: this,
                     caller: this,
                     label: 'Register'
-            })).createForm(new MODEL().set({
+            })).createForm(new MODEL('login').set({
                 label: 'Register',
                 container: this
             })).then((form) => {
