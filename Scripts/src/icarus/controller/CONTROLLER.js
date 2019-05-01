@@ -40,7 +40,9 @@ export default class CONTROLLER extends MODEL {
 		this.loader.log(10, 'Launching application...');
 		this.main = new MAIN(this);
 		this.showLoginPrompt(user === 'Guest');
-		this.keyBindings();
+        this.keyBindings();
+
+        this.loader.log(100);
     }
     /** If a ReturnUrl is provided, redirect to that Url
         @returns {void}
