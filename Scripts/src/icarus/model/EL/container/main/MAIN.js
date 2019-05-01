@@ -162,9 +162,15 @@ export default class MAIN extends CONTAINER {
 	*/
 	createUserMenu() {
         let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-		let usermenu = new USERMENU(userBar.element);
+        let usermenu = new USERMENU(userBar.element);
+        // Tab should expand UserMenu
+        userBar.tab.el.addEventListener('activate', () => {
+            usermenu.el.dispatchEvent(new Expand(usermenu));
+        });
+
 		$(usermenu.el).insertBefore(userBar.element.navbar.el);
         usermenu.el.dispatchEvent(new Expand(usermenu));
+        
 		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
 	}
 	/** Adds default Nav Items to the Nav Bar including the label
