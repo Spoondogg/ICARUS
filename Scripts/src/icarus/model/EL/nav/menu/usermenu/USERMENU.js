@@ -13,7 +13,7 @@ export default class USERMENU extends MENU {
 	    @param {MODEL} model Model
 	*/
 	constructor(node) {
-		super(node, new MODEL('in').set('name', 'USER'));
+		super(node, new MODEL('usermenu in').set('name', 'USER'));
         this.overrideMenuDefaults();
         this.profile = new DIV(this, new MODEL('profile'));
         this.image = new IMG(this.profile, new MODEL({
@@ -37,9 +37,9 @@ export default class USERMENU extends MENU {
         /** @type {NAVBAR} */
         this.navbar = this.node.navbar;
         this.navbar.addClass('options-nav');
-        let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
-        optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
-        this.options = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, [], true);
+        //let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
+        //optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
+        this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.USER, [], true);
         this.options.element.swipeSensitivity = 150;
 
         if (this.getRole() === 'Guest') {
@@ -49,6 +49,12 @@ export default class USERMENU extends MENU {
                 name: 'log-in'
             }));
             this.btnLogin.el.onclick = () => this.login();
+            this.btnRegister = this.options.element.addNavItemIcon(new MODEL().set({
+                label: 'Register',
+                icon: ICONS.USER,
+                name: 'register'
+            }));
+            this.btnRegister.el.onclick = () => this.register();
         } else {
             this.btnLogout = this.options.element.addNavItemIcon(new MODEL().set({
                 label: 'Log Out',
@@ -57,15 +63,8 @@ export default class USERMENU extends MENU {
             }));
             this.btnLogout.el.onclick = () => this.logout();
         }
-        /* You should probably use OAuth instead */
-        this.btnRegister = this.options.element.addNavItemIcon(new MODEL().set({
-            label: 'Register',
-            icon: ICONS.USER,
-            name: 'register'
-        }));
-        this.btnRegister.el.onclick = () => this.register();
+        this.options.tab.el.dispatchEvent(new Activate(this.options.tab));
     }
-
 	/** The USERMENU slides in and should be expanded at all times 
 	    @returns {void}
 	*/
