@@ -74,7 +74,7 @@ $font-size-normal: 1rem;
 $font-size-large: 1.5rem;
 $font-size-extralarge: 2.5rem;
 $navbar-height: 4rem; // 50px
-$sidebar-width: 320px;
+$sidebar-width: 240px;
 /// Acts as a placeholder to prevent zero-unit warnings from sass-lint
 $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
@@ -526,7 +526,7 @@ html {
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
         animation: slideOutUp $transition-speed $transition-motion;
-        background-color: blue;
+        background-color: $color-grey-lighter;
         border: 0;
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;

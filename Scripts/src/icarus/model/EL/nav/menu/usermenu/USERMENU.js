@@ -39,7 +39,9 @@ export default class USERMENU extends MENU {
         this.navbar.addClass('options-nav');
         //let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
         //optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
-        this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.USER, [], true);
+        this.settings = this.navbar.addTabbableMenu('SETTINGS', 'SETTINGS', ICONS.CONSOLE, ['Profile', 'Notifications'], true);
+        this.account = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, ['Security'], true);
+        this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [], true);
         this.options.element.swipeSensitivity = 150;
 
         if (this.getRole() === 'Guest') {
