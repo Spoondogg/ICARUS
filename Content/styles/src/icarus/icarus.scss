@@ -1974,7 +1974,8 @@ html {
             }
         }
         /// The USERMENU class, A menu that contains user links and details
-        &[name='USER'] {
+        //&[name='USER'] {
+        &.usermenu {
             > ul {
                 &.horizontal {
                     flex-direction: row-reverse;
