@@ -155,7 +155,22 @@ export default class EL extends MODEL {
                 this.attributes.class = this.el.classList.value;
 			}
 		});
-	}
+    }
+    /** Adds the given class name to the element's list of classes
+	    @param {string} className the class to be appended
+        @see https://stackoverflow.com/a/9229821/722785
+	    @returns {Promise<ThisType>} Returns this element for chaining purposes
+	*/
+    setClass(className = '') {
+        return this.chain(() => {
+            if (className === 'undefined') {
+                console.log('ClassName Undefined');
+            } else {
+                this.el.className = className;
+                this.attributes.class = className;
+            }
+        });
+    }
 	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
 	    @returns {Promise<ThisType>} Promise Chain
