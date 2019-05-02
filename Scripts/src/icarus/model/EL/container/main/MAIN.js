@@ -1,6 +1,6 @@
 /** @module icarus/model/el/container/MAIN */
 import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
-import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
+import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
@@ -181,7 +181,10 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 			this.createDocumentMap();
 			// History / Prev / Back Navigation
-			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
+            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, [
+                this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
+                this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
+            ]);
 			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
 			this.createUserMenu();
@@ -304,6 +307,38 @@ export default class MAIN extends CONTAINER {
 			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 		}, 'Unable to restore focus to MAIN');
     }
+    /** Launches a Forgotten Password form that can email a user a reset token
+        @returns {void}
+    */
+    forgotPassword() {
+        console.log('MAIN.forgotPassword');
+        this.loader.log(99, 'Forgot Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Forgot Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Forgot Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ForgotPassword');
+                form.setId(0);
+                form.label = 'Forgot Password';
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
+                ]);
+
+                let [btnForgotPassword] = form.footer.buttonGroup.get();
+                btnForgotPassword.addClass('btn-sign-in');
+                btnForgotPassword.setLabel('Verify Email');
+                btnForgotPassword.icon.setIcon(ICONS.EXCLAMATION);
+
+                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Allows the user to open a MAIN 
 		@param {UId} id Unique Id
 	    @todo Create method to browse MAINs
@@ -348,6 +383,7 @@ export default class MAIN extends CONTAINER {
 	/** Log into the application using the given credentials
         @param {EL} caller The calling element to resolve on DIALOG close
 	    @todo Create AHREF to 'ForgotPassword'
+        @todo Consider making this a class that MAIN calls, similar to USERMENU (LOGINFORM)
 	    @returns {void}
 	*/
 	login(caller = this) {
@@ -372,14 +408,29 @@ export default class MAIN extends CONTAINER {
                             createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                             createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                         ]);
-                        form.footer.buttonGroup.addButton('Google').el.onclick = () => {
+                        //console.log('ButtonGroup', form.footer.buttonGroup.get());
+
+                        let [btnSignIn] = form.footer.buttonGroup.get();
+                        btnSignIn.addClass('btn-sign-in');
+                        btnSignIn.setLabel('Sign In');
+
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton('Sign in with Google', ICONS.USER);
+                        btnOAuthGoogle.addClass('btn-oauth-google');
+                        btnOAuthGoogle.el.onclick = () => {
                             this.loginOAuth('Google');
                             return false;
                         }
-                        form.footer.buttonGroup.addButton('Register').el.onclick = () => {
+                        /*form.footer.buttonGroup.addButton('Register').el.onclick = () => {
                             this.register();
                             return false;
+                        }*/
+                        let btnForgotPassword = form.footer.buttonGroup.addButton('Forgot Your Password?');
+                        btnForgotPassword.addClass('btn-forgot-password');
+                        btnForgotPassword.el.onclick = () => {
+                            this.forgotPassword();
+                            return false;
                         }
+
                         form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
                         loader.log(100).then(() => prompt.show());
                     }
@@ -437,20 +488,25 @@ export default class MAIN extends CONTAINER {
                 new MODEL('login'), {
                     container: this,
                     caller: this,
-                    label: 'Register'
+                    label: 'Sign Up'
             })).createForm(new MODEL('login').set({
-                label: 'Register',
+                label: 'Sign Up',
                 container: this
             })).then((form) => {
                 form.setAction('/Account/Register');
                 form.setId(0);
-                form.label = 'Register';
+                form.label = 'Sign Up';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
                     createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
                     createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                     createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
                 ]);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Sign Up');
+
                 form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
                 loader.log(100).then(() => form.getDialog().show());
             })
@@ -473,4 +529,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
