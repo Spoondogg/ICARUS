@@ -97,4 +97,4 @@ export default class USERMENU extends MENU {
         return this.flip().then(() => this.getMain().register());
     }
 }
-export { ATTRIBUTES, EL, MENU, MODEL }
+export { ATTRIBUTES, EL, MENU, MODEL, NAVBAR }

@@ -3,7 +3,7 @@
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMSELECT, FORMTEXTAREA } from '../container/formelement/FORMELEMENTGROUP.js';
-import FORMFOOTER, { BUTTON } from './FORMFOOTER.js';
+import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
@@ -596,5 +596,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, CONTAINER, EL, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */
