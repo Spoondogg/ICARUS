@@ -29,7 +29,11 @@ export default class NAVHEADER extends NAVBAR {
             let container = this.getContainer();
             container.getFactory().save(false, container, container, 'label');
         });
-		this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
+        this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, [
+            this.createNavItemIconModel('ELEMENTS'),
+            this.createNavItemIconModel('CRUD'),
+            this.createNavItemIconModel('DOM')
+        ]);
 	}
 	/** Adds a single NAV Icon and associated SIDEBAR
 	    @param {string} name Name
