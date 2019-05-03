@@ -29,7 +29,6 @@ export default class CONTROLLER extends MODEL {
 			token,
 			factory
 		});
-		document.body.className = 'icarus';
 		this.watermark = new WATERMARK();
 		/** @property {Url} url An Url object */
 		this.url = new URL(window.location.href);
