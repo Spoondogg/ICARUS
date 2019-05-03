@@ -608,6 +608,7 @@
     <Content Include="Content\icon50.png" />
     <Content Include="Content\icon512.png" />
     <Content Include="Content\Images\favicon.ico" />
+    <Content Include="Content\Images\Icon.png" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
@@ -799,6 +800,7 @@
     <Content Include="Content\Images\startup\startup-750x1334.psd" />
     <Content Include="Content\Images\startup\startup-1125x2436.psd" />
     <Content Include="Content\Images\startup\startup-1242x2208.psd" />
+    <Content Include="Content\Images\Icon.psd" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
