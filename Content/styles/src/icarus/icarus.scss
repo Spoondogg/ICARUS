@@ -12,7 +12,7 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: #306e90;
+$color-blue: #005879;;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
@@ -21,7 +21,7 @@ $color-blue-light: #bee1ef;
 $color-blue-lighter: #43acbd;
 /// A deep blue color
 /// @type Color
-$color-blue-deep: #005879;
+$color-blue-deep: #133b63;
 /// Default Orange Color
 /// @type Color
 $color-orange: rgb(255, 165, 0);
@@ -480,6 +480,10 @@ html {
     @include font-smoothing;
     @include transition($transition-default);
     background-color: $color-dark-less;
+    background-image: url('../Images/Logo.png');
+    background-position: center;
+    background-position-y: 85px;
+    background-repeat: no-repeat;
     color: $color-primary;
     font-family: $font-primary;
     font-size: $font-size-base;
@@ -498,6 +502,12 @@ html {
 
     .edit {
         @extend %edit;
+    }
+    /// A simplified view of a progress bar
+    .external-progress {
+        border-radius: 2px;
+        margin: calc(50vh - 2rem) auto;
+        width: $sidebar-width;
     }
 
     .selected {
@@ -644,6 +654,7 @@ html {
                 //#{$navbar-height}
                 //@extend %modal-tall;
                 animation: slideOutRight $transition-speed $transition-motion;
+                background-color: $color-grey-dark;
                 border-radius: 0;
                 float: right;
                 height: calc(100vh - #{$navbar-height});
@@ -661,12 +672,12 @@ html {
                         animation: slideOutRight $transition-speed $transition-motion;
                     }
                 }
-                
+
                 .btn-navheader {
                     visibility: hidden;
                 }
 
-                > .body { 
+                > .body {
                     background-color: $color-grey-dark;
 
                     .body {
@@ -682,7 +693,7 @@ html {
                         max-height: calc(100vh - 11rem);
                         /// A LOGIN FORM
                         > form {
-                            border: none;
+                            border: 0;
                             margin-top: 1rem;
 
                             label {
@@ -697,101 +708,105 @@ html {
                             }
 
                             input {
-                                margin-bottom: .5rem;                            
+                                margin-bottom: .5rem;
                             }
 
-                        > .body {
-                            > footer {
-                                .btn-forgot-password {
-                                    @include transition($transition-default);
-                                    //background-color: $color-grey-lighter;
-                                    background-color: $color-grey-dark;
-                                    border: none;
-                                    //color: $color-grey;
-                                    color: $color-white;
-                                    font-size: .8rem;
-                                    font-weight: lighter;
-                                    //height: 6rem;
-                                    margin: 1rem auto 0;
-                                    //padding: 1rem;
-                                    &:hover {
-                                        color: $color-blue-light;
-                                        text-decoration: underline;
-                                    }
-                                }
-
-                                .btn-oauth-google {
-                                    @include transition($transition-default);
-                                    margin: 1rem auto;
-                                    background-color: $color-red;
-                                    border: none;
-                                    color: $color-white;
-                                    text-transform: none;
-                                    border-bottom: 2px solid $color-black;
-                                    font-weight: lighter;
-
-                                    &:hover {
-                                        background-color: $color-red-deep;
+                            > .body {
+                                > footer {
+                                    .btn-forgot-password {
+                                        @include transition($transition-default);
+                                        //background-color: $color-grey-lighter;
+                                        background-color: $color-grey-dark;
+                                        border: 0;
+                                        //color: $color-grey;
+                                        color: $color-white;
+                                        font-size: .8rem;
+                                        font-weight: lighter;
+                                        //height: 6rem;
+                                        margin: 1rem auto 0;
+                                        //padding: 1rem;
+                                        &:hover {
+                                            color: $color-blue-light;
+                                            text-decoration: underline;
+                                        }
                                     }
 
-                                    > .icon {
-                                        float: left;
-                                        padding: 1rem;
+                                    .btn-oauth-google {
+                                        @include transition($transition-default);
+                                        background-color: $color-red;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
+
+                                        &:hover {
+                                            background-color: $color-red-deep;
+                                        }
+
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
+
+                                        > .button-label {
+                                            float: left;
+                                        }
                                     }
 
-                                    > .button-label {
-                                        float: left;
-                                    }
-                                }
+                                    .btn-sign-in {
+                                        background-color: $color-blue;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
 
-                                .btn-sign-in {
-                                    margin: 1rem auto;
-                                    background-color: $color-blue;
-                                    border: none;
-                                    color: $color-white;
-                                    text-transform: none;
-                                    border-bottom: 2px solid $color-black;
-                                    font-weight: lighter;
+                                        &:hover {
+                                            background-color: $color-blue-deep;
+                                        }
 
-                                    &:hover {
-                                        background-color: $color-blue-deep;
-                                    }
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
 
-                                    > .icon {
-                                        float: left;
-                                        padding: 1rem;
-                                    }
-
-                                    > .button-label {
-                                        float: left;
+                                        > .button-label {
+                                            float: left;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+
+                > .form-footer {
+                    display: none;
+                }
             }
         }
-    }
-    /// A Panel style Dialog
-    /// @group dialog
-    &.panel {
-        animation: slideOutDown $transition-speed $transition-motion;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-        bottom: 0;
-        margin-bottom: 0;
-        top: auto;
+        /// A Panel style Dialog
+        /// @group dialog
+        &.panel {
+            animation: slideOutDown $transition-speed $transition-motion;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            bottom: 0;
+            margin-bottom: 0;
+            top: auto;
 
-        &[open],
-        &.in {
-            animation: slideInTop $transition-speed $transition-motion;
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
 
-            &.hiding {
-                animation: slideOutUp $transition-speed $transition-motion;
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
             }
-        }
-        /*> .form-footer {
+            /*> .form-footer {
                 border: 0;
 
                 button {
@@ -801,103 +816,106 @@ html {
                     padding: 0;
                 }
             }*/
-    }
-    /// A Loader Dialog
-    /// @group dialog
-    &.loader {
-        animation: slideOutDown $transition-speed $transition-motion;
-        background-color: $color-dark; // transparentize($color-light, .75);
-        border-radius: 0;
-        border-top: 1px solid transparentize($color-grey-light, .7);
-        bottom: 0;
-        height: auto;
-        margin-bottom: -.5rem;
-        max-height: 260px;
-        top: auto;
-        width: 100%;
-
-        &::backdrop {
-            opacity: 0;
         }
+        /// A Loader Dialog
+        /// @group dialog
+        &.loader {
+            animation: slideOutDown $transition-speed $transition-motion;
+            background-color: $color-dark; // transparentize($color-light, .75);
+            border-radius: 0;
+            border-top: 1px solid transparentize($color-grey-light, .7);
+            bottom: 0;
+            height: auto;
+            margin-bottom: -.5rem;
+            max-height: 260px;
+            overflow-y: hidden;
+            top: auto;
+            width: 100%;
+            z-index: 9999;
 
-        &[open],
-        &.in {
-            animation: slideInTop $transition-speed $transition-motion;
-
-            &.hiding {
-                animation: slideOutUp $transition-speed $transition-motion;
-            }
-        }
-
-        .body {
-            margin: .5rem;
-
-            .well {
-                font-size: smaller;
-                margin: 0;
+            &::backdrop {
+                opacity: 0;
             }
 
-            .progress {
-                border-radius: 3px;
-                clear: both;
-                float: none;
-                margin: 0;
-                //height: calc(#{$navbar-height} - .5rem);
-                .text {
+            &[open],
+            &.in {
+                animation: slideInTop $transition-speed $transition-motion;
+
+                &.hiding {
+                    animation: slideOutUp $transition-speed $transition-motion;
+                }
+            }
+
+            .body {
+                margin: .5rem;
+
+                .well {
+                    font-size: smaller;
+                    margin: 0;
+                }
+
+                .progress {
+                    @extend %clickable;
+                    border-radius: 3px;
                     clear: both;
                     float: none;
-                    min-width: 400px;
-                    overflow: visible;
-                    padding: 0 .5rem;
-                    text-align: left;
-                    text-decoration: none;
-                    text-transform: uppercase;
-                }
+                    margin: 0;
+                    //height: calc(#{$navbar-height} - .5rem);
+                    .text {
+                        clear: both;
+                        float: none;
+                        min-width: 400px;
+                        overflow: visible;
+                        padding: 0 .5rem;
+                        text-align: left;
+                        text-decoration: none;
+                        text-transform: uppercase;
+                    }
 
-                .progress-bar {
-                    border-radius: .3rem;
-                    overflow: visible;
-                    text-shadow: 0 1px 4px $color-shadow-neutral;
-                }
+                    .progress-bar {
+                        border-radius: .3rem;
+                        overflow: visible;
+                        text-shadow: 0 1px 4px $color-shadow-neutral;
+                    }
 
-                & + ul {
-                    border: 1px solid $color-grey-dark;
-                    border-radius: 5px;
-                    height: 0;
-                    margin-top: 0;
-                    padding: 0;
+                    & + ul {
+                        border: 1px solid $color-grey-dark;
+                        border-radius: 5px;
+                        height: 0;
+                        margin-top: 0;
+                        padding: 0;
 
-                    &.console {
-                        @extend %no-scroll-bar;
+                        &.console {
+                            @extend %no-scroll-bar;
 
-                        &.collapse {
-                            &.in {
-                                height: 12rem;
-                                margin-top: .5rem;
-                                //opacity: 1;
-                                padding: initial;
+                            &.collapse {
+                                &.in {
+                                    height: 12rem;
+                                    margin-top: .5rem;
+                                    //opacity: 1;
+                                    padding: initial;
+                                }
                             }
-                        }
 
-                        &.collapsing {
-                            margin-top: .5rem;
-                        }
+                            &.collapsing {
+                                margin-top: .5rem;
+                            }
 
-                        li {
-                            padding: 3px;
+                            li {
+                                padding: 3px;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        footer,
-        header {
-            display: none;
-            height: $navbar-height;
+            footer,
+            header {
+                display: none;
+                height: $navbar-height;
+            }
         }
     }
-}
     /// Full width NAV element
     nav {
         @extend %bevel-up;
