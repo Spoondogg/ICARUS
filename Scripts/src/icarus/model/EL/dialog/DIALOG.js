@@ -75,7 +75,7 @@ export default class DIALOG extends EL {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
-        @param {number} [delay] Millisecond delay until dialog is closed
+        @param {number} [delay] Millisecond delay until dialog is closed (Imports transition speed)
         @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
@@ -92,7 +92,6 @@ export default class DIALOG extends EL {
 		});
 	}
 	getContainer() {
-		console.log('Getting dialog container');
 		return this.container;
 	}
 	getMain() {
