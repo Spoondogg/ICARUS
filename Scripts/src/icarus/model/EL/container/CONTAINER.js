@@ -931,8 +931,8 @@ export default class CONTAINER extends GROUP {
         If the results are a Payload and its status is "success",
         the page is reloaded.
         @param {object} payload A post payload
-        @param {any} status Result status
-        @returns {void} 
+        @param {string} status Result status
+        @returns {Promise} Promise to resolve / reject
     */
 	ajaxRefreshIfSuccessful(payload, status) {
 		return new Promise((resolve, reject) => {
@@ -949,12 +949,14 @@ export default class CONTAINER extends GROUP {
 							loader.log(100, location.href).then(() => resolve(location.reload(true)));
 						}
 					} else {
-						let err = 'Unable to POST results to server with status: "' + status + '"';
-						//console.log(err, payload);
-						loader.log(100, location.href, true, 3000).then(() => reject(new Error(err)));
+                        let err = this.toString() + ': ' + location.href + ': Unable to POST results to server.', ' + payload.className; //Status: "' + status + '"
+                        //console.warn(err, payload);
+                        loader.console.el.dispatchEvent(new Activate(loader.console));
+                        loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));                        
 					}
-				} catch (e) {
-					loader.log(100, location.href, true, 3000).then(() => reject(e));
+                } catch (e) {
+                    loader.console.el.dispatchEvent(new Activate(loader.console));
+					loader.log(99, location.href, true, true, 1000, 'warning').then(() => reject(e));
 				}
 			});
 		});
