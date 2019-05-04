@@ -14,7 +14,7 @@ import { STATUS } from '../../enums/STATUS.js';
 */
 export default class EL extends MODEL {
 	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {El} node Parent Node
+	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
 	*/
@@ -513,7 +513,8 @@ export default class EL extends MODEL {
 	*/
 	empty() {
 		return new Promise((resolve) => {
-			while (this.el.firstChild) {
+            while (this.el.firstChild) {
+                console.log('Removing child', this.el.firstChild);
 				this.el.removeChild(this.el.firstChild);
 			}
 			//this.children.length = 0;

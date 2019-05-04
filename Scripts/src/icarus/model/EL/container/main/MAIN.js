@@ -431,7 +431,11 @@ export default class MAIN extends CONTAINER {
                             return false;
                         }
 
-                        form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                        form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status).then(
+                            (result) => {
+                                console.log(this.toString() + '.login()', result);
+                            }
+                        );
                         loader.log(100).then(() => prompt.show());
                     }
                 );
