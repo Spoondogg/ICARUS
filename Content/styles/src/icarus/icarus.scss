@@ -2190,6 +2190,47 @@ html {
                     flex-basis: auto;
                     flex-grow: 2;
                     //text-align: center;
+                    &.nav-item-icon {
+                        > a {
+                            width: 100%;
+
+                            > .icon {
+                                clear: left;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                width: 2rem;
+                            }
+
+                            > .label {
+                                clear: right;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                text-align: left;
+                                width: calc(100% - 2rem);
+                            }
+                        }
+                    }
+                    // Centered tabs, such as the MAIN tab 
+                    &.tab-center {
+                        > a {
+                            > .icon {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                width: auto;
+                            }
+
+                            > .label {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                text-align: center;
+                                width: auto;
+                            }
+                        }
+                    }
                 }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
