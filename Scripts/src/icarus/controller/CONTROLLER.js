@@ -101,23 +101,15 @@ export default class CONTROLLER extends MODEL {
 	*/
 	showLoginPrompt(proceed = true) {
 		if (this.url.searchParams.get('login') && proceed) {
-			console.log('showLoginPrompt();');
+			console.log('showLoginPrompt()');
 			this.main.login();
-		}
-		return this;
-	}
-	/** If conditions are met, launches OAuth Login Prompt
-	    @returns {boolean} If a login parameter exists, return true
-	
-    showExternalLoginPrompt() {
-        let provider = this.url.searchParams.get('provider');
-        let returnUrl = this.url.searchParams.get('returnUrl');
-        if (provider && returnUrl) {
-            console.log('showExternalLoginPrompt()');
-            //this.main.loader.log(50, 'Processing OAuth[' + provider + ']...', true).then(() => this.main.loginOAuth(provider));
         }
-        return this;
-    }*/
+        if (this.url.searchParams.get('resetpassword') && proceed) {
+            console.log('showResetPasswordPrompt()');
+            this.main.resetPassword();
+        }
+		return this;
+    }
 	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP
 	*/
