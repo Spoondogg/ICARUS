@@ -46,10 +46,10 @@ export default class LOADER extends DIALOG {
             this.progressBar.setType(type);
 			this.progressBar.el.style.width = value + '%';
 			this.progressBar.el.setAttribute('aria-valuenow', value);
-			if (text) {
+			if (typeof text !== 'undefined') {
 				let txt = text.substr(0, 32) + '...';
 				this.progressBar.text.setInnerHTML(txt);
-				this.console.addEntry(text, toConsole);
+				this.console.addEntry(text, toConsole, type);
 			}
 			if (value < 100) {
 				clearTimeout(this.logTimer);
