@@ -20,11 +20,11 @@ export default class CONSOLE extends LIST {
 	/** Adds the given text as a list item to the console (UL) at the top of the list
 	    @param {string} text Text to be added
         @param {boolean} toConsole If true, is also logged to console
+        @param {string} type ie success, info, warning, danger
 	    @returns {LI} The console entry
 	*/
-	addEntry(text, toConsole = false) {
-		let li = this.addLI(new MODEL().set('innerHTML', text));
-        //$(this.el).prepend(li.el);
+	addEntry(text, toConsole = false, type = 'info') {
+		let li = this.addLI(new MODEL(type).set('innerHTML', text));
         $(this.el).animate({
             scrollTop: parseInt($(li.el).offset().top)
         }, 500, 'swing');
