@@ -19,7 +19,8 @@ export default class FORMELEMENT extends CONTAINER {
         /** The Form Element Label
             @type {LABEL}
         */
-        this.inputLabel = new LABEL(this.body.pane, new MODEL().set('innerHTML', model.label));
+        let labelClass = model.attributes.type === 'HIDDEN' ? 'hidden' : '';
+        this.inputLabel = new LABEL(this.body.pane, new MODEL(labelClass).set('innerHTML', model.label));
         this.inputLabel.el.onclick = (event) => {
             event.stopPropagation();
             this.input.el.focus();
