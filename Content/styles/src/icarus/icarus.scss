@@ -856,7 +856,7 @@ html {
 
                 .progress {
                     @extend %clickable;
-                    border-radius: 3px;
+                    border-radius: .3rem;
                     clear: both;
                     float: none;
                     margin: 0;
@@ -869,13 +869,52 @@ html {
                         padding: 0 .5rem;
                         text-align: left;
                         text-decoration: none;
+                        text-shadow: 2px 2px 2px $color-black;
                         text-transform: uppercase;
                     }
 
                     .progress-bar {
-                        border-radius: .3rem;
+                        border-radius: $zero-px;
                         overflow: visible;
                         text-shadow: 0 1px 4px $color-shadow-neutral;
+                        /*.progress {
+                            background: rgba(245, 245, 245, 1);
+                            background: -webkit-linear-gradient(top, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            background: linear-gradient(to bottom, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            border: 0px solid rgba(54, 54, 54, 1);
+                            border-radius: 0px;
+                            height: 16px;
+                        }*/
+                        &.progress-bar-info {
+                            //background: $color-blue;
+                            //background: -webkit-linear-gradient(top, darken($color-orange, 20%) 0%, $color-orange 100%);
+                            background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, $color-blue 100%);
+
+                            &:hover {
+                                //background: lighten($color-blue, 5%);
+                                background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, lighten($color-blue, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-warning {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken($color-orange, 20%) 0%, $color-orange 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken($color-orange, 5%) 0%, lighten($color-orange, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-error {
+                            //background: $color-red;
+                            background: linear-gradient(to bottom, darken($color-red, 20%) 0%, $color-red 100%);
+
+                            &:hover {
+                                //background: lighten($color-red, 5%);
+                                background: linear-gradient(to bottom, darken($color-red, 5%) 0%, lighten($color-red, 5%) 100%);
+                            }
+                        }
                     }
 
                     & + ul {
@@ -903,6 +942,14 @@ html {
 
                             li {
                                 padding: 3px;
+
+                                &.warning {
+                                    color: $color-orange;
+                                }
+
+                                &.error {
+                                    color: $color-red-deep;
+                                }
                             }
                         }
                     }
@@ -1521,7 +1568,7 @@ html {
             &:first-of-type {
                 background-color: $color-dark;
                 border-bottom: 2px solid $color-darker;
-                box-shadow: 0px 1px 7px 0px $color-shadow-dark;
+                box-shadow: $zero-px 1px 7px $zero-px $color-shadow-dark;
                 box-sizing: content-box;
                 color: $color-white;
                 font-weight: bold;
@@ -2212,7 +2259,7 @@ html {
                             }
                         }
                     }
-                    // Centered tabs, such as the MAIN tab 
+                    // Centered tabs, such as the MAIN tab
                     &.tab-center {
                         > a {
                             > .icon {
