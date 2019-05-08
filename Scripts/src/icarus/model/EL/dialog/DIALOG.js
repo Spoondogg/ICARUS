@@ -94,12 +94,20 @@ export default class DIALOG extends EL {
 	getContainer() {
 		return this.container;
 	}
-	getMain() {
-		try {
-			return this.getContainer().getMain();
-		} catch (e) {
-			console.warn('Unable to get MAIN for DIALOG', this);
-		}
+    getMain(container = this.getContainer(), attempt = 1, recursionLimit = 100) {
+        if (attempt < recursionLimit) {
+            try {
+                let main = container.getMain();
+                if (main === null) {
+                    return this.getMain(container.getContainer(), attempt + 1);
+                }
+                return main;
+            } catch (e) {
+                //return this.getContainer().getContainer().getMain();
+
+                console.error('Unable to get MAIN for DIALOG', this);
+            }
+        }
 	}
 	overrideBootstrap() {
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
