@@ -514,7 +514,6 @@ export default class EL extends MODEL {
 	empty() {
 		return new Promise((resolve) => {
             while (this.el.firstChild) {
-                console.log('Removing child', this.el.firstChild);
 				this.el.removeChild(this.el.firstChild);
 			}
 			//this.children.length = 0;
