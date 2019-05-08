@@ -926,35 +926,75 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-	}
+    }
+    responseRefresh(loader, resolve) {
+        let url = new URL(window.location.href);
+        let returnUrl = url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            location.href = url.origin + returnUrl;
+            loader.log(100).then(() => resolve(location.href));
+        } else {
+            loader.log(99).then(() => resolve(location.reload(true)));
+        }
+    }
+
+    responseUndefined(payload, loader, reject) {
+        let err = this.toString() + ': An error occurred while posting results to ' + location.href;
+        //console.warn(err, payload);
+
+        /// IMPLEMENT AN ERROR HANDLER BASED ON Payload.classname
+        loader.console.el.dispatchEvent(new Activate(loader.console));
+        switch (payload.className) {
+            case 'InvalidLoginAttempt': // payload.result === 4
+                err = 'Login Failed. The email or password you entered is incorrect.';
+                loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                break;
+
+            case 'InvalidForgotPasswordAttempt': // payload.result === 5
+                err = 'Unable to process forgotten password request.';
+                loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                break;
+
+            default:
+                loader.log(99, err, true, false, 1000, 'error').then(() => reject(new Error(err)));
+        }
+    }
 	/** Typically this function is used within JQuery posts.
         If the results are a Payload and its status is "success",
         the page is reloaded.
         @param {object} payload A post payload
         @param {string} status Result status
+        @param {boolean} refresh If true (default), page is refreshed
         @returns {Promise} Promise to resolve / reject
     */
-	ajaxRefreshIfSuccessful(payload, status) {
+    processAjaxResponse(payload, status, refresh = true) {
 		return new Promise((resolve, reject) => {
-			this.getLoader().log(80, '...', true).then((loader) => {
-				console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
-				try {
-					if (payload.result === 1) { //!== 0 
-						let url = new URL(window.location.href);
-						let returnUrl = url.searchParams.get('ReturnUrl');
-						if (returnUrl) {
-							location.href = url.origin + returnUrl;
-							loader.log(100, location.href).then(() => resolve(location.href));
-						} else {
-							loader.log(100, location.href).then(() => resolve(location.reload(true)));
-						}
-					} else {
-                        let err = this.toString() + ': ' + location.href + ': Unable to POST results to server.', ' + payload.className; //Status: "' + status + '"
-                        //console.warn(err, payload);
-                        loader.console.el.dispatchEvent(new Activate(loader.console));
-                        loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));                        
-					}
+			this.getLoader().log(80).then((loader) => {
+                console.log(this.toString() + '.processAjaxResponse()', payload, status, refresh);
+                try {
+                    switch (payload.result) {
+                        case 1: // success
+                            if (refresh) {
+                                this.responseRefresh(loader, resolve);
+                            } else {
+                                //loader.log(100, payload.result + ' : ' + status);
+                                resolve(true);
+                            }
+                            break;
+
+                        /*case 5: // InvalidForgotPasswordAttempt
+                            let err = 'Login Failed. The email or password you entered is incorrect.';
+                            loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                            break;*/
+
+                        default:
+                        //case 'undefined':
+                            console.warn('payload.result', payload.result);
+                            this.responseUndefined(payload, loader, reject);
+                            break;
+                    }
                 } catch (e) {
+                    console.warn('Unable to process Ajax Response', payload, status);
                     loader.console.el.dispatchEvent(new Activate(loader.console));
 					loader.log(99, location.href, true, true, 1000, 'warning').then(() => reject(e));
 				}

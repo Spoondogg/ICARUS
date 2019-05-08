@@ -23,7 +23,8 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
-		this.navheader.setAttribute('draggable', false);
+        this.navheader.setAttribute('draggable', false);
+        this.navheader.tab.addClass('tab-center');
 		this.addNavOptions();
         this.setFactory(model.factory);
 		this.loader = model.loader;
@@ -334,7 +335,12 @@ export default class MAIN extends CONTAINER {
                 btnForgotPassword.setLabel('Verify Email');
                 btnForgotPassword.icon.setIcon(ICONS.EXCLAMATION);
 
-                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then((result) => {
+                    console.log(result, 'Closing dialog');
+                    form.getDialog().close();
+                    loader.log(99, 'A password request has been emailed with further instructions', true, true, 5000, 'warning');
+                    loader.console.el.dispatchEvent(new Activate(loader.console));
+                });
                 loader.log(100).then(() => form.getDialog().show());
             })
         );
@@ -402,9 +408,10 @@ export default class MAIN extends CONTAINER {
                     label: 'Login'
                 })).then(
                     (form) => {
+                        let email = this.url.searchParams.get('email');
                         form.setAction('/Account/Login');
                         form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                            createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
                             createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                             createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                         ]);
@@ -431,7 +438,7 @@ export default class MAIN extends CONTAINER {
                             return false;
                         }
 
-                        form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status).then(
+                        form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
                             (result) => {
                                 console.log(this.toString() + '.login()', result);
                             }
@@ -459,7 +466,7 @@ export default class MAIN extends CONTAINER {
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
 			form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
-			form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}
 	/** Redirects to the third party OAuth Sign In
@@ -480,7 +487,7 @@ export default class MAIN extends CONTAINER {
 			() => Promise.resolve(localStorage.clear()).then(
 				$.post('/Account/LogOff', {
 					'__RequestVerificationToken': this.getToken()
-				}, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
+				}, this.processAjaxResponse.bind(this), 'json')));
 	}
 	/** Log into the application using the given credentials
         @param {string} email Username / Email 
@@ -511,11 +518,55 @@ export default class MAIN extends CONTAINER {
                 btnSignIn.addClass('btn-sign-in');
                 btnSignIn.setLabel('Sign Up');
 
-                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
                 loader.log(100).then(() => form.getDialog().show());
             })
         );
-	}
+    }
+    /** Log into the application using the given credentials
+        @param {string} email Username / Email 
+        @param {string} password Account Password
+        @returns {void}
+    */
+    resetPassword() {
+        this.loader.log(99, 'Reset Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Reset Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Reset Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ResetPassword');
+                form.setId(0);
+                form.label = 'Reset Password';
+                form.addClass('reset-password');
+
+                let email = this.url.searchParams.get('email');
+
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
+                    createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Update Password');
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then(() => {
+                    loader.log(99, 'Redirecting to login').then(() => {
+                        setTimeout(() => {
+                            window.location.href = window.location.origin + '?login=1&email=' + email;
+                        }, 3000);
+                    });
+                });
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Swipe Up Event
 	    @returns {void}
 	*/
