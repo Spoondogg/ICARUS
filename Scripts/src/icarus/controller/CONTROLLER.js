@@ -97,7 +97,7 @@ export default class CONTROLLER extends MODEL {
 	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
         @param {boolean} proceed Optionally prevent any action from being taken
-	    @returns {boolean} If a login parameter exists, return true
+	    @returns {void}
 	*/
 	showLoginPrompt(proceed = true) {
 		if (this.url.searchParams.get('login') && proceed) {
@@ -108,7 +108,12 @@ export default class CONTROLLER extends MODEL {
             console.log('showResetPasswordPrompt()');
             this.main.resetPassword();
         }
-		return this;
+
+        // 'proceed' not required in cases where session has been corrupted
+        // You will get stuck in an endless loop doing this, so be warned.
+        if (this.url.searchParams.get('logout')) {
+            return confirm('Manually log out?') ? this.main.logout() : window.history.pushState({}, null, '/');
+        }
     }
 	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP
