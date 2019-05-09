@@ -369,7 +369,7 @@ export default class EL extends MODEL {
 	    @returns {string} Current User
 	*/
     getAvatar() {
-        return localStorage.getItem('picture') || './Content/Images/user256.png';
+        return localStorage.getItem('picture') || '/Content/Images/user256.png';
     }
     /** Retrieves the roles value from the DOM Meta tags
 	    @returns {string} Current User Role(s) (comma delimited)
