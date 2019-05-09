@@ -58,7 +58,11 @@ export default class DIALOG extends EL {
 	    @returns {void}
 	*/
 	closeOnFocusOut() {
-		this.el.onclick = (event) => event.target === this.el ? this.closeDialog() : this;
+        this.el.onclick = (event) => {
+            if (event.target === this.el) {
+                this.closeDialog();
+            }
+        }
 	}
 	/** Shows the DIALOG
         @param {number} delay Millisecond delay until dialog is shown
