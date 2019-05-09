@@ -18,8 +18,8 @@ export default class GLYPHICON extends SPAN {
         @param {string} glyphicon The glyphicon name
         @returns {void}
     */
-	setIcon(glyphicon) {
-		this.el.className = glyphicon;
+    setIcon(glyphicon) {
+        this.setClass('icon glyphicon ' + glyphicon);
 	}
 }
 export { ATTRIBUTES, EL, ICONS, SPAN }

@@ -1,6 +1,6 @@
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
-import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
+import CONTAINER, { Activate, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
@@ -23,7 +23,8 @@ export default class MAIN extends CONTAINER {
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
-		this.navheader.setAttribute('draggable', false);
+        this.navheader.setAttribute('draggable', false);
+        this.navheader.tab.addClass('tab-center');
 		this.addNavOptions();
         this.setFactory(model.factory);
 		this.loader = model.loader;
@@ -119,7 +120,7 @@ export default class MAIN extends CONTAINER {
 		this.navheader.el.dispatchEvent(new Expand(this.navheader));
 		this.body.el.dispatchEvent(new Expand(this.body));
 		this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
-	}
+    }
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -181,7 +182,10 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 			this.createDocumentMap();
 			// History / Prev / Back Navigation
-			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
+            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, [
+                this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
+                this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
+            ]);
 			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
 			this.createUserMenu();
@@ -304,6 +308,43 @@ export default class MAIN extends CONTAINER {
 			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 		}, 'Unable to restore focus to MAIN');
     }
+    /** Launches a Forgotten Password form that can email a user a reset token
+        @returns {void}
+    */
+    forgotPassword() {
+        console.log('MAIN.forgotPassword');
+        this.loader.log(99, 'Forgot Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Forgot Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Forgot Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ForgotPassword');
+                form.setId(0);
+                form.label = 'Forgot Password';
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
+                ]);
+
+                let [btnForgotPassword] = form.footer.buttonGroup.get();
+                btnForgotPassword.addClass('btn-sign-in');
+                btnForgotPassword.setLabel('Verify Email');
+                btnForgotPassword.icon.setIcon(ICONS.EXCLAMATION);
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then((result) => {
+                    console.log(result, 'Closing dialog');
+                    form.getDialog().close();
+                    loader.log(99, 'A password request has been emailed with further instructions', true, true, 5000, 'warning');
+                    loader.console.el.dispatchEvent(new Activate(loader.console));
+                });
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Allows the user to open a MAIN 
 		@param {UId} id Unique Id
 	    @todo Create method to browse MAINs
@@ -348,6 +389,7 @@ export default class MAIN extends CONTAINER {
 	/** Log into the application using the given credentials
         @param {EL} caller The calling element to resolve on DIALOG close
 	    @todo Create AHREF to 'ForgotPassword'
+        @todo Consider making this a class that MAIN calls, similar to USERMENU (LOGINFORM)
 	    @returns {void}
 	*/
 	login(caller = this) {
@@ -366,21 +408,41 @@ export default class MAIN extends CONTAINER {
                     label: 'Login'
                 })).then(
                     (form) => {
+                        let email = this.url.searchParams.get('email');
                         form.setAction('/Account/Login');
                         form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                            createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                            createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
                             createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                             createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                         ]);
-                        form.footer.buttonGroup.addButton('Google').el.onclick = () => {
+                        //console.log('ButtonGroup', form.footer.buttonGroup.get());
+
+                        let [btnSignIn] = form.footer.buttonGroup.get();
+                        btnSignIn.addClass('btn-sign-in');
+                        btnSignIn.setLabel('Sign In');
+
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton('Sign in with Google', ICONS.USER);
+                        btnOAuthGoogle.addClass('btn-oauth-google');
+                        btnOAuthGoogle.el.onclick = () => {
                             this.loginOAuth('Google');
                             return false;
                         }
-                        form.footer.buttonGroup.addButton('Register').el.onclick = () => {
+                        /*form.footer.buttonGroup.addButton('Register').el.onclick = () => {
                             this.register();
                             return false;
+                        }*/
+                        let btnForgotPassword = form.footer.buttonGroup.addButton('Forgot Your Password?');
+                        btnForgotPassword.addClass('btn-forgot-password');
+                        btnForgotPassword.el.onclick = () => {
+                            this.forgotPassword();
+                            return false;
                         }
-                        form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+
+                        form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
+                            (result) => {
+                                console.log(this.toString() + '.login()', result);
+                            }
+                        );
                         loader.log(100).then(() => prompt.show());
                     }
                 );
@@ -403,8 +465,8 @@ export default class MAIN extends CONTAINER {
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-			form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
-			form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+			form.footer.buttonGroup.addButton('Register - Local').el.addEventListener('activate', () => this.register());
+			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}
 	/** Redirects to the third party OAuth Sign In
@@ -413,9 +475,13 @@ export default class MAIN extends CONTAINER {
 	    @returns {void} 
 	*/
 	loginOAuth(provider) {
-		this.body.collapse().then(() => {
-			window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
-		});
+        this.body.collapse().then(
+            this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
+                () => {
+                    window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
+                }
+            )
+        );
 	}
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
@@ -425,37 +491,91 @@ export default class MAIN extends CONTAINER {
 			() => Promise.resolve(localStorage.clear()).then(
 				$.post('/Account/LogOff', {
 					'__RequestVerificationToken': this.getToken()
-				}, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
+				}, this.processAjaxResponse.bind(this), 'json')));
 	}
 	/** Log into the application using the given credentials
-        @param {string} email Username / Email 
-        @param {string} password Account Password
+        param {EL} container Username / Email
+        @param {EL} caller Account Password
         @returns {void}
     */
-	register() {
-        this.loader.log(99, 'Register', true).then((loader) => new PROMPT(new DIALOGMODEL(
-                new MODEL('login'), {
-                    container: this,
-                    caller: this,
-                    label: 'Register'
+	register(caller = this) {
+        this.loader.log(99, 'Register').then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller,
+                label: 'Sign Up'
             })).createForm(new MODEL('login').set({
-                label: 'Register',
+                label: 'Sign Up',
                 container: this
             })).then((form) => {
                 form.setAction('/Account/Register');
                 form.setId(0);
-                form.label = 'Register';
+                form.label = 'Sign Up';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
                     createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
                     createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                     createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
                 ]);
-                form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Sign Up');
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
+                    () => console.warn('SHOULD CLOSE DIALOG NOW', form.getDialog().close())
+                    /*() => {
+                        form.getDialog().close();
+                    }*/
+                );
                 loader.log(100).then(() => form.getDialog().show());
             })
         );
-	}
+    }
+    /** Log into the application using the given credentials
+        @param {string} email Username / Email 
+        @param {string} password Account Password
+        @returns {void}
+    */
+    resetPassword() {
+        this.loader.log(99, 'Reset Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Reset Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Reset Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ResetPassword');
+                form.setId(0);
+                form.label = 'Reset Password';
+                form.addClass('reset-password');
+
+                let email = this.url.searchParams.get('email');
+
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
+                    createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Update Password');
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then(() => {
+                    loader.log(99, 'Redirecting to login').then(() => {
+                        setTimeout(() => {
+                            window.location.href = window.location.origin + '?login=1&email=' + email;
+                        }, 3000);
+                    });
+                });
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Swipe Up Event
 	    @returns {void}
 	*/
@@ -473,4 +593,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }

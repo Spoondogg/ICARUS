@@ -14,7 +14,7 @@ import { STATUS } from '../../enums/STATUS.js';
 */
 export default class EL extends MODEL {
 	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {El} node Parent Node
+	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
 	*/
@@ -155,7 +155,22 @@ export default class EL extends MODEL {
                 this.attributes.class = this.el.classList.value;
 			}
 		});
-	}
+    }
+    /** Adds the given class name to the element's list of classes
+	    @param {string} className the class to be appended
+        @see https://stackoverflow.com/a/9229821/722785
+	    @returns {Promise<ThisType>} Returns this element for chaining purposes
+	*/
+    setClass(className = '') {
+        return this.chain(() => {
+            if (className === 'undefined') {
+                console.log('ClassName Undefined');
+            } else {
+                this.el.className = className;
+                this.attributes.class = className;
+            }
+        });
+    }
 	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
 	    @returns {Promise<ThisType>} Promise Chain
@@ -354,7 +369,7 @@ export default class EL extends MODEL {
 	    @returns {string} Current User
 	*/
     getAvatar() {
-        return localStorage.getItem('picture') || './Content/Images/user256.png';
+        return localStorage.getItem('picture') || '/Content/Images/user256.png';
     }
     /** Retrieves the roles value from the DOM Meta tags
 	    @returns {string} Current User Role(s) (comma delimited)
@@ -498,7 +513,7 @@ export default class EL extends MODEL {
 	*/
 	empty() {
 		return new Promise((resolve) => {
-			while (this.el.firstChild) {
+            while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
 			}
 			//this.children.length = 0;

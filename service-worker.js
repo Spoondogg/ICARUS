@@ -15,6 +15,7 @@ var urlsToCache = [
     '/Content/styles/fonts/glyphicons-halflings-regular.woff',
     '/Content/styles/fonts/glyphicons-halflings-regular.woff2',
     '/Content/Images/Logo.png',
+    '/Content/Images/Icon.png',
     '/Content/favicon.ico'
 ];
 /** Service Worker error handling

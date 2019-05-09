@@ -58,7 +58,11 @@ export default class DIALOG extends EL {
 	    @returns {void}
 	*/
 	closeOnFocusOut() {
-		this.el.onclick = (event) => event.target === this.el ? this.closeDialog() : this;
+        this.el.onclick = (event) => {
+            if (event.target === this.el) {
+                this.closeDialog();
+            }
+        }
 	}
 	/** Shows the DIALOG
         @param {number} delay Millisecond delay until dialog is shown
@@ -75,7 +79,7 @@ export default class DIALOG extends EL {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
-        @param {number} [delay] Millisecond delay until dialog is closed
+        @param {number} [delay] Millisecond delay until dialog is closed (Imports transition speed)
         @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
@@ -92,15 +96,22 @@ export default class DIALOG extends EL {
 		});
 	}
 	getContainer() {
-		console.log('Getting dialog container');
 		return this.container;
 	}
-	getMain() {
-		try {
-			return this.getContainer().getMain();
-		} catch (e) {
-			console.warn('Unable to get MAIN for DIALOG', this);
-		}
+    getMain(container = this.getContainer(), attempt = 1, recursionLimit = 100) {
+        if (attempt < recursionLimit) {
+            try {
+                let main = container.getMain();
+                if (main === null) {
+                    return this.getMain(container.getContainer(), attempt + 1);
+                }
+                return main;
+            } catch (e) {
+                //return this.getContainer().getContainer().getMain();
+
+                console.error('Unable to get MAIN for DIALOG', this);
+            }
+        }
 	}
 	overrideBootstrap() {
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
