@@ -51,11 +51,11 @@ export default class USERMENU extends MENU {
             this.btnLogin = this.account.element.addNavItemIcon(new MODEL().set(
                 this.createNavItemIconModel('log-in', 'Log In', ICONS.LOGIN)
             ));
-            this.btnLogin.el.addEventListener('activate', () => this.login());
+            this.btnLogin.el.addEventListener('activate', () => this.login(this.btnLogin));
             this.btnRegister = this.account.element.addNavItemIcon(new MODEL().set(
                 this.createNavItemIconModel('register', 'Sign Up', ICONS.USER)
             ));
-            this.btnRegister.el.addEventListener('activate', () => this.register());
+            this.btnRegister.el.addEventListener('activate', () => this.register(this.btnRegister));
         } else {
             this.btnLogout = this.account.element.addNavItemIcon(new MODEL().set(
                 this.createNavItemIconModel('log-out', 'Log Out', ICONS.LOGOUT)
@@ -94,18 +94,20 @@ export default class USERMENU extends MENU {
 		return this.flip().then(() => this.getMain().logout());
 	}
 	/** Calls MAIN.login()
+        @param {EL} caller Caller
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	login() {
+	login(caller = this) {
 		console.log('USERMENU.login()');
-		return this.flip().then(() => this.getMain().login());
+        return this.flip().then(() => this.getMain().login(caller));
     }
     /** Calls MAIN.register()
+        @param {EL} caller Caller 
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-    register() {
+    register(caller = this) {
         console.log('USERMENU.register()');
-        return this.flip().then(() => this.getMain().register());
+        return this.flip().then(() => this.getMain().register(caller));
     }
 }
 export { ATTRIBUTES, EL, MENU, MODEL, NAVBAR }
