@@ -938,30 +938,44 @@ export default class CONTAINER extends GROUP {
         }
     }
 
-    responseUndefined(payload, loader, reject) {
-        let err = this.toString() + ': An error occurred while posting results to ' + location.href;
+    responseUndefined(payload, loader, resolve) {
+        let msg = this.toString() + ': An error occurred while posting results to ' + location.href;
         //console.warn(err, payload);
 
         /// IMPLEMENT AN ERROR HANDLER BASED ON Payload.classname
         loader.console.el.dispatchEvent(new Activate(loader.console));
         switch (payload.className) {
             case 'InvalidLoginAttempt': // payload.result === 4
-                err = 'Login Failed. The email or password you entered is incorrect.';
-                loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                msg = 'Login Failed. The email or password you entered is incorrect.';
+                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
                 break;
 
             case 'InvalidForgotPasswordAttempt': // payload.result === 5
-                err = 'Unable to process forgotten password request.';
-                loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                msg = 'Unable to process forgotten password request.';
+                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
                 break;
 
-            default:
-                loader.log(99, err, true, false, 1000, 'error').then(() => reject(new Error(err)));
+            default: // 'Error':
+                msg = payload.result + ': ';
+                if (payload.message) {
+                    msg += '\n' + payload.message
+                }
+                /*if (payload.model.Errors) {
+                    payload.model.Errors.forEach((er) => {
+                        err += '\n' + er;
+                    })
+                }*/
+                loader.log(99, msg, true, false, 1000, payload.className.toLowerCase()).then(() => {
+                    payload.model.Errors.forEach((er) => {
+                        loader.log(99, er, true, true, 300, 'warning');
+                    });
+                    resolve(new Error(msg));
+                });
         }
     }
-	/** Typically this function is used within JQuery posts.
-        If the results are a Payload and its status is "success",
-        the page is reloaded.
+	/** Handles the Payload response from a Form POST
+        If the results are a Payload and its status is "success", the page is reloaded.
+        Otherwise, call appropriate handler based on payload.result
         @param {object} payload A post payload
         @param {string} status Result status
         @param {boolean} refresh If true (default), page is refreshed
@@ -990,7 +1004,7 @@ export default class CONTAINER extends GROUP {
                         default:
                         //case 'undefined':
                             console.warn('payload.result', payload.result);
-                            this.responseUndefined(payload, loader, reject);
+                            this.responseUndefined(payload, loader, resolve);
                             break;
                     }
                 } catch (e) {
