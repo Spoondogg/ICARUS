@@ -498,7 +498,8 @@ namespace ICARUS.Controllers {
                     TempData["payload"] = model;
 
                     //return RedirectToLocal(returnUrl);
-                    //return Json(new Payload(1, "SignInStatus.Success: RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);return RedirectToAction("Index", "Home");
+                    //return Json(new Payload(1, "SignInStatus.Success: RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
+                    return RedirectToAction("Index", "Home");
 
                 case SignInStatus.LockedOut:
                     //return View("Lockout");
