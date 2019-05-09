@@ -1,5 +1,5 @@
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
@@ -120,7 +120,7 @@ export default class MAIN extends CONTAINER {
 		this.navheader.el.dispatchEvent(new Expand(this.navheader));
 		this.body.el.dispatchEvent(new Expand(this.body));
 		this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
-	}
+    }
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -465,7 +465,7 @@ export default class MAIN extends CONTAINER {
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-			form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
+			form.footer.buttonGroup.addButton('Register - Local').el.addEventListener('activate', () => this.register());
 			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}
@@ -475,9 +475,13 @@ export default class MAIN extends CONTAINER {
 	    @returns {void} 
 	*/
 	loginOAuth(provider) {
-		this.body.collapse().then(() => {
-			window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
-		});
+        this.body.collapse().then(
+            this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
+                () => {
+                    window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
+                }
+            )
+        );
 	}
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
@@ -490,16 +494,16 @@ export default class MAIN extends CONTAINER {
 				}, this.processAjaxResponse.bind(this), 'json')));
 	}
 	/** Log into the application using the given credentials
-        @param {string} email Username / Email 
-        @param {string} password Account Password
+        param {EL} container Username / Email
+        @param {EL} caller Account Password
         @returns {void}
     */
-	register() {
-        this.loader.log(99, 'Register', true).then((loader) => new PROMPT(new DIALOGMODEL(
-                new MODEL('login'), {
-                    container: this,
-                    caller: this,
-                    label: 'Sign Up'
+	register(caller = this) {
+        this.loader.log(99, 'Register').then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller,
+                label: 'Sign Up'
             })).createForm(new MODEL('login').set({
                 label: 'Sign Up',
                 container: this
@@ -518,7 +522,12 @@ export default class MAIN extends CONTAINER {
                 btnSignIn.addClass('btn-sign-in');
                 btnSignIn.setLabel('Sign Up');
 
-                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
+                    () => console.warn('SHOULD CLOSE DIALOG NOW', form.getDialog().close())
+                    /*() => {
+                        form.getDialog().close();
+                    }*/
+                );
                 loader.log(100).then(() => form.getDialog().show());
             })
         );
