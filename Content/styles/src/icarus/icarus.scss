@@ -22,6 +22,7 @@ $color-blue-lighter: #43acbd;
 /// A deep blue color
 /// @type Color
 $color-blue-deep: #133b63;
+$color-blue-header: #1b242d;
 /// Default Orange Color
 /// @type Color
 $color-orange: rgb(255, 165, 0);
@@ -906,6 +907,16 @@ html {
                             }
                         }
 
+                        &.progress-bar-notification {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken(#c9c041, 20%) 0%, #c9c041 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken(#c9c041, 5%) 0%, lighten(#c9c041, 5%) 100%);
+                            }
+                        }
+
                         &.progress-bar-error {
                             //background: $color-red;
                             background: linear-gradient(to bottom, darken($color-red, 20%) 0%, $color-red 100%);
@@ -943,12 +954,16 @@ html {
                             li {
                                 padding: 3px;
 
+                                &.notification {
+                                    color: #c9c041;
+                                }
+
                                 &.warning {
                                     color: $color-orange;
                                 }
 
                                 &.error {
-                                    color: $color-red-deep;
+                                    color: $color-red;
                                 }
                             }
                         }
@@ -2068,7 +2083,7 @@ html {
 
         &.section {
             > header {
-                background-color: $color-blue-deep;
+                background-color: $color-blue-header;
             }
         }
 
