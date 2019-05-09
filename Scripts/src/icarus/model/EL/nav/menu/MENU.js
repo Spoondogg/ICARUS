@@ -35,6 +35,19 @@ export default class MENU extends LIST {
 			this.scrollOnExpand();
 		}
 	}
+    /** This should be a typedef
+        @param {string} name Tab Name
+        @param {string} [label] Tab Label
+        @param {string} [icon] Tab Icon
+        @returns {{name:string, label:string, icon:string}} NavItemIconModel
+    */
+    createNavItemIconModel(name, label = name, icon = name) {
+        return {
+            name,
+            label,
+            icon
+        };
+    }
 	/** Scroll the menu into view on Expansion
 	    @returns {void}
 	*/
@@ -94,7 +107,7 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEM(this, model)); //model.url, model.label
 	}
 	/** Constructs a Nav Item Icon
-	    @param {MODEL} model Object model
+	    @param {MODEL|{label:string, icon:string, name:string}} model Object model
 	    @returns {NAVITEMICON} Nav Item with Anchor
 	*/
 	addNavItemIcon(model) {

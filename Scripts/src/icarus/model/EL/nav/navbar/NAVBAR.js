@@ -3,7 +3,6 @@ import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, NAVITEM, NAVITEMICON
 import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
-//import SVG from '../../svg/SVG.js';
 /** A full width collapseable NAV Element that generally contains tabs
     @class
     @extends NAV
@@ -31,36 +30,29 @@ export default class NAVBAR extends NAV {
 		this.menus.el.dispatchEvent(new Activate(this.menus));
 		this.menus.el.dispatchEvent(new Expand(this.menus));
 	}
-	/** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
-	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+    /** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
         @param {string} name MENU Name
         @param {string} label TAB Label
         @param {string} icon TAB Icon
-        @param {Array<string>} secondaryTabs Array of Tab names
+        @param {Array<{label:string, icon:string, name:string}>} secondaryTabs Array of Tab names ie label:string, icon:string, name:string
         @param {boolean} isHorizontal If true (default), secondary tab menu is horizontal
-	    @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus {tab,element}
-	*/
+        @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus
+    */
 	addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = [], isHorizontal = true) {
-		// Create Primary tab and Menu
-		let tabbable = this.addTabbableElement(
-			this.tabs.addNavItemIcon(new MODEL().set({
-				icon,
-				label,
-				name
-			})),
-			this.menus.addMenu(new MODEL().set('name', name))
-		);
-		// Create Secondary Tabs and Horizontal Menus inside Menu            
-		secondaryTabs.forEach((t) => this.addTabbableElement(
-			tabbable.element.addNavItemIcon(new MODEL().set({
-				label: t,
-				icon: ICONS[t],
-				name: t
-			})),
-			tabbable.element.addMenu(new MODEL(isHorizontal ? 'horizontal' : '').set('name', t))
-		));
-		return tabbable;
-	}
+        let tabbable = this.addTabbableElement( // Create Primary tab and Menu
+            this.tabs.addNavItemIcon(new MODEL().set({
+                icon,
+                label,
+                name
+            })),
+            this.menus.addMenu(new MODEL().set('name', name))
+        );	    
+        secondaryTabs.forEach((t) => this.addTabbableElement( // Create Secondary Tabs and Horizontal Menus inside Menu
+            tabbable.element.addNavItemIcon(new MODEL().set(t)),
+            tabbable.element.addMenu(new MODEL(isHorizontal ? 'horizontal' : '').set('name', t.name))
+        ));
+        return tabbable;
+	}	
 	/** Adds the Options/Config menu
 	    Adds a 'right-aligned' or 'full-width' tab to show/hide the Options Menu
         @param {string} label NAVITEMICON.label
@@ -69,7 +61,7 @@ export default class NAVBAR extends NAV {
         @param {Array<string>} children Sample child tabs
         @param {boolean} isHorizontal If true (default), sub-menu is horizontal with icons, else vertical
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
-	    @returns {void}
+	    @returns {{tab:NAVITEMICON, menu:MENU}} Tab and Menu
 	*/
 	addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
 		try {
@@ -91,7 +83,12 @@ export default class NAVBAR extends NAV {
 				}));
 				let opt = menu.addMenu(new MODEL(optMenuClass).set('name', str));
 				this.addTabbableElement(tb, opt);
-			});
+            });
+
+            return {
+                tab,
+                menu
+            }
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
 			if (modal === null) {

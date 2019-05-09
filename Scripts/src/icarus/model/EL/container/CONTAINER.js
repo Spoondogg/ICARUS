@@ -70,11 +70,14 @@ export default class CONTAINER extends GROUP {
 		    @type {string}
 		*/
 		this.label = this.required(model.label || this.element);
-		/** Indicates if this CONTAINER is public or private
-            CONTAINER(s) are considered to be PUBLIC by default
+		/** Indicates if this CONTAINER can be edited by anyone, or just by the author
             @type {number}
         */
-        this.shared = this.required(model.shared || 1);
+        this.shared = this.required(model.shared || 0);
+        /** Indicates if this CONTAINER can be edited by anyone, or just by the author
+            @type {number}
+        */
+        this.isPublic = this.required(model.isPublic || 0);
         /** Simple status indicator
             @type {number}
         */
@@ -436,7 +439,7 @@ export default class CONTAINER extends GROUP {
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
                             break;
                         case 'p':
-                            this[name] = new P(node, new MODEL().set('innerHTML', this.getFactory().markdownConverter.makeHtml(this.data[name])));
+                            this[name] = new P(node, new MODEL('markdown').set('innerHTML', this.getFactory().markdownConverter.makeHtml(this.data[name])));
 							break;
 						case 'legend':
 							this[name] = new LEGEND(node, new MODEL().set('innerHTML', this.data[name]));
@@ -446,7 +449,7 @@ export default class CONTAINER extends GROUP {
 							break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
-					}
+                    }
 					this[name].implement(new Clickable(this[name]));
 					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
 					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
@@ -494,7 +497,8 @@ export default class CONTAINER extends GROUP {
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
-            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX')
+            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX'),
+            createInputModel('INPUT', 'isPublic', this.isPublic.toString(), 'isPublic', 'CHECKBOX')
 		];
     }
     /** Dispatches the given Event to this CONTAINER's children
@@ -562,11 +566,11 @@ export default class CONTAINER extends GROUP {
 	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
-	addElementItems(containerList) {
+    addElementItems(containerList) {
 		return this.chain(() => {
 			if (containerList.length > 0) {
-				let defaultContainers = [];
-				containerList.splice(2, 0, ...defaultContainers);
+				//let defaultContainers = []; // First two are normal
+				//containerList.splice(2, 0, ...defaultContainers);
 				Promise.all([containerList.map((c) => this.addContainerCase(c))]);
 			}
 		});
@@ -922,35 +926,91 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-	}
-	/** Typically this function is used within JQuery posts.
-        If the results are a Payload and its status is "success",
-        the page is reloaded.
+    }
+    responseRefresh(loader, resolve) {
+        let url = new URL(window.location.href);
+        let returnUrl = url.searchParams.get('ReturnUrl');
+        if (returnUrl) {
+            location.href = url.origin + returnUrl;
+            loader.log(100).then(() => resolve(location.href));
+        } else {
+            loader.log(99).then(() => resolve(location.reload(true)));
+        }
+    }
+
+    responseUndefined(payload, loader, resolve) {
+        let msg = this.toString() + ': An error occurred while posting results to ' + location.href;
+        //console.warn(err, payload);
+
+        /// IMPLEMENT AN ERROR HANDLER BASED ON Payload.classname
+        loader.console.el.dispatchEvent(new Activate(loader.console));
+        switch (payload.className) {
+            case 'InvalidLoginAttempt': // payload.result === 4
+                msg = 'Login Failed. The email or password you entered is incorrect.';
+                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                break;
+
+            case 'InvalidForgotPasswordAttempt': // payload.result === 5
+                msg = 'Unable to process forgotten password request.';
+                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                break;
+
+            default: // 'Error':
+                msg = payload.result + ': ';
+                if (payload.message) {
+                    msg += '\n' + payload.message
+                }
+                /*if (payload.model.Errors) {
+                    payload.model.Errors.forEach((er) => {
+                        err += '\n' + er;
+                    })
+                }*/
+                loader.log(99, msg, true, false, 1000, payload.className.toLowerCase()).then(() => {
+                    payload.model.Errors.forEach((er) => {
+                        loader.log(99, er, true, true, 300, 'warning');
+                    });
+                    resolve(new Error(msg));
+                });
+        }
+    }
+	/** Handles the Payload response from a Form POST
+        If the results are a Payload and its status is "success", the page is reloaded.
+        Otherwise, call appropriate handler based on payload.result
         @param {object} payload A post payload
-        @param {any} status Result status
-        @returns {void} 
+        @param {string} status Result status
+        @param {boolean} refresh If true (default), page is refreshed
+        @returns {Promise} Promise to resolve / reject
     */
-	ajaxRefreshIfSuccessful(payload, status) {
+    processAjaxResponse(payload, status, refresh = true) {
 		return new Promise((resolve, reject) => {
-			this.getLoader().log(80, '...', true).then((loader) => {
-				console.log('ajaxRefreshIfSuccessful: Payload', payload, 'status', status);
-				try {
-					if (payload.result === 1) { //!== 0 
-						let url = new URL(window.location.href);
-						let returnUrl = url.searchParams.get('ReturnUrl');
-						if (returnUrl) {
-							location.href = url.origin + returnUrl;
-							loader.log(100, location.href).then(() => resolve(location.href));
-						} else {
-							loader.log(100, location.href).then(() => resolve(location.reload(true)));
-						}
-					} else {
-						let err = 'Unable to POST results to server with status: "' + status + '"';
-						//console.log(err, payload);
-						loader.log(100, location.href, true, 3000).then(() => reject(new Error(err)));
-					}
-				} catch (e) {
-					loader.log(100, location.href, true, 3000).then(() => reject(e));
+			this.getLoader().log(80).then((loader) => {
+                console.log(this.toString() + '.processAjaxResponse()', payload, status, refresh);
+                try {
+                    switch (payload.result) {
+                        case 1: // success
+                            if (refresh) {
+                                this.responseRefresh(loader, resolve);
+                            } else {
+                                //loader.log(100, payload.result + ' : ' + status);
+                                resolve(true);
+                            }
+                            break;
+
+                        /*case 5: // InvalidForgotPasswordAttempt
+                            let err = 'Login Failed. The email or password you entered is incorrect.';
+                            loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
+                            break;*/
+
+                        default:
+                        //case 'undefined':
+                            console.warn('payload.result', payload.result);
+                            this.responseUndefined(payload, loader, resolve);
+                            break;
+                    }
+                } catch (e) {
+                    console.warn('Unable to process Ajax Response', payload, status);
+                    loader.console.el.dispatchEvent(new Activate(loader.console));
+					loader.log(99, location.href, true, true, 1000, 'warning').then(() => reject(e));
 				}
 			});
 		});
@@ -1001,12 +1061,6 @@ export default class CONTAINER extends GROUP {
 	*/
 	getDateCreated() {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
-	}
-	/** Retrieves the token value from the DOM Meta tags
-	    @returns {string} A request verification token
-	*/
-	getToken() {
-		return document.getElementsByTagName('meta').token.content;
 	}
 }
 export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }

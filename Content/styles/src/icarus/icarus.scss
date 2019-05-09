@@ -12,7 +12,7 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: #306e90;
+$color-blue: #005879;;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
@@ -21,13 +21,14 @@ $color-blue-light: #bee1ef;
 $color-blue-lighter: #43acbd;
 /// A deep blue color
 /// @type Color
-$color-blue-deep: #005879;
+$color-blue-deep: #133b63;
+$color-blue-header: #1b242d;
 /// Default Orange Color
 /// @type Color
 $color-orange: rgb(255, 165, 0);
 /// Default Red Color
 /// @type Color
-$color-red: rgb(255, 0, 0);
+$color-red: #b30808;
 /// Default Deep Red Color
 /// @type Color
 $color-red-deep: #641818;
@@ -74,7 +75,7 @@ $font-size-normal: 1rem;
 $font-size-large: 1.5rem;
 $font-size-extralarge: 2.5rem;
 $navbar-height: 4rem; // 50px
-$sidebar-width: 320px;
+$sidebar-width: 240px;
 /// Acts as a placeholder to prevent zero-unit warnings from sass-lint
 $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
@@ -261,6 +262,7 @@ $z-bottom: -1;
 /// Limits max height of the modal so that the stickyfooter remains visible
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
+    height: calc(50vh - #{$navbar-height});
     max-height: calc(50vh - #{$navbar-height});
     overflow-y: auto;
 }
@@ -479,6 +481,10 @@ html {
     @include font-smoothing;
     @include transition($transition-default);
     background-color: $color-dark-less;
+    background-image: url('../Images/Logo.png');
+    background-position: center;
+    background-position-y: 85px;
+    background-repeat: no-repeat;
     color: $color-primary;
     font-family: $font-primary;
     font-size: $font-size-base;
@@ -497,6 +503,12 @@ html {
 
     .edit {
         @extend %edit;
+    }
+    /// A simplified view of a progress bar
+    .external-progress {
+        border-radius: 2px;
+        margin: calc(50vh - 2rem) auto;
+        width: $sidebar-width;
     }
 
     .selected {
@@ -525,6 +537,7 @@ html {
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
         animation: slideOutUp $transition-speed $transition-motion;
+        background-color: $color-grey-lighter;
         border: 0;
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;
@@ -557,6 +570,39 @@ html {
                 }
             }
         }
+        /// The Dialog Header
+        /// @group dialog
+        > header {
+            background-color: $color-grey-dark;
+            color: $color-light;
+            height: 3rem;
+            line-height: 3rem;
+            padding: 0 .5rem;
+            text-transform: uppercase;
+
+            button {
+                //background-color: transparent;
+                //color: $color-white;
+                float: right;
+                //font-weight: bold;
+                //line-height: 1.5rem;
+                //&:hover {
+                //    color: $color-light-less;
+                //}
+            }
+        }
+
+        footer {
+            &.form-footer {
+                border: 0;
+                //button {
+                //border-radius: 0;
+                //height: $navbar-height - 1rem;
+                //line-height: $navbar-height - 1rem;
+                //padding: 0;
+                //}
+            }
+        }
         /// A Prompt style Dialog
         /// @group dialog
         &.prompt {
@@ -585,6 +631,163 @@ html {
                     padding: 0;
                 }
             }*/
+            > .body {
+                overflow-x: hidden;
+
+                > .pane {
+                    @extend %modal-tall;
+                    //height: calc(50vh - #{$navbar-height});
+                    //max-height: calc(50vh - #{$navbar-height});
+                    overflow-x: hidden;
+
+                    > form {
+                        .form-footer {
+                            height: auto;
+                        }
+                    }
+                }
+            }
+            /// A Login Form embedded in a Prompt
+            /// @group dialog
+            &.login {
+                $login-width: 250px;
+                //$navheights: ($navbar-height * 2);
+                //#{$navbar-height}
+                //@extend %modal-tall;
+                animation: slideOutRight $transition-speed $transition-motion;
+                background-color: $color-grey-dark;
+                border-radius: 0;
+                float: right;
+                height: calc(100vh - #{$navbar-height});
+                left: calc(100% - #{$login-width});
+                margin: 0;
+                max-height: calc(100vh - #{$navbar-height});
+                top: $navbar-height;
+                width: $login-width;
+
+                &[open],
+                &.in {
+                    animation: slideInRight $transition-speed $transition-motion;
+
+                    &.hiding {
+                        animation: slideOutRight $transition-speed $transition-motion;
+                    }
+                }
+
+                .btn-navheader {
+                    visibility: hidden;
+                }
+
+                > .body {
+                    background-color: $color-grey-dark;
+
+                    .body {
+                        .pane {
+                            background-color: $color-grey-dark;
+                            padding: 0;
+                        }
+                    }
+
+                    > .pane {
+                        //background-color: red;
+                        height: calc(100vh - 11rem);
+                        max-height: calc(100vh - 11rem);
+                        /// A LOGIN FORM
+                        > form {
+                            border: 0;
+                            margin-top: 1rem;
+
+                            label {
+                                clear: both;
+                                color: $color-white;
+                                float: left;
+                                font-size: .7rem;
+                                font-weight: lighter;
+                                line-height: .7rem;
+                                margin-top: 0;
+                                padding: 0 .5rem;
+                            }
+
+                            input {
+                                margin-bottom: .5rem;
+                            }
+
+                            > .body {
+                                > footer {
+                                    .btn-forgot-password {
+                                        @include transition($transition-default);
+                                        //background-color: $color-grey-lighter;
+                                        background-color: $color-grey-dark;
+                                        border: 0;
+                                        //color: $color-grey;
+                                        color: $color-white;
+                                        font-size: .8rem;
+                                        font-weight: lighter;
+                                        //height: 6rem;
+                                        margin: 1rem auto 0;
+                                        //padding: 1rem;
+                                        &:hover {
+                                            color: $color-blue-light;
+                                            text-decoration: underline;
+                                        }
+                                    }
+
+                                    .btn-oauth-google {
+                                        @include transition($transition-default);
+                                        background-color: $color-red;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
+
+                                        &:hover {
+                                            background-color: $color-red-deep;
+                                        }
+
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
+
+                                        > .button-label {
+                                            float: left;
+                                        }
+                                    }
+
+                                    .btn-sign-in {
+                                        background-color: $color-blue;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
+
+                                        &:hover {
+                                            background-color: $color-blue-deep;
+                                        }
+
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
+
+                                        > .button-label {
+                                            float: left;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                > .form-footer {
+                    display: none;
+                }
+            }
         }
         /// A Panel style Dialog
         /// @group dialog
@@ -615,28 +818,6 @@ html {
                 }
             }*/
         }
-        /// A Login Form embedded in a Prompt
-        /// @group dialog
-        &.login {
-            animation: slideOutRight $transition-speed $transition-motion;
-            float: right;
-            left: calc(100% - 270px);
-            top: 2rem;
-            width: 250px;
-
-            &[open],
-            &.in {
-                animation: slideInRight $transition-speed $transition-motion;
-
-                &.hiding {
-                    animation: slideOutRight $transition-speed $transition-motion;
-                }
-            }
-
-            footer {
-                display: none;
-            }
-        }
         /// A Loader Dialog
         /// @group dialog
         &.loader {
@@ -648,8 +829,10 @@ html {
             height: auto;
             margin-bottom: -.5rem;
             max-height: 260px;
+            overflow-y: hidden;
             top: auto;
             width: 100%;
+            z-index: 9999;
 
             &::backdrop {
                 opacity: 0;
@@ -673,7 +856,8 @@ html {
                 }
 
                 .progress {
-                    border-radius: 3px;
+                    @extend %clickable;
+                    border-radius: .3rem;
                     clear: both;
                     float: none;
                     margin: 0;
@@ -686,13 +870,62 @@ html {
                         padding: 0 .5rem;
                         text-align: left;
                         text-decoration: none;
+                        text-shadow: 2px 2px 2px $color-black;
                         text-transform: uppercase;
                     }
 
                     .progress-bar {
-                        border-radius: .3rem;
+                        border-radius: $zero-px;
                         overflow: visible;
                         text-shadow: 0 1px 4px $color-shadow-neutral;
+                        /*.progress {
+                            background: rgba(245, 245, 245, 1);
+                            background: -webkit-linear-gradient(top, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            background: linear-gradient(to bottom, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            border: 0px solid rgba(54, 54, 54, 1);
+                            border-radius: 0px;
+                            height: 16px;
+                        }*/
+                        &.progress-bar-info {
+                            //background: $color-blue;
+                            //background: -webkit-linear-gradient(top, darken($color-orange, 20%) 0%, $color-orange 100%);
+                            background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, $color-blue 100%);
+
+                            &:hover {
+                                //background: lighten($color-blue, 5%);
+                                background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, lighten($color-blue, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-warning {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken($color-orange, 20%) 0%, $color-orange 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken($color-orange, 5%) 0%, lighten($color-orange, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-notification {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken(#c9c041, 20%) 0%, #c9c041 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken(#c9c041, 5%) 0%, lighten(#c9c041, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-error {
+                            //background: $color-red;
+                            background: linear-gradient(to bottom, darken($color-red, 20%) 0%, $color-red 100%);
+
+                            &:hover {
+                                //background: lighten($color-red, 5%);
+                                background: linear-gradient(to bottom, darken($color-red, 5%) 0%, lighten($color-red, 5%) 100%);
+                            }
+                        }
                     }
 
                     & + ul {
@@ -720,6 +953,18 @@ html {
 
                             li {
                                 padding: 3px;
+
+                                &.notification {
+                                    color: #c9c041;
+                                }
+
+                                &.warning {
+                                    color: $color-orange;
+                                }
+
+                                &.error {
+                                    color: $color-red;
+                                }
                             }
                         }
                     }
@@ -730,50 +975,6 @@ html {
             header {
                 display: none;
                 height: $navbar-height;
-            }
-        }
-        /// The Dialog Header
-        /// @group dialog
-        > header {
-            background-color: $color-grey-dark;
-            color: $color-light;
-            height: 3rem;
-            line-height: 3rem;
-            padding: 0 .5rem;
-            text-transform: uppercase;
-
-            button {
-                //background-color: transparent;
-                //color: $color-white;
-                float: right;
-                //font-weight: bold;
-                //line-height: 1.5rem;
-                //&:hover {
-                //    color: $color-light-less;
-                //}
-            }
-        }
-
-        > .body {
-            @extend %modal-tall;
-            overflow-x: hidden;
-
-            > form {
-                .form-footer {
-                    height: auto;
-                }
-            }
-        }
-
-        footer {
-            &.form-footer {
-                border: 0;
-                //button {
-                //border-radius: 0;
-                //height: $navbar-height - 1rem;
-                //line-height: $navbar-height - 1rem;
-                //padding: 0;
-                //}
             }
         }
     }
@@ -962,6 +1163,28 @@ html {
             }*/
         }
     }
+    /// Showdown.js Markdown (Github flavor) for checkboxes (ie: - [ ])
+    .markdown {
+        ul {
+            li {
+                &.task-list-item {
+                    line-height: 1.2rem;
+                    padding: .4rem 0;
+
+                    input {
+                        &[type='checkbox'] {
+                            display: block;
+                            float: left;
+                            height: 1.2rem;
+                            line-height: 1.2rem;
+                            margin-top: 4px;
+                            width: 1.2rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
     /// HTML FORM Element
     form {
         @extend %bevel-up;
@@ -1014,10 +1237,9 @@ html {
                 li {
                     @include transition($transition-default);
                     background-color: $color-red;
-                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     text-align: center;
+                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     width: 50%;
-
 
                     &:first-of-type { // yes
                         //background: linear-gradient(left, $color-white 0%, $color-red-deep 100%);
@@ -1360,13 +1582,20 @@ html {
         > header {
             &:first-of-type {
                 background-color: $color-dark;
-                border-bottom: 4px solid $color-darker;
-                //border-bottom: 1px solid $color-grey-light;
+                border-bottom: 2px solid $color-darker;
+                box-shadow: $zero-px 1px 7px $zero-px $color-shadow-dark;
                 box-sizing: content-box;
                 color: $color-white;
                 font-weight: bold;
                 line-height: 2rem;
                 padding: .2rem .5rem;
+
+                &:hover {
+                    //@include transition(color 400ms);
+                    @include transition(background-color 400ms);
+                    background-color: $color-dark-less;
+                    //color: $color-secondary-neutral;
+                }
             }
         }
 
@@ -1400,7 +1629,7 @@ html {
             > .pane {
                 @extend %no-scroll-bar;
                 @include transition($transition-default);
-                min-height: $navbar-height;
+                //min-height: $navbar-height;
                 width: 100%;
 
                 > p {
@@ -1462,10 +1691,8 @@ html {
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
-            //border-bottom: 1px solid $color-grey;
-            //border-top: 1px solid $color-grey-darker;
             box-shadow: 0 0 .5rem 0 $color-shadow-dark;
-            margin: .8rem auto;
+            margin: 0 auto;
             min-height: $navbar-height;
 
             &:first-of-type {
@@ -1474,8 +1701,6 @@ html {
 
             > .body {
                 > .pane {
-                    padding-bottom: 1rem;
-
                     > header {
                         &:first-of-type {
                             background-color: $color-grey-dark;
@@ -1660,6 +1885,8 @@ html {
         /// A full width block with impact
         &.jumbotron {
             @extend %noSelect;
+            border-radius: 0;
+            border-top: 1px solid $color-shadow-light;
             padding: 0;
 
             > .body {
@@ -1856,7 +2083,7 @@ html {
 
         &.section {
             > header {
-                background-color: $color-blue-deep;
+                background-color: $color-blue-header;
             }
         }
 
@@ -1935,7 +2162,8 @@ html {
             }
         }
         /// The USERMENU class, A menu that contains user links and details
-        &[name='USER'] {
+        //&[name='USER'] {
+        &.usermenu {
             > ul {
                 &.horizontal {
                     flex-direction: row-reverse;
@@ -1946,10 +2174,11 @@ html {
                 //background-color: $color-grey-dark;
                 color: $color-white;
                 font-family: $font-header;
+                padding: .5rem 0;
                 text-align: center;
 
                 > img {
-                    &.picture {
+                    &.avatar {
                         background-color: $color-grey;
                         border: 2px solid $color-grey-light;
                         border-radius: 128px;
@@ -1967,10 +2196,17 @@ html {
                     line-height: 1.4rem;
                 }
 
-                > .quote {
+                > .email {
                     font-size: .8rem;
                     line-height: 1.4rem;
                     margin-bottom: 1rem;
+                }
+
+                > .roles {
+                    border-top: 1px solid $color-white;
+                    line-height: 1.4rem;
+                    margin: 0 1rem 1rem;
+                    padding-top: .4rem;
                 }
             }
         }
@@ -2016,6 +2252,47 @@ html {
                     flex-basis: auto;
                     flex-grow: 2;
                     //text-align: center;
+                    &.nav-item-icon {
+                        > a {
+                            width: 100%;
+
+                            > .icon {
+                                clear: left;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                width: 2rem;
+                            }
+
+                            > .label {
+                                clear: right;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                text-align: left;
+                                width: calc(100% - 2rem);
+                            }
+                        }
+                    }
+                    // Centered tabs, such as the MAIN tab
+                    &.tab-center {
+                        > a {
+                            > .icon {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                width: auto;
+                            }
+
+                            > .label {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                text-align: center;
+                                width: auto;
+                            }
+                        }
+                    }
                 }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {

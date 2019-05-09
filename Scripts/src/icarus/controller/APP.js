@@ -19,6 +19,6 @@ export default class APP extends CONTROLLER {
 		@param {number} recursionLimit Limits recursion depth
 	*/
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100) {
-		super(id, user, dev, recursionLimit, 'Icarus', '0.6.20190418', TOKEN.setToken().value, new CONTAINERFACTORY());
+		super(id, user, dev, recursionLimit, 'spoonMEDIA', '0.6.20190501', TOKEN.setToken().value, new CONTAINERFACTORY());
 	}
 }

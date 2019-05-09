@@ -510,6 +510,10 @@
     <Compile Include="Migrations\201903281514380_2019-03-28__ContainerMeta.Designer.cs">
       <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.cs" />
+    <Compile Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.Designer.cs">
+      <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
@@ -602,14 +606,16 @@
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\icon192.png" />
     <Content Include="Content\icon50.png" />
-    <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\icon512.png" />
+    <Content Include="Content\Images\favicon.ico" />
+    <Content Include="Content\Images\Icon.png" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Content\Images\startup\startup-1125x2436.png" />
     <Content Include="Content\Images\startup\startup-1242x2208.png" />
     <Content Include="Content\Images\startup\startup-750x1334.png" />
+    <Content Include="Content\Images\user256.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
@@ -668,6 +674,8 @@
     <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\panel\PANEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
@@ -680,12 +688,10 @@
     <Content Include="Scripts\src\icarus\model\el\list\LIST.js" />
     <Content Include="Scripts\src\icarus\model\el\list\li\LI.js" />
     <Content Include="Scripts\src\icarus\model\el\list\ul\UL.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\navfooter\NAVFOOTER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\navheader\NAVHEADER.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
@@ -788,6 +794,13 @@
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="Content\Images\Logo.psd" />
+    <Content Include="Content\Images\User.psd" />
+    <Content Include="Content\apple-touch-icon.psd" />
+    <Content Include="Content\Images\startup\startup-750x1334.psd" />
+    <Content Include="Content\Images\startup\startup-1125x2436.psd" />
+    <Content Include="Content\Images\startup\startup-1242x2208.psd" />
+    <Content Include="Content\Images\Icon.psd" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -814,12 +827,7 @@
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
@@ -846,7 +854,6 @@
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Database\Index.cshtml" />
     <Content Include="Views\Container\Debug.cshtml" />
-    <Content Include="Views\Account\LogOff.cshtml" />
     <Content Include="Views\Account\ExternalLogin.cshtml" />
     <Content Include="Views\Shared\_Globals.cshtml" />
     <Content Include="Scripts\src\icarus\task\config\beautify.json" />
@@ -1101,6 +1108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903281514380_2019-03-28__ContainerMeta.resx">
       <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.resx">
+      <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
