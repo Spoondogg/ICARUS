@@ -226,15 +226,18 @@ namespace ICARUS.Controllers {
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new {
+                        userId = user.Id,
+                        code = code
+                    }, protocol: Request.Url.Scheme);
 
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     //return RedirectToAction("Index", "Home");
-                    return Json(new Payload(1, "An email to confirm your account has been sent."));
+                    return Json(new Payload(2, "Notification", result, "An email to confirm your account has been sent."));
                 } else {
                     AddErrors(result);
-                    return Json(new Payload(2, "Result", result, "Failed to created user.  See Results for details."));
+                    return Json(new Payload(2, "Error", result, "Failed to create user.  See Results for details."));
                 }
             } catch (Exception e) {
                 return Json(new Payload(2, e, "An exception occurred trying to register a user."));
@@ -495,8 +498,7 @@ namespace ICARUS.Controllers {
                     TempData["payload"] = model;
 
                     //return RedirectToLocal(returnUrl);
-                    //return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
-                    return RedirectToAction("Index", "Home");
+                    //return Json(new Payload(1, "SignInStatus.Success: RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);return RedirectToAction("Index", "Home");
 
                 case SignInStatus.LockedOut:
                     //return View("Lockout");
@@ -533,7 +535,7 @@ namespace ICARUS.Controllers {
                     ///////  Instead of returning the ExternalLoginConfirmation View, try processing the results right now!
 
                     if (User.Identity.IsAuthenticated) {
-                        return Json(new Payload(1, "RedirectToAction", model, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
+                        return Json(new Payload(1, "ExternaLoginConfirmation: RedirectToAction", model, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
                     }
                     
                     // Get the information about the user from the external login provider
@@ -556,7 +558,7 @@ namespace ICARUS.Controllers {
                             rslt = await UserManager.AddToRoleAsync(user.Id, "User");
                             if(rslt.Succeeded) {
                                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                                //return Json(new Payload(1, "RedirectToLocal", model), JsonRequestBehavior.AllowGet);
+                                //return Json(new Payload(1, "AttemptToCreateUser: RedirectToLocal", model), JsonRequestBehavior.AllowGet);
                                 return RedirectToLocal(returnUrl);
                             }
                         }
@@ -567,7 +569,7 @@ namespace ICARUS.Controllers {
                     return Json(
                         new Payload(
                             2, "AccountController.ExternalLoginCallback", 
-                            model, "Failed to creat user"
+                            model, "Failed to create user"
                         ), JsonRequestBehavior.AllowGet
                     );
                     //return Json(new Payload(5, "SignInStatus.Failure", model), JsonRequestBehavior.AllowGet);
