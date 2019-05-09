@@ -14,7 +14,7 @@ import { STATUS } from '../../enums/STATUS.js';
 */
 export default class EL extends MODEL {
 	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {El} node Parent Node
+	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
 	*/
@@ -155,7 +155,22 @@ export default class EL extends MODEL {
                 this.attributes.class = this.el.classList.value;
 			}
 		});
-	}
+    }
+    /** Adds the given class name to the element's list of classes
+	    @param {string} className the class to be appended
+        @see https://stackoverflow.com/a/9229821/722785
+	    @returns {Promise<ThisType>} Returns this element for chaining purposes
+	*/
+    setClass(className = '') {
+        return this.chain(() => {
+            if (className === 'undefined') {
+                console.log('ClassName Undefined');
+            } else {
+                this.el.className = className;
+                this.attributes.class = className;
+            }
+        });
+    }
 	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
 	    @returns {Promise<ThisType>} Promise Chain
@@ -288,7 +303,24 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-	}
+    }
+    /** Performs an AJAX request and calls the given method with the JSON response
+        @param {string} url HTTP Request Url
+        @param {Function} fn Function that accepts the resulting payload as its only argument
+        @param {string} method Request Method (ie: 'POST','GET')
+        @returns {Object} A JSON object retrieved from the given url
+    */
+    getJson(url, fn, method = 'GET') {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let payload = JSON.parse(this.responseText);
+                fn(payload);
+            }
+        };
+        xmlhttp.open(method, url, true);
+        xmlhttp.send();
+    }
 	/** Retrieve the application loader
 	    @returns {LOADER} Loader
 	*/
@@ -321,23 +353,30 @@ export default class EL extends MODEL {
 	getTail() {
 		return this.get()[this.get().length - 1];
     }
-    /** Performs an AJAX request and calls the given method with the JSON response
-        @param {string} url HTTP Request Url
-        @param {Function} fn Function that accepts the resulting payload as its only argument
-        @param {string} method Request Method (ie: 'POST','GET')
-        @returns {Object} A JSON object retrieved from the given url
-    */
-    getJson(url, fn, method = 'GET') {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let payload = JSON.parse(this.responseText);
-                fn(payload);
-            }
-        };
-        xmlhttp.open(method, url, true);
-        xmlhttp.send();
+    /** Retrieves the token value from the DOM Meta tags
+	    @returns {string} A request verification token
+	*/
+    getToken() {
+        return document.getElementsByTagName('meta').token.content || '';
     }
+    /** Retrieves the user value from the DOM Meta tags
+	    @returns {string} Current User
+	*/
+    getUser() {
+        return document.getElementsByTagName('meta').user.content || 'Guest';
+    }
+    /** Retrieves the user's profile picture / avatar if available
+	    @returns {string} Current User
+	*/
+    getAvatar() {
+        return localStorage.getItem('picture') || '/Content/Images/user256.png';
+    }
+    /** Retrieves the roles value from the DOM Meta tags
+	    @returns {string} Current User Role(s) (comma delimited)
+	*/
+    getRole() {
+        return document.getElementsByTagName('meta').roles.content || '';
+    } 
     /** Retrieves a Payload matching the given params (if permitted)
         @param {number} uid Type UId (ie: Formpost(123) = 123)
         @param {string} [type] Payload type (default: FORMPOST)
@@ -474,7 +513,7 @@ export default class EL extends MODEL {
 	*/
 	empty() {
 		return new Promise((resolve) => {
-			while (this.el.firstChild) {
+            while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
 			}
 			//this.children.length = 0;

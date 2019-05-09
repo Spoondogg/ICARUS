@@ -40,6 +40,15 @@ export default class BUTTONGROUP extends GROUP {
 	*/
 	addToggleButton(label, glyphicon, buttonType) {
 		return this.addChild(new TOGGLEBUTTON(this, label, glyphicon, buttonType));
-	}
+    }
+    /** Get child BUTTON element by Name and optionally by Class
+	    @param {string} name Element Name
+        @param {string} className Element Class
+	    @returns {Array<BUTTON>} Child Item/Element Filtered Results
+        @description This might also be recognized as this.getChildren()
+	*/
+    get(name = null, className = null) {
+        return super.get(name, className);
+    }
 }
 export { ALIGN, ATTRIBUTES, BUTTON, EL, MODEL, TOGGLEBUTTON }

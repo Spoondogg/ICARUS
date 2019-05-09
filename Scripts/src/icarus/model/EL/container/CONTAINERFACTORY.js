@@ -1,5 +1,6 @@
 /** @module */
 import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
+import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
 import ARTICLE from '../article/ARTICLE.js';
@@ -7,7 +8,6 @@ import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
-import FORM from '../form/FORM.js';
 import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
 import INDEX from '../container/banner/index/INDEX.js';
 import INDEXMAIN from '../container/banner/indexmain/INDEXMAIN.js';
@@ -104,4 +104,4 @@ export default class CONTAINERFACTORY extends FACTORY {
         return element;
     }	
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
