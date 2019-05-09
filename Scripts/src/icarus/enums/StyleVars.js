@@ -10,6 +10,7 @@ export const ColorBlue = "#005879;";
 export const ColorBlueLight = "#bee1ef";
 export const ColorBlueLighter = "#43acbd";
 export const ColorBlueDeep = "#133b63";
+export const ColorBlueHeader = "#1b242d";
 export const ColorOrange = "rgb(255, 165, 0)";
 export const ColorRed = "#b30808";
 export const ColorRedDeep = "#641818";
