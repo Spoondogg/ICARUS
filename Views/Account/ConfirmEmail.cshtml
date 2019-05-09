@@ -4,7 +4,7 @@
 @section viewInit {
     <!--
         <script src="@Url.Content("~/Scripts/init.js")" type="module"></script>
-    -->
+
     <div style="background-color:white;">
         <div class="progress">
             <div class="progress-bar progress-bar-info progress-bar-striped"
@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+        -->
     @if (User.Identity.IsAuthenticated) {
         <script type="text/javascript">
             console.log(100, 'You are already logged in.\nRedirecting...');
