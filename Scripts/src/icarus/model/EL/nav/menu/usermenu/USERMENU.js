@@ -29,6 +29,10 @@ export default class USERMENU extends MENU {
         }
         this.createOptions();        
         this.navbar.el.dispatchEvent(new Expand(this.navbar));
+        this.el.dispatchEvent(new Expand(this));
+        // override
+        this.collapse = () => true;
+        this.expand = () => true;
     }
     /** Creates the Options Menu for this active user
         @returns {void}
@@ -39,33 +43,40 @@ export default class USERMENU extends MENU {
         this.navbar.addClass('options-nav');
         //let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
         //optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
-        this.settings = this.navbar.addTabbableMenu('SETTINGS', 'SETTINGS', ICONS.CONSOLE, ['Profile', 'Notifications'], true);
-        this.account = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, ['Security'], true);
-        this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [], true);
-        this.options.element.swipeSensitivity = 150;
-
+        this.account = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, [], true);
+        this.account.element.swipeSensitivity = 150;
         if (this.getRole() === 'Guest') {
-            this.btnLogin = this.options.element.addNavItemIcon(new MODEL().set({
-                label: 'Log In',
-                icon: ICONS.USER,
-                name: 'log-in'
-            }));
-            this.btnLogin.el.onclick = () => this.login();
-            this.btnRegister = this.options.element.addNavItemIcon(new MODEL().set({
-                label: 'Register',
-                icon: ICONS.USER,
-                name: 'register'
-            }));
-            this.btnRegister.el.onclick = () => this.register();
+            this.account.tab.el.style.flexBasis = '20rem'; // this should be a style rule
+
+            this.btnLogin = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('log-in', 'Log In', ICONS.LOGIN)
+            ));
+            this.btnLogin.el.addEventListener('activate', () => this.login(this.btnLogin));
+            this.btnRegister = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('register', 'Sign Up', ICONS.USER)
+            ));
+            this.btnRegister.el.addEventListener('activate', () => this.register(this.btnRegister));
         } else {
-            this.btnLogout = this.options.element.addNavItemIcon(new MODEL().set({
-                label: 'Log Out',
-                icon: ICONS.USER,
-                name: 'log-out'
-            }));
-            this.btnLogout.el.onclick = () => this.logout();
+            this.btnLogout = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('log-out', 'Log Out', ICONS.LOGOUT)
+            ));
+            this.btnLogout.el.addEventListener('activate', () => this.logout());
+            // Application Communications, Alerts etc
+            this.chat = this.navbar.addTabbableMenu('CHAT', 'CHAT', ICONS.CHAT, [
+                this.createNavItemIconModel('chat-one', 'Chat One', ICONS.CHAT),
+                this.createNavItemIconModel('chat-two', 'Chat Two', ICONS.CHAT)
+            ], true);
+            this.chat.element.swipeSensitivity = 150;
+            // User Settings / Options
+            this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [
+                this.createNavItemIconModel('Styles', 'Styles', ICONS.DOM),
+                this.createNavItemIconModel('Alerts', 'Alerts', ICONS.ALERT),
+                this.createNavItemIconModel('Security', 'Security', ICONS.LOCK)
+            ], true);
+            this.options.element.swipeSensitivity = 150;
         }
-        this.options.tab.el.dispatchEvent(new Activate(this.options.tab));
+        // Launch Account Tab by default
+        this.account.tab.el.dispatchEvent(new Activate(this.account.tab));
     }
 	/** The USERMENU slides in and should be expanded at all times 
 	    @returns {void}
@@ -83,18 +94,20 @@ export default class USERMENU extends MENU {
 		return this.flip().then(() => this.getMain().logout());
 	}
 	/** Calls MAIN.login()
+        @param {EL} caller Caller
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	login() {
+	login(caller = this) {
 		console.log('USERMENU.login()');
-		return this.flip().then(() => this.getMain().login());
+        return this.flip().then(() => this.getMain().login(caller));
     }
     /** Calls MAIN.register()
+        @param {EL} caller Caller 
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-    register() {
+    register(caller = this) {
         console.log('USERMENU.register()');
-        return this.flip().then(() => this.getMain().register());
+        return this.flip().then(() => this.getMain().register(caller));
     }
 }
-export { ATTRIBUTES, EL, MENU, MODEL }
+export { ATTRIBUTES, EL, MENU, MODEL, NAVBAR }

@@ -29,7 +29,6 @@ export default class CONTROLLER extends MODEL {
 			token,
 			factory
 		});
-		document.body.className = 'icarus';
 		this.watermark = new WATERMARK();
 		/** @property {Url} url An Url object */
 		this.url = new URL(window.location.href);
@@ -98,27 +97,24 @@ export default class CONTROLLER extends MODEL {
 	/** Determines if a 'login' parameter exists in the Url, and if true, 
 	    shows the login prompt.
         @param {boolean} proceed Optionally prevent any action from being taken
-	    @returns {boolean} If a login parameter exists, return true
+	    @returns {void}
 	*/
 	showLoginPrompt(proceed = true) {
 		if (this.url.searchParams.get('login') && proceed) {
-			console.log('showLoginPrompt();');
+			console.log('showLoginPrompt()');
 			this.main.login();
-		}
-		return this;
-	}
-	/** If conditions are met, launches OAuth Login Prompt
-	    @returns {boolean} If a login parameter exists, return true
-	
-    showExternalLoginPrompt() {
-        let provider = this.url.searchParams.get('provider');
-        let returnUrl = this.url.searchParams.get('returnUrl');
-        if (provider && returnUrl) {
-            console.log('showExternalLoginPrompt()');
-            //this.main.loader.log(50, 'Processing OAuth[' + provider + ']...', true).then(() => this.main.loginOAuth(provider));
         }
-        return this;
-    }*/
+        if (this.url.searchParams.get('resetpassword') && proceed) {
+            console.log('showResetPasswordPrompt()');
+            this.main.resetPassword();
+        }
+
+        // 'proceed' not required in cases where session has been corrupted
+        // You will get stuck in an endless loop doing this, so be warned.
+        if (this.url.searchParams.get('logout')) {
+            return confirm('Manually log out?') ? this.main.logout() : window.history.pushState({}, null, '/');
+        }
+    }
 	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP
 	*/

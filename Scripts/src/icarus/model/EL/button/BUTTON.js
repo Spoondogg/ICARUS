@@ -25,7 +25,7 @@ export default class BUTTON extends EL {
         @returns {void}
     */
 	setLabel(label, glyphicon) {
-		this.icon.label.setInnerHTML(label);
+		this.label.setInnerHTML(label);
 		if (glyphicon) {
 			this.icon.setIcon(glyphicon);
 		}

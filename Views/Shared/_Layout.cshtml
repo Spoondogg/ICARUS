@@ -46,7 +46,7 @@
         <!-- iPad Pro 12.9" (2048px x 2732px) -->
         <link rel="apple-touch-startup-image" href="/apple-launch-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
     *@
-    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Icon.png")" />
     @* iPhone X (1125px x 2436px) *@
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/startup/startup-1125x2436.png")" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
     @* iPhone 8, 7, 6s, 6 (750px x 1334px) *@
@@ -69,7 +69,7 @@
             if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
         </script>*@
 </head>
-<body>
+<body class="icarus">
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
     @if (IsSectionDefined("NoScript")) {

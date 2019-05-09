@@ -35,6 +35,19 @@ export default class MENU extends LIST {
 			this.scrollOnExpand();
 		}
 	}
+    /** This should be a typedef
+        @param {string} name Tab Name
+        @param {string} [label] Tab Label
+        @param {string} [icon] Tab Icon
+        @returns {{name:string, label:string, icon:string}} NavItemIconModel
+    */
+    createNavItemIconModel(name, label = name, icon = name) {
+        return {
+            name,
+            label,
+            icon
+        };
+    }
 	/** Scroll the menu into view on Expansion
 	    @returns {void}
 	*/

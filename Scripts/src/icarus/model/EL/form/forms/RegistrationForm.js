@@ -21,7 +21,7 @@ export default class RegistrationForm extends FORM {
 			action: '/Account/Register'
 		})).set({
 			id: 'registrationForm',
-			label: 'Register'
+            label: 'Sign Up'
 		}));
 	}
 }
