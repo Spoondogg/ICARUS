@@ -38,7 +38,7 @@ export default class CONTAINER extends GROUP {
 		this.addClass('container');
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label));
+		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
 		this.navheader.implement(new Draggable(this));
 		this.implement(new Draggable(this));
 		this.body = new COLLAPSIBLE(this, new MODEL('body'));
@@ -793,6 +793,7 @@ export default class CONTAINER extends GROUP {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
                         if (payload.result === 1) {
+                            this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
                             resolve(this.make(payload.model));
                         } else {
                             reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
@@ -877,9 +878,10 @@ export default class CONTAINER extends GROUP {
 		@param {string} label The name to be set
 	    @returns {void}
 	*/
-	setLabel(label) {
-		this.navheader.tab.anchor.label.setInnerHTML(label);
-		this.label = label;
+    setLabel(label) {
+        console.log(this.toString() + '.setLabel(' + label + ')');
+		this.navheader.tab.anchor.label.setInnerHTML(label.toString());
+		this.label = label.toString();
 	}
 	/** Sets the subsection array to the given value
 		@param {Array<number>} subsections Sub Section UID array
