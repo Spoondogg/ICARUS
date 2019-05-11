@@ -163,6 +163,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
+    <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
     <Compile Include="Controllers\WordController.cs" />
@@ -531,6 +532,7 @@
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
     <Compile Include="Models\Icarus\Elements\BANNER.cs" />
     <Compile Include="Models\Icarus\Elements\HEADER.cs" />
+    <Compile Include="Models\Icarus\Form\FORMTEXTAREA.cs" />
     <Compile Include="Models\Icarus\Form\FORMINPUT.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
