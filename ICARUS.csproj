@@ -622,6 +622,7 @@
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
+    <Content Include="Scripts\src\icarus\event\Flip.js" />
     <Content Include="Scripts\src\icarus\event\Toggle.js" />
     <Content Include="Scripts\src\icarus\event\LongClick.js" />
     <Content Include="Scripts\src\icarus\init.js" />
