@@ -21,10 +21,10 @@ export default class NAVHEADER extends NAVBAR {
 			icon: ICONS.CERTIFICATE,
 			label: model.label
         }));
-		node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate(this)));
-		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(this)));
-		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this)));
-        this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this)));
+        node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate(node)));
+        node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(node)));
+        this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
+        this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
         this.tab.el.addEventListener('select', () => {
             let container = this.getContainer();
             container.getFactory().save(false, container, container, 'label');
