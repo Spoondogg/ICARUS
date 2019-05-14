@@ -35,7 +35,7 @@ export default class Switchable extends IFACE {
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
 		this.methods.deactivate = () => node.chain(() => node.removeClass('active'));
-		/** Toggles the 'active' state of this element, triggering an Activate/Deactivate Event
+		/** 'Flipping' this switch toggles the 'active' state of this element, triggering an Activate/Deactivate Event
 		    @param {string} className Existence of classname indicates on/off event to call
 		    @param {Event} eventOn Event to call if class does not yet exist
 		    @param {Event} eventOff Event to call if class already exists
