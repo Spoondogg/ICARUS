@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 /** @module */
-import COLLAPSIBLE, { Collapse, Collapsible, Expand } from './COLLAPSIBLE.js';
+import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
@@ -35,19 +35,18 @@ export default class CONTAINER extends GROUP {
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
         super(node, element, model);
-		this.addClass('container');
+        this.addClass('container');
+        this.editableElements = [];
+        /** If true, siblings are deactivated when this CONTAINER is activated */
+        this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
 		this.navheader.implement(new Draggable(this));
-		this.implement(new Draggable(this));
-		this.body = new COLLAPSIBLE(this, new MODEL('body'));
+        this.implement(new Draggable(this));
+        this.body = new COLLAPSIBLE(this, new MODEL('body'));
         this.body.implement(new Clickable(this.body));
-        this.btnNavHeader = new EL(this.body.pane, 'DIV', new MODEL('btn-navheader')).setInnerHTML('+');
-        this.btnNavHeader.implement(new Clickable(this.btnNavHeader));
-        this.btnNavHeader.el.addEventListener('activate', () => this.navheader.el.dispatchEvent(new Activate(this.btnNavHeader)));
-        this.btnNavHeader.el.addEventListener('deactivate', () => this.navheader.el.dispatchEvent(new Deactivate(this.btnNavHeader)));
-		this.addEvents();
+        this.addEvents();
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
@@ -311,52 +310,97 @@ export default class CONTAINER extends GROUP {
             event.stopPropagation();
             //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});*/
-	}
+    }
+    /** Dispatches a Deactivate Event on CONTAINER.body for any sibling CONTAINER Elements relative to this CONTAINER 
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateSiblingContainers() {
+        console.log(this.toString() + '.deactivateSiblingContainers()');
+        /// IF id is undefined, try comparing by attributes.name
+        return this.chain(() => {
+            let siblings = this.node.get();
+            if (this.id) {
+                siblings = siblings.filter((c) => c.id !== this.id);
+            } else if (this.name) {
+                siblings = siblings.filter((c) => c.attributes.name !== this.attributes.name);
+            }
+            siblings.forEach((s) => {
+                try {
+                    s.body.el.dispatchEvent(new Deactivate(s));
+                } catch (e) {
+                    console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
+                }
+            });
+        }, this.toString() + ' Unable to remove "active" class from siblings');
+    }
+    /** Dispatches the given Event to this element's siblings
+        Overrides EL.dispatchToSiblings
+	    @param {Event} event Event to dispatch
+	    @returns {void}
+	*/
+    dispatchToSiblings(event) {
+        //console.log(this.toString() + '.siblings()', event, this.node.getContainer().get().filter((c) => c !== this));
+        this.node.getContainer().get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+    }
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
 	*/
 	addActivateEvents() {
-        this.body.el.addEventListener('activate', () => {
+        this.el.addEventListener('activate', () => {
             console.log('Activated ' + this.toString());
-            try {
+            /*try {
                 this.getMain().focusBody();
             } catch (e) {
                 if (!(e instanceof TypeError)) {
                     console.warn(this.toString() + '.addActivateEvents()', e);
                     throw e;
                 }
-            }
-            /// IF id is undefined, try comparing by attributes.name
-            try {
-                let siblings = this.node.get();
-                if (this.id) {                    
-                    siblings = siblings.filter((c) => c.id !== this.id);
-                } else if (this.name) {
-                    siblings = siblings.filter((c) => c.attributes.name !== this.attributes.name);                    
-                }
-                siblings.forEach((s) => {
-                    try {
-                        s.body.el.dispatchEvent(new Deactivate(s));
-                    } catch (e) {
-                        console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
-                    }
-                });
-            } catch (e) {
-                console.warn(this.toString() + '.addActivateEvents() Unable to focus body', e);
+            }*/
+            if (this.node.getContainer().deactivateSiblingsOnActivate) {
+                this.dispatchToSiblings(new Deactivate(this));
             }
         });
-		this.body.el.addEventListener('deactivate', () => {
+        this.el.addEventListener('deactivate', () => {
             console.log('Deactivated ' + this.toString());
-            try {
+            /*try {
                 this.getMain().focusBody();
             } catch (e) {
                 if (!(e instanceof TypeError)) {
                     console.warn(this.toString() + '.addActivateEvents()', e);
                     throw e;
                 }
-            }
+            }*/
 		});
-	}
+    }
+    /** Adds 'activate' and 'deactivate' events to this CONTAINER
+	    @returns {void}
+	*/
+    addExpandEvents() {
+        this.el.addEventListener('expand', () => {
+            console.log('Expanded ' + this.toString(), this);
+            this.data.collapsed = -1;
+            /*try {
+                this.getMain().focusBody();
+            } catch (e) {
+                if (!(e instanceof TypeError)) {
+                    console.warn(this.toString() + '.addActivateEvents()', e);
+                    throw e;
+                }
+            }*/
+        });
+        this.el.addEventListener('collapse', () => {
+            console.log('Collapsed ' + this.toString(), this);
+            this.data.collapsed = 1;
+            /*try {
+                this.getMain().focusBody();
+            } catch (e) {
+                if (!(e instanceof TypeError)) {
+                    console.warn(this.toString() + '.addActivateEvents()', e);
+                    throw e;
+                }
+            }*/
+        });
+    }
 	/** Adds 'moveUp' and 'moveDown' events to this CONTAINER
 	    @returns {void}
 	*/
@@ -417,7 +461,8 @@ export default class CONTAINER extends GROUP {
 	*/
 	addEvents() {
 		this.addSelectEvents();
-		this.addActivateEvents();
+        this.addActivateEvents();
+        this.addExpandEvents();
 		this.addMoveEvents();
     }
 	/** Creates an editable EL for this CONTAINER
@@ -450,18 +495,24 @@ export default class CONTAINER extends GROUP {
 						default:
 							console.warn(name + ' does not have a valid constructor');
                     }
+                    this[name].setAttribute('name', name);
 					this[name].implement(new Clickable(this[name]));
 					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
-					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
-                    this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
+                    this[name].el.addEventListener('activate', () => {
+                        console.log('Activated editable element: ' + name);
+                        //let siblings = this.editableElements.filter((c) => c.attributes.name !== name);
+                        //console.log('Deactivating sibling editable elements', this.toString(), name, siblings);
+                        //siblings.forEach((s) => s.el.dispatchEvent(new Deactivate(this)));
+                    });
+                    this[name].el.addEventListener('deactivate', () => {
+                        console.log('Deactivated editable element: ' + name);
+                    });
 
                     if (name === 'header') {
-                        if (parseInt(this.data.collapsed) === -1) {
-                            this.header.el.dispatchEvent(new Activate(this.header));
-                        }
-                        this[name].el.addEventListener('deactivate', () => this.navheader.tab.el.dispatchEvent(new Deactivate(this[name])));
-                        this[name].el.addEventListener('activate', () => this.navheader.tab.el.dispatchEvent(new Activate(this[name])));
+                        this.addHeaderEvents();
                     }
+
+                    this.editableElements.push(this[name]);
 
 					resolve(this[name]);
 				}
@@ -470,7 +521,27 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Adds specific events for CONTAINER.header (if exists)
+        @returns {void} 
+    */
+    addHeaderEvents() {
+        this.header.el.addEventListener('deactivate', () => {
+            this.navheader.tab.el.dispatchEvent(new Deactivate(this.header));
+        });
+        this.header.el.addEventListener('activate', () => {
+            this.navheader.tab.el.dispatchEvent(new Activate(this.header));
+        });
+        this.header.el.addEventListener('longclick', () => {
+            //console.log(this.toString() + '.header.longclick()');
+            if (this.getUser() === this.authorId || this.shared === 1) {
+                this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+            }
+        });
+        if (parseInt(this.data.collapsed) === -1) {
+            this.header.el.dispatchEvent(new Activate(this.header));
+        }
+    }
 	/** Hides the collection of named EL(s), optionally excluding those with the specified name
 	    @param {Array<EL>} elements A collection of Elements to hide
 	    @param {string} name Optional name of element to keep visible
@@ -557,7 +628,7 @@ export default class CONTAINER extends GROUP {
             let { tab } = this.navheader;
             let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
             let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
-            let c = model.data.showNav === '1' ? this.btnNavHeader.el.dispatchEvent(new Activate(this.btnNavHeader)) : this.btnNavHeader.el.dispatchEvent(new Deactivate(this.btnNavHeader));
+            let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Activate(this.navheader)) : this.navheader.el.dispatchEvent(new Deactivate(this.navheader));
 			return [a, b, c];
 		}
 		return [false, false, false];
@@ -912,11 +983,12 @@ export default class CONTAINER extends GROUP {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
-							try {
-								this.container.save(true).then(() => {
+                            try {
+								this.container.getFactory().save(true, this.container, this.container).then(() => {
 									resolve(dialog.close());
 								});
-							} catch (ee) {
+                            } catch (ee) {
+                                console.warn(this.toString() + '.removeDialog() Error', this.container);
 								reject(ee);
 							}
 						});
@@ -1065,5 +1137,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Toggle }
 /* eslint-enable max-lines */
