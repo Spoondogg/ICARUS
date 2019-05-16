@@ -3,6 +3,7 @@
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
+import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
@@ -15,7 +16,7 @@ import INPUTMODEL from '../input/INPUTMODEL.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
-import Movable from '../../../interface/Movable.js';
+import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
@@ -26,7 +27,6 @@ import STRING from '../../../STRING.js';
     @extends GROUP
 */
 export default class CONTAINER extends GROUP {
-	// eslint-disable max-statements */
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
@@ -37,12 +37,14 @@ export default class CONTAINER extends GROUP {
         super(node, element, model);
         this.addClass('container');
         this.editableElements = [];
+        this.dragging = false;
         /** If true, siblings are deactivated when this CONTAINER is activated */
         this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
-		this.navheader.implement(new Draggable(this));
+        this.navheader.implement(new Draggable(this));
+        this.addQuickAccessButtons();
         this.implement(new Draggable(this));
         this.body = new COLLAPSIBLE(this, new MODEL('body'));
         this.body.implement(new Clickable(this.body));
@@ -52,6 +54,46 @@ export default class CONTAINER extends GROUP {
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
+    }
+    addQuickAccessButtons() {
+        // Add quick-access buttons
+        if (this.className !== 'MAIN') {
+            // Save and QuickSave button
+            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+                label: 'SAVE',
+                icon: ICONS.SAVE,
+                name: 'btn-save'
+            }));
+            $(btnSave.el).insertBefore(this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el);
+            btnSave.el.addEventListener('activate', () => this.chain(() => {
+                this.el.dispatchEvent(new Modify(btnSave));
+            }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+            btnSave.el.addEventListener('longclick',
+                () => this.getFactory().save(false, this, this).then(
+                    () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+
+            // Up and Down buttons
+            [
+                {
+                    label: 'UP',
+                    icon: ICONS.UP,
+                    name: 'btn-up',
+                    dir: 0
+                },
+                {
+                    label: 'DOWN',
+                    icon: ICONS.DOWN,
+                    name: 'btn-down',
+                    dir: 2
+                }
+            ].forEach((model) => {
+                let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+                btn.el.addEventListener('activate', () => {
+                    this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
+                        () => btn.el.dispatchEvent(new Deactivate(btn)));
+                });
+            });
+        }
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
 	    @param {CONTAINERMODEL|MODEL} model Model
@@ -94,7 +136,6 @@ export default class CONTAINER extends GROUP {
 		*/
         this.reference = null;
 	}
-	// eslint-enable max-statements */
 	/** Generic construct method for EL/CONTAINER async actions and population
 	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} Promise Chain
@@ -348,28 +389,12 @@ export default class CONTAINER extends GROUP {
 	addActivateEvents() {
         this.el.addEventListener('activate', () => {
             console.log('Activated ' + this.toString());
-            /*try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }*/
             if (this.node.getContainer().deactivateSiblingsOnActivate) {
                 this.dispatchToSiblings(new Deactivate(this));
             }
         });
         this.el.addEventListener('deactivate', () => {
             console.log('Deactivated ' + this.toString());
-            /*try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }*/
 		});
     }
     /** Adds 'activate' and 'deactivate' events to this CONTAINER
@@ -377,84 +402,44 @@ export default class CONTAINER extends GROUP {
 	*/
     addExpandEvents() {
         this.el.addEventListener('expand', () => {
-            console.log('Expanded ' + this.toString(), this);
+            console.log('Expanded ' + this.toString());
             this.data.collapsed = -1;
-            /*try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }*/
         });
         this.el.addEventListener('collapse', () => {
-            console.log('Collapsed ' + this.toString(), this);
+            console.log('Collapsed ' + this.toString());
             this.data.collapsed = 1;
-            /*try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }*/
         });
     }
-	/** Adds 'moveUp' and 'moveDown' events to this CONTAINER
+    /** Adds CRUD related events for this CONTAINER
+        @param {number} delay Delay
+        @todo Implement [create, read/open/load, update/modify, remove,delete]
+        @returns {void}
+    */
+    addCrudEvents(delay = 5000) {
+        this.el.addEventListener('modify', () => {
+            //console.log(this.toString() + ' has been modified and needs to be saved...');
+            this.addClass('modified');
+            setTimeout(() => {
+                if (document.getElementsByClassName('dragging').length > 0) {
+                    //console.log('Still dragging...  Checking again in ' + delay + ' ms...');
+                    this.el.dispatchEvent(new Modify(this));
+                } else if (this.hasClass('modified') === true) {                    
+                    this.getFactory().save(true, this, this);
+                    this.removeClass('modified');
+                }
+            }, delay);
+        });
+        this.el.addEventListener('save', () => {
+            console.log(this.toString() + ' has been saved');
+            this.removeClass('modified');
+        });
+    }
+    /** Adds 'moveUp' and 'moveDown' events to this CONTAINER
+        @param {number} dur Animation duration in milliseconds
 	    @returns {void}
 	*/
-	addMoveEvents() {
-		/** Moves this element UP one slot
-	        @returns {ThisType} This Container
-	    */
-		this.moveUp = () => {
-			console.log(this.toString() + ': Move up');
-			let n = $(this.el);
-			if (n.prev().length > 0) {
-				n.animate({
-					height: 'toggle'
-				}, 300);
-				setTimeout(() => {
-					n.prev().animate({
-						height: 'toggle'
-					}, 300).insertAfter(n).animate({
-						height: 'toggle'
-					}, 300);
-				}, 0);
-				setTimeout(() => {
-					n.animate({
-						height: 'toggle'
-					}, 300).delay(300);
-				}, 300);
-            }
-            return this;
-		};
-		/** Moves this element DOWN one slot
-		    @returns {ThisType} This Container
-		*/
-		this.moveDown = () => {
-            console.log(this.toString() + ': Move down');
-			let n = $(this.el);
-			if (n.next().length > 0) {
-				n.animate({
-					height: 'toggle'
-				}, 300);
-				setTimeout(() => {
-					n.next().animate({
-						height: 'toggle'
-					}, 300).insertBefore(n).animate({
-						height: 'toggle'
-					}, 300).delay(300);
-				}, 0);
-				setTimeout(() => {
-					n.animate({
-						height: 'toggle'
-					}, 300);
-				}, 300);
-			}
-			return this;
-		};
+    addMoveEvents(dur = 150) {
+        // todo
 	}
 	/** Adds default CONTAINER Event Handlers 
 	    @returns {void} 
@@ -463,7 +448,8 @@ export default class CONTAINER extends GROUP {
 		this.addSelectEvents();
         this.addActivateEvents();
         this.addExpandEvents();
-		this.addMoveEvents();
+        this.addMoveEvents();
+        this.addCrudEvents();
     }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
@@ -478,7 +464,10 @@ export default class CONTAINER extends GROUP {
 					switch (name) {
 						case 'header':
                             this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
+                            this.header.setAttribute('draggable', 'false');
+                            this.header.implement(new Collapsible(this.header));
                             $(this.header.el).insertAfter(this.navheader.el);
+                            this.header.el.dispatchEvent(new Expand(this.header));
                             break;
                         case 'slogan':
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
@@ -535,7 +524,9 @@ export default class CONTAINER extends GROUP {
         this.header.el.addEventListener('longclick', () => {
             //console.log(this.toString() + '.header.longclick()');
             if (this.getUser() === this.authorId || this.shared === 1) {
-                this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+                if (this.dragging === false) {
+                    this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+                }
             }
         });
         if (parseInt(this.data.collapsed) === -1) {
@@ -950,7 +941,6 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     setLabel(label) {
-        console.log(this.toString() + '.setLabel(' + label + ')');
 		this.navheader.tab.anchor.label.setInnerHTML(label.toString());
 		this.label = label.toString();
 	}
