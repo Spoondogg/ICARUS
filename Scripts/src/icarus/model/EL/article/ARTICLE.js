@@ -11,7 +11,7 @@ export default class ARTICLE extends CONTAINER {
 	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
-		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION']);
+		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION', 'TEXTBLOCK']);
         this.addClass('article');
         this.deactivateSiblingsOnActivate = false;
         this.containerHeader = new COLLAPSIBLE(this.body.pane, new MODEL('header'));
