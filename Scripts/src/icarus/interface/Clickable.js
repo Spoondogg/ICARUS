@@ -23,7 +23,7 @@ export default class Clickable extends IFACE {
 	*/
 	constructor(node, options = new MODEL().set({
 		delay: 200,
-		longClickDelay: 850,
+		longClickDelay: 1200,
 		stopPropagation: true
 	})) {
 		super(node, 'clickable');
