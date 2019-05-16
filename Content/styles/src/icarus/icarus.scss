@@ -674,10 +674,6 @@ html {
                     }
                 }
 
-                .btn-navheader {
-                    visibility: hidden;
-                }
-
                 > .body {
                     background-color: $color-grey-dark;
 
@@ -1577,6 +1573,7 @@ html {
     /// An Element that can contain child elements
     .container {
         @extend %wide-block;
+        @include transition($transition-default);
         box-sizing: border-box;
         /// editable header with toggle
         > header {
@@ -1598,7 +1595,7 @@ html {
                 }
             }
         }
-
+        /// Container Nav options menu and fixed navbar
         > nav {
             // Fixed Nav
             &.nav-header {
@@ -1641,49 +1638,43 @@ html {
                         text-align: justify;
                     }
                 }
-                /// A button to show hide navheader
-                .btn-navheader {
-                    @include transition($transition-default);
-                    background-color: $color-red;
-                    border-radius: .2rem;
-                    color: $color-white;
-                    float: right;
-                    font-family: $font-major;
-                    font-size: 1rem;
-                    font-weight: bold;
-                    height: 2rem;
-                    line-height: 1rem;
-                    margin: -2rem 0 .2rem;
-                    opacity: 0;
-                    overflow-x: hidden;
-                    padding: .5rem;
-                    position: relative;
-                    right: calc(0% - 2.5em);
-                    text-align: center;
-                    top: 2.2rem;
-                    width: 2em;
-
-                    &.active {
-                        background-color: $color-red-deep;
-                    }
-                }
             }
 
             &.active {
                 > .pane {
-                    /// A button that toggles the visibility of the navheader
-                    /// This button is only visible if the container body is active
-                    /// A button to show hide navheader
-                    > .btn-navheader {
-                        opacity: .8;
-                        right: 0;
-                    }
 
                     > .screen { //jumbotron
-                        > .btn-navheader {
-                            opacity: .8;
-                            right: 0;
-                        }
+                        //
+                    }
+                }
+            }
+        }
+
+        &.active {
+            background-color: $color-blue-lighter;
+            //
+        }
+
+        &.dragging {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            background-color: $color-orange;
+        }
+
+        &.drag-over {
+            background-color: $color-blue-lighter;
+            padding-top: 1rem;
+
+            &:hover {
+                background-color: $color-red;
+            }
+        }
+
+        &.modified {
+            > nav {
+                > ul {
+                    &[name='tabs'] {
+                        background-color: $color-orange;
                     }
                 }
             }
@@ -1971,10 +1962,6 @@ html {
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
-                    /// A button to show hide navheader, hidden on MAIN
-                    > .btn-navheader {
-                        display: none;
-                    }
 
                     &.focus-left {
                         //background-color: $color-black;
