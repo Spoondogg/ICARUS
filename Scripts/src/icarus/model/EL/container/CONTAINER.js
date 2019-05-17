@@ -58,19 +58,31 @@ export default class CONTAINER extends GROUP {
     addQuickAccessButtons() {
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
+            
             // Save and QuickSave button
-            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL().set({
+            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
                 label: 'SAVE',
                 icon: ICONS.SAVE,
                 name: 'btn-save'
             }));
-            $(btnSave.el).insertBefore(this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el);
             btnSave.el.addEventListener('activate', () => this.chain(() => {
                 this.el.dispatchEvent(new Modify(btnSave));
             }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
             btnSave.el.addEventListener('longclick',
                 () => this.getFactory().save(false, this, this).then(
                     () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+
+            // Refresh
+            let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+                label: 'REFRESH',
+                icon: ICONS.REFRESH,
+                name: 'btn-refresh'
+            }));
+            btnRefresh.el.addEventListener('activate', () => {
+                this.chain(() => {
+                    this.getMain().focusBody().then(() => this.refresh());
+                }).then(() => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh)));
+            });
 
             // Up and Down buttons
             [
@@ -93,6 +105,13 @@ export default class CONTAINER extends GROUP {
                         () => btn.el.dispatchEvent(new Deactivate(btn)));
                 });
             });
+
+            // Move OPTIONS tab to the end
+            let [btnOptions] = this.navheader.tabs.get('OPTIONS', 'NAVITEMICON');
+            btnOptions.addClass('tab-narrow');
+            let siblings = this.navheader.tabs.get();
+            let lastSibling = siblings[siblings.length - 1];
+            $(btnOptions.el).insertAfter(lastSibling.el);
         }
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
@@ -435,11 +454,11 @@ export default class CONTAINER extends GROUP {
         });
     }
     /** Adds 'moveUp' and 'moveDown' events to this CONTAINER
-        @param {number} dur Animation duration in milliseconds
+        param {number} dur Animation duration in milliseconds
 	    @returns {void}
 	*/
-    addMoveEvents(dur = 150) {
-        // todo
+    addMoveEvents() {
+        //
 	}
 	/** Adds default CONTAINER Event Handlers 
 	    @returns {void} 
@@ -735,8 +754,14 @@ export default class CONTAINER extends GROUP {
 		return this.chain(() => {
 			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
-			items.UP.el.onclick = () => this.moveUp();
-			items.DOWN.el.onclick = () => this.moveDown();
+            items.UP.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, 0))).then(
+                    () => items.UP.el.dispatchEvent(new Deactivate(items.UP)));
+            });
+            items.DOWN.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, 2))).then(
+                    () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN)));
+            });
 			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
 			items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
 			items.DELETE.el.onclick = () => this.disable();
