@@ -12,7 +12,7 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: #005879;;
+$color-blue: #005879;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
@@ -2070,7 +2070,13 @@ html {
 
         &.section {
             > header {
+                @include transition(background-color 200ms);
                 background-color: $color-blue-header;
+                // Animation for longclick indicator
+                &.press {
+                    @include transition(background-color 1200ms);
+                    background-color: mix($color-blue-header, $color-red);
+                }
             }
         }
 
@@ -2281,6 +2287,20 @@ html {
                         }
                     }
                 }
+
+                .tab-narrow {
+                    flex-basis: 4rem;
+                    //flex-grow: 2;
+                    > a {
+                        > .icon {
+                            line-height: 4rem;
+                        }
+                        //width: 3rem;
+                        > .label {
+                            display: none;
+                        }
+                    }
+                }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
                     //display: inline-block;
@@ -2294,9 +2314,6 @@ html {
                     }
 
                     > a {
-                        //background-color: purple;
-                        //border: 1px solid $color-white;
-                        //border-radius: .2rem;
                         display: block;
                         height: 4rem;
                         //justify-content: center;
@@ -2305,8 +2322,7 @@ html {
                         padding: 0;
                         text-align: center;
                         text-decoration: none;
-                        width: 4rem;
-
+                        //width: 4rem;
                         span {
                             display: block;
                             //float: left;
