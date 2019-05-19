@@ -1584,7 +1584,7 @@ html {
                 box-sizing: content-box;
                 color: $color-white;
                 font-weight: bold;
-                line-height: 2rem;
+                line-height: 3rem;
                 padding: .2rem .5rem;
 
                 &:hover {
@@ -1592,7 +1592,16 @@ html {
                     @include transition(background-color 400ms);
                     background-color: $color-dark-less;
                     //color: $color-secondary-neutral;
+                    &.press {
+                        @include transition(background-color 1200ms);
+                        background-color: $color-red;
+                    }
                 }
+            }
+
+            &.press {
+                @include transition(background-color 1200ms);
+                background-color: $color-red;
             }
         }
         /// Container Nav options menu and fixed navbar
@@ -2069,13 +2078,30 @@ html {
         }
 
         &.section {
+
             > header {
+
+                &.active + .body {
+                    margin-bottom: 1rem;
+                }
+
                 @include transition(background-color 200ms);
                 background-color: $color-blue-header;
                 // Animation for longclick indicator
                 &.press {
                     @include transition(background-color 1200ms);
-                    background-color: mix($color-blue-header, $color-red);
+                    background-color: $color-red;
+                }
+            }
+
+            .section {
+                > header {
+                    background-color: lighten($color-blue-header, 15%);
+
+                    &.press {
+                        @include transition(background-color 1200ms);
+                        background-color: $color-red;
+                    }
                 }
             }
         }
@@ -2083,20 +2109,19 @@ html {
         &.textblock {
             > .body {
                 &.active {
-                    //background-color:
-                    //> .pane {
                     > header {
                         &:first-of-type {
                             background-color: $color-blue-lighter;
                             //border-bottom: 4px solid $color-red-deep;
                             //color: $color-white;
                         }
+                        // Animation for longclick indicator
+                        &.press {
+                            @include transition(background-color 1200ms);
+                            background-color: $color-red;
+                        }
                     }
-                    //}
                 }
-                /*> .pane {
-                    // 
-                }*/
             }
         }
     }
