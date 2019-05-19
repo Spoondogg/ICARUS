@@ -1,6 +1,7 @@
 /** @module */
 import IFACE, { EL } from './IFACE.js';
 import Collapse from '../event/Collapse.js';
+import Expand from '../event/Expand.js';
 import Modify from '../event/Modify.js';
 /** An interface for Drag driven Events
     @see https://www.w3schools.com/jsref/event_ondrag.asp
@@ -18,27 +19,15 @@ export default class Draggable extends IFACE {
     }
     touchStart(ev, node) {
         setTimeout(() => {
-            node.dragging = true;
-            node.addClass('dragging');
             try {
-                //let cnt = node.getContainer();
-                //console.log(' - Setting ' + cnt.toString() + ' state to modified');
-                //cnt.el.dispatchEvent(new Modify(cnt));
-
-                // grab the location of touch
+                // Grab the location of touch
                 let [touchLocation] = ev.targetTouches;
                 node.touchLocation = [touchLocation.pageX, touchLocation.pageY]; // only need Y
-                //console.log(node.toString() + '.touchstart()', node.touchLocation);
-
                 // Check the height(s) of all siblings and store
                 node.touchSiblings = node.getContainer().get();
-                node.myIndex = node.touchSiblings.indexOf(node);
                 node.siblingHeights = node.touchSiblings.map((s) => Math.round(s.el.getBoundingClientRect().height));
-                //console.log('Sibling Heights', node.siblingHeights);
+                node.myIndex = node.touchSiblings.indexOf(node);
                 //console.log('Total Sibling Height', node.siblingHeights.reduce((a, b) => a + b, 0));
-
-                //node.body.el.dispatchEvent(new Collapse(node.body)); //node.body.collapse();
-                //ev.stopPropagation();
             } catch (e) {
                 console.warn('Unable to dispatch TouchStart', ev);
                 throw e;
@@ -57,12 +46,10 @@ export default class Draggable extends IFACE {
             node.dragTimer = null;
             node.touchSiblings = null;
             node.myIndex = null;
-
-            node.navheader.el.addEventListener('touchstart', (ev) => {
-                this.touchStart(ev, node);
-            }, { passive: true });
-
+            node.navheader.el.addEventListener('touchstart', (ev) => this.touchStart(ev, node), { passive: true });
             node.navheader.el.addEventListener('touchmove', (ev) => {
+                node.dragging = true;
+                node.addClass('dragging');
                 try {
                     clearTimeout(node.dragtimer);
                 } catch (e) {
@@ -70,84 +57,70 @@ export default class Draggable extends IFACE {
                 }
                 ev.preventDefault();
                 let [touchLocation] = ev.targetTouches;
-                //console.log(node.toString() + '.touchmove()');
                 node.dragtimer = window.setTimeout(() => {
+                    node.navheader.el.dispatchEvent(new Collapse(node.navheader));
                     //console.log(node.toString() + '.touchend()', [touchLocation.pageX, touchLocation.pageY]);
                     // calculate distance
-                    let dir = 'down';
-                    if (node.touchLocation[1] > touchLocation.pageY) {
-                        dir = 'up'
-                    }
+                    let dir = node.touchLocation[1] > touchLocation.pageY ? 0 : 2;
                     let diff = Math.abs(node.touchLocation[1] - touchLocation.pageY);
                     //console.log(' - Moved ' + dir + ' ' + diff + ' pixels from index[' + node.myIndex + '] at ' + node.touchLocation[1] + ' to ' + touchLocation.pageY);
                     // starting at index, determine number of objects become greater than height
-                    let objSum = 0;
+                    let objSum = 0 - node.navheader.el.getBoundingClientRect().height; // -56px is default height
                     let i = node.myIndex;
                     let j = 0;
                     while (objSum < diff) {
                         objSum += node.siblingHeights[i];
-                        if (dir === 'down') {
-                            i++;
-                        } else {
-                            i--;
-                        }
+                        i = dir === 2 ? i + 1 : i - 1;
                         j++;
                     }
                     //console.log(' - objSum: ' + j + ' objects, total height' + objSum);
                     node.touchSiblings.forEach((s) => s.removeClass('drag-over'));
-                    let targetIndex = null;
-                    if (dir === 'down') {
-                        targetIndex = node.myIndex + j;
-                    } else {
-                        targetIndex = node.myIndex - j;                        
-                    }
+                    let targetIndex = dir === 2 ? node.myIndex + j : node.myIndex - j;
                     let target = node.touchSiblings[targetIndex];
                     target.addClass('drag-over');
-
                     node.dragtimer = window.setTimeout(() => {
-                        // determine if still dragging / timeout drag
+                        // Determine if still dragging / timeout drag
                         node.dragging = false;
                         node.removeClass('dragging');
                         target.removeClass('drag-over');
-                        // insert at location
+                        // Insert at location
                         setTimeout(() => {
-                            $(node.el).animate({
-                                height: 'toggle'
-                            }, 300);
-                            setTimeout(() => $(node.el).insertBefore(target.el), 300);
-                            //console.log('Moving from index ' + node.myIndex + ' to ' + targetIndex);
-                            $(node.el).animate({
-                                height: 'toggle'
-                            }, 300);
+                            if (node.dragging === false) {
+                                $(node.el).animate({
+                                    height: 'toggle'
+                                }, 300);
+                                setTimeout(() => $(node.el).insertBefore(target.el), 300);
+                                $(node.el).animate({
+                                    height: 'toggle'
+                                }, 300);
 
-                            // Swap positions in array too see https://stackoverflow.com/a/872317/722785
-                            let k = node.myIndex;
-                            if (dir === 'down') {
-                                while (k < targetIndex) {
-                                    //console.log(' - swap ' + k + ' with ' + (k + 1));
-                                    let tmp = node.touchSiblings[k];
-                                    node.touchSiblings[k] = node.touchSiblings[k + 1];
-                                    node.touchSiblings[k + 1] = tmp;
-                                    k++;
+                                // Swap positions in array too see https://stackoverflow.com/a/872317/722785
+                                let k = node.myIndex;
+                                if (dir === 2) {
+                                    while (k < targetIndex) {
+                                        let tmp = node.touchSiblings[k];
+                                        node.touchSiblings[k] = node.touchSiblings[k + 1];
+                                        node.touchSiblings[k + 1] = tmp;
+                                        k++;
+                                    }
+                                } else {
+                                    while (k > targetIndex) {
+                                        let tmp = node.touchSiblings[k];
+                                        node.touchSiblings[k] = node.touchSiblings[k - 1];
+                                        node.touchSiblings[k - 1] = tmp;
+                                        k--;
+                                    }
                                 }
+                                node.navheader.el.dispatchEvent(new Expand(node.navheader));
+                                let container = node.getContainer();
+                                container.el.dispatchEvent(new Modify(container));
                             } else {
-                                while (k > targetIndex) {
-                                    //console.log(' - swap ' + k + ' with ' + (k - 1));
-                                    let tmp = node.touchSiblings[k];
-                                    node.touchSiblings[k] = node.touchSiblings[k - 1];
-                                    node.touchSiblings[k - 1] = tmp;
-                                    k--;
-                                }
+                                clearTimeout(node.dragtimer);
                             }
-
-                            let cnt = node.getContainer();
-                            //console.log(' - Setting ' + cnt.toString() + ' state to modified');
-                            cnt.el.dispatchEvent(new Modify(cnt));
                         }, 300);
                     }, 400);
                 }, 10);
-
-                //ev.stopPropagation();
+                ev.stopPropagation();
             }, { passive: false });
         }
 		node.el.addEventListener('dragstart', (ev) => this.onError(node.dragstart, ev, 'DragStart Failed'));
