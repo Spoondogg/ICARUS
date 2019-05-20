@@ -1,8 +1,9 @@
 /* eslint-disable max-lines */
 /** @module */
-import COLLAPSIBLE, { Collapse, Collapsible, Expand } from './COLLAPSIBLE.js';
+import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
+import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
@@ -15,7 +16,7 @@ import INPUTMODEL from '../input/INPUTMODEL.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
-import Movable from '../../../interface/Movable.js';
+import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import { STATUS } from '../../../enums/STATUS.js';
@@ -26,7 +27,6 @@ import STRING from '../../../STRING.js';
     @extends GROUP
 */
 export default class CONTAINER extends GROUP {
-	// eslint-disable max-statements */
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} element HTML element Tag
@@ -35,24 +35,84 @@ export default class CONTAINER extends GROUP {
 	*/
 	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
         super(node, element, model);
-		this.addClass('container');
+        this.addClass('container');
+        this.editableElements = [];
+        this.dragging = false;
+        /** If true, siblings are deactivated when this CONTAINER is activated */
+        this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label));
-		this.navheader.implement(new Draggable(this));
-		this.implement(new Draggable(this));
-		this.body = new COLLAPSIBLE(this, new MODEL('body'));
+		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
+        this.navheader.implement(new Draggable(this));
+        this.addQuickAccessButtons();
+        this.implement(new Draggable(this));
+        this.body = new COLLAPSIBLE(this, new MODEL('body'));
         this.body.implement(new Clickable(this.body));
-        this.btnNavHeader = new EL(this.body.pane, 'DIV', new MODEL('btn-navheader')).setInnerHTML('+');
-        this.btnNavHeader.implement(new Clickable(this.btnNavHeader));
-        this.btnNavHeader.el.addEventListener('activate', () => this.navheader.el.dispatchEvent(new Activate(this.btnNavHeader)));
-        this.btnNavHeader.el.addEventListener('deactivate', () => this.navheader.el.dispatchEvent(new Deactivate(this.btnNavHeader)));
-		this.addEvents();
+        this.addEvents();
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
+    }
+    addQuickAccessButtons() {
+        // Add quick-access buttons
+        if (this.className !== 'MAIN') {
+            
+            // Save and QuickSave button
+            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+                label: 'SAVE',
+                icon: ICONS.SAVE,
+                name: 'btn-save'
+            }));
+            btnSave.el.addEventListener('activate', () => this.chain(() => {
+                this.el.dispatchEvent(new Modify(btnSave));
+            }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+            btnSave.el.addEventListener('longclick',
+                () => this.getFactory().save(false, this, this).then(
+                    () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+
+            // Refresh
+            let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+                label: 'REFRESH',
+                icon: ICONS.REFRESH,
+                name: 'btn-refresh'
+            }));
+            btnRefresh.el.addEventListener('activate', () => {
+                this.chain(() => {
+                    this.getMain().focusBody().then(() => this.refresh());
+                }).then(() => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh)));
+            });
+
+            // Up and Down buttons
+            [
+                {
+                    label: 'UP',
+                    icon: ICONS.UP,
+                    name: 'btn-up',
+                    dir: 0
+                },
+                {
+                    label: 'DOWN',
+                    icon: ICONS.DOWN,
+                    name: 'btn-down',
+                    dir: 2
+                }
+            ].forEach((model) => {
+                let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+                btn.el.addEventListener('activate', () => {
+                    this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
+                        () => btn.el.dispatchEvent(new Deactivate(btn)));
+                });
+            });
+
+            // Move OPTIONS tab to the end
+            let [btnOptions] = this.navheader.tabs.get('OPTIONS', 'NAVITEMICON');
+            btnOptions.addClass('tab-narrow');
+            let siblings = this.navheader.tabs.get();
+            let lastSibling = siblings[siblings.length - 1];
+            $(btnOptions.el).insertAfter(lastSibling.el);
+        }
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
 	    @param {CONTAINERMODEL|MODEL} model Model
@@ -95,7 +155,6 @@ export default class CONTAINER extends GROUP {
 		*/
         this.reference = null;
 	}
-	// eslint-enable max-statements */
 	/** Generic construct method for EL/CONTAINER async actions and population
 	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} Promise Chain
@@ -311,114 +370,105 @@ export default class CONTAINER extends GROUP {
             event.stopPropagation();
             //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});*/
-	}
+    }
+    /** Dispatches a Deactivate Event on CONTAINER.body for any sibling CONTAINER Elements relative to this CONTAINER 
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateSiblingContainers() {
+        console.log(this.toString() + '.deactivateSiblingContainers()');
+        /// IF id is undefined, try comparing by attributes.name
+        return this.chain(() => {
+            let siblings = this.node.get();
+            if (this.id) {
+                siblings = siblings.filter((c) => c.id !== this.id);
+            } else if (this.name) {
+                siblings = siblings.filter((c) => c.attributes.name !== this.attributes.name);
+            }
+            siblings.forEach((s) => {
+                try {
+                    s.body.el.dispatchEvent(new Deactivate(s));
+                } catch (e) {
+                    console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
+                }
+            });
+        }, this.toString() + ' Unable to remove "active" class from siblings');
+    }
+    /** Dispatches the given Event to this element's siblings
+        Overrides EL.dispatchToSiblings
+	    @param {Event} event Event to dispatch
+	    @returns {void}
+	*/
+    dispatchToSiblings(event) {
+        //console.log(this.toString() + '.siblings()', event, this.node.getContainer().get().filter((c) => c !== this));
+        this.node.getContainer().get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+    }
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
 	*/
 	addActivateEvents() {
-        this.body.el.addEventListener('activate', () => {
+        this.el.addEventListener('activate', () => {
             console.log('Activated ' + this.toString());
-            try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }
-            /// IF id is undefined, try comparing by attributes.name
-            try {
-                let siblings = this.node.get();
-                if (this.id) {                    
-                    siblings = siblings.filter((c) => c.id !== this.id);
-                } else if (this.name) {
-                    siblings = siblings.filter((c) => c.attributes.name !== this.attributes.name);                    
-                }
-                siblings.forEach((s) => {
-                    try {
-                        s.body.el.dispatchEvent(new Deactivate(s));
-                    } catch (e) {
-                        console.log(this.toString() + ' Unable to remove "active" class from sibling', s);
-                    }
-                });
-            } catch (e) {
-                console.warn(this.toString() + '.addActivateEvents() Unable to focus body', e);
+            if (this.node.getContainer().deactivateSiblingsOnActivate) {
+                this.dispatchToSiblings(new Deactivate(this));
             }
         });
-		this.body.el.addEventListener('deactivate', () => {
+        this.el.addEventListener('deactivate', () => {
             console.log('Deactivated ' + this.toString());
-            try {
-                this.getMain().focusBody();
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    console.warn(this.toString() + '.addActivateEvents()', e);
-                    throw e;
-                }
-            }
 		});
-	}
-	/** Adds 'moveUp' and 'moveDown' events to this CONTAINER
+    }
+    /** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
 	*/
-	addMoveEvents() {
-		/** Moves this element UP one slot
-	        @returns {ThisType} This Container
-	    */
-		this.moveUp = () => {
-			console.log(this.toString() + ': Move up');
-			let n = $(this.el);
-			if (n.prev().length > 0) {
-				n.animate({
-					height: 'toggle'
-				}, 300);
-				setTimeout(() => {
-					n.prev().animate({
-						height: 'toggle'
-					}, 300).insertAfter(n).animate({
-						height: 'toggle'
-					}, 300);
-				}, 0);
-				setTimeout(() => {
-					n.animate({
-						height: 'toggle'
-					}, 300).delay(300);
-				}, 300);
-            }
-            return this;
-		};
-		/** Moves this element DOWN one slot
-		    @returns {ThisType} This Container
-		*/
-		this.moveDown = () => {
-            console.log(this.toString() + ': Move down');
-			let n = $(this.el);
-			if (n.next().length > 0) {
-				n.animate({
-					height: 'toggle'
-				}, 300);
-				setTimeout(() => {
-					n.next().animate({
-						height: 'toggle'
-					}, 300).insertBefore(n).animate({
-						height: 'toggle'
-					}, 300).delay(300);
-				}, 0);
-				setTimeout(() => {
-					n.animate({
-						height: 'toggle'
-					}, 300);
-				}, 300);
-			}
-			return this;
-		};
+    addExpandEvents() {
+        this.el.addEventListener('expand', () => {
+            console.log('Expanded ' + this.toString());
+            this.data.collapsed = -1;
+        });
+        this.el.addEventListener('collapse', () => {
+            console.log('Collapsed ' + this.toString());
+            this.data.collapsed = 1;
+        });
+    }
+    /** Adds CRUD related events for this CONTAINER
+        @param {number} delay Delay
+        @todo Implement [create, read/open/load, update/modify, remove,delete]
+        @returns {void}
+    */
+    addCrudEvents(delay = 5000) {
+        this.el.addEventListener('modify', () => {
+            //console.log(this.toString() + ' has been modified and needs to be saved...');
+            this.addClass('modified');
+            setTimeout(() => {
+                if (document.getElementsByClassName('dragging').length > 0) {
+                    //console.log('Still dragging...  Checking again in ' + delay + ' ms...');
+                    this.el.dispatchEvent(new Modify(this));
+                } else if (this.hasClass('modified') === true) {                    
+                    this.getFactory().save(true, this, this);
+                    this.removeClass('modified');
+                }
+            }, delay);
+        });
+        this.el.addEventListener('save', () => {
+            console.log(this.toString() + ' has been saved');
+            this.removeClass('modified');
+        });
+    }
+    /** Adds 'moveUp' and 'moveDown' events to this CONTAINER
+        param {number} dur Animation duration in milliseconds
+	    @returns {void}
+	*/
+    addMoveEvents() {
+        //
 	}
 	/** Adds default CONTAINER Event Handlers 
 	    @returns {void} 
 	*/
 	addEvents() {
 		this.addSelectEvents();
-		this.addActivateEvents();
-		this.addMoveEvents();
+        this.addActivateEvents();
+        this.addExpandEvents();
+        this.addMoveEvents();
+        this.addCrudEvents();
     }
 	/** Creates an editable EL for this CONTAINER
         @todo Consider making this into an ELEMENTFACTORY as this will scale quickly
@@ -433,7 +483,10 @@ export default class CONTAINER extends GROUP {
 					switch (name) {
 						case 'header':
                             this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
+                            this.header.setAttribute('draggable', 'false');
+                            this.header.implement(new Collapsible(this.header));
                             $(this.header.el).insertAfter(this.navheader.el);
+                            this.header.el.dispatchEvent(new Expand(this.header));
                             break;
                         case 'slogan':
                             this[name] = new HEADER(node, new MODEL('slogan').set('innerHTML', this.data[name]));
@@ -450,18 +503,24 @@ export default class CONTAINER extends GROUP {
 						default:
 							console.warn(name + ' does not have a valid constructor');
                     }
+                    this[name].setAttribute('name', name);
 					this[name].implement(new Clickable(this[name]));
 					this[name].el.addEventListener('select', () => this.getFactory().editProperty(name, 'data', this, this));
-					this[name].el.addEventListener('activate', () => this.body.el.dispatchEvent(new Activate(this.body)));
-                    this[name].el.addEventListener('deactivate', () => this.body.el.dispatchEvent(new Deactivate(this.body)));
+                    this[name].el.addEventListener('activate', () => {
+                        console.log('Activated editable element: ' + name);
+                        //let siblings = this.editableElements.filter((c) => c.attributes.name !== name);
+                        //console.log('Deactivating sibling editable elements', this.toString(), name, siblings);
+                        //siblings.forEach((s) => s.el.dispatchEvent(new Deactivate(this)));
+                    });
+                    this[name].el.addEventListener('deactivate', () => {
+                        console.log('Deactivated editable element: ' + name);
+                    });
 
                     if (name === 'header') {
-                        if (parseInt(this.data.collapsed) === -1) {
-                            this.header.el.dispatchEvent(new Activate(this.header));
-                        }
-                        this[name].el.addEventListener('deactivate', () => this.navheader.tab.el.dispatchEvent(new Deactivate(this[name])));
-                        this[name].el.addEventListener('activate', () => this.navheader.tab.el.dispatchEvent(new Activate(this[name])));
+                        this.addHeaderEvents();
                     }
+
+                    this.editableElements.push(this[name]);
 
 					resolve(this[name]);
 				}
@@ -470,7 +529,29 @@ export default class CONTAINER extends GROUP {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Adds specific events for CONTAINER.header (if exists)
+        @returns {void} 
+    */
+    addHeaderEvents() {
+        this.header.el.addEventListener('deactivate', () => {
+            this.navheader.tab.el.dispatchEvent(new Deactivate(this.header));
+        });
+        this.header.el.addEventListener('activate', () => {
+            this.navheader.tab.el.dispatchEvent(new Activate(this.header));
+        });
+        this.header.el.addEventListener('longclick', () => {
+            //console.log(this.toString() + '.header.longclick()');
+            if (this.getUser() === this.authorId || this.shared === 1) {
+                if (this.dragging === false) {
+                    this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+                }
+            }
+        });
+        if (parseInt(this.data.collapsed) === -1) {
+            this.header.el.dispatchEvent(new Activate(this.header));
+        }
+    }
 	/** Hides the collection of named EL(s), optionally excluding those with the specified name
 	    @param {Array<EL>} elements A collection of Elements to hide
 	    @param {string} name Optional name of element to keep visible
@@ -557,7 +638,7 @@ export default class CONTAINER extends GROUP {
             let { tab } = this.navheader;
             let a = model.data.collapsed === '1' ? tab.el.dispatchEvent(new Deactivate(tab)) : tab.el.dispatchEvent(new Activate(tab));
             let b = model.data.collapsed === '1' ? this.body.el.dispatchEvent(new Collapse(this.body)) : this.body.el.dispatchEvent(new Expand(this.body));
-            let c = model.data.showNav === '1' ? this.btnNavHeader.el.dispatchEvent(new Activate(this.btnNavHeader)) : this.btnNavHeader.el.dispatchEvent(new Deactivate(this.btnNavHeader));
+            let c = model.data.showNav === '1' ? this.navheader.el.dispatchEvent(new Activate(this.navheader)) : this.navheader.el.dispatchEvent(new Deactivate(this.navheader));
 			return [a, b, c];
 		}
 		return [false, false, false];
@@ -673,8 +754,14 @@ export default class CONTAINER extends GROUP {
 		return this.chain(() => {
 			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
 			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
-			items.UP.el.onclick = () => this.moveUp();
-			items.DOWN.el.onclick = () => this.moveDown();
+            items.UP.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, 0))).then(
+                    () => items.UP.el.dispatchEvent(new Deactivate(items.UP)));
+            });
+            items.DOWN.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, 2))).then(
+                    () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN)));
+            });
 			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
 			items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
 			items.DELETE.el.onclick = () => this.disable();
@@ -793,6 +880,7 @@ export default class CONTAINER extends GROUP {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
                         if (payload.result === 1) {
+                            this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
                             resolve(this.make(payload.model));
                         } else {
                             reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
@@ -877,9 +965,9 @@ export default class CONTAINER extends GROUP {
 		@param {string} label The name to be set
 	    @returns {void}
 	*/
-	setLabel(label) {
-		this.navheader.tab.anchor.label.setInnerHTML(label);
-		this.label = label;
+    setLabel(label) {
+		this.navheader.tab.anchor.label.setInnerHTML(label.toString());
+		this.label = label.toString();
 	}
 	/** Sets the subsection array to the given value
 		@param {Array<number>} subsections Sub Section UID array
@@ -910,11 +998,12 @@ export default class CONTAINER extends GROUP {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
-							try {
-								this.container.save(true).then(() => {
+                            try {
+								this.container.getFactory().save(true, this.container, this.container).then(() => {
 									resolve(dialog.close());
 								});
-							} catch (ee) {
+                            } catch (ee) {
+                                console.warn(this.toString() + '.removeDialog() Error', this.container);
 								reject(ee);
 							}
 						});
@@ -1063,5 +1152,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING }
+export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Toggle }
 /* eslint-enable max-lines */

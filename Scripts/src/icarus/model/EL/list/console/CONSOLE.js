@@ -39,10 +39,10 @@ export default class CONSOLE extends LIST {
         @returns {void}
     */
     flush() {
-        console.log(this.toString() + '.flush()', this.children);
+        //console.log(this.toString() + '.flush()', this.children);
         this.empty();
         this.children.length = 0;
-        console.log(this.toString() + '.flush().done()', this.children);
+        //console.log(this.toString() + '.flush().done()', this.children);
     }
 }
 export { Collapse, EL, Expand, MODEL, Switchable }
