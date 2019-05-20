@@ -414,7 +414,33 @@ export default class CONTAINER extends GROUP {
         });
         this.el.addEventListener('deactivate', () => {
             console.log('Deactivated ' + this.toString());
-		});
+        });
+        this.navheader.tab.el.addEventListener('activate', () => {
+            if (this.header) {
+                if (!this.header.hasClass('active')) {
+                    try {
+                        this.header.el.dispatchEvent(new Activate(this.navheader.tab));
+                    } catch (e) {
+                        if (!(e instanceof TypeError)) {
+                            console.warn('Unable to activate header', e);
+                        }
+                    }
+                }
+            }
+        });
+        this.navheader.tab.el.addEventListener('deactivate', () => {
+            if (this.header) {
+                if (this.header.hasClass('active')) {
+                    try {
+                        this.header.el.dispatchEvent(new Deactivate(this.navheader.tab));
+                    } catch (e) {
+                        if (!(e instanceof TypeError)) {
+                            console.warn('Unable to deactivate header', e);
+                        }
+                    }
+                }
+            }
+        });
     }
     /** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
@@ -485,7 +511,7 @@ export default class CONTAINER extends GROUP {
                             this.header = new HEADER(node, new MODEL().set('innerHTML', this.data.header));
                             this.header.setAttribute('draggable', 'false');
                             this.header.implement(new Collapsible(this.header));
-                            $(this.header.el).insertAfter(this.navheader.el);
+                            $(this.header.el).insertBefore(this.navheader.el);
                             this.header.el.dispatchEvent(new Expand(this.header));
                             break;
                         case 'slogan':
@@ -681,6 +707,7 @@ export default class CONTAINER extends GROUP {
 		return this.chain(
 			() => this.getLoader().log(20, this.toString() + '.refresh()').then(
                 (loader) => {
+                    this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab));
                     this.getPayload(this.getId(), this.className).then(
                         (payload) => {
                             let tempStyleDisplay = this.el.style.display;
@@ -698,7 +725,9 @@ export default class CONTAINER extends GROUP {
                                     () => this.make(payload.model).then(() => {
                                         this.el.style.display = tempStyleDisplay;
                                         //console.log(this.toString() + '.refresh().results', results);
-                                        loader.log(100)
+                                        loader.log(100).then(() => {
+                                            this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
+                                        })
                                     })
                                 );
                             });
