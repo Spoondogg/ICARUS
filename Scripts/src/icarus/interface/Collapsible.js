@@ -2,6 +2,7 @@
 import IFACE, { EL } from './IFACE.js';
 import Collapse from '../event/Collapse.js';
 import Expand from '../event/Expand.js';
+import Toggle from '../event/Toggle.js';
 /** An interface for Collapse driven Events
     @class
     @extends IFACE
@@ -21,7 +22,7 @@ export default class Collapsible extends IFACE {
 	addListeners(node) {
 		node.el.addEventListener('collapse', () => node.collapse());
 		node.el.addEventListener('expand', () => node.expand());
-		node.el.addEventListener('toggle', () => this.toggle('in', new Expand(node), new Collapse(node)));
+		node.el.addEventListener('toggle', () => node.toggle());
 	}
 	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
@@ -35,7 +36,11 @@ export default class Collapsible extends IFACE {
 		/** Expands the node
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.expand = () => node.chain(() => $(node.el).collapse('show'));
+        this.methods.expand = () => node.chain(() => $(node.el).collapse('show'));
+        /** Toggles the node
+            @returns {Promise<ThisType>} Promise Chain
+        */
+        this.methods.toggle = () => this.toggle('in', new Expand(node), new Collapse(node));
 	}
 }
-export { Collapse, EL, Expand, IFACE }
+export { Collapse, EL, Expand, IFACE, Toggle }

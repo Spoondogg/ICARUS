@@ -163,6 +163,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
+    <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
     <Compile Include="Controllers\WordController.cs" />
@@ -531,6 +532,7 @@
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
     <Compile Include="Models\Icarus\Elements\BANNER.cs" />
     <Compile Include="Models\Icarus\Elements\HEADER.cs" />
+    <Compile Include="Models\Icarus\Form\FORMTEXTAREA.cs" />
     <Compile Include="Models\Icarus\Form\FORMINPUT.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
@@ -620,6 +622,11 @@
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
+    <Content Include="Scripts\src\icarus\event\Move.js" />
+    <Content Include="Scripts\src\icarus\event\Modify.js" />
+    <Content Include="Scripts\src\icarus\event\Flip.js" />
+    <Content Include="Scripts\src\icarus\event\Toggle.js" />
+    <Content Include="Scripts\src\icarus\event\LongClick.js" />
     <Content Include="Scripts\src\icarus\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
     <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
