@@ -72,7 +72,12 @@ export default class FORM extends CONTAINER {
 			type,
 			hidden,
 			id
-		} = model;
+        } = model;
+        if (typeof model.data !== 'undefined') {
+            console.log('WOOT', model);
+        } else {
+            console.log('Look to pass the CONTAINER model.data through here');
+        }
         return new Promise((resolve, reject) => FORM.createEmptyForm(node, hidden).then((form) => {
             form.setAction('FORMPOST/SET');
             try {

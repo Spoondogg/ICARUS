@@ -32,6 +32,7 @@ export const ICONS = {
 	FORM: 'glyphicon-list-alt',
 	FORMELEMENTGROUP: 'glyphicon-tasks',
 	FORMINPUT: 'glyphicon-log-in',
+	FORMTEXTAREA: 'glyphicon-align-justify',
     FULLSCREEN: 'glyphicon-new-window',
     HISTORY: 'glyphicon-record',
 	HOME: 'glyphicon-home',

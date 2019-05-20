@@ -19,7 +19,8 @@ export default class MAIN extends CONTAINER {
     */
 	constructor(model) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
-		this.addClass('main');
+        this.addClass('main');
+        this.deactivateSiblingsOnActivate = false;
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
