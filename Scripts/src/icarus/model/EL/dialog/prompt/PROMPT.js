@@ -20,7 +20,8 @@ export default class PROMPT extends DIALOG {
 	    @param {FormModel} model FORM
 	    @returns {Promise<FORM>} Promise to return a FORM
 	*/
-	createForm(model = new MODEL()) {
+    createForm(model = new MODEL()) {
+        console.log('PROMPT.createForm()', model);
 		return new Promise((resolve, reject) => {
 			try {
 				if (model.formtype === 'FORMPOST') {
@@ -34,7 +35,6 @@ export default class PROMPT extends DIALOG {
 				console.error('PROMPT.createForm() Failed to create Form', model, this);
 				reject(e)
 			}
-			//});
 		});
 	}
 	/** Sets required defaults for a PROMPT FORM
