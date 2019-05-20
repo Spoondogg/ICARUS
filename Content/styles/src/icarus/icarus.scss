@@ -1577,6 +1577,10 @@ html {
         box-sizing: border-box;
         /// editable header with toggle
         > header {
+            position: sticky;
+            top: 0;
+            z-index: #{$z-top - 1};
+
             &:first-of-type {
                 background-color: $color-dark;
                 border-bottom: 2px solid $color-darker;
@@ -1610,6 +1614,9 @@ html {
             &.nav-header {
                 border-bottom: 1px solid $color-transparent;
                 box-shadow: 0 0 0 0 $color-transparent;
+                position: sticky;
+                top: 0;
+                z-index: #{$z-top - 1};
 
                 &.in {
                     border-bottom: 1px solid $color-shadow-light;
@@ -1714,6 +1721,11 @@ html {
                     }
                     /// Collapsible
                     > .header {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 0;
+                        z-index: #{$z-top - 1};
+
                         > .pane {
                             > .author,
                             .date-created {
@@ -2081,7 +2093,7 @@ html {
 
             > header {
 
-                &.active + .body {
+                &.active + .nav-header + .body {
                     margin-bottom: 1rem;
                 }
 
