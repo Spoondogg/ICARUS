@@ -1,5 +1,6 @@
 /** @module */
 import IFACE, { EL } from './IFACE.js';
+import Move from '../event/Move.js';
 /** An interface for Move driven Events
     @class
     @extends IFACE
@@ -13,91 +14,107 @@ export default class Movable extends IFACE {
 	}
 	/** Adds listeners where applicable
 	    @param {EL} node Element to append listeners
+        @param { number } [dur] Animation duration in milliseconds)
 	    @returns {void}
 	*/
-	addListeners(node) {
-		node.el.addEventListener('up', () => node.up());
-		node.el.addEventListener('down', () => node.down());
-		//node.el.addEventListener('left', () => node.left());
-		//node.el.addEventListener('right', () => node.right());
-	}
+    addListeners(node, dur = 150) {
+        node.el.addEventListener('move', (ev) => {
+            if (ev.detail.direction === 2) {
+                //this.onError(node.move, ev, 'MoveUp Failed');
+                node.moveDown(node, dur);
+            } else {
+                node.moveUp(node, dur);
+            }
+        });
+    }
 	/** Appends Interface methods to class that implements them
 	    @param {EL} node Element to implement methods
+        @param {number} [dur] Animation duration in milliseconds
 	    @returns {void}
 	*/
-	setMethods(node) {
+	setMethods(node, dur = 150) {
 		/** Moves the element up
-	        @returns {Promise<ThisType>} Promise Chain
+	        @returns {void}
 	    */
-		this.methods.up = () => node.chain(() => console.log('Move Up', node));
+        this.methods.moveUp = () => this.move(node, 0, dur);
 		/** Moves the element down
-		    @returns {Promise<ThisType>} Promise Chain
+		    @returns {void}
 		*/
-		this.methods.down = () => node.chain(() => console.log('Move Down', node));
-	}
-	/** Moves this element UP one slot
-	    @returns {ThisType} This Container
+        this.methods.moveDown = () => this.move(node, 2, dur);
+    }
+    /** Checks for the existence of a sibling to this node in the DOM, in the given direction
+        @todo Eliminate JQuery dependency and instead use css animations and classes to indicate state
+        @param {EL} node Element to implement methods
+        @param {number} direction Move Direction (0=up,1=right,2=down,3=left)
+	    @returns {boolean} True if sibling exists
 	*/
-	moveUp() {
-		let node = $(this.el);
-		if (node.prev().length > 0) {
-			node.animate({
-				height: 'toggle'
-			}, 300);
-			setTimeout(() => {
-				node.prev().animate({
-					height: 'toggle'
-				}, 300).insertAfter(node).animate({
-					height: 'toggle'
-				}, 300);
-			}, 0);
-			setTimeout(() => {
-				node.animate({
-					height: 'toggle'
-				}, 300).delay(300);
-			}, 300);
-		}
-		return this;
-	}
-	/** Moves this element DOWN one slot
-	    @returns {ThisType} This Container
-	*/
-	moveDown() {
-		let node = $(this.el);
-		if (node.next().length > 0) {
-			node.animate({
-				height: 'toggle'
-			}, 300);
-			setTimeout(() => {
-				node.next().animate({
-					height: 'toggle'
-				}, 300).insertBefore(node).animate({
-					height: 'toggle'
-				}, 300).delay(300);
-			}, 0);
-			setTimeout(() => {
-				node.animate({
-					height: 'toggle'
-				}, 300);
-			}, 300);
-		}
-		return this;
-	}
-	/** Moves the Container up one slot in the DOM
+    checkForSibling(node, direction) {
+        let n = $(node.el);
+        let hasSibling = false;
+        switch (direction) {
+            case 0: // up
+                hasSibling = n.prev().length > 0;
+                break;
+
+            case 1: // right
+            case 2: // down
+                hasSibling = n.next().length > 0;
+                break;
+
+            case 3: // left
+                break
+
+            default:
+                console.warn(node.toString() + '.move(), No direction specified');
+        }
+        return hasSibling;
+    }
+	/** Moves this element in the specified direction amongst its siblings
+        @param {EL} node Element to implement methods
+        @param {number} direction Move Direction (0=up,1=right,2=down,3=left)
+        @param {number} [dur] Animation duration in milliseconds
 	    @returns {void}
 	*/
-	up() {
-		this.navheader.toggle();
-		this.navfooter.toggle();
-		this.moveUp();
-	}
-	/** Moves the Container down one slot in the DOM
-	    @returns {void}
-	*/
-	down() {
-		this.navheader.toggle();
-		this.navfooter.toggle();
-		this.moveDown();
+    move(node, direction = 0, dur = 150) {
+        console.log(node.toString() + '.moveUp(' + dur + ')');
+        let nA = $(node.el);
+        let hasSibling = this.checkForSibling(node, direction);
+        if (hasSibling) {
+            // Get next/prev sibling
+            let siblings = node.getContainer().get();
+            let myIndex = siblings.indexOf(node);
+            let siblingIndex = direction === 0 ? myIndex - 1 : myIndex + 1;
+            let sibling = siblings[siblingIndex];
+            let nB = $(sibling.el);
+            // Collapse element and sibling
+            [nA, nB].forEach((n) => n.animate({
+                height: 'toggle'
+            }, dur));
+            // Swap positions
+            setTimeout(() => {
+                // in the DOM...
+                switch (direction) {
+                    case 0:
+                        nB.insertAfter(node.el);
+                        break;
+                    case 2:
+                        nB.insertBefore(node.el);
+                        break;
+                    default:
+                        console.warn('Unrecognized direction', direction);
+                }
+                // Swap positions in array too see https://stackoverflow.com/a/872317/722785
+                let tmp = siblings[siblingIndex];
+                siblings[siblingIndex] = siblings[myIndex];
+                siblings[myIndex] = tmp;
+                // Restore element and sibling
+                setTimeout(() => {
+                    [nA, nB].forEach((n) => n.animate({
+                        height: 'toggle'
+                    }, dur));
+                }, dur);
+            }, dur);
+        }
 	}
 }
-export { EL, IFACE }
+export { EL, IFACE, Move }

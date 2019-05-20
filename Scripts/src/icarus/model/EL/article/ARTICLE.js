@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { COLLAPSIBLE, Expand, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { Activate, COLLAPSIBLE, Clickable, Deactivate, Expand, MODEL, Toggle } from '../container/CONTAINER.js';
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class
@@ -11,8 +11,9 @@ export default class ARTICLE extends CONTAINER {
 	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
-		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION']);
+		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION', 'TEXTBLOCK']);
         this.addClass('article');
+        this.deactivateSiblingsOnActivate = false;
         this.containerHeader = new COLLAPSIBLE(this.body.pane, new MODEL('header'));
 	}
 	constructElements() {
@@ -22,6 +23,13 @@ export default class ARTICLE extends CONTAINER {
 				let date = this.getDateCreated();
                 this.articleDate = new SPAN(this.containerHeader.pane, new MODEL('date-created').set('innerHTML', date.date));
                 this.articleAuthor = new SPAN(this.containerHeader.pane, new MODEL('author').set('innerHTML', this.authorId));
+                this.articleAuthor.implement(new Clickable(this.articleAuthor));
+                this.articleAuthor.el.addEventListener('longclick', () => {
+                    if (this.getUser() === this.authorId || this.shared === 1) {
+                        this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+                    }
+                });
+
                 if (parseInt(this.data.showHeader) === 1) {
                     this.containerHeader.el.dispatchEvent(new Expand(this.containerHeader));
                 }

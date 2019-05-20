@@ -48,7 +48,10 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 		let id = this.attributes.value;
 		if (id > 0) {
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-            btnEdit.el.onclick = () => this.createForm(className, type, id, this.input);
+            btnEdit.el.onclick = () => {
+                console.log('Create FORMPOST FORM for ' + id);
+                this.createForm(className, type, id, this.input);
+            }
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
         btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
@@ -59,10 +62,11 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @param {UId} [id] FormPost Id to edit
-	    @param {INPUT} inputNode The input that spawned this DIALOG
+	    @param {INPUT} [inputNode] The input that spawned this DIALOG
+        @param {MODEL} [model] Optional MODEL to use for population
 	    @returns {Promise<PROMPT>} Promise to create a new FormPost DIALOG and return it
 	*/
-	createForm(className, type, id = 0, inputNode = null) {
+	createForm(className, type, id = 0, inputNode = null, model = new MODEL()) {
 		return new Promise((resolve, reject) => {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
@@ -71,7 +75,9 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 					container,
                     caller: this,
                     label: 'Create FormPost Form'
-				})).createForm(new MODEL().set({
+                })).createForm(new MODEL().set({
+                    data: model.data,
+                    //attributes: model.attributes,
 					formtype: 'FORMPOST',
 					className,
 					type,

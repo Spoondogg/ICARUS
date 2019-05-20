@@ -12,7 +12,7 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: #005879;;
+$color-blue: #005879;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
@@ -672,10 +672,6 @@ html {
                     &.hiding {
                         animation: slideOutRight $transition-speed $transition-motion;
                     }
-                }
-
-                .btn-navheader {
-                    visibility: hidden;
                 }
 
                 > .body {
@@ -1577,6 +1573,7 @@ html {
     /// An Element that can contain child elements
     .container {
         @extend %wide-block;
+        @include transition($transition-default);
         box-sizing: border-box;
         /// editable header with toggle
         > header {
@@ -1587,7 +1584,7 @@ html {
                 box-sizing: content-box;
                 color: $color-white;
                 font-weight: bold;
-                line-height: 2rem;
+                line-height: 3rem;
                 padding: .2rem .5rem;
 
                 &:hover {
@@ -1595,10 +1592,19 @@ html {
                     @include transition(background-color 400ms);
                     background-color: $color-dark-less;
                     //color: $color-secondary-neutral;
+                    &.press {
+                        @include transition(background-color 1200ms);
+                        background-color: $color-red;
+                    }
                 }
             }
-        }
 
+            &.press {
+                @include transition(background-color 1200ms);
+                background-color: $color-red;
+            }
+        }
+        /// Container Nav options menu and fixed navbar
         > nav {
             // Fixed Nav
             &.nav-header {
@@ -1641,49 +1647,43 @@ html {
                         text-align: justify;
                     }
                 }
-                /// A button to show hide navheader
-                .btn-navheader {
-                    @include transition($transition-default);
-                    background-color: $color-red;
-                    border-radius: .2rem;
-                    color: $color-white;
-                    float: right;
-                    font-family: $font-major;
-                    font-size: 1rem;
-                    font-weight: bold;
-                    height: 2rem;
-                    line-height: 1rem;
-                    margin: -2rem 0 .2rem;
-                    opacity: 0;
-                    overflow-x: hidden;
-                    padding: .5rem;
-                    position: relative;
-                    right: calc(0% - 2.5em);
-                    text-align: center;
-                    top: 2.2rem;
-                    width: 2em;
-
-                    &.active {
-                        background-color: $color-red-deep;
-                    }
-                }
             }
 
             &.active {
                 > .pane {
-                    /// A button that toggles the visibility of the navheader
-                    /// This button is only visible if the container body is active
-                    /// A button to show hide navheader
-                    > .btn-navheader {
-                        opacity: .8;
-                        right: 0;
-                    }
 
                     > .screen { //jumbotron
-                        > .btn-navheader {
-                            opacity: .8;
-                            right: 0;
-                        }
+                        //
+                    }
+                }
+            }
+        }
+
+        &.active {
+            background-color: $color-blue-lighter;
+            //
+        }
+
+        &.dragging {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            background-color: $color-orange;
+        }
+
+        &.drag-over {
+            background-color: $color-blue-lighter;
+            padding-top: 1rem;
+
+            &:hover {
+                background-color: $color-red;
+            }
+        }
+
+        &.modified {
+            > nav {
+                > ul {
+                    &[name='tabs'] {
+                        background-color: $color-orange;
                     }
                 }
             }
@@ -1971,10 +1971,6 @@ html {
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
-                    /// A button to show hide navheader, hidden on MAIN
-                    > .btn-navheader {
-                        display: none;
-                    }
 
                     &.focus-left {
                         //background-color: $color-black;
@@ -2082,28 +2078,50 @@ html {
         }
 
         &.section {
+
             > header {
+
+                &.active + .body {
+                    margin-bottom: 1rem;
+                }
+
+                @include transition(background-color 200ms);
                 background-color: $color-blue-header;
+                // Animation for longclick indicator
+                &.press {
+                    @include transition(background-color 1200ms);
+                    background-color: $color-red;
+                }
+            }
+
+            .section {
+                > header {
+                    background-color: lighten($color-blue-header, 15%);
+
+                    &.press {
+                        @include transition(background-color 1200ms);
+                        background-color: $color-red;
+                    }
+                }
             }
         }
 
         &.textblock {
             > .body {
                 &.active {
-                    //background-color:
-                    //> .pane {
                     > header {
                         &:first-of-type {
                             background-color: $color-blue-lighter;
                             //border-bottom: 4px solid $color-red-deep;
                             //color: $color-white;
                         }
+                        // Animation for longclick indicator
+                        &.press {
+                            @include transition(background-color 1200ms);
+                            background-color: $color-red;
+                        }
                     }
-                    //}
                 }
-                /*> .pane {
-                    // 
-                }*/
             }
         }
     }
@@ -2294,6 +2312,20 @@ html {
                         }
                     }
                 }
+
+                .tab-narrow {
+                    flex-basis: 4rem;
+                    //flex-grow: 2;
+                    > a {
+                        > .icon {
+                            line-height: 4rem;
+                        }
+                        //width: 3rem;
+                        > .label {
+                            display: none;
+                        }
+                    }
+                }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
                     //display: inline-block;
@@ -2307,9 +2339,6 @@ html {
                     }
 
                     > a {
-                        //background-color: purple;
-                        //border: 1px solid $color-white;
-                        //border-radius: .2rem;
                         display: block;
                         height: 4rem;
                         //justify-content: center;
@@ -2318,8 +2347,7 @@ html {
                         padding: 0;
                         text-align: center;
                         text-decoration: none;
-                        width: 4rem;
-
+                        //width: 4rem;
                         span {
                             display: block;
                             //float: left;
