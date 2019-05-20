@@ -39,7 +39,73 @@ export default class MAIN extends CONTAINER {
         this.expandMain();
         /** Add factories */
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
-	}
+        this.addRefreshScroll();
+    }
+    /** Scroll to refresh
+        @see https://dev.to/vijitail/pull-to-refresh-animation-with-vanilla-javascript-17oc
+        @returns {void}
+    */
+    addRefreshScroll() {
+        document.addEventListener('touchstart', (ev) => this.swipeStart(ev), false);
+        document.addEventListener('touchmove', (ev) => this.swipe(ev), false);
+        document.addEventListener('touchend', (ev) => this.swipeEnd(ev), false);
+        this.pStart = {
+            x: 0,
+            y: 0
+        };
+        this.pCurrent = {
+            x: 0,
+            y: 0
+        };
+        //let main = this.el;
+        this.isLoading = false;
+    }
+    /** In the swipeStart() function, we’ll capture the touch coordinates 
+        and assign it to the pStart object.
+        @param {Event} ev Touch Event
+        @returns {void}
+    */
+    swipeStart(ev) {
+        if (typeof ev.targetTouches === 'undefined') {
+            this.pStart.x = ev.screenX;
+            this.pStart.y = ev.screenY
+        } else {
+            let [touch] = ev.targetTouches;
+            this.pStart.x = touch.screenX;
+            this.pStart.y = touch.screenY;
+        }
+    }
+    swipe(ev) {
+        if (typeof ev.changedTouches !== 'undefined') {
+            let [touch] = ev.changedTouches;
+            this.pCurrent.x = touch.screenX;
+            this.pCurrent.y = touch.screenY;
+        } else {
+            this.pCurrent.x = ev.screenX;
+            this.pCurrent.y = ev.screenY;
+        }
+        let changeY = this.pStart.y - this.pCurrent.y;
+        console.log('changeY', changeY, this.body.pane.el.scrollTop);
+        //const rotation = this.changeY < 
+        if (this.body.pane.el.scrollTop === 0) {
+            if (changeY < -100) {
+                console.warn('Scroll triggered a refresh!');
+                this.isLoading = true;
+                alert('Refreshing...');
+                //window.navigator.vibrate(200);
+                this.refresh();
+            }
+        }
+    }
+    swipeEnd(ev) {
+        if (this.body.pane.el.scrollTop === 0 && !this.isLoading) {
+            this.isLoading = true;
+            //console.log('REFRESH!!!');
+        } else {
+            this.isLoading = false;
+
+        }
+    }
 	constructElements() {
 		if (this.dataId > 0) {
 			document.title = this.data.title;
