@@ -141,7 +141,7 @@ export default class FACTORY {
                     new PROMPT(new DIALOGMODEL(new MODEL(), {
                         caller,
                         container,
-                        label: 'Edit ' + container.toString + '[' + type + '].' + name
+                        label: 'Edit ' + container.toString() + '[' + type + '].' + name
                     })).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
                         className: container.className,
@@ -197,7 +197,7 @@ export default class FACTORY {
                         });
                     });
                 } else {
-                    console.warn(container.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+                    console.warn(container.toString() + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
                     resolve(false);
                 }
             } catch (e) {
