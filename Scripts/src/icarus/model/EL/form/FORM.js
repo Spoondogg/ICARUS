@@ -59,7 +59,6 @@ export default class FORM extends CONTAINER {
     }
 	/** Adds a single FIELDSET and FORMELEMENTGROUP as children of this FORM and
         populates based on the given FORMPOST MODEL
-        @description This is a description
 	    @param {EL} node Parent node
         @param {FormPostFormModel} model Model
 	    @returns {Promise<FORM>} An empty form container
