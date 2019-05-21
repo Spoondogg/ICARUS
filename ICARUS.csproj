@@ -166,6 +166,13 @@
     <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
+    <Compile Include="Controllers\TDController.cs" />
+    <Compile Include="Controllers\THController.cs" />
+    <Compile Include="Controllers\TRController.cs" />
+    <Compile Include="Controllers\TFootController.cs" />
+    <Compile Include="Controllers\TBodyController.cs" />
+    <Compile Include="Controllers\THeadController.cs" />
+    <Compile Include="Controllers\TableController.cs" />
     <Compile Include="Controllers\WordController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
@@ -519,6 +526,13 @@
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
     <Compile Include="Models\Icarus\Elements\IMAGEGALLERY.cs" />
+    <Compile Include="Models\Icarus\Elements\TH.cs" />
+    <Compile Include="Models\Icarus\Elements\TD.cs" />
+    <Compile Include="Models\Icarus\Elements\TR.cs" />
+    <Compile Include="Models\Icarus\Elements\TFOOT.cs" />
+    <Compile Include="Models\Icarus\Elements\TBODY.cs" />
+    <Compile Include="Models\Icarus\Elements\THEAD.cs" />
+    <Compile Include="Models\Icarus\Elements\TABLE.cs" />
     <Compile Include="Models\Icarus\Elements\SENTENCE.cs" />
     <Compile Include="Models\Icarus\Elements\WORD.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
