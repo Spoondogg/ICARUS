@@ -76,13 +76,13 @@ export default class MAIN extends CONTAINER {
         }
     }
     swipe(ev) {
-        if (typeof ev.changedTouches !== 'undefined') {
+        if (typeof ev.changedTouches === 'undefined') {
+            this.pCurrent.x = ev.screenX;
+            this.pCurrent.y = ev.screenY;
+        } else {
             let [touch] = ev.changedTouches;
             this.pCurrent.x = touch.screenX;
             this.pCurrent.y = touch.screenY;
-        } else {
-            this.pCurrent.x = ev.screenX;
-            this.pCurrent.y = ev.screenY;
         }
         let changeY = this.pStart.y - this.pCurrent.y;
         console.log('changeY', changeY, this.body.pane.el.scrollTop);
