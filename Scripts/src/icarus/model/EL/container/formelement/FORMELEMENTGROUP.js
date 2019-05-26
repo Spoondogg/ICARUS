@@ -21,7 +21,7 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	}
 	constructElements() {
 		if (this.dataId > 0) {
-			this.createEditableElement('header', this.body.pane);
+            this.createEditableElement('header', this.childLocation);
 		}
 	}
 	/** Adds the given array of FORMELEMENT(s) to this group
@@ -42,28 +42,28 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 	    @returns {FORMPOSTINPUT} A FORMPOSTINPUT
 	*/
     addFormPostInput(model) {
-        return this.addChild(new FORMPOSTINPUT(this.body.pane, model));
+        return this.addChild(new FORMPOSTINPUT(this.childLocation, model));
     }
     /** Constructs a FORMTEXTAREA for this FORMELEMENTGROUP
 	    @param {MODEL} model Model
 	    @returns {FORMTEXTAREA} A FORMTEXTAREA
 	*/
     addFormTextArea(model) {
-        return this.addChild(new FORMTEXTAREA(this.body.pane, model));
+        return this.addChild(new FORMTEXTAREA(this.childLocation, model));
     }
     /** Constructs a FORMSELECT for this FORMELEMENTGROUP
 	    @param {MODEL} model Model
 	    @returns {FORMSELECT} A FORMSELECT
 	*/
     addFormSelect(model) {
-        return this.addChild(new FORMSELECT(this.body.pane, model));
+        return this.addChild(new FORMSELECT(this.childLocation, model));
     }
     /** Constructs a FORMINPUT for this FORMELEMENTGROUP
 	    @param {MODEL} model Model
 	    @returns {FORMINPUT} A FORMINPUT
 	*/
     addFormInput(model) {
-        return this.addChild(new FORMINPUT(this.body.pane, model));
+        return this.addChild(new FORMINPUT(this.childLocation, model));
     }
 	/** Adds the given FORMELEMENT to this group
 	    @param {MODEL} model A FORM INPUT MODEL
