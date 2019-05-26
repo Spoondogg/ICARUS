@@ -14,12 +14,12 @@ export default class ARTICLE extends CONTAINER {
 		super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION', 'TEXTBLOCK', 'TABLE']);
         this.addClass('article');
         this.deactivateSiblingsOnActivate = false;
-        this.containerHeader = new COLLAPSIBLE(this.body.pane, new MODEL('header'));
+        this.containerHeader = new COLLAPSIBLE(this.childLocation, 'DIV', new MODEL('header'));
 	}
 	constructElements() {
 		return this.chain(() => {
             if (this.dataId > 0) {                
-				this.createEditableElement('header', this.body.pane);
+                this.createEditableElement('header', this.childLocation);
 				let date = this.getDateCreated();
                 this.articleDate = new SPAN(this.containerHeader.pane, new MODEL('date-created').set('innerHTML', date.date));
                 this.articleAuthor = new SPAN(this.containerHeader.pane, new MODEL('author').set('innerHTML', this.authorId));

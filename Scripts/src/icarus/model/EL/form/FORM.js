@@ -36,8 +36,8 @@ export default class FORM extends CONTAINER {
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
-                this.createEditableElement('p', this.body.pane);
+                this.createEditableElement('header', this.childLocation);
+                this.createEditableElement('p', this.childLocation);
             } else {
                 this.ifEmpty();
             }
@@ -48,7 +48,7 @@ export default class FORM extends CONTAINER {
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
 	addFieldset(model) {
-		return this.addChild(new FIELDSET(this.body.pane, model));
+        return this.addChild(new FIELDSET(this.childLocation, model));
     }
     /** Returns an array of FIELDSET(s), optionally filtered to the specified name
         @param {string} [name] Optional name to filter search

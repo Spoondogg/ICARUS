@@ -19,17 +19,17 @@ export default class CALLOUT extends CONTAINER {
 		return this.chain(() => {
 			if (this.dataId > 0) {
 				if (this.data.icon) {
-					this.icon = new GLYPHICON(this.body.pane, this.data.icon);
+                    this.icon = new GLYPHICON(this.childLocation, this.data.icon);
 				}
 				if (this.data.header) {
-					this.createEditableElement('header', this.body.pane).then((header) => {
+                    this.createEditableElement('header', this.childLocation).then((header) => {
 						if (this.data.align) {
 							header.el.setAttribute('style', 'text-align:' + this.data.align + ';');
 						}
 					});
 				}
 				if (this.data.p) {
-					this.createEditableElement('p', this.body.pane);
+                    this.createEditableElement('p', this.childLocation);
 				}
 			}
 		});

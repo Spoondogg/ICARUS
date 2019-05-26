@@ -33,7 +33,8 @@ export default class CONTAINER extends GROUP {
 	    @param {MODEL} model Model
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
+    constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
+        //console.log(element + '.model', model);
         super(node, element, model);
         this.addClass('container');
         this.editableElements = [];
@@ -45,15 +46,28 @@ export default class CONTAINER extends GROUP {
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
-        this.implement(new Draggable(this));
-        this.body = new COLLAPSIBLE(this, new MODEL('body'));
+        this.implement(new Draggable(this));        
+        this.body = new COLLAPSIBLE(this, this.getBodyElement(model), new MODEL('body'));
         this.body.implement(new Clickable(this.body));
+        /** Represents the location where children of this container are instantiated
+            @type {EL}
+        */
+        this.childLocation = this.body.pane;
         this.addEvents();
 		// Cascade state
 		// Add Navbar Items
 		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
+    }
+    getBodyElement(model) {
+        let bodyElement = 'DIV';
+        try {
+            bodyElement = model.body.element;
+        } catch (e) {
+            //console.log('body.element does not exist for this model');
+        }
+        return bodyElement;
     }
     addQuickAccessButtons() {
         // Add quick-access buttons
@@ -179,9 +193,9 @@ export default class CONTAINER extends GROUP {
 	*/
     get(name = null, className = null) {
         if (name === null && className === null) {
-            return this.body.pane.children;
+            return this.childLocation.children;
         }
-        return this.body.pane.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+        return this.childLocation.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -329,7 +343,7 @@ export default class CONTAINER extends GROUP {
                 thisContainerData.forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
             }
 		} catch (e) {
-			console.warn('Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
+			console.warn('Missing DATAELEMENTS.js reference.  Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
 		}
 	}
 	/** If the Container has no children, display a button to create an element
@@ -340,7 +354,7 @@ export default class CONTAINER extends GROUP {
 		return Promise.resolve(this);
 		/*return this.chain(() => {
             if (this.get().length === 0) {
-				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+				let btnAddElement = new EL(this.childLocation, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
 				btnAddElement.btn.el.onclick = () => {
 					this.navheader.expand().then(
@@ -721,7 +735,7 @@ export default class CONTAINER extends GROUP {
                                 }
                             });
                             Promise.all(promises).then(() => { //results
-                                this.body.pane.empty().then(
+                                this.childLocation.empty().then(
                                     () => this.make(payload.model).then(() => {
                                         this.el.style.display = tempStyleDisplay;
                                         //console.log(this.toString() + '.refresh().results', results);
@@ -827,7 +841,7 @@ export default class CONTAINER extends GROUP {
 					}
 					this.addConstructor(className, (model) => {
 						try {
-							resolve(this.getFactory().get(this.body.pane, className, model.id || 0));
+                            resolve(this.getFactory().get(this.childLocation, className, model.id || 0));
 						} catch (ee) {
 							console.warn('Unable to retrieve factory for Container Case', ee);
 							reject(ee);
@@ -947,12 +961,12 @@ export default class CONTAINER extends GROUP {
 	getSubSections() {
         try {
             //return this.get().filter((s) => s.id > 0).map((ss) => ss.id); // MODEL
-            return [...this.body.pane.el.children].filter((s) => s.id > 0).map((ss) => ss.id); // EL.el from HTMLElementCollection
+            return [...this.childLocation.el.children].filter((s) => s.id > 0).map((ss) => ss.id); // EL.el from HTMLElementCollection
         } catch (e) {
             console.warn(this.toString() + '.getSubSections()', e);
             return [0];
         }        
-	}
+    }
 	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container class
 	    @throws Will throw an error 
