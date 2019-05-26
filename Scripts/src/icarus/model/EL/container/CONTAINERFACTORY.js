@@ -3,6 +3,7 @@ import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
+//import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
@@ -17,6 +18,7 @@ import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import SECTION from '../section/SECTION.js';
+import TABLE from '../table/TABLE.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 /** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
@@ -88,6 +90,10 @@ export default class CONTAINERFACTORY extends FACTORY {
                 break;
             case 'SPAN':
                 element = new SPAN(span, model);
+                break;
+            case 'TABLE':
+                element = new TABLE(span, model);
+                element.setFactory(this.factories.get('TABLEFACTORY'));
                 break;
             case 'TEXTBLOCK':
                 element = new TEXTBLOCK(span, model);
