@@ -9,6 +9,7 @@ import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
+import TABLEFACTORY from '../../table/TABLEFACTORY.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -39,6 +40,7 @@ export default class MAIN extends CONTAINER {
         this.expandMain();
         /** Add factories */
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
+        this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
         this.addRefreshScroll();
     }
     /** Scroll to refresh
@@ -660,4 +662,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR, TABLEFACTORY }

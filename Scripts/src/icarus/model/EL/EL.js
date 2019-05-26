@@ -217,7 +217,34 @@ export default class EL extends MODEL {
 			return false;
 		}
 		throw new RecursionLimitError(this.className + '.checkReflectionPrototype(): Exceeded attempt limit. (Attempt ' + attempt + ')');
-	}
+    }
+    /** Retrieves the index value for this element among its siblings
+        @returns {number} index value
+    */
+    getIndex() {
+        return this.node.get().indexOf(this);
+    }
+    /** Checks for the existence of a nested property value
+        @see https://stackoverflow.com/a/2631198/722785
+        @param {any} obj Node
+        @param {any} level Property level
+        @param {any} rest The rest
+        @returns {boolean} True if property exists
+    */
+    getNestedProperty(obj, level, ...rest) {
+        console.log(this.toString() + '.checkNested()', level, obj, rest.length);
+        if (typeof obj === 'undefined') {
+            return false;
+        }
+        if (rest.length === 0 && Reflect.apply(hasOwnProperty, obj, level)) {
+            return obj[level];
+        }
+        return this.getNestedProperty(obj[level], ...rest);
+        //var hasGivenProperty = Reflect.hasOwnProperty(this, level);
+
+        //var hasGivenProperty = Reflect.apply(hasOwnProperty, this, level);
+        //return rest.length === 0 && hasGivenProperty ? true : this.checkNested(this[level], ...rest);
+    }
 	/** Retrieve an {@link EL} based on its __proto__
 	    @description Recursively iterates through parent nodes until an object with the given prototype is found
 	    @param {string} className The value to search for within this key
