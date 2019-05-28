@@ -1,6 +1,5 @@
 /** @module */
 import CONTAINER, { Activate, Deactivate, EL, Expand, MODEL } from '../../container/CONTAINER.js';
-//import ROW, { COLUMN, EL, MODEL } from './row/ROW.js';
 import TABLE from '../TABLE.js';
 import TD from './row/column/TD.js';
 import TH from './row/column/TH.js';
@@ -19,10 +18,9 @@ export default class TGROUP extends CONTAINER {
         this.removeClass('draggable');
         this.deactivateSiblingsOnActivate = false;
         this.childLocation = this;
-        //this.navheader.destroy();
         this.body.destroy();
-        this.el.addEventListener('activate', () => this.activateTable());
-        this.el.addEventListener('deactivate', () => this.deactivateTable());
+        this.el.addEventListener('activate', () => this.activateTGroup());
+        this.el.addEventListener('deactivate', () => this.deactivateTGroup());
     }
     constructElements() {
         return this.chain(() => {
@@ -41,20 +39,22 @@ export default class TGROUP extends CONTAINER {
     addTr(model) {
         return this.addChild(new TR(this.childLocation, model));
     }
-    activateTable() {
-        console.log('activateTable');
-        let table = this.getTable();
+    /** When a Table Group is activated, it is assumed that its table is also active
+        @returns {void}
+    */
+    activateTGroup() {
+        let table = this.getContainer();
         table.el.dispatchEvent(new Activate(table));
     }
-    deactivateTable() {
-        let table = this.getTable();
+    deactivateTGroup() {
+        let table = this.getContainer();
         table.el.dispatchEvent(new Deactivate(table));
     }
     /** Returns this row's table
         @returns {TABLE} Table
     */
     getTable() {
-        return this.node;
+        return this.node.node.node; // @todo Create getProtoByClassName
     }
 }
 export { CONTAINER, EL, Expand, MODEL, TABLE, TD, TH, TR }
