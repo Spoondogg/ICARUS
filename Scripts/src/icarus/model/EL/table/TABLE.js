@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { Activate, Deactivate, Expand, MODEL, Switchable } from '../container/CONTAINER.js';
 import TGROUP, { TD, TH, TR } from './tgroup/TGROUP.js';
 import TBODY from './TGROUP/TBODY.js';
 import TFOOT from './TGROUP/TFOOT.js';
@@ -17,8 +17,14 @@ export default class TABLE extends CONTAINER {
         };
         super(node, 'DIV', model, ['THEAD', 'TBODY', 'TFOOT']);
         this.addClass('table');
+        this.body.implement(new Switchable(this.body));
         this.deactivateSiblingsOnActivate = false;
-        //this.childLocation = this;
+        this.el.addEventListener('activate', () => {
+            this.body.el.dispatchEvent(new Activate(this.body));
+        });
+        this.el.addEventListener('deactivate', () => {
+            this.body.el.dispatchEvent(new Deactivate(this.body));
+        });
     }
     constructElements() {
         return this.chain(() => {
