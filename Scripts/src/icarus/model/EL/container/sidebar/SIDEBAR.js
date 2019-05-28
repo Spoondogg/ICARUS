@@ -21,16 +21,20 @@ export default class SIDEBAR extends EL {
 		this.navbar.el.dispatchEvent(new Expand(this.navbar));
 		this.setAlignmentOptions(model.align || 'left');
 		// Override activate/deactivate for custom animation timing
-		this.activate = () => {
-			this.removeClass('hidden');
-			setTimeout(() => {
-				this.addClass('active');
-				this.getMain().body.pane.addClass('focus-' + this.align);
-			}, 150);
+        this.activate = () => {
+            if (!this.hasClass('active')) {
+                this.removeClass('hidden');
+                setTimeout(() => {
+                    this.addClass('active');
+                    this.getMain().body.pane.addClass('focus-' + this.align);
+                }, 150);
+            }
 		}
-		this.deactivate = () => {
-			this.getMain().body.pane.removeClass('focus-' + this.align);
-			this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
+        this.deactivate = () => {
+            if (this.hasClass('active')) {
+                this.getMain().body.pane.removeClass('focus-' + this.align);
+                this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
+            }
 		}
 		// Default state
 		this.deactivate();
