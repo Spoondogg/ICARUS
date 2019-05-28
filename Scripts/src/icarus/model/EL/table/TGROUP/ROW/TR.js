@@ -11,46 +11,23 @@ export default class TR extends CONTAINER {
         @param {MODEL} model The model
     */
     constructor(node, model) {
-        //model.body = { // set collapsible body tag to table
-        //    element: 'TR'
-        //};
         super(node, 'TR', model, ['TD', 'TH']);
         this.addClass('table-row');
         this.removeAttribute('draggable');
         this.removeClass('draggable');
-        //this.deactivateSiblingsOnActivate = true;
         this.childLocation = this;
         this.navheader.destroy();
         this.body.destroy();
-        this.el.addEventListener('activate', () => this.activateTGroup());
-        this.el.addEventListener('deactivate', () => this.deactivateTGroup());
+        this.el.addEventListener('activate', () => {
+            let tGroup = this.getTGroup();
+            tGroup.el.dispatchEvent(new Activate(tGroup));
+        });
+        this.el.addEventListener('deactivate', () => {
+            let tGroup = this.getTGroup();
+            tGroup.el.dispatchEvent(new Deactivate(tGroup));
+        });
     }
-    activateTGroup() {
-        let tGroup = this.getTGroup();
-
-        //let siblings = tGroup.get().filter((c) => c !== this);
-        //siblings.forEach((s) => s.el.dispatchEvent(new Deactivate(s)));  
-        //tGroup.get().filter(
-        //    (c) => c !== this).forEach(
-        //    (cc) => cc.el.dispatchEvent(new Deactivate(this)));
-
-        tGroup.el.dispatchEvent(new Activate(tGroup));
-
-            //console.log('Deactivating Siblings', tGroup.get());
-    }
-    deactivateTGroup() {
-        let tGroup = this.getTGroup();
-        //let siblings = tGroup.get().filter((c) => c !== this);
-        //console.log(this.toString() + '.siblings', siblings);
-        //siblings.forEach((s) => s.el.dispatchEvent(new Deactivate(s)));
-        //this.get().forEach((c) => {
-        //    console.log('Deactivate Me', c.el.innerHTML);
-        //    c.el.dispatchEvent(new Deactivate(c));
-        //});
-
-        //console.log('Deactivating TGROUP', tGroup);
-        tGroup.el.dispatchEvent(new Deactivate(tGroup));
-    }
+    
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
