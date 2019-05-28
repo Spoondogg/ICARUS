@@ -30,11 +30,35 @@ export default class Switchable extends IFACE {
 		/** Adds active state to node
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.activate = () => node.chain(() => node.addClass('active'));
+        this.methods.activate = () => node.chain(() => {
+            if (!node.hasClass('active')) {
+                node.addClass('active');
+            }
+        });
 		/** Removes active state from node
 	        @returns {Promise<ThisType>} Promise Chain
 	    */
-		this.methods.deactivate = () => node.chain(() => node.removeClass('active'));
+        this.methods.deactivate = () => {
+            if (node.hasClass('active')) {
+                node.chain(() => {
+                    let activeChildren = node.get().filter((c) => c.hasClass('active'));
+                    //console.log(node.toString() + '.deactivate().activeChildren', activeChildren);
+                    if (activeChildren.length === 0) {
+                        //console.log(node.toString() + '.deactivate()');
+                        node.removeClass('active');
+                        try {
+                            node.deactivateReference();
+                        } catch (e) {
+                            if (!(e instanceof TypeError)) {
+                                console.error(this.toString() + '.deactivateReference()', e);
+                            }
+                        }
+                    } else {
+                        console.warn(node.toString() + ' is unable to deactivate because it has active children', activeChildren);
+                    }
+                });
+            }
+        }
 		/** 'Flipping' this switch toggles the 'active' state of this element, triggering an Activate/Deactivate Event
 		    @param {string} className Existence of classname indicates on/off event to call
 		    @param {Event} eventOn Event to call if class does not yet exist
