@@ -39,10 +39,47 @@ export default class MAIN extends CONTAINER {
 		this.watchMousePosition();
         this.expandMain();
         /** Add factories */
+        this.addFactories();
+        this.addRefreshScroll();
+        this.addMainActivateEvents();
+    }
+    /** Override and terminate parent activation at the top of the chain
+        @returns {void}
+    */
+    activateParentContainer() {
+        //console.log(this.toString() + '.activateParentContainer(TRUE)');
+    }
+    /** Override and terminate parent deactivation at the top of the chain
+        @returns {void}
+    */
+    deactivateParentContainer() {
+        //console.log(this.toString() + '.deactivateParentContainer(TRUE)');
+    }
+    addFactories() {
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
         this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
-        this.addRefreshScroll();
     }
+    addMainActivateEvents() {
+        this.el.addEventListener('activate', () => {        
+            let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+            //console.log(this.toString() + ' is activating the document-map', sidebarTab);            
+            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+            console.log('Trigger scrollTo() for SIDEBAR.scrollTarget');
+            /*$(sidebar.el).animate({
+                scrollTop: parseInt($(this.reference.el).offset().top)
+            }, 600, 'swing');*/            
+        });
+        this.el.addEventListener('deactivate', () => {
+            let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            if (sidebarTab.hasClass('active')) {
+                //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+                //console.log(this.toString() + ' is deactivating the document-map', sidebarTab);
+                sidebarTab.el.dispatchEvent(new Deactivate(sidebarTab));
+            }
+        });
+    }
+
     /** Scroll to refresh
         @see https://dev.to/vijitail/pull-to-refresh-animation-with-vanilla-javascript-17oc
         @returns {void}
@@ -543,14 +580,14 @@ export default class MAIN extends CONTAINER {
 	    @param {string} provider The OAuth Provider
 	    @returns {void} 
 	*/
-	loginOAuth(provider) {
-        this.body.collapse().then(
-            this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
+    loginOAuth(provider) {
+        this.chain(() => this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab))).then(
+            () => this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
                 () => {
                     window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
                 }
             )
-        );
+        );        
 	}
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
@@ -635,11 +672,9 @@ export default class MAIN extends CONTAINER {
                 btnSignIn.setLabel('Update Password');
 
                 form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then(() => {
-                    loader.log(99, 'Redirecting to login').then(() => {
-                        setTimeout(() => {
-                            window.location.href = window.location.origin + '?login=1&email=' + email;
-                        }, 3000);
-                    });
+                    loader.log(99, 'Redirecting to login').then(() => setTimeout(() => {
+                        window.location.href = window.location.origin + '?login=1&email=' + email;
+                    }, 3000));
                 });
                 loader.log(100).then(() => form.getDialog().show());
             })
