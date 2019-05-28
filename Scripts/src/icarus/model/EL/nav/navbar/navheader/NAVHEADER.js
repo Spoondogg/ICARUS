@@ -21,8 +21,6 @@ export default class NAVHEADER extends NAVBAR {
 			icon: ICONS.CERTIFICATE,
 			label: model.label
         }));
-        node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate(node)));
-        node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(node)));
         this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
         this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
         this.tab.el.addEventListener('select', () => {
