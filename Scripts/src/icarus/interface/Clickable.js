@@ -72,11 +72,11 @@ export default class Clickable extends IFACE {
 		// Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 		// Consider showing a simple press-timer animation after 100ms
-		node.el.addEventListener('mousedown', (ev) => node.pressDown(ev));
-		node.el.addEventListener('mouseup', (ev) => node.pressUp(ev));
+        node.el.addEventListener('mousedown', (ev) => node.pressDown(ev), { passive: true });
+        node.el.addEventListener('mouseup', (ev) => node.pressUp(ev), { passive: true });
 		node.el.addEventListener('touchstart', (ev) => node.pressDown(ev), { passive: true });
 		node.el.addEventListener('touchend', (ev) => node.pressUp(ev), { passive: true });
-        node.el.addEventListener('click', (ev) => node.pressed(ev));
+        node.el.addEventListener('click', (ev) => node.pressed(ev), { passive: true });
 	}
 	startTimer(node) {
 		clearTimeout(node.timer);
