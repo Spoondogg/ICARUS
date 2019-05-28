@@ -1982,8 +1982,6 @@ html {
                     }
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
-
-
                         nav {
                             //margin-bottom: .5rem;
                             &.menu {
@@ -2004,6 +2002,22 @@ html {
                                         border-bottom: 2px solid $color-grey-darker;
                                     }
                                 }
+                                //&[name='tabs'] {
+                                > .nav-item {
+                                    &.active {
+                                        height: 2rem;
+                                        line-height: 2rem;
+
+                                        > a {
+                                            > .icon,
+                                            > .label {
+                                                height: 2rem;
+                                                line-height: 2rem;
+                                            }
+                                        }
+                                    }
+                                }
+                                //}
                             }
                         }
                     }
@@ -2081,10 +2095,8 @@ html {
         /// A Table Container Element
         /// See https://css-tricks.com/complete-guide-table-element/
         &.table {
-
-
             > nav {
-                display: none;
+                //display: none;
             }
 
             > .body { // table
