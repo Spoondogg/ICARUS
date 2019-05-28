@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 /** @module */
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
+import Clickable, { Switchable } from '../../../interface/Clickable.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
-import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
@@ -70,9 +70,11 @@ export default class CONTAINER extends GROUP {
         return bodyElement;
     }
     addQuickAccessButtons() {
+        // Trigger reference on select
+        this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el.addEventListener('select',
+            () => this.el.dispatchEvent(new Activate(this)));
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
-            
             // Save and QuickSave button
             let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
                 label: 'SAVE',
@@ -82,22 +84,18 @@ export default class CONTAINER extends GROUP {
             btnSave.el.addEventListener('activate', () => this.chain(() => {
                 this.el.dispatchEvent(new Modify(btnSave));
             }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-            btnSave.el.addEventListener('longclick',
-                () => this.getFactory().save(false, this, this).then(
+            btnSave.el.addEventListener('longclick', () => this.getFactory().save(false, this, this).then(
                     () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-
             // Refresh
             let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
                 label: 'REFRESH',
                 icon: ICONS.REFRESH,
                 name: 'btn-refresh'
             }));
-            btnRefresh.el.addEventListener('activate', () => {
-                this.chain(() => {
-                    this.getMain().focusBody().then(() => this.refresh());
-                }).then(() => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh)));
-            });
-
+            btnRefresh.el.addEventListener('activate', () => this.chain(
+                () => this.getMain().focusBody().then(
+                    () => this.refresh().then(
+                        () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
             // Up and Down buttons
             [
                 {
@@ -260,6 +258,49 @@ export default class CONTAINER extends GROUP {
             (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase()))
         );
     }
+    /** Activates this container's reference in the document map
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    activateReference() {
+        //console.log('Activating reference for ' + this.toString(), this.reference);
+        //this.activateReferenceChildMenu();
+        return this.chain(() => {
+            let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+            if (!tab.hasClass('active')) {
+                tab.el.dispatchEvent(new Activate(tab));
+            }
+        }, this.toString() + ' is unable to activate its reference');
+    }
+    activateReferenceChildMenu() {
+        //console.log('Activating childrenmenu');
+        let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+        let [childrenMenu] = menu.get('CHILDREN', 'NAVITEMICON');
+        if (!childrenMenu.hasClass('active')) {
+            childrenMenu.el.dispatchEvent(new Activate(childrenMenu));
+        }
+    }
+    /** Deactivates this container's reference in the document map
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateReference() {
+        return this.chain(() => {
+            //console.log('Deactivating reference for ' + this.toString(), this.reference);
+            this.deactivateReferenceChildMenus();
+            let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+            tab.el.dispatchEvent(new Deactivate(tab));
+        }, this.toString() + ' is unable to deactivate its reference');
+    }
+    /** Deactivates child menus from this container's reference
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateReferenceChildMenus() {
+        return this.chain(() => {
+            //console.log('Deactivating childrenmenus');
+            let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+            let menus = menu.get(null, 'NAVITEMICON');
+            menus.forEach((m) => m.el.dispatchEvent(new Deactivate(m)));
+        }, this.toString() + ' is unable to deactivate its child menus');
+    }
 	/** Adds this CONTAINER to parent reference in the Document Map
 	    @returns {void}
 	*/
@@ -288,8 +329,8 @@ export default class CONTAINER extends GROUP {
 					/** @type {[NAVITEMICON]} */
 					let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
 					tab.el.addEventListener('activate', () => {
-						console.log('DocumentMap > ' + this.toString(), this);
-						this.scrollTo();
+						//console.log('DocumentMap > ' + this.toString(), this);
+						//this.scrollTo();
 						childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
 							(n) => n.tabs.children.forEach(
 								(t) => t.el.dispatchEvent(new Deactivate(t))));
@@ -416,18 +457,56 @@ export default class CONTAINER extends GROUP {
         //console.log(this.toString() + '.siblings()', event, this.node.getContainer().get().filter((c) => c !== this));
         this.node.getContainer().get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
     }
+    activateParentContainer() {
+        try {
+            let container = this.getContainer();
+            container.el.dispatchEvent(new Activate(container));
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to activate parent');
+        }
+    }
+    activateContainer() {
+        this.activateParentContainer();
+        //console.log('Activated ' + this.toString());
+        this.getContainer().activateReferenceChildMenu();
+        this.activateReference();
+        try {
+            if (this.node.getContainer().deactivateSiblingsOnActivate) {
+                this.dispatchToSiblings(new Deactivate(this));
+            }
+        } catch (e) {
+            if (!(e instanceof TypeError)) {
+                console.warn('Unable to deactivate siblings', e);
+            }
+        }
+    }
+    deactivateParentContainer() {
+        try {
+            let container = this.getContainer();
+            container.el.dispatchEvent(new Deactivate(container));
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to deactivate parent');
+        }
+    }
+    deactivateContainer() {
+        /*
+        //console.log(this.toString() + '.deactivateContainer()');
+        let activeChildren = this.get().filter((c) => c.hasClass('active')); // needs caching!!
+        if (activeChildren.length === 0) {
+            this.deactivateReference();
+        } else {
+            console.warn('Unable to deactivate ' + this.toString() + '.  It has active children', activeChildren);
+        }
+        */
+    }
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
 	*/
 	addActivateEvents() {
-        this.el.addEventListener('activate', () => {
-            console.log('Activated ' + this.toString());
-            if (this.node.getContainer().deactivateSiblingsOnActivate) {
-                this.dispatchToSiblings(new Deactivate(this));
-            }
-        });
+        this.el.addEventListener('activate', () => this.activateContainer());
         this.el.addEventListener('deactivate', () => {
-            console.log('Deactivated ' + this.toString());
+            this.deactivateContainer();
+            this.deactivateParentContainer();
         });
         this.navheader.tab.el.addEventListener('activate', () => {
             if (this.header) {
@@ -926,6 +1005,8 @@ export default class CONTAINER extends GROUP {
                             this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
                             resolve(this.make(payload.model));
                         } else {
+                            this.getMain().login();
+                            // @todo Create a LoginRequired type Error and appropriate handler
                             reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
                         }
                     });
@@ -1195,5 +1276,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Toggle }
+export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
 /* eslint-enable max-lines */
