@@ -62,13 +62,17 @@ export default class MAIN extends CONTAINER {
     addMainActivateEvents() {
         this.el.addEventListener('activate', () => {        
             let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
-            //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
-            //console.log(this.toString() + ' is activating the document-map', sidebarTab);            
+            let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
             sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
-            console.log('Trigger scrollTo() for SIDEBAR.scrollTarget');
-            /*$(sidebar.el).animate({
-                scrollTop: parseInt($(this.reference.el).offset().top)
-            }, 600, 'swing');*/            
+            console.log('Trigger scrollTo() for SIDEBAR.scrollTarget', sidebar.scrollTarget);
+            /*if (sidebar.scrollTarget !== null) {
+                $(sidebar.el).animate({
+                    scrollTop: parseInt($(sidebar.scrollTarget.el).offset().top)
+                }, 600, 'swing');
+                sidebar.scrollTarget = null;
+            } else {
+                console.log('Scroll target not set');
+            }*/
         });
         this.el.addEventListener('deactivate', () => {
             let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');

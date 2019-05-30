@@ -1,7 +1,7 @@
 /** @module */
 import EL, { MODEL } from '../../EL.js';
 import NAVBAR, { Expand } from '../../nav/navbar/NAVBAR.js';
-import Switchable, { Deactivate } from '../../../../interface/Switchable.js';
+import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import Swipeable from '../../../../interface/Swipeable.js';
 /** A Sidebar Container
     @class
@@ -19,7 +19,8 @@ export default class SIDEBAR extends EL {
 		this.implement(new Switchable(this));
 		this.navbar = new NAVBAR(this, new MODEL());
 		this.navbar.el.dispatchEvent(new Expand(this.navbar));
-		this.setAlignmentOptions(model.align || 'left');
+        this.setAlignmentOptions(model.align || 'left');
+        this.scrollTarget = null;
 		// Override activate/deactivate for custom animation timing
         this.activate = () => {
             if (!this.hasClass('active')) {
@@ -38,7 +39,21 @@ export default class SIDEBAR extends EL {
 		}
 		// Default state
 		this.deactivate();
-	}
+    }
+    /** Scrolls the sidebar to the given reference
+        @param {CONTAINER} node Container node
+        @returns {Promise<ThisType>} Promise chain
+    */
+    scrollToReference(node) {
+        return this.chain(() => {
+            node.el.dispatchEvent(new Activate(node));
+            this.scrollTarget = node.reference;
+            $(this.el).animate({
+                scrollTop: parseInt($(node.reference.el).offset().top)
+            }, 600, 'swing');
+            this.scrollTarget = null;
+        });
+    }
 	/** Sets the SIDEBAR alignment and configures 'swipeLeft' and 'swipeRight' accordingly
 	    @param {string} align SIDEBAR alignment
 	    @returns {void}
