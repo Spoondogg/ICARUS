@@ -34,6 +34,12 @@ export default class COLUMN extends EL {
     */
     activateColumn() {
         let row = this.getRow();
+        let { navheader } = this.getMain();
+        let [sidebar] = navheader.menus.get('document-map', 'SIDEBAR');
+        sidebar.scrollToReference(row);
+        let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
+        sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+
         let siblings = [...row.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
         siblings.forEach((s) => s.dispatchEvent(new Deactivate(s)));
 
@@ -41,7 +47,9 @@ export default class COLUMN extends EL {
         if (tGroup.className !== 'TBODY') {
             let rows = tGroup.get(null, 'TR');
             tGroup.getTable()
-            rows.forEach((r) => r.el.dispatchEvent(new Activate(r)));
+            rows.filter((r) => r.hasClass('active') === false).forEach((rr) => {
+                rr.el.dispatchEvent(new Activate(rr));
+            });
         }
     }
     /** Returns this row's table-group
