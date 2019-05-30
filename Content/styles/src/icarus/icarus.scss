@@ -81,6 +81,7 @@ $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
 $thumbnail-height: 10rem;
+$longclick-delay: 2000ms ;
 $transition-speed: 150ms;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
@@ -262,7 +263,7 @@ $z-bottom: -1;
 /// Limits max height of the modal so that the stickyfooter remains visible
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
-    height: calc(50vh - #{$navbar-height});
+    //height: calc(50vh - #{$navbar-height});
     max-height: calc(50vh - #{$navbar-height});
     overflow-y: auto;
 }
@@ -1558,14 +1559,14 @@ html {
                     background-color: $color-dark-less;
                     //color: $color-secondary-neutral;
                     &.press {
-                        @include transition(background-color 1200ms);
+                        @include transition(background-color $longclick-delay);
                         background-color: $color-red;
                     }
                 }
             }
 
             &.press {
-                @include transition(background-color 1200ms);
+                @include transition(background-color $longclick-delay);
                 background-color: $color-red;
             }
         }
@@ -2076,7 +2077,7 @@ html {
                 background-color: $color-blue-header;
                 // Animation for longclick indicator
                 &.press {
-                    @include transition(background-color 1200ms);
+                    @include transition(background-color $longclick-delay);
                     background-color: $color-red;
                 }
             }
@@ -2086,7 +2087,7 @@ html {
                     background-color: lighten($color-blue-header, 15%);
 
                     &.press {
-                        @include transition(background-color 1200ms);
+                        @include transition(background-color $longclick-delay);
                         background-color: $color-red;
                     }
                 }
@@ -2135,7 +2136,7 @@ html {
                                 }
 
                                 &.press {
-                                    @include transition(background-color 1200ms);
+                                    @include transition(background-color $longclick-delay);
                                     background-color: $color-red;
                                 }
                             }
@@ -2173,7 +2174,7 @@ html {
                                 }
 
                                 &.press {
-                                    @include transition(background-color 1200ms);
+                                    @include transition(background-color $longclick-delay);
                                     background-color: $color-red;
                                 }
                             }
@@ -2204,7 +2205,7 @@ html {
                         white-space: nowrap;
                         // Animation for longclick indicator
                         &.press {
-                            @include transition(background-color 1200ms);
+                            @include transition(background-color $longclick-delay);
                             background-color: $color-red;
                         }
 
@@ -2498,6 +2499,11 @@ html {
                     background-color: $color-shadow-light;
                     border-left: 1px solid $color-shadow-neutral;
                     border-right: 1px solid $color-shadow-neutral;
+
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
                 }
 
                 &.active {

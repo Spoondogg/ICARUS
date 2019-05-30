@@ -52,6 +52,7 @@ export const ZeroPx = 0;
 export const MaxWidthDesktop = 768;
 export const MaxWidthMobile = 767;
 export const ThumbnailHeight = 10;
+export const LongclickDelay = 2000;
 export const TransitionSpeed = 150;
 export const TransitionMotion = "ease-in-out";
 export const TransitionDefault = "all $transition-speed $transition-motion";
