@@ -69,54 +69,28 @@ export default class CONTAINER extends GROUP {
         }
         return bodyElement;
     }
+    
     addQuickAccessButtons() {
-        // Trigger reference on select
-        this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el.addEventListener('select',
-            () => this.el.dispatchEvent(new Activate(this)));
+
+        // Trigger draggable on TAB long-click
+        this.navheader.tab.el.addEventListener('longclick', () => {
+            this.toggleClass('allow-drag');
+        });
+
+        // Trigger reference on OPTIONS long-click
+        this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el.addEventListener('longclick', () => {
+            let mainNav = this.getMain().navheader;
+            let [sidebarTab] = mainNav.tabs.get('document-map', 'NAVITEMICON');
+            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+            let [sidebar] = mainNav.menus.get('document-map', 'SIDEBAR');
+            sidebar.scrollToReference(this);
+        });
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
             // Save and QuickSave button
-            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-                label: 'SAVE',
-                icon: ICONS.SAVE,
-                name: 'btn-save'
-            }));
-            btnSave.el.addEventListener('activate', () => this.chain(() => {
-                this.el.dispatchEvent(new Modify(btnSave));
-            }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-            btnSave.el.addEventListener('longclick', () => this.getFactory().save(false, this, this).then(
-                    () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-            // Refresh
-            let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-                label: 'REFRESH',
-                icon: ICONS.REFRESH,
-                name: 'btn-refresh'
-            }));
-            btnRefresh.el.addEventListener('activate', () => this.chain(
-                () => this.getMain().focusBody().then(
-                    () => this.refresh().then(
-                        () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
-            // Up and Down buttons
-            [
-                {
-                    label: 'UP',
-                    icon: ICONS.UP,
-                    name: 'btn-up',
-                    dir: 0
-                },
-                {
-                    label: 'DOWN',
-                    icon: ICONS.DOWN,
-                    name: 'btn-down',
-                    dir: 2
-                }
-            ].forEach((model) => {
-                let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
-                btn.el.addEventListener('activate', () => {
-                    this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
-                        () => btn.el.dispatchEvent(new Deactivate(btn)));
-                });
-            });
+            this.addSaveButton();
+            this.addRefreshButton();
+            this.addMoveButtons();
 
             // Move OPTIONS tab to the end
             let [btnOptions] = this.navheader.tabs.get('OPTIONS', 'NAVITEMICON');
@@ -125,6 +99,60 @@ export default class CONTAINER extends GROUP {
             let lastSibling = siblings[siblings.length - 1];
             $(btnOptions.el).insertAfter(lastSibling.el);
         }
+    }
+    /** Adds a save button to this.navheader
+        @returns {void}
+    */
+    addSaveButton() {
+        let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+            label: 'SAVE',
+            icon: ICONS.SAVE,
+            name: 'btn-save'
+        }));
+        btnSave.el.addEventListener('activate', () => this.chain(() => {
+            this.el.dispatchEvent(new Modify(btnSave));
+        }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+        btnSave.el.addEventListener('longclick', () => this.getFactory().save(false, this, this).then(
+            () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+    }
+    /** Adds a refresh button to this.navheader
+        @returns {void}
+    */
+    addRefreshButton() {
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+            label: 'REFRESH',
+            icon: ICONS.REFRESH,
+            name: 'btn-refresh'
+        }));
+        btnRefresh.el.addEventListener('activate', () => this.chain(
+            () => this.getMain().focusBody().then(
+                () => this.refresh().then(
+                    () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
+    }
+    /** Adds Up and Down buttons to this.navheader
+        @returns {void}
+    */
+    addMoveButtons() {
+        [
+            {
+                label: 'UP',
+                icon: ICONS.UP,
+                name: 'btn-up',
+                dir: 0
+            },
+            {
+                label: 'DOWN',
+                icon: ICONS.DOWN,
+                name: 'btn-down',
+                dir: 2
+            }
+        ].forEach((model) => {
+            let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+            btn.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
+                    () => btn.el.dispatchEvent(new Deactivate(btn)));
+            });
+        });
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
 	    @param {CONTAINERMODEL|MODEL} model Model
@@ -460,7 +488,9 @@ export default class CONTAINER extends GROUP {
     activateParentContainer() {
         try {
             let container = this.getContainer();
-            container.el.dispatchEvent(new Activate(container));
+            if (!container.hasClass('active')) {
+                container.el.dispatchEvent(new Activate(container));
+            }
         } catch (e) {
             console.warn(this.toString() + ' is unable to activate parent');
         }
