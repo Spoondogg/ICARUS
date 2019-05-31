@@ -3,6 +3,7 @@ import EL, { MODEL } from '../../EL.js';
 import NAVBAR, { Expand } from '../../nav/navbar/NAVBAR.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import Swipeable from '../../../../interface/Swipeable.js';
+import { TransitionSpeed } from '../../../../enums/StyleVars.js';
 /** A Sidebar Container
     @class
     @extends EL
@@ -25,16 +26,14 @@ export default class SIDEBAR extends EL {
         this.activate = () => {
             if (!this.hasClass('active')) {
                 this.removeClass('hidden');
-                setTimeout(() => {
-                    this.addClass('active');
-                    this.getMain().body.pane.addClass('focus-' + this.align);
-                }, 150);
+                this.addClass('active');
+                this.getMain().body.pane.addClass('focus-' + this.align);
             }
 		}
         this.deactivate = () => {
             if (this.hasClass('active')) {
                 this.getMain().body.pane.removeClass('focus-' + this.align);
-                this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), 150));
+                this.removeClass('active').then((sidebar) => setTimeout(() => sidebar.addClass('hidden'), TransitionSpeed));
             }
 		}
 		// Default state
@@ -46,12 +45,29 @@ export default class SIDEBAR extends EL {
     */
     scrollToReference(node) {
         return this.chain(() => {
-            node.el.dispatchEvent(new Activate(node));
-            this.scrollTarget = node.reference;
-            $(this.el).animate({
-                scrollTop: parseInt($(node.reference.el).offset().top)
-            }, 600, 'swing');
-            this.scrollTarget = null;
+            // Activate the reference tab
+            let [tab] = node.reference.tabs.get(null, 'NAVITEMICON');
+            if (!tab.hasClass('active')) {
+
+                // Activate the actual node to trigger a cascade of activations up to the linked list head
+                if (!node.hasClass('active')) {
+                    node.el.dispatchEvent(new Activate(node));
+                }
+
+                tab.el.dispatchEvent(new Activate(tab));
+
+                // Scroll
+                this.scrollTarget = tab;
+                setTimeout(() => {
+                    console.log('Scrolling to reference', this.scrollTarget.toString());
+                    if (this.scrollTarget !== null) {
+                        $(this.el).animate({
+                            scrollTop: parseInt($(this.scrollTarget.el).offset().top)
+                        }, 600, 'swing');
+                        this.scrollTarget = null;
+                    }
+                }, 500);
+            }
         });
     }
 	/** Sets the SIDEBAR alignment and configures 'swipeLeft' and 'swipeRight' accordingly
