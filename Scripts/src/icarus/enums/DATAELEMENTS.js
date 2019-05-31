@@ -244,7 +244,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'TR', {
-            data: [createInputModel('INPUT', 'columnIds')]
+            data: [createInputModel('INPUT', 'columns')]
         }
     ],
     [
