@@ -118,8 +118,12 @@ export default class NAVBAR extends NAV {
 		let deactivate = new Deactivate();
 		tab.el.addEventListener('activate', () => {
             element.dispatchToSiblings(deactivate);
-            tab.addClass('active');
-			tab.target.el.dispatchEvent(new Activate()); // Activate Element
+            //tab.addClass('active');
+            tab.target.el.dispatchEvent(new Activate()); // Activate Element
+            /*if (this.getContainer().className !== 'MAIN') {
+                console.log('scrollTo', this);
+                tab.scrollTo();
+            }*/
 		});
 		/** Deactivate Tab and Element */
 		tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
