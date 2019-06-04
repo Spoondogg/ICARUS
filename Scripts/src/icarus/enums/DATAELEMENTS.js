@@ -252,7 +252,7 @@ export const DATAELEMENTS = new Map([
             data: [
                 createInputModel('INPUT', 'type'),
                 createInputModel('INPUT', 'name'),
-                createInputModel('INPUT', 'value')
+                createInputModel('TEXTAREA', 'p', 'value')
             ]
         }
     ],
@@ -261,7 +261,7 @@ export const DATAELEMENTS = new Map([
             data: [
                 createInputModel('INPUT', 'type'),
                 createInputModel('INPUT', 'name'),
-                createInputModel('INPUT', 'value')
+                createInputModel('TEXTAREA', 'p', 'value')
             ]
         }
     ],
