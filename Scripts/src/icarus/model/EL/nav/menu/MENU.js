@@ -92,7 +92,7 @@ export default class MENU extends LIST {
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
 	}
-	/** Constructs a Nav Item (Anchor)
+	/** Constructs a NavBar Element with TABS and MENUS menus
 	    @param {MODEL} model Object model
 	    @returns {NAVBAR} NavBar
 	*/
