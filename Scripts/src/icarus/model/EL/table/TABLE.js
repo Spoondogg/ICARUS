@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, Deactivate, Expand, MODEL, Switchable } from '../container/CONTAINER.js';
+import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
 import TGROUP, { TD, TH, TR } from './tgroup/TGROUP.js';
 import TBODY from './TGROUP/TBODY.js';
 import TFOOT from './TGROUP/TFOOT.js';
@@ -15,21 +15,52 @@ export default class TABLE extends CONTAINER {
         model.body = { // set collapsible body tag to table
             element: 'TABLE'
         };
-        super(node, 'DIV', model, ['THEAD', 'TBODY', 'TFOOT']);
+        super(node, 'DIV', model, ['TR']);
         this.addClass('table');
-        this.body.implement(new Switchable(this.body));
         this.deactivateSiblingsOnActivate = false;
-        this.el.addEventListener('activate', () => {
-            this.body.el.dispatchEvent(new Activate(this.body));
-        });
-        this.el.addEventListener('deactivate', () => {
-            this.body.el.dispatchEvent(new Deactivate(this.body));
-        });
+
+        this.tHead = new THEAD(this.body.pane, new MODEL());
+        this.tHead.addTr(new MODEL());
+        //tHeadRow.addColumn(new MODEL().set('innerHTML', 'thead'));
+
+        this.tBody = new TBODY(this.body.pane, new MODEL());
+        this.childLocation = this.tBody;
+
+        this.tFoot = new TFOOT(this.body.pane, new MODEL());
+        this.tFoot.addTr(new MODEL());
+        //tFootRow.addColumn(new MODEL().set('innerHTML', 'tfoot'));
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this);
+                console.log(this.toString() + '.columns', this.data);
+                if (this.data.columns) {
+                    // create columns in THEAD and TFOOT
+                    let cols = this.data.columns.split(',');
+                    console.log(this.toString() + '.cols', cols);
+                    //let tHeadRow = new TR(this.tHead, new MODEL().set('columns', this.data.columns), ['TH']);
+                    //let tFootRow = new TR(this.tFoot, new MODEL().set('columns', this.data.columns), ['TH']);
+
+                    let [tHeadRow] = this.tHead.get(null, 'TR');
+                    cols.forEach((col) => tHeadRow.addColumn(new MODEL().set('innerHTML', col)));
+                    let [tFootRow] = this.tFoot.get(null, 'TR');
+                    cols.forEach((col) => tFootRow.addColumn(new MODEL().set('innerHTML', col)));
+
+                    //this.tFoot.addTr(colModel);
+                    /*cols.forEach((col) => {
+                        tHeadRow.addTh(new MODEL().set('innerHTML', col));
+                        tFootRow.addTh(new MODEL().set('innerHTML', col));
+                    });*/
+                    /*
+                    if (tGroup.className === 'TBODY') {
+                        cols.forEach((col) => this.addTd(new MODEL()).setInnerHTML(col));
+                    } else {
+                        cols.forEach((col) => this.addTh(new MODEL()).setInnerHTML(col));
+                    }
+                    */
+                }
+
             } else {
                 console.log('No data exists for ' + this.toString());
                 this.navheader.el.dispatchEvent(new Expand(this.navheader));
@@ -41,7 +72,9 @@ export default class TABLE extends CONTAINER {
 	    @returns {TGROUP} A Table group
 	*/
 	addTHead(model) {
-        return this.addChild(new THEAD(this.childLocation, model));
+        let tHead = this.addChild(new THEAD(this.childLocation, model));
+        $(tHead.el).insertBefore(this.body.pane);
+        return tHead;
     }
     /** Adds the given table group to the table
 	    @param {MODEL} model Object model
@@ -55,8 +88,18 @@ export default class TABLE extends CONTAINER {
 	    @returns {TGROUP} A Table group
 	*/
     addTFoot(model) {
-        return this.addChild(new TFOOT(this.childLocation, model));
+        let tFoot = this.addChild(new TFOOT(this.childLocation, model));
+        $(tFoot.el).insertAfter(this.body.pane);
+        return tFoot;
     }
+    /** Adds a row to the table body group
+        @param {MODEL} model Object model
+        @returns {TR} A table row
+    */
+    addRow(model) {
+        return this.getTBody().addTr(model);
+    }
+
     /** Returns THEAD (If exists)
         @returns {THEAD} An array of FIELDSET(s)
     */
