@@ -49,7 +49,7 @@ export default class TR extends CONTAINER {
             if (this.dataId > 0) {
                 this.createEditableElement('p', this.childLocation);
             } else {
-                console.log('No data exists for ' + this.toString());
+                //console.log('No data exists for ' + this.toString());
                 this.navheader.el.dispatchEvent(new Expand(this.navheader));
             }
             /*
