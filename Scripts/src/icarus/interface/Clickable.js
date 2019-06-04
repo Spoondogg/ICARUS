@@ -1,10 +1,10 @@
 /** @module */
 import IFACE, { EL, MODEL } from './IFACE.js';
-import { LongclickDelay } from '../enums/StyleVars.js';
 import Activate from '../event/Activate.js';
 import Deactivate from '../event/Deactivate.js';
 import Deselect from '../event/Deselect.js';
 import LongClick from '../event/LongClick.js';
+import { LongclickDelay } from '../enums/StyleVars.js';
 import Select from '../event/Select.js';
 import Selectable from './Selectable.js';
 import Switchable from './Switchable.js';

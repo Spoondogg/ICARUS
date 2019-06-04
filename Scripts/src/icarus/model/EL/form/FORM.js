@@ -2,7 +2,7 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
-import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMSELECT, FORMTEXTAREA } from '../container/formelement/FORMELEMENTGROUP.js';
+import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
@@ -72,10 +72,10 @@ export default class FORM extends CONTAINER {
 			hidden,
 			id
         } = model;
-        if (typeof model.data !== 'undefined') {
-            console.log('WOOT', model);
-        } else {
+        if (typeof model.data === 'undefined') {
             console.log('Look to pass the CONTAINER model.data through here');
+        } else {
+            console.error('WOOT', model);
         }
         return new Promise((resolve, reject) => FORM.createEmptyForm(node, hidden).then((form) => {
             form.setAction('FORMPOST/SET');
