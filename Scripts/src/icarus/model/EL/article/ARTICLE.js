@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, COLLAPSIBLE, Clickable, Deactivate, Expand, MODEL, Toggle } from '../container/CONTAINER.js';
+import CONTAINER, { COLLAPSIBLE, Clickable, Expand, MODEL, Toggle } from '../container/CONTAINER.js';
 import SPAN from '../span/SPAN.js';
 /** A generic ARTICLE Element
     @class

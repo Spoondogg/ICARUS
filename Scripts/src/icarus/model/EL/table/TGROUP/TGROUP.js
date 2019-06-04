@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, Clickable, Deactivate, EL, Expand, MODEL } from '../../container/CONTAINER.js';
+import CONTAINER, { Clickable, EL, Expand, MODEL } from '../../container/CONTAINER.js';
 import TABLE from '../TABLE.js';
 import TD from './row/column/TD.js';
 import TH from './row/column/TH.js';
@@ -18,7 +18,7 @@ export default class TGROUP extends EL {
     }
 	/** Adds the given table-row to this table-group
 	    @param {MODEL} model Object model
-	    @returns {TGROUP} A Table group
+	    @returns {TR} A Table row
 	*/
     addTr(model) {
         let containerList = this.className === 'TBODY' ? ['TD'] : ['TH'];
