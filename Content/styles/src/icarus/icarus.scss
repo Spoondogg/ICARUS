@@ -1984,6 +1984,9 @@ html {
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
                         nav {
+                            //&.active {
+                            //    margin: 1rem 0;
+                            //}
                             //margin-bottom: .5rem;
                             &.menu {
                                 border-bottom: 0 solid transparent;
@@ -2111,12 +2114,14 @@ html {
                     > .table-group {
                         border: $zero-px;
                         display: table-row-group;
+                        height: $navbar-height;
                         margin: 0;
+                        min-height: $navbar-height;
                         padding: 0;
                         width: 100%;
 
                         > nav {
-                            display: none;
+                            //display: none;
                         }
                         /// A Table Header //thead
                         &.table-header {
@@ -2183,6 +2188,11 @@ html {
 
                     .table-row {
                         display: table-row;
+                        height: $navbar-height;
+
+                        &:hover {
+                            background-color: $color-blue-lighter;
+                        }
 
                         > nav {
                             display: none;
@@ -2203,14 +2213,32 @@ html {
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
+
+                        > nav {
+                            display: none;
+                        }
                         // Animation for longclick indicator
                         &.press {
                             @include transition(background-color $longclick-delay);
                             background-color: $color-red;
                         }
 
+                        &:hover {
+                            background-color: orange;
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
+
                         &.active {
                             background-color: $color-blue-light;
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
                         }
                     }
                 }
@@ -2275,6 +2303,7 @@ html {
         }
         // Nested sub menu
         > .menu {
+
             > li {
                 width: 100%;
 
@@ -2287,6 +2316,16 @@ html {
 
                 & + .menu {
                     background-color: $color-orange;
+                }
+                // This affects the UL
+                & ~ ul:empty {
+                    background-color: purple;
+                    color: chartreuse;
+
+                    li ~ & {
+                        background-color: gold;
+                        color: palegoldenrod;
+                    }
                 }
             }
         }
