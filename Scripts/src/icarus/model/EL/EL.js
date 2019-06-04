@@ -298,6 +298,21 @@ export default class EL extends MODEL {
             this.factory = factory;
         }
     }
+    /** Catches DOM Exception when event is already being dispatched
+	    @param {EL} element Element Class to dispatch event
+	    @param {Event} event Event
+	    @returns {void}
+	*/
+    filterEventDomException(element, event) {
+        try {
+            element.el.dispatchEvent(event);
+        } catch (e) {
+            if (!(e instanceof DOMException)) { // DOMException: Event is already being dispatched
+                console.warn(e.message);
+                throw e;
+            }
+        }
+    }
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
         @param {string} className Element Class
