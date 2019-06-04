@@ -19,6 +19,7 @@ import LEGEND from '../legend/LEGEND.js';
 import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
+import REFERENCE from './REFERENCE.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
@@ -79,11 +80,11 @@ export default class CONTAINER extends GROUP {
 
         // Trigger reference on OPTIONS long-click
         this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el.addEventListener('longclick', () => {
-            let mainNav = this.getMain().navheader;
-            let [sidebarTab] = mainNav.tabs.get('document-map', 'NAVITEMICON');
-            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
-            let [sidebar] = mainNav.menus.get('document-map', 'SIDEBAR');
+            let { navheader } = this.getMain();
+            let [sidebar] = navheader.menus.get('document-map', 'SIDEBAR');
             sidebar.scrollToReference(this);
+            let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
+            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
         });
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
@@ -191,7 +192,7 @@ export default class CONTAINER extends GROUP {
 		*/
         this.name = this.required(model.name || this.element);
 		/** Represents an anchor/reference in the SIDEBAR NAV document-map 
-		    @type {NAVBAR} Document Map Reference NAVBAR
+		    @type {REFERENCE} Document Map Reference NAVBAR
 		*/
         this.reference = null;
 	}
@@ -252,7 +253,7 @@ export default class CONTAINER extends GROUP {
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
 	    @returns {void}
 	*/
-	addDocumentMapAttributes(menu, submenuName) {
+    addDocumentMapAttributes(menu, submenuName) {
 		/** @type {[MENU]} */
 		let [dataMenu] = menu.get(submenuName, 'MENU');
         let type = submenuName.toString().toLowerCase();
@@ -283,8 +284,7 @@ export default class CONTAINER extends GROUP {
     addDefaultDocumentMapAttributes(menu) {
         ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
         this.reference.menus.get()[0].get(null, 'NAVITEMICON').forEach(
-            (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase()))
-        );
+            (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase())));
     }
     /** Activates this container's reference in the document map
         @returns {Promise<ThisType>} Promise Chain
@@ -329,40 +329,35 @@ export default class CONTAINER extends GROUP {
             menus.forEach((m) => m.el.dispatchEvent(new Deactivate(m)));
         }, this.toString() + ' is unable to deactivate its child menus');
     }
-	/** Adds this CONTAINER to parent reference in the Document Map
+	/** Adds this CONTAINER as a child of its parent reference in the Document Map
 	    @returns {void}
 	*/
 	updateDocumentMap() {
 		if (this.className !== 'MAIN' && this.getContainer() !== null) {
-			try {
-				let parentName = this.getContainer().toString();
-				/** @type {NAVBAR} */
-				let parentRef = this.getContainer().reference;
-				if (parentRef !== null) {
+            try {
+                let container = this.getContainer();
+                if (container.reference !== null) {
 					/** @type {[MENU]} */
-					let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
-					/** @type {[MENU]} */
-					let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
-					/** @type {NAVBAR} */
-                    this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
+                    let [childrenMenu] = container.reference.getMenu(container.toString()).get('CHILDREN', 'MENU');
 
-                    this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
-                    
+                    this.reference = new REFERENCE(childrenMenu, new MODEL().set({
+                        name: this.toString(),
+                        container: this
+                    }));
+
 					/// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
 					/** @type {[MENU]} */
-					let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-                    this.addDefaultDocumentMapAttributes(menu);
+					//let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+                    this.addDefaultDocumentMapAttributes(this.reference.options.menu);//.getMenu('PROPERTIES')
 
 					/// Allow only one active CHILD at a time
 					/** @type {[NAVITEMICON]} */
-					let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-					tab.el.addEventListener('activate', () => {
-						//console.log('DocumentMap > ' + this.toString(), this);
-						//this.scrollTo();
-						childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
-							(n) => n.tabs.children.forEach(
-								(t) => t.el.dispatchEvent(new Deactivate(t))));
-                    });
+					//let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+                    let tab = this.reference.getTab(this.toString());
+                    tab.el.addEventListener('activate',
+                        () => childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
+                            (n) => n.tabs.children.forEach(
+                                (t) => t.el.dispatchEvent(new Deactivate(t)))));
                     tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
 					/// Expand the NAVBAR and override its collapse Event
 					this.reference.el.dispatchEvent(new Expand(this.reference));
@@ -383,7 +378,7 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Creates this CONTAINER's MODEL collections based on the 
         default MODEL for this container type in DATAELEMENTS
-	    @param {string} name ie: data, attributes, meta
+	    @param {Name} name ie: data, attributes, meta
 	    param {MODEL} model Container Model
 	    @returns {void}
 	*/
@@ -453,6 +448,13 @@ export default class CONTAINER extends GROUP {
             event.stopPropagation();
             //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});*/
+    }
+    /** Dispatches a Deactivate Event on this.el.children HTMLElements
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateChildren() {
+        let children = [...this.el.children].filter((c) => c.classList.contains('active'));
+        children.forEach((s) => s.dispatchEvent(new Deactivate(s)));
     }
     /** Dispatches a Deactivate Event on CONTAINER.body for any sibling CONTAINER Elements relative to this CONTAINER 
         @returns {Promise<ThisType>} Promise Chain
