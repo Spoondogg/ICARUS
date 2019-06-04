@@ -60,11 +60,11 @@ export default class MAIN extends CONTAINER {
         this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
     }
     addMainActivateEvents() {
-        this.el.addEventListener('activate', () => {        
-            let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
-            let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
-            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
-            console.log('Trigger scrollTo() for SIDEBAR.scrollTarget', sidebar.scrollTarget);
+        this.el.addEventListener('activate', () => {      
+            //let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+            //sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+            //console.log('Trigger scrollTo() for SIDEBAR.scrollTarget', sidebar.scrollTarget);
             /*if (sidebar.scrollTarget !== null) {
                 $(sidebar.el).animate({
                     scrollTop: parseInt($(sidebar.scrollTarget.el).offset().top)
@@ -75,12 +75,12 @@ export default class MAIN extends CONTAINER {
             }*/
         });
         this.el.addEventListener('deactivate', () => {
-            let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            /*let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
             if (sidebarTab.hasClass('active')) {
                 //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
                 //console.log(this.toString() + ' is deactivating the document-map', sidebarTab);
                 sidebarTab.el.dispatchEvent(new Deactivate(sidebarTab));
-            }
+            }*/
         });
     }
 
@@ -140,7 +140,7 @@ export default class MAIN extends CONTAINER {
             }
         }
     }
-    swipeEnd(ev) {
+    swipeEnd() {
         if (this.body.pane.el.scrollTop === 0 && !this.isLoading) {
             this.isLoading = true;
             //console.log('REFRESH!!!');
@@ -253,8 +253,28 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	createDocumentMap() {
-		let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
+        let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
+        let options = sidebar.element.navbar.addOptionsMenu(
+            this.label, ICONS[this.className], this.toString(),
+            ['DATA', 'ATTRIBUTES', 'META', 'PROPERTIES', 'METHODS', 'CHILDREN'], false
+        );
+
+        /** @type {[MENU]} */
+        let [propertiesMenu] = options.menu.get('PROPERTIES', 'MENU');
+
+        ['DATA', 'ATTRIBUTES', 'META'].forEach((p) => {
+            let t = propertiesMenu.addNavItemIcon(new MODEL().set({
+                label: p,
+                icon: ICONS[p],
+                name: p
+            })); //.addTabbableMenu(propertiesMenu.addMenu(new MODEL().set('name', 'DATA')));
+            let m = propertiesMenu.addMenu(new MODEL().set('name', p));
+            sidebar.element.navbar.addTabbableElement(t, m);
+        });
+
+        /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
+            Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
+        */
 		this.reference = sidebar.element.navbar;
 		// Add submenu items to DATA and ATTRIBUTES
         /** @type {[NAVITEMICON]} */
@@ -275,10 +295,7 @@ export default class MAIN extends CONTAINER {
         let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
         let usermenu = new USERMENU(userBar.element);
         // Tab should expand UserMenu
-        userBar.tab.el.addEventListener('activate', () => {
-            usermenu.el.dispatchEvent(new Expand(usermenu));
-        });
-
+        userBar.tab.el.addEventListener('activate', () => usermenu.el.dispatchEvent(new Expand(usermenu)));
 		$(usermenu.el).insertBefore(userBar.element.navbar.el);
         usermenu.el.dispatchEvent(new Expand(usermenu));
         
