@@ -253,9 +253,10 @@ export default class CONTAINER extends GROUP {
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
 	    @returns {void}
 	*/
-    addDocumentMapAttributes(menu, submenuName) {
+    addDocumentMapProperties(menu, submenuName) {
 		/** @type {[MENU]} */
-		let [dataMenu] = menu.get(submenuName, 'MENU');
+		//let [dataMenu] = menu.get(submenuName, 'MENU');
+        let dataMenu = menu.getMenu(submenuName);
         let type = submenuName.toString().toLowerCase();
         /*if (this.elements.get(type).length > 0) {
             console.log(this.toString() + '.elements.' + type, this.elements.get(type).map((el) => el.label));
@@ -277,12 +278,25 @@ export default class CONTAINER extends GROUP {
             });
 		});
     }
+    /** Adds clickable CRUD, ELEMENT and DOM nav items to the Document Map
+	    @param {MENU} menu This Container's reference menu
+	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
+	    @returns {void}
+	*/
+    addDocumentMapMethods(menu, submenuName) {
+        /** @type {[MENU]} */
+        //let [dataMenu] = menu.get(submenuName, 'MENU');
+        let dataMenu = menu.getMenu(submenuName);
+        let type = submenuName.toString().toLowerCase();
+        console.warn('ADD METHODS');
+        this.addCrudItems(dataMenu);
+    }
     /** Adds the default Document Map Attributes ('DATA', 'ATTRIBUTES', 'META') to the given MENU
         @param {MENU} menu Document Map reference menu for this container
         @returns {void}
     */
-    addDefaultDocumentMapAttributes(menu) {
-        ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+    addDefaultDocumentMapProperties(menu) {
+        ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapProperties(menu, str));
         this.reference.menus.get()[0].get(null, 'NAVITEMICON').forEach(
             (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase())));
     }
@@ -348,7 +362,9 @@ export default class CONTAINER extends GROUP {
 					/// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
 					/** @type {[MENU]} */
 					//let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-                    this.addDefaultDocumentMapAttributes(this.reference.options.menu);//.getMenu('PROPERTIES')
+                    let { menu } = this.reference.options;
+                    let propertiesMenu = menu.getMenu('PROPERTIES');
+                    this.addDefaultDocumentMapProperties(propertiesMenu);
 
 					/// Allow only one active CHILD at a time
 					/** @type {[NAVITEMICON]} */
@@ -922,12 +938,13 @@ export default class CONTAINER extends GROUP {
 			items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
 		});
 	}
-	/** Adds the CRUD Nav Items
+	/** Adds the CRUD Nav Items to the given menu
+        @param {MENU} menu A menu for CRUD related items
         @returns {GROUP} A Menu Group
 	*/
-	addCrudItems() {
+    addCrudItems(menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU')) {
 		return this.chain(() => {
-			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
+			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
 			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
 			items.LOAD.el.onclick = () => this.load();
 			items.SAVEAS.el.onclick = () => this.getFactory().save(false, this, this);
