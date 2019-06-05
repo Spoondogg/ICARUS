@@ -133,10 +133,12 @@ export default class MAIN extends CONTAINER {
         if (this.body.pane.el.scrollTop === 0) {
             if (changeY < -100) {
                 console.warn('Scroll triggered a refresh!');
-                this.isLoading = true;
+                // Find a way to detect MAIN.body.pane scroll 
+                // Avoid refresh when sidebar scroll takes place and scrollTop === 0
+                /*this.isLoading = true;
                 alert('Refreshing...');
                 //window.navigator.vibrate(200);
-                this.refresh();
+                this.refresh();*/
             }
         }
     }
@@ -256,12 +258,11 @@ export default class MAIN extends CONTAINER {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
         let options = sidebar.element.navbar.addOptionsMenu(
             this.label, ICONS[this.className], this.toString(),
-            ['DATA', 'ATTRIBUTES', 'META', 'PROPERTIES', 'METHODS', 'CHILDREN'], false
+            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
         );
 
         /** @type {[MENU]} */
         let [propertiesMenu] = options.menu.get('PROPERTIES', 'MENU');
-
         ['DATA', 'ATTRIBUTES', 'META'].forEach((p) => {
             let t = propertiesMenu.addNavItemIcon(new MODEL().set({
                 label: p,
@@ -271,20 +272,31 @@ export default class MAIN extends CONTAINER {
             let m = propertiesMenu.addMenu(new MODEL().set('name', p));
             sidebar.element.navbar.addTabbableElement(t, m);
         });
+        //this.addDefaultDocumentMapProperties(propertiesMenu);
+
+        /** @type {[MENU]} */
+        let [methodsMenu] = options.menu.get('METHODS', 'MENU');
+        ['ELEMENTS', 'CRUD', 'DOM'].forEach((p) => {
+            let t = methodsMenu.addNavItemIcon(new MODEL().set({
+                label: p,
+                icon: ICONS[p],
+                name: p
+            }));
+            let m = methodsMenu.addMenu(new MODEL().set('name', p));
+            sidebar.element.navbar.addTabbableElement(t, m);
+        });
+        //this.addCrudItems(methodsMenu.getMenu('CRUD'));
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
             Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
         */
 		this.reference = sidebar.element.navbar;
 		// Add submenu items to DATA and ATTRIBUTES
-        /** @type {[NAVITEMICON]} */
-        let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
-		/** @type {[MENU]} */
-        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-        this.addDefaultDocumentMapAttributes(menu);
+        this.reference.getTab(this.toString()).el.addEventListener('select', () => this.getFactory().save(false, this, this));
 
-		// Position and show the NAVBAR
+        this.addDefaultDocumentMapProperties(propertiesMenu);
+
+        // Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
 	}
