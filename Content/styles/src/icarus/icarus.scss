@@ -1993,8 +1993,8 @@ html {
                                 border-top: 0 solid transparent;
 
                                 &.active {
-                                    border-bottom: 1px solid $color-blue-light;
-                                    border-top: 1px solid $color-blue;
+                                    border-bottom: 3px solid $color-grey-dark;
+                                    border-top: 1px solid $color-darker;
                                 }
                             }
 
@@ -2009,6 +2009,8 @@ html {
                                 //&[name='tabs'] {
                                 > .nav-item {
                                     &.active {
+                                        border-top: 2px solid $color-grey-dark;
+                                        border-bottom: 1px solid $color-darker;
                                         height: 2rem;
                                         line-height: 2rem;
 
@@ -2021,7 +2023,6 @@ html {
                                         }
                                     }
                                 }
-                                //}
                             }
                         }
                     }
