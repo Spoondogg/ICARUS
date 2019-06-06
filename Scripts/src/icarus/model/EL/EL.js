@@ -187,10 +187,11 @@ export default class EL extends MODEL {
     }*/
 	/** Dispatches the given Event to this element's siblings
 	    @param {Event} event Event to dispatch
+        @param {string} className Event signal classname
 	    @returns {void}
 	*/
-	dispatchToSiblings(event) {
-		this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+	dispatchToSiblings(event, className) {
+		this.node.get().filter((c) => c.hasClass(className) && c !== this).forEach((s) => s.el.dispatchEvent(event));
 	}
 	/** Used to recursively verify if the reflected Prototype class of the given node
 	    matches a specified value.  This can be helpful in cases where you need to 
@@ -305,7 +306,7 @@ export default class EL extends MODEL {
 	*/
     filterEventDomException(element, event) {
         try {
-            element.el.dispatchEvent(event);
+            Promise.resolve(element.el.dispatchEvent(event));
         } catch (e) {
             if (!(e instanceof DOMException)) { // DOMException: Event is already being dispatched
                 console.warn(e.message);

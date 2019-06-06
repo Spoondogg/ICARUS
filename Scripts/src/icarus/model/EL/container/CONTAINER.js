@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines, max-statements */
 /** @module */
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import Clickable, { Switchable } from '../../../interface/Clickable.js';
@@ -30,14 +30,15 @@ import STRING from '../../../STRING.js';
 export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
-	    @param {string} element HTML element Tag
-	    @param {MODEL} model Model
-	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
+	    @param {string} [element] HTML element Tag
+	    @param {MODEL} [model] Model
+	    @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
 	*/
     constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
         //console.log(element + '.model', model);
         super(node, element, model);
         this.addClass('container');
+        this.containerList = containerList;
         this.editableElements = [];
         this.dragging = false;
         /** If true, siblings are deactivated when this CONTAINER is activated */
@@ -55,11 +56,15 @@ export default class CONTAINER extends GROUP {
         */
         this.childLocation = this.body.pane;
         this.addEvents();
-		// Cascade state
-		// Add Navbar Items
-		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
+        this.addOptions();
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
+    }
+    addOptions() {
+        let optionsMenu = this.navheader.getMenu('OPTIONS');
+        this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
+            () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
+                () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
     }
     getBodyElement(model) {
         let bodyElement = 'DIV';
@@ -70,22 +75,26 @@ export default class CONTAINER extends GROUP {
         }
         return bodyElement;
     }
-    
+    /** Activates this reference and reveals it in the document-map
+        @param {CONTAINER} [targetContainer] Target Container
+        @returns {void}
+    */
+    scrollToReference(targetContainer = this) {
+        let main = this.getMain();
+        let [sidebar] = main.navheader.menus.get('document-map', 'SIDEBAR');
+        sidebar.scrollToReference(targetContainer);
+        let sidebarTab = main.navheader.getTab('document-map');
+        sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+    }
+    /** Adds a set of frequently used buttons to this container's nav-header
+        @returns {void}
+    */
     addQuickAccessButtons() {
-
         // Trigger draggable on TAB long-click
-        this.navheader.tab.el.addEventListener('longclick', () => {
-            this.toggleClass('allow-drag');
-        });
+        this.navheader.tab.el.addEventListener('longclick', () => this.toggleClass('allow-drag'));
 
         // Trigger reference on OPTIONS long-click
-        this.navheader.tabs.get('OPTIONS', 'NAVITEMICON')[0].el.addEventListener('longclick', () => {
-            let { navheader } = this.getMain();
-            let [sidebar] = navheader.menus.get('document-map', 'SIDEBAR');
-            sidebar.scrollToReference(this);
-            let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
-            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
-        });
+        this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
             // Save and QuickSave button
@@ -94,7 +103,7 @@ export default class CONTAINER extends GROUP {
             this.addMoveButtons();
 
             // Move OPTIONS tab to the end
-            let [btnOptions] = this.navheader.tabs.get('OPTIONS', 'NAVITEMICON');
+            let btnOptions = this.navheader.getTab('OPTIONS'); //.tabs.get('OPTIONS', 'NAVITEMICON');
             btnOptions.addClass('tab-narrow');
             let siblings = this.navheader.tabs.get();
             let lastSibling = siblings[siblings.length - 1];
@@ -282,15 +291,13 @@ export default class CONTAINER extends GROUP {
 	    @param {MENU} menu This Container's reference menu
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
 	    @returns {void}
-	*/
+	
     addDocumentMapMethods(menu, submenuName) {
-        /** @type {[MENU]} */
-        //let [dataMenu] = menu.get(submenuName, 'MENU');
         let dataMenu = menu.getMenu(submenuName);
         let type = submenuName.toString().toLowerCase();
         console.warn('ADD METHODS');
         this.addCrudItems(dataMenu);
-    }
+    }*/
     /** Adds the default Document Map Attributes ('DATA', 'ATTRIBUTES', 'META') to the given MENU
         @param {MENU} menu Document Map reference menu for this container
         @returns {void}
@@ -352,28 +359,34 @@ export default class CONTAINER extends GROUP {
                 let container = this.getContainer();
                 if (container.reference !== null) {
 					/** @type {[MENU]} */
-                    let [childrenMenu] = container.reference.getMenu(container.toString()).get('CHILDREN', 'MENU');
+                    let parentReferenceMenu = container.reference.getMenu(container.toString());
+                    let parentChildrenMenu = parentReferenceMenu.getMenu('CHILDREN');
 
-                    this.reference = new REFERENCE(childrenMenu, new MODEL().set({
+                    this.reference = new REFERENCE(parentChildrenMenu, new MODEL().set({
                         name: this.toString(),
                         container: this
                     }));
 
-					/// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
-					/** @type {[MENU]} */
-					//let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-                    let { menu } = this.reference.options;
-                    let propertiesMenu = menu.getMenu('PROPERTIES');
+                    /// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
+                    let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
                     this.addDefaultDocumentMapProperties(propertiesMenu);
 
-					/// Allow only one active CHILD at a time
-					/** @type {[NAVITEMICON]} */
-					//let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
                     let tab = this.reference.getTab(this.toString());
-                    tab.el.addEventListener('activate',
-                        () => childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
-                            (n) => n.tabs.children.forEach(
-                                (t) => t.el.dispatchEvent(new Deactivate(t)))));
+                    tab.el.addEventListener('activate', () => this.chain(() => {
+                        let refs = [...parentChildrenMenu.el.children]
+                            .filter((c) => c.classList.contains('active') && c !== this.reference.el);
+                        //console.log('ACTIVATED REFERENCE TAB', refs);
+                        this.reference.el.dispatchEvent(new Activate(this.reference));
+                        /// Allow only one active CHILD at a time
+                        refs.forEach((ref) => ref.dispatchEvent(new Deactivate(ref)));
+                    }));
+                    tab.el.addEventListener('deactivate', () => this.chain(() => {
+                        //console.log('DEACTIVATED REFERENCE TAB');
+                        if (tab.hasClass('active')) {
+                            this.reference.el.dispatchEvent(new Deactivate(this.reference));
+                        }
+                    }));
+
                     tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
 					/// Expand the NAVBAR and override its collapse Event
 					this.reference.el.dispatchEvent(new Expand(this.reference));
@@ -391,7 +404,40 @@ export default class CONTAINER extends GROUP {
 	*/
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
-	}
+    }
+
+    constructReferenceSubMenus(arr, menu, reference) {
+        arr.forEach((p) => {
+            let t = menu.addNavItemIcon(new MODEL().set({
+                label: p,
+                icon: ICONS[p],
+                name: p
+            }));
+            let m = menu.addMenu(new MODEL().set('name', p));
+            reference.addTabbableElement(t, m);
+        });
+    }
+
+    /** Constructs the Reference menus based on its CONTAINER
+        @param {REFERENCE} reference Reference.options.menu
+        @returns {void}
+    */
+    constructReference(reference) {
+        try {
+            let { menu } = reference.options;
+
+            let propertiesMenu = menu.getMenu('PROPERTIES');
+            this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, reference);
+
+            let methodsMenu = menu.getMenu('METHODS');
+            this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
+            this.addCrudItems(methodsMenu.getMenu('CRUD'));
+            this.addDomItems(methodsMenu.getMenu('DOM'));
+            this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.container.containerList);
+        } catch (e) {
+            console.warn('Unable to add REFERENCE items', e);
+        }
+    }
 	/** Creates this CONTAINER's MODEL collections based on the 
         default MODEL for this container type in DATAELEMENTS
 	    @param {Name} name ie: data, attributes, meta
@@ -497,11 +543,12 @@ export default class CONTAINER extends GROUP {
     /** Dispatches the given Event to this element's siblings
         Overrides EL.dispatchToSiblings
 	    @param {Event} event Event to dispatch
+        @param {string} className Event signal classname
 	    @returns {void}
 	*/
-    dispatchToSiblings(event) {
+    dispatchToSiblings(event, className) {
         //console.log(this.toString() + '.siblings()', event, this.node.getContainer().get().filter((c) => c !== this));
-        this.node.getContainer().get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+        this.node.getContainer().get().filter((c) => c.hasClass(className) && c !== this).forEach((s) => s.el.dispatchEvent(event));
     }
     activateParentContainer() {
         try {
@@ -520,7 +567,7 @@ export default class CONTAINER extends GROUP {
         this.activateReference();
         try {
             if (this.node.getContainer().deactivateSiblingsOnActivate) {
-                this.dispatchToSiblings(new Deactivate(this));
+                this.dispatchToSiblings(new Deactivate(this), 'active');
             }
         } catch (e) {
             if (!(e instanceof TypeError)) {
@@ -811,15 +858,16 @@ export default class CONTAINER extends GROUP {
 		return [false, false, false];
 	}
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
+        @param {MENU} menu Target Menu
 	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
-    addElementItems(containerList) {
+    addElementItems(menu, containerList) {
 		return this.chain(() => {
 			if (containerList.length > 0) {
 				//let defaultContainers = []; // First two are normal
 				//containerList.splice(2, 0, ...defaultContainers);
-				Promise.all([containerList.map((c) => this.addContainerCase(c))]);
+				Promise.all([containerList.map((c) => this.addContainerCase(menu, c))]);
 			}
 		});
 	}
@@ -861,17 +909,15 @@ export default class CONTAINER extends GROUP {
                                     return [dataEl, e.name];
                                 }
                             });
-                            Promise.all(promises).then(() => { //results
-                                this.childLocation.empty().then(
+                            Promise.all(promises).then(() => this.childLocation.empty().then(
+                                () => this.reference.options.menu.getMenu('CHILDREN').empty().then(
                                     () => this.make(payload.model).then(() => {
                                         this.el.style.display = tempStyleDisplay;
                                         //console.log(this.toString() + '.refresh().results', results);
                                         loader.log(100).then(() => {
                                             this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
-                                        })
-                                    })
-                                );
-                            });
+                                        });
+                                    }))));
                         }
                     );
                 }), this.toString() + ' failed to refresh');
@@ -918,34 +964,39 @@ export default class CONTAINER extends GROUP {
 		return items;
 	}
 	/** Adds default items to the DOM Menu
+        @param {MENU} menu Target Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems() {
-		return this.chain(() => {
-			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
-			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
-            items.UP.el.addEventListener('activate', () => {
-                this.chain(() => this.el.dispatchEvent(new Move(this, 0))).then(
-                    () => items.UP.el.dispatchEvent(new Deactivate(items.UP)));
-            });
-            items.DOWN.el.addEventListener('activate', () => {
-                this.chain(() => this.el.dispatchEvent(new Move(this, 2))).then(
-                    () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN)));
-            });
-			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
-			items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
-			items.DELETE.el.onclick = () => this.disable();
-			items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+	addDomItems(menu) {
+        return this.chain(() => {
+            let arr = ['REFRESH', 'FULLSCREEN'];
+            if (this.className !== 'MAIN') {
+                arr.push('UP', 'DOWN', 'REMOVE', 'DELETE');
+            }
+			let items = this.createNavItems(arr, menu);
+            items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
+            items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+            if (this.className !== 'MAIN') {
+                items.UP.el.addEventListener('activate', () => this.chain(
+                    () => this.el.dispatchEvent(new Move(this, 0))).then(
+                        () => items.UP.el.dispatchEvent(new Deactivate(items.UP))));
+                items.DOWN.el.addEventListener('activate', () => this.chain(
+                    () => this.el.dispatchEvent(new Move(this, 2))).then(
+                        () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN))));
+
+                items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
+                items.DELETE.el.onclick = () => this.disable();
+            }            
 		});
 	}
 	/** Adds the CRUD Nav Items to the given menu
         @param {MENU} menu A menu for CRUD related items
         @returns {GROUP} A Menu Group
 	*/
-    addCrudItems(menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU')) {
+    addCrudItems(menu) {
 		return this.chain(() => {
 			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
-			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
+            let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu); //[0]
 			items.LOAD.el.onclick = () => this.load();
 			items.SAVEAS.el.onclick = () => this.getFactory().save(false, this, this);
 			items.SAVE.el.onclick = () => this.getFactory().save(true, this, this);
@@ -953,19 +1004,20 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
+        @param {MENU} menu Target Menu
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
         @returns {Promise<ThisType>} Promise Chain
     */
-	addContainerCase(className, addButton = true) {
+    addContainerCase(menu, className, addButton = true) {
 		return new Promise((resolve, reject) => {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
 					if (addButton) {
-						let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU');
-						let item = this.addContainerCaseButton(className, menu[0]);
+						//let menu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
+						let item = this.addContainerCaseButton(className, menu);
 						item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
-						item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
+						item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 					}
 					this.addConstructor(className, (model) => {
 						try {

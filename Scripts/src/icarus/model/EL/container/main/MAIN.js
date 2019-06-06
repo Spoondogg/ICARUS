@@ -263,29 +263,14 @@ export default class MAIN extends CONTAINER {
 
         /** @type {[MENU]} */
         let [propertiesMenu] = options.menu.get('PROPERTIES', 'MENU');
-        ['DATA', 'ATTRIBUTES', 'META'].forEach((p) => {
-            let t = propertiesMenu.addNavItemIcon(new MODEL().set({
-                label: p,
-                icon: ICONS[p],
-                name: p
-            })); //.addTabbableMenu(propertiesMenu.addMenu(new MODEL().set('name', 'DATA')));
-            let m = propertiesMenu.addMenu(new MODEL().set('name', p));
-            sidebar.element.navbar.addTabbableElement(t, m);
-        });
-        //this.addDefaultDocumentMapProperties(propertiesMenu);
+        this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, sidebar.element.navbar);
 
         /** @type {[MENU]} */
         let [methodsMenu] = options.menu.get('METHODS', 'MENU');
-        ['ELEMENTS', 'CRUD', 'DOM'].forEach((p) => {
-            let t = methodsMenu.addNavItemIcon(new MODEL().set({
-                label: p,
-                icon: ICONS[p],
-                name: p
-            }));
-            let m = methodsMenu.addMenu(new MODEL().set('name', p));
-            sidebar.element.navbar.addTabbableElement(t, m);
-        });
-        //this.addCrudItems(methodsMenu.getMenu('CRUD'));
+        this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, sidebar.element.navbar);
+        this.addCrudItems(methodsMenu.getMenu('CRUD'));
+        this.addDomItems(methodsMenu.getMenu('DOM'));
+        this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
             Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
