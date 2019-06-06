@@ -34,27 +34,25 @@ export default class NAVITEM extends LI {
     /** Adds 'activate' and 'deactivate' Events that trigger the EL when this NAVITEM is activated
 	    @param {EL} element A Switchable Element that is activated by this Tab
 	    @returns {{tab:NAVITEM, element:EL}} Tabbable Element {tab,element}
-        @todo Create TABBABLE Class
 	*/
 	addTabbableElement(element) {
         this.target = element; // consider array to allow multiple targets
 		element.tab = this;
 		let deactivate = new Deactivate();
-            this.el.addEventListener('activate', () => {
-            element.dispatchToSiblings(deactivate);
+        this.el.addEventListener('activate', () => {
+            element.dispatchToSiblings(deactivate, 'active');
             this.addClass('active');
             this.target.el.dispatchEvent(new Activate());
 		});
-		/** Deactivate Tab and Element */
-		this.target.el.addEventListener('deactivate', () => this.filterEventDomException(this, deactivate));
-		this.el.addEventListener('deactivate', () => {
+		/** Deactivate Tab, Element and Children */
+        this.target.el.addEventListener('deactivate', () => {
+            this.filterEventDomException(this, deactivate);
+            this.target.get().forEach((c) => this.chain(() => c.el.dispatchEvent(new Deactivate())));
+        });
+        this.el.addEventListener('deactivate', () => {
             this.filterEventDomException(this.target, deactivate);
             this.removeClass('active');
-            this.target.el.dispatchEvent(new Deactivate()); // Deactivate Element
 		});
-		/** Deactivate children */
-		this.target.el.addEventListener('deactivate', () => this.target.get().forEach(
-            (c) => c.el.dispatchEvent(new Deactivate())));
 		return {
 			tab: this,
 			element
