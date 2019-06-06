@@ -2008,6 +2008,9 @@ html {
                                 }
                                 //&[name='tabs'] {
                                 > .nav-item {
+                                    border-bottom: 1px solid $color-shadow-neutral;
+                                    border-top: 1px solid #505050;
+
                                     &.active {
                                         border-top: 2px solid $color-grey-dark;
                                         border-bottom: 1px solid $color-darker;
