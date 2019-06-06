@@ -12,19 +12,17 @@ export default class COLUMN extends CONTAINER {
         super(node, element, model, []);
         this.addClass('table-column');
         this.childLocation = this;
+        this.navheader.destroy();
         this.body.destroy();
-        //this.implement(new Clickable(this));
-        //this.el.addEventListener('activate', () => this.activateColumn());
-        //this.el.addEventListener('deactivate', () => this.deactivateColumn());
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
-                console.log('Data exists for ' + this.toString());
-                this.createEditableElement('p', this.childLocation);
+                this.createEditableElement('p', this.childLocation).then(
+                    (colData) => colData.el.addEventListener('longclick', () => this.scrollToReference(this.getRow())));
             } else {
-                console.log('No data exists for ' + this.toString());
-                this.navheader.el.dispatchEvent(new Expand(this.navheader));
+                //console.log('No data exists for ' + this.toString());
+                //this.navheader.el.dispatchEvent(new Expand(this.navheader));
             }
         });
     }
@@ -35,15 +33,13 @@ export default class COLUMN extends CONTAINER {
         let row = this.getRow();
 
         if (row.hasClass('active')) {
-            //let activeColumns = [...row.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
             let activeColumns = row.get(null, this.className).filter((c) => c.hasClass('active') && c !== this);
             console.log('Active sibling columns', activeColumns);
             activeColumns.forEach((c) => c.el.dispatchEvent(new Deactivate(c)));
         }/* else {
             row.el.dispatchEvent(new Activate(row));
         }*/
-        //this.chain(() => {
-            
+        //this.chain(() => {            
             let { navheader } = this.getMain();
             let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
             sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
