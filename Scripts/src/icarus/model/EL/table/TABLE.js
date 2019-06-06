@@ -20,45 +20,25 @@ export default class TABLE extends CONTAINER {
         this.deactivateSiblingsOnActivate = false;
 
         this.tHead = new THEAD(this.body.pane, new MODEL());
-        this.tHead.addTr(new MODEL());
-        //tHeadRow.addColumn(new MODEL().set('innerHTML', 'thead'));
+        this.tHead.addTr(new MODEL().set('label', 'THEAD'));
 
         this.tBody = new TBODY(this.body.pane, new MODEL());
         this.childLocation = this.tBody;
 
         this.tFoot = new TFOOT(this.body.pane, new MODEL());
-        this.tFoot.addTr(new MODEL());
-        //tFootRow.addColumn(new MODEL().set('innerHTML', 'tfoot'));
+        this.tFoot.addTr(new MODEL().set('label', 'TFOOT'));
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this);
-                console.log(this.toString() + '.columns', this.data);
                 if (this.data.columns) {
                     // create columns in THEAD and TFOOT
                     let cols = this.data.columns.split(',');
-                    console.log(this.toString() + '.cols', cols);
-                    //let tHeadRow = new TR(this.tHead, new MODEL().set('columns', this.data.columns), ['TH']);
-                    //let tFootRow = new TR(this.tFoot, new MODEL().set('columns', this.data.columns), ['TH']);
-
                     let [tHeadRow] = this.tHead.get(null, 'TR');
                     cols.forEach((col) => tHeadRow.addColumn(new MODEL().set('innerHTML', col)));
                     let [tFootRow] = this.tFoot.get(null, 'TR');
                     cols.forEach((col) => tFootRow.addColumn(new MODEL().set('innerHTML', col)));
-
-                    //this.tFoot.addTr(colModel);
-                    /*cols.forEach((col) => {
-                        tHeadRow.addTh(new MODEL().set('innerHTML', col));
-                        tFootRow.addTh(new MODEL().set('innerHTML', col));
-                    });*/
-                    /*
-                    if (tGroup.className === 'TBODY') {
-                        cols.forEach((col) => this.addTd(new MODEL()).setInnerHTML(col));
-                    } else {
-                        cols.forEach((col) => this.addTh(new MODEL()).setInnerHTML(col));
-                    }
-                    */
                 }
 
             } else {
