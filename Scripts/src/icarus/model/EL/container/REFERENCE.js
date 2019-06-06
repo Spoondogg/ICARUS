@@ -1,6 +1,6 @@
 ﻿/** @module */
 /* eslint-disable max-lines-per-function, complexity, max-statements */
-import NAVBAR, { MENU, MODEL } from '../nav/navbar/NAVBAR.js';
+import NAVBAR, { Activate, Deactivate, MODEL } from '../nav/navbar/NAVBAR.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** A REFERENCE represents a collection of menus and tabs representing the MODEL
     of its given CONTAINER as part of the document-map
@@ -14,15 +14,34 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
         /** @type {Name} */
         this.name = this.required(model.name);
         this.addClass('reference');
-        
         this.options = this.addOptionsMenu(
             this.container.label, ICONS[this.container.className], this.container.toString(),
-            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
+            ['PROPERTIES', 'METHODS', 'CHILDREN'], false
         );
 
+        let { tab } = this.options;
+        this.el.addEventListener('deactivate', () => this.chain(() => {
+            if (tab.hasClass('active')) {
+                tab.el.dispatchEvent(new Deactivate(tab));
+            }
+        }));
+        /** Activates REFERENCE tab and scrolls to CONTAINER */
+        tab.el.addEventListener('longclick', () => this.chain(() => {
+            tab.el.dispatchEvent(new Activate(tab));
+            let main = this.getMain();
+            main.focusBody();
+            this.container.scrollTo();
+            this.container.el.dispatchEvent(new Activate(this.container));
+        }));
+
+        this.constructReference();
+    }
+    /** Constructs the Reference menus based on its CONTAINER
+        @returns {void}
+    */
+    constructReference() {
         try {
-            /** @type {[MENU]} */
-            let [propertiesMenu] = this.options.menu.get('PROPERTIES', 'MENU');
+            let propertiesMenu = this.options.menu.getMenu('PROPERTIES');
             ['DATA', 'ATTRIBUTES', 'META'].forEach((p) => {
                 let t = propertiesMenu.addNavItemIcon(new MODEL().set({
                     label: p,
@@ -33,13 +52,7 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
                 this.addTabbableElement(t, m);
             });
 
-            /*  This is where you want to add things like CRUD, ELEMENTS etc 
-                that exist in CONTAINER.navheader.  The key here is not to repeat
-                yourself unnecessarily.  
-            */
-
-            /** @type {[MENU]} */
-            let [methodsMenu] = this.options.menu.get('METHODS', 'MENU');
+            let methodsMenu = this.options.menu.getMenu('METHODS');
             ['ELEMENTS', 'CRUD', 'DOM'].forEach((p) => {
                 let t = methodsMenu.addNavItemIcon(new MODEL().set({
                     label: p,
@@ -49,34 +62,12 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
                 let m = methodsMenu.addMenu(new MODEL().set('name', p));
                 this.addTabbableElement(t, m);
             });
-
-            /** @example 
-            // Add test tabbable menu
-            let isHorizontal = false;
-            let optMenuClass = isHorizontal ? 'horizontal' : '';
-            let tabOne = methodsMenu.addNavItemIcon(new MODEL().set({
-                label: 'ONE',
-                icon: ICONS.FLAG,
-                name: 'ONE'
-            }));
-            //let tabbableOne = tabOne.addTabbableElement(methodsMenu.addMenu(new MODEL(optMenuClass).set('name', 'ONE')));
-    
-            let subOne = methodsMenu.addMenu(new MODEL(optMenuClass).set('name', 'ONE'));
-            this.addTabbableElement(tabOne, subOne);
-    
-            // So basically, just create a new submenu (opt) and continue on with the pattern
-            let tabTwo = subOne.addNavItemIcon(new MODEL().set({
-                label: 'TWO',
-                icon: ICONS.FLAG,
-                name: 'TWO'
-            }));
-            let subTwo = subOne.addMenu(new MODEL(optMenuClass).set('name', 'TWO'));
-            this.addTabbableElement(tabTwo, subTwo);        
-            */
+            this.container.addCrudItems(methodsMenu.getMenu('CRUD'));
+            this.container.addDomItems(methodsMenu.getMenu('DOM'));
+            this.container.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.container.containerList);
         } catch (e) {
             console.warn('Unable to add REFERENCE items', e);
         }
     }
 }
-
 /* eslint-enable */
