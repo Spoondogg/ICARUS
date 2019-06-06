@@ -34,40 +34,7 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
             this.container.el.dispatchEvent(new Activate(this.container));
         }));
 
-        this.constructReference();
-    }
-    /** Constructs the Reference menus based on its CONTAINER
-        @returns {void}
-    */
-    constructReference() {
-        try {
-            let propertiesMenu = this.options.menu.getMenu('PROPERTIES');
-            ['DATA', 'ATTRIBUTES', 'META'].forEach((p) => {
-                let t = propertiesMenu.addNavItemIcon(new MODEL().set({
-                    label: p,
-                    icon: ICONS[p],
-                    name: p
-                }));
-                let m = propertiesMenu.addMenu(new MODEL().set('name', p));
-                this.addTabbableElement(t, m);
-            });
-
-            let methodsMenu = this.options.menu.getMenu('METHODS');
-            ['ELEMENTS', 'CRUD', 'DOM'].forEach((p) => {
-                let t = methodsMenu.addNavItemIcon(new MODEL().set({
-                    label: p,
-                    icon: ICONS[p],
-                    name: p
-                }));
-                let m = methodsMenu.addMenu(new MODEL().set('name', p));
-                this.addTabbableElement(t, m);
-            });
-            this.container.addCrudItems(methodsMenu.getMenu('CRUD'));
-            this.container.addDomItems(methodsMenu.getMenu('DOM'));
-            this.container.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.container.containerList);
-        } catch (e) {
-            console.warn('Unable to add REFERENCE items', e);
-        }
+        this.container.constructReference(this);
     }
 }
 /* eslint-enable */
