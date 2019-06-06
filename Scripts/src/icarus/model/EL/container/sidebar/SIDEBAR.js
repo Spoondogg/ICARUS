@@ -58,15 +58,15 @@ export default class SIDEBAR extends EL {
 
                 // Scroll
                 this.scrollTarget = tab;
-                setTimeout(() => {
-                    console.log('Scrolling to reference', this.scrollTarget.toString());
+                //setTimeout(() => {
+                    //console.log('Scrolling to reference', this.scrollTarget.toString());
                     if (this.scrollTarget !== null) {
                         $(this.el).animate({
                             scrollTop: parseInt($(this.scrollTarget.el).offset().top)
                         }, 600, 'swing');
                         this.scrollTarget = null;
                     }
-                }, 500);
+                //}, 500);
             }
         });
     }
