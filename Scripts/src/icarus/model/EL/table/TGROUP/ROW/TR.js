@@ -17,32 +17,8 @@ export default class TR extends CONTAINER {
         this.removeAttribute('draggable');
         this.removeClass('draggable');
         this.childLocation = this;
+        this.navheader.destroy();
         this.body.destroy();
-        this.implement(new Clickable(this));
-        //this.navheader.destroy();
-        
-        this.el.addEventListener('activate', () => {
-            console.log(this.toString() + '.activate()');
-            /*let tGroup = this.getTGroup();
-            if (tGroup.hasClass('active')) {
-                let activeRows = [...tGroup.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
-                activeRows.forEach((s) => s.dispatchEvent(new Deactivate(s)));
-            } else {
-                tGroup.el.dispatchEvent(new Activate(tGroup));
-            }*/
-        });
-        this.el.addEventListener('deactivate', () => {
-            //this.deactivateChildren();
-            /*
-            let tGroup = this.getTGroup();
-            let activeRows = [...tGroup.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
-            if (activeRows.length === 0) {
-                tGroup.el.dispatchEvent(new Deactivate(tGroup));
-            } else {
-                console.log('Row has active siblings', this.el, activeRows);
-            }
-            */
-        });
     }    
     constructElements() {
         return this.chain(() => {
