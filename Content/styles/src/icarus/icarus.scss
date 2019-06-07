@@ -2214,6 +2214,7 @@ html {
                     .table-column {
                         display: table-cell;
                         height: $navbar-height;
+                        min-width: $navbar-height;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
