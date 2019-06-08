@@ -1,5 +1,4 @@
 ﻿/** @module */
-/* eslint-disable max-lines-per-function, complexity, max-statements */
 import NAVBAR, { Activate, Deactivate, MODEL } from '../nav/navbar/NAVBAR.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** A REFERENCE represents a collection of menus and tabs representing the MODEL
@@ -7,6 +6,10 @@ import { ICONS } from '../../../enums/ICONS.js';
     @class
 */
 export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends REFERENCE
+    /** Constructs a Navigation Panel
+	    @param {EL} node Parent Node
+	    @param {MODEL} model Model
+    */
     constructor(node, model) {
         super(node, model);
         /** @type {CONTAINER} */
@@ -37,4 +40,4 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
         this.container.constructReference(this);
     }
 }
-/* eslint-enable */
+export { MODEL }

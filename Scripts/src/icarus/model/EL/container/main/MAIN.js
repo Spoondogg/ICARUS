@@ -251,31 +251,31 @@ export default class MAIN extends CONTAINER {
 	navigateForward() {
 		console.log('TODO: Forward');
 	}
-	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants
+	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
 	    @returns {void}
 	*/
 	createDocumentMap() {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-        let options = sidebar.element.navbar.addOptionsMenu(
-            this.label, ICONS[this.className], this.toString(),
-            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
-        );
-
-        /** @type {[MENU]} */
-        let [propertiesMenu] = options.menu.get('PROPERTIES', 'MENU');
-        this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, sidebar.element.navbar);
-
-        /** @type {[MENU]} */
-        let [methodsMenu] = options.menu.get('METHODS', 'MENU');
-        this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, sidebar.element.navbar);
-        this.addCrudItems(methodsMenu.getMenu('CRUD'));
-        this.addDomItems(methodsMenu.getMenu('DOM'));
-        this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
             Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
         */
-		this.reference = sidebar.element.navbar;
+        this.reference = sidebar.element.navbar;
+        this.reference.options = this.reference.addOptionsMenu(
+            this.label, ICONS[this.className], this.toString(),
+            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
+        );
+
+        let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
+        this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, this.reference);
+
+        let methodsMenu = this.reference.options.menu.getMenu('METHODS');
+        this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, this.reference);
+        this.addCrudItems(methodsMenu.getMenu('CRUD'));
+        this.addDomItems(methodsMenu.getMenu('DOM'));
+        this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
+
+        
 		// Add submenu items to DATA and ATTRIBUTES
         this.reference.getTab(this.toString()).el.addEventListener('select', () => this.getFactory().save(false, this, this));
 
