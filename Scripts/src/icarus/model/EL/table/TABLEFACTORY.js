@@ -7,7 +7,6 @@ import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
     @class
 */
 export default class TABLEFACTORY extends CONTAINERFACTORY {
-    /* eslint-disable max-lines-per-function, complexity, max-statements */
     /** Constructs a FACTORY to build TABLE related CONTAINER Classes */
     constructor() {
         super('TABLE');
@@ -50,4 +49,3 @@ export default class TABLEFACTORY extends CONTAINERFACTORY {
     }
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, TABLE }
-/* eslint-enable */

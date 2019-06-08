@@ -13,7 +13,6 @@ import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js'
     @class
 */
 export default class FORMFACTORY extends CONTAINERFACTORY {
-    /* eslint-disable max-lines-per-function, complexity, max-statements */
     /** Constructs a FACTORY to build FORM related CONTAINER Classes */
     constructor() {
         super('FORM');
@@ -89,4 +88,3 @@ export default class FORMFACTORY extends CONTAINERFACTORY {
     }
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
-/* eslint-enable */
