@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { MODEL } from '../container/CONTAINER.js';
 import TGROUP, { TD, TH, TR } from './tgroup/TGROUP.js';
 import TBODY from './TGROUP/TBODY.js';
 import TFOOT from './TGROUP/TFOOT.js';
@@ -15,35 +15,17 @@ export default class TABLE extends CONTAINER {
         model.body = { // set collapsible body tag to table
             element: 'TABLE'
         };
-        super(node, 'DIV', model, ['TR']);
+        super(node, 'DIV', model, ['THEAD', 'TBODY', 'TFOOT']);
         this.addClass('table');
         this.deactivateSiblingsOnActivate = false;
-
-        this.tHead = new THEAD(this.body.pane, new MODEL());
-        this.tHead.addTr(new MODEL().set('label', 'THEAD'));
-
-        this.tBody = new TBODY(this.body.pane, new MODEL());
-        this.childLocation = this.tBody;
-
-        this.tFoot = new TFOOT(this.body.pane, new MODEL());
-        this.tFoot.addTr(new MODEL().set('label', 'TFOOT'));
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this);
-                if (this.data.columns) {
-                    // create columns in THEAD and TFOOT
-                    let cols = this.data.columns.split(',');
-                    let [tHeadRow] = this.tHead.get(null, 'TR');
-                    cols.forEach((col) => tHeadRow.addColumn(new MODEL().set('innerHTML', col)));
-                    let [tFootRow] = this.tFoot.get(null, 'TR');
-                    cols.forEach((col) => tFootRow.addColumn(new MODEL().set('innerHTML', col)));
-                }
-
             } else {
-                console.log('No data exists for ' + this.toString());
-                this.navheader.el.dispatchEvent(new Expand(this.navheader));
+                //console.log('No data exists for ' + this.toString());
+                //this.navheader.el.dispatchEvent(new Expand(this.navheader));
             }
         });
     }
@@ -52,9 +34,7 @@ export default class TABLE extends CONTAINER {
 	    @returns {TGROUP} A Table group
 	*/
 	addTHead(model) {
-        let tHead = this.addChild(new THEAD(this.childLocation, model));
-        $(tHead.el).insertBefore(this.body.pane);
-        return tHead;
+        return this.addChild(new THEAD(this.childLocation, model));
     }
     /** Adds the given table group to the table
 	    @param {MODEL} model Object model
@@ -68,9 +48,7 @@ export default class TABLE extends CONTAINER {
 	    @returns {TGROUP} A Table group
 	*/
     addTFoot(model) {
-        let tFoot = this.addChild(new TFOOT(this.childLocation, model));
-        $(tFoot.el).insertAfter(this.body.pane);
-        return tFoot;
+        return this.addChild(new TFOOT(this.childLocation, model));
     }
     /** Adds a row to the table body group
         @param {MODEL} model Object model
@@ -79,7 +57,6 @@ export default class TABLE extends CONTAINER {
     addRow(model) {
         return this.getTBody().addTr(model);
     }
-
     /** Returns THEAD (If exists)
         @returns {THEAD} An array of FIELDSET(s)
     */
@@ -100,23 +77,6 @@ export default class TABLE extends CONTAINER {
     getTFoot() {
         let [results] = this.get(null, 'TFOOT');
         return results;
-    }
-    static createEmptyTable(node) {
-        console.log('TABLE.createEmptyTable()');
-        return new Promise((resolve, reject) => {
-            try {
-                let table = new TABLE(node, new MODEL().set({
-                    showNav: 0,
-                    body: {
-                        element: 'TABLE'
-                    }
-                }));
-                table.addEach(['THEAD', 'TBODY', 'TFOOT']);
-                resolve(table);
-            } catch (e) {
-                reject(e);
-            }
-        });
     }
 }
 export { MODEL, TBODY, TD, TGROUP, TH, THEAD, TFOOT, TR }
