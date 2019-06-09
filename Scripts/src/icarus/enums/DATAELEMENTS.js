@@ -216,10 +216,7 @@ export const DATAELEMENTS = new Map([
 	['SIDEBAR', {}],
     [
         'TABLE', {
-            data: [
-                createInputModel('INPUT', 'columns'),
-                createInputModel('INPUT', 'header', 'Header')
-            ]
+            data: [createInputModel('INPUT', 'header', 'Header')]
         }
     ],
     [
