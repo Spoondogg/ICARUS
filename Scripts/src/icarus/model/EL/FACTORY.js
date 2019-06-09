@@ -96,7 +96,7 @@ export default class FACTORY {
 	    @returns {Promise<EL>} A newly constructed element
 	*/
 	get(node, className, id = 0) {
-		let span = new SPAN(node, new MODEL());
+		let span = new SPAN(node);
         let index = node.children.push(span); // Reserve the slot in the array  
         return span.getPayload(id, className).then((payload) => {
             /** @type {EL} */
@@ -141,7 +141,7 @@ export default class FACTORY {
                     new PROMPT(new DIALOGMODEL(new MODEL(), {
                         caller,
                         container,
-                        label: 'Edit ' + container.toString + '[' + type + '].' + name
+                        label: 'Edit ' + container.toString() + '[' + type + '].' + name
                     })).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
                         className: container.className,
@@ -197,7 +197,7 @@ export default class FACTORY {
                         });
                     });
                 } else {
-                    console.warn(container.toString + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
+                    console.warn(container.toString() + '.elements[' + type + '].' + name + ' does not have a ' + type + ' FORMPOST');
                     resolve(false);
                 }
             } catch (e) {

@@ -1,11 +1,11 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines, max-statements */
 /** @module */
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
+import Clickable, { Switchable } from '../../../interface/Clickable.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
-import Clickable from '../../../interface/Clickable.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
@@ -19,6 +19,7 @@ import LEGEND from '../legend/LEGEND.js';
 import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
+import REFERENCE from './REFERENCE.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
@@ -29,13 +30,15 @@ import STRING from '../../../STRING.js';
 export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
-	    @param {string} element HTML element Tag
-	    @param {MODEL} model Model
-	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
+	    @param {string} [element] HTML element Tag
+	    @param {MODEL} [model] Model
+	    @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
+    constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
+        //console.log(element + '.model', model);
         super(node, element, model);
         this.addClass('container');
+        this.containerList = containerList;
         this.editableElements = [];
         this.dragging = false;
         /** If true, siblings are deactivated when this CONTAINER is activated */
@@ -45,74 +48,121 @@ export default class CONTAINER extends GROUP {
 		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
-        this.implement(new Draggable(this));
-        this.body = new COLLAPSIBLE(this, new MODEL('body'));
+        this.implement(new Draggable(this));        
+        this.body = new COLLAPSIBLE(this, this.getBodyElement(model), new MODEL('body'));
         this.body.implement(new Clickable(this.body));
+        /** Represents the location where children of this container are instantiated
+            @type {EL}
+        */
+        this.childLocation = this.body.pane;
         this.addEvents();
-		// Cascade state
-		// Add Navbar Items
-		this.addElementItems(containerList).then(() => this.addDomItems().then(() => this.addCrudItems()));
+        this.addOptions();
 		this.updateDocumentMap();
 		this.setDefaultVisibility(model);
     }
+    addOptions() {
+        let optionsMenu = this.navheader.getMenu('OPTIONS');
+        this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
+            () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
+                () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
+    }
+    getBodyElement(model) {
+        let bodyElement = 'DIV';
+        try {
+            bodyElement = model.body.element;
+        } catch (e) {
+            //console.log('body.element does not exist for this model');
+        }
+        return bodyElement;
+    }
+    /** Activates this reference and reveals it in the document-map
+        @param {CONTAINER} [targetContainer] Target Container
+        @returns {void}
+    */
+    scrollToReference(targetContainer = this) {
+        let main = this.getMain();
+        let [sidebar] = main.navheader.menus.get('document-map', 'SIDEBAR');
+        sidebar.scrollToReference(targetContainer);
+        let sidebarTab = main.navheader.getTab('document-map');
+        sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+    }
+    /** Adds a set of frequently used buttons to this container's nav-header
+        @returns {void}
+    */
     addQuickAccessButtons() {
+        // Trigger draggable on TAB long-click
+        this.navheader.tab.el.addEventListener('longclick', () => this.toggleClass('allow-drag'));
+
+        // Trigger reference on OPTIONS long-click
+        this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
-            
             // Save and QuickSave button
-            let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-                label: 'SAVE',
-                icon: ICONS.SAVE,
-                name: 'btn-save'
-            }));
-            btnSave.el.addEventListener('activate', () => this.chain(() => {
-                this.el.dispatchEvent(new Modify(btnSave));
-            }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-            btnSave.el.addEventListener('longclick',
-                () => this.getFactory().save(false, this, this).then(
-                    () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
-
-            // Refresh
-            let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-                label: 'REFRESH',
-                icon: ICONS.REFRESH,
-                name: 'btn-refresh'
-            }));
-            btnRefresh.el.addEventListener('activate', () => {
-                this.chain(() => {
-                    this.getMain().focusBody().then(() => this.refresh());
-                }).then(() => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh)));
-            });
-
-            // Up and Down buttons
-            [
-                {
-                    label: 'UP',
-                    icon: ICONS.UP,
-                    name: 'btn-up',
-                    dir: 0
-                },
-                {
-                    label: 'DOWN',
-                    icon: ICONS.DOWN,
-                    name: 'btn-down',
-                    dir: 2
-                }
-            ].forEach((model) => {
-                let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
-                btn.el.addEventListener('activate', () => {
-                    this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
-                        () => btn.el.dispatchEvent(new Deactivate(btn)));
-                });
-            });
+            this.addSaveButton();
+            this.addRefreshButton();
+            this.addMoveButtons();
 
             // Move OPTIONS tab to the end
-            let [btnOptions] = this.navheader.tabs.get('OPTIONS', 'NAVITEMICON');
+            let btnOptions = this.navheader.getTab('OPTIONS'); //.tabs.get('OPTIONS', 'NAVITEMICON');
             btnOptions.addClass('tab-narrow');
             let siblings = this.navheader.tabs.get();
             let lastSibling = siblings[siblings.length - 1];
             $(btnOptions.el).insertAfter(lastSibling.el);
         }
+    }
+    /** Adds a save button to this.navheader
+        @returns {void}
+    */
+    addSaveButton() {
+        let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+            label: 'SAVE',
+            icon: ICONS.SAVE,
+            name: 'btn-save'
+        }));
+        btnSave.el.addEventListener('activate', () => this.chain(() => {
+            this.el.dispatchEvent(new Modify(btnSave));
+        }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+        btnSave.el.addEventListener('longclick', () => this.getFactory().save(false, this, this).then(
+            () => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
+    }
+    /** Adds a refresh button to this.navheader
+        @returns {void}
+    */
+    addRefreshButton() {
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
+            label: 'REFRESH',
+            icon: ICONS.REFRESH,
+            name: 'btn-refresh'
+        }));
+        btnRefresh.el.addEventListener('activate', () => this.chain(
+            () => this.getMain().focusBody().then(
+                () => this.refresh().then(
+                    () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
+    }
+    /** Adds Up and Down buttons to this.navheader
+        @returns {void}
+    */
+    addMoveButtons() {
+        [
+            {
+                label: 'UP',
+                icon: ICONS.UP,
+                name: 'btn-up',
+                dir: 0
+            },
+            {
+                label: 'DOWN',
+                icon: ICONS.DOWN,
+                name: 'btn-down',
+                dir: 2
+            }
+        ].forEach((model) => {
+            let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+            btn.el.addEventListener('activate', () => {
+                this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
+                    () => btn.el.dispatchEvent(new Deactivate(btn)));
+            });
+        });
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
 	    @param {CONTAINERMODEL|MODEL} model Model
@@ -151,7 +201,7 @@ export default class CONTAINER extends GROUP {
 		*/
         this.name = this.required(model.name || this.element);
 		/** Represents an anchor/reference in the SIDEBAR NAV document-map 
-		    @type {NAVBAR} Document Map Reference NAVBAR
+		    @type {REFERENCE} Document Map Reference NAVBAR
 		*/
         this.reference = null;
 	}
@@ -179,9 +229,9 @@ export default class CONTAINER extends GROUP {
 	*/
     get(name = null, className = null) {
         if (name === null && className === null) {
-            return this.body.pane.children;
+            return this.childLocation.children;
         }
-        return this.body.pane.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+        return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -212,9 +262,10 @@ export default class CONTAINER extends GROUP {
 	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
 	    @returns {void}
 	*/
-	addDocumentMapAttributes(menu, submenuName) {
+    addDocumentMapProperties(menu, submenuName) {
 		/** @type {[MENU]} */
-		let [dataMenu] = menu.get(submenuName, 'MENU');
+		//let [dataMenu] = menu.get(submenuName, 'MENU');
+        let dataMenu = menu.getMenu(submenuName);
         let type = submenuName.toString().toLowerCase();
         /*if (this.elements.get(type).length > 0) {
             console.log(this.toString() + '.elements.' + type, this.elements.get(type).map((el) => el.label));
@@ -236,59 +287,117 @@ export default class CONTAINER extends GROUP {
             });
 		});
     }
+    /** Adds clickable CRUD, ELEMENT and DOM nav items to the Document Map
+	    @param {MENU} menu This Container's reference menu
+	    @param {string} submenuName Target menu (ie: DATA or ATTRIBUTES)
+	    @returns {void}
+	
+    addDocumentMapMethods(menu, submenuName) {
+        let dataMenu = menu.getMenu(submenuName);
+        let type = submenuName.toString().toLowerCase();
+        console.warn('ADD METHODS');
+        this.addCrudItems(dataMenu);
+    }*/
     /** Adds the default Document Map Attributes ('DATA', 'ATTRIBUTES', 'META') to the given MENU
         @param {MENU} menu Document Map reference menu for this container
         @returns {void}
     */
-    addDefaultDocumentMapAttributes(menu) {
-        ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapAttributes(menu, str));
+    addDefaultDocumentMapProperties(menu) {
+        ['DATA', 'ATTRIBUTES', 'META'].forEach((str) => this.addDocumentMapProperties(menu, str));
         this.reference.menus.get()[0].get(null, 'NAVITEMICON').forEach(
-            (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase()))
-        );
+            (m) => m.el.addEventListener('select', () => this.createNewFormPost(m.name.toLowerCase())));
     }
-	/** Adds this CONTAINER to parent reference in the Document Map
+    /** Activates this container's reference in the document map
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    activateReference() {
+        //console.log('Activating reference for ' + this.toString(), this.reference);
+        //this.activateReferenceChildMenu();
+        return this.chain(() => {
+            let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+            if (!tab.hasClass('active')) {
+                tab.el.dispatchEvent(new Activate(tab));
+            }
+        }, this.toString() + ' is unable to activate its reference');
+    }
+    activateReferenceChildMenu() {
+        //console.log('Activating childrenmenu');
+        let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+        let [childrenMenu] = menu.get('CHILDREN', 'NAVITEMICON');
+        if (!childrenMenu.hasClass('active')) {
+            childrenMenu.el.dispatchEvent(new Activate(childrenMenu));
+        }
+    }
+    /** Deactivates this container's reference in the document map
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateReference() {
+        return this.chain(() => {
+            //console.log('Deactivating reference for ' + this.toString(), this.reference);
+            this.deactivateReferenceChildMenus();
+            let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
+            tab.el.dispatchEvent(new Deactivate(tab));
+        }, this.toString() + ' is unable to deactivate its reference');
+    }
+    /** Deactivates child menus from this container's reference
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateReferenceChildMenus() {
+        return this.chain(() => {
+            //console.log('Deactivating childrenmenus');
+            let [menu] = this.reference.menus.get(this.toString(), 'MENU');
+            let menus = menu.get(null, 'NAVITEMICON');
+            menus.forEach((m) => m.el.dispatchEvent(new Deactivate(m)));
+        }, this.toString() + ' is unable to deactivate its child menus');
+    }
+	/** Adds this CONTAINER as a child of its parent reference in the Document Map
 	    @returns {void}
 	*/
 	updateDocumentMap() {
-		if (this.className !== 'MAIN' && this.getContainer() !== null) {
-			try {
-				let parentName = this.getContainer().toString();
-				/** @type {NAVBAR} */
-				let parentRef = this.getContainer().reference;
-				if (parentRef !== null) {
-					/** @type {[MENU]} */
-					let [parentRefMenu] = parentRef.menus.get(parentName, 'MENU');
-					/** @type {[MENU]} */
-					let [childrenMenu] = parentRefMenu.get('CHILDREN', 'MENU');
-					/** @type {NAVBAR} */
-                    this.reference = childrenMenu.addNavBar(new MODEL().set('name', this.toString()));
+        if (this.className !== 'MAIN' && this.getContainer() !== null) {
+            try {
+                let container = this.getContainer();
+                if (container.reference !== null) {
+                    /** @type {[MENU]} */
+                    let parentReferenceMenu = container.reference.getMenu(container.toString());
+                    let parentChildrenMenu = parentReferenceMenu.getMenu('CHILDREN');
 
-                    this.reference.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
-                    
-					/// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
-					/** @type {[MENU]} */
-					let [menu] = this.reference.menus.get(this.toString(), 'MENU');
-                    this.addDefaultDocumentMapAttributes(menu);
+                    this.reference = new REFERENCE(parentChildrenMenu, new MODEL().set({
+                        name: this.toString(),
+                        container: this
+                    }));
 
-					/// Allow only one active CHILD at a time
-					/** @type {[NAVITEMICON]} */
-					let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-					tab.el.addEventListener('activate', () => {
-						console.log('DocumentMap > ' + this.toString(), this);
-						this.scrollTo();
-						childrenMenu.get(null, 'NAVBAR').filter((c) => c !== this.reference).forEach(
-							(n) => n.tabs.children.forEach(
-								(t) => t.el.dispatchEvent(new Deactivate(t))));
-                    });
+                    /// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
+                    let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
+                    this.addDefaultDocumentMapProperties(propertiesMenu);
+
+                    let tab = this.reference.getTab(this.toString());
+                    tab.el.addEventListener('activate', () => this.chain(() => {
+                        let refs = [...parentChildrenMenu.el.children]
+                            .filter((c) => c.classList.contains('active') && c !== this.reference.el);
+                        //console.log('ACTIVATED REFERENCE TAB', refs);
+                        this.reference.el.dispatchEvent(new Activate(this.reference));
+                        /// Allow only one active CHILD at a time
+                        refs.forEach((ref) => ref.dispatchEvent(new Deactivate(ref)));
+                    }));
+                    tab.el.addEventListener('deactivate', () => this.chain(() => {
+                        //console.log('DEACTIVATED REFERENCE TAB');
+                        if (tab.hasClass('active')) {
+                            this.reference.el.dispatchEvent(new Deactivate(this.reference));
+                        }
+                    }));
+
                     tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
-					/// Expand the NAVBAR and override its collapse Event
-					this.reference.el.dispatchEvent(new Expand(this.reference));
-					this.reference.collapse = () => true;
-				}
-			} catch (e) {
-				console.warn('Unable to update document-map', this.className, e);
-			}
-		}
+                    /// Expand the NAVBAR and override its collapse Event
+                    this.reference.el.dispatchEvent(new Expand(this.reference));
+                    this.reference.collapse = () => true;
+                }
+            } catch (e) {
+                console.warn('Unable to update document-map', this.className, e);
+            }
+        } else {
+            console.warn('MAIN or no CONTAINER', this);
+        }
 	}
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
@@ -297,10 +406,43 @@ export default class CONTAINER extends GROUP {
 	*/
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
-	}
+    }
+
+    constructReferenceSubMenus(arr, menu, reference) {
+        arr.forEach((p) => {
+            let t = menu.addNavItemIcon(new MODEL().set({
+                label: p,
+                icon: ICONS[p],
+                name: p
+            }));
+            let m = menu.addMenu(new MODEL().set('name', p));
+            reference.addTabbableElement(t, m);
+        });
+    }
+
+    /** Constructs the Reference menus based on its CONTAINER
+        @param {REFERENCE} reference Reference.options.menu
+        @returns {void}
+    */
+    constructReference(reference) {
+        try {
+            let { menu } = reference.options;
+
+            let propertiesMenu = menu.getMenu('PROPERTIES');
+            this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, reference);
+
+            let methodsMenu = menu.getMenu('METHODS');
+            this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
+            this.addCrudItems(methodsMenu.getMenu('CRUD'));
+            this.addDomItems(methodsMenu.getMenu('DOM'));
+            this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
+        } catch (e) {
+            console.warn('Unable to add REFERENCE items', e);
+        }
+    }
 	/** Creates this CONTAINER's MODEL collections based on the 
         default MODEL for this container type in DATAELEMENTS
-	    @param {string} name ie: data, attributes, meta
+	    @param {Name} name ie: data, attributes, meta
 	    param {MODEL} model Container Model
 	    @returns {void}
 	*/
@@ -329,7 +471,7 @@ export default class CONTAINER extends GROUP {
                 thisContainerData.forEach((m) => arr.push(m)); // Default Data Elements for CONTAINER descendent
             }
 		} catch (e) {
-			console.warn('Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
+			console.warn('Missing DATAELEMENTS.js reference.  Unable to create ' + this.toString() + '.elements.' + name, this, DATAELEMENTS.get(this.className), e);
 		}
 	}
 	/** If the Container has no children, display a button to create an element
@@ -340,7 +482,7 @@ export default class CONTAINER extends GROUP {
 		return Promise.resolve(this);
 		/*return this.chain(() => {
             if (this.get().length === 0) {
-				let btnAddElement = new EL(this.body.pane, 'DIV', new MODEL('btn-add-element'));
+				let btnAddElement = new EL(this.childLocation, 'DIV', new MODEL('btn-add-element'));
 				btnAddElement.btn = new EL(btnAddElement, 'BUTTON', new MODEL().set('innerHTML', 'Add an Element to this ' + this.className));
 				btnAddElement.btn.el.onclick = () => {
 					this.navheader.expand().then(
@@ -371,6 +513,13 @@ export default class CONTAINER extends GROUP {
             //this.navheader.el.dispatchEvent(new Collapse(this.navheader));
 		});*/
     }
+    /** Dispatches a Deactivate Event on this.el.children HTMLElements
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    deactivateChildren() {
+        let children = [...this.el.children].filter((c) => c.classList.contains('active'));
+        children.forEach((s) => s.dispatchEvent(new Deactivate(s)));
+    }
     /** Dispatches a Deactivate Event on CONTAINER.body for any sibling CONTAINER Elements relative to this CONTAINER 
         @returns {Promise<ThisType>} Promise Chain
     */
@@ -396,24 +545,65 @@ export default class CONTAINER extends GROUP {
     /** Dispatches the given Event to this element's siblings
         Overrides EL.dispatchToSiblings
 	    @param {Event} event Event to dispatch
+        @param {string} className Event signal classname
 	    @returns {void}
 	*/
-    dispatchToSiblings(event) {
+    dispatchToSiblings(event, className) {
         //console.log(this.toString() + '.siblings()', event, this.node.getContainer().get().filter((c) => c !== this));
-        this.node.getContainer().get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+        this.node.getContainer().get().filter((c) => c.hasClass(className) && c !== this).forEach((s) => s.el.dispatchEvent(event));
+    }
+    activateParentContainer() {
+        try {
+            let container = this.getContainer();
+            if (!container.hasClass('active')) {
+                container.el.dispatchEvent(new Activate(container));
+            }
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to activate parent');
+        }
+    }
+    activateContainer() {
+        this.activateParentContainer();
+        //console.log('Activated ' + this.toString());
+        this.getContainer().activateReferenceChildMenu();
+        this.activateReference();
+        try {
+            if (this.node.getContainer().deactivateSiblingsOnActivate) {
+                this.dispatchToSiblings(new Deactivate(this), 'active');
+            }
+        } catch (e) {
+            if (!(e instanceof TypeError)) {
+                console.warn('Unable to deactivate siblings', e);
+            }
+        }
+    }
+    deactivateParentContainer() {
+        try {
+            let container = this.getContainer();
+            container.el.dispatchEvent(new Deactivate(container));
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to deactivate parent');
+        }
+    }
+    deactivateContainer() {
+        /*
+        //console.log(this.toString() + '.deactivateContainer()');
+        let activeChildren = this.get().filter((c) => c.hasClass('active')); // needs caching!!
+        if (activeChildren.length === 0) {
+            this.deactivateReference();
+        } else {
+            console.warn('Unable to deactivate ' + this.toString() + '.  It has active children', activeChildren);
+        }
+        */
     }
 	/** Adds 'activate' and 'deactivate' events to this CONTAINER
 	    @returns {void}
 	*/
 	addActivateEvents() {
-        this.el.addEventListener('activate', () => {
-            console.log('Activated ' + this.toString());
-            if (this.node.getContainer().deactivateSiblingsOnActivate) {
-                this.dispatchToSiblings(new Deactivate(this));
-            }
-        });
+        this.el.addEventListener('activate', () => this.activateContainer());
         this.el.addEventListener('deactivate', () => {
-            console.log('Deactivated ' + this.toString());
+            this.deactivateContainer();
+            this.deactivateParentContainer();
         });
         this.navheader.tab.el.addEventListener('activate', () => {
             if (this.header) {
@@ -670,15 +860,16 @@ export default class CONTAINER extends GROUP {
 		return [false, false, false];
 	}
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
+        @param {MENU} menu Target Menu
 	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
-    addElementItems(containerList) {
+    addElementItems(menu, containerList) {
 		return this.chain(() => {
 			if (containerList.length > 0) {
 				//let defaultContainers = []; // First two are normal
 				//containerList.splice(2, 0, ...defaultContainers);
-				Promise.all([containerList.map((c) => this.addContainerCase(c))]);
+				Promise.all([containerList.map((c) => this.addContainerCase(menu, c))]);
 			}
 		});
 	}
@@ -720,17 +911,15 @@ export default class CONTAINER extends GROUP {
                                     return [dataEl, e.name];
                                 }
                             });
-                            Promise.all(promises).then(() => { //results
-                                this.body.pane.empty().then(
+                            Promise.all(promises).then(() => this.childLocation.empty().then(
+                                () => this.reference.options.menu.getMenu('CHILDREN').empty().then(
                                     () => this.make(payload.model).then(() => {
                                         this.el.style.display = tempStyleDisplay;
                                         //console.log(this.toString() + '.refresh().results', results);
                                         loader.log(100).then(() => {
                                             this.navheader.tab.el.dispatchEvent(new Activate(this.navheader.tab));
-                                        })
-                                    })
-                                );
-                            });
+                                        });
+                                    }))));
                         }
                     );
                 }), this.toString() + ' failed to refresh');
@@ -777,33 +966,39 @@ export default class CONTAINER extends GROUP {
 		return items;
 	}
 	/** Adds default items to the DOM Menu
+        @param {MENU} menu Target Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems() {
-		return this.chain(() => {
-			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('DOM', 'MENU');
-			let items = this.createNavItems(['UP', 'DOWN', 'REFRESH', 'REMOVE', 'DELETE', 'FULLSCREEN'], menu[0]);
-            items.UP.el.addEventListener('activate', () => {
-                this.chain(() => this.el.dispatchEvent(new Move(this, 0))).then(
-                    () => items.UP.el.dispatchEvent(new Deactivate(items.UP)));
-            });
-            items.DOWN.el.addEventListener('activate', () => {
-                this.chain(() => this.el.dispatchEvent(new Move(this, 2))).then(
-                    () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN)));
-            });
-			items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
-			items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
-			items.DELETE.el.onclick = () => this.disable();
-			items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+	addDomItems(menu) {
+        return this.chain(() => {
+            let arr = ['REFRESH', 'FULLSCREEN'];
+            if (this.className !== 'MAIN') {
+                arr.push('UP', 'DOWN', 'REMOVE', 'DELETE');
+            }
+			let items = this.createNavItems(arr, menu);
+            items.REFRESH.el.onclick = () => this.getMain().focusBody().then(() => this.refresh());
+            items.FULLSCREEN.el.onclick = () => document.documentElement.requestFullscreen();
+            if (this.className !== 'MAIN') {
+                items.UP.el.addEventListener('activate', () => this.chain(
+                    () => this.el.dispatchEvent(new Move(this, 0))).then(
+                        () => items.UP.el.dispatchEvent(new Deactivate(items.UP))));
+                items.DOWN.el.addEventListener('activate', () => this.chain(
+                    () => this.el.dispatchEvent(new Move(this, 2))).then(
+                        () => items.DOWN.el.dispatchEvent(new Deactivate(items.DOWN))));
+
+                items.REMOVE.el.onclick = () => this.getMain().focusBody().then(() => this.removeDialog());
+                items.DELETE.el.onclick = () => this.disable();
+            }            
 		});
 	}
-	/** Adds the CRUD Nav Items
+	/** Adds the CRUD Nav Items to the given menu
+        @param {MENU} menu A menu for CRUD related items
         @returns {GROUP} A Menu Group
 	*/
-	addCrudItems() {
+    addCrudItems(menu) {
 		return this.chain(() => {
-			let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('CRUD', 'MENU');
-			let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu[0]);
+			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
+            let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu); //[0]
 			items.LOAD.el.onclick = () => this.load();
 			items.SAVEAS.el.onclick = () => this.getFactory().save(false, this, this);
 			items.SAVE.el.onclick = () => this.getFactory().save(true, this, this);
@@ -811,23 +1006,24 @@ export default class CONTAINER extends GROUP {
 	}
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
+        @param {MENU} menu Target Menu
         @param {string} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
         @returns {Promise<ThisType>} Promise Chain
     */
-	addContainerCase(className, addButton = true) {
+    addContainerCase(menu, className, addButton = true) {
 		return new Promise((resolve, reject) => {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
 					if (addButton) {
-						let menu = this.navheader.menus.get('OPTIONS', 'MENU')[0].get('ELEMENTS', 'MENU');
-						let item = this.addContainerCaseButton(className, menu[0]);
+						//let menu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
+						let item = this.addContainerCaseButton(className, menu);
 						item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
-						item.el.addEventListener('mouseup', () => menu[0].el.dispatchEvent(new Deactivate()));
+						item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 					}
 					this.addConstructor(className, (model) => {
 						try {
-							resolve(this.getFactory().get(this.body.pane, className, model.id || 0));
+                            resolve(this.getFactory().get(this.childLocation, className, model.id || 0));
 						} catch (ee) {
 							console.warn('Unable to retrieve factory for Container Case', ee);
 							reject(ee);
@@ -912,6 +1108,8 @@ export default class CONTAINER extends GROUP {
                             this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
                             resolve(this.make(payload.model));
                         } else {
+                            this.getMain().login();
+                            // @todo Create a LoginRequired type Error and appropriate handler
                             reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
                         }
                     });
@@ -947,12 +1145,12 @@ export default class CONTAINER extends GROUP {
 	getSubSections() {
         try {
             //return this.get().filter((s) => s.id > 0).map((ss) => ss.id); // MODEL
-            return [...this.body.pane.el.children].filter((s) => s.id > 0).map((ss) => ss.id); // EL.el from HTMLElementCollection
+            return [...this.childLocation.el.children].filter((s) => s.id > 0).map((ss) => ss.id); // EL.el from HTMLElementCollection
         } catch (e) {
             console.warn(this.toString() + '.getSubSections()', e);
             return [0];
         }        
-	}
+    }
 	/** Returns the MAIN container
 	    @returns {CONTAINER} The MAIN Container class
 	    @throws Will throw an error 
@@ -1181,5 +1379,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Toggle }
+export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
 /* eslint-enable max-lines */

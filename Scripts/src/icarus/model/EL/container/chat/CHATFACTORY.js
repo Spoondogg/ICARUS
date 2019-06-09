@@ -10,10 +10,9 @@ import WORD from '../word/WORD.js';
     @class
 */
 export default class CHATFACTORY extends CONTAINERFACTORY {
-    /* eslint-disable max-lines-per-function, complexity, max-statements */
     /** Constructs a FACTORY to build CONTAINER Classes */
     constructor() {
-        super('FORMELEMENT');
+        super('CHAT');
     }
     /** Switch statement to determine appropriate element for this factory to construct
         @param {string} className Container Constructor Name
@@ -41,4 +40,3 @@ export default class CHATFACTORY extends CONTAINERFACTORY {
     }
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
-/* eslint-enable */

@@ -4,6 +4,7 @@ import Activate from '../event/Activate.js';
 import Deactivate from '../event/Deactivate.js';
 import Deselect from '../event/Deselect.js';
 import LongClick from '../event/LongClick.js';
+import { LongclickDelay } from '../enums/StyleVars.js';
 import Select from '../event/Select.js';
 import Selectable from './Selectable.js';
 import Switchable from './Switchable.js';
@@ -23,7 +24,7 @@ export default class Clickable extends IFACE {
 	*/
 	constructor(node, options = new MODEL().set({
 		delay: 200,
-		longClickDelay: 1200,
+		longClickDelay: LongclickDelay,
 		stopPropagation: true
 	})) {
 		super(node, 'clickable');
@@ -72,11 +73,11 @@ export default class Clickable extends IFACE {
 		// Detect Long click on desktop (MouseEvent) and mobile (TouchEvent) 
 		// @see https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 		// Consider showing a simple press-timer animation after 100ms
-		node.el.addEventListener('mousedown', (ev) => node.pressDown(ev));
-		node.el.addEventListener('mouseup', (ev) => node.pressUp(ev));
+        node.el.addEventListener('mousedown', (ev) => node.pressDown(ev), { passive: true });
+        node.el.addEventListener('mouseup', (ev) => node.pressUp(ev), { passive: true });
 		node.el.addEventListener('touchstart', (ev) => node.pressDown(ev), { passive: true });
 		node.el.addEventListener('touchend', (ev) => node.pressUp(ev), { passive: true });
-        node.el.addEventListener('click', (ev) => node.pressed(ev));
+        node.el.addEventListener('click', (ev) => node.pressed(ev), { passive: true });
 	}
 	startTimer(node) {
 		clearTimeout(node.timer);
