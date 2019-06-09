@@ -4,15 +4,16 @@ import DIV, { ATTRIBUTES, EL, MODEL } from '../div/DIV.js';
 import PANE from './PANE.js';
 /** A collapsible DIV with an embedded PANE
     @class
-    @extends DIV
+    @extends EL
 */
-export default class COLLAPSIBLE extends DIV {
+export default class COLLAPSIBLE extends EL {
 	/** Construct a collapsible DIV with an embedded PANE
         @param {CONTAINER} node Parent
+        @param {string} element Element tag name
         @param {MODEL} model Object
 	*/
-	constructor(node, model) {
-		super(node, model);
+	constructor(node, element = 'DIV', model) {
+		super(node, element, model);
 		this.implement(new Collapsible(this));
 		this.pane = new PANE(this, new MODEL());
 	}

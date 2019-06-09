@@ -36,7 +36,7 @@ export default class DIALOG extends EL {
 		if (showHeader) {
 			this.navheader.expand();
 		}
-		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
+		this.body = new COLLAPSIBLE(this, 'DIV', new MODEL('body'), model.text);
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();

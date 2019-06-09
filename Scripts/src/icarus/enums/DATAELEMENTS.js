@@ -214,7 +214,54 @@ export const DATAELEMENTS = new Map([
 		}
 	],
 	['SIDEBAR', {}],
-	['TABLE', {}],
+    [
+        'TABLE', {
+            data: [createInputModel('INPUT', 'header', 'Header')]
+        }
+    ],
+    [
+        'TGROUP', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TBODY', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'THEAD', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TFOOT', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TR', {
+            data: [createInputModel('INPUT', 'columns')]
+        }
+    ],
+    [
+        'TD', {
+            data: [
+                createInputModel('INPUT', 'type'),
+                createInputModel('INPUT', 'name'),
+                createInputModel('TEXTAREA', 'p', 'value')
+            ]
+        }
+    ],
+    [
+        'TH', {
+            data: [
+                createInputModel('INPUT', 'type'),
+                createInputModel('INPUT', 'name'),
+                createInputModel('TEXTAREA', 'p', 'value')
+            ]
+        }
+    ],
 	[
 		'TEXTBLOCK', {
 			data: [

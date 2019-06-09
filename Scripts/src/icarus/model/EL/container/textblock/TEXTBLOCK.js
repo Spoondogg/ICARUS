@@ -22,8 +22,8 @@ export default class TEXTBLOCK extends CONTAINER {
 	construct() {
 		return this.chain(() => {
             if (this.dataId > 0) {
-                this.createEditableElement('header', this.body.pane);
-				this.createEditableElement('p', this.body.pane);
+                this.createEditableElement('header', this.childLocation);
+                this.createEditableElement('p', this.childLocation);
             } else {
                 console.log('No data exists for ' + this.toString());
                 this.navheader.el.dispatchEvent(new Expand(this.navheader));

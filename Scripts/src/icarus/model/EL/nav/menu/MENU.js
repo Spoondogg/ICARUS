@@ -73,18 +73,6 @@ export default class MENU extends LIST {
 		this.addConstructor('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
 		this.addConstructor('NAVSEPARATOR', () => this.addNavSeparator());
 	}
-	/** When MENU loses focus, it will collapse any child MENU(s)
-	    This ensures that only one menu is visible at any given time
-	    @returns {void}
-	*/
-	collapseOnFocusOut() {
-		this.el.onclick = (event) => {
-			if (event.target !== this.el) {
-				console.log('Collapsing child menus...', this);
-				this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
-			}
-		};
-	}
 	/** Constructs a MENU inside this MENU
 	    @param {MODEL} model Object model
 	    @returns {MENU} Nav Item with Anchor
@@ -92,7 +80,7 @@ export default class MENU extends LIST {
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
 	}
-	/** Constructs a Nav Item (Anchor)
+	/** Constructs a NavBar Element with TABS and MENUS
 	    @param {MODEL} model Object model
 	    @returns {NAVBAR} NavBar
 	*/
@@ -132,6 +120,32 @@ export default class MENU extends LIST {
 	*/
 	addNavSeparator() {
 		return new NAVSEPARATOR(this.list);
-	}
+    }
+    /** When MENU loses focus, it will collapse any child MENU(s)
+	    This ensures that only one menu is visible at any given time
+	    @returns {void}
+	*/
+    collapseOnFocusOut() {
+        this.el.onclick = (event) => {
+            if (event.target !== this.el) {
+                console.log('Collapsing child menus...', this);
+                this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
+            }
+        };
+    }
+    /** Returns the top level tab for this navbar
+        @param {Name} name Tab Name
+        @returns {NAVITEMICON} Reference Tab
+    */
+    getTab(name) {
+        return this.get(name, 'NAVITEMICON')[0];
+    }
+    /** Returns the top level menu for this navbar
+        @param {Name} name Menu Name
+        @returns {MENU} Reference Menu
+    */
+    getMenu(name) {
+        return this.get(name, 'MENU')[0];
+    }
 }
 export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, UL }

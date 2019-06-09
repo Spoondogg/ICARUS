@@ -7,7 +7,7 @@ import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 export default class SPAN extends EL {
 	/** Constructs a simple SPAN Element
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {MODEL} [model] Model
     */
 	constructor(node, model) {
 		super(node, 'SPAN', model);

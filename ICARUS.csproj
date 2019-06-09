@@ -166,6 +166,13 @@
     <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
+    <Compile Include="Controllers\TDController.cs" />
+    <Compile Include="Controllers\THController.cs" />
+    <Compile Include="Controllers\TRController.cs" />
+    <Compile Include="Controllers\TFootController.cs" />
+    <Compile Include="Controllers\TBodyController.cs" />
+    <Compile Include="Controllers\THeadController.cs" />
+    <Compile Include="Controllers\TableController.cs" />
     <Compile Include="Controllers\WordController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
@@ -515,10 +522,25 @@
     <Compile Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.Designer.cs">
       <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905212108527_TableElements.cs" />
+    <Compile Include="Migrations\201905212108527_TableElements.Designer.cs">
+      <DependentUpon>201905212108527_TableElements.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905212116005_TableElements1.cs" />
+    <Compile Include="Migrations\201905212116005_TableElements1.Designer.cs">
+      <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
     <Compile Include="Models\Icarus\Elements\IMAGEGALLERY.cs" />
+    <Compile Include="Models\Icarus\Elements\TH.cs" />
+    <Compile Include="Models\Icarus\Elements\TD.cs" />
+    <Compile Include="Models\Icarus\Elements\TR.cs" />
+    <Compile Include="Models\Icarus\Elements\TFOOT.cs" />
+    <Compile Include="Models\Icarus\Elements\TBODY.cs" />
+    <Compile Include="Models\Icarus\Elements\THEAD.cs" />
+    <Compile Include="Models\Icarus\Elements\TABLE.cs" />
     <Compile Include="Models\Icarus\Elements\SENTENCE.cs" />
     <Compile Include="Models\Icarus\Elements\WORD.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
@@ -673,6 +695,8 @@
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHATFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formcheckbox\FORMCHECKBOX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
@@ -683,6 +707,12 @@
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\TABLEFACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\TH.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\TD.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\TBODY.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\TFOOT.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\THEAD.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\panel\PANEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
@@ -768,7 +798,7 @@
     <Content Include="Scripts\src\icarus\model\el\svg\SVG.js" />
     <Content Include="Scripts\src\icarus\model\el\table\TABLE.js" />
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\COLUMN.js" />
-    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\ROW.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\TR.js" />
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\TGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\textarea\TEXTAREA.js" />
     <Content Include="Scripts\src\icarus\model\el\list\dl\DL.js" />
@@ -1118,6 +1148,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.resx">
       <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905212108527_TableElements.resx">
+      <DependentUpon>201905212108527_TableElements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905212116005_TableElements1.resx">
+      <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
