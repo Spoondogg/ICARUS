@@ -96,7 +96,7 @@ export default class FACTORY {
 	    @returns {Promise<EL>} A newly constructed element
 	*/
 	get(node, className, id = 0) {
-		let span = new SPAN(node, new MODEL());
+		let span = new SPAN(node);
         let index = node.children.push(span); // Reserve the slot in the array  
         return span.getPayload(id, className).then((payload) => {
             /** @type {EL} */
