@@ -231,7 +231,7 @@ export default class CONTAINER extends GROUP {
         if (name === null && className === null) {
             return this.childLocation.children;
         }
-        return this.childLocation.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+        return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -354,11 +354,11 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
 	updateDocumentMap() {
-		if (this.className !== 'MAIN' && this.getContainer() !== null) {
+        if (this.className !== 'MAIN' && this.getContainer() !== null) {
             try {
                 let container = this.getContainer();
                 if (container.reference !== null) {
-					/** @type {[MENU]} */
+                    /** @type {[MENU]} */
                     let parentReferenceMenu = container.reference.getMenu(container.toString());
                     let parentChildrenMenu = parentReferenceMenu.getMenu('CHILDREN');
 
@@ -388,14 +388,16 @@ export default class CONTAINER extends GROUP {
                     }));
 
                     tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
-					/// Expand the NAVBAR and override its collapse Event
-					this.reference.el.dispatchEvent(new Expand(this.reference));
-					this.reference.collapse = () => true;
-				}
-			} catch (e) {
-				console.warn('Unable to update document-map', this.className, e);
-			}
-		}
+                    /// Expand the NAVBAR and override its collapse Event
+                    this.reference.el.dispatchEvent(new Expand(this.reference));
+                    this.reference.collapse = () => true;
+                }
+            } catch (e) {
+                console.warn('Unable to update document-map', this.className, e);
+            }
+        } else {
+            console.warn('MAIN or no CONTAINER', this);
+        }
 	}
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
@@ -433,7 +435,7 @@ export default class CONTAINER extends GROUP {
             this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
             this.addCrudItems(methodsMenu.getMenu('CRUD'));
             this.addDomItems(methodsMenu.getMenu('DOM'));
-            this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.container.containerList);
+            this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
         } catch (e) {
             console.warn('Unable to add REFERENCE items', e);
         }
