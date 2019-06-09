@@ -100,8 +100,9 @@ export default class INDEX extends BANNER {
                                         label: element + '(' + id + ')',
 										caller: icon,
 										container: this
-									}));
-									panel.body.addContainerCase(element);
+                                    }));
+                                    let elementsMenu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
+                                    panel.body.addContainerCase(elementsMenu, element);
 									panel.body.populate([result.model]).then((results) => {
 										try {
 											results.body.pane.children[1].navheader.expand();

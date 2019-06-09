@@ -81,6 +81,7 @@ $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
 $thumbnail-height: 10rem;
+$longclick-delay: 2000ms ;
 $transition-speed: 150ms;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
@@ -262,7 +263,7 @@ $z-bottom: -1;
 /// Limits max height of the modal so that the stickyfooter remains visible
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
-    height: calc(50vh - #{$navbar-height});
+    //height: calc(50vh - #{$navbar-height});
     max-height: calc(50vh - #{$navbar-height});
     overflow-y: auto;
 }
@@ -1325,45 +1326,6 @@ html {
             }
         }
     }
-    /// A Table Element
-    table {
-        font-size: smaller;
-        /// A Table Header
-        thead {
-            border-bottom: 2px solid $color-white;
-            padding-right: 18px;
-        }
-        /// A Table Header Row
-        th {
-            background-color: $color-light-more;
-            border: 0;
-            font-size: smaller;
-            text-transform: uppercase;
-        }
-        /// A Table Row
-        tr {
-            border-bottom: 1px solid $color-light;
-            border-top: 1px solid $color-grey;
-            display: inline-table;
-            table-layout: fixed;
-            width: 100%;
-
-            &:hover {
-                background-color: $color-light-more;
-            }
-        }
-        /// Table Data
-        td,
-        th {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        /// The body of the table
-        tbody {
-            border-bottom: thin solid $color-white;
-        }
-    }
 
     .banner {
         @extend %noSelect;
@@ -1577,6 +1539,10 @@ html {
         box-sizing: border-box;
         /// editable header with toggle
         > header {
+            position: sticky;
+            top: 0;
+            z-index: #{$z-top - 1};
+
             &:first-of-type {
                 background-color: $color-dark;
                 border-bottom: 2px solid $color-darker;
@@ -1593,14 +1559,14 @@ html {
                     background-color: $color-dark-less;
                     //color: $color-secondary-neutral;
                     &.press {
-                        @include transition(background-color 1200ms);
+                        @include transition(background-color $longclick-delay);
                         background-color: $color-red;
                     }
                 }
             }
 
             &.press {
-                @include transition(background-color 1200ms);
+                @include transition(background-color $longclick-delay);
                 background-color: $color-red;
             }
         }
@@ -1610,6 +1576,9 @@ html {
             &.nav-header {
                 border-bottom: 1px solid $color-transparent;
                 box-shadow: 0 0 0 0 $color-transparent;
+                position: sticky;
+                top: 0;
+                z-index: #{$z-top - 1};
 
                 &.in {
                     border-bottom: 1px solid $color-shadow-light;
@@ -1714,6 +1683,11 @@ html {
                     }
                     /// Collapsible
                     > .header {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 0;
+                        z-index: #{$z-top - 1};
+
                         > .pane {
                             > .author,
                             .date-created {
@@ -2004,22 +1978,23 @@ html {
                     width: $sidebar-width;
 
                     @media only screen and (max-width: $max-width-mobile) {
-                        min-width: 120px;
+                        min-width: 180px;
                         width: 35%;
                     }
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
-
-
                         nav {
+                            //&.active {
+                            //    margin: 1rem 0;
+                            //}
                             //margin-bottom: .5rem;
                             &.menu {
                                 border-bottom: 0 solid transparent;
                                 border-top: 0 solid transparent;
 
                                 &.active {
-                                    border-bottom: 1px solid $color-blue-light;
-                                    border-top: 1px solid $color-blue;
+                                    border-bottom: 3px solid $color-grey-dark;
+                                    border-top: 1px solid $color-darker;
                                 }
                             }
 
@@ -2029,6 +2004,26 @@ html {
 
                                     &.active {
                                         border-bottom: 2px solid $color-grey-darker;
+                                    }
+                                }
+                                //&[name='tabs'] {
+                                > .nav-item {
+                                    border-bottom: 1px solid $color-shadow-neutral;
+                                    border-top: 1px solid #505050;
+
+                                    &.active {
+                                        border-top: 2px solid $color-grey-dark;
+                                        border-bottom: 1px solid $color-darker;
+                                        height: 2rem;
+                                        line-height: 2rem;
+
+                                        > a {
+                                            > .icon,
+                                            > .label {
+                                                height: 2rem;
+                                                line-height: 2rem;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -2081,7 +2076,7 @@ html {
 
             > header {
 
-                &.active + .body {
+                &.active + .nav-header + .body {
                     margin-bottom: 1rem;
                 }
 
@@ -2089,7 +2084,7 @@ html {
                 background-color: $color-blue-header;
                 // Animation for longclick indicator
                 &.press {
-                    @include transition(background-color 1200ms);
+                    @include transition(background-color $longclick-delay);
                     background-color: $color-red;
                 }
             }
@@ -2099,8 +2094,169 @@ html {
                     background-color: lighten($color-blue-header, 15%);
 
                     &.press {
-                        @include transition(background-color 1200ms);
+                        @include transition(background-color $longclick-delay);
                         background-color: $color-red;
+                    }
+                }
+            }
+        }
+        /// A Table Container Element
+        /// See https://css-tricks.com/complete-guide-table-element/
+        &.table {
+            > nav {
+                //display: none;
+            }
+
+            > .body { // table
+                //display: table;
+                //font-size: smaller;
+                line-height: 2rem;
+
+                > .pane {
+                    display: table;
+
+                    > .table-group {
+                        border: $zero-px;
+                        display: table-row-group;
+                        height: $navbar-height;
+                        margin: 0;
+                        min-height: $navbar-height;
+                        padding: 0;
+                        width: 100%;
+
+                        > nav {
+                            //display: none;
+                        }
+                        /// A Table Header //thead
+                        &.table-header {
+                            background-color: $color-blue-deep;
+                            border-bottom: 2px solid $color-blue-lighter;
+                            box-shadow: 3px 0px 3px $color-shadow-dark;
+                            //font-weight: bold;
+                            th {
+                                background-color: $color-blue-deep;
+                                border-right: 1px solid grey;
+                                color: $color-white;
+                                position: sticky;
+                                top: 4rem;
+                                z-index: #{$z-top - 1};
+
+                                &.active {
+                                    background-color: lighten($color-blue-deep, 10%);
+                                }
+
+                                &.press {
+                                    @include transition(background-color $longclick-delay);
+                                    background-color: $color-red;
+                                }
+                            }
+                        }
+                        /// A Table Header Row //th
+                        &.table-body {
+                            background-color: $color-light-more;
+                            border: 0;
+                            border-bottom: thin solid $color-white;
+                            font-size: smaller;
+                            text-transform: uppercase;
+
+                            .table-row {
+                                border-bottom: 1px solid grey;
+                                box-sizing: border-box;
+
+                                .table-column {
+                                    border-right: 1px solid grey;
+                                    box-sizing: border-box;
+                                }
+                            }
+                        }
+                        /// A Table Row //tr
+                        &.table-footer {
+                            border-bottom: 1px solid $color-light;
+                            border-top: 1px solid $color-grey;
+                            //display: inline-table;
+                            font-weight: bold;
+                            table-layout: fixed;
+                            width: 100%;
+
+                            &:hover {
+                                background-color: $color-light-more;
+                            }
+
+                            th {
+                                background-color: $color-blue-deep;
+                                border-right: 1px solid grey;
+                                color: $color-white;
+                                position: sticky;
+                                bottom: 0;
+                                z-index: #{$z-top - 1};
+
+                                &.active {
+                                    background-color: lighten($color-blue-deep, 10%);
+                                }
+
+                                &.press {
+                                    @include transition(background-color $longclick-delay);
+                                    background-color: $color-red;
+                                }
+                            }
+                        }
+                    }
+
+                    .table-row {
+                        display: block;
+                        height: $navbar-height;
+
+                        &:hover {
+                            background-color: $color-blue-lighter;
+                        }
+
+                        > nav {
+                            display: none;
+                        }
+
+                        > .body {
+                            display: table-row-group;
+
+                            > .pane {
+                                display: table-row-group;
+                            }
+                        }
+                    }
+
+                    .table-column {
+                        display: table-cell;
+                        height: $navbar-height;
+                        min-width: $navbar-height;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+
+                        > nav {
+                            display: none;
+                        }
+                        // Animation for longclick indicator
+                        &.press {
+                            @include transition(background-color $longclick-delay);
+                            background-color: $color-red;
+                        }
+
+                        &:hover {
+                            background-color: orange;
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
+
+                        &.active {
+                            background-color: $color-blue-light;
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
                     }
                 }
             }
@@ -2164,6 +2320,7 @@ html {
         }
         // Nested sub menu
         > .menu {
+
             > li {
                 width: 100%;
 
@@ -2176,6 +2333,16 @@ html {
 
                 & + .menu {
                     background-color: $color-orange;
+                }
+                // This affects the UL
+                & ~ ul:empty {
+                    background-color: purple;
+                    color: chartreuse;
+
+                    li ~ & {
+                        background-color: gold;
+                        color: palegoldenrod;
+                    }
                 }
             }
         }
@@ -2388,6 +2555,11 @@ html {
                     background-color: $color-shadow-light;
                     border-left: 1px solid $color-shadow-neutral;
                     border-right: 1px solid $color-shadow-neutral;
+
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
                 }
 
                 &.active {

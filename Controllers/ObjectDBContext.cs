@@ -62,6 +62,27 @@ namespace ICARUS.Controllers {
         public DbSet<SECTION> Sections { get; set; }
         public object Section { get; internal set; }
 
+        public DbSet<TABLE> Tables { get; set; }
+        public object Table { get; internal set; }
+
+        public DbSet<THEAD> THeads { get; set; }
+        public object THead { get; internal set; }
+
+        public DbSet<TBODY> TBodys { get; set; }
+        public object TBody { get; internal set; }
+
+        public DbSet<TFOOT> TFoots { get; set; }
+        public object TFoot { get; internal set; }
+
+        public DbSet<TR> TRs { get; set; }
+        public object Tr { get; internal set; }
+
+        public DbSet<TH> THs { get; set; }
+        public object Th { get; internal set; }
+
+        public DbSet<TD> TDs { get; set; }
+        public object Td { get; internal set; }
+
         // FORM
         public DbSet<FORM> Forms { get; set; }
         public object Form { get; internal set; }
@@ -174,6 +195,13 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("IFrame", IFrames);
             this.dbSets.Add("ARTICLE", Articles);
             this.dbSets.Add("SECTION", Sections);
+            this.dbSets.Add("TABLE", Tables);
+            this.dbSets.Add("THEAD", THeads);
+            this.dbSets.Add("TBODY", TBodys);
+            this.dbSets.Add("TFOOT", TFoots);
+            this.dbSets.Add("TR", TRs);
+            this.dbSets.Add("TH", THs);
+            this.dbSets.Add("TD", TDs);
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
             this.dbSets.Add("FormElementGroup", FormElementGroups);

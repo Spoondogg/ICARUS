@@ -30,7 +30,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <summary>
         /// Container Label
         /// </summary>
-        [StringLength(128, MinimumLength = 3), Required]
+        [StringLength(128, MinimumLength = 1), Required]
         public string label { get; set; }
 
         /// <summary>

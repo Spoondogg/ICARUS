@@ -16,7 +16,7 @@ export default class FIELDSET extends CONTAINER {
 	constructElements() {
 		return this.chain(() => {
 			if (this.dataId > 0) {
-				this.createEditableElement('legend', this.body.pane);
+                this.createEditableElement('legend', this.childLocation);
 			} else {
 				this.ifEmpty();
 			}
@@ -28,7 +28,7 @@ export default class FIELDSET extends CONTAINER {
 	    @returns {FORMELEMENTGROUP} A Form Fieldset element
 	*/
 	addFormElementGroup(model) {
-		return this.addChild(new FORMELEMENTGROUP(this.body.pane, model));
+        return this.addChild(new FORMELEMENTGROUP(this.childLocation, model));
     }
     /** Returns an array of FORMELEMENTGROUP(s), optionally filtered to the specified name
         @param {string} [name] Optional name to filter search
