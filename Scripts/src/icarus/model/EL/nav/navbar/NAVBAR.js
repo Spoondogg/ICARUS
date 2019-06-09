@@ -38,7 +38,7 @@ export default class NAVBAR extends NAV {
         @param {boolean} isHorizontal If true (default), secondary tab menu is horizontal
         @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus
     */
-	addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = [], isHorizontal = true) {
+    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = [], isHorizontal = true) {
         let tabbable = this.addTabbableElement( // Create Primary tab and Menu
             this.tabs.addNavItemIcon(new MODEL().set({
                 icon,
@@ -46,7 +46,7 @@ export default class NAVBAR extends NAV {
                 name
             })),
             this.menus.addMenu(new MODEL().set('name', name))
-        );	    
+        );
         secondaryTabs.forEach((t) => this.addTabbableElement( // Create Secondary Tabs and Horizontal Menus inside Menu
             tabbable.element.addNavItemIcon(new MODEL().set(t)),
             tabbable.element.addMenu(new MODEL(isHorizontal ? 'horizontal' : '').set('name', t.name))
@@ -70,20 +70,17 @@ export default class NAVBAR extends NAV {
 				icon,
 				label,
 				name
-			}));
-			let menu = this.menus.addMenu(new MODEL().set('name', name));
-			this.addTabbableElement(tab, menu);
+            }));
+            let menu = this.menus.addMenu(new MODEL().set('name', name));
+            tab.addTabbableElement(menu);
+
 			// Create Secondary Tabs and Horizontal Menus inside Options Menu
 			let optMenuClass = isHorizontal ? 'horizontal' : '';
-			children.map((str) => {
-				let tb = menu.addNavItemIcon(new MODEL().set({
-					label: str,
-					icon: ICONS[str],
-					name: str
-				}));
-				let opt = menu.addMenu(new MODEL(optMenuClass).set('name', str));
-				this.addTabbableElement(tb, opt);
-            });
+            children.map((str) => menu.addNavItemIcon(new MODEL().set({
+                label: str,
+                icon: ICONS[str],
+                name: str
+            })).addTabbableElement(menu.addMenu(new MODEL(optMenuClass).set('name', str))));
 
             return {
                 tab,
@@ -106,49 +103,27 @@ export default class NAVBAR extends NAV {
 			}
 		}
 	}
-	/** Sets the 'activate' and 'deactivate' so that the NAVITEM will trigger the EL
-	     @param {NAVITEM} tab NAV Item that acts as a Tab
-	     @param {EL} element A Switchable Element that is activated by this Tab
-	     @returns {{tab:NAVITEM, element:EL}} Tabbable Element {tab,element}
-         @todo Create TABBABLE Class
+	/** Adds 'activate' and 'deactivate' Events that trigger the EL when the Tab is activated
+	    @param {NAVITEM} tab NAV Item that acts as a Tab
+	    @param {EL} element A Switchable Element that is activated by this Tab
+	    @returns {{tab:NAVITEM, element:EL}} Tabbable Element {tab,element}
 	*/
-	addTabbableElement(tab, element) {
-		tab.target = element;
-		element.tab = tab;
-		let deactivate = new Deactivate();
-		tab.el.addEventListener('activate', () => {
-            element.dispatchToSiblings(deactivate);
-            tab.addClass('active');
-			tab.target.el.dispatchEvent(new Activate()); // Activate Element
-		});
-		/** Deactivate Tab and Element */
-		tab.target.el.addEventListener('deactivate', () => this.filterEventDomException(tab, deactivate));
-		tab.el.addEventListener('deactivate', () => {
-            this.filterEventDomException(tab.target, deactivate);
-            tab.removeClass('active');
-			tab.target.el.dispatchEvent(new Deactivate()); // Deactivate Element
-		});
-		// Deactivate children
-		tab.target.el.addEventListener('deactivate', () => tab.target.get().forEach((c) => c.el.dispatchEvent(new Deactivate())));
-		return {
-			tab,
-			element
-		};
-	}
-	/** Catches DOM Exception when event is already being dispatched
-	    @param {EL} element Element Class to dispatch event
-	    @param {Event} event Deactivate Event
-	    @returns {void}
-	*/
-	filterEventDomException(element, event) {
-		try {
-			element.el.dispatchEvent(event);
-		} catch (e) {
-			if (!(e instanceof DOMException)) { // DOMException: Event is already being dispatched
-				console.warn(e.message);
-				throw e;
-			}
-		}
-	}
+    addTabbableElement(tab, element) {
+        return tab.addTabbableElement(element);
+    }
+    /** Returns the top level tab for this navbar
+        @param {Name} name Tab Name
+        @returns {NAVITEMICON} Reference Tab
+    */
+    getTab(name) {
+        return this.tabs.get(name, 'NAVITEMICON')[0];
+    }
+    /** Returns the top level menu for this navbar
+        @param {Name} name Menu Name
+        @returns {MENU} Reference Menu
+    */
+    getMenu(name) {
+        return this.menus.get(name, 'MENU')[0];
+    }
 }
 export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, NAVITEM, NAVITEMICON }

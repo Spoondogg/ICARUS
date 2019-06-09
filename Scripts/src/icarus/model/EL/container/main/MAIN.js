@@ -9,6 +9,7 @@ import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
+import TABLEFACTORY from '../../table/TABLEFACTORY.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -38,9 +39,51 @@ export default class MAIN extends CONTAINER {
 		this.watchMousePosition();
         this.expandMain();
         /** Add factories */
-        this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
+        this.addFactories();
         this.addRefreshScroll();
+        this.addMainActivateEvents();
     }
+    /** Override and terminate parent activation at the top of the chain
+        @returns {void}
+    */
+    activateParentContainer() {
+        //console.log(this.toString() + '.activateParentContainer(TRUE)');
+    }
+    /** Override and terminate parent deactivation at the top of the chain
+        @returns {void}
+    */
+    deactivateParentContainer() {
+        //console.log(this.toString() + '.deactivateParentContainer(TRUE)');
+    }
+    addFactories() {
+        this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
+        this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
+    }
+    addMainActivateEvents() {
+        this.el.addEventListener('activate', () => {      
+            //let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+            //sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+            //console.log('Trigger scrollTo() for SIDEBAR.scrollTarget', sidebar.scrollTarget);
+            /*if (sidebar.scrollTarget !== null) {
+                $(sidebar.el).animate({
+                    scrollTop: parseInt($(sidebar.scrollTarget.el).offset().top)
+                }, 600, 'swing');
+                sidebar.scrollTarget = null;
+            } else {
+                console.log('Scroll target not set');
+            }*/
+        });
+        this.el.addEventListener('deactivate', () => {
+            /*let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            if (sidebarTab.hasClass('active')) {
+                //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+                //console.log(this.toString() + ' is deactivating the document-map', sidebarTab);
+                sidebarTab.el.dispatchEvent(new Deactivate(sidebarTab));
+            }*/
+        });
+    }
+
     /** Scroll to refresh
         @see https://dev.to/vijitail/pull-to-refresh-animation-with-vanilla-javascript-17oc
         @returns {void}
@@ -76,13 +119,13 @@ export default class MAIN extends CONTAINER {
         }
     }
     swipe(ev) {
-        if (typeof ev.changedTouches !== 'undefined') {
+        if (typeof ev.changedTouches === 'undefined') {
+            this.pCurrent.x = ev.screenX;
+            this.pCurrent.y = ev.screenY;
+        } else {
             let [touch] = ev.changedTouches;
             this.pCurrent.x = touch.screenX;
             this.pCurrent.y = touch.screenY;
-        } else {
-            this.pCurrent.x = ev.screenX;
-            this.pCurrent.y = ev.screenY;
         }
         let changeY = this.pStart.y - this.pCurrent.y;
         console.log('changeY', changeY, this.body.pane.el.scrollTop);
@@ -90,14 +133,16 @@ export default class MAIN extends CONTAINER {
         if (this.body.pane.el.scrollTop === 0) {
             if (changeY < -100) {
                 console.warn('Scroll triggered a refresh!');
-                this.isLoading = true;
+                // Find a way to detect MAIN.body.pane scroll 
+                // Avoid refresh when sidebar scroll takes place and scrollTop === 0
+                /*this.isLoading = true;
                 alert('Refreshing...');
                 //window.navigator.vibrate(200);
-                this.refresh();
+                this.refresh();*/
             }
         }
     }
-    swipeEnd(ev) {
+    swipeEnd() {
         if (this.body.pane.el.scrollTop === 0 && !this.isLoading) {
             this.isLoading = true;
             //console.log('REFRESH!!!');
@@ -206,22 +251,37 @@ export default class MAIN extends CONTAINER {
 	navigateForward() {
 		console.log('TODO: Forward');
 	}
-	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants
+	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
 	    @returns {void}
 	*/
 	createDocumentMap() {
-		let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
-		this.reference = sidebar.element.navbar;
-		// Add submenu items to DATA and ATTRIBUTES
-        /** @type {[NAVITEMICON]} */
-        let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
-		/** @type {[MENU]} */
-        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-        this.addDefaultDocumentMapAttributes(menu);
+        let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
-		// Position and show the NAVBAR
+        /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
+            Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
+        */
+        this.reference = sidebar.element.navbar;
+        this.reference.options = this.reference.addOptionsMenu(
+            this.label, ICONS[this.className], this.toString(),
+            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
+        );
+
+        let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
+        this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, this.reference);
+
+        let methodsMenu = this.reference.options.menu.getMenu('METHODS');
+        this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, this.reference);
+        this.addCrudItems(methodsMenu.getMenu('CRUD'));
+        this.addDomItems(methodsMenu.getMenu('DOM'));
+        this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
+
+        
+		// Add submenu items to DATA and ATTRIBUTES
+        this.reference.getTab(this.toString()).el.addEventListener('select', () => this.getFactory().save(false, this, this));
+
+        this.addDefaultDocumentMapProperties(propertiesMenu);
+
+        // Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
 	}
@@ -232,10 +292,7 @@ export default class MAIN extends CONTAINER {
         let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
         let usermenu = new USERMENU(userBar.element);
         // Tab should expand UserMenu
-        userBar.tab.el.addEventListener('activate', () => {
-            usermenu.el.dispatchEvent(new Expand(usermenu));
-        });
-
+        userBar.tab.el.addEventListener('activate', () => usermenu.el.dispatchEvent(new Expand(usermenu)));
 		$(usermenu.el).insertBefore(userBar.element.navbar.el);
         usermenu.el.dispatchEvent(new Expand(usermenu));
         
@@ -541,14 +598,14 @@ export default class MAIN extends CONTAINER {
 	    @param {string} provider The OAuth Provider
 	    @returns {void} 
 	*/
-	loginOAuth(provider) {
-        this.body.collapse().then(
-            this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
+    loginOAuth(provider) {
+        this.chain(() => this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab))).then(
+            () => this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
                 () => {
                     window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
                 }
             )
-        );
+        );        
 	}
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
@@ -633,11 +690,9 @@ export default class MAIN extends CONTAINER {
                 btnSignIn.setLabel('Update Password');
 
                 form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then(() => {
-                    loader.log(99, 'Redirecting to login').then(() => {
-                        setTimeout(() => {
-                            window.location.href = window.location.origin + '?login=1&email=' + email;
-                        }, 3000);
-                    });
+                    loader.log(99, 'Redirecting to login').then(() => setTimeout(() => {
+                        window.location.href = window.location.origin + '?login=1&email=' + email;
+                    }, 3000));
                 });
                 loader.log(100).then(() => form.getDialog().show());
             })
@@ -660,4 +715,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR, TABLEFACTORY }
