@@ -11,14 +11,17 @@ export default class TR extends CONTAINER {
         @param {MODEL} model The model
         @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
     */
-    constructor(node, model, containerList = ['TD', 'TH']) { // 
+    constructor(node, model, containerList = node.getContainer().className === 'TBODY' ? ['TD'] : ['TH']) { // 
         super(node, 'TR', model, containerList); //
         this.addClass('table-row');
         this.removeAttribute('draggable');
         this.removeClass('draggable');
-        this.childLocation = this;
+        this.childLocation = this;        
         this.navheader.destroy();
         this.body.destroy();
+        this.implement(new Clickable(this));
+        this.el.addEventListener('activate', () => this.activateEvent());
+        this.el.addEventListener('deactivate', () => console.log('Deactivated TR'));
     }    
     constructElements() {
         return this.chain(() => {
@@ -28,51 +31,29 @@ export default class TR extends CONTAINER {
                 //console.log('No data exists for ' + this.toString());
                 this.navheader.el.dispatchEvent(new Expand(this.navheader));
             }
-            /*
-            if (this.columns) {
-                this.addColumns(this.columns);
-            } else if (this.dataId > 0) {
-                    this.addColumns(this.data.columns);
-            } else {
-                //console.log('Adding default columns', this);
-                let cols = this.getTGroup().getTable().data.columns.split(',');
-                let colStr = cols.map(() => 'null').join(',');
-                this.addColumns(colStr);
-            }*/
         });
     }
+    activateEvent() {
+        let cols = this.getColumns();
+        console.log('Activated TR', this.getTGroup(), cols);
+    }
+    /** Retrieves an array of columns inside this row
+        @returns {Array<COLUMN>} An array of Columns
+    */
+    getColumns() {
+        return this.get(null, this.getColType());
+    }
+    /** Determines the appropriate COLUMN Element based on its parent class
+        @returns {string} Column Element Tag Name
+    */
     getColType() {
         return this.getTGroup().className === 'TBODY' ? 'TD' : 'TH';
     }
-    getActiveColumns() {
-        return this.get(null, this.getColType()).filter((c) => c.hasClass('active') && c !== this);
-    }
-    /*addColumn(model, tGroup = this.getTGroup()) {
-
-        //let tGroup = this.getTGroup(); // can this be cached or passed through?
-        if (tGroup.className === 'TBODY') {
-            this.addTd(model);
-        } else {
-            this.addTh(model);
-        }
-    }*/
-    /** Adds the given column set to this row with the appropriate element type
-        @param {string} columns A comma delimited string of column values
-        @returns {void}
-    */
-    addColumns(columns) {
-        console.log('CREATE COLUMNS', columns);
-        let cols = columns.split(',');
-        switch (this.getColType()) {
-            case 'TD':
-                cols.forEach((col) => this.addTd(new MODEL()).setInnerHTML(col));
-                break;
-            case 'TH':
-                cols.forEach((col) => this.addTh(new MODEL()).setInnerHTML(col));
-                break;
-            default:
-                cols.forEach((col) => this.addTd(new MODEL()).setInnerHTML(col));
-        }
+    // consider a way of injecting filters directly into a this.get() call ie: this.get(null, 'TD', hasClass(c, 'active'));
+    // pass a function that returns true (filter)
+    // 
+    getActiveColumns() { 
+        return this.getColumns().filter((c) => c.hasClass('active') && c !== this);
     }
     addColumn(model) {
         let col = null;
@@ -88,21 +69,19 @@ export default class TR extends CONTAINER {
         }
         return col;
     }
-    /** Returns this row's table-group
+    /** Returns this row's table-group (THEAD|TBODY|TFOOT)
         @returns {TGROUP} Table Group
     */
     getTGroup() {
-        return this.node.node;
+        return this.getContainer();
     }
     /** Deactivate row siblings
         @returns {void}
     */
     deactivateSiblings() {
-        let tGroup = this.getTGroup();
-        let siblings = [...tGroup.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
+        let siblings = [...this.getTGroup().el.children].filter((c) => c.classList.contains('active') && c !== this.el);
         siblings.forEach((s) => s.dispatchEvent(new Deactivate(s)));
     }
-
 	/** Adds the given table data to the table
 	    @param {MODEL} model Object model
 	    @returns {TD} A Table group
