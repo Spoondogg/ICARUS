@@ -2135,6 +2135,7 @@ html {
                             //font-weight: bold;
                             th {
                                 background-color: $color-blue-deep;
+                                border-right: 1px solid grey;
                                 color: $color-white;
                                 position: sticky;
                                 top: 4rem;
@@ -2157,6 +2158,16 @@ html {
                             border-bottom: thin solid $color-white;
                             font-size: smaller;
                             text-transform: uppercase;
+
+                            .table-row {
+                                border-bottom: 1px solid grey;
+                                box-sizing: border-box;
+
+                                .table-column {
+                                    border-right: 1px solid grey;
+                                    box-sizing: border-box;
+                                }
+                            }
                         }
                         /// A Table Row //tr
                         &.table-footer {
@@ -2173,6 +2184,7 @@ html {
 
                             th {
                                 background-color: $color-blue-deep;
+                                border-right: 1px solid grey;
                                 color: $color-white;
                                 position: sticky;
                                 bottom: 0;
@@ -2191,7 +2203,7 @@ html {
                     }
 
                     .table-row {
-                        display: table-row;
+                        display: block;
                         height: $navbar-height;
 
                         &:hover {
