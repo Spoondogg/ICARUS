@@ -32,7 +32,9 @@ export default class TGROUP extends CONTAINER {
     getTable() {
         return this.getProtoTypeByClass('TABLE');
     }
-
+    /** Retrieves an array of child TR Elements
+        @returns {Array<TR>} An array of TR Elements
+    */
     getRows() {
         return this.get(null, 'TR');
     }
