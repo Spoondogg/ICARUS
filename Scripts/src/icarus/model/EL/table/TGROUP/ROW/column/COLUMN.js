@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Activate, Deactivate, EL, Expand, MODEL } from '../../../../container/CONTAINER.js';
+import CONTAINER, { Activate, Clickable, Deactivate, EL, MODEL } from '../../../../container/CONTAINER.js';
 import TR from '../TR.js';
 /** A Column that exists inside a Row */
 export default class COLUMN extends CONTAINER {
@@ -12,17 +12,18 @@ export default class COLUMN extends CONTAINER {
         super(node, element, model, []);
         this.addClass('table-column');
         this.childLocation = this;
-        this.navheader.destroy();
-        this.body.destroy();
+        //this.navheader.destroy();
+        //this.body.destroy();
+        this.implement(new Clickable(this));
+        this.el.addEventListener('longpress', () => this.scrollToReference(this));
+        //this.el.addEventListener('activate', () => console.log('Activated Column'));
+        //this.el.addEventListener('deactivate', () => console.log('Deactivated Column'));
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('p', this.childLocation).then(
-                    (colData) => colData.el.addEventListener('longclick', () => this.scrollToReference(this.getRow())));
-            } else {
-                //console.log('No data exists for ' + this.toString());
-                //this.navheader.el.dispatchEvent(new Expand(this.navheader));
+                    (colData) => colData.el.addEventListener('longclick', () => this.scrollToReference(this)));
             }
         });
     }
@@ -31,41 +32,32 @@ export default class COLUMN extends CONTAINER {
     */
     activateColumn() {        
         let row = this.getRow();
-
         if (row.hasClass('active')) {
             let activeColumns = row.get(null, this.className).filter((c) => c.hasClass('active') && c !== this);
             console.log('Active sibling columns', activeColumns);
             activeColumns.forEach((c) => c.el.dispatchEvent(new Deactivate(c)));
-        }/* else {
-            row.el.dispatchEvent(new Activate(row));
-        }*/
-        //this.chain(() => {            
-            let { navheader } = this.getMain();
-            let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
-            sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
-            let [sidebar] = navheader.menus.get('document-map', 'SIDEBAR');
-            sidebar.scrollToReference(row);
-        //});
+        }         
+        let { navheader } = this.getMain();
+        let [sidebarTab] = navheader.tabs.get('document-map', 'NAVITEMICON');
+        sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+        let [sidebar] = navheader.menus.get('document-map', 'SIDEBAR');
+        sidebar.scrollToReference(row);
     }
     /** If all siblings are deactivated, deactivate parent row
         @param {TR} row Table Row for this column
         @returns {void}
     */
     deactivateColumn(row = this.getRow()) {
-        //let row = this.getRow();
         let activeColumns = [...row.el.children].filter((c) => c.classList.contains('active') && c !== this.el);
         if (activeColumns.length === 0) {
             row.el.dispatchEvent(new Deactivate(row));
-        } /*else {
-            console.log('Column has active siblings', this.el, activeColumns);
-            activeColumns.forEach((c) => c.dispatchEvent(new Deactivate(c)));
-        }*/
+        }
     }
     /** Returns this row's table-group
         @returns {TR} Table Row
     */
     getRow() {
-        return this.getProtoTypeByClass('TR'); // this.node;
+        return this.getProtoTypeByClass('TR');
     }
 }
 export { CONTAINER, EL, MODEL, TR }
