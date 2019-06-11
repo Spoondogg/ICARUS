@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
@@ -174,18 +174,20 @@ export default class FORM extends CONTAINER {
             btnReset.destroy();
         }
     }
-    /** Creates a new form post
+    /** Creates a new form post of specified type for this CONTAINER
         @param {string} type ie: data, meta, attributes
+        @param {string} className ie: TD
         @returns {void}
     */
-    createNewFormPost(type) {
+    createNewFormPost(type, className = this.className) {
+        console.log('Create new formpost', type)
         try {
             let typeId = type + 'Id';
             let [fs] = this.getFieldset();
             let [fsg] = fs.getFormElementGroup();
             let formPostInput = fsg.get(null, 'FORMPOSTINPUT'); //typeId, 'FORMPOSTINPUT'
             let [formPostInputType] = formPostInput.filter((inp) => inp.attributes.name === typeId);
-            formPostInputType.createForm(this.className, type, 0, formPostInputType.input);
+            formPostInputType.createForm(className, type, 0, formPostInputType.input);
         } catch (e) {
             console.warn(this.toString() + ' is unable to create a new FORMPOST for ' + type)
         }
@@ -197,8 +199,8 @@ export default class FORM extends CONTAINER {
 	defaultFormPostInputArray(data) {
 		return [
 			createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'shared', data.model.shared, 'shared', 'CHECKBOX'),
-            createInputModel('INPUT', 'isPublic', data.model.isPublic, 'isPublic', 'CHECKBOX')
+            createInputModel('INPUT', 'shared', data.model.shared || -1, 'shared', 'CHECKBOX'),
+            createInputModel('INPUT', 'isPublic', data.model.isPublic || -1, 'isPublic', 'CHECKBOX')
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST
@@ -619,5 +621,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
 /* eslint-enable max-lines */
