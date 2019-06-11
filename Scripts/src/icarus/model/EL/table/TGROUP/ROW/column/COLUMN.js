@@ -12,8 +12,8 @@ export default class COLUMN extends CONTAINER {
         super(node, element, model, []);
         this.addClass('table-column');
         this.childLocation = this;
-        //this.navheader.destroy();
-        //this.body.destroy();
+        this.navheader.destroy();
+        this.body.destroy();
         this.implement(new Clickable(this));
         this.el.addEventListener('longpress', () => this.scrollToReference(this));
         //this.el.addEventListener('activate', () => console.log('Activated Column'));
@@ -22,8 +22,11 @@ export default class COLUMN extends CONTAINER {
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
-                this.createEditableElement('p', this.childLocation).then(
+                this.createEditableElement('span', this.childLocation).then(
                     (colData) => colData.el.addEventListener('longclick', () => this.scrollToReference(this)));
+            } else if (this.id > 0) {
+                console.log(this.toString() + ' should create a DATA element');
+                this.createNewFormPost('data');
             }
         });
     }

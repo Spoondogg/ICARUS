@@ -37,8 +37,8 @@ export const DATAELEMENTS = new Map([
     [
         'CONTAINER', {
             data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'CHECKBOX'),
-                createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'CHECKBOX')
+                createInputModel('INPUT', 'showNav', '-1', 'showNav', 'CHECKBOX'),
+                createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'CHECKBOX')
             ],
             attributes: [
                 createInputModel('INPUT', 'name'),
