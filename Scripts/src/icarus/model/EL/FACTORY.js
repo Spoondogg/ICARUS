@@ -239,6 +239,16 @@ export default class FACTORY {
             });
         });
     }
+    /** Launches a viewer in a dialog for the given class type 
+        @param {string} classType Default class to display
+        @param {CONTAINER} container Calling container
+        @param {EL} caller Calling element (ie: switchable element resolved)
+        @returns {Promise<PROMPT>} Prompt configured to view given classType
+    */
+    launchViewer(classType = 'MAIN', container = this, caller = this) {
+        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller);
+        return Promise.resolve(false);
+    }
     /** Saves the state of the CONTAINER
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
