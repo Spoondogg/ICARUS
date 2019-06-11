@@ -138,6 +138,7 @@ namespace ICARUS.Controllers {
                 Dictionary<string, object> attribs = new Dictionary<string, object>();
                 attribs.Add("id", li.id);
                 attribs.Add("label", li.label);
+                attribs.Add("metaId", li.metaId);
                 listArray.Add(attribs);
             }
 
@@ -201,6 +202,7 @@ namespace ICARUS.Controllers {
             columns.Add("index");
             columns.Add("id");
             columns.Add("label");
+            columns.Add("metaId");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "discriminator", this.className));
@@ -231,6 +233,7 @@ namespace ICARUS.Controllers {
             columns.Add("id");
             columns.Add("className");
             columns.Add("label");
+            columns.Add("metaId");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "id", id));
