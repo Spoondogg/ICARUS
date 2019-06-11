@@ -9,7 +9,7 @@ import { ALIGN } from '../../../../enums/ALIGN.js';
 export default class BUTTONGROUP extends GROUP {
 	/** Constructs a Group for containing Buttons
 	    @param {EL} node Parent Node
-        @param {MODEL} model Model
+        @param {MODEL} [model] Model
 	*/
 	constructor(node, model = new MODEL().set('label', 'buttons')) {
 		super(node, 'DIV', model);
