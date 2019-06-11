@@ -1,7 +1,7 @@
 /** A fixed height, full width Container
     @module
 */
-import CONTAINER from '../CONTAINER.js';
+import CONTAINER, { MODEL } from '../CONTAINER.js';
 /** A horizontal container with a fixed height and independent scrolling
     designed to be populated with enclosed Containers like Cards, Buttons or NavItemIcons
     @class
