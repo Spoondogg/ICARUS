@@ -41,7 +41,11 @@ export default class EL extends MODEL {
 		/** State Indicator 
 		    @type {number} 
 		*/
-		this.status = STATUS.DEFAULT;
+        this.status = STATUS.DEFAULT;
+        /** Represents the location where children of this element are instantiated
+            @type {EL}
+        */
+        this.childLocation = this;
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
