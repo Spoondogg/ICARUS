@@ -2,8 +2,8 @@
 import FORM, { ATTRIBUTES, MODEL } from '../../../form/FORM.js';
 import BANNER from '../BANNER.js';
 import HEADER from '../../../header/HEADER.js';
-//import MENU from '../../../nav/menu/MENU.js';
-/** Contains a high level view of all MAIN Objects available to this user
+import MENU, { Expand } from '../../../nav/menu/MENU.js';
+/** Contains a high level view of the specified CONTAINER Class if it is available to the user
     @class
     @extends BANNER
 */
@@ -11,37 +11,30 @@ export default class CLASSVIEWER extends BANNER {
 	/** Constructs a CLASSVIEWER Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
+        @param {string} classType Default class to display
 	*/
-	constructor(node, model) {
+    constructor(node, model, classType = 'MAIN') {
 		super(node, model);
-		this.addClass('classviewer');
-		this.classType = 'JUMBOTRON';
+        this.addClass('classviewer');
+        //this.body.pane.addClass('banner');
+		this.classType = classType;
 	}
-	construct() {
-		this.h1 = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.classType + ' viewer'), 1);
-		this.form = FORM.createEmptyForm(this.body.pane);
-		let inputs = [
-			new MODEL(new ATTRIBUTES({
-				name: 'classType',
-				value: this.classType,
-				readonly: 'readonly'
-			})).set({
-				element: 'INPUT',
-				label: 'Class Type'
-			})
-		];
-		this.form.fieldset.formElementGroup.addInputElements(inputs);
-		/* @todo Remove inline style and replace MENU from MENULIST
-		this.menulist = new MENU(this.body.pane, new MODEL(new ATTRIBUTES('style', 'max-height:200px;overflow-y:auto;')).setGroup({
-			name: 'preview-list',
-			label: this.data.listClass + '(s)'
-		}));
-		let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
-		for (let m = 0; m < methods.length; m++) {
-			this.menulist.menu.addNavItem(new MODEL().set('label', this.classType + '.' + methods[m] + '()')).el.onclick = () => {
-				window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]);
-			};
-        }
-        */
+    construct() {
+        return this.chain(() => {
+            if (this.dataId > 0) {
+                this.h1 = new HEADER(this.body.pane, new MODEL().set('innerHTML', this.data.classType + ' viewer'), 1);
+                this.menu = new MENU(this.body.pane, new MODEL());
+                let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
+                for (let m = 0; m < methods.length; m++) {
+                    this.menu.addNavItem(new MODEL().set('label', this.data.classType + '.' + methods[m] + '()')).el.onclick = () => {
+                        window.open(new URL(window.location.href).origin + '/' + this.data.classType + '/' + methods[m]);
+                    };
+                }
+                this.menu.el.dispatchEvent(new Expand(this.menu));
+            } else {
+                console.log('No data exists for ' + this.toString());
+                this.navheader.el.dispatchEvent(new Expand(this.navheader));
+            }
+        });
 	}
 }
