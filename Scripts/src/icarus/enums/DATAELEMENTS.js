@@ -63,6 +63,11 @@ export const DATAELEMENTS = new Map([
         }
     ],
     [
+        'CLASSVIEWER', {
+            data: [createInputModel('INPUT', 'classType', 'MAIN')]
+        }
+    ],
+    [
         'DICTIONARY', {
             data: [createInputModel('INPUT', 'language')]
         }
@@ -247,18 +252,18 @@ export const DATAELEMENTS = new Map([
     [
         'TD', {
             data: [
-                createInputModel('INPUT', 'type'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('TEXTAREA', 'p', 'value')
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
             ]
         }
     ],
     [
         'TH', {
             data: [
-                createInputModel('INPUT', 'type'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('TEXTAREA', 'p', 'value')
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
             ]
         }
     ],
