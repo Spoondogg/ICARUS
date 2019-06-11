@@ -1,38 +1,44 @@
 /** @module */
-import BANNER from '../BANNER.js';
+import MENU, { Expand, MODEL } from '../../../nav/menu/MENU.js';
 import BUTTON from '../../../button/BUTTON.js';
 import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+import CONTAINER from '../../CONTAINER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import MENU from '../../../nav/menu/MENU.js';
-import MODEL from '../../../../MODEL.js';
 /** Contains a list of THUMBNAILS for each MAIN Container available to this user
     @class
-    @extends BANNER
     @description This thing needs a lot of work...  Its ugly and outdated.
 */
-export default class INDEXMAIN extends BANNER {
+export default class INDEXMAIN extends CONTAINER {
 	/** Constructs a banner with a header affixed outside of the Container's pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
+        @param {string} classType Default class to display
 	 */
-	constructor(node, model) {
-		super(node, model);
-		this.addClass('index-main');
-		/** @param {number} page The current page */
+	constructor(node, model, classType = 'MAIN') {
+		super(node, 'DIV', model, [classType]);
+        this.addClass('index-main');
+        this.body.pane.addClass('banner');
+        /** @type {string} The default class to display */
+        this.classType = classType;
+		/** @type {number} The current page */
 		this.page = 0;
-		/** @param {number} pageLength The number of items per page */
+		/** @type {number} The number of items per page */
 		this.pageLength = 6;
-		/** @param {number} pageTotal The total number of available pages */
+		/** @type {number} The total number of available pages */
 		this.pageTotal = 0;
-		/** @param {number} maxNavItems The maximum number of pages to cache */
+		/** @type {number} The maximum number of pages to cache */
 		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
-		this.isLoading = false;
-		this.menu = new MENU(this.body.pane, new MODEL().set('label', 'INDEX'));
+        this.isLoading = false;
+
+        this.header = new HEADER(this, new MODEL());
+        $(this.header.el).insertBefore(this.body.pane.el);
+
+        this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        this.menu.el.dispatchEvent(new Expand(this.menu));
 		this.addEvents();
-		this.header = new HEADER(this, new MODEL());
-		$(this.header.el).insertBefore(this.body.pane.el);
+		
 		this.pagination = this.createPaginationFooter();
 		this.footer = new FOOTER(this, new MODEL());
 		$(this.pagination.el).insertAfter(this.body.pane.el);
@@ -46,37 +52,37 @@ export default class INDEXMAIN extends BANNER {
 		return new Promise((resolve, reject) => {
 			try {
 				if (!isNaN(this.page)) {
-					this.getLoader().log(10, 'Retrieving page ' + this.page).then((loader) => {
-						$.post('/Main/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
-							'__RequestVerificationToken': this.getMain().token
-						}, (payload, status) => {
-							if (status === 'success') {
-								loader.log(50).then(() => {
-									this.isLoading = true;
-									this.pageTotal = payload.total;
-									payload.list.forEach((model) => {
-										this.createThumbnail(model, payload.className).el.onclick = () => this.launchMain(model.id, model.label);
-									});
-									this.isLoading = false;
-									this.purgeList();
-									if (!this.pagination.buttonGroup.loaded) {
-										this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-										for (let p = 0; p < this.pageCount; p++) {
-											this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-												this.menu.empty().then(() => this.loadPage(p));
-												return false;
-											};
-										}
-										this.pagination.buttonGroup.loaded = true;
-										this.pagination.buttonGroup.children[0].addClass('active');
-									}
-									loader.log(100).then(() => resolve(this));
-								});
-							} else {
-								loader.log(0, status).then(() => reject(new Error('Failed to retrieve page')));
-							}
-						});
-					});
+                    $.post('/' + this.classType + '/PageIndex?page=' + this.page + '&pageLength=' + this.pageLength, {
+                        '__RequestVerificationToken': this.getToken()
+                    }, (payload, status) => {
+                        if (status === 'success') {
+
+                            this.isLoading = true;
+                            this.pageTotal = payload.total;
+                            payload.list.forEach((model) => {                                
+                                this.createThumbnail(model, payload.className).el.onclick = () => {
+                                    console.log('Creating thumbnail', payload, this.getContainer());
+                                    this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);//.get(.load(model.id);
+                                }
+                            });
+                            this.isLoading = false;
+                            this.purgeList();
+                            if (!this.pagination.buttonGroup.loaded) {
+                                this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
+                                for (let p = 0; p < this.pageCount; p++) {
+                                    this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
+                                        this.menu.empty().then(() => this.loadPage(p));
+                                        return false;
+                                    };
+                                }
+                                this.pagination.buttonGroup.loaded = true;
+                                this.pagination.buttonGroup.children[0].addClass('active');
+                            }
+                            resolve(this);                            
+                        } else {
+                            reject(new Error('Failed to retrieve page'));
+                        }
+                    });
 				}
 			} catch (e) {
 				reject(e);
@@ -107,14 +113,6 @@ export default class INDEXMAIN extends BANNER {
 			    }, 300);
 			    
 			}*/
-		};
-		this.body.pane.el.onmouseenter = () => {
-			console.log('Moused over body.pane');
-			this.body.pane.addClass('showNav');
-		};
-		this.body.pane.el.onmouseleave = () => {
-			console.log('Moused out of body.pane');
-			this.body.pane.removeClass('showNav');
 		};
 	}
 	/** Creates a Thumbnail that launches its respective MAIN
@@ -149,18 +147,12 @@ export default class INDEXMAIN extends BANNER {
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
 	}
-	/** Opens the given Main Container
-		@param {number} id Main Container Id
-	    @returns {void}
-	*/
-	launchMain(id) {
-		this.getMain().load(id);
-	}
 	/** Loads the page
 	    @param {number} page Page to load
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	loadPage(page) {
+    loadPage(page) {
+        console.log(this.toString() + '.loadPage()', page);
 		return this.chain(() => {
 			this.header.setInnerHTML('Page ' + (page + 1));
 			let buttons = this.pagination.buttonGroup.el.children;
@@ -176,7 +168,7 @@ export default class INDEXMAIN extends BANNER {
 	    @returns {void}
 	*/
 	nextPage() {
-		//console.log('nextpage', this.page + 1, this.pageLength);
+		console.log('nextpage', this.page + 1, this.pageLength);
 		if (this.pageTotal > this.page * this.pageLength + 1) {
 			this.loadPage(this.page + 1);
 			this.scrollToActiveButton();
@@ -188,7 +180,7 @@ export default class INDEXMAIN extends BANNER {
         @returns {void}
     */
 	prevPage() {
-		//console.log('prevPage', this.page - 1, this.pageLength);
+		console.log('prevPage', this.page - 1, this.pageLength);
 		this.isLoading = true;
 		if (this.page > 0) {
 			this.loadPage(this.page - 1);

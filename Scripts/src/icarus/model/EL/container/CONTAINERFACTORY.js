@@ -108,6 +108,30 @@ export default class CONTAINERFACTORY extends FACTORY {
                 throw Error(this.toString() + ' No constructor exists for "' + className + '"');
         }
         return element;
-    }	
+    }
+    /** Launches a viewer in a dialog for the given class type.
+        Selecting an element loads it into the calling CONTAINER.
+        @param {string} [classType] Default class to display (ie: MAIN)
+        @param {CONTAINER} [container] Calling container
+        @param {EL} [caller] Calling element (ie: switchable element resolved)
+        @returns {Promise<PROMPT>} Prompt configured to view given classType
+    */
+    launchViewer(classType = 'MAIN', container = this, caller = this) {
+        return new Promise((resolve) => {
+            container.getLoader().log(25).then((loader) => {
+                let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
+                    container,
+                    caller,
+                    label: 'View ' + classType + '(s)',
+                    text: 'Viewer Text'
+                }));
+                let viewer = new INDEXMAIN(prompt.body.pane, new MODEL().set({
+                    container
+                }), classType);
+                // Do viewer config here
+                loader.log(100).then(() => resolve(prompt.show()));
+            });
+        });
+    }
 }
 export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
