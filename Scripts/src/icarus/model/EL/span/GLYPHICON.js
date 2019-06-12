@@ -1,5 +1,5 @@
 /** @module */
-import SPAN, { ATTRIBUTES, EL } from './SPAN.js';
+import SPAN, { ATTRIBUTES, EL, MODEL } from './SPAN.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** Bootstrap 3 Glyph Icon
     @class
@@ -22,4 +22,4 @@ export default class GLYPHICON extends SPAN {
         this.setClass('icon glyphicon ' + glyphicon);
 	}
 }
-export { ATTRIBUTES, EL, ICONS, SPAN }
+export { ATTRIBUTES, EL, ICONS, MODEL, SPAN }
