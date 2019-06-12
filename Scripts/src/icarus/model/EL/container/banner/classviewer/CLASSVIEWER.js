@@ -1,8 +1,7 @@
 /** @module */
-import FORM, { ATTRIBUTES, MODEL } from '../../../form/FORM.js';
+import MENU, { Expand, MODEL } from '../../../nav/menu/MENU.js';
 import BANNER from '../BANNER.js';
 import HEADER from '../../../header/HEADER.js';
-import MENU, { Expand } from '../../../nav/menu/MENU.js';
 /** Contains a high level view of the specified CONTAINER Class if it is available to the user
     @class
     @extends BANNER
@@ -16,7 +15,6 @@ export default class CLASSVIEWER extends BANNER {
     constructor(node, model, classType = 'MAIN') {
 		super(node, model);
         this.addClass('classviewer');
-        //this.body.pane.addClass('banner');
 		this.classType = classType;
 	}
     construct() {
