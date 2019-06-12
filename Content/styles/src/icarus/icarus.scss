@@ -333,6 +333,49 @@ $z-bottom: -1;
         @extend %selected;
     }
 }
+// An abstract navigation item with clickable events
+%nav-item {
+    @extend %clickable;
+    @include transition($transition-default);
+    background-color: $color-shadow-neutral;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    box-sizing: border-box;
+    cursor: pointer;
+    //float: left;
+    //line-height: $navbar-height; // - 1rem;
+    list-style: none;
+
+    &:hover {
+        background-color: $color-shadow-light;
+        border-left: 1px solid $color-shadow-neutral;
+        border-right: 1px solid $color-shadow-neutral;
+
+        &.press {
+            @include transition(background-color $longclick-delay);
+            background-color: $color-red;
+        }
+    }
+
+    &.active {
+        background-color: $color-grey-dark;
+        box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+    }
+
+    &.selected {
+        background-color: red;
+    }
+
+    &.wide-tab {
+        font-weight: bold;
+
+        &.active {
+            > a {
+                text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+            }
+        }
+    }
+}
 /// Extends a list so that each embedded list gets smaller
 %list-within-list {
     > li {
@@ -511,10 +554,6 @@ html {
         margin: calc(50vh - 2rem) auto;
         width: $sidebar-width;
     }
-
-    .selected {
-        @extend %selected;
-    }
     /* #endregion */
     /* #region Elements */
     button {
@@ -529,6 +568,10 @@ html {
     h6,
     header {
         @extend %header;
+
+        &.selected {
+            @extend %selected;
+        }
     }
 
     .hidden {
@@ -604,8 +647,15 @@ html {
                 //}
             }
         }
+
+        &.confirm {
+            > .form-footer {
+                height: auto;
+            }
+        }
         /// A Prompt style Dialog
         /// @group dialog
+        &.confirm,
         &.prompt {
             animation: slideOutDown $transition-speed $transition-motion;
             border-bottom-left-radius: 0;
@@ -640,6 +690,10 @@ html {
                     //height: calc(50vh - #{$navbar-height});
                     //max-height: calc(50vh - #{$navbar-height});
                     overflow-x: hidden;
+
+                    > .text {
+                        padding: 1rem;
+                    }
 
                     > form {
                         .form-footer {
@@ -1181,6 +1235,10 @@ html {
                 }
             }
         }
+
+        &.selected {
+            @extend %selected;
+        }
     }
     /// HTML FORM Element
     form {
@@ -1324,6 +1382,10 @@ html {
             & + input {
                 background-color: $color-red;
             }
+        }
+
+        &.selected {
+            @extend %selected;
         }
     }
 
@@ -1515,6 +1577,11 @@ html {
     }
     /// A clickable icon with embedded label
     &.icon {
+
+        &.selected {
+            @extend %selected;
+        }
+
         .label {
             color: $color-black;
             //font-family: sans-serif;
@@ -1568,6 +1635,10 @@ html {
             &.press {
                 @include transition(background-color $longclick-delay);
                 background-color: $color-red;
+            }
+
+            &.selected {
+                @extend %selected;
             }
         }
         /// Container Nav options menu and fixed navbar
@@ -1897,6 +1968,10 @@ html {
                         font-size: $font-size-extralarge;
                         line-height: 3rem;
                         padding: 0 6px;
+
+                        &.selected {
+                            @extend %selected;
+                        }
                     }
 
                     p {
@@ -1910,6 +1985,10 @@ html {
 
                         &.active {
                             text-decoration: underline;
+                        }
+
+                        &.selected {
+                            @extend %selected;
                         }
                     }
                 }
@@ -2108,154 +2187,150 @@ html {
             }
 
             > .body { // table
-                //display: table;
+                display: table;
                 //font-size: smaller;
                 line-height: 2rem;
 
-                > .pane {
-                    display: table;
+                > .table-group {
+                    border: $zero-px;
+                    display: table-row-group;
+                    height: $navbar-height;
+                    margin: 0;
+                    min-height: $navbar-height;
+                    padding: 0;
+                    width: 100%;
 
-                    > .table-group {
-                        border: $zero-px;
-                        display: table-row-group;
-                        height: $navbar-height;
-                        margin: 0;
-                        min-height: $navbar-height;
-                        padding: 0;
+                    > nav {
+                        //display: none;
+                    }
+                    /// A Table Header //thead
+                    &.table-header {
+                        background-color: $color-blue-deep;
+                        border-bottom: 2px solid $color-blue-lighter;
+                        box-shadow: 3px 0px 3px $color-shadow-dark;
+                        //font-weight: bold;
+                        th {
+                            background-color: $color-blue-deep;
+                            border-right: 1px solid grey;
+                            color: $color-white;
+                            position: sticky;
+                            top: 4rem;
+                            z-index: #{$z-top - 1};
+
+                            &.active {
+                                background-color: lighten($color-blue-deep, 10%);
+                            }
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
+                    }
+                    /// A Table Header Row //th
+                    &.table-body {
+                        background-color: $color-light-more;
+                        border: 0;
+                        border-bottom: thin solid $color-white;
+                        font-size: smaller;
+                        text-transform: uppercase;
+
+                        .table-row {
+                            border-bottom: 1px solid grey;
+                            box-sizing: border-box;
+
+                            .table-column {
+                                border-right: 1px solid grey;
+                                box-sizing: border-box;
+                            }
+                        }
+                    }
+                    /// A Table Row //tr
+                    &.table-footer {
+                        border-bottom: 1px solid $color-light;
+                        border-top: 1px solid $color-grey;
+                        //display: inline-table;
+                        font-weight: bold;
+                        table-layout: fixed;
                         width: 100%;
 
-                        > nav {
-                            //display: none;
-                        }
-                        /// A Table Header //thead
-                        &.table-header {
-                            background-color: $color-blue-deep;
-                            border-bottom: 2px solid $color-blue-lighter;
-                            box-shadow: 3px 0px 3px $color-shadow-dark;
-                            //font-weight: bold;
-                            th {
-                                background-color: $color-blue-deep;
-                                border-right: 1px solid grey;
-                                color: $color-white;
-                                position: sticky;
-                                top: 4rem;
-                                z-index: #{$z-top - 1};
-
-                                &.active {
-                                    background-color: lighten($color-blue-deep, 10%);
-                                }
-
-                                &.press {
-                                    @include transition(background-color $longclick-delay);
-                                    background-color: $color-red;
-                                }
-                            }
-                        }
-                        /// A Table Header Row //th
-                        &.table-body {
-                            background-color: $color-light-more;
-                            border: 0;
-                            border-bottom: thin solid $color-white;
-                            font-size: smaller;
-                            text-transform: uppercase;
-
-                            .table-row {
-                                border-bottom: 1px solid grey;
-                                box-sizing: border-box;
-
-                                .table-column {
-                                    border-right: 1px solid grey;
-                                    box-sizing: border-box;
-                                }
-                            }
-                        }
-                        /// A Table Row //tr
-                        &.table-footer {
-                            border-bottom: 1px solid $color-light;
-                            border-top: 1px solid $color-grey;
-                            //display: inline-table;
-                            font-weight: bold;
-                            table-layout: fixed;
-                            width: 100%;
-
-                            &:hover {
-                                background-color: $color-light-more;
-                            }
-
-                            th {
-                                background-color: $color-blue-deep;
-                                border-right: 1px solid grey;
-                                color: $color-white;
-                                position: sticky;
-                                bottom: 0;
-                                z-index: #{$z-top - 1};
-
-                                &.active {
-                                    background-color: lighten($color-blue-deep, 10%);
-                                }
-
-                                &.press {
-                                    @include transition(background-color $longclick-delay);
-                                    background-color: $color-red;
-                                }
-                            }
-                        }
-                    }
-
-                    .table-row {
-                        display: block;
-                        height: $navbar-height;
-
                         &:hover {
-                            background-color: $color-blue-lighter;
+                            background-color: $color-light-more;
                         }
 
-                        > nav {
-                            display: none;
-                        }
+                        th {
+                            background-color: $color-blue-deep;
+                            border-right: 1px solid grey;
+                            color: $color-white;
+                            position: sticky;
+                            bottom: 0;
+                            z-index: #{$z-top - 1};
 
-                        > .body {
-                            display: table-row-group;
+                            &.active {
+                                background-color: lighten($color-blue-deep, 10%);
+                            }
 
-                            > .pane {
-                                display: table-row-group;
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
                             }
                         }
                     }
+                }
 
-                    .table-column {
-                        display: table-cell;
-                        height: $navbar-height;
-                        min-width: $navbar-height;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
+                .table-row {
+                    display: table-row;
+                    height: $navbar-height;
 
-                        > nav {
-                            display: none;
+                    &:hover {
+                        background-color: $color-blue-lighter;
+                    }
+
+                    > nav {
+                        display: none;
+                    }
+
+                    > .body {
+                        display: table-row-group;
+
+                        > .pane {
+                            display: table-row-group;
                         }
-                        // Animation for longclick indicator
+                    }
+                }
+
+                .table-column {
+                    display: table-cell;
+                    height: $navbar-height;
+                    min-width: $navbar-height;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
+                    > nav {
+                        display: none;
+                    }
+                    // Animation for longclick indicator
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
+
+                    &:hover {
+                        background-color: orange;
+
                         &.press {
                             @include transition(background-color $longclick-delay);
                             background-color: $color-red;
                         }
+                    }
 
-                        &:hover {
-                            background-color: orange;
+                    &.active {
+                        background-color: $color-blue-light;
 
-                            &.press {
-                                @include transition(background-color $longclick-delay);
-                                background-color: $color-red;
-                            }
-                        }
-
-                        &.active {
-                            background-color: $color-blue-light;
-
-                            &.press {
-                                @include transition(background-color $longclick-delay);
-                                background-color: $color-red;
-                            }
+                        &.press {
+                            @include transition(background-color $longclick-delay);
+                            background-color: $color-red;
                         }
                     }
                 }
@@ -2395,6 +2470,18 @@ html {
                 }
             }
         }
+        /// Displays a list of CONTAINER thumbnails, typically inside a PROMPT
+        &.index-menu {
+            overflow-y: auto;
+
+            &.collapse {
+                height: 0;
+
+                &.in {
+                    height: 19rem;
+                }
+            }
+        }
         /// A header within a menu
         /// @todo Consider that this should just be a Definition List style menu and this is the DT
         > header {
@@ -2421,6 +2508,7 @@ html {
             */
         }
         /// A collection of list-items within this menu
+        &.list,
         > .list {
             @extend %wide-block;
             /// List items are made to scroll horizontally instead of vertically
@@ -2540,39 +2628,80 @@ html {
             }
 
             .nav-item {
-                @extend %clickable;
-                @include transition($transition-default);
-                background-color: $color-shadow-neutral;
-                border-left: 1px solid transparent;
-                border-right: 1px solid transparent;
-                box-sizing: border-box;
-                cursor: pointer;
-                //float: left;
-                //line-height: $navbar-height; // - 1rem;
-                list-style: none;
-
-                &:hover {
-                    background-color: $color-shadow-light;
-                    border-left: 1px solid $color-shadow-neutral;
-                    border-right: 1px solid $color-shadow-neutral;
-
-                    &.press {
-                        @include transition(background-color $longclick-delay);
-                        background-color: $color-red;
-                    }
-                }
-
-                &.active {
-                    background-color: $color-grey-dark;
-                    box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
-                }
-
                 &.wide-tab {
                     font-weight: bold;
 
                     &.active {
                         > a {
                             text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+                        }
+                    }
+                }
+
+                &.nav-item-thumbnail {
+                    @extend %bevel-up;
+                    height: $thumbnail-height;
+                    margin: 0;
+
+                    > a {
+                        display: block;
+                        height: $thumbnail-height;
+                        line-height: 1.5rem;
+                        padding: .5rem 0;
+                        width: 100%;
+
+                        img {
+                            @extend %thumbnail-image;
+                            clear: left;
+                            float: left;
+                            height: $thumbnail-height - 1rem;
+                            margin: 0 .5rem;
+                            width: $thumbnail-height - 1rem;
+                        }
+
+                        .label {
+                            display: none;
+                        }
+
+                        header,
+                        p {
+                            color: $color-white;
+                            clear: right;
+                            display: block;
+                            float: left;
+                            width: calc(100% - #{$thumbnail-height});
+                        }
+
+                        header {
+                            font-weight: bold;
+                        }
+
+                        p {
+                            font-style: italic;
+                            height: 4.5rem;
+                            overflow: hidden;
+                        }
+
+                        .btn-group {
+                            float: right;
+
+                            button {
+                                background-color: $color-grey;
+                                border-radius: .8rem;
+                                border: 0;
+                                box-shadow: inset 1px 1px 2px $color-shadow-neutral;
+                                color: $color-white;
+                                font-size: smaller;
+                                font-weight: normal;
+                                height: 2rem;
+                                line-height: 1rem;
+                                margin-right: 1rem;
+                                padding: 0 1rem;
+
+                                &:hover {
+                                    background-color: $color-blue-deep;
+                                }
+                            }
                         }
                     }
                 }
@@ -2608,6 +2737,10 @@ html {
                 }
             }
         }
+    }
+
+    .nav-item {
+        @extend %nav-item;
     }
 
     .navbar-search {
@@ -2670,97 +2803,9 @@ html {
         }
     }
 
-    .thumbnail {
-        @extend %bevel-up;
-        @extend %clickable;
-        background-color: $color-grey-dark;
-        border-radius: .4rem;
-        font-family: 'Raleway';
-        height: $thumbnail-height;
-        margin: .5rem;
-        padding: 0;
-        width: calc(50% - 1rem);
 
-        @media only screen and (max-width: $max-width-desktop) {
-            border-radius: 0;
-            margin: 0;
-            width: 100%;
-        }
 
-        &.nav-item {
-            a {
-                height: $thumbnail-height;
-                line-height: 1.5rem;
-                width: 100%;
 
-                img {
-                    @extend %thumbnail-image;
-                    clear: left;
-                    float: left;
-                    height: $thumbnail-height - 1rem;
-                    margin: .5rem;
-                    width: $thumbnail-height - 1rem;
-                }
-            }
-        }
-
-        .body {
-            .pane {
-                background-color: $color-light;
-                color: $color-dark;
-
-                > header {
-                    clear: right;
-                    color: $color-light-less;
-                    display: block;
-                    float: left;
-                    font-weight: bold;
-                    line-height: 3rem;
-                    margin: .5rem 0 0;
-                    padding: 0;
-                    text-transform: uppercase;
-                    width: calc(100% - 148px);
-                }
-
-                > img {
-                    background-color: $color-white;
-                    border: 1px solid $color-white;
-                    border-radius: .3rem;
-                    clear: left;
-                    display: block;
-                    float: left;
-                    height: 128px;
-                    margin: .3rem;
-                    width: 128px;
-                }
-
-                > p {
-                    color: $color-light-less;
-                    float: left;
-                    font-size: smaller;
-                    height: 6rem;
-                    margin: 0 .3rem;
-                    overflow-y: auto;
-                    padding: 0 .8rem;
-                    text-align: justify;
-                    width: calc(100% - 148px);
-                }
-
-                > .btn-group {
-                    bottom: 1.75rem;
-                    position: absolute;
-                    right: 1.35rem;
-
-                    > button {
-                        &.btn {
-                            border: 0;
-                            border-radius: .3rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     .vertical-align-center {
         display: table-cell;
