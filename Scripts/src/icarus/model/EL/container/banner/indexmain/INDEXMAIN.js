@@ -1,7 +1,7 @@
 /** @module */
+import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
+import CONFIRM, { DIALOGMODEL } from '../../../dialog/confirm/CONFIRM.js';
 import MENU, { Expand, MODEL } from '../../../nav/menu/MENU.js';
-import BUTTON from '../../../button/BUTTON.js';
-import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONTAINER from '../../CONTAINER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
@@ -19,7 +19,6 @@ export default class INDEXMAIN extends CONTAINER {
 	constructor(node, model, classType = 'MAIN') {
 		super(node, 'DIV', model, [classType]);
         this.addClass('index-main');
-        this.body.pane.addClass('banner');
         /** @type {string} The default class to display */
         this.classType = classType;
 		/** @type {number} The current page */
@@ -36,11 +35,32 @@ export default class INDEXMAIN extends CONTAINER {
         $(this.header.el).insertBefore(this.body.pane.el);
 
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        this.menu.el.onscroll = () => {
+            if (this.menu.el.scrollTop > 10) {
+                if (this.menu.el.scrollTop >= this.menu.el.scrollHeight - this.menu.el.offsetHeight) {
+                    if (!this.isLoading) {
+                        this.isLoading = true;
+                        //console.log('Scrolled to bottom. Loading next page if exists');
+                        this.nextPage();
+                        this.isLoading = false;
+                    }
+                }
+            }
+			/*if (this.menu.el.scrollTop === 0 && this.page > 1) {
+			    setTimeout(() => {
+			        if (this.menu.el.scrollTop === 0) {
+			            console.log('Scrolled to top. Loading previous page if exists');
+			            this.prevPage();
+			        }
+			    }, 300);			    
+			}*/
+        };
+
         this.menu.el.dispatchEvent(new Expand(this.menu));
 		this.addEvents();
 		
 		this.pagination = this.createPaginationFooter();
-		this.footer = new FOOTER(this, new MODEL());
+		//this.footer = new FOOTER(this, new MODEL());
 		$(this.pagination.el).insertAfter(this.body.pane.el);
 		this.loadPage(this.page);
 	}
@@ -56,14 +76,27 @@ export default class INDEXMAIN extends CONTAINER {
                         '__RequestVerificationToken': this.getToken()
                     }, (payload, status) => {
                         if (status === 'success') {
-
                             this.isLoading = true;
                             this.pageTotal = payload.total;
                             payload.list.forEach((model) => {                                
-                                this.createThumbnail(model, payload.className).el.onclick = () => {
-                                    console.log('Creating thumbnail', payload, this.getContainer());
-                                    this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);//.get(.load(model.id);
-                                }
+                                let thumb = this.createThumbnail(model);
+                                let thumbButton = thumb.buttonGroup.addButton('Append', ICONS.PENCIL);
+                                thumbButton.el.addEventListener('click', () => {
+                                    let confirm = new CONFIRM(new DIALOGMODEL(new MODEL(), {
+                                        container: this,
+                                        caller: this,
+                                        label: 'Append to CONTAINER',
+                                        text: 'Append to CONTAINER?'
+                                    }), () => {
+                                        console.log('Confirmed.  Appending...');
+                                        console.log('Creating thumbnail', payload, this.getContainer());
+                                        console.warn('PROMPT/CONFIRM WITH THE USER BEFORE PROCEEDING');
+                                        this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);
+                                    }, () => {
+                                        console.log('Cancelled');
+                                    });
+                                    confirm.showDialog();
+                                });
                             });
                             this.isLoading = false;
                             this.purgeList();
@@ -93,42 +126,25 @@ export default class INDEXMAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	addEvents() {
-		this.body.pane.el.onscroll = () => {
-			if (this.body.pane.el.scrollTop > 10) {
-				if (this.body.pane.el.scrollTop >= this.body.pane.el.scrollHeight - this.body.pane.el.offsetHeight) {
-					if (!this.isLoading) {
-						this.isLoading = true;
-						//console.log('Scrolled to bottom. Loading next page if exists');
-						this.nextPage();
-						this.isLoading = false;
-					}
-				}
-			}
-			/*if (this.body.pane.el.scrollTop === 0 && this.page > 1) {
-			    setTimeout(() => {
-			        if (this.body.pane.el.scrollTop === 0) {
-			            console.log('Scrolled to top. Loading previous page if exists');
-			            this.prevPage();
-			        }
-			    }, 300);
-			    
-			}*/
-		};
+        //
 	}
 	/** Creates a Thumbnail that launches its respective MAIN
 	    @param {MODEL} model The Thumbnail model
+        @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
-        @param {string} model.description A brief description that can be truncated
+        @param {string} model.metaId A brief description that can be truncated
 	    @param {string} name The name to launch
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-	createThumbnail({
+    createThumbnail({
+        id,
 		label,
-		description
+        metaId
 	}) {
 		return this.menu.addNavThumbnail(new MODEL().set({
-			label,
-			description
+            id,
+            label,
+			metaId
 		}));
 	}
 	/** Creates a Pagination Footer
