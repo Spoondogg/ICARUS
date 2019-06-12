@@ -697,6 +697,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formcheckbox\FORMCHECKBOX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
