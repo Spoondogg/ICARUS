@@ -298,4 +298,4 @@ export default class FACTORY {
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
-// eslint-enable */
+/* eslint-enable */
