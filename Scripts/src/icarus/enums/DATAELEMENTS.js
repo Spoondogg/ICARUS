@@ -163,7 +163,16 @@ export const DATAELEMENTS = new Map([
         }
     ],
     ['INDEX', {}],
-    ['INDEXMAIN', {}],
+    [
+        'INDEXMAIN', {
+            data: [
+                createInputModel('INPUT', 'classType', 'MAIN'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'MAIN'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
+        }
+    ],
     [
         'INPUT', {
             data: [
