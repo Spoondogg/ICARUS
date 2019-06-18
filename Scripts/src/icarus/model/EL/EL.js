@@ -8,12 +8,20 @@ import MissingContainerError from '../../error/MissingContainerError.js';
 import PAYLOAD from './form/PAYLOAD.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
-/** A Generic HTML Element Node
+/** A Generic HTML Element Node Class
+    @description It might make more sense for this class to be called NODE.
+    In the future, I might consider creating a NODE class and having EL
+    extend it.  I'm certain that there are certain methods and properties 
+    of EL that would be better suited to a NODE class.    
+    @todo Create a NODE class to handle methods for accessing its parent/child
+    @todo Extend MODEL (current) and implement NODE for descendants of CONTAINER
+    @description This would result in CONTAINERS having NODE features...  But what about cases
+    where EL needs to access?  Maybe this isn't such a good idea afterall.
     @class
     @extends MODEL
 */
 export default class EL extends MODEL {
-	/** Constructs a Node representing an HTMLElement as part of a linked list
+	/** Constructs a node representing an HTMLElement that can be represented in the DOM
 	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
@@ -637,12 +645,14 @@ export default class EL extends MODEL {
             }
         });
     }
-	/** Gets the container (if exists) and sets it
+	/** Sets container with given CONTAINER or optionsally
+        gets the container (by Prototype if exists) and sets it
+        @param {CONTAINER} [container] Container
 	    @returns {void}
 	*/
-	setContainer() {
+    setContainer(container = this.getProtoTypeByClass('CONTAINER')) {
 		/** @type {EL} */
-		this.container = this.getProtoTypeByClass('CONTAINER');
+        this.container = container;
 	}
 	/** Gets the main (if exists) and sets it
 	    @returns {void}
