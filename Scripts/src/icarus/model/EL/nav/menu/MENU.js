@@ -103,10 +103,11 @@ export default class MENU extends LIST {
 	}
 	/** Constructs a Nav Item Thumbnail
 	    @param {MODEL} model The model
+        @param {string} classType The class type that this thumbnail represents
 	    @returns {NAVITEMTHUMBNAIL} A nav item with a thumbnail
 	*/
-	addNavThumbnail(model) {
-		return this.addChild(new NAVITEMTHUMBNAIL(this, model));
+	addNavThumbnail(model, classType = 'MODEL') {
+		return this.addChild(new NAVITEMTHUMBNAIL(this, model, classType));
 	}
 	/** Adds an array of Nav Items
         @param {Array} navItems An array of NAVITEM
@@ -116,10 +117,11 @@ export default class MENU extends LIST {
 		navItems.forEach((i) => this.addNavItem(i));
 	}
 	/** Adds a Separator (UI Only)    
+        @param {string} [label] Label
         @returns {NAVSEPARATOR} A Navigation Menu Separator
 	*/
-	addNavSeparator() {
-		return new NAVSEPARATOR(this.list);
+	addNavSeparator(label = '') {
+		return new NAVSEPARATOR(this, label);
     }
     /** When MENU loses focus, it will collapse any child MENU(s)
 	    This ensures that only one menu is visible at any given time
