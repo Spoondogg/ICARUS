@@ -122,12 +122,11 @@ export default class CONTAINERFACTORY extends FACTORY {
                 let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
                     container,
                     caller,
-                    label: 'View ' + classType + '(s)',
-                    text: 'Viewer Text'
+                    label: classType + '(s)'
+                    //text: 'Viewer Text'
                 }));
-                let viewer = new INDEXMAIN(prompt.body.pane, new MODEL().set({
-                    container
-                }), classType);
+                let viewer = new INDEXMAIN(prompt.body.pane, new MODEL(), classType);
+                viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));
             });
