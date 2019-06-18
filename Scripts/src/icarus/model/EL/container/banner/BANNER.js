@@ -11,9 +11,11 @@ export default class BANNER extends CONTAINER {
 	/** Constructs a Banner that contains CallOuts.
 	    @param {CONTAINER} node The model
 	    @param {MODEL} model Object Model
+        @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
 	*/
-	constructor(node, model) {
-		super(node, 'DIV', model, ['CALLOUT', 'THUMBNAIL']);
+	constructor(node, model, containerList = ['CALLOUT', 'THUMBNAIL']) {
+		super(node, 'DIV', model, containerList);
 		this.body.pane.addClass('banner');
 	}
 }
+export { MODEL }
