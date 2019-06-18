@@ -10,9 +10,9 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
     
-    public class IndexMainController : ContainerController {
+    public class ClassIndexController : ContainerController {
 
-        public IndexMainController() : base("IndexMain") {
+        public ClassIndexController() : base("CLASSINDEX") {
 
         }
 
@@ -22,8 +22,8 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new INDEXMAIN()
-                : new INDEXMAIN(formPost);
+                ? new CLASSINDEX()
+                : new CLASSINDEX(formPost);
 
             obj.setAuthorId(User.Identity.Name);
 
@@ -37,7 +37,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            return ctx.IndexMains.AsQueryable().Single(FilterById(id));
+            return ctx.ClassIndexes.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.IndexMains.Where(FilterAllowed());
+            return ctx.ClassIndexes.Where(FilterAllowed());
         }
     }
 }

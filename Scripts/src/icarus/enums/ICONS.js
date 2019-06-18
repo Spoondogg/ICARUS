@@ -49,7 +49,7 @@ export const ICONS = {
 	IMAGEGALLERY: 'glyphicon-picture',
 	INPUT: 'glyphicon-log-in',
 	INDEX: 'glyphicon-th',
-	INDEXMAIN: 'glyphicon-th-large',
+	CLASSINDEX: 'glyphicon-th-large',
 	JUMBOTRON: 'glyphicon-blackboard',
 	LIST: 'glyphicon-th-list',
     LOAD: 'glyphicon-open-file',
