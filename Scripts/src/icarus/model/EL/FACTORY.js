@@ -15,12 +15,14 @@ export default class FACTORY {
     constructor(type = '') {
         this.type = type;
         try {
+            /* eslint-disable no-undef */ // 'showdown' is embedded into vendor.js
             this.markdownConverter = new showdown.Converter({
                 smoothLivePreview: true,
                 strikethrough: true,
                 tasklists: true
             });
             this.markdownConverter.setFlavor('github');
+            /* eslint-enable no-undef */
         } catch (e) {
             console.warn('Failed to bind markdown converted');
             throw e;
