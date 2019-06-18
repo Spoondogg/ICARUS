@@ -1,13 +1,13 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
-import CONFIRM, { DIALOGMODEL } from '../../../dialog/confirm/CONFIRM.js';
-import MENU, { Expand, MODEL } from '../../../nav/menu/MENU.js';
-import CONTAINER from '../../CONTAINER.js';
+import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
+import CONTAINER, { Activate, Clickable } from '../../CONTAINER.js';
+import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
+import CLASSVIEWER from '../classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-/** Contains a list of THUMBNAILS for each MAIN Container available to this user
+/** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     @class
-    @description This thing needs a lot of work...  Its ugly and outdated.
 */
 export default class INDEXMAIN extends CONTAINER {
 	/** Constructs a banner with a header affixed outside of the Container's pane
@@ -16,8 +16,8 @@ export default class INDEXMAIN extends CONTAINER {
 	    @param {MODEL} model INDEX model
         @param {string} classType Default class to display
 	 */
-	constructor(node, model, classType = 'MAIN') {
-		super(node, 'DIV', model, [classType]);
+    constructor(node, model, classType = 'MAIN') {
+        super(node, 'DIV', model, [classType]);
         this.addClass('index-main');
         /** @type {string} The default class to display */
         this.classType = classType;
@@ -31,8 +31,8 @@ export default class INDEXMAIN extends CONTAINER {
 		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
         this.isLoading = false;
 
-        this.header = new HEADER(this, new MODEL());
-        $(this.header.el).insertBefore(this.body.pane.el);
+        this.header = new HEADER(this.body, new MODEL().set('innerHTML', this.classType));
+        $(this.header.el).insertBefore(this.body.el);
 
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
         this.menu.el.onscroll = () => {
@@ -55,17 +55,58 @@ export default class INDEXMAIN extends CONTAINER {
 			    }, 300);			    
 			}*/
         };
+        
+        this.configureHeader();
+        this.header.el.dispatchEvent(new Activate(this.header));
 
-        this.menu.el.dispatchEvent(new Expand(this.menu));
-		this.addEvents();
+        this.addEvents();
+        
+        /** Override swipe for horizontal menu */
+        this.body.pane.stopPropagation = true;
+        this.body.pane.swipeLeft = () => console.log('INDEXMAIN Swipe Left');
+        this.body.pane.swipeRight = () => console.log('INDEXMAIN Swipe Right');
 		
 		this.pagination = this.createPaginationFooter();
-		//this.footer = new FOOTER(this, new MODEL());
-		$(this.pagination.el).insertAfter(this.body.pane.el);
-		this.loadPage(this.page);
-	}
+		//this.loadPage(this.page);
+    }
+    /** Adds appropriate Event handlers to Header
+        @returns {void}
+    */
+    configureHeader() {
+        this.header.implement(new Clickable(this.header));
+        this.header.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
+        this.header.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+        this.addHeaderEvents();
+    }
+    /** Appends chosen CONTAINER to target after confirmation
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    confirmAppend(model) {
+        CONFIRM.confirmMethodCall(
+            'Append Confirmation',
+            'Append ' + this.classType + ': ' + model.label + '(' + model.id + ') to ' + this.getContainer().toString() + '?',
+            () => {
+                console.log('Confirmed.  Appending...', model, this.getContainer());
+                this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);
+            }
+        );
+    }
+    /** Launches a Class Viewer after confirmation
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    confirmView(model) {
+        CONFIRM.confirmMethodCall(
+            'Launch Viewer',
+            'Launch viewer for ' + this.classType + ' "' + model.label + '(' + model.id + ')"?',
+            () => {
+                console.log('Confirmed.  Viewing ' + this.classType + '(' + model.id + ')');
+                this.launchClassViewer(model.id, this.classType);
+            }
+        );
+    }
 	/** Constructs the INDEXMAIN Container
-        @todo This should be able to create PageIndexes for ALL Container types, not just MAIN
         @returns {void}
     */
 	construct() {
@@ -78,26 +119,9 @@ export default class INDEXMAIN extends CONTAINER {
                         if (status === 'success') {
                             this.isLoading = true;
                             this.pageTotal = payload.total;
-                            payload.list.forEach((model) => {                                
-                                let thumb = this.createThumbnail(model);
-                                let thumbButton = thumb.buttonGroup.addButton('Append', ICONS.PENCIL);
-                                thumbButton.el.addEventListener('click', () => {
-                                    let confirm = new CONFIRM(new DIALOGMODEL(new MODEL(), {
-                                        container: this,
-                                        caller: this,
-                                        label: 'Append to CONTAINER',
-                                        text: 'Append to CONTAINER?'
-                                    }), () => {
-                                        console.log('Confirmed.  Appending...');
-                                        console.log('Creating thumbnail', payload, this.getContainer());
-                                        console.warn('PROMPT/CONFIRM WITH THE USER BEFORE PROCEEDING');
-                                        this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);
-                                    }, () => {
-                                        console.log('Cancelled');
-                                    });
-                                    confirm.showDialog();
-                                });
-                            });
+                            let pageNote = this.page > -1 ? ': Page ' + (this.page + 1) : '';
+                            this.menu.addNavSeparator(this.classType + pageNote);
+                            payload.list.forEach((model) => this.addContainerThumbnailMethods(model));
                             this.isLoading = false;
                             this.purgeList();
                             if (!this.pagination.buttonGroup.loaded) {
@@ -121,7 +145,43 @@ export default class INDEXMAIN extends CONTAINER {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
+        @param {MODEL} model model
+        @returns {void}
+    */
+    addContainerThumbnailMethods(model) {
+        let thumb = this.createThumbnail(model, this.classType);
+
+        let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
+            label: 'Append',
+            icon: ICONS.PENCIL,
+            name: 'APPEND'
+        }));
+        btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
+
+        let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
+            label: 'View ' + this.classType,
+            icon: ICONS[this.classType],
+            name: 'VIEW'
+        }));
+        btnView.el.addEventListener('click', () => this.confirmView(model));
+
+        // Add methods
+        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
+        for (let m = 0; m < methods.length; m++) {
+            thumb.menu.addNavItemIcon(new MODEL().set({
+                label: methods[m],
+                icon: ICONS[methods[m].toUpperCase()],
+                name: methods[m].toUpperCase()
+            })).el.onclick = () => CONFIRM.confirmMethodCall(
+                this.classType + '.' + methods[m],
+                methods[m] + ' description',
+                () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]),
+                () => console.log(this.classType + '.' + methods[m] + '() was not called.')
+            );
+        }
+    }
 	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
 	    @returns {void}
 	*/
@@ -132,26 +192,23 @@ export default class INDEXMAIN extends CONTAINER {
 	    @param {MODEL} model The Thumbnail model
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
-        @param {string} model.metaId A brief description that can be truncated
-	    @param {string} name The name to launch
+	    @param {string} className The className that the thumbnail represents
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail({
         id,
-		label,
-        metaId
-	}) {
+		label
+	}, className) {
 		return this.menu.addNavThumbnail(new MODEL().set({
             id,
-            label,
-			metaId
-		}));
+            label
+		}), className);
 	}
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A Footer with a buttongroup for pagination
 	*/
 	createPaginationFooter() {
-		let pagination = new FOOTER(this, new MODEL('pagination'));
+		let pagination = new FOOTER(this.body, new MODEL('pagination'));
 		pagination.el.setAttribute('style', 'text-align:center;');
 		pagination.btnPrev = new BUTTON(pagination, 'Prev');
 		pagination.btnPrev.el.setAttribute('style', 'margin-right:1em;');
@@ -162,15 +219,42 @@ export default class INDEXMAIN extends CONTAINER {
 		pagination.btnNext.el.setAttribute('style', 'margin-left:1em;');
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
-	}
+    }
+    /** Launches a CLASSVIEWER for the given id and classType
+        @param {UId} id CONTAINER UId
+        @param {string} classType CONTAINER class
+        @returns {void}
+    */
+    launchClassViewer(id, classType) {
+        if (classType === 'MAIN') {
+            CONFIRM.confirmMethodCall(
+                'Launch MAIN Viewer',
+                classType + ' "(' + id + ') will launch in a new window.  Proceed?',
+                () => {
+                    console.log('Confirmed.  Viewing ' + classType + '(' + id + ')');
+                    window.open('/' + id, '_blank');
+                }
+            );
+        } else {
+            let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
+                container: this.getContainer(),
+                caller: this,
+                label: 'ClassViewer: ' + classType + ' # ' + id
+                //text: 'Viewing ' + classType + ' (' + id + ')"'
+            }), false);
+            let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
+            viewer.body.el.dispatchEvent(new Expand(viewer));
+            this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
+        }
+    }
 	/** Loads the page
 	    @param {number} page Page to load
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-    loadPage(page) {
+    loadPage(page = 0) {
         console.log(this.toString() + '.loadPage()', page);
 		return this.chain(() => {
-			this.header.setInnerHTML('Page ' + (page + 1));
+			//this.header.setInnerHTML(this.label + ': Page ' + (page + 1));
 			let buttons = this.pagination.buttonGroup.el.children;
 			for (let b = 0; b < buttons.length; b++) {
 				$(buttons[b]).removeClass('active');
@@ -184,12 +268,12 @@ export default class INDEXMAIN extends CONTAINER {
 	    @returns {void}
 	*/
 	nextPage() {
-		console.log('nextpage', this.page + 1, this.pageLength);
-		if (this.pageTotal > this.page * this.pageLength + 1) {
+        //console.log('nextpage', this.page + 1, this.pageLength, this.pageTotal, this.page * this.pageLength);
+		if (this.pageTotal - this.page * this.pageLength > this.pageLength) {
 			this.loadPage(this.page + 1);
 			this.scrollToActiveButton();
 		} else {
-			console.log('No next pages to display');
+            console.log('No next pages to display');
 		}
 	}
 	/** Loads the previous page
@@ -221,7 +305,19 @@ export default class INDEXMAIN extends CONTAINER {
 			}
 			this.isLoading = false;
 		}
-	}
+    }
+
+    /** Empties the menu and resets pages
+        @returns {Promise<ThisType>} Promise Chain
+    */
+    refresh() {
+        return this.chain(() => {
+            this.menu.empty().then(() => {
+                this.loadPage();
+            });
+        });
+    }
+
 	/** Scrolls the Pagination Buttongroup to the active button
 	    @returns {void}
 	*/
