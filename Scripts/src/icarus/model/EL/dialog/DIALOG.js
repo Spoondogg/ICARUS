@@ -38,7 +38,9 @@ export default class DIALOG extends EL {
 			this.navheader.expand();
 		}
         this.body = new COLLAPSIBLE(this, 'DIV', new MODEL('body'));
-        this.text = new DIV(this.body.pane, new MODEL('text').set('innerHTML', model.text));
+        if (typeof model.text !== 'undefined') {
+            this.text = new DIV(this.body.pane, new MODEL('text').set('innerHTML', model.text));
+        }
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
@@ -90,13 +92,21 @@ export default class DIALOG extends EL {
             try {
                 this.addClass('hiding').then(() => setTimeout(() => {
 					$(this.el).modal('hide');
-					resolve(preserve ? this : this.destroy().then(() => this.caller.deactivate()));
+					resolve(preserve ? this : this.destroy().then(() => this.deactivateCaller()));
 				}, delay));
 			} catch (e) {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Deactivates DIALOG caller if exists 
+        @returns {void}
+    */
+    deactivateCaller() {
+        if (this.caller !== null) {
+            this.caller.deactivate();
+        }
+    }
 	getContainer() {
 		return this.container;
 	}
