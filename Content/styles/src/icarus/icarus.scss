@@ -80,7 +80,7 @@ $sidebar-width: 240px;
 $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
-$thumbnail-height: 10rem;
+$thumbnail-height: 7rem;
 $longclick-delay: 2000ms ;
 $transition-speed: 150ms;
 $transition-motion: ease-in-out;
@@ -260,11 +260,11 @@ $z-bottom: -1;
     overflow-y: scroll;
     //top: $navbar-height;
 }
-/// Limits max height of the modal so that the stickyfooter remains visible
+/// Limits max height of the modal so that the stickyfooter remains visible (with a 5% buffer)
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
     //height: calc(50vh - #{$navbar-height});
-    max-height: calc(50vh - #{$navbar-height});
+    max-height: calc(55vh - #{$navbar-height});
     overflow-y: auto;
 }
 /// An image thumbnail
@@ -372,6 +372,22 @@ $z-bottom: -1;
         &.active {
             > a {
                 text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+            }
+        }
+    }
+
+    &.divider {
+        background-color: $color-grey-dark;
+        height: 2rem;
+        position: sticky;
+        top: 0;
+        z-index: #{$z-top - 1};
+
+        > a {
+            padding-left: .2rem;
+
+            > span {
+                line-height: 2rem;
             }
         }
     }
@@ -636,7 +652,7 @@ html {
             }
         }
 
-        footer {
+        > footer {
             &.form-footer {
                 border: 0;
                 //button {
@@ -651,6 +667,18 @@ html {
         &.confirm {
             > .form-footer {
                 height: auto;
+            }
+        }
+        /// A dialog for viewing EL Classes
+        &.dialog-classviewer {
+            > .body {
+                height: calc(85vh - 4rem);
+                max-height: calc(85vh - 4rem);
+
+                > .pane {
+                    height: calc(85vh - 4rem);
+                    max-height: calc(85vh - 4rem);
+                }
             }
         }
         /// A Prompt style Dialog
@@ -1108,8 +1136,9 @@ html {
         display: block;
         float: left;
         font-size: smaller;
-        height: $navbar-height;
+        height: $navbar-height - 1rem;
         line-height: $navbar-height - 1rem;
+        overflow: hidden;
         padding: 0;
         width: 100%;
         /// Button within a footer
@@ -1877,10 +1906,9 @@ html {
                     color: $color-light;
                     padding: 0 .5rem;
                     text-transform: uppercase;
-
-                    @media only screen and (max-width: $max-width-mobile) {
+                    /*@media only screen and (max-width: $max-width-mobile) {
                         display: none;
-                    }
+                    }*/
                 }
 
                 > .banner {
@@ -2640,7 +2668,7 @@ html {
 
                 &.nav-item-thumbnail {
                     @extend %bevel-up;
-                    height: $thumbnail-height;
+                    //height: $thumbnail-height;
                     margin: 0;
 
                     > a {
@@ -2649,14 +2677,21 @@ html {
                         line-height: 1.5rem;
                         padding: .5rem 0;
                         width: 100%;
-
-                        img {
+                        //img,
+                        .thumbnail-image {
                             @extend %thumbnail-image;
                             clear: left;
                             float: left;
                             height: $thumbnail-height - 1rem;
                             margin: 0 .5rem;
                             width: $thumbnail-height - 1rem;
+
+                            &.icon {
+                                font-size: $thumbnail-height - 3rem;
+                                line-height: $thumbnail-height - 1rem;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
                         }
 
                         .label {
@@ -2674,11 +2709,13 @@ html {
 
                         header {
                             font-weight: bold;
+                            padding-top: .5rem;
                         }
 
                         p {
                             font-style: italic;
-                            height: 4.5rem;
+                            height: 4rem;
+                            margin: 0;
                             overflow: hidden;
                         }
 
