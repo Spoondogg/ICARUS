@@ -164,7 +164,7 @@ export const DATAELEMENTS = new Map([
     ],
     ['INDEX', {}],
     [
-        'INDEXMAIN', {
+        'CLASSINDEX', {
             data: [
                 createInputModel('INPUT', 'classType', 'MAIN'),
                 createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
@@ -206,7 +206,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'TABLE', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'JUMBOTRON', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')

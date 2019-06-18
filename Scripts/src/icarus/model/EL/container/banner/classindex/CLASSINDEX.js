@@ -9,13 +9,13 @@ import HEADER from '../../../header/HEADER.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     @class
 */
-export default class INDEXMAIN extends CONTAINER {
-	/** Constructs a banner with a header affixed outside of the Container's pane
+export default class CLASSINDEX extends CONTAINER {
+	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Parent node
-	    @param {MODEL} model INDEX model
+        @param {MODEL} model INDEX model
         @param {string} classType Default class to display
-	 */
+	*/
     constructor(node, model, classType = 'MAIN') {
         super(node, 'DIV', model, [classType]);
         this.addClass('index-main');
@@ -63,8 +63,8 @@ export default class INDEXMAIN extends CONTAINER {
         
         /** Override swipe for horizontal menu */
         this.body.pane.stopPropagation = true;
-        this.body.pane.swipeLeft = () => console.log('INDEXMAIN Swipe Left');
-        this.body.pane.swipeRight = () => console.log('INDEXMAIN Swipe Right');
+        this.body.pane.swipeLeft = () => console.log(this.toString() + ' Swipe Left');
+        this.body.pane.swipeRight = () => console.log(this.toString() + ' Swipe Right');
 		
 		this.pagination = this.createPaginationFooter();
 		//this.loadPage(this.page);
@@ -106,7 +106,7 @@ export default class INDEXMAIN extends CONTAINER {
             }
         );
     }
-	/** Constructs the INDEXMAIN Container
+	/** Constructs the CLASSINDEX Container
         @returns {void}
     */
 	construct() {

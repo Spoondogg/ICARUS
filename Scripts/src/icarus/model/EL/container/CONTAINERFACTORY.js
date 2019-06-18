@@ -11,7 +11,7 @@ import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
 import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
 import INDEX from '../container/banner/index/INDEX.js';
-import INDEXMAIN from '../container/banner/indexmain/INDEXMAIN.js';
+import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
@@ -64,8 +64,8 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'INDEX':
                 element = new INDEX(span, model);
                 break;
-            case 'INDEXMAIN':
-                element = new INDEXMAIN(span, model);
+            case 'CLASSINDEX':
+                element = new CLASSINDEX(span, model);
                 break;
             case 'INDEXTHUMBNAIL':
                 element = new INDEXTHUMBNAIL(span, model);
@@ -125,7 +125,7 @@ export default class CONTAINERFACTORY extends FACTORY {
                     label: classType + '(s)'
                     //text: 'Viewer Text'
                 }));
-                let viewer = new INDEXMAIN(prompt.body.pane, new MODEL(), classType);
+                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType);
                 viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));
