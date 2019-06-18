@@ -1,10 +1,8 @@
 /** @module */
-import CONFIRM, { DIALOGMODEL } from '../../../dialog/confirm/CONFIRM.js';
-import NAVITEM, { ATTRIBUTES, EL, MODEL } from '../../../nav/navitem/NAVITEM.js';
-import BUTTONGROUP from '../../../group/buttongroup/BUTTONGROUP.js';
+import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/header.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
-import IMG from '../../../img/IMG.js';
 import P from '../../../p/P.js';
 import STRING from '../../../../../STRING.js';
 /** A full-width NavItem with a Thumbnail image, label and description
@@ -16,33 +14,22 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         @param {MODEL} model The Thumbnail model
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
-        @param {string} model.metaId A brief description that can be truncated
+        @param {string} classType The class that this thumbnail represents
     */
-	constructor(node, model) {
+	constructor(node, model, classType = 'MODEL') {
 		super(node, model);
         this.addClass('nav-item-thumbnail');
-        this.image = new IMG(this.anchor, new MODEL());
-        console.log(model);
+        //this.image = new IMG(this.anchor, new MODEL('thumbnail-image'));
+        this.image = new GLYPHICON(this.anchor, ICONS[classType]).addClass('thumbnail-image');
 		$(this.image.el).insertBefore(this.anchor.label.el);
-		this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', model.label));
-        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING('MetaId: ' + model.metaId || 'N/A').truncate(128)));
-        this.buttonGroup = new BUTTONGROUP(this.anchor);
-        let btn = this.buttonGroup.addButton('MetaId: ' + model.metaId, ICONS.META);
-        btn.el.addEventListener('click', () => {
-            let confirm = new CONFIRM(new DIALOGMODEL(new MODEL(), {
-                container: this,
-                caller: this,
-                label: 'Launch Viewer',
-                text: 'Launch viewer for "' + model.label + '"?'
-            }), () => {
-                console.log('Confirmed.  Viewing MetaId ' + model.metaId);
-            }, () => {
-                console.log('Cancelled');
-            });
-            confirm.showDialog();
-        });
-		this.fetchImage();
-	}
+        this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', classType + ' # ' + model.id));
+        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(model.label || 'N/A').truncate(128)));
+        this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
+        this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
+        this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+
+		//this.fetchImage(); // Only if IMG exists
+    }
 	/** Retrieve a FormPost for the given MAIN and sets this image source
 	    @returns {void}
 	*/
@@ -94,4 +81,4 @@ export default class NAVTHUMBNAIL extends NAVITEM {
 		}
 	}
 }
-export { ATTRIBUTES, CONFIRM, EL, MODEL }
+export { ATTRIBUTES, EL, MODEL }
