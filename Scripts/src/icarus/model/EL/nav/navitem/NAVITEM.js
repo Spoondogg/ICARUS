@@ -1,8 +1,8 @@
 /** @module */
 import Clickable, { Activate, Deactivate } from '../../../../interface/Clickable.js';
+import MENU, { Collapse, Expand } from '../menu/MENU.js';
 import UL, { ATTRIBUTES, EL, LI, MODEL } from '../../list/ul/UL.js';
 import ANCHOR from '../../a/anchor/ANCHOR.js';
-import MENU from '../menu/MENU.js';
 /** A Navigation Item
     @class
     @extends LI
@@ -59,4 +59,4 @@ export default class NAVITEM extends LI {
 		};
 	}
 }
-export { ANCHOR, ATTRIBUTES, EL, LI, MENU, MODEL, UL }
+export { ANCHOR, ATTRIBUTES, Collapse, EL, Expand, LI, MENU, MODEL, UL }
