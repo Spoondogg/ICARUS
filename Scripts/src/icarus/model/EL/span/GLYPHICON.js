@@ -11,7 +11,7 @@ export default class GLYPHICON extends SPAN {
 	    @param {string} glyphicon The bootstrap glyphicon or ICON enum
 	*/
 	constructor(node, glyphicon) {
-		super(node, new MODEL());
+		super(node);
 		this.addClass('icon glyphicon ' + glyphicon);
 	}
 	/** Sets the ICON class to the given glyphicon
@@ -22,4 +22,4 @@ export default class GLYPHICON extends SPAN {
         this.setClass('icon glyphicon ' + glyphicon);
 	}
 }
-export { ATTRIBUTES, EL, ICONS, SPAN }
+export { ATTRIBUTES, EL, ICONS, MODEL, SPAN }

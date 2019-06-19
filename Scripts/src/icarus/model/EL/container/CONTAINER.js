@@ -20,6 +20,7 @@ import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import REFERENCE from './REFERENCE.js';
+import SPAN from '../span/SPAN.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
@@ -183,11 +184,11 @@ export default class CONTAINER extends GROUP {
 		/** Indicates if this CONTAINER can be edited by anyone, or just by the author
             @type {number}
         */
-        this.shared = this.required(model.shared || 0);
+        this.shared = this.required(model.shared || -1);
         /** Indicates if this CONTAINER can be edited by anyone, or just by the author
             @type {number}
         */
-        this.isPublic = this.required(model.isPublic || 0);
+        this.isPublic = this.required(model.isPublic || -1);
         /** Simple status indicator
             @type {number}
         */
@@ -248,11 +249,16 @@ export default class CONTAINER extends GROUP {
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
     }
+    /** Creates a FORMPOST representing this container's attribute by given type
+        @param {string} type ie: data, attribute, meta
+        @param {string} [name] optional name of property to edit
+        @returns {void}
+    */
     createNewFormPost(type, name = '') {
         let typeId = type + 'Id';
         if (this[typeId] === 0) {
-            console.log(this.toString() + '.addDocumentMapAttributes() needs to create a(n) ' + type + ' FORMPOST');
-            this.getFactory().save(false, this, this).then((prompt) => prompt.form.createNewFormPost(type));
+            console.log(this.toString() + '.createNewFormPost() needs to create a(n) ' + type + ' FORMPOST');
+            this.getFactory().save(false, this, this).then((prompt) => prompt.form.createNewFormPost(type, this.className));
         } else {
             this.getFactory().editProperty(name, type, this, this);
         }
@@ -715,7 +721,10 @@ export default class CONTAINER extends GROUP {
 							break;
 						case 'label':
 							this[name] = new LABEL(node, new MODEL().set('innerHTML', this.data[name]));
-							break;
+                            break;
+                        case 'span':
+                            this[name] = new SPAN(node, new MODEL().set('innerHTML', this.data[name]));
+                            break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
                     }
@@ -728,16 +737,11 @@ export default class CONTAINER extends GROUP {
                         //console.log('Deactivating sibling editable elements', this.toString(), name, siblings);
                         //siblings.forEach((s) => s.el.dispatchEvent(new Deactivate(this)));
                     });
-                    this[name].el.addEventListener('deactivate', () => {
-                        console.log('Deactivated editable element: ' + name);
-                    });
-
+                    this[name].el.addEventListener('deactivate', () => console.log('Deactivated editable element: ' + name));
                     if (name === 'header') {
                         this.addHeaderEvents();
                     }
-
                     this.editableElements.push(this[name]);
-
 					resolve(this[name]);
 				}
 			} catch (e) {
@@ -1003,7 +1007,7 @@ export default class CONTAINER extends GROUP {
 			items.SAVEAS.el.onclick = () => this.getFactory().save(false, this, this);
 			items.SAVE.el.onclick = () => this.getFactory().save(true, this, this);
 		});
-	}
+    }
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
         @param {MENU} menu Target Menu
@@ -1018,8 +1022,9 @@ export default class CONTAINER extends GROUP {
 					if (addButton) {
 						//let menu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
 						let item = this.addContainerCaseButton(className, menu);
-						item.el.addEventListener('click', () => this.create(new MODEL().set('className', className)));
-						item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
+						item.el.addEventListener('activate', () => this.create(new MODEL().set('className', className)));
+						//item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
+                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this));
 					}
 					this.addConstructor(className, (model) => {
 						try {
@@ -1099,22 +1104,31 @@ export default class CONTAINER extends GROUP {
 		@param {number} id App Id to load
 		@returns {Promise<ThisType>} Promise Chain
 	*/
-	load(id) {
+    load(id) {
+        console.log(this.toString() + '.load()', id);
 		return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
-                        if (payload.result === 1) {
-                            this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
-                            resolve(this.make(payload.model));
-                        } else {
-                            this.getMain().login();
-                            // @todo Create a LoginRequired type Error and appropriate handler
-                            reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                        switch (payload.result) {
+                            case 0: // error
+                                console.error(this.toString() + '.load() error', payload.result, payload);
+                                this.getMain().login();
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                                break;
+                            case 1: // success
+                                this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
+                                resolve(this.make(payload.model));
+                                break;
+                            default: 
+                                console.log('Payload Result', payload.result, payload);
+                                this.getMain().login();
+                                // @todo Create a LoginRequired type Error and appropriate handler
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
                         }
                     });
 				} else {
-					console.log('Invalid Id to Load');
+					console.warn(this.toString() + 'attempted to load an element without providing a valid Id. Launching BROWSER');
 					resolve(this);
 				}
 			} catch (e) {

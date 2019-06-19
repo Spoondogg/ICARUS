@@ -37,8 +37,8 @@ export const DATAELEMENTS = new Map([
     [
         'CONTAINER', {
             data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'CHECKBOX'),
-                createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'CHECKBOX')
+                createInputModel('INPUT', 'showNav', '-1', 'showNav', 'CHECKBOX'),
+                createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'CHECKBOX')
             ],
             attributes: [
                 createInputModel('INPUT', 'name'),
@@ -60,6 +60,11 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('INPUT', 'p', 'Text')
             ]
+        }
+    ],
+    [
+        'CLASSVIEWER', {
+            data: [createInputModel('INPUT', 'classType', 'MAIN')]
         }
     ],
     [
@@ -158,7 +163,16 @@ export const DATAELEMENTS = new Map([
         }
     ],
     ['INDEX', {}],
-    ['INDEXMAIN', {}],
+    [
+        'CLASSINDEX', {
+            data: [
+                createInputModel('INPUT', 'classType', 'MAIN'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'MAIN'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
+        }
+    ],
     [
         'INPUT', {
             data: [
@@ -192,7 +206,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'TABLE', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'JUMBOTRON', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')
@@ -247,18 +261,18 @@ export const DATAELEMENTS = new Map([
     [
         'TD', {
             data: [
-                createInputModel('INPUT', 'type'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('TEXTAREA', 'p', 'value')
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
             ]
         }
     ],
     [
         'TH', {
             data: [
-                createInputModel('INPUT', 'type'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('TEXTAREA', 'p', 'value')
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
             ]
         }
     ],
