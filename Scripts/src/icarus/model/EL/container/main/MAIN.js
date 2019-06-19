@@ -379,7 +379,8 @@ export default class MAIN extends CONTAINER {
 								new PROMPT(new MODEL().set({
 									label: 'Create a new page',
 									caller: this,
-									container: this
+                                    container: this,
+                                    text: 'Create a new page'
 								})).createForm().then((form) => {
 									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {

@@ -14,6 +14,9 @@ export default class TGROUP extends CONTAINER {
 	constructor(node, element, model) {
         super(node, element, model, ['TR']);
         this.addClass('table-group');
+        this.childLocation = this;
+        this.navheader.destroy();
+        this.body.destroy();
         this.implement(new Clickable(this));
     }
     constructElements() {

@@ -11,7 +11,7 @@ import { TransitionSpeed } from '../../../../enums/StyleVars.js';
 export default class SIDEBAR extends EL {
 	/** A Sidebar Container Element
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {MODEL} [model] Model
 	*/
 	constructor(node, model = new MODEL().set('name', 'sidebar')) {
 		super(node, 'ASIDE', model);

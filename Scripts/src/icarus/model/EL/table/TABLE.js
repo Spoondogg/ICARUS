@@ -18,15 +18,17 @@ export default class TABLE extends CONTAINER {
         super(node, 'DIV', model, ['THEAD', 'TBODY', 'TFOOT']);
         this.addClass('table');
         this.deactivateSiblingsOnActivate = false;
+        this.childLocation = this.body;
+        this.body.pane.destroy();
     }
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this);
-            } else {
+            } /*else {
                 //console.log('No data exists for ' + this.toString());
                 //this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }
+            }*/
         });
     }
 	/** Adds the given table group to the table
