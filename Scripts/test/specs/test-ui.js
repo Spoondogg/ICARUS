@@ -244,7 +244,7 @@ describe('Verify CONTAINER(s)', () => {
         }
     });
 
-    it('INDEXMAIN loaded correctly', (done) => {
+    it('CLASSINDEX loaded correctly', (done) => {
         try {
             page.$eval('div.index-main', (el) => el.className).then((val) => {
                 expect(val).to.equal('container index-main');
@@ -256,7 +256,7 @@ describe('Verify CONTAINER(s)', () => {
         }
     });
 
-    it('INDEXMAIN ul.list loaded correctly', (done) => {
+    it('CLASSINDEX ul.list loaded correctly', (done) => {
         try {
             page.$eval('div.index-main .body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
                 console.log(' - The query did not return any results');

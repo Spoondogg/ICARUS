@@ -15,12 +15,14 @@ export default class FACTORY {
     constructor(type = '') {
         this.type = type;
         try {
+            /* eslint-disable no-undef */ // 'showdown' is embedded into vendor.js
             this.markdownConverter = new showdown.Converter({
                 smoothLivePreview: true,
                 strikethrough: true,
                 tasklists: true
             });
             this.markdownConverter.setFlavor('github');
+            /* eslint-enable no-undef */
         } catch (e) {
             console.warn('Failed to bind markdown converted');
             throw e;
@@ -239,6 +241,16 @@ export default class FACTORY {
             });
         });
     }
+    /** Launches a viewer in a dialog for the given class type 
+        @param {string} classType Default class to display
+        @param {CONTAINER} container Calling container
+        @param {EL} caller Calling element (ie: switchable element resolved)
+        @returns {Promise<PROMPT>} Prompt configured to view given classType
+    */
+    launchViewer(classType = 'MAIN', container = this, caller = this) {
+        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller);
+        return Promise.resolve(false);
+    }
     /** Saves the state of the CONTAINER
         @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
         @param {CONTAINER} container Container to save (Default this)
@@ -288,4 +300,4 @@ export default class FACTORY {
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
-// eslint-enable */
+/* eslint-enable */
