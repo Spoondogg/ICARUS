@@ -5,6 +5,7 @@ import UL, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL } fr
 import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
+import NAVSEARCH from '../navitem/NAVSEARCH.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 /** A collapseable list of NAVITEMS
     @extends LIST
@@ -100,7 +101,14 @@ export default class MENU extends LIST {
 	*/
 	addNavItemIcon(model) {
 		return this.addChild(new NAVITEMICON(this, model));
-	}
+    }
+    /** Constructs a Nav Item Icon
+	    @param {MODEL|{label:string, icon:string, name:string}} model Object model
+	    @returns {NAVITEMICON} Nav Item with Anchor
+	*/
+    addNavSearch(model) {
+        return this.addChild(new NAVSEARCH(this, model));
+    }
 	/** Constructs a Nav Item Thumbnail
 	    @param {MODEL} model The model
         @param {string} classType The class type that this thumbnail represents
