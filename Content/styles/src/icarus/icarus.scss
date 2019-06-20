@@ -12,7 +12,7 @@ $color-black: #000;
 $color-primary: #555;
 /// Default Blue Color
 /// @type Color
-$color-blue: #306e90;
+$color-blue: #005879;
 /// A light blue color
 /// @type Color
 $color-blue-light: #bee1ef;
@@ -21,13 +21,14 @@ $color-blue-light: #bee1ef;
 $color-blue-lighter: #43acbd;
 /// A deep blue color
 /// @type Color
-$color-blue-deep: #005879;
+$color-blue-deep: #133b63;
+$color-blue-header: #1b242d;
 /// Default Orange Color
 /// @type Color
 $color-orange: rgb(255, 165, 0);
 /// Default Red Color
 /// @type Color
-$color-red: rgb(255, 0, 0);
+$color-red: #b30808;
 /// Default Deep Red Color
 /// @type Color
 $color-red-deep: #641818;
@@ -74,12 +75,13 @@ $font-size-normal: 1rem;
 $font-size-large: 1.5rem;
 $font-size-extralarge: 2.5rem;
 $navbar-height: 4rem; // 50px
-$sidebar-width: 320px;
+$sidebar-width: 240px;
 /// Acts as a placeholder to prevent zero-unit warnings from sass-lint
 $zero-px: 0px; // sass-lint:disable-line zero-unit
 $max-width-desktop: 768px;
 $max-width-mobile: 767px;
-$thumbnail-height: 10rem;
+$thumbnail-height: 7rem;
+$longclick-delay: 2000ms ;
 $transition-speed: 150ms;
 $transition-motion: ease-in-out;
 $transition-default: all $transition-speed $transition-motion;
@@ -258,10 +260,11 @@ $z-bottom: -1;
     overflow-y: scroll;
     //top: $navbar-height;
 }
-/// Limits max height of the modal so that the stickyfooter remains visible
+/// Limits max height of the modal so that the stickyfooter remains visible (with a 5% buffer)
 %modal-tall {
     $navheights: ($navbar-height * 2) - 1rem;
-    max-height: calc(50vh - #{$navbar-height});
+    //height: calc(50vh - #{$navbar-height});
+    max-height: calc(55vh - #{$navbar-height});
     overflow-y: auto;
 }
 /// An image thumbnail
@@ -328,6 +331,65 @@ $z-bottom: -1;
 
     &.selected {
         @extend %selected;
+    }
+}
+// An abstract navigation item with clickable events
+%nav-item {
+    @extend %clickable;
+    @include transition($transition-default);
+    background-color: $color-shadow-neutral;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    box-sizing: border-box;
+    cursor: pointer;
+    //float: left;
+    //line-height: $navbar-height; // - 1rem;
+    list-style: none;
+
+    &:hover {
+        background-color: $color-shadow-light;
+        border-left: 1px solid $color-shadow-neutral;
+        border-right: 1px solid $color-shadow-neutral;
+
+        &.press {
+            @include transition(background-color $longclick-delay);
+            background-color: $color-red;
+        }
+    }
+
+    &.active {
+        background-color: $color-grey-dark;
+        box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
+    }
+
+    &.selected {
+        background-color: red;
+    }
+
+    &.wide-tab {
+        font-weight: bold;
+
+        &.active {
+            > a {
+                text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+            }
+        }
+    }
+
+    &.divider {
+        background-color: $color-grey-dark;
+        height: 2rem;
+        position: sticky;
+        top: 0;
+        z-index: #{$z-top - 1};
+
+        > a {
+            padding-left: .2rem;
+
+            > span {
+                line-height: 2rem;
+            }
+        }
     }
 }
 /// Extends a list so that each embedded list gets smaller
@@ -479,6 +541,10 @@ html {
     @include font-smoothing;
     @include transition($transition-default);
     background-color: $color-dark-less;
+    background-image: url('../Images/Logo.png');
+    background-position: center;
+    background-position-y: 85px;
+    background-repeat: no-repeat;
     color: $color-primary;
     font-family: $font-primary;
     font-size: $font-size-base;
@@ -498,9 +564,11 @@ html {
     .edit {
         @extend %edit;
     }
-
-    .selected {
-        @extend %selected;
+    /// A simplified view of a progress bar
+    .external-progress {
+        border-radius: 2px;
+        margin: calc(50vh - 2rem) auto;
+        width: $sidebar-width;
     }
     /* #endregion */
     /* #region Elements */
@@ -516,6 +584,10 @@ html {
     h6,
     header {
         @extend %header;
+
+        &.selected {
+            @extend %selected;
+        }
     }
 
     .hidden {
@@ -525,6 +597,7 @@ html {
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
         animation: slideOutUp $transition-speed $transition-motion;
+        background-color: $color-grey-lighter;
         border: 0;
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;
@@ -557,8 +630,60 @@ html {
                 }
             }
         }
+        /// The Dialog Header
+        /// @group dialog
+        > header {
+            background-color: $color-grey-dark;
+            color: $color-light;
+            height: 3rem;
+            line-height: 3rem;
+            padding: 0 .5rem;
+            text-transform: uppercase;
+
+            button {
+                //background-color: transparent;
+                //color: $color-white;
+                float: right;
+                //font-weight: bold;
+                //line-height: 1.5rem;
+                //&:hover {
+                //    color: $color-light-less;
+                //}
+            }
+        }
+
+        > footer {
+            &.form-footer {
+                border: 0;
+                //button {
+                //border-radius: 0;
+                //height: $navbar-height - 1rem;
+                //line-height: $navbar-height - 1rem;
+                //padding: 0;
+                //}
+            }
+        }
+
+        &.confirm {
+            > .form-footer {
+                height: auto;
+            }
+        }
+        /// A dialog for viewing EL Classes
+        &.dialog-classviewer {
+            > .body {
+                height: calc(85vh - 4rem);
+                max-height: calc(85vh - 4rem);
+
+                > .pane {
+                    height: calc(85vh - 4rem);
+                    max-height: calc(85vh - 4rem);
+                }
+            }
+        }
         /// A Prompt style Dialog
         /// @group dialog
+        &.confirm,
         &.prompt {
             animation: slideOutDown $transition-speed $transition-motion;
             border-bottom-left-radius: 0;
@@ -585,6 +710,163 @@ html {
                     padding: 0;
                 }
             }*/
+            > .body {
+                overflow-x: hidden;
+
+                > .pane {
+                    @extend %modal-tall;
+                    //height: calc(50vh - #{$navbar-height});
+                    //max-height: calc(50vh - #{$navbar-height});
+                    overflow-x: hidden;
+
+                    > .text {
+                        padding: 1rem;
+                    }
+
+                    > form {
+                        .form-footer {
+                            height: auto;
+                        }
+                    }
+                }
+            }
+            /// A Login Form embedded in a Prompt
+            /// @group dialog
+            &.login {
+                $login-width: 250px;
+                //$navheights: ($navbar-height * 2);
+                //#{$navbar-height}
+                //@extend %modal-tall;
+                animation: slideOutRight $transition-speed $transition-motion;
+                background-color: $color-grey-dark;
+                border-radius: 0;
+                float: right;
+                height: calc(100vh - #{$navbar-height});
+                left: calc(100% - #{$login-width});
+                margin: 0;
+                max-height: calc(100vh - #{$navbar-height});
+                top: $navbar-height;
+                width: $login-width;
+
+                &[open],
+                &.in {
+                    animation: slideInRight $transition-speed $transition-motion;
+
+                    &.hiding {
+                        animation: slideOutRight $transition-speed $transition-motion;
+                    }
+                }
+
+                > .body {
+                    background-color: $color-grey-dark;
+
+                    .body {
+                        .pane {
+                            background-color: $color-grey-dark;
+                            padding: 0;
+                        }
+                    }
+
+                    > .pane {
+                        //background-color: red;
+                        height: calc(100vh - 11rem);
+                        max-height: calc(100vh - 11rem);
+                        /// A LOGIN FORM
+                        > form {
+                            border: 0;
+                            margin-top: 1rem;
+
+                            label {
+                                clear: both;
+                                color: $color-white;
+                                float: left;
+                                font-size: .7rem;
+                                font-weight: lighter;
+                                line-height: .7rem;
+                                margin-top: 0;
+                                padding: 0 .5rem;
+                            }
+
+                            input {
+                                margin-bottom: .5rem;
+                            }
+
+                            > .body {
+                                > footer {
+                                    .btn-forgot-password {
+                                        @include transition($transition-default);
+                                        //background-color: $color-grey-lighter;
+                                        background-color: $color-grey-dark;
+                                        border: 0;
+                                        //color: $color-grey;
+                                        color: $color-white;
+                                        font-size: .8rem;
+                                        font-weight: lighter;
+                                        //height: 6rem;
+                                        margin: 1rem auto 0;
+                                        //padding: 1rem;
+                                        &:hover {
+                                            color: $color-blue-light;
+                                            text-decoration: underline;
+                                        }
+                                    }
+
+                                    .btn-oauth-google {
+                                        @include transition($transition-default);
+                                        background-color: $color-red;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
+
+                                        &:hover {
+                                            background-color: $color-red-deep;
+                                        }
+
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
+
+                                        > .button-label {
+                                            float: left;
+                                        }
+                                    }
+
+                                    .btn-sign-in {
+                                        background-color: $color-blue;
+                                        border: 0;
+                                        border-bottom: 2px solid $color-black;
+                                        color: $color-white;
+                                        font-weight: lighter;
+                                        margin: 1rem auto;
+                                        text-transform: none;
+
+                                        &:hover {
+                                            background-color: $color-blue-deep;
+                                        }
+
+                                        > .icon {
+                                            float: left;
+                                            padding: 1rem;
+                                        }
+
+                                        > .button-label {
+                                            float: left;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                > .form-footer {
+                    display: none;
+                }
+            }
         }
         /// A Panel style Dialog
         /// @group dialog
@@ -615,28 +897,6 @@ html {
                 }
             }*/
         }
-        /// A Login Form embedded in a Prompt
-        /// @group dialog
-        &.login {
-            animation: slideOutRight $transition-speed $transition-motion;
-            float: right;
-            left: calc(100% - 270px);
-            top: 2rem;
-            width: 250px;
-
-            &[open],
-            &.in {
-                animation: slideInRight $transition-speed $transition-motion;
-
-                &.hiding {
-                    animation: slideOutRight $transition-speed $transition-motion;
-                }
-            }
-
-            footer {
-                display: none;
-            }
-        }
         /// A Loader Dialog
         /// @group dialog
         &.loader {
@@ -648,8 +908,10 @@ html {
             height: auto;
             margin-bottom: -.5rem;
             max-height: 260px;
+            overflow-y: hidden;
             top: auto;
             width: 100%;
+            z-index: 9999;
 
             &::backdrop {
                 opacity: 0;
@@ -673,7 +935,8 @@ html {
                 }
 
                 .progress {
-                    border-radius: 3px;
+                    @extend %clickable;
+                    border-radius: .3rem;
                     clear: both;
                     float: none;
                     margin: 0;
@@ -686,13 +949,62 @@ html {
                         padding: 0 .5rem;
                         text-align: left;
                         text-decoration: none;
+                        text-shadow: 2px 2px 2px $color-black;
                         text-transform: uppercase;
                     }
 
                     .progress-bar {
-                        border-radius: .3rem;
+                        border-radius: $zero-px;
                         overflow: visible;
                         text-shadow: 0 1px 4px $color-shadow-neutral;
+                        /*.progress {
+                            background: rgba(245, 245, 245, 1);
+                            background: -webkit-linear-gradient(top, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            background: linear-gradient(to bottom, rgba(235, 235, 235, 1) 0%, rgba(245, 245, 245, 1) 100%);
+                            border: 0px solid rgba(54, 54, 54, 1);
+                            border-radius: 0px;
+                            height: 16px;
+                        }*/
+                        &.progress-bar-info {
+                            //background: $color-blue;
+                            //background: -webkit-linear-gradient(top, darken($color-orange, 20%) 0%, $color-orange 100%);
+                            background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, $color-blue 100%);
+
+                            &:hover {
+                                //background: lighten($color-blue, 5%);
+                                background: linear-gradient(to bottom, darken($color-blue, 5%) 0%, lighten($color-blue, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-warning {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken($color-orange, 20%) 0%, $color-orange 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken($color-orange, 5%) 0%, lighten($color-orange, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-notification {
+                            //background: $color-orange;
+                            background: linear-gradient(to bottom, darken(#c9c041, 20%) 0%, #c9c041 100%);
+
+                            &:hover {
+                                //background: lighten($color-orange, 5%);
+                                background: linear-gradient(to bottom, darken(#c9c041, 5%) 0%, lighten(#c9c041, 5%) 100%);
+                            }
+                        }
+
+                        &.progress-bar-error {
+                            //background: $color-red;
+                            background: linear-gradient(to bottom, darken($color-red, 20%) 0%, $color-red 100%);
+
+                            &:hover {
+                                //background: lighten($color-red, 5%);
+                                background: linear-gradient(to bottom, darken($color-red, 5%) 0%, lighten($color-red, 5%) 100%);
+                            }
+                        }
                     }
 
                     & + ul {
@@ -720,6 +1032,18 @@ html {
 
                             li {
                                 padding: 3px;
+
+                                &.notification {
+                                    color: #c9c041;
+                                }
+
+                                &.warning {
+                                    color: $color-orange;
+                                }
+
+                                &.error {
+                                    color: $color-red;
+                                }
                             }
                         }
                     }
@@ -730,50 +1054,6 @@ html {
             header {
                 display: none;
                 height: $navbar-height;
-            }
-        }
-        /// The Dialog Header
-        /// @group dialog
-        > header {
-            background-color: $color-grey-dark;
-            color: $color-light;
-            height: 3rem;
-            line-height: 3rem;
-            padding: 0 .5rem;
-            text-transform: uppercase;
-
-            button {
-                //background-color: transparent;
-                //color: $color-white;
-                float: right;
-                //font-weight: bold;
-                //line-height: 1.5rem;
-                //&:hover {
-                //    color: $color-light-less;
-                //}
-            }
-        }
-
-        > .body {
-            @extend %modal-tall;
-            overflow-x: hidden;
-
-            > form {
-                .form-footer {
-                    height: auto;
-                }
-            }
-        }
-
-        footer {
-            &.form-footer {
-                border: 0;
-                //button {
-                //border-radius: 0;
-                //height: $navbar-height - 1rem;
-                //line-height: $navbar-height - 1rem;
-                //padding: 0;
-                //}
             }
         }
     }
@@ -856,8 +1136,9 @@ html {
         display: block;
         float: left;
         font-size: smaller;
-        height: $navbar-height;
+        height: $navbar-height - 1rem;
         line-height: $navbar-height - 1rem;
+        overflow: hidden;
         padding: 0;
         width: 100%;
         /// Button within a footer
@@ -962,6 +1243,32 @@ html {
             }*/
         }
     }
+    /// Showdown.js Markdown (Github flavor) for checkboxes (ie: - [ ])
+    .markdown {
+        ul {
+            li {
+                &.task-list-item {
+                    line-height: 1.2rem;
+                    padding: .4rem 0;
+
+                    input {
+                        &[type='checkbox'] {
+                            display: block;
+                            float: left;
+                            height: 1.2rem;
+                            line-height: 1.2rem;
+                            margin-top: 4px;
+                            width: 1.2rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.selected {
+            @extend %selected;
+        }
+    }
     /// HTML FORM Element
     form {
         @extend %bevel-up;
@@ -1010,21 +1317,30 @@ html {
             //width: 0;
             & ~ .checkmark-menu {
                 list-style: none;
+
                 li {
+                    @include transition($transition-default);
                     background-color: $color-red;
                     text-align: center;
+                    text-shadow: 1px 1px 3px $color-shadow-dark;
                     width: 50%;
 
                     &:first-of-type { // yes
-                        background-color: $color-red;
+                        //background: linear-gradient(left, $color-white 0%, $color-red-deep 100%);
+                        background: linear-gradient(to right, $color-shadow-dark 0%, $color-shadow-light 100%, $color-shadow-light 100%);
+                        background-color: $color-white;
                         clear: left;
                         float: left;
+                        font-size: 1rem;
                     }
 
                     &:last-of-type { // no
+                        //background: linear-gradient(to right, #9e9e9e 25%,#9e9e9e 25%,#707070 75%);
+                        background: linear-gradient(to right, $color-shadow-light 0%, $color-shadow-light 0%, $color-shadow-dark 100%);
                         background-color: $color-blue;
                         clear: right;
                         float: right;
+                        font-size: 1.6rem;
                     }
                 }
             }
@@ -1034,12 +1350,19 @@ html {
 
                 & ~ .checkmark-menu {
                     li {
+                        @include transition($transition-default);
+
                         &:first-of-type { // yes
                             background-color: $color-blue;
+                            font-size: 1.6rem;
+                            //background: -webkit-linear-gradient(left, $color-white 0%,#13660d 100%);
+                            //background: linear-gradient(to right, $color-blue 0%, $color-grey-light 100%, $color-grey-light 100%);
                         }
 
                         &:last-of-type { // no
-                            background-color: $color-red;
+                            background-color: $color-white;
+                            font-size: 1rem;
+                            //background: linear-gradient(to right, $color-shadow-light 0%, $color-shadow-light 0%, $color-grey-dark 100%);
                         }
                     }
                 }
@@ -1089,44 +1412,9 @@ html {
                 background-color: $color-red;
             }
         }
-    }
-    /// A Table Element
-    table {
-        font-size: smaller;
-        /// A Table Header
-        thead {
-            border-bottom: 2px solid $color-white;
-            padding-right: 18px;
-        }
-        /// A Table Header Row
-        th {
-            background-color: $color-light-more;
-            border: 0;
-            font-size: smaller;
-            text-transform: uppercase;
-        }
-        /// A Table Row
-        tr {
-            border-bottom: 1px solid $color-light;
-            border-top: 1px solid $color-grey;
-            display: inline-table;
-            table-layout: fixed;
-            width: 100%;
 
-            &:hover {
-                background-color: $color-light-more;
-            }
-        }
-        /// Table Data
-        td,
-        th {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        /// The body of the table
-        tbody {
-            border-bottom: thin solid $color-white;
+        &.selected {
+            @extend %selected;
         }
     }
 
@@ -1318,6 +1606,11 @@ html {
     }
     /// A clickable icon with embedded label
     &.icon {
+
+        &.selected {
+            @extend %selected;
+        }
+
         .label {
             color: $color-black;
             //font-family: sans-serif;
@@ -1338,15 +1631,54 @@ html {
     /// An Element that can contain child elements
     .container {
         @extend %wide-block;
+        @include transition($transition-default);
         box-sizing: border-box;
+        /// editable header with toggle
+        > header {
+            position: sticky;
+            top: 0;
+            z-index: #{$z-top - 1};
 
+            &:first-of-type {
+                background-color: $color-dark;
+                border-bottom: 2px solid $color-darker;
+                box-shadow: $zero-px 1px 7px $zero-px $color-shadow-dark;
+                box-sizing: content-box;
+                color: $color-white;
+                font-weight: bold;
+                line-height: 3rem;
+                padding: .2rem .5rem;
 
+                &:hover {
+                    //@include transition(color 400ms);
+                    @include transition(background-color 400ms);
+                    background-color: $color-dark-less;
+                    //color: $color-secondary-neutral;
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
+                }
+            }
 
+            &.press {
+                @include transition(background-color $longclick-delay);
+                background-color: $color-red;
+            }
+
+            &.selected {
+                @extend %selected;
+            }
+        }
+        /// Container Nav options menu and fixed navbar
         > nav {
             // Fixed Nav
             &.nav-header {
                 border-bottom: 1px solid $color-transparent;
                 box-shadow: 0 0 0 0 $color-transparent;
+                position: sticky;
+                top: 0;
+                z-index: #{$z-top - 1};
 
                 &.in {
                     border-bottom: 1px solid $color-shadow-light;
@@ -1372,21 +1704,8 @@ html {
             > .pane {
                 @extend %no-scroll-bar;
                 @include transition($transition-default);
-                min-height: $navbar-height;
+                //min-height: $navbar-height;
                 width: 100%;
-
-                > header {
-                    &:first-of-type {
-                        background-color: $color-dark;
-                        border-bottom: 4px solid $color-darker;
-                        //border-bottom: 1px solid $color-grey-light;
-                        box-sizing: content-box;
-                        color: $color-white;
-                        font-weight: bold;
-                        line-height: 2rem;
-                        padding: .2rem .5rem;
-                    }
-                }
 
                 > p {
                     &:first-of-type {
@@ -1397,49 +1716,43 @@ html {
                         text-align: justify;
                     }
                 }
-                /// A button to show hide navheader
-                .btn-navheader {
-                    @include transition($transition-default);
-                    background-color: $color-red;
-                    border-radius: .2rem;
-                    color: $color-white;
-                    float: right;
-                    font-family: $font-major;
-                    font-size: 1rem;
-                    font-weight: bold;
-                    height: 2rem;
-                    line-height: 1rem;
-                    margin: -2rem 0 .2rem;
-                    opacity: 0;
-                    overflow-x: hidden;
-                    padding: .5rem;
-                    position: relative;
-                    right: calc(0% - 2.5em);
-                    text-align: center;
-                    top: 2.2rem;
-                    width: 2em;
-
-                    &.active {
-                        background-color: $color-red-deep;
-                    }
-                }
             }
 
             &.active {
                 > .pane {
-                    /// A button that toggles the visibility of the navheader
-                    /// This button is only visible if the container body is active
-                    /// A button to show hide navheader
-                    > .btn-navheader {
-                        opacity: .8;
-                        right: 0;
-                    }
 
                     > .screen { //jumbotron
-                        > .btn-navheader {
-                            opacity: .8;
-                            right: 0;
-                        }
+                        //
+                    }
+                }
+            }
+        }
+
+        &.active {
+            background-color: $color-blue-lighter;
+            //
+        }
+
+        &.dragging {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            background-color: $color-orange;
+        }
+
+        &.drag-over {
+            background-color: $color-blue-lighter;
+            padding-top: 1rem;
+
+            &:hover {
+                background-color: $color-red;
+            }
+        }
+
+        &.modified {
+            > nav {
+                > ul {
+                    &[name='tabs'] {
+                        background-color: $color-orange;
                     }
                 }
             }
@@ -1447,10 +1760,8 @@ html {
         /// A collection of navigation elements
         /// A Container for article style content, grouped into sections
         &.article {
-            //border-bottom: 1px solid $color-grey;
-            //border-top: 1px solid $color-grey-darker;
             box-shadow: 0 0 .5rem 0 $color-shadow-dark;
-            margin: .8rem auto;
+            margin: 0 auto;
             min-height: $navbar-height;
 
             &:first-of-type {
@@ -1459,8 +1770,6 @@ html {
 
             > .body {
                 > .pane {
-                    padding-bottom: 1rem;
-
                     > header {
                         &:first-of-type {
                             background-color: $color-grey-dark;
@@ -1472,26 +1781,35 @@ html {
                             text-transform: uppercase;
                         }
                     }
+                    /// Collapsible
+                    > .header {
+                        position: -webkit-sticky;
+                        position: sticky;
+                        top: 0;
+                        z-index: #{$z-top - 1};
 
-                    > .author,
-                    .date-created {
-                        background-color: $color-dark-less;
-                        color: $color-white;
-                        display: block;
-                        font-size: .8rem;
-                        text-align: center;
-                        //width: 50%;
-                    }
-                    //> .date-created {
-                    //clear: left;
-                    //float: left;
-                    //padding-left: .5rem;
-                    //}
-                    > .author {
-                        //clear: right;
-                        //float: right;
-                        padding-right: .5rem;
-                        //text-align: right;
+                        > .pane {
+                            > .author,
+                            .date-created {
+                                background-color: $color-dark-less;
+                                color: $color-white;
+                                display: block;
+                                font-size: .8rem;
+                                text-align: center;
+                                //width: 50%;
+                            }
+                            //> .date-created {
+                            //clear: left;
+                            //float: left;
+                            //padding-left: .5rem;
+                            //}
+                            > .author {
+                                //clear: right;
+                                //float: right;
+                                padding-right: .5rem;
+                                //text-align: right;
+                            }
+                        }
                     }
                 }
             }
@@ -1572,7 +1890,9 @@ html {
 
                 > .pane {
                     @extend %bevel-up;
-                    background-color: $color-grey-darker;
+                    //background-color: $color-grey-darker;
+                    max-height: 16rem;
+                    overflow-y: auto;
                     padding: 0;
                 }
             }
@@ -1588,10 +1908,9 @@ html {
                     color: $color-light;
                     padding: 0 .5rem;
                     text-transform: uppercase;
-
-                    @media only screen and (max-width: $max-width-mobile) {
+                    /*@media only screen and (max-width: $max-width-mobile) {
                         display: none;
-                    }
+                    }*/
                 }
 
                 > .banner {
@@ -1641,6 +1960,8 @@ html {
         /// A full width block with impact
         &.jumbotron {
             @extend %noSelect;
+            border-radius: 0;
+            border-top: 1px solid $color-shadow-light;
             padding: 0;
 
             > .body {
@@ -1677,6 +1998,10 @@ html {
                         font-size: $font-size-extralarge;
                         line-height: 3rem;
                         padding: 0 6px;
+
+                        &.selected {
+                            @extend %selected;
+                        }
                     }
 
                     p {
@@ -1690,6 +2015,10 @@ html {
 
                         &.active {
                             text-decoration: underline;
+                        }
+
+                        &.selected {
+                            @extend %selected;
                         }
                     }
                 }
@@ -1725,10 +2054,6 @@ html {
                 > .pane {
                     @extend %pane-tall;
                     background-color: $color-grey;
-                    /// A button to show hide navheader, hidden on MAIN
-                    > .btn-navheader {
-                        display: none;
-                    }
 
                     &.focus-left {
                         //background-color: $color-black;
@@ -1762,22 +2087,23 @@ html {
                     width: $sidebar-width;
 
                     @media only screen and (max-width: $max-width-mobile) {
-                        min-width: 120px;
+                        min-width: 180px;
                         width: 35%;
                     }
                     /// A Tree structure view of the MAIN CONTAINER
                     &[name='document-map'] {
-
-
                         nav {
+                            //&.active {
+                            //    margin: 1rem 0;
+                            //}
                             //margin-bottom: .5rem;
                             &.menu {
                                 border-bottom: 0 solid transparent;
                                 border-top: 0 solid transparent;
 
                                 &.active {
-                                    border-bottom: 1px solid $color-blue-light;
-                                    border-top: 1px solid $color-blue;
+                                    border-bottom: 3px solid $color-grey-dark;
+                                    border-top: 1px solid $color-darker;
                                 }
                             }
 
@@ -1787,6 +2113,26 @@ html {
 
                                     &.active {
                                         border-bottom: 2px solid $color-grey-darker;
+                                    }
+                                }
+                                //&[name='tabs'] {
+                                > .nav-item {
+                                    border-bottom: 1px solid $color-shadow-neutral;
+                                    border-top: 1px solid #505050;
+
+                                    &.active {
+                                        border-top: 2px solid $color-grey-dark;
+                                        border-bottom: 1px solid $color-darker;
+                                        height: 2rem;
+                                        line-height: 2rem;
+
+                                        > a {
+                                            > .icon,
+                                            > .label {
+                                                height: 2rem;
+                                                line-height: 2rem;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1836,27 +2182,207 @@ html {
         }
 
         &.section {
-            //> .body {
-            //> .pane {
+
+            > header {
+
+                &.active + .nav-header + .body {
+                    margin-bottom: 1rem;
+                }
+
+                @include transition(background-color 200ms);
+                background-color: $color-blue-header;
+                // Animation for longclick indicator
+                &.press {
+                    @include transition(background-color $longclick-delay);
+                    background-color: $color-red;
+                }
+            }
+
+            .section {
+                > header {
+                    background-color: lighten($color-blue-header, 15%);
+
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
+                }
+            }
+        }
+        /// A Table Container Element
+        /// See https://css-tricks.com/complete-guide-table-element/
+        &.table {
+            > nav {
+                //display: none;
+            }
+
+            > .body { // table
+                display: table;
+                //font-size: smaller;
+                line-height: 2rem;
+
+                > .table-group {
+                    border: $zero-px;
+                    display: table-row-group;
+                    height: $navbar-height;
+                    margin: 0;
+                    min-height: $navbar-height;
+                    padding: 0;
+                    width: 100%;
+
+                    > nav {
+                        //display: none;
+                    }
+                    /// A Table Header //thead
+                    &.table-header {
+                        background-color: $color-blue-deep;
+                        border-bottom: 2px solid $color-blue-lighter;
+                        box-shadow: 3px 0px 3px $color-shadow-dark;
+                        //font-weight: bold;
+                        th {
+                            background-color: $color-blue-deep;
+                            border-right: 1px solid grey;
+                            color: $color-white;
+                            position: sticky;
+                            top: 4rem;
+                            z-index: #{$z-top - 1};
+
+                            &.active {
+                                background-color: lighten($color-blue-deep, 10%);
+                            }
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
+                    }
+                    /// A Table Header Row //th
+                    &.table-body {
+                        background-color: $color-light-more;
+                        border: 0;
+                        border-bottom: thin solid $color-white;
+                        font-size: smaller;
+                        text-transform: uppercase;
+
+                        .table-row {
+                            border-bottom: 1px solid grey;
+                            box-sizing: border-box;
+
+                            .table-column {
+                                border-right: 1px solid grey;
+                                box-sizing: border-box;
+                            }
+                        }
+                    }
+                    /// A Table Row //tr
+                    &.table-footer {
+                        border-bottom: 1px solid $color-light;
+                        border-top: 1px solid $color-grey;
+                        //display: inline-table;
+                        font-weight: bold;
+                        table-layout: fixed;
+                        width: 100%;
+
+                        &:hover {
+                            background-color: $color-light-more;
+                        }
+
+                        th {
+                            background-color: $color-blue-deep;
+                            border-right: 1px solid grey;
+                            color: $color-white;
+                            position: sticky;
+                            bottom: 0;
+                            z-index: #{$z-top - 1};
+
+                            &.active {
+                                background-color: lighten($color-blue-deep, 10%);
+                            }
+
+                            &.press {
+                                @include transition(background-color $longclick-delay);
+                                background-color: $color-red;
+                            }
+                        }
+                    }
+                }
+
+                .table-row {
+                    display: table-row;
+                    height: $navbar-height;
+
+                    &:hover {
+                        background-color: $color-blue-lighter;
+                    }
+
+                    > nav {
+                        display: none;
+                    }
+
+                    > .body {
+                        display: table-row-group;
+
+                        > .pane {
+                            display: table-row-group;
+                        }
+                    }
+                }
+
+                .table-column {
+                    display: table-cell;
+                    height: $navbar-height;
+                    min-width: $navbar-height;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
+                    > nav {
+                        display: none;
+                    }
+                    // Animation for longclick indicator
+                    &.press {
+                        @include transition(background-color $longclick-delay);
+                        background-color: $color-red;
+                    }
+
+                    &:hover {
+                        background-color: orange;
+
+                        &.press {
+                            @include transition(background-color $longclick-delay);
+                            background-color: $color-red;
+                        }
+                    }
+
+                    &.active {
+                        background-color: $color-blue-light;
+
+                        &.press {
+                            @include transition(background-color $longclick-delay);
+                            background-color: $color-red;
+                        }
+                    }
+                }
+            }
         }
 
         &.textblock {
             > .body {
                 &.active {
-                    //background-color:
-                    //> .pane {
                     > header {
                         &:first-of-type {
                             background-color: $color-blue-lighter;
                             //border-bottom: 4px solid $color-red-deep;
                             //color: $color-white;
                         }
+                        // Animation for longclick indicator
+                        &.press {
+                            @include transition(background-color 1200ms);
+                            background-color: $color-red;
+                        }
                     }
-                    //}
                 }
-                /*> .pane {
-                    // 
-                }*/
             }
         }
     }
@@ -1899,6 +2425,7 @@ html {
         }
         // Nested sub menu
         > .menu {
+
             > li {
                 width: 100%;
 
@@ -1912,10 +2439,21 @@ html {
                 & + .menu {
                     background-color: $color-orange;
                 }
+                // This affects the UL
+                & ~ ul:empty {
+                    background-color: purple;
+                    color: chartreuse;
+
+                    li ~ & {
+                        background-color: gold;
+                        color: palegoldenrod;
+                    }
+                }
             }
         }
         /// The USERMENU class, A menu that contains user links and details
-        &[name='USER'] {
+        //&[name='USER'] {
+        &.usermenu {
             > ul {
                 &.horizontal {
                     flex-direction: row-reverse;
@@ -1926,10 +2464,11 @@ html {
                 //background-color: $color-grey-dark;
                 color: $color-white;
                 font-family: $font-header;
+                padding: .5rem 0;
                 text-align: center;
 
                 > img {
-                    &.picture {
+                    &.avatar {
                         background-color: $color-grey;
                         border: 2px solid $color-grey-light;
                         border-radius: 128px;
@@ -1947,10 +2486,29 @@ html {
                     line-height: 1.4rem;
                 }
 
-                > .quote {
+                > .email {
                     font-size: .8rem;
                     line-height: 1.4rem;
                     margin-bottom: 1rem;
+                }
+
+                > .roles {
+                    border-top: 1px solid $color-white;
+                    line-height: 1.4rem;
+                    margin: 0 1rem 1rem;
+                    padding-top: .4rem;
+                }
+            }
+        }
+        /// Displays a list of CONTAINER thumbnails, typically inside a PROMPT
+        &.index-menu {
+            overflow-y: auto;
+
+            &.collapse {
+                height: 0;
+
+                &.in {
+                    height: 19rem;
                 }
             }
         }
@@ -1980,6 +2538,7 @@ html {
             */
         }
         /// A collection of list-items within this menu
+        &.list,
         > .list {
             @extend %wide-block;
             /// List items are made to scroll horizontally instead of vertically
@@ -1996,6 +2555,61 @@ html {
                     flex-basis: auto;
                     flex-grow: 2;
                     //text-align: center;
+                    &.nav-item-icon {
+                        > a {
+                            width: 100%;
+
+                            > .icon {
+                                clear: left;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                width: 2rem;
+                            }
+
+                            > .label {
+                                clear: right;
+                                display: block;
+                                float: left;
+                                line-height: 4rem;
+                                text-align: left;
+                                width: calc(100% - 2rem);
+                            }
+                        }
+                    }
+                    // Centered tabs, such as the MAIN tab
+                    &.tab-center {
+                        > a {
+                            > .icon {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                width: auto;
+                            }
+
+                            > .label {
+                                clear: initial;
+                                float: initial;
+                                line-height: 2rem;
+                                text-align: center;
+                                width: auto;
+                            }
+                        }
+                    }
+                }
+
+                .tab-narrow {
+                    flex-basis: 4rem;
+                    //flex-grow: 2;
+                    > a {
+                        > .icon {
+                            line-height: 4rem;
+                        }
+                        //width: 3rem;
+                        > .label {
+                            display: none;
+                        }
+                    }
                 }
                 /// Nav Items with a fixed width and height, acting as an icon
                 > .nav-item-icon {
@@ -2010,9 +2624,6 @@ html {
                     }
 
                     > a {
-                        //background-color: purple;
-                        //border: 1px solid $color-white;
-                        //border-radius: .2rem;
                         display: block;
                         height: 4rem;
                         //justify-content: center;
@@ -2021,8 +2632,7 @@ html {
                         padding: 0;
                         text-align: center;
                         text-decoration: none;
-                        width: 4rem;
-
+                        //width: 4rem;
                         span {
                             display: block;
                             //float: left;
@@ -2048,34 +2658,89 @@ html {
             }
 
             .nav-item {
-                @extend %clickable;
-                @include transition($transition-default);
-                background-color: $color-shadow-neutral;
-                border-left: 1px solid transparent;
-                border-right: 1px solid transparent;
-                box-sizing: border-box;
-                cursor: pointer;
-                //float: left;
-                //line-height: $navbar-height; // - 1rem;
-                list-style: none;
-
-                &:hover {
-                    background-color: $color-shadow-light;
-                    border-left: 1px solid $color-shadow-neutral;
-                    border-right: 1px solid $color-shadow-neutral;
-                }
-
-                &.active {
-                    background-color: $color-grey-dark;
-                    box-shadow: inset 1px 1px 4px -2px $color-shadow-dark;
-                }
-
                 &.wide-tab {
                     font-weight: bold;
 
                     &.active {
                         > a {
                             text-shadow: 3px 2px 3px $color-shadow-neutral; //rgba(255, 255, 255, .2);
+                        }
+                    }
+                }
+
+                &.nav-item-thumbnail {
+                    @extend %bevel-up;
+                    //height: $thumbnail-height;
+                    margin: 0;
+
+                    > a {
+                        display: block;
+                        height: $thumbnail-height;
+                        line-height: 1.5rem;
+                        padding: .5rem 0;
+                        width: 100%;
+                        //img,
+                        .thumbnail-image {
+                            @extend %thumbnail-image;
+                            clear: left;
+                            float: left;
+                            height: $thumbnail-height - 1rem;
+                            margin: 0 .5rem;
+                            width: $thumbnail-height - 1rem;
+
+                            &.icon {
+                                font-size: $thumbnail-height - 3rem;
+                                line-height: $thumbnail-height - 1rem;
+                                text-align: center;
+                                vertical-align: middle;
+                            }
+                        }
+
+                        .label {
+                            display: none;
+                        }
+
+                        header,
+                        p {
+                            color: $color-white;
+                            clear: right;
+                            display: block;
+                            float: left;
+                            width: calc(100% - #{$thumbnail-height});
+                        }
+
+                        header {
+                            font-weight: bold;
+                            padding-top: .5rem;
+                        }
+
+                        p {
+                            font-style: italic;
+                            height: 4rem;
+                            margin: 0;
+                            overflow: hidden;
+                        }
+
+                        .btn-group {
+                            float: right;
+
+                            button {
+                                background-color: $color-grey;
+                                border-radius: .8rem;
+                                border: 0;
+                                box-shadow: inset 1px 1px 2px $color-shadow-neutral;
+                                color: $color-white;
+                                font-size: smaller;
+                                font-weight: normal;
+                                height: 2rem;
+                                line-height: 1rem;
+                                margin-right: 1rem;
+                                padding: 0 1rem;
+
+                                &:hover {
+                                    background-color: $color-blue-deep;
+                                }
+                            }
                         }
                     }
                 }
@@ -2111,6 +2776,10 @@ html {
                 }
             }
         }
+    }
+
+    .nav-item {
+        @extend %nav-item;
     }
 
     .navbar-search {
@@ -2173,97 +2842,9 @@ html {
         }
     }
 
-    .thumbnail {
-        @extend %bevel-up;
-        @extend %clickable;
-        background-color: $color-grey-dark;
-        border-radius: .4rem;
-        font-family: 'Raleway';
-        height: $thumbnail-height;
-        margin: .5rem;
-        padding: 0;
-        width: calc(50% - 1rem);
 
-        @media only screen and (max-width: $max-width-desktop) {
-            border-radius: 0;
-            margin: 0;
-            width: 100%;
-        }
 
-        &.nav-item {
-            a {
-                height: $thumbnail-height;
-                line-height: 1.5rem;
-                width: 100%;
 
-                img {
-                    @extend %thumbnail-image;
-                    clear: left;
-                    float: left;
-                    height: $thumbnail-height - 1rem;
-                    margin: .5rem;
-                    width: $thumbnail-height - 1rem;
-                }
-            }
-        }
-
-        .body {
-            .pane {
-                background-color: $color-light;
-                color: $color-dark;
-
-                > header {
-                    clear: right;
-                    color: $color-light-less;
-                    display: block;
-                    float: left;
-                    font-weight: bold;
-                    line-height: 3rem;
-                    margin: .5rem 0 0;
-                    padding: 0;
-                    text-transform: uppercase;
-                    width: calc(100% - 148px);
-                }
-
-                > img {
-                    background-color: $color-white;
-                    border: 1px solid $color-white;
-                    border-radius: .3rem;
-                    clear: left;
-                    display: block;
-                    float: left;
-                    height: 128px;
-                    margin: .3rem;
-                    width: 128px;
-                }
-
-                > p {
-                    color: $color-light-less;
-                    float: left;
-                    font-size: smaller;
-                    height: 6rem;
-                    margin: 0 .3rem;
-                    overflow-y: auto;
-                    padding: 0 .8rem;
-                    text-align: justify;
-                    width: calc(100% - 148px);
-                }
-
-                > .btn-group {
-                    bottom: 1.75rem;
-                    position: absolute;
-                    right: 1.35rem;
-
-                    > button {
-                        &.btn {
-                            border: 0;
-                            border-radius: .3rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     .vertical-align-center {
         display: table-cell;

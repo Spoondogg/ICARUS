@@ -1,22 +1,24 @@
 /** @module */
 import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
+import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
+//import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
+import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
 import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
-import FORM from '../form/FORM.js';
 import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
 import INDEX from '../container/banner/index/INDEX.js';
-import INDEXMAIN from '../container/banner/indexmain/INDEXMAIN.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import SECTION from '../section/SECTION.js';
+import TABLE from '../table/TABLE.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
 /** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
@@ -62,8 +64,8 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'INDEX':
                 element = new INDEX(span, model);
                 break;
-            case 'INDEXMAIN':
-                element = new INDEXMAIN(span, model);
+            case 'CLASSINDEX':
+                element = new CLASSINDEX(span, model);
                 break;
             case 'INDEXTHUMBNAIL':
                 element = new INDEXTHUMBNAIL(span, model);
@@ -89,6 +91,10 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'SPAN':
                 element = new SPAN(span, model);
                 break;
+            case 'TABLE':
+                element = new TABLE(span, model);
+                element.setFactory(this.factories.get('TABLEFACTORY'));
+                break;
             case 'TEXTBLOCK':
                 element = new TEXTBLOCK(span, model);
                 break;
@@ -102,6 +108,29 @@ export default class CONTAINERFACTORY extends FACTORY {
                 throw Error(this.toString() + ' No constructor exists for "' + className + '"');
         }
         return element;
-    }	
+    }
+    /** Launches a viewer in a dialog for the given class type.
+        Selecting an element loads it into the calling CONTAINER.
+        @param {string} [classType] Default class to display (ie: MAIN)
+        @param {CONTAINER} [container] Calling container
+        @param {EL} [caller] Calling element (ie: switchable element resolved)
+        @returns {Promise<PROMPT>} Prompt configured to view given classType
+    */
+    launchViewer(classType = 'MAIN', container = this, caller = this) {
+        return new Promise((resolve) => {
+            container.getLoader().log(25).then((loader) => {
+                let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
+                    container,
+                    caller,
+                    label: classType + '(s)'
+                    //text: 'Viewer Text'
+                }));
+                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType);
+                viewer.setContainer(container);
+                // Do viewer config here
+                loader.log(100).then(() => resolve(prompt.show()));
+            });
+        });
+    }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }

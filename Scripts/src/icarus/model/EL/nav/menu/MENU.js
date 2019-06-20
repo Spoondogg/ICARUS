@@ -35,6 +35,19 @@ export default class MENU extends LIST {
 			this.scrollOnExpand();
 		}
 	}
+    /** This should be a typedef
+        @param {string} name Tab Name
+        @param {string} [label] Tab Label
+        @param {string} [icon] Tab Icon
+        @returns {{name:string, label:string, icon:string}} NavItemIconModel
+    */
+    createNavItemIconModel(name, label = name, icon = name) {
+        return {
+            name,
+            label,
+            icon
+        };
+    }
 	/** Scroll the menu into view on Expansion
 	    @returns {void}
 	*/
@@ -60,18 +73,6 @@ export default class MENU extends LIST {
 		this.addConstructor('NAVTHUMBNAIL', () => this.addNavThumbnail(model));
 		this.addConstructor('NAVSEPARATOR', () => this.addNavSeparator());
 	}
-	/** When MENU loses focus, it will collapse any child MENU(s)
-	    This ensures that only one menu is visible at any given time
-	    @returns {void}
-	*/
-	collapseOnFocusOut() {
-		this.el.onclick = (event) => {
-			if (event.target !== this.el) {
-				console.log('Collapsing child menus...', this);
-				this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
-			}
-		};
-	}
 	/** Constructs a MENU inside this MENU
 	    @param {MODEL} model Object model
 	    @returns {MENU} Nav Item with Anchor
@@ -79,7 +80,7 @@ export default class MENU extends LIST {
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
 	}
-	/** Constructs a Nav Item (Anchor)
+	/** Constructs a NavBar Element with TABS and MENUS
 	    @param {MODEL} model Object model
 	    @returns {NAVBAR} NavBar
 	*/
@@ -94,7 +95,7 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEM(this, model)); //model.url, model.label
 	}
 	/** Constructs a Nav Item Icon
-	    @param {MODEL} model Object model
+	    @param {MODEL|{label:string, icon:string, name:string}} model Object model
 	    @returns {NAVITEMICON} Nav Item with Anchor
 	*/
 	addNavItemIcon(model) {
@@ -102,10 +103,11 @@ export default class MENU extends LIST {
 	}
 	/** Constructs a Nav Item Thumbnail
 	    @param {MODEL} model The model
+        @param {string} classType The class type that this thumbnail represents
 	    @returns {NAVITEMTHUMBNAIL} A nav item with a thumbnail
 	*/
-	addNavThumbnail(model) {
-		return this.addChild(new NAVITEMTHUMBNAIL(this, model));
+	addNavThumbnail(model, classType = 'MODEL') {
+		return this.addChild(new NAVITEMTHUMBNAIL(this, model, classType));
 	}
 	/** Adds an array of Nav Items
         @param {Array} navItems An array of NAVITEM
@@ -115,10 +117,37 @@ export default class MENU extends LIST {
 		navItems.forEach((i) => this.addNavItem(i));
 	}
 	/** Adds a Separator (UI Only)    
+        @param {string} [label] Label
         @returns {NAVSEPARATOR} A Navigation Menu Separator
 	*/
-	addNavSeparator() {
-		return new NAVSEPARATOR(this.list);
-	}
+	addNavSeparator(label = '') {
+		return new NAVSEPARATOR(this, label);
+    }
+    /** When MENU loses focus, it will collapse any child MENU(s)
+	    This ensures that only one menu is visible at any given time
+	    @returns {void}
+	*/
+    collapseOnFocusOut() {
+        this.el.onclick = (event) => {
+            if (event.target !== this.el) {
+                console.log('Collapsing child menus...', this);
+                this.get().filter((c) => c.className === 'MENU').forEach((c) => c.collapse());
+            }
+        };
+    }
+    /** Returns the top level tab for this navbar
+        @param {Name} name Tab Name
+        @returns {NAVITEMICON} Reference Tab
+    */
+    getTab(name) {
+        return this.get(name, 'NAVITEMICON')[0];
+    }
+    /** Returns the top level menu for this navbar
+        @param {Name} name Menu Name
+        @returns {MENU} Reference Menu
+    */
+    getMenu(name) {
+        return this.get(name, 'MENU')[0];
+    }
 }
 export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, UL }

@@ -8,13 +8,21 @@ import MissingContainerError from '../../error/MissingContainerError.js';
 import PAYLOAD from './form/PAYLOAD.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
-/** A Generic HTML Element Node
+/** A Generic HTML Element Node Class
+    @description It might make more sense for this class to be called NODE.
+    In the future, I might consider creating a NODE class and having EL
+    extend it.  I'm certain that there are certain methods and properties 
+    of EL that would be better suited to a NODE class.    
+    @todo Create a NODE class to handle methods for accessing its parent/child
+    @todo Extend MODEL (current) and implement NODE for descendants of CONTAINER
+    @description This would result in CONTAINERS having NODE features...  But what about cases
+    where EL needs to access?  Maybe this isn't such a good idea afterall.
     @class
     @extends MODEL
 */
 export default class EL extends MODEL {
-	/** Constructs a Node representing an HTMLElement as part of a linked list
-	    @param {El} node Parent Node
+	/** Constructs a node representing an HTMLElement that can be represented in the DOM
+	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
 	*/
@@ -41,7 +49,11 @@ export default class EL extends MODEL {
 		/** State Indicator 
 		    @type {number} 
 		*/
-		this.status = STATUS.DEFAULT;
+        this.status = STATUS.DEFAULT;
+        /** Represents the location where children of this element are instantiated
+            @type {EL}
+        */
+        this.childLocation = this;
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
@@ -84,9 +96,9 @@ export default class EL extends MODEL {
 				} else {
 					this.node.el.appendChild(this.el);
 				}
-			} else {
+			} /*else {
 				console.warn(this.toString() + '.make(): this.el already exists', typeof this.el);
-			}
+			}*/
 			this.merge(model).then(() => this.construct(model));
 		}, this.toString() + '.make() Unable to make ' + this.element);
 	}
@@ -155,7 +167,22 @@ export default class EL extends MODEL {
                 this.attributes.class = this.el.classList.value;
 			}
 		});
-	}
+    }
+    /** Adds the given class name to the element's list of classes
+	    @param {string} className the class to be appended
+        @see https://stackoverflow.com/a/9229821/722785
+	    @returns {Promise<ThisType>} Returns this element for chaining purposes
+	*/
+    setClass(className = '') {
+        return this.chain(() => {
+            if (className === 'undefined') {
+                console.log('ClassName Undefined');
+            } else {
+                this.el.className = className;
+                this.attributes.class = className;
+            }
+        });
+    }
 	/** Promises to add an array of classnames to this element
 	    @param {Array<string>} classNames An array of class names
 	    @returns {Promise<ThisType>} Promise Chain
@@ -172,10 +199,11 @@ export default class EL extends MODEL {
     }*/
 	/** Dispatches the given Event to this element's siblings
 	    @param {Event} event Event to dispatch
+        @param {string} className Event signal classname
 	    @returns {void}
 	*/
-	dispatchToSiblings(event) {
-		this.node.get().filter((c) => c !== this).forEach((s) => s.el.dispatchEvent(event));
+	dispatchToSiblings(event, className) {
+		this.node.get().filter((c) => c.hasClass(className) && c !== this).forEach((s) => s.el.dispatchEvent(event));
 	}
 	/** Used to recursively verify if the reflected Prototype class of the given node
 	    matches a specified value.  This can be helpful in cases where you need to 
@@ -202,7 +230,34 @@ export default class EL extends MODEL {
 			return false;
 		}
 		throw new RecursionLimitError(this.className + '.checkReflectionPrototype(): Exceeded attempt limit. (Attempt ' + attempt + ')');
-	}
+    }
+    /** Retrieves the index value for this element among its siblings
+        @returns {number} index value
+    */
+    getIndex() {
+        return this.node.get().indexOf(this);
+    }
+    /** Checks for the existence of a nested property value
+        @see https://stackoverflow.com/a/2631198/722785
+        @param {any} obj Node
+        @param {any} level Property level
+        @param {any} rest The rest
+        @returns {boolean} True if property exists
+    */
+    getNestedProperty(obj, level, ...rest) {
+        console.log(this.toString() + '.checkNested()', level, obj, rest.length);
+        if (typeof obj === 'undefined') {
+            return false;
+        }
+        if (rest.length === 0 && Reflect.apply(hasOwnProperty, obj, level)) {
+            return obj[level];
+        }
+        return this.getNestedProperty(obj[level], ...rest);
+        //var hasGivenProperty = Reflect.hasOwnProperty(this, level);
+
+        //var hasGivenProperty = Reflect.apply(hasOwnProperty, this, level);
+        //return rest.length === 0 && hasGivenProperty ? true : this.checkNested(this[level], ...rest);
+    }
 	/** Retrieve an {@link EL} based on its __proto__
 	    @description Recursively iterates through parent nodes until an object with the given prototype is found
 	    @param {string} className The value to search for within this key
@@ -256,6 +311,21 @@ export default class EL extends MODEL {
             this.factory = factory;
         }
     }
+    /** Catches DOM Exception when event is already being dispatched
+	    @param {EL} element Element Class to dispatch event
+	    @param {Event} event Event
+	    @returns {void}
+	*/
+    filterEventDomException(element, event) {
+        try {
+            Promise.resolve(element.el.dispatchEvent(event));
+        } catch (e) {
+            if (!(e instanceof DOMException)) { // DOMException: Event is already being dispatched
+                console.warn(e.message);
+                throw e;
+            }
+        }
+    }
 	/** Get child element by Name and optionally by Class
 	    @param {string} name Element Name
         @param {string} className Element Class
@@ -288,7 +358,24 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-	}
+    }
+    /** Performs an AJAX request and calls the given method with the JSON response
+        @param {string} url HTTP Request Url
+        @param {Function} fn Function that accepts the resulting payload as its only argument
+        @param {string} method Request Method (ie: 'POST','GET')
+        @returns {Object} A JSON object retrieved from the given url
+    */
+    getJson(url, fn, method = 'GET') {
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let payload = JSON.parse(this.responseText);
+                fn(payload);
+            }
+        };
+        xmlhttp.open(method, url, true);
+        xmlhttp.send();
+    }
 	/** Retrieve the application loader
 	    @returns {LOADER} Loader
 	*/
@@ -321,23 +408,30 @@ export default class EL extends MODEL {
 	getTail() {
 		return this.get()[this.get().length - 1];
     }
-    /** Performs an AJAX request and calls the given method with the JSON response
-        @param {string} url HTTP Request Url
-        @param {Function} fn Function that accepts the resulting payload as its only argument
-        @param {string} method Request Method (ie: 'POST','GET')
-        @returns {Object} A JSON object retrieved from the given url
-    */
-    getJson(url, fn, method = 'GET') {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let payload = JSON.parse(this.responseText);
-                fn(payload);
-            }
-        };
-        xmlhttp.open(method, url, true);
-        xmlhttp.send();
+    /** Retrieves the token value from the DOM Meta tags
+	    @returns {string} A request verification token
+	*/
+    getToken() {
+        return document.getElementsByTagName('meta').token.content || '';
     }
+    /** Retrieves the user value from the DOM Meta tags
+	    @returns {string} Current User
+	*/
+    getUser() {
+        return document.getElementsByTagName('meta').user.content || 'Guest';
+    }
+    /** Retrieves the user's profile picture / avatar if available
+	    @returns {string} Current User
+	*/
+    getAvatar() {
+        return localStorage.getItem('picture') || '/Content/Images/user256.png';
+    }
+    /** Retrieves the roles value from the DOM Meta tags
+	    @returns {string} Current User Role(s) (comma delimited)
+	*/
+    getRole() {
+        return document.getElementsByTagName('meta').roles.content || '';
+    } 
     /** Retrieves a Payload matching the given params (if permitted)
         @param {number} uid Type UId (ie: Formpost(123) = 123)
         @param {string} [type] Payload type (default: FORMPOST)
@@ -474,7 +568,7 @@ export default class EL extends MODEL {
 	*/
 	empty() {
 		return new Promise((resolve) => {
-			while (this.el.firstChild) {
+            while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
 			}
 			//this.children.length = 0;
@@ -503,12 +597,12 @@ export default class EL extends MODEL {
 						if (this.node !== document.body) {
 							this.node.get().splice(this.node.get().indexOf(this), 1);
 						}
-						resolve();
+						resolve(true);
 					});
 				} catch (e) {
 					if (e instanceof TypeError) {
 						console.warn('Unable to destroy ' + this.toString(), this);
-						resolve();
+						resolve(false);
 					} else {
 						reject(e);
 					}
@@ -551,12 +645,14 @@ export default class EL extends MODEL {
             }
         });
     }
-	/** Gets the container (if exists) and sets it
+	/** Sets container with given CONTAINER or optionsally
+        gets the container (by Prototype if exists) and sets it
+        @param {CONTAINER} [container] Container
 	    @returns {void}
 	*/
-	setContainer() {
+    setContainer(container = this.getProtoTypeByClass('CONTAINER')) {
 		/** @type {EL} */
-		this.container = this.getProtoTypeByClass('CONTAINER');
+        this.container = container;
 	}
 	/** Gets the main (if exists) and sets it
 	    @returns {void}

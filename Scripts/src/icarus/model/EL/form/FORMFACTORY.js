@@ -1,20 +1,18 @@
 /** @module */
 import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT, SPAN } from '../container/CONTAINERFACTORY.js'; // Deactivate
-import FORMSELECT, { OPTION } from '../../container/formelement/formselect/FORMSELECT.js';
-import FIELDSET from '../../fieldset/FIELDSET.js';
-import FORM from '../../form/FORM.js';
-//import FORMELEMENT from '../../container/formelement/FORMELEMENT.js';
-import FORMELEMENTGROUP from '../../container/formelement/FORMELEMENTGROUP.js';
-import FORMINPUT from '../../container/formelement/forminput/FORMINPUT.js';
-import FORMPOSTINPUT from '../../container/formelement/formpostinput/FORMPOSTINPUT.js';
-import FORMTEXTAREA from '../../container/formelement/formtextarea/FORMTEXTAREA.js';
+import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
+import FIELDSET from '../fieldset/FIELDSET.js'
+import FORM from '../form/FORM.js';
+import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
+import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
+import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.js';
+import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
 /** Constructs various Form Elements and returns them to be appended
     Each Form Element child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
 */
 export default class FORMFACTORY extends CONTAINERFACTORY {
-    /* eslint-disable max-lines-per-function, complexity, max-statements */
     /** Constructs a FACTORY to build FORM related CONTAINER Classes */
     constructor() {
         super('FORM');
@@ -90,4 +88,3 @@ export default class FORMFACTORY extends CONTAINERFACTORY {
     }
 }
 export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
-/* eslint-enable */

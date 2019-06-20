@@ -1,28 +1,35 @@
 /** @module */
-import NAVITEM, { ATTRIBUTES, EL, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/header.js';
-import IMG from '../../../img/IMG.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
 import P from '../../../p/P.js';
 import STRING from '../../../../../STRING.js';
 /** A full-width NavItem with a Thumbnail image, label and description
     @class
-    @extends CONTAINER
 */
-export default class NAVTHUMBNAIL extends NAVITEM { //CONTAINER {
-	/** Constructs a Bootstrap Jumbotron
+export default class NAVTHUMBNAIL extends NAVITEM {
+	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
         @param {CONTAINER} node The model
-        @param {MODEL} model Object Model
+        @param {MODEL} model The Thumbnail model
+        @param {number} model.id Unique Identifier that this thumbnail represents
+        @param {string} model.label The Thumbnail label
+        @param {string} classType The class that this thumbnail represents
     */
-	constructor(node, model) {
+	constructor(node, model, classType = 'MODEL') {
 		super(node, model);
-		//this.addClass('thumbnail col-xs-12 col-sm-6 col-lg-offset-0');
-		this.addClass('thumbnail');
-		this.image = new IMG(this.anchor, new MODEL());
+        this.addClass('nav-item-thumbnail');
+        //this.image = new IMG(this.anchor, new MODEL('thumbnail-image'));
+        this.image = new GLYPHICON(this.anchor, ICONS[classType]).addClass('thumbnail-image');
 		$(this.image.el).insertBefore(this.anchor.label.el);
-		this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', model.label));
-		this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(model.description || 'N/A').truncate(128)));
-		this.fetchImage();
-	}
+        this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', classType + ' # ' + model.id));
+        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(model.label || 'N/A').truncate(128)));
+        this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
+        this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
+        this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+
+		//this.fetchImage(); // Only if IMG exists
+    }
 	/** Retrieve a FormPost for the given MAIN and sets this image source
 	    @returns {void}
 	*/

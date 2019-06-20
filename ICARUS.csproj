@@ -163,13 +163,21 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
+    <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
     <Compile Include="Controllers\ImageGalleryController.cs" />
+    <Compile Include="Controllers\TDController.cs" />
+    <Compile Include="Controllers\THController.cs" />
+    <Compile Include="Controllers\TRController.cs" />
+    <Compile Include="Controllers\TFootController.cs" />
+    <Compile Include="Controllers\TBodyController.cs" />
+    <Compile Include="Controllers\THeadController.cs" />
+    <Compile Include="Controllers\TableController.cs" />
     <Compile Include="Controllers\WordController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\IFrameController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
-    <Compile Include="Controllers\IndexMainController.cs" />
+    <Compile Include="Controllers\ClassIndexController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\ClassViewerController.cs" />
     <Compile Include="Controllers\MenuListController.cs" />
@@ -510,14 +518,33 @@
     <Compile Include="Migrations\201903281514380_2019-03-28__ContainerMeta.Designer.cs">
       <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.cs" />
+    <Compile Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.Designer.cs">
+      <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905212108527_TableElements.cs" />
+    <Compile Include="Migrations\201905212108527_TableElements.Designer.cs">
+      <DependentUpon>201905212108527_TableElements.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905212116005_TableElements1.cs" />
+    <Compile Include="Migrations\201905212116005_TableElements1.Designer.cs">
+      <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
     <Compile Include="Models\Icarus\Elements\IMAGEGALLERY.cs" />
+    <Compile Include="Models\Icarus\Elements\TH.cs" />
+    <Compile Include="Models\Icarus\Elements\TD.cs" />
+    <Compile Include="Models\Icarus\Elements\TR.cs" />
+    <Compile Include="Models\Icarus\Elements\TFOOT.cs" />
+    <Compile Include="Models\Icarus\Elements\TBODY.cs" />
+    <Compile Include="Models\Icarus\Elements\THEAD.cs" />
+    <Compile Include="Models\Icarus\Elements\TABLE.cs" />
     <Compile Include="Models\Icarus\Elements\SENTENCE.cs" />
     <Compile Include="Models\Icarus\Elements\WORD.cs" />
     <Compile Include="Models\Icarus\Elements\IFRAME.cs" />
-    <Compile Include="Models\Icarus\Elements\INDEXMAIN.cs" />
+    <Compile Include="Models\Icarus\Elements\CLASSINDEX.cs" />
     <Compile Include="Models\Icarus\Elements\INDEX.cs" />
     <Compile Include="Models\Icarus\Elements\CLASSVIEWER.cs" />
     <Compile Include="Models\Icarus\Elements\MenuList.cs" />
@@ -527,6 +554,7 @@
     <Compile Include="Models\Icarus\Elements\CALLOUT.cs" />
     <Compile Include="Models\Icarus\Elements\BANNER.cs" />
     <Compile Include="Models\Icarus\Elements\HEADER.cs" />
+    <Compile Include="Models\Icarus\Form\FORMTEXTAREA.cs" />
     <Compile Include="Models\Icarus\Form\FORMINPUT.cs" />
     <Compile Include="Models\Icarus\Form\TextArea.cs" />
     <Compile Include="Models\Icarus\Form\Select.cs" />
@@ -602,18 +630,25 @@
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\icon192.png" />
     <Content Include="Content\icon50.png" />
-    <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\icon512.png" />
+    <Content Include="Content\Images\favicon.ico" />
+    <Content Include="Content\Images\Icon.png" />
     <Content Include="Content\Images\loading_sm.gif" />
     <Content Include="Content\Images\Logo.png" />
     <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Content\Images\startup\startup-1125x2436.png" />
     <Content Include="Content\Images\startup\startup-1242x2208.png" />
     <Content Include="Content\Images\startup\startup-750x1334.png" />
+    <Content Include="Content\Images\user256.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
+    <Content Include="Scripts\src\icarus\event\Move.js" />
+    <Content Include="Scripts\src\icarus\event\Modify.js" />
+    <Content Include="Scripts\src\icarus\event\Flip.js" />
+    <Content Include="Scripts\src\icarus\event\Toggle.js" />
+    <Content Include="Scripts\src\icarus\event\LongClick.js" />
     <Content Include="Scripts\src\icarus\init.js" />
     <Content Include="Scripts\src\icarus\controller\TOKEN.js" />
     <Content Include="Scripts\src\icarus\enums\ALIGN.js" />
@@ -660,6 +695,9 @@
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHATFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formcheckbox\FORMCHECKBOX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
@@ -668,6 +706,14 @@
     <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
+    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\TABLEFACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\TH.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\TD.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\TBODY.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\TFOOT.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\THEAD.js" />
     <Content Include="Scripts\src\icarus\model\TypeDefs.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\panel\PANEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\PROMPT.js" />
@@ -680,12 +726,10 @@
     <Content Include="Scripts\src\icarus\model\el\list\LIST.js" />
     <Content Include="Scripts\src\icarus\model\el\list\li\LI.js" />
     <Content Include="Scripts\src\icarus\model\el\list\ul\UL.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\usermenu\USERMENU.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\NAV.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\navfooter\NAVFOOTER.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navbar\navheader\NAVHEADER.js" />
-    <Content Include="Scripts\src\icarus\model\el\nav\navbar\NAVBAR.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\NAVITEM.js" />
     <Content Include="Scripts\src\icarus\model\el\strong\STRONG.js" />
     <Content Include="Scripts\src\icarus\model\el\button\BUTTON.js" />
@@ -697,7 +741,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\banner\callout\CALLOUT.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\indexmain\INDEXMAIN.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\classindex\CLASSINDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\index\INDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\navthumbnail\NAVTHUMBNAIL.js" />
@@ -755,7 +799,7 @@
     <Content Include="Scripts\src\icarus\model\el\svg\SVG.js" />
     <Content Include="Scripts\src\icarus\model\el\table\TABLE.js" />
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\column\COLUMN.js" />
-    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\ROW.js" />
+    <Content Include="Scripts\src\icarus\model\el\table\tgroup\row\TR.js" />
     <Content Include="Scripts\src\icarus\model\el\table\tgroup\TGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\textarea\TEXTAREA.js" />
     <Content Include="Scripts\src\icarus\model\el\list\dl\DL.js" />
@@ -788,6 +832,13 @@
     <Content Include=".eslintrc.json" />
     <Content Include=".babelrc" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="Content\Images\Logo.psd" />
+    <Content Include="Content\Images\User.psd" />
+    <Content Include="Content\apple-touch-icon.psd" />
+    <Content Include="Content\Images\startup\startup-750x1334.psd" />
+    <Content Include="Content\Images\startup\startup-1125x2436.psd" />
+    <Content Include="Content\Images\startup\startup-1242x2208.psd" />
+    <Content Include="Content\Images\Icon.psd" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -814,12 +865,7 @@
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
@@ -846,7 +892,6 @@
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Database\Index.cshtml" />
     <Content Include="Views\Container\Debug.cshtml" />
-    <Content Include="Views\Account\LogOff.cshtml" />
     <Content Include="Views\Account\ExternalLogin.cshtml" />
     <Content Include="Views\Shared\_Globals.cshtml" />
     <Content Include="Scripts\src\icarus\task\config\beautify.json" />
@@ -1101,6 +1146,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903281514380_2019-03-28__ContainerMeta.resx">
       <DependentUpon>201903281514380_2019-03-28__ContainerMeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904261802316_0-6_CRUD-Shared-Public_116.resx">
+      <DependentUpon>201904261802316_0-6_CRUD-Shared-Public_116.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905212108527_TableElements.resx">
+      <DependentUpon>201905212108527_TableElements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905212116005_TableElements1.resx">
+      <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

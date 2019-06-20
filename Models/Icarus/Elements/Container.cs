@@ -30,7 +30,7 @@ namespace ICARUS.Models.Icarus.Elements {
         /// <summary>
         /// Container Label
         /// </summary>
-        [StringLength(128, MinimumLength = 3), Required]
+        [StringLength(128, MinimumLength = 1), Required]
         public string label { get; set; }
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dataId = 0;
             this.metaId = 0;
             this.shared = 0;
+            this.isPublic = 0;
             this.dateCreated = DateTime.UtcNow.ToLocalTime();
             this.dateLastModified = DateTime.UtcNow.ToLocalTime();
         }
@@ -88,6 +89,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.dataId = formPost.parseInt("dataId");
             this.metaId = formPost.parseInt("metaId");
             this.shared = formPost.parseInt("shared");
+            this.isPublic = formPost.parseInt("isPublic");
             this.dateLastModified = DateTime.UtcNow.ToLocalTime();
         }
     }

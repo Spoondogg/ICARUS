@@ -15,6 +15,7 @@ var urlsToCache = [
     '/Content/styles/fonts/glyphicons-halflings-regular.woff',
     '/Content/styles/fonts/glyphicons-halflings-regular.woff2',
     '/Content/Images/Logo.png',
+    '/Content/Images/Icon.png',
     '/Content/favicon.ico'
 ];
 /** Service Worker error handling
@@ -42,8 +43,6 @@ self.addEventListener('install', (event) => {
             })
     );
 });
-
-
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
@@ -55,7 +54,6 @@ self.addEventListener('fetch', (event) => {
                 return fetch(event.request);
             }));
 });
-
 self.addEventListener('activate', (event) => {
     var cacheWhitelist = ['icarus-cache-v1'];
     event.waitUntil(
@@ -66,7 +64,6 @@ self.addEventListener('activate', (event) => {
                 }
             }))));
 });
-
 // https://developers.google.com/web/fundamentals/app-install-banners/
 /*
 btnAdd.addEventListener('click', (e) => {
@@ -86,6 +83,4 @@ btnAdd.addEventListener('click', (e) => {
         });
 });
 */
-
-
 // https://developers.google.com/web/fundamentals/codelabs/push-notifications/

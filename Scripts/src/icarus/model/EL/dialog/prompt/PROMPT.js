@@ -1,5 +1,5 @@
 /** @module */
-import DIALOG, { ATTRIBUTES, DIALOGMODEL, DIV, EL, MODEL } from '../DIALOG.js';
+import DIALOG, { ATTRIBUTES, DIALOGMODEL, DIV, EL, ICONS, MODEL } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
@@ -17,24 +17,24 @@ export default class PROMPT extends DIALOG {
 		this.form = null; //this.createForm(model.form);
 	}
 	/** Creates the FORM or constructs a new empty FORM
-	    @param {FormModel} model FORM
+	    @param {FormModel} [model] FormModel
 	    @returns {Promise<FORM>} Promise to return a FORM
 	*/
-	createForm(model = new MODEL()) {
+    createForm(model = new MODEL()) {
+        console.log('PROMPT.createForm()', model);
 		return new Promise((resolve, reject) => {
 			try {
 				if (model.formtype === 'FORMPOST') {
-					FORM.createFormPostForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+					FORM.createFormPostForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else if (model.formtype === 'CONTAINER') {
-					FORM.createContainerForm(this.body, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createContainerForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else {
-					FORM.createEmptyForm(this.body, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createEmptyForm(this.body.pane, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				}
 			} catch (e) {
 				console.error('PROMPT.createForm() Failed to create Form', model, this);
 				reject(e)
 			}
-			//});
 		});
 	}
 	/** Sets required defaults for a PROMPT FORM
@@ -56,4 +56,4 @@ export default class PROMPT extends DIALOG {
 		});
 	}
 }
-export { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, FORM, MODEL }
+export { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, FORM, ICONS, MODEL }

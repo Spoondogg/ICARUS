@@ -66,7 +66,7 @@ namespace ICARUS.Controllers {
                 m.id == id && m.status != -1
                 && (
                     m.authorId == User.Identity.Name
-                    || m.shared == 1
+                    || m.isPublic == 1
                 )
             );
         }
@@ -82,7 +82,7 @@ namespace ICARUS.Controllers {
                 m.status != -1
                 && (
                     m.authorId == User.Identity.Name
-                    || m.shared == 1
+                    || m.isPublic == 1
                 )
             );
         }
@@ -138,6 +138,7 @@ namespace ICARUS.Controllers {
                 Dictionary<string, object> attribs = new Dictionary<string, object>();
                 attribs.Add("id", li.id);
                 attribs.Add("label", li.label);
+                attribs.Add("metaId", li.metaId);
                 listArray.Add(attribs);
             }
 
@@ -164,13 +165,9 @@ namespace ICARUS.Controllers {
             columns.Add("className");
             columns.Add("authorId");
             columns.Add("status");
-            //columns.Add("showHeader");
             columns.Add("label");
-            //columns.Add("collapsed");
-            //columns.Add("hasTab");
             columns.Add("dateCreated");
             columns.Add("dateLastModified");
-            //columns.Add("hasSidebar");
             columns.Add("attributesId");
             columns.Add("dataId");
             columns.Add("shared");
@@ -201,6 +198,7 @@ namespace ICARUS.Controllers {
             columns.Add("index");
             columns.Add("id");
             columns.Add("label");
+            //columns.Add("metaId");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "discriminator", this.className));
@@ -210,7 +208,7 @@ namespace ICARUS.Controllers {
             Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
-                m => m.authorId == User.Identity.Name || m.shared == 1
+                m => m.authorId == User.Identity.Name || m.isPublic == 1
             ).Count();
 
             Dictionary<string, object> result = new Dictionary<string, object>();
@@ -231,6 +229,7 @@ namespace ICARUS.Controllers {
             columns.Add("id");
             columns.Add("className");
             columns.Add("label");
+            //columns.Add("metaId");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "id", id));
@@ -324,7 +323,7 @@ namespace ICARUS.Controllers {
                 // Set new values
                 int result = 0;
                 if (model != null) {
-                    if(model.authorId == User.Identity.Name) {
+                    if(model.authorId == User.Identity.Name || model.shared == 1) {
                         model.status = 1;
 
                         model.updateContainerModel(formPost);

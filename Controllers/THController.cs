@@ -10,23 +10,22 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
     
-    public class IndexMainController : ContainerController {
+    public class THController : ContainerController {
 
-        public IndexMainController() : base("IndexMain") {
+        public THController() : base("TH") {
 
         }
 
         /// <summary>
-        /// Instantiate a Container using List defaults
+        /// Instantiate a Container using TR defaults
         /// </summary>
         /// <returns></returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new INDEXMAIN()
-                : new INDEXMAIN(formPost);
+                ? new TH()
+                : new TH(formPost);
 
             obj.setAuthorId(User.Identity.Name);
-
             return obj;
         }
 
@@ -37,17 +36,16 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            return ctx.IndexMains.AsQueryable().Single(FilterById(id));
+            return ctx.THs.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
-        /// Select a single element
+        /// Select all elements
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="id"></param>
         /// <returns></returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.IndexMains.Where(FilterAllowed());
+            return ctx.THs.Where(FilterAllowed());
         }
     }
 }

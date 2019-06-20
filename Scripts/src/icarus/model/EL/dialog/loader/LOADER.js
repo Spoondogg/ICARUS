@@ -26,25 +26,30 @@ export default class LOADER extends DIALOG {
 		this.el.setAttribute('data-backdrop', false);
 		this.progress = new DIV(this.body, new MODEL('progress'));
 		this.progressBar = new PROGRESSBAR(this.progress);
-		this.console = new CONSOLE(this.body);
-		this.progressBar.el.onclick = () => this.console.flip();
+        this.console = new CONSOLE(this.body);
+        this.console.el.addEventListener('deactivate', () => setTimeout(() => this.hide(), 500));
+        this.progressBar.el.onclick = () => this.console.flip();
+        this.hide = () => this.hideDialog().then(() => this.console.flush());
 		this.log(value);
 	}
 	/** Sets the progress bar status
 		@param {number} value Percentage as integer (ie: 50 means 50%).
 		@param {string} text Text displayed inside progress bar.  
 	    @param {boolean} show If true, the log will be displayed
+        @param {boolean} toConsole If true, logs to console as well
         @param {number} delay Delay to hide when value reaches 100 or stay visible if value === 0
+        @param {string} type ie success, info, warning, danger
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
-	log(value, text = '', show = true, delay = 300) {
-		return this.chain(() => {
+	log(value, text = '', show = true, toConsole = false, delay = 300, type = 'info') {
+        return this.chain(() => {
+            this.progressBar.setType(type);
 			this.progressBar.el.style.width = value + '%';
 			this.progressBar.el.setAttribute('aria-valuenow', value);
-			if (text) {
+			if (typeof text !== 'undefined') {
 				let txt = text.substr(0, 32) + '...';
 				this.progressBar.text.setInnerHTML(txt);
-				this.console.addEntry(text);
+				this.console.addEntry(text, toConsole, type);
 			}
 			if (value < 100) {
 				clearTimeout(this.logTimer);
@@ -60,6 +65,6 @@ export default class LOADER extends DIALOG {
 				}, delay);
 			}
 		});
-	}
+    }
 }
 export { CONSOLE, DIV, EL, MODEL, PROGRESSBAR }
