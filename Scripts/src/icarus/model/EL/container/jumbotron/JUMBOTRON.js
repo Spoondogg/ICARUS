@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, Activate, EL, Expand, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, Activate, EL, Expand, MODEL, Toggle } from '../CONTAINER.js';
 import DIV from '../../div/DIV.js';
 /** A full width Container with a fixed height
     @see https://getbootstrap.com/docs/3.3/components/#jumbotron }
@@ -15,15 +15,18 @@ export default class JUMBOTRON extends CONTAINER {
 		super(node, 'DIV', model);
         this.addClass('jumbotron');
         this.screen = new DIV(this.body.pane, new MODEL('screen'));
-        this.screen.el.appendChild(this.btnNavHeader.el);
 	}
 	construct() {
-		//console.log(this.className + '.construct()');
 		return this.chain(() => {
-			//console.log('JUMBOTRON', this);
 			if (this.dataId > 0) {
 				this.setScreenColor();
-				this.createEditableElement('slogan', this.screen);
+                this.createEditableElement('slogan', this.screen).then((slogan) => {
+                    slogan.el.addEventListener('longclick', () => {
+                        if (this.getUser() === this.authorId || this.shared === 1) {
+                            this.navheader.el.dispatchEvent(new Toggle(this.navheader));
+                        }
+                    });
+                });
 				this.createEditableElement('p', this.screen);
 				this.loadBgImage();
 				this.setBgColor();

@@ -76,7 +76,7 @@ export default class IFACE {
 		console.log('node', node);
 		throw new AbstractMethodError('IFACE setMethods not set', this);
 	}
-	/** Toggles state of this element and triggers the appropriate event
+	/** Toggles state of this element (by className) and triggers the appropriate event
 	    @param {string} className Existence of classname indicates on/off event to call
 	    @param {Event} eventOn Event to call if class does not yet exist
 	    @param {Event} eventOff Event to call if class already exists

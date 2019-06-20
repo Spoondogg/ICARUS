@@ -7,6 +7,7 @@ import DIALOGMODEL from './DIALOGMODEL.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import Selectable from '../../../interface/Selectable.js';
 import { TransitionSpeed } from '../../../enums/StyleVars.js';
+/* eslint-disable max-statements */
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
     @extends EL
@@ -36,7 +37,10 @@ export default class DIALOG extends EL {
 		if (showHeader) {
 			this.navheader.expand();
 		}
-		this.body = new COLLAPSIBLE(this, new MODEL('body'), model.text);
+        this.body = new COLLAPSIBLE(this, 'DIV', new MODEL('body'));
+        if (typeof model.text !== 'undefined') {
+            this.text = new DIV(this.body.pane, new MODEL('text').set('innerHTML', model.text));
+        }
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
 		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
@@ -58,7 +62,11 @@ export default class DIALOG extends EL {
 	    @returns {void}
 	*/
 	closeOnFocusOut() {
-		this.el.onclick = (event) => event.target === this.el ? this.closeDialog() : this;
+        this.el.onclick = (event) => {
+            if (event.target === this.el) {
+                this.closeDialog();
+            }
+        }
 	}
 	/** Shows the DIALOG
         @param {number} delay Millisecond delay until dialog is shown
@@ -75,7 +83,7 @@ export default class DIALOG extends EL {
 		return this.hideDialog(delay, false);
 	}
 	/** Hides the DIALOG and deactivates its caller
-        @param {number} [delay] Millisecond delay until dialog is closed
+        @param {number} [delay] Millisecond delay until dialog is closed (Imports transition speed)
         @param {boolean} [preserve=true] If true, element is not deleted
 	    @returns {Promise<DIALOG>} Callback on successful close
     */
@@ -84,23 +92,38 @@ export default class DIALOG extends EL {
             try {
                 this.addClass('hiding').then(() => setTimeout(() => {
 					$(this.el).modal('hide');
-					resolve(preserve ? this : this.destroy().then(() => this.caller.deactivate()));
+					resolve(preserve ? this : this.destroy().then(() => this.deactivateCaller()));
 				}, delay));
 			} catch (e) {
 				reject(e);
 			}
 		});
-	}
+    }
+    /** Deactivates DIALOG caller if exists 
+        @returns {void}
+    */
+    deactivateCaller() {
+        if (this.caller !== null) {
+            this.caller.deactivate();
+        }
+    }
 	getContainer() {
-		console.log('Getting dialog container');
 		return this.container;
 	}
-	getMain() {
-		try {
-			return this.getContainer().getMain();
-		} catch (e) {
-			console.warn('Unable to get MAIN for DIALOG', this);
-		}
+    getMain(container = this.getContainer(), attempt = 1, recursionLimit = 100) {
+        if (attempt < recursionLimit) {
+            try {
+                let main = container.getMain();
+                if (main === null) {
+                    return this.getMain(container.getContainer(), attempt + 1);
+                }
+                return main;
+            } catch (e) {
+                //return this.getContainer().getContainer().getMain();
+
+                console.error('Unable to get MAIN for DIALOG', this);
+            }
+        }
 	}
 	overrideBootstrap() {
 		// Set animations @see https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
@@ -110,4 +133,5 @@ export default class DIALOG extends EL {
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 }
-export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, MENU, MODEL, NAVITEMICON }
+export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, ICONS, MENU, MODEL, NAVITEMICON }
+/* eslint-enable */

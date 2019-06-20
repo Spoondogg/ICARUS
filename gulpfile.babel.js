@@ -1,4 +1,4 @@
-/// <binding AfterBuild='BuildDocumentation, BuildVendorDependencies' ProjectOpened='Watch' />
+/// <binding AfterBuild='BuildVendorDependencies' ProjectOpened='Watch' />
 /** Interface between Task Runner and GULPFILE
     @module 
 */

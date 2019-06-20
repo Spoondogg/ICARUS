@@ -1,6 +1,7 @@
 /** @module */
-import MENU, { ATTRIBUTES, EL, MODEL } from '../MENU.js'
+import MENU, { ATTRIBUTES, Activate, EL, Expand, MODEL, NAVBAR } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
+import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
 /** User Menu 
     @class
@@ -12,29 +13,71 @@ export default class USERMENU extends MENU {
 	    @param {MODEL} model Model
 	*/
 	constructor(node) {
-		super(node, new MODEL('in').set('name', 'USER'));
-		this.overrideMenuDefaults();
-		this.profile = new DIV(this, new MODEL('profile'));
-		this.image = new IMG(this.profile, new MODEL({
-			class: 'picture',
-			src: localStorage.getItem('picture')
-		}));
-		this.username = new DIV(this.profile, new MODEL('username'), 'Ryan Dunphy');
-		this.quote = new DIV(this.profile, new MODEL('quote'), 'Dad Joke Specialist');
-		this.details = new DIV(this.profile, new MODEL('details'), 'Lorem Ipsum');
-		this.options = this.addMenu(new MODEL('horizontal').set({
-			name: 'USEROPTIONS',
-			swipeSensitivity: 150
-		}));
-		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log In'));
-		this.btnLogout.el.onclick = () => this.login();
-		this.btnLogout = this.options.addNavItem(new MODEL().set('label', 'Log Out'));
-		this.btnLogout.el.onclick = () => this.logout();
-		for (let i = 0; i < 5; i++) {
-			this.options.addNavItem(new MODEL().set('label', 'Button[' + i + ']')).el.onclick = () => this.deactivate();
-		}
-		this.options.expand();
-	}
+		super(node, new MODEL('usermenu in').set('name', 'USER'));
+        this.overrideMenuDefaults();
+        this.profile = new DIV(this, new MODEL('profile'));
+        this.image = new IMG(this.profile, new MODEL({
+            class: 'avatar',
+            src: this.getAvatar()
+        }));
+        try {
+            this.username = new DIV(this.profile, new MODEL('username').set('innerHTML', localStorage.getItem('name')));
+            this.email = new DIV(this.profile, new MODEL('email').set('innerHTML', this.getUser()));
+            this.roles = new DIV(this.profile, new MODEL('roles').set('innerHTML', this.getRole()));
+        } catch (e) {
+            console.warn(e);
+        }
+        this.createOptions();        
+        this.navbar.el.dispatchEvent(new Expand(this.navbar));
+        this.el.dispatchEvent(new Expand(this));
+        // override
+        this.collapse = () => true;
+        this.expand = () => true;
+    }
+    /** Creates the Options Menu for this active user
+        @returns {void}
+    */
+    createOptions() {
+        /** @type {NAVBAR} */
+        this.navbar = this.node.navbar;
+        this.navbar.addClass('options-nav');
+        //let optionsMenu = this.navbar.addOptionsMenu('OPTIONS', ICONS.USER, 'OPTIONS', ['Profile', 'Settings']);
+        //optionsMenu.tab.el.dispatchEvent(new Activate(optionsMenu.tab));
+        this.account = this.navbar.addTabbableMenu('ACCOUNT', 'ACCOUNT', ICONS.USER, [], true);
+        this.account.element.swipeSensitivity = 150;
+        if (this.getRole() === 'Guest') {
+            this.account.tab.el.style.flexBasis = '20rem'; // this should be a style rule
+
+            this.btnLogin = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('log-in', 'Log In', ICONS.LOGIN)
+            ));
+            this.btnLogin.el.addEventListener('activate', () => this.login(this.btnLogin));
+            this.btnRegister = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('register', 'Sign Up', ICONS.USER)
+            ));
+            this.btnRegister.el.addEventListener('activate', () => this.register(this.btnRegister));
+        } else {
+            this.btnLogout = this.account.element.addNavItemIcon(new MODEL().set(
+                this.createNavItemIconModel('log-out', 'Log Out', ICONS.LOGOUT)
+            ));
+            this.btnLogout.el.addEventListener('activate', () => this.logout());
+            // Application Communications, Alerts etc
+            this.chat = this.navbar.addTabbableMenu('CHAT', 'CHAT', ICONS.CHAT, [
+                this.createNavItemIconModel('chat-one', 'Chat One', ICONS.CHAT),
+                this.createNavItemIconModel('chat-two', 'Chat Two', ICONS.CHAT)
+            ], true);
+            this.chat.element.swipeSensitivity = 150;
+            // User Settings / Options
+            this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [
+                this.createNavItemIconModel('Styles', 'Styles', ICONS.DOM),
+                this.createNavItemIconModel('Alerts', 'Alerts', ICONS.ALERT),
+                this.createNavItemIconModel('Security', 'Security', ICONS.LOCK)
+            ], true);
+            this.options.element.swipeSensitivity = 150;
+        }
+        // Launch Account Tab by default
+        this.account.tab.el.dispatchEvent(new Activate(this.account.tab));
+    }
 	/** The USERMENU slides in and should be expanded at all times 
 	    @returns {void}
 	*/
@@ -51,11 +94,20 @@ export default class USERMENU extends MENU {
 		return this.flip().then(() => this.getMain().logout());
 	}
 	/** Calls MAIN.login()
+        @param {EL} caller Caller
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	login() {
+	login(caller = this) {
 		console.log('USERMENU.login()');
-		return this.flip().then(() => this.getMain().login());
-	}
+        return this.flip().then(() => this.getMain().login(caller));
+    }
+    /** Calls MAIN.register()
+        @param {EL} caller Caller 
+	    @returns {Promise<ThisType>} Promise Chain
+	*/
+    register(caller = this) {
+        console.log('USERMENU.register()');
+        return this.flip().then(() => this.getMain().register(caller));
+    }
 }
-export { ATTRIBUTES, EL, MENU, MODEL }
+export { ATTRIBUTES, EL, MENU, MODEL, NAVBAR }

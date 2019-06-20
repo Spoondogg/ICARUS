@@ -1,14 +1,15 @@
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
-import CONTAINERFACTORY, { DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
+import CONTAINER, { Activate, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
-import FORMFACTORY from '../formelement/FORMELEMENTFACTORY.js';
+import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
+import TABLEFACTORY from '../../table/TABLEFACTORY.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -19,11 +20,13 @@ export default class MAIN extends CONTAINER {
     */
 	constructor(model) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
-		this.addClass('main');
+        this.addClass('main');
+        this.deactivateSiblingsOnActivate = false;
 		this.body.pane.addClass('pane-tall');
 		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
 		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
-		this.navheader.setAttribute('draggable', false);
+        this.navheader.setAttribute('draggable', false);
+        this.navheader.tab.addClass('tab-center');
 		this.addNavOptions();
         this.setFactory(model.factory);
 		this.loader = model.loader;
@@ -36,8 +39,118 @@ export default class MAIN extends CONTAINER {
 		this.watchMousePosition();
         this.expandMain();
         /** Add factories */
+        this.addFactories();
+        this.addRefreshScroll();
+        this.addMainActivateEvents();
+    }
+    /** Override and terminate parent activation at the top of the chain
+        @returns {void}
+    */
+    activateParentContainer() {
+        //console.log(this.toString() + '.activateParentContainer(TRUE)');
+    }
+    /** Override and terminate parent deactivation at the top of the chain
+        @returns {void}
+    */
+    deactivateParentContainer() {
+        //console.log(this.toString() + '.deactivateParentContainer(TRUE)');
+    }
+    addFactories() {
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
-	}
+        this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
+    }
+    addMainActivateEvents() {
+        this.el.addEventListener('activate', () => {      
+            //let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+            //sidebarTab.el.dispatchEvent(new Activate(sidebarTab));
+            //console.log('Trigger scrollTo() for SIDEBAR.scrollTarget', sidebar.scrollTarget);
+            /*if (sidebar.scrollTarget !== null) {
+                $(sidebar.el).animate({
+                    scrollTop: parseInt($(sidebar.scrollTarget.el).offset().top)
+                }, 600, 'swing');
+                sidebar.scrollTarget = null;
+            } else {
+                console.log('Scroll target not set');
+            }*/
+        });
+        this.el.addEventListener('deactivate', () => {
+            /*let [sidebarTab] = this.navheader.tabs.get('document-map', 'NAVITEMICON');
+            if (sidebarTab.hasClass('active')) {
+                //let [sidebar] = this.navheader.menus.get('document-map', 'SIDEBAR');
+                //console.log(this.toString() + ' is deactivating the document-map', sidebarTab);
+                sidebarTab.el.dispatchEvent(new Deactivate(sidebarTab));
+            }*/
+        });
+    }
+
+    /** Scroll to refresh
+        @see https://dev.to/vijitail/pull-to-refresh-animation-with-vanilla-javascript-17oc
+        @returns {void}
+    */
+    addRefreshScroll() {
+        document.addEventListener('touchstart', (ev) => this.swipeStart(ev), false);
+        document.addEventListener('touchmove', (ev) => this.swipe(ev), false);
+        document.addEventListener('touchend', (ev) => this.swipeEnd(ev), false);
+        this.pStart = {
+            x: 0,
+            y: 0
+        };
+        this.pCurrent = {
+            x: 0,
+            y: 0
+        };
+        //let main = this.el;
+        this.isLoading = false;
+    }
+    /** In the swipeStart() function, we’ll capture the touch coordinates 
+        and assign it to the pStart object.
+        @param {Event} ev Touch Event
+        @returns {void}
+    */
+    swipeStart(ev) {
+        if (typeof ev.targetTouches === 'undefined') {
+            this.pStart.x = ev.screenX;
+            this.pStart.y = ev.screenY
+        } else {
+            let [touch] = ev.targetTouches;
+            this.pStart.x = touch.screenX;
+            this.pStart.y = touch.screenY;
+        }
+    }
+    swipe(ev) {
+        if (typeof ev.changedTouches === 'undefined') {
+            this.pCurrent.x = ev.screenX;
+            this.pCurrent.y = ev.screenY;
+        } else {
+            let [touch] = ev.changedTouches;
+            this.pCurrent.x = touch.screenX;
+            this.pCurrent.y = touch.screenY;
+        }
+        let changeY = this.pStart.y - this.pCurrent.y;
+        console.log('changeY', changeY, this.body.pane.el.scrollTop);
+        //const rotation = this.changeY < 
+        if (this.body.pane.el.scrollTop === 0) {
+            if (changeY < -100) {
+                console.warn('Scroll triggered a refresh!');
+                // Find a way to detect MAIN.body.pane scroll 
+                // Avoid refresh when sidebar scroll takes place and scrollTop === 0
+                /*this.isLoading = true;
+                alert('Refreshing...');
+                //window.navigator.vibrate(200);
+                this.refresh();*/
+            }
+        }
+    }
+    swipeEnd() {
+        if (this.body.pane.el.scrollTop === 0 && !this.isLoading) {
+            this.isLoading = true;
+            //console.log('REFRESH!!!');
+        } else {
+            this.isLoading = false;
+
+        }
+    }
 	constructElements() {
 		if (this.dataId > 0) {
 			document.title = this.data.title;
@@ -119,7 +232,7 @@ export default class MAIN extends CONTAINER {
 		this.navheader.el.dispatchEvent(new Expand(this.navheader));
 		this.body.el.dispatchEvent(new Expand(this.body));
 		this.navfooter.el.dispatchEvent(new Expand(this.navfooter));
-	}
+    }
 	/** Returns a friendly username for the current user (if exists)
 	    @returns {string} A friendly username
 	*/
@@ -138,22 +251,37 @@ export default class MAIN extends CONTAINER {
 	navigateForward() {
 		console.log('TODO: Forward');
 	}
-	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants
+	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
 	    @returns {void}
 	*/
 	createDocumentMap() {
-		let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
-		sidebar.element.navbar.addOptionsMenu(this.toString(), ICONS[this.className], this.toString(), ['DATA', 'ATTRIBUTES', 'META', 'CHILDREN'], false);
-		this.reference = sidebar.element.navbar;
-		// Add submenu items to DATA and ATTRIBUTES
-        /** @type {[NAVITEMICON]} */
-        let [tab] = this.reference.tabs.get(this.toString(), 'NAVITEMICON');
-        tab.el.addEventListener('select', () => this.getFactory().save(false, this, this));
-		/** @type {[MENU]} */
-        let [menu] = sidebar.element.navbar.menus.get(this.toString(), 'MENU');
-        this.addDefaultDocumentMapAttributes(menu);
+        let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
-		// Position and show the NAVBAR
+        /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
+            Well, it doesn't have a container.  But that can be fixed by using DOCUMENTMAP
+        */
+        this.reference = sidebar.element.navbar;
+        this.reference.options = this.reference.addOptionsMenu(
+            this.label, ICONS[this.className], this.toString(),
+            ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
+        );
+
+        let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
+        this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, this.reference);
+
+        let methodsMenu = this.reference.options.menu.getMenu('METHODS');
+        this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, this.reference);
+        this.addCrudItems(methodsMenu.getMenu('CRUD'));
+        this.addDomItems(methodsMenu.getMenu('DOM'));
+        this.addElementItems(methodsMenu.getMenu('ELEMENTS'), this.containerList);
+
+        
+		// Add submenu items to DATA and ATTRIBUTES
+        this.reference.getTab(this.toString()).el.addEventListener('select', () => this.getFactory().save(false, this, this));
+
+        this.addDefaultDocumentMapProperties(propertiesMenu);
+
+        // Position and show the NAVBAR
 		$(sidebar.tab.el).insertBefore(this.navheader.tab.el);
 		sidebar.element.navbar.el.dispatchEvent(new Expand(sidebar.element.navbar));
 	}
@@ -161,12 +289,13 @@ export default class MAIN extends CONTAINER {
 	    @returns {{tab:NAVITEM, element:SIDEBAR}} Tabbable Element {tab,element}
 	*/
 	createUserMenu() {
-		let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
-		userBar.element.navbar.addOptionsMenu('USERMENU', ICONS.USER, 'USERMENU', ['Profile', 'Settings']);
-		userBar.element.navbar.el.dispatchEvent(new Expand(userBar.element.navbar));
-		let usermenu = new USERMENU(userBar.element);
+        let userBar = this.navheader.addTabbableSidebar('sidebar-user', 'USER', ICONS.USER, 'right');
+        let usermenu = new USERMENU(userBar.element);
+        // Tab should expand UserMenu
+        userBar.tab.el.addEventListener('activate', () => usermenu.el.dispatchEvent(new Expand(usermenu)));
 		$(usermenu.el).insertBefore(userBar.element.navbar.el);
-		usermenu.el.dispatchEvent(new Expand());
+        usermenu.el.dispatchEvent(new Expand(usermenu));
+        
 		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
 	}
 	/** Adds default Nav Items to the Nav Bar including the label
@@ -177,7 +306,10 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 			this.createDocumentMap();
 			// History / Prev / Back Navigation
-			let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, ['HISTORY1', 'HISTORY2']);
+            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, [
+                this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
+                this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
+            ]);
 			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
 			// RIGHT ALIGN
 			this.createUserMenu();
@@ -247,7 +379,8 @@ export default class MAIN extends CONTAINER {
 								new PROMPT(new MODEL().set({
 									label: 'Create a new page',
 									caller: this,
-									container: this
+                                    container: this,
+                                    text: 'Create a new page'
 								})).createForm().then((form) => {
 									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
 										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
@@ -300,6 +433,43 @@ export default class MAIN extends CONTAINER {
 			this.navfooter.menus.get(null, 'MENU').map((menu) => menu.el.dispatchEvent(ev));
 		}, 'Unable to restore focus to MAIN');
     }
+    /** Launches a Forgotten Password form that can email a user a reset token
+        @returns {void}
+    */
+    forgotPassword() {
+        console.log('MAIN.forgotPassword');
+        this.loader.log(99, 'Forgot Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Forgot Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Forgot Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ForgotPassword');
+                form.setId(0);
+                form.label = 'Forgot Password';
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
+                ]);
+
+                let [btnForgotPassword] = form.footer.buttonGroup.get();
+                btnForgotPassword.addClass('btn-sign-in');
+                btnForgotPassword.setLabel('Verify Email');
+                btnForgotPassword.icon.setIcon(ICONS.EXCLAMATION);
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then((result) => {
+                    console.log(result, 'Closing dialog');
+                    form.getDialog().close();
+                    loader.log(99, 'A password request has been emailed with further instructions', true, true, 5000, 'warning');
+                    loader.console.el.dispatchEvent(new Activate(loader.console));
+                });
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Allows the user to open a MAIN 
 		@param {UId} id Unique Id
 	    @todo Create method to browse MAINs
@@ -344,6 +514,7 @@ export default class MAIN extends CONTAINER {
 	/** Log into the application using the given credentials
         @param {EL} caller The calling element to resolve on DIALOG close
 	    @todo Create AHREF to 'ForgotPassword'
+        @todo Consider making this a class that MAIN calls, similar to USERMENU (LOGINFORM)
 	    @returns {void}
 	*/
 	login(caller = this) {
@@ -351,30 +522,58 @@ export default class MAIN extends CONTAINER {
 		let label = 'LogIn';
 		this.loader.log(99, label).then(
 			(loader) => {
-				let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
+				let prompt = new PROMPT(new DIALOGMODEL(new MODEL('login'), {
 					caller,
 					container: this,
 					label
 				}));
-                prompt.createForm(new DIALOGMODEL(new MODEL(), {
+                prompt.createForm(new DIALOGMODEL(new MODEL('login'), {
                     caller,
                     container: prompt,
-                    label
+                    label: 'Login'
                 })).then(
-					(form) => form.footer.buttonGroup.empty().then(
-						() => {
-							form.footer.buttonGroup.addButton('Login - Google/.NET').el.onclick = () => {
-								this.loginOAuth('Google');
-								return false;
-							}
-							//loader.log(100).then(() => form.getDialog().show());
-							loader.log(100).then(() => prompt.show());
-						}
-					)
-				)
+                    (form) => {
+                        let email = this.url.searchParams.get('email');
+                        form.setAction('/Account/Login');
+                        form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                            createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
+                            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+                        ]);
+                        //console.log('ButtonGroup', form.footer.buttonGroup.get());
+
+                        let [btnSignIn] = form.footer.buttonGroup.get();
+                        btnSignIn.addClass('btn-sign-in');
+                        btnSignIn.setLabel('Sign In');
+
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton('Sign in with Google', ICONS.USER);
+                        btnOAuthGoogle.addClass('btn-oauth-google');
+                        btnOAuthGoogle.el.onclick = () => {
+                            this.loginOAuth('Google');
+                            return false;
+                        }
+                        /*form.footer.buttonGroup.addButton('Register').el.onclick = () => {
+                            this.register();
+                            return false;
+                        }*/
+                        let btnForgotPassword = form.footer.buttonGroup.addButton('Forgot Your Password?');
+                        btnForgotPassword.addClass('btn-forgot-password');
+                        btnForgotPassword.el.onclick = () => {
+                            this.forgotPassword();
+                            return false;
+                        }
+
+                        form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
+                            (result) => {
+                                console.log(this.toString() + '.login()', result);
+                            }
+                        );
+                        loader.log(100).then(() => prompt.show());
+                    }
+                );
 			}
 		);
-	}
+    }
 	/** Creates a login form in the given form
 	    @param {FORM} form Form element
 	    @returns {Promise<ThisType>} Promise Chain
@@ -391,8 +590,8 @@ export default class MAIN extends CONTAINER {
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-			form.footer.buttonGroup.addButton('Register - Local').el.onclick = () => this.register();
-			form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
+			form.footer.buttonGroup.addButton('Register - Local').el.addEventListener('activate', () => this.register());
+			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}
 	/** Redirects to the third party OAuth Sign In
@@ -400,10 +599,14 @@ export default class MAIN extends CONTAINER {
 	    @param {string} provider The OAuth Provider
 	    @returns {void} 
 	*/
-	loginOAuth(provider) {
-		this.body.collapse().then(() => {
-			location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
-		});
+    loginOAuth(provider) {
+        this.chain(() => this.navheader.tab.el.dispatchEvent(new Deactivate(this.navheader.tab))).then(
+            () => this.chain(() => this.navheader.el.dispatchEvent(new Collapse(this.navheader))).then(
+                () => {
+                    window.location.href = '/Account/ExternalLogin/externalLogin?provider=' + provider + '&returnUrl=' + encodeURI(this.url.origin + '/signin-' + provider);
+                }
+            )
+        );        
 	}
 	/** Logs the current user out 
         @returns {Promise<boolean>} True on success
@@ -413,35 +616,89 @@ export default class MAIN extends CONTAINER {
 			() => Promise.resolve(localStorage.clear()).then(
 				$.post('/Account/LogOff', {
 					'__RequestVerificationToken': this.getToken()
-				}, this.ajaxRefreshIfSuccessful.bind(this), 'json')));
+				}, this.processAjaxResponse.bind(this), 'json')));
 	}
 	/** Log into the application using the given credentials
+        param {EL} container Username / Email
+        @param {EL} caller Account Password
+        @returns {void}
+    */
+	register(caller = this) {
+        this.loader.log(99, 'Register').then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller,
+                label: 'Sign Up'
+            })).createForm(new MODEL('login').set({
+                label: 'Sign Up',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/Register');
+                form.setId(0);
+                form.label = 'Sign Up';
+                form.addClass('register');
+                form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
+                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Sign Up');
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status).then(
+                    () => console.warn('SHOULD CLOSE DIALOG NOW', form.getDialog().close())
+                    /*() => {
+                        form.getDialog().close();
+                    }*/
+                );
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
+    /** Log into the application using the given credentials
         @param {string} email Username / Email 
         @param {string} password Account Password
         @returns {void}
     */
-	register() {
-		this.loader.log(99, 'Register', true).then((loader) => {
-			new PROMPT(new MODEL().set('label', 'Register')).createForm(new MODEL().set({
-				container: this,
-				label: 'Register'
-			})).then((form) => {
-				form.setAction('/Account/Register');
-				form.setId(0);
-				//form.id = 0;
-				//form.el.setAttribute('id', 0);
-				form.label = 'Register';
-                form.addClass('register');
+    resetPassword() {
+        this.loader.log(99, 'Reset Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+            new MODEL('login'), {
+                container: this,
+                caller: this,
+                label: 'Reset Password'
+            })).createForm(new MODEL('login').set({
+                label: 'Reset Password',
+                container: this
+            })).then((form) => {
+                form.setAction('/Account/ResetPassword');
+                form.setId(0);
+                form.label = 'Reset Password';
+                form.addClass('reset-password');
+
+                let email = this.url.searchParams.get('email');
+
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-					createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-					createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-					createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
-				]);
-				form.afterSuccessfulPost = (payload, status) => this.ajaxRefreshIfSuccessful(payload, status);
-				loader.log(100).then(() => form.getDialog().show());
-			});
-		});
-	}
+                    createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
+                    createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
+                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                ]);
+
+                let [btnSignIn] = form.footer.buttonGroup.get();
+                btnSignIn.addClass('btn-sign-in');
+                btnSignIn.setLabel('Update Password');
+
+                form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then(() => {
+                    loader.log(99, 'Redirecting to login').then(() => setTimeout(() => {
+                        window.location.href = window.location.origin + '?login=1&email=' + email;
+                    }, 3000));
+                });
+                loader.log(100).then(() => form.getDialog().show());
+            })
+        );
+    }
 	/** Swipe Up Event
 	    @returns {void}
 	*/
@@ -459,4 +716,4 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR, TABLEFACTORY }

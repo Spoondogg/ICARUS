@@ -21,15 +21,17 @@ export default class NAVHEADER extends NAVBAR {
 			icon: ICONS.CERTIFICATE,
 			label: model.label
         }));
-		node.el.addEventListener('activate', () => this.tab.el.dispatchEvent(new Activate(this)));
-		node.el.addEventListener('deactivate', () => this.tab.el.dispatchEvent(new Deactivate(this)));
-		this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this)));
-        this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this)));
+        this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
+        this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
         this.tab.el.addEventListener('select', () => {
             let container = this.getContainer();
-            container.save(false, container, container, 'label');
+            container.getFactory().save(false, container, container, 'label');
         });
-		this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, ['ELEMENTS', 'CRUD', 'DOM']);
+        this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, [
+            this.createNavItemIconModel('ELEMENTS'),
+            this.createNavItemIconModel('CRUD'),
+            this.createNavItemIconModel('DOM')
+        ]);
 	}
 	/** Adds a single NAV Icon and associated SIDEBAR
 	    @param {string} name Name

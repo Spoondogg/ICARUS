@@ -7,11 +7,10 @@ import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 export default class DIV extends EL {
 	/** Constructs a DIV element
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
-	    @param {string} innerHtml Inner Html
+	    @param {MODEL} [model] Model
 	*/
-	constructor(node, model, innerHtml) {
-		super(node, 'DIV', model, innerHtml);
+	constructor(node, model) {
+		super(node, 'DIV', model);
 	}
 }
 export { ATTRIBUTES, EL, MODEL }

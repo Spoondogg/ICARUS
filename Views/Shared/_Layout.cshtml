@@ -12,6 +12,26 @@
     <meta name="theme-color" content="#FFF" />
     <meta name="token" content="" />
     <meta name="user" content="@User.Identity.Name" />
+    @using Microsoft.AspNet.Identity
+    @using Microsoft.AspNet.Identity.Owin;
+    @if (Request.IsAuthenticated) {
+        string userId = User.Identity.GetUserId();
+        string role = "Guest";
+        var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        try {
+            if (userId != null) {
+                var userRoles = userManager.GetRoles(userId);
+                role = String.Join(",", userRoles);
+            }
+        } catch (Exception e) {
+            <script>
+                console.warn('_Layout', '@e.GetType()', '@e.Message');
+            </script>
+        }
+        <meta name="roles" content="@role" />
+    } else {
+        <meta name="roles" content="Guest" />
+    }
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - ICARUS @ViewBag.Version</title>
     @* Preload these scripts
@@ -26,7 +46,7 @@
         <!-- iPad Pro 12.9" (2048px x 2732px) -->
         <link rel="apple-touch-startup-image" href="/apple-launch-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
     *@
-    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Logo.png")" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/Images/Icon.png")" />
     @* iPhone X (1125px x 2436px) *@
     <link rel="apple-touch-startup-image" href="@Url.Content("~/Content/Images/startup/startup-1125x2436.png")" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
     @* iPhone 8, 7, 6s, 6 (750px x 1334px) *@
@@ -38,20 +58,21 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato|Raleway">
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/vendor.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/styles/icarus.min.css")" />
-    @* <script src="https://apis.google.com/js/platform.js" async defer></script> *@
+    @*<script src="http://spoonmedia.ca:9000/target/target-script-min.js#anonymous"></script>*@
+    @*<script src="http://localhost:1337/vorlon.js"></script>*@
+    @*<script src="http://spoonmedia.ca:1337/vorlon.js"></script>*@
+    @*<script src="https://apis.google.com/js/platform.js" async defer></script>*@
     <script src="@Url.Content("~/Scripts/vendor.js")"></script>
-    @*
-        <script>
+    @*<script>
             // https://github.com/nolanlawson/pinafore/issues/45#issuecomment-400887012
             var manifest = document.querySelector('link[rel=manifest]');
             if ('standalone' in navigator) manifest.parentNode.removeChild(manifest);
-        </script>
-    *@
+        </script>*@
 </head>
-<body>
+<body class="icarus">
     @Html.AntiForgeryToken() @* The AntiForgery Token is required on ALL pages *@
     @* NoScript tag when Javascript is disabled *@
-    @if (IsSectionDefined("NoScript")) {  
+    @if (IsSectionDefined("NoScript")) {
         @RenderSection("NoScript", required: false)
     } else {
         <noscript>

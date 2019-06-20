@@ -50,6 +50,9 @@ namespace ICARUS.Controllers {
         public DbSet<Container> Containers { get; set; }
         public object Container { get; internal set; }
 
+        public DbSet<CLASSINDEX> ClassIndexes { get; set; }
+        public object ClassIndex { get; internal set; }
+
         public DbSet<CLASSVIEWER> ClassViewers { get; set; }
         public object ClassViewer { get; internal set; }
 
@@ -61,6 +64,27 @@ namespace ICARUS.Controllers {
 
         public DbSet<SECTION> Sections { get; set; }
         public object Section { get; internal set; }
+
+        public DbSet<TABLE> Tables { get; set; }
+        public object Table { get; internal set; }
+
+        public DbSet<THEAD> THeads { get; set; }
+        public object THead { get; internal set; }
+
+        public DbSet<TBODY> TBodys { get; set; }
+        public object TBody { get; internal set; }
+
+        public DbSet<TFOOT> TFoots { get; set; }
+        public object TFoot { get; internal set; }
+
+        public DbSet<TR> TRs { get; set; }
+        public object Tr { get; internal set; }
+
+        public DbSet<TH> THs { get; set; }
+        public object Th { get; internal set; }
+
+        public DbSet<TD> TDs { get; set; }
+        public object Td { get; internal set; }
 
         // FORM
         public DbSet<FORM> Forms { get; set; }
@@ -77,6 +101,9 @@ namespace ICARUS.Controllers {
 
         public DbSet<FORMINPUT> FormInputs { get; set; }
         public object FormInput { get; internal set; }
+
+        public DbSet<FORMTEXTAREA> FormTextAreas { get; set; }
+        public object FormTextArea { get; internal set; }
 
         public DbSet<Input> Inputs { get; set; }
         public object Input { get; internal set; }
@@ -105,9 +132,6 @@ namespace ICARUS.Controllers {
 
         public DbSet<IMAGEGALLERY> ImageGalleries { get; set; }
         public object ImageGallery { get; internal set; }
-
-        public DbSet<INDEXMAIN> IndexMains { get; set; }
-        public object IndexMain { get; internal set; }
 
         public DbSet<CHAT> Chats { get; set; }
         public object Chat { get; internal set; }
@@ -167,15 +191,24 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("Main", Mains);
             this.dbSets.Add("Container", Containers);
             this.dbSets.Add("CLASSVIEWER", ClassViewers);
+            this.dbSets.Add("CLASSINDEX", ClassIndexes);
             this.dbSets.Add("CHAT", Chats);
             this.dbSets.Add("IFrame", IFrames);
             this.dbSets.Add("ARTICLE", Articles);
             this.dbSets.Add("SECTION", Sections);
+            this.dbSets.Add("TABLE", Tables);
+            this.dbSets.Add("THEAD", THeads);
+            this.dbSets.Add("TBODY", TBodys);
+            this.dbSets.Add("TFOOT", TFoots);
+            this.dbSets.Add("TR", TRs);
+            this.dbSets.Add("TH", THs);
+            this.dbSets.Add("TD", TDs);
             this.dbSets.Add("Form", Forms);
             this.dbSets.Add("FieldSet", FieldSets);
             this.dbSets.Add("FormElementGroup", FormElementGroups);
             this.dbSets.Add("FORMELEMENT", FormElements);
             this.dbSets.Add("FORMINPUT", FormInputs);
+            this.dbSets.Add("FORMTEXTAREA", FormTextAreas);
             this.dbSets.Add("Input", Inputs);
             this.dbSets.Add("Select", Selects);
             this.dbSets.Add("TextArea", TextAreas);
@@ -185,7 +218,6 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("MenuList", MenuLists);
             this.dbSets.Add("IMAGEGALLERY", ImageGalleries);
             this.dbSets.Add("Index", Indexes);
-            this.dbSets.Add("IndexMain", IndexMains);
             this.dbSets.Add("Jumbotron", Jumbotrons);
             this.dbSets.Add("Banner", Banners);
             this.dbSets.Add("Paragraph", Paragraphs);

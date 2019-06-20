@@ -66,10 +66,9 @@ namespace ICARUS.Controllers {
         /// Previous signature: Login(LoginViewModel model, string returnUrl)
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="returnUrl"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous] //ValidateAntiForgeryToken
-        public async Task<ActionResult> Login(FormPost model, string returnUrl) {
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken] //ValidateAntiForgeryToken
+        public async Task<ActionResult> Login(FormPost model) { //string returnUrl
             try {
                 var formResults = model.resultsToDictionary();
                 // This doesn't count login failures towards account lockout
@@ -227,15 +226,18 @@ namespace ICARUS.Controllers {
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new {
+                        userId = user.Id,
+                        code = code
+                    }, protocol: Request.Url.Scheme);
 
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     //return RedirectToAction("Index", "Home");
-                    return Json(new Payload(1, "An email to confirm your account has been sent."));
+                    return Json(new Payload(2, "Notification", result, "An email to confirm your account has been sent."));
                 } else {
                     AddErrors(result);
-                    return Json(new Payload(2, "Result", result, "Failed to created user.  See Results for details."));
+                    return Json(new Payload(2, "Error", result, "Failed to create user.  See Results for details."));
                 }
             } catch (Exception e) {
                 return Json(new Payload(2, e, "An exception occurred trying to register a user."));
@@ -259,15 +261,45 @@ namespace ICARUS.Controllers {
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-        /// <summary>
+        /*/// <summary>
         /// GET: /Account/ForgotPassword
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
         public ActionResult ForgotPassword() {
             return View();
-        }
+        }*/
         /// <summary>
+        /// Recieves a FormPost containing an email associated with Forgotten Password
+        /// POST: /Account/ForgotPassword
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(FormPost model, string returnUrl) {
+            try {
+                var formResults = model.resultsToDictionary();
+                var email = formResults["Email"].ToString();
+                var user = await UserManager.FindByNameAsync(email);
+
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id))) {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    //return View("ForgotPasswordConfirmation");
+                    return Json(new Payload(5, "InvalidForgotPasswordAttempt", model), JsonRequestBehavior.AllowGet);
+                }
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = user.Email, resetpassword = 1 }, protocol: Request.Url.Scheme);		
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                return Json(new Payload(1, "MODEL", "Forgot Password notification sent"));
+            } catch (Exception e) {
+                return Json(new Payload(2, e, "An exception occurred trying to validate a forgotten password"));
+            }
+        }
+        /*/// <summary>
         /// POST: /Account/ForgotPassword
         /// </summary>
         /// <param name="model"></param>
@@ -291,7 +323,7 @@ namespace ICARUS.Controllers {
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
+        }*/
         /// <summary>
         /// GET: /Account/ForgotPasswordConfirmation
         /// </summary>
@@ -310,23 +342,37 @@ namespace ICARUS.Controllers {
         public ActionResult ResetPassword(string code) {
             return code == null ? View("Error") : View();
         }
-        // POST: /Account/ResetPassword
+        /// <summary>
+        /// POST: /Account/ResetPassword
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
-            if (!ModelState.IsValid) {
-                return View(model);
+        public async Task<ActionResult> ResetPassword(FormPost model) {
+            try {
+                var formResults = model.resultsToDictionary();
+                var code = formResults["Code"].ToString();
+                var password = formResults["Password"].ToString();
+                var email = formResults["Email"].ToString();
+
+                var user = await UserManager.FindByNameAsync(email);
+                if (user == null) {
+                    // Don't reveal that the user does not exist
+                    //return RedirectToAction("ResetPasswordConfirmation", "Account");
+                    return Json(new Payload(5, "InvalidResetPasswordAttempt", model), JsonRequestBehavior.AllowGet);
+                }
+                var result = await UserManager.ResetPasswordAsync(user.Id, code, password);
+                if (result.Succeeded) {
+                    //return RedirectToAction("ResetPasswordConfirmation", "Account");
+                    return Json(new Payload(1, "MODEL", "Password reset success"));
+                } else {
+                    return Json(new Payload(2, "MODEL", "Password reset failed"));
+                }
+            } catch (Exception e) {
+                return Json(new Payload(2, e, "An exception occurred trying to reset a password"));
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null) {
-                // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded) {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            AddErrors(result);
-            return View();
+            //AddErrors(result);
+            //return View();
         }
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
@@ -452,7 +498,7 @@ namespace ICARUS.Controllers {
                     TempData["payload"] = model;
 
                     //return RedirectToLocal(returnUrl);
-                    //return Json(new Payload(1, "RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
+                    //return Json(new Payload(1, "SignInStatus.Success: RedirectToLocal(returnUrl)", model), JsonRequestBehavior.AllowGet);
                     return RedirectToAction("Index", "Home");
 
                 case SignInStatus.LockedOut:
@@ -490,7 +536,7 @@ namespace ICARUS.Controllers {
                     ///////  Instead of returning the ExternalLoginConfirmation View, try processing the results right now!
 
                     if (User.Identity.IsAuthenticated) {
-                        return Json(new Payload(1, "RedirectToAction", model, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
+                        return Json(new Payload(1, "ExternaLoginConfirmation: RedirectToAction", model, "RedirectToAction('Index', 'Manage')"), JsonRequestBehavior.AllowGet);
                     }
                     
                     // Get the information about the user from the external login provider
@@ -513,7 +559,7 @@ namespace ICARUS.Controllers {
                             rslt = await UserManager.AddToRoleAsync(user.Id, "User");
                             if(rslt.Succeeded) {
                                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                                //return Json(new Payload(1, "RedirectToLocal", model), JsonRequestBehavior.AllowGet);
+                                //return Json(new Payload(1, "AttemptToCreateUser: RedirectToLocal", model), JsonRequestBehavior.AllowGet);
                                 return RedirectToLocal(returnUrl);
                             }
                         }
@@ -524,7 +570,7 @@ namespace ICARUS.Controllers {
                     return Json(
                         new Payload(
                             2, "AccountController.ExternalLoginCallback", 
-                            model, "Failed to creat user"
+                            model, "Failed to create user"
                         ), JsonRequestBehavior.AllowGet
                     );
                     //return Json(new Payload(5, "SignInStatus.Failure", model), JsonRequestBehavior.AllowGet);

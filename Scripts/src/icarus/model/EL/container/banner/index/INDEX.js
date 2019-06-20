@@ -1,50 +1,76 @@
 /** @module  */
-import PANEL, { CONTAINER, MODEL } from '../../../dialog/panel/PANEL.js';
-import BANNER from '../BANNER.js';
+import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
+import CONTAINER, { MODEL } from '../../CONTAINER.js';
+import MENU, { Collapse, Expand } from '../../../nav/menu/MENU.js';
+import CLASSINDEX from '../classindex/CLASSINDEX.js';
+import CLASSVIEWER from '../classviewer/CLASSVIEWER.js';
+import Clickable from '../../../../../interface/Clickable.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
+import PANEL from '../../../dialog/panel/PANEL.js';
 /** Contains a high level view of all objects owned by this user
     @class
-    @extends BANNER
 */
-export default class INDEX extends BANNER {
+export default class INDEX extends CONTAINER {
 	/** Constructs an INDEX Container Element for browsing CONTAINERS
 	    @param {CONTAINER} node Parent node
-	    @param {MODEL} model INDEX model	    
+	    @param {MODEL} [model] INDEX model	    
     */
 	constructor(node, model) {
-		super(node, model);
-		this.addClass('index');
-		this.addContainersMenu();
-		//this.navheader.expand();
+		super(node, 'DIV', model);
+        this.addClass('index');
+        this.menu = new MENU(this.body.pane, new MODEL().set('name', 'index'));
+        this.addContainersMenu();
+        this.menu.el.dispatchEvent(new Expand(this.menu));
 	}
-	constructElements() {
-		return Promise.resolve(this);
-	}
+    constructElements() {
+        return this.chain(() => {
+            if (this.dataId > 0) {
+                this.createEditableElement('header', this.childLocation);
+                this.configureHeader();
+                if (parseInt(this.data.showHeader) === 1) {
+                    this.createEditableElement('p', this.childLocation);
+                }
+            }/*else {
+                console.log('No data exists for ' + this.toString());
+                this.navheader.el.dispatchEvent(new Expand(this.navheader));
+            }*/
+        });
+    }
+    /** Adds appropriate Event handlers to Header
+        @returns {void}
+    */
+    configureHeader() {
+        this.header.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
+        this.header.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+        this.addHeaderEvents();
+    }
 	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
 	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
 	    @returns {void}
 	*/
 	addContainersMenu() {
-		try {
-			// Create Primary Options tab and Menu
-			let btnContainers = this.navheader.tabs.addNavItemIcon(new MODEL().set({
-				icon: ICONS.COG,
-				label: 'ELEMENTS'
-			}));
-			let containerOptions = this.navheader.menus.addNavBar(new MODEL().set('name', 'ELEMENTS'));
-			this.navheader.addTabbableElement(btnContainers, containerOptions);
+		try {			
 			// Create Secondary Tabs and Horizontal Menus inside Menu
-			let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'WORD', 'IMAGEGALLERY'];
+			let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEGALLERY'];
 			allowed.map((name) => {
-				let tb = containerOptions.tabs.addNavItemIcon(new MODEL().set({
+				let tb = this.menu.addNavItemIcon(new MODEL().set({
 					label: name,
 					icon: ICONS[name]
-				}));
-				let opt = containerOptions.menus.addMenu(new MODEL('horizontal').set('name', name));
-				containerOptions.addTabbableElement(tb, opt);
-				this.addThumbButtonActions(name, tb, opt);
-				////  YOU SHOULD CREATE A TABBABLE ELEMENT (CONTAINER-PREVIEW) that can be populated with the element
+                }));
+                tb.el.addEventListener('activate', () => {
+                    let prompt = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classindex'), {
+                        container: this.getContainer(),
+                        caller: tb,
+                        label: 'CLASSINDEX: ' + name,
+                        text: 'View ' + name
+                    }));
+                    let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), name);
+                    viewer.setContainer(this.node.node.node.getContainer());
+                    viewer.body.el.dispatchEvent(new Expand(viewer));
+                    prompt.showDialog();
+                });
+				///this.addThumbButtonActions(name, tb, opt);
 			});
 		} catch (e) {
 			let modal = this.getProtoTypeByClass('MODAL');
@@ -62,7 +88,48 @@ export default class INDEX extends BANNER {
 				}
 			}
 		}
-	}
+    }
+    /** Launches a Class Viewer after confirmation
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    confirmView(model) {
+        CONFIRM.confirmMethodCall(
+            'Launch Viewer',
+            'Launch viewer for ' + this.classType + ' "' + model.label + '(' + model.id + ')"?',
+            () => {
+                console.log('Confirmed.  Viewing ' + this.classType + '(' + model.id + ')');
+                this.launchClassViewer(model.id, this.classType);
+            }
+        );
+    }
+    /** Launches a CLASSVIEWER for the given id and classType
+        @param {UId} id CONTAINER UId
+        @param {string} classType CONTAINER class
+        @returns {void}
+    */
+    launchClassViewer(id, classType) {
+        if (classType === 'MAIN') {
+            CONFIRM.confirmMethodCall(
+                'Launch MAIN Viewer',
+                classType + ' "(' + id + ') will launch in a new window.  Proceed?',
+                () => {
+                    console.log('Confirmed.  Viewing ' + classType + '(' + id + ')');
+                    window.open('/' + id, '_blank');
+                }
+            );
+        } else {
+            let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
+                container: this.getContainer(),
+                caller: this,
+                label: 'ClassViewer: ' + classType + ' # ' + id
+                //text: 'Viewing ' + classType + ' (' + id + ')"'
+            }), false);
+            let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType), classType);
+            viewer.body.el.dispatchEvent(new Expand(viewer));
+            this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
+        }
+    }
 	/** If no children supplied...
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
@@ -100,8 +167,9 @@ export default class INDEX extends BANNER {
                                         label: element + '(' + id + ')',
 										caller: icon,
 										container: this
-									}));
-									panel.body.addContainerCase(element);
+                                    }));
+                                    let elementsMenu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
+                                    panel.body.addContainerCase(elementsMenu, element);
 									panel.body.populate([result.model]).then((results) => {
 										try {
 											results.body.pane.children[1].navheader.expand();

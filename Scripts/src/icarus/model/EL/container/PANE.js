@@ -14,7 +14,7 @@ export default class PANE extends DIV {
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('pane');
-		this.implement(new Swipeable(this));
+        this.implement(new Swipeable(this, parseInt(getComputedStyle(this.el).width) * 0.85, true, true));
 		this.swipeUp = () => {
 			console.log('swipeUp');
 			let { navheader } = this.getContainer();

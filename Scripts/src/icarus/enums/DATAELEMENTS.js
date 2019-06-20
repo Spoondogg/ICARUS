@@ -37,8 +37,8 @@ export const DATAELEMENTS = new Map([
     [
         'CONTAINER', {
             data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'CHECKBOX'),
-                createInputModel('INPUT', 'collapsed', '1', 'collapsed', 'CHECKBOX')
+                createInputModel('INPUT', 'showNav', '-1', 'showNav', 'CHECKBOX'),
+                createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'CHECKBOX')
             ],
             attributes: [
                 createInputModel('INPUT', 'name'),
@@ -49,8 +49,8 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'ARTICLE', {
-            containers: ['JUMBOTRON', 'FORM', 'SECTION']
-            //data: [createInputModel('INPUT', 'header')]
+            containers: ['JUMBOTRON', 'FORM', 'SECTION'],
+            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')]
         }
     ],
     [
@@ -60,6 +60,11 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('INPUT', 'p', 'Text')
             ]
+        }
+    ],
+    [
+        'CLASSVIEWER', {
+            data: [createInputModel('INPUT', 'classType', 'MAIN')]
         }
     ],
     [
@@ -105,7 +110,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'FORMELEMENTGROUP', {
-            containers: ['FORMINPUT'], //, 'FORMTEXTAREA'
+            containers: ['FORMINPUT', 'FORMTEXTAREA'],
             data: [createInputModel('INPUT', 'header')],
             attributes: [createInputModel('INPUT', 'name', 'text-input')]
         }
@@ -158,7 +163,16 @@ export const DATAELEMENTS = new Map([
         }
     ],
     ['INDEX', {}],
-    ['INDEXMAIN', {}],
+    [
+        'CLASSINDEX', {
+            data: [
+                createInputModel('INPUT', 'classType', 'MAIN'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'MAIN'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
+        }
+    ],
     [
         'INPUT', {
             data: [
@@ -192,7 +206,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'TABLE', 'INDEX', 'INDEXMAIN', 'CLASSVIEWER', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'TABLE', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'JUMBOTRON', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')
@@ -207,13 +221,61 @@ export const DATAELEMENTS = new Map([
     [
         'SECTION', {
             data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('TEXTAREA', 'p', 'Description')
             ]
 		}
 	],
 	['SIDEBAR', {}],
-	['TABLE', {}],
+    [
+        'TABLE', {
+            data: [createInputModel('INPUT', 'header', 'Header')]
+        }
+    ],
+    [
+        'TGROUP', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TBODY', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'THEAD', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TFOOT', {
+            data: [createInputModel('INPUT', 'name')]
+        }
+    ],
+    [
+        'TR', {
+            data: [createInputModel('INPUT', 'columns')]
+        }
+    ],
+    [
+        'TD', {
+            data: [
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
+            ]
+        }
+    ],
+    [
+        'TH', {
+            data: [
+                createInputModel('INPUT', 'type', 'text'),
+                createInputModel('INPUT', 'name', 'null'),
+                createInputModel('TEXTAREA', 'span', 'null')
+            ]
+        }
+    ],
 	[
 		'TEXTBLOCK', {
 			data: [
