@@ -38,7 +38,7 @@ export default class NAVBAR extends NAV {
         @param {boolean} isHorizontal If true (default), secondary tab menu is horizontal
         @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus
     */
-    addTabbableMenu(name, label = name, icon = ICONS.CERTIFICATE, secondaryTabs = [], isHorizontal = true) {
+    addTabbableMenu(name, label = name, icon = ICONS[name], secondaryTabs = [], isHorizontal = true) {
         let tabbable = this.addTabbableElement( // Create Primary tab and Menu
             this.tabs.addNavItemIcon(new MODEL().set({
                 icon,
