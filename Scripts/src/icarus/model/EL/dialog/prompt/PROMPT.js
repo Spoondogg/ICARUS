@@ -21,9 +21,10 @@ export default class PROMPT extends DIALOG {
 	    @returns {Promise<FORM>} Promise to return a FORM
 	*/
     createForm(model = new MODEL()) {
-        console.log('PROMPT.createForm()', model);
+        console.log(this.toString() + '.createForm()', model);
 		return new Promise((resolve, reject) => {
-			try {
+            try {
+                // @todo These should just be their own classes!!!
 				if (model.formtype === 'FORMPOST') {
 					FORM.createFormPostForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else if (model.formtype === 'CONTAINER') {
