@@ -166,6 +166,7 @@ namespace ICARUS.Controllers {
             columns.Add("authorId");
             columns.Add("status");
             columns.Add("label");
+            columns.Add("tags");
             columns.Add("dateCreated");
             columns.Add("dateLastModified");
             columns.Add("attributesId");
@@ -216,6 +217,58 @@ namespace ICARUS.Controllers {
             result.Add("total", total);
             result.Add("list", this.Call(procedure));
             
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Container Ids that contain this container
+        /// </summary>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
+        /// <param name="query">Search string</param>
+        /// <returns>A Json PageIndex</returns>
+        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", string query = null) {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("subsections");
+            columns.Add("authorId");
+            columns.Add("label");
+            columns.Add("description");
+            columns.Add("tags");
+            //columns.Add("metaId");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "pageLength", pageLen));
+            parameters.Add(new Param(3, "page", page));
+            parameters.Add(new Param(4, "query", query));
+
+            Procedure procedure = new Procedure("ICARUS.GetSearchList", columns, parameters);
+
+            List<string> searchCountCols = new List<string>();
+            searchCountCols.Add("count");
+
+            List<Param> searchCountParams = new List<Param>();
+            searchCountParams.Add(new Param(1, "discriminator", this.className));
+            searchCountParams.Add(new Param(2, "query", query));
+
+            Procedure searchCount = new Procedure("ICARUS.GetSearchCount", searchCountCols, searchCountParams);
+            //int totalNew = this.Call(searchCount);
+
+            /*int total = selectAll(getObjectDbContext()).Where(
+                m => m.label.ToLower().Contains(query.ToLower())
+            ).Count();*/
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("total", this.Call(searchCount)[0]["count"]);
+            result.Add("list", this.Call(procedure));
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
