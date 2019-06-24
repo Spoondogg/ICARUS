@@ -230,7 +230,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<FORM>} An empty form container
 	*/
     static createEmptyForm(node, hidden = false) {
-        console.log('FORM.createEmptyForm()');
+        //console.log('FORM.createEmptyForm()');
 		return new Promise((resolve, reject) => {
 			try {
 				let form = new FORM(node, new MODEL(new ATTRIBUTES('style', hidden ? 'display:none;' : '')).set('showNav', 0));

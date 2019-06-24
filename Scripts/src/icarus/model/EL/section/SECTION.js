@@ -21,10 +21,10 @@ export default class SECTION extends CONTAINER {
                 if (parseInt(this.data.showHeader) === 1) {
                     this.createEditableElement('p', this.childLocation);
                 }
-			} else {
+			} /*else {
                 console.log('No data exists for ' + this.toString());
 				this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }
+            }*/
 		});
 	}
 }
