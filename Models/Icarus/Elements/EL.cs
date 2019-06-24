@@ -78,6 +78,12 @@ namespace ICARUS.Models.Icarus {
         public string subsections { get; set; }
 
         /// <summary>
+        /// A comma delimited list of tag ids (ie: 1,2,3)
+        /// </summary>
+        [Required]
+        public string tags { get; set; }
+
+        /// <summary>
         /// A related form post for generic data key/values
         /// </summary>
         [Required]
