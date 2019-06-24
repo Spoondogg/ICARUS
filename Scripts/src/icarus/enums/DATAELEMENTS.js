@@ -44,7 +44,10 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'name'),
                 createInputModel('INPUT', 'class')
             ],
-            meta: [createInputModel('TEXTAREA', 'description')]
+            meta: [
+                createInputModel('TEXTAREA', 'description'),
+                createInputModel('INPUT', 'tags', '0')
+            ]
         }
     ],
     [
