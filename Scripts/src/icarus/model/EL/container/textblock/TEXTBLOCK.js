@@ -24,10 +24,10 @@ export default class TEXTBLOCK extends CONTAINER {
             if (this.dataId > 0) {
                 this.createEditableElement('header', this.childLocation);
                 this.createEditableElement('p', this.childLocation);
-            } else {
+            } /*else {
                 console.log('No data exists for ' + this.toString());
                 this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }
+            }*/
 		});
 	}
 }
