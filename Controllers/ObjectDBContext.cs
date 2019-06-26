@@ -130,8 +130,8 @@ namespace ICARUS.Controllers {
         public DbSet<INDEX> Indexes { get; set; }
         public object Index { get; internal set; }
 
-        public DbSet<IMAGEGALLERY> ImageGalleries { get; set; }
-        public object ImageGallery { get; internal set; }
+        public DbSet<IMAGEINDEX> ImageIndexes { get; set; }
+        public object ImageIndex { get; internal set; }
 
         public DbSet<CHAT> Chats { get; set; }
         public object Chat { get; internal set; }
@@ -216,7 +216,7 @@ namespace ICARUS.Controllers {
             this.dbSets.Add("ListItem", ListItems);
             this.dbSets.Add("List", Lists);
             this.dbSets.Add("MenuList", MenuLists);
-            this.dbSets.Add("IMAGEGALLERY", ImageGalleries);
+            this.dbSets.Add("IMAGEINDEX", ImageIndexes);
             this.dbSets.Add("Index", Indexes);
             this.dbSets.Add("Jumbotron", Jumbotrons);
             this.dbSets.Add("Banner", Banners);

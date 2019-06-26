@@ -1,14 +1,14 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, MODEL } from '../../../group/buttongroup/BUTTONGROUP.js';
-import BANNER from '../BANNER.js';
+//import BANNER from '../BANNER.js';
+import CONTAINER from '../../CONTAINER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import NAVTHUMBNAIL from '../../../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 /** Contains a high level view of all objects owned by this user
     @class
-    @extends BANNER
 */
-export default class IMAGEGALLERY extends BANNER {
+export default class IMAGEINDEX extends CONTAINER {
 	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
@@ -27,14 +27,14 @@ export default class IMAGEGALLERY extends BANNER {
 		this.loadPage(this.page);
 	}
 	construct() {
-		let postUrl = '/ImageGallery/ImageIndex';
+		let postUrl = '/ImageIndex/ImageIndex';
 		if (this.page) {
 			postUrl += '?page=' + this.page + '&pageLength=' + this.pageLength;
 		}
 		$.post(postUrl, {
 				'__RequestVerificationToken': this.getMain().token //token.value
 			},
-			/** Processes the payload from /ImageGallery/ImageIndex?page=X&pageLenght=Y
+			/** Processes the payload from /ImageIndex/Index?page=X&pageLenght=Y
 				@param {any} payload The POST payload
 				@param {any} status The POST status
 			    @returns {void}

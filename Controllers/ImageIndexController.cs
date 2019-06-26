@@ -11,9 +11,9 @@ using System.Web.Mvc;
 
 namespace ICARUS.Controllers {
 
-    public class ImageGalleryController : ContainerController {
+    public class ImageIndexController : ContainerController {
 
-        public ImageGalleryController() : base("IMAGEGALLERY") {
+        public ImageIndexController() : base("IMAGEINDEX") {
 
         }
 
@@ -23,8 +23,8 @@ namespace ICARUS.Controllers {
         /// <returns>An image gallery</returns>
         public override Container make(FormPost formPost = null) {
             var obj = (formPost == null)
-                ? new IMAGEGALLERY()
-                : new IMAGEGALLERY(formPost);
+                ? new IMAGEINDEX()
+                : new IMAGEINDEX(formPost);
 
             obj.setAuthorId(User.Identity.Name);
 
@@ -36,9 +36,9 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="id"></param>
-        /// <returns>A single ImageGallery Element</returns>
+        /// <returns>A single ImageIndex Element</returns>
         public override Container select(ObjectDBContext ctx, int id) {
-            return ctx.ImageGalleries.AsQueryable().Single(FilterById(id));
+            return ctx.ImageIndexes.AsQueryable().Single(FilterById(id));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ICARUS.Controllers {
         /// <param name="id"></param>
         /// <returns>A collection of elements</returns>
         public override IEnumerable<Container> selectAll(ObjectDBContext ctx) {
-            return ctx.ImageGalleries.Where(FilterAllowed());
+            return ctx.ImageIndexes.Where(FilterAllowed());
         }
 
         // "http://localhost:8052/JUMBOTRON/Page?page=0&pageLength=2"/>
@@ -91,7 +91,7 @@ namespace ICARUS.Controllers {
         /// Returns a list of Image Ids
         /// </summary>
         /// <returns>A list of image Ids</returns>        
-        public async Task<ActionResult> ImageIndex(string page = "0", string pageLength = "10") {
+        public async Task<ActionResult> Index(string page = "0", string pageLength = "10") {
 
             int pageLen = Int32.Parse(pageLength);
             pageLen = (pageLen > 50) ? 50 : pageLen;
