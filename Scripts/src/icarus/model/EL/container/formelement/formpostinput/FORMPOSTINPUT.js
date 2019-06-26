@@ -67,14 +67,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @returns {Promise<PROMPT>} Promise to create a new FormPost DIALOG and return it
 	*/
 	createForm(className, type, id = 0, inputNode = null, model = new MODEL()) {
-		return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
 				console.log('CreateForm', container, typeof container);
 				new PROMPT(new DIALOGMODEL(new MODEL(), {
 					container,
                     caller: this,
-                    label: 'Create FormPost Form'
+                    label: className + '.' + type + '(' + id + ') '
                 })).createForm(new MODEL().set({
                     data: model.data,
                     //attributes: model.attributes,

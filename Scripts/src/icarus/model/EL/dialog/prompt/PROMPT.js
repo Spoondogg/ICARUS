@@ -20,8 +20,10 @@ export default class PROMPT extends DIALOG {
 	    @param {FormModel} [model] FormModel
 	    @returns {Promise<FORM>} Promise to return a FORM
 	*/
-    createForm(model = new MODEL()) {
-        console.log(this.toString() + '.createForm()', model);
+    createForm(model = new MODEL().set({
+        container: this.container
+    })) {
+        //console.log(this.toString() + '.createForm()', model);
 		return new Promise((resolve, reject) => {
             try {
                 // @todo These should just be their own classes!!!
@@ -44,7 +46,7 @@ export default class PROMPT extends DIALOG {
 	    @returns {Promise<FORM>} Promise Chain
 	*/
     configureForm(form, model) {
-        console.log(this.toString() + '.configureForm()', form, model);
+        //console.log(this.toString() + '.configureForm()', form, model);
 		return new Promise((resolve, reject) => {
             try {
 				form.getDialog = () => this;

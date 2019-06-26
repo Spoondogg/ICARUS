@@ -59,6 +59,7 @@
     @property {boolean} [shared=false] Shared
     @property {string} [status=1] Status
     @property {UIdList} [subsections] Child Container UIds
+    @property {UIdList} [tags] Tag UIds
     @property {string} [name] Name
 */
 /** Represents a LOADER Class Structure

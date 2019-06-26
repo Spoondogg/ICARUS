@@ -4,7 +4,6 @@ import CONTAINER, { MODEL } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand } from '../../../nav/menu/MENU.js';
 import CLASSINDEX from '../classindex/CLASSINDEX.js';
 import CLASSVIEWER from '../classviewer/CLASSVIEWER.js';
-import Clickable from '../../../../../interface/Clickable.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 import PANEL from '../../../dialog/panel/PANEL.js';
 /** Contains a high level view of all objects owned by this user
@@ -52,7 +51,7 @@ export default class INDEX extends CONTAINER {
 	addContainersMenu() {
 		try {			
 			// Create Secondary Tabs and Horizontal Menus inside Menu
-			let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEGALLERY'];
+            let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEINDEX'];
 			allowed.map((name) => {
 				let tb = this.menu.addNavItemIcon(new MODEL().set({
 					label: name,

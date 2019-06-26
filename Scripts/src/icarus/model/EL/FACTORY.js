@@ -2,7 +2,10 @@
 import CONTAINER, { Deactivate } from './container/CONTAINER.js';
 import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
+import { ICONS } from '../../enums/ICONS.js';
 import PAYLOAD from './form/PAYLOAD.js';
+import SEARCH from './dialog/prompt/SEARCH/SEARCH.js';
+import { createInputModel } from '../../enums/DATAELEMENTS.js'; //DATAELEMENTS
 //import { showdown } from 'showdown';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
@@ -245,17 +248,18 @@ export default class FACTORY {
         @param {string} classType Default class to display
         @param {CONTAINER} container Calling container
         @param {EL} caller Calling element (ie: switchable element resolved)
+        @param {string} [query] Optional Query String
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this) {
-        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller);
+    launchViewer(classType = 'MAIN', container = this, caller = this, query = null) {
+        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller, query);
         return Promise.resolve(false);
     }
     /** Saves the state of the CONTAINER
-        @param {boolean} noPrompt If false (default), no dialog is displayed and the form is automatically submitted after population
-        @param {CONTAINER} container Container to save (Default this)
-        @param {EL} caller Element that called the save (ie: switchable element resolved)
-        @param {string} name optional named element to focus in PROMPT.form
+        @param {boolean} [noPrompt] If false (default), no dialog is displayed and the form is automatically submitted after population
+        @param {CONTAINER} [container] Container to save (Default this)
+        @param {EL} [caller] Element that called the save (ie: switchable element resolved)
+        @param {string} [name] optional named element to focus in PROMPT.form
 	    @returns {Promise<PROMPT>} Promise to Save (or prompt the user to save) 
 	*/
     save(noPrompt = false, container = this, caller = this, name = null) {
@@ -263,7 +267,7 @@ export default class FACTORY {
         return new Promise((resolve) => {
             caller.getLoader().log(25).then((loader) => {
                 let prompt = new PROMPT(new MODEL().set({
-                    label: 'Save ' + container.toString(),
+                    label: 'Save ' + container.toString() + ': ' + container.label,
                     container,
                     caller
                 }));
@@ -289,6 +293,87 @@ export default class FACTORY {
                     loader.log(100).then(() => {
                         if (noPrompt) {
                             form.post().then(() => form.getDialog().close().then((dialog) => resolve(dialog)));
+                        } else {
+                            resolve(form.getDialog().show());
+                        }
+                    });
+                });
+            });
+        });
+    }
+    /** Performs the SEARCH Query and populates results
+        @param {string} queryString Query String
+        @param {CONTAINER} container Container to search (Default this)
+        @param {SEARCH} prompt A SEARCH Prompt
+        @param {number} [minLength] Minimum search string length
+        @returns {void}
+    */
+    submitSearch(queryString, container, prompt, minLength = 2) {
+        prompt.results.empty();
+        let results = null;
+        switch (queryString) {
+            case '*':
+                results = container.get();
+                break;
+            default:
+                if (queryString.length + 1 > minLength) {
+                    console.log('Searching ' + container.toString() + ' for "' + queryString + '"');
+                    results = container.query(queryString);
+                } else {
+                    console.warn('Invalid query "' + queryString + '". Search be at least ' + minLength + ' characters long', queryString.length);
+                    results = [];
+                }
+        }        
+        results.forEach((r) => {
+            let thumb = prompt.results.addNavThumbnail(new MODEL().set({
+                id: r.id,
+                label: r.toString() + ': ' + r.label,
+                //icon: ICONS[r.className],
+                name: r.toString()
+            }), [r.className]);
+            let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
+                label: 'View ' + r.className,
+                icon: ICONS[r.className],
+                name: 'VIEW'
+            }));
+            //btnView.el.addEventListener('click', () => this.confirmView(model));
+            btnView.el.addEventListener('click', () => console.log('TODO: Launch Viewer'));
+        });
+    }
+    /** Searches the children of this Element and displays results in a PROMPT (Or passes them along the chain)
+        @param {boolean} noPrompt If false (default), no dialog is displayed and the results are passed along
+        @param {CONTAINER} container Container to search (Default this)
+        @param {EL} caller Element that called the search (ie: switchable element resolved)
+        @param {string} query optional named element to focus in PROMPT.form
+	    @returns {Promise<PROMPT>} Promise to show SEARCH Prompt (or pass along results)
+	*/
+    search(noPrompt = false, container = this, caller = this, query = null) {
+        console.log(caller.toString() + ' is attempting to SEARCH ' + container.toString(), query);
+        return new Promise((resolve) => {
+            caller.getLoader().log(25).then((loader) => {
+                let prompt = new SEARCH(new MODEL().set({
+                    label: 'Search ' + container.toString(),
+                    container,
+                    caller
+                }));
+                prompt.createForm().then((form) => {
+                    form.setAction('#');
+                    form.setId(0);
+                    form.label = 'Search';
+                    let inp = form.getFieldset()[0].getFormElementGroup()[0].addFormInput(
+                        createInputModel('INPUT', 'Search').setAttribute('placeholder', 'Search ' + container.toString() + ' for...')
+                    );
+                    form.footer.buttonGroup.get()[0].setLabel('', ICONS.SEARCH);
+                    form.post = () => this.submitSearch(inp.input.el.value, container, prompt);
+
+                    prompt.form = form;
+                    if (query !== null) {
+                        console.log(container.toString() + 'Query', query);
+                    }
+                    loader.log(100).then(() => {
+                        if (noPrompt) {
+                            console.log('noprompt');
+                            form.getDialog().close().then((dialog) => resolve(dialog));
                         } else {
                             resolve(form.getDialog().show());
                         }

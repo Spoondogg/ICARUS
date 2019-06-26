@@ -165,7 +165,7 @@
     <Compile Include="Controllers\DocumentationController.cs" />
     <Compile Include="Controllers\FormTextAreaController.cs" />
     <Compile Include="Controllers\FormInputController.cs" />
-    <Compile Include="Controllers\ImageGalleryController.cs" />
+    <Compile Include="Controllers\ImageIndexController.cs" />
     <Compile Include="Controllers\TDController.cs" />
     <Compile Include="Controllers\THController.cs" />
     <Compile Include="Controllers\TRController.cs" />
@@ -530,10 +530,14 @@
     <Compile Include="Migrations\201905212116005_TableElements1.Designer.cs">
       <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906241603555_20190624__Tags.cs" />
+    <Compile Include="Migrations\201906241603555_20190624__Tags.Designer.cs">
+      <DependentUpon>201906241603555_20190624__Tags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
-    <Compile Include="Models\Icarus\Elements\IMAGEGALLERY.cs" />
+    <Compile Include="Models\Icarus\Elements\IMAGEINDEX.cs" />
     <Compile Include="Models\Icarus\Elements\TH.cs" />
     <Compile Include="Models\Icarus\Elements\TD.cs" />
     <Compile Include="Models\Icarus\Elements\TR.cs" />
@@ -698,6 +702,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
+    <Content Include="Scripts\src\icarus\model\el\dialog\prompt\SEARCH\SEARCH.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
@@ -740,7 +745,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\banner\BANNER.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\callout\CALLOUT.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\imagegallery\IMAGEGALLERY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\banner\imageindex\IMAGEINDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\classindex\CLASSINDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\index\INDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
@@ -1155,6 +1160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905212116005_TableElements1.resx">
       <DependentUpon>201905212116005_TableElements1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906241603555_20190624__Tags.resx">
+      <DependentUpon>201906241603555_20190624__Tags.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

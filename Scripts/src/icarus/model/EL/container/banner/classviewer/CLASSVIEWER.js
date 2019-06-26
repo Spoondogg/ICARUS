@@ -1,6 +1,6 @@
 /** @module */
 import CONTAINER, { HEADER, MODEL } from '../../CONTAINER.js';
-/** Contains a high level view of the specified CONTAINER Class if it is available to the user
+/** Contains a high level view of the specified CONTAINER Class(es) if available to the user
     @class
 */
 export default class CLASSVIEWER extends CONTAINER {
@@ -8,11 +8,13 @@ export default class CLASSVIEWER extends CONTAINER {
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} model INDEX model
         @param {string} classType Default class to display
+        @param {string} [query] Optional Query String
 	*/
-    constructor(node, model, classType = 'MAIN') {
+    constructor(node, model, classType = 'MAIN', query = null) {
         super(node, 'DIV', model, [classType]);
         this.addClass('classviewer');
         this.classType = classType;
+        this.query = query;
         this.header = new HEADER(this.body, new MODEL().set('innerHTML', classType + ' viewer'));
     }
     construct() {
