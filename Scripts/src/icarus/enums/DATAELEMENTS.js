@@ -209,7 +209,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'TABLE', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'JUMBOTRON', 'IMAGEGALLERY', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'FORM', 'TABLE', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')

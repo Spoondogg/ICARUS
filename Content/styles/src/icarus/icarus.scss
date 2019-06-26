@@ -363,7 +363,7 @@ $z-bottom: -1;
     }
 
     &.selected {
-        background-color: red;
+        background-color: $color-red;
     }
 
     &.wide-tab {
@@ -389,6 +389,41 @@ $z-bottom: -1;
             > span {
                 line-height: 2rem;
             }
+        }
+    }
+
+    &.nav-item-search {
+        box-sizing: border-box;
+        height: 4rem;
+        line-height: 4rem;
+        margin: 0;
+        padding: .5rem 0;
+
+        > a {
+            display: none;
+        }
+
+        > input {
+            border-radius: 5px 0 0 5px;
+            border-right: 1px solid #676767;
+            box-sizing: border-box;
+            clear: left;
+            float: left;
+            height: 3rem;
+            margin: 0 0 0 .5rem;
+            width: calc(100% - 4rem);
+        }
+
+        > button {
+            border-left: 1px solid #ef3131;
+            border-radius: 0 5px 5px 0;
+            box-sizing: border-box;
+            clear: right;
+            float: right;
+            height: 3rem;
+            margin: 0 .5rem 0 0;
+            padding: 0;
+            width: 3rem;
         }
     }
 }
@@ -602,7 +637,9 @@ html {
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;
         margin: 1rem auto;
+        max-height: 100vh;
         max-width: $body-width;
+        overflow-y: auto;
         padding: 0;
         position: absolute;
         top: 0;
@@ -867,6 +904,41 @@ html {
                     display: none;
                 }
             }
+
+            &.prompt-search {
+                height: calc(100vh - 4rem);
+
+                > .body {
+                    height: calc(100vh - 11rem);
+
+                    > .pane {
+                        height: auto;
+                        max-height: initial;
+
+                        .search-results {
+                            height: calc(100vh - 20rem);
+                            max-height: calc(100vh - 20rem);
+                            overflow-y: auto;
+                        }
+
+                        form {
+                            //bottom: 3rem;
+                            //position: fixed;
+                            .form-element {
+                                &[name='Search'] {
+                                    label {
+                                        display: none;
+                                    }
+                                }
+                            }
+
+                            .form-footer {
+                                height: calc(4rem - 1px);
+                            }
+                        }
+                    }
+                }
+            }
         }
         /// A Panel style Dialog
         /// @group dialog
@@ -1100,28 +1172,37 @@ html {
             }
         }
     }
-    /// A vertically aligned button group
-    /// @todo This should just be a list...  shouldn't it?
-    /// @group review
-    .btn-group-vertical {
-        width: 100%;
 
-        button {
-            &:first-child {
-                &:not(:last-child) {
-                    border-radius: 0;
+    .btn-group {
+        height: $navbar-height;
+
+        .btn {
+            height: $navbar-height;
+        }
+        /// A vertically aligned button group
+        /// @todo This should just be a list...  shouldn't it?
+        /// @group review
+        &.btn-group-vertical {
+            height: auto;
+            width: 100%;
+
+            button {
+                &:first-child {
+                    &:not(:last-child) {
+                        border-radius: 0;
+                    }
                 }
-            }
 
-            &:last-child {
-                &:not(:first-child) {
-                    // override vendor
-                    border-radius: 0;
+                &:last-child {
+                    &:not(:first-child) {
+                        // override vendor
+                        border-radius: 0;
+                    }
                 }
-            }
 
-            .btn {
-                margin: 0;
+                .btn {
+                    margin: 0;
+                }
             }
         }
     }
@@ -1136,9 +1217,9 @@ html {
         display: block;
         float: left;
         font-size: smaller;
-        height: $navbar-height - 1rem;
-        line-height: $navbar-height - 1rem;
-        overflow: hidden;
+        line-height: $navbar-height;
+        min-height: $navbar-height;
+        //overflow: hidden;
         padding: 0;
         width: 100%;
         /// Button within a footer
@@ -1603,6 +1684,11 @@ html {
         position: relative;
         transition: position 800ms;
         transition-delay: 300ms;
+    }
+    /// https://stackoverflow.com/a/22913340/722785
+    .glyphicon-blank:before {
+        content: "\2122"; //minus sign
+        color: transparent !important;
     }
     /// A clickable icon with embedded label
     &.icon {
@@ -2291,9 +2377,9 @@ html {
                         th {
                             background-color: $color-blue-deep;
                             border-right: 1px solid grey;
+                            bottom: 0;
                             color: $color-white;
                             position: sticky;
-                            bottom: 0;
                             z-index: #{$z-top - 1};
 
                             &.active {
@@ -2667,7 +2753,7 @@ html {
                         }
                     }
                 }
-
+                ///
                 &.nav-item-thumbnail {
                     @extend %bevel-up;
                     //height: $thumbnail-height;
@@ -2701,44 +2787,121 @@ html {
                         }
 
                         header,
-                        p {
-                            color: $color-white;
+                        p,
+                        .detail {
                             clear: right;
+                            color: $color-white;
                             display: block;
                             float: left;
+                            margin: 0;
                             width: calc(100% - #{$thumbnail-height});
                         }
 
                         header {
                             font-weight: bold;
-                            padding-top: .5rem;
+                            height: 1rem;
+                            line-height: 1rem;
+                            margin-bottom: .25rem;
                         }
 
                         p {
-                            font-style: italic;
-                            height: 4rem;
-                            margin: 0;
+                            font-size: .8rem;
+                            height: 2rem;
+                            line-height: 1rem;
+                            max-height: 2rem;
                             overflow: hidden;
                         }
 
-                        .btn-group {
-                            float: right;
+                        .detail {
+                            font-size: .8rem;
+                            font-style: italic;
+                            height: 1rem;
+                            line-height: 1rem;
+                            overflow: hidden;
+
+                            .left,
+                            .right {
+                                display: block;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                width: 50%;
+                            }
+
+                            .left {
+                                clear: left;
+                                float: left;
+                            }
+
+                            .right {
+                                clear: right;
+                                float: right;
+                                text-align: right;
+
+                                > .icon {
+                                    font-size: 1rem;
+                                    padding-right: 1rem;
+                                }
+                            }
+                        }
+                        /// A group of star buttons representing a rating
+                        .star-group {
+                            &.right {
+                                padding-right: 1rem;
+                                button {
+                                    float: right;
+                                }
+                            }
 
                             button {
-                                background-color: $color-grey;
-                                border-radius: .8rem;
+                                background-color: transparent;
                                 border: 0;
+                                box-shadow: none;
+                                color: $color-white;
+                                font-size: 1rem;
+                                height: 1rem;
+                                line-height: 1rem;
+                                margin: 0 1px;
+                                padding: 0;
+                            }
+                        }
+                        /// A group of pill buttons representing tags
+                        .tag-group {
+                            @extend %horizontal-scroll;
+                            @extend %no-scroll-bar;
+                            display: inline-flex;
+                            height: 1.5rem;
+                            margin-top: .25rem;
+                            float: right;
+                            max-height: 1.5rem;
+                            width: calc(100% - #{$thumbnail-height});
+                            /// A tab style nav item
+                            //.nav-item {
+                            //    flex-basis: 8rem;
+                            //flex-grow: 1;
+                            //height: $navbar-height;
+                            //}
+                            button {
+                                background-color: $color-grey;
+                                border: 0;
+                                border-radius: .5rem;
                                 box-shadow: inset 1px 1px 2px $color-shadow-neutral;
                                 color: $color-white;
-                                font-size: smaller;
+                                //flex-basis: 16rem;
+                                flex-grow: 0;
+                                font-size: .8rem;
                                 font-weight: normal;
-                                height: 2rem;
+                                height: 1.5rem;
                                 line-height: 1rem;
-                                margin-right: 1rem;
-                                padding: 0 1rem;
+                                margin-right: .5rem;
+                                padding: .25rem .5rem;
 
                                 &:hover {
                                     background-color: $color-blue-deep;
+                                }
+
+                                > .icon {
+                                    display: none;
                                 }
                             }
                         }

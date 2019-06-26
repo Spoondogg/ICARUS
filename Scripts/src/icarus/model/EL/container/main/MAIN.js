@@ -297,7 +297,14 @@ export default class MAIN extends CONTAINER {
         usermenu.el.dispatchEvent(new Expand(usermenu));
         
 		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
-	}
+    }
+    submitSearch(ev, query, caller) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        console.log('Search', query);
+        // Replace with launchSearch()
+        this.getFactory().launchViewer('MAIN', this, caller, query);
+    }
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
@@ -306,11 +313,39 @@ export default class MAIN extends CONTAINER {
 			// LEFT ALIGN
 			this.createDocumentMap();
 			// History / Prev / Back Navigation
-            let btnPrev = this.navheader.addTabbableMenu('HISTORY', 'HISTORY', ICONS.CHEVRON_LEFT, [
-                this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
+            let tabbable = this.navheader.addTabbableMenu('SEARCH', 'SEARCH', ICONS.SEARCH, []);
+                /*this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
                 this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
-            ]);
-			$(btnPrev.tab.el).insertBefore(this.navheader.tab.el);
+            ]);*/
+            /// Override input defaults and pass to search
+            let navsearch = tabbable.element.addNavSearch(new MODEL('navsearch-woot'));
+
+            navsearch.input.el.addEventListener('keypress', (ev) => {
+                let evt = ev;
+                if (!ev) {
+                    evt = window.event;
+                }
+                let keyCode = evt.keyCode || evt.which;
+                if (keyCode === '13') { // Enter Key
+                    this.submitSearch(evt, navsearch.input.el.value.toString(), navsearch.button)
+                    return false;
+                }
+            });
+
+            navsearch.input.el.addEventListener('keyup', (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                console.log('Populate datalist Search', navsearch.input.el.value.toString());
+            });
+            navsearch.button.el.addEventListener('click', (ev) => this.submitSearch(ev, navsearch.input.el.value.toString(), navsearch.button));
+
+            $(tabbable.tab.el).insertBefore(this.navheader.tab.el);
+
+            tabbable.tab.el.addEventListener('activate', () => {
+                navsearch.el.dispatchEvent(new Activate(tabbable.tab));
+                navsearch.input.el.focus();
+            });
+
 			// RIGHT ALIGN
 			this.createUserMenu();
 			/*if (this.getUser() === 'Guest') {

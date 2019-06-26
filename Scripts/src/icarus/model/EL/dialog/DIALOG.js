@@ -104,7 +104,11 @@ export default class DIALOG extends EL {
     */
     deactivateCaller() {
         if (this.caller !== null) {
-            this.caller.deactivate();
+            try {
+                this.caller.deactivate();
+            } catch (e) {
+                console.warn('Unable to deactivate caller', this.caller.toString());
+            }
         }
     }
 	getContainer() {

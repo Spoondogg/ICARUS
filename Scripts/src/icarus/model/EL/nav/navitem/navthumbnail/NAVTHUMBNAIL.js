@@ -1,5 +1,7 @@
 /** @module */
+import BUTTONGROUP, { BUTTON } from '../../../group/buttongroup/BUTTONGROUP.js';
 import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import DIV from '../../../div/DIV.js';
 import GLYPHICON from '../../../span/GLYPHICON.js';
 import HEADER from '../../../header/header.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
@@ -13,7 +15,11 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         @param {CONTAINER} node The model
         @param {MODEL} model The Thumbnail model
         @param {number} model.id Unique Identifier that this thumbnail represents
+        @param {string} model.subsections Delimited string of uids
+        @param {string} model.authorId Author Id
         @param {string} model.label The Thumbnail label
+        @param {string} model.description Description
+        @param {string} model.tags Comma delimited list of tag uids
         @param {string} classType The class that this thumbnail represents
     */
 	constructor(node, model, classType = 'MODEL') {
@@ -22,14 +28,36 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         //this.image = new IMG(this.anchor, new MODEL('thumbnail-image'));
         this.image = new GLYPHICON(this.anchor, ICONS[classType]).addClass('thumbnail-image');
 		$(this.image.el).insertBefore(this.anchor.label.el);
-        this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', classType + ' # ' + model.id));
-        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(model.label || 'N/A').truncate(128)));
+        this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', model.label + ' (' + classType + ' # ' + model.id + ')'));
+        let descString = model.description + ' (' + model.tags + ')'
+        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(descString || 'N/A').truncate(128)));
+        this.addThumbDetails(model);
+        this.addTags(model);
         this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
         this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
         this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
 
 		//this.fetchImage(); // Only if IMG exists
     }
+    addTags(model) {
+        this.tagGroup = new BUTTONGROUP(this.anchor, new MODEL('tag-group'));
+        if (typeof model.tags === 'undefined') {
+            this.tagGroup.addButton('#0', ICONS.TAG);
+        } else {
+            model.tags.split(',').forEach((t) => this.tagGroup.addButton('#' + t, ICONS.TAG));
+        }
+    }
+    addThumbDetails(model) {
+        this.detail = new DIV(this.anchor, new MODEL('detail'));
+        this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
+        this.detail.rating = new BUTTONGROUP(this.detail, new MODEL('right star-group'));
+        this.detail.rating.addButton('', ICONS.STAREMPTY);
+        this.detail.rating.addButton('', ICONS.STAREMPTY);
+        this.detail.rating.addButton('', ICONS.STAR);
+        this.detail.rating.addButton('', ICONS.STAR);
+        this.detail.rating.addButton('', ICONS.STAR);
+    }
+
 	/** Retrieve a FormPost for the given MAIN and sets this image source
 	    @returns {void}
 	*/

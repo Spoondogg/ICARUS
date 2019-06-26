@@ -10,7 +10,7 @@ import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
 import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
-import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
+import IMAGEINDEX from '../container/banner/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/banner/index/INDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
@@ -58,8 +58,8 @@ export default class CONTAINERFACTORY extends FACTORY {
                 element = new FORM(span, model);
                 element.setFactory(this.factories.get('FORMFACTORY'));
                 break;
-            case 'IMAGEGALLERY':
-                element = new IMAGEGALLERY(span, model);
+            case 'IMAGEINDEX':
+                element = new IMAGEINDEX(span, model);
                 break;
             case 'INDEX':
                 element = new INDEX(span, model);
@@ -114,9 +114,11 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {string} [classType] Default class to display (ie: MAIN)
         @param {CONTAINER} [container] Calling container
         @param {EL} [caller] Calling element (ie: switchable element resolved)
+        @param {string} [query] Optional Query String
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this) {
+    launchViewer(classType = 'MAIN', container = this, caller = this, query = null) {
+        console.log(container.toString() + '.launchViewer()', query);
         return new Promise((resolve) => {
             container.getLoader().log(25).then((loader) => {
                 let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
@@ -125,7 +127,7 @@ export default class CONTAINERFACTORY extends FACTORY {
                     label: classType + '(s)'
                     //text: 'Viewer Text'
                 }));
-                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType);
+                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType, query);
                 viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));

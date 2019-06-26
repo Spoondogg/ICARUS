@@ -100,6 +100,7 @@ export default class CONTAINER extends GROUP {
         if (this.className !== 'MAIN') {
             // Save and QuickSave button
             this.addSaveButton();
+            this.addSearchButton();
             this.addRefreshButton();
             this.addMoveButtons();
 
@@ -139,6 +140,26 @@ export default class CONTAINER extends GROUP {
             () => this.getMain().focusBody().then(
                 () => this.refresh().then(
                     () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
+    }
+    /** Adds a search button to this.navheader
+        @returns {void}
+    */
+    addSearchButton() {
+        // THIS WILL EVENTUALLY BECOME A CLASS
+        let search = this.navheader.addTabbableMenu('SEARCH'); //, element: menu 
+        search.tab.addClass('tab-narrow');
+        /*
+        menu.addNavSearch(new MODEL().set({
+            label: 'woot',
+            icon: ICONS.SEARCH,
+            name: 'SEARCHwoot'
+        }));
+        */
+        search.tab.el.addEventListener('activate', () => this.createSearchPrompt(search.tab));
+        //search.tab.el.addEventListener('activate', () => console.log('woot'));
+    }
+    createSearchPrompt(tab) {
+        return this.getContainer().getFactory().search(false, this, tab);
     }
     /** Adds Up and Down buttons to this.navheader
         @returns {void}
@@ -197,6 +218,10 @@ export default class CONTAINER extends GROUP {
             @type {Array<number>}
         */
         this.subsections = this.required(model.subsections ? model.subsections.split(',') : [0]);
+        /** Array of Tag UIds 
+            @type {Array<number>}
+        */
+        this.tags = this.required(model.tags ? model.tags.split(',') : [0]);
         /** A Machine Friendly name for a CONTAINER
 		    @type {string}
 		*/
@@ -233,6 +258,37 @@ export default class CONTAINER extends GROUP {
             return this.childLocation.children;
         }
         return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+    }
+    /** Searches children of this CONTAINER on given queryString
+        @param {string} queryString Search String
+        @param {string} [attributeName] Attribute to search (Default: label)
+        @param {boolean} [fuzzy] If true, fuzzy search is performed
+        @param {boolean} [recursive] If true, results are searched recursively
+        @returns {Array<EL>} Array of results
+    */
+    query(queryString, attributeName = 'label', fuzzy = true, recursive = false) {
+        //console.log(this.toString() + '.query(' + queryString + ', ' + fuzzy + ', ' + recursive + ')', this.childLocation.children);
+        let results = this.childLocation.children.filter((c) => this.queryFilter(c, queryString, attributeName));
+        //console.log('Results', results);
+        return results;
+    }
+    /** The filter to match this container's children on a given queryString
+        @param {EL} c Element
+        @param {string} queryString Query
+        @param {string} attributeName Attribute to search
+        @returns {boolean} True if matched
+    */
+    queryFilter(c, queryString, attributeName) {
+        //console.log('QueryFilter', c, queryString, attributeName);
+        let result = false;
+        try {
+            //console.log(c[attributeName]);
+            result = c[attributeName].toLowerCase().includes(queryString.toLowerCase());
+        } catch (e) {
+            console.log(c.toString() + ' does not have a searchable "' + attributeName + '" parameter');
+        }
+        //console.log(result);
+        return result;
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -794,6 +850,7 @@ export default class CONTAINER extends GROUP {
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
             createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
             createInputModel('INPUT', 'subsections', this.getSubSections().toString() || '0', 'SubSections', 'TEXT', true),
+            createInputModel('INPUT', 'tags', this.tags.toString() || '0', 'Tags', 'TEXT', true),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
@@ -1216,7 +1273,14 @@ export default class CONTAINER extends GROUP {
 	*/
 	setSubSections(subsections) {
 		this.subsections = subsections;
-	}
+    }
+    /** Sets the tags array to the given value
+		@param {Array<number>} tags Tag UID array
+	    @returns {void}
+	*/
+    setTags(tags) {
+        this.tags = tags;
+    }
 	/** Toggles visibility of any child Container Headers
         @returns {Promise<ThisType>} Promise Chain
 	*/
@@ -1267,11 +1331,9 @@ export default class CONTAINER extends GROUP {
             loader.log(99).then(() => resolve(location.reload(true)));
         }
     }
-
     responseUndefined(payload, loader, resolve) {
         let msg = this.toString() + ': An error occurred while posting results to ' + location.href;
         //console.warn(err, payload);
-
         /// IMPLEMENT AN ERROR HANDLER BASED ON Payload.classname
         loader.console.el.dispatchEvent(new Activate(loader.console));
         switch (payload.className) {
@@ -1279,12 +1341,10 @@ export default class CONTAINER extends GROUP {
                 msg = 'Login Failed. The email or password you entered is incorrect.';
                 loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
                 break;
-
             case 'InvalidForgotPasswordAttempt': // payload.result === 5
                 msg = 'Unable to process forgotten password request.';
                 loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
                 break;
-
             default: // 'Error':
                 msg = payload.result + ': ';
                 if (payload.message) {
@@ -1325,7 +1385,6 @@ export default class CONTAINER extends GROUP {
                                 resolve(true);
                             }
                             break;
-
                         /*case 5: // InvalidForgotPasswordAttempt
                             let err = 'Login Failed. The email or password you entered is incorrect.';
                             loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
