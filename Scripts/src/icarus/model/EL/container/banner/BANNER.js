@@ -16,6 +16,9 @@ export default class BANNER extends CONTAINER {
 	constructor(node, model, containerList = ['CALLOUT', 'THUMBNAIL']) {
 		super(node, 'DIV', model, containerList);
 		this.body.pane.addClass('banner');
-	}
+    }
+    constructElements() {
+        return Promise.resolve(this);
+    }
 }
 export { MODEL }
