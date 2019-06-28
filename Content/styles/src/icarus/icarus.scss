@@ -1303,12 +1303,17 @@ html {
                 flex-grow: 2;
             }
             /// Button representing a paged result
-            /*button {
-                background-color: $color-grey-darker;
+            button {
+                background-color: $color-transparent;
                 border: 0;
+                border-left: 1px solid $color-shadow-light;
+                border-right: 1px solid $color-shadow-light;
+                box-shadow: none;
+                color: $color-white;
                 flex-basis: 5rem;
                 flex-grow: 1;
                 font-family: $font-primary;
+                height: $navbar-height;
                 text-transform: uppercase;
 
                 &:focus {
@@ -1317,11 +1322,21 @@ html {
                 }
 
                 &.active {
-                    background-color: $color-grey-dark;
+                    background-color: darken($color-grey, 10%);
+                    border-left: 1px solid $color-shadow-dark;
+                    border-right: 1px solid $color-shadow-dark;
                     color: $color-blue-light;
                     outline: none;
                 }
-            }*/
+
+                &.prev {
+                    margin-right: 1rem;
+                }
+
+                &.next {
+                    margin-left: 1rem;
+                }
+            }
         }
     }
     /// Showdown.js Markdown (Github flavor) for checkboxes (ie: - [ ])
@@ -2012,7 +2027,7 @@ html {
             }
         }
 
-        &.image-gallery {
+        &.index-image {
             color: inherit;
 
             > .body {
@@ -2848,6 +2863,7 @@ html {
                         .star-group {
                             &.right {
                                 padding-right: 1rem;
+
                                 button {
                                     float: right;
                                 }
