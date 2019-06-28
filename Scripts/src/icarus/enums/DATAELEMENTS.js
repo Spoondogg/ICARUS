@@ -57,11 +57,29 @@ export const DATAELEMENTS = new Map([
         }
     ],
     [
+        'BANNER', {
+            data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
+        }
+    ],
+    [
         'CALLOUT', {
             data: [
                 createInputModel('INPUT', 'icon'),
                 createInputModel('INPUT', 'header', 'Header'),
                 createInputModel('INPUT', 'p', 'Text')
+            ]
+        }
+    ],
+    [
+        'CHAT', {
+            data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'Header'),
+                createInputModel('TEXTAREA', 'p', 'Description')
             ]
         }
     ],
@@ -165,7 +183,14 @@ export const DATAELEMENTS = new Map([
             ]
         }
     ],
-    ['INDEX', {}],
+    [
+        'INDEX', {
+            data: [
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'INDEX')
+            ]
+        }
+    ],
     [
         'CLASSINDEX', {
             data: [
@@ -209,7 +234,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'FORM', 'TABLE', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'FORM', 'TABLE', 'BANNER', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'CHAT', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')
