@@ -1294,7 +1294,7 @@ export default class CONTAINER extends GROUP {
 	removeDialog() {
 		return new Promise((resolve, reject) => {
 			try {
-				let dialog = new DIALOG(new MODEL().set({
+				let dialog = new DIALOG(new MODEL('prompt').set({
 					label: 'Remove ' + this.toString() + ' from ' + this.container.toString(),
 					container: this.getMain(),
 					caller: this.getContainer() //.getMain()
