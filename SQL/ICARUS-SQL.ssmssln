@@ -1,0 +1,108 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_WIP", "_WIP", "{6A761238-A0A4-4F70-ACB7-D48150AE8CE1}"
+	ProjectSection(SolutionItems) = preProject
+		_wip.sql = _wip.sql
+		_wip_FormPost_GetDescription.sql = _wip_FormPost_GetDescription.sql
+		AspNetUsers.sql = AspNetUsers.sql
+		FormPosts.sql = FormPosts.sql
+		Icarus-Forms.sql = Icarus-Forms.sql
+		JAC_Fix.sql = JAC_Fix.sql
+		job_BackupDatabase.sql = job_BackupDatabase.sql
+		Restore.sql = Restore.sql
+		Snippets.sql = Snippets.sql
+		testing.sql = testing.sql
+		User_OAuthDetails.sql = User_OAuthDetails.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Container", "Container", "{217058C0-1C11-4311-B2C3-018B1A084CB9}"
+	ProjectSection(SolutionItems) = preProject
+		Chat_UpdateDictionary.sql = Chat_UpdateDictionary.sql
+		Container_Construct.sql = Container_Construct.sql
+		Container_Example_SubSectionIndex.sql = Container_Example_SubSectionIndex.sql
+		Container_GetContainerParents.sql = Container_GetContainerParents.sql
+		Container_GetContainersWithMissingChildren.sql = Container_GetContainersWithMissingChildren.sql
+		Container_GetDependancies.sql = Container_GetDependancies.sql
+		Container_GetDescription.sql = Container_GetDescription.sql
+		Container_GetDisabledContainers.sql = Container_GetDisabledContainers.sql
+		Container_GetEmptyMains.sql = Container_GetEmptyMains.sql
+		Container_GetIndex.sql = Container_GetIndex.sql
+		Container_GetList.sql = Container_GetList.sql
+		Container_GetMostRecent.sql = Container_GetMostRecent.sql
+		Container_GetOrphans.sql = Container_GetOrphans.sql
+		Container_GetSearchCount.sql = Container_GetSearchCount.sql
+		Container_GetSearchList.sql = Container_GetSearchList.sql
+		Container_GetStats.sql = Container_GetStats.sql
+		Image_GetImageIndex.sql = Image_GetImageIndex.sql
+		ImageGallery_GetImageList.sql = ImageGallery_GetImageList.sql
+		Images.sql = Images.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{F1B59F23-EE5A-40F3-A492-D4910F08ADA5}"
+	ProjectSection(SolutionItems) = preProject
+		Container_GetSearchCount.sql = Container_GetSearchCount.sql
+		job_BackupDatabase.sql = job_BackupDatabase.sql
+		Restore.sql = Restore.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FormPost", "FormPost", "{C1587909-2A7F-437D-BE93-9E1CFBA79D81}"
+	ProjectSection(SolutionItems) = preProject
+		Images.sql = Images.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LINGU", "LINGU", "{B12E2ABB-A55A-4C12-866F-D4463F77EA62}"
+	ProjectSection(SolutionItems) = preProject
+		Dictionary-Full.sql = Dictionary-Full.sql
+		Dictionary.sql = Dictionary.sql
+		Dictionary_GetDuplicateWords.sql = Dictionary_GetDuplicateWords.sql
+		Dictionary_GetSurroundingWords.sql = Dictionary_GetSurroundingWords.sql
+		..\..\..\..\icarus\_SQL\Dictionary_GetWordId.sql = ..\..\..\..\icarus\_SQL\Dictionary_GetWordId.sql
+		Sentence.sql = Sentence.sql
+		Sentence_GetWordIdList.sql = Sentence_GetWordIdList.sql
+		Sentence_Map.sql = Sentence_Map.sql
+		XML_GetStatement.sql = XML_GetStatement.sql
+		XML_GetWord.sql = XML_GetWord.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maintenance", "Maintenance", "{8375ACCE-61AF-4B0E-901C-E6B09980D44A}"
+	ProjectSection(SolutionItems) = preProject
+		Maintenance_PurgeContainerOrphans.sql = Maintenance_PurgeContainerOrphans.sql
+		Maintenance_PurgeContainers.sql = Maintenance_PurgeContainers.sql
+		Maintenance_PurgeEmptyMains.sql = Maintenance_PurgeEmptyMains.sql
+		Maintenance_PurgeFormPosts.sql = Maintenance_PurgeFormPosts.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dbo", "dbo", "{90D6EC88-5163-4540-B76A-C5C971AC4F56}"
+	ProjectSection(SolutionItems) = preProject
+		LogEntry.sql = LogEntry.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "views", "views", "{E3CAE076-EAB0-4192-A9A9-E46B442B49D3}"
+	ProjectSection(SolutionItems) = preProject
+		Container_vw_ContainerParentIndex.sql = Container_vw_ContainerParentIndex.sql
+		Container_vw_ContainerSubSectionIndex.sql = Container_vw_ContainerSubSectionIndex.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Deprec", "_Deprec", "{30196BB5-3D96-4E9D-AC65-B537E7862DB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74B9E4D0-A03B-4D53-9915-760265CB4F48}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B12E2ABB-A55A-4C12-866F-D4463F77EA62} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{E3CAE076-EAB0-4192-A9A9-E46B442B49D3} = {217058C0-1C11-4311-B2C3-018B1A084CB9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DBFB882D-281E-4E76-8596-315CF2225C81}
+	EndGlobalSection
+EndGlobal
