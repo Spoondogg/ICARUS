@@ -15,7 +15,6 @@ export default class CLASSVIEWER extends CONTAINER {
         this.addClass('classviewer');
         this.classType = classType;
         this.query = query;
-        this.header = new HEADER(this.body, new MODEL().set('innerHTML', classType + ' viewer'));
     }
     construct() {
         return Promise.resolve(this);
