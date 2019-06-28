@@ -17,8 +17,8 @@ export default class CLASSINDEX extends CONTAINER {
         @param {string} classType Default class to display
         @param {string} [query] Optional Query String
 	*/
-    constructor(node, model, classType = 'MAIN', query = '') {
-        console.log('ClassIndex', classType, query);
+    constructor(node, model, classType = model.data.classType || 'MAIN', query = '') {
+        //console.log('ClassIndex', classType, model.data.classType, query);
         super(node, 'DIV', model, [classType]);
         this.addClass('index-main');
         this.query = query;
@@ -34,7 +34,7 @@ export default class CLASSINDEX extends CONTAINER {
 		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
         this.isLoading = false;
 
-        this.header = new HEADER(this.body, new MODEL().set('innerHTML', this.classType));
+        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || classType));
         $(this.header.el).insertBefore(this.body.el);
 
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
@@ -119,7 +119,7 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     construct() {
-        console.log('ClassIndex construct()', this.classType, this.query);
+        //console.log('ClassIndex construct()', this.classType, this.data.classType, this.query);
         let query = this.query === null ? '' : this.query;
 		return new Promise((resolve, reject) => {
 			try {
@@ -244,13 +244,13 @@ export default class CLASSINDEX extends CONTAINER {
 	createPaginationFooter() {
 		let pagination = new FOOTER(this.body, new MODEL('pagination'));
 		pagination.el.setAttribute('style', 'text-align:center;');
-		pagination.btnPrev = new BUTTON(pagination, 'Prev');
-		pagination.btnPrev.el.setAttribute('style', 'margin-right:1em;');
+        pagination.btnPrev = new BUTTON(pagination, '', ICONS.CHEVRON_LEFT);
+        pagination.btnPrev.addClass('prev');
 		pagination.btnPrev.el.onclick = this.prevPage.bind(this);
 		pagination.buttonGroup = new BUTTONGROUP(pagination);
 		pagination.buttonGroup.loaded = false;
-		pagination.btnNext = new BUTTON(pagination, 'Next');
-		pagination.btnNext.el.setAttribute('style', 'margin-left:1em;');
+        pagination.btnNext = new BUTTON(pagination, '', ICONS.CHEVRON_RIGHT);
+        pagination.btnNext.addClass('next');
 		pagination.btnNext.el.onclick = this.nextPage.bind(this);
 		return pagination;
     }
