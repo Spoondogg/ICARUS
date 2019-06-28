@@ -3,6 +3,7 @@ import CONTAINER, { Activate, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS,
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
+import CHATFACTORY from '../chat/CHATFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
@@ -56,6 +57,7 @@ export default class MAIN extends CONTAINER {
         //console.log(this.toString() + '.deactivateParentContainer(TRUE)');
     }
     addFactories() {
+        this.getFactory().factories.set('CHATFACTORY', new CHATFACTORY());
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
         this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
     }
