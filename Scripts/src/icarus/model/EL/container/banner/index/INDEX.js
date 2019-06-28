@@ -10,7 +10,7 @@ import PANEL from '../../../dialog/panel/PANEL.js';
     @class
 */
 export default class INDEX extends CONTAINER {
-	/** Constructs an INDEX Container Element for browsing CONTAINERS
+	/** An abstract indexed view of a collection of Objects
 	    @param {CONTAINER} node Parent node
 	    @param {MODEL} [model] INDEX model	    
     */
@@ -24,15 +24,8 @@ export default class INDEX extends CONTAINER {
     constructElements() {
         return this.chain(() => {
             if (this.dataId > 0) {
-                this.createEditableElement('header', this.childLocation);
-                this.configureHeader();
-                if (parseInt(this.data.showHeader) === 1) {
-                    this.createEditableElement('p', this.childLocation);
-                }
-            }/*else {
-                console.log('No data exists for ' + this.toString());
-                this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }*/
+                this.createEditableElement('header', this.childLocation).then(() => this.configureHeader());
+            }
         });
     }
     /** Adds appropriate Event handlers to Header
