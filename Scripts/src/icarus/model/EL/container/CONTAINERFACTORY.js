@@ -7,9 +7,11 @@ import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
+import CHAT from '../container/chat/CHAT.js';
 import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
 import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
+import DICTIONARY from '../container/dictionary/DICTIONARY.js';
 import IMAGEINDEX from '../container/banner/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/banner/index/INDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
@@ -20,6 +22,7 @@ import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
 import SECTION from '../section/SECTION.js';
 import TABLE from '../table/TABLE.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
+import WORD from '../container/word/WORD.js';
 /** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
@@ -51,8 +54,15 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'CALLOUT':
                 element = new CALLOUT(span, model);
                 break;
+            case 'CHAT':
+                element = new CHAT(span, model);
+                element.setFactory(this.factories.get('CHATFACTORY'));
+                break;
             case 'CLASSVIEWER':
                 element = new CLASSVIEWER(span, model);
+                break;
+            case 'DICTIONARY':
+                element = new DICTIONARY(span, model);
                 break;
             case 'FORM':
                 element = new FORM(span, model);
@@ -103,7 +113,10 @@ export default class CONTAINERFACTORY extends FACTORY {
                 break;
             case 'UL':
                 element = new UL(span, model);
-                break;            
+                break;       
+            case 'WORD':
+                element = new WORD(span, model);
+                break;       
             default:
                 throw Error(this.toString() + ' No constructor exists for "' + className + '"');
         }
