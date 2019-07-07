@@ -6,6 +6,7 @@ import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CHATFACTORY from '../chat/CHATFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
+import INDEXFACTORY from '../../container/index/INDEXFACTORY.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -59,6 +60,7 @@ export default class MAIN extends CONTAINER {
     addFactories() {
         this.getFactory().factories.set('CHATFACTORY', new CHATFACTORY());
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
+        this.getFactory().factories.set('INDEXFACTORY', new INDEXFACTORY());
         this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
     }
     addMainActivateEvents() {
@@ -300,11 +302,16 @@ export default class MAIN extends CONTAINER {
         
 		return this.navheader.addTabbableElement(userBar.tab, userBar.element);
     }
+    /** Launches the appropriate ClassViewer and passes it the querystring
+        @param {Event} ev Evetn
+        @param {string} query QueryString
+        @param {EL} caller Calling element
+        @returns {void}
+    */
     submitSearch(ev, query, caller) {
         ev.preventDefault();
         ev.stopPropagation();
         console.log('Search', query);
-        // Replace with launchSearch()
         this.getFactory().launchViewer('MAIN', this, caller, query);
     }
 	/** Adds default Nav Items to the Nav Bar including the label
@@ -314,7 +321,7 @@ export default class MAIN extends CONTAINER {
 		return this.chain(() => {
 			// LEFT ALIGN
 			this.createDocumentMap();
-			// History / Prev / Back Navigation
+			// Search
             let tabbable = this.navheader.addTabbableMenu('SEARCH', 'SEARCH', ICONS.SEARCH, []);
                 /*this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
                 this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
@@ -406,7 +413,7 @@ export default class MAIN extends CONTAINER {
 						if (payload.result === 0) {
 							resolve(this.login());
 						} else {
-							loader.log(100, 'Created MAIN, ' + payload.message, true).then(() => {
+							loader.log(100, 'Created MAIN, ' + payload.message).then(() => {
 								/** Prompts the user to open the new page.
 								    In order to avoid popup blocking, the user must 
 								    manually click to be redirected or launch a new
@@ -475,7 +482,7 @@ export default class MAIN extends CONTAINER {
     */
     forgotPassword() {
         console.log('MAIN.forgotPassword');
-        this.loader.log(99, 'Forgot Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+        this.loader.log(99, 'Forgot Password').then((loader) => new PROMPT(new DIALOGMODEL(
             new MODEL('login'), {
                 container: this,
                 caller: this,
@@ -500,7 +507,12 @@ export default class MAIN extends CONTAINER {
                 form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status, false).then((result) => {
                     console.log(result, 'Closing dialog');
                     form.getDialog().close();
-                    loader.log(99, 'A password request has been emailed with further instructions', true, true, 5000, 'warning');
+                    loader.log(99, 'A password request has been emailed with further instructions', {
+                        show: true,
+                        toConsole: true,
+                        delay: 5000,
+                        type: 'warning'
+                    });
                     loader.console.el.dispatchEvent(new Activate(loader.console));
                 });
                 loader.log(100).then(() => form.getDialog().show());
@@ -700,7 +712,7 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     resetPassword() {
-        this.loader.log(99, 'Reset Password', true).then((loader) => new PROMPT(new DIALOGMODEL(
+        this.loader.log(99, 'Reset Password').then((loader) => new PROMPT(new DIALOGMODEL(
             new MODEL('login'), {
                 container: this,
                 caller: this,

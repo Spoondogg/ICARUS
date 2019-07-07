@@ -1999,7 +1999,27 @@ html {
             }
         }
 
-        &.index-main {
+        &.classindex {
+
+            > header {
+                > button {
+                    background-color: transparent;
+                    border: none;
+                    //clear: right;
+                    color: $color-white;
+                    float: right;
+
+                    > .icon {
+                        padding: 0 1rem;
+                        float: right;
+                        line-height: 3rem;
+                    }
+
+                    &.page-total {
+                    }
+                }
+            }
+
             > .body {
                 background-color: $color-grey-dark;
 

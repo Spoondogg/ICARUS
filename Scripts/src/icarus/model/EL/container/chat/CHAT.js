@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL, createInputModel } from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
@@ -18,33 +18,26 @@ export default class CHAT extends CONTAINER {
 		super(node, 'DIV', model, []);
 		this.addClass('chat');
 		this.user = this.getMain().getUser();
-        FORM.createEmptyForm(this.body.pane).then((form) => {
+        FORM.createEmptyForm(this.body.pane).then((form) => {            
+            form.el.style = 'height:68px;background-color:#5a5a5a;';
+            form.setAction('CHAT/Talk');
+            $(form.el).insertAfter(this.body.pane.el);
+            let inputs = [createInputModel('TEXTAREA', 'statement', '', 'element', 'TEXTAREA')];
+            form.getFieldset()[0].getFormElementGroup()[0].addInputElements(inputs).then(() => {
+                /** Show the Payload response
+                    @param {Payload} payload The payload
+                    @returns {void}
+                    @todo Rewrite without function call, instead just call setTimeout with a Payload parameter
+                    @todo this.form.afterSuccessfulPost = setTimeout(this.addStatement('ICARUS', payload.message), 1000, payload);
+                    @todo Needs testing
+                */
+                form.afterSuccessfulPost = (payload) => setTimeout(() => this.addStatement('ICARUS', payload.message), 1000);
+                let chatInput = form.getFieldset()[0].getFormElementGroup()[0].get()[0].input;
+                console.log('Chat Input', chatInput);
+                chatInput.el.onkeypress = () => this.postStatement(chatInput);
+            });
+
             this.form = form;
-            this.form.el.style = 'height:68px;background-color:#5a5a5a;';
-            $(this.form.el).insertAfter(this.body.pane.el);
-            let inputs = [
-                new MODEL(new ATTRIBUTES({
-                    name: 'statement',
-                    type: 'TEXTAREA',
-                    value: ''
-                })).set({
-                    element: 'TEXTAREA',
-                    label: 'element'
-                })
-            ];
-            this.form.fieldset.formElementGroup.addInputElements(inputs);
-            this.form.setAction('CHAT/Talk');
-            /** Show the Payload response
-                @param {Payload} payload The payload
-                @returns {void}
-                @todo Rewrite without function call, instead just call setTimeout with a Payload parameter
-                @todo this.form.afterSuccessfulPost = setTimeout(this.addStatement('ICARUS', payload.message), 1000, payload);
-                @todo Needs testing
-            */
-            this.form.afterSuccessfulPost = (payload) => setTimeout(() => this.addStatement('ICARUS', payload.message), 1000);
-            this.chatInput = this.form.fieldset.formElementGroup.children[0].input;
-            console.log('Chat Input', this.chatInput);
-            this.chatInput.el.onkeypress = this.postStatement.bind(this);
         });
 	}
 	construct() {
@@ -61,13 +54,14 @@ export default class CHAT extends CONTAINER {
     }
 	/** Posts the chat statement to the server and handles any responses
         when the user presses ENTER 
+        @param {FORMELEMENT} chatInput Form Element
         @returns {boolean} True if succeeds
     */
-	postStatement() {
+	postStatement(chatInput) {
 		if (window.event.keyCode === 13) {
-			this.addStatement(this.user, this.chatInput.el.value);
+			this.addStatement(this.user, chatInput.el.value);
 			this.form.post();
-			this.chatInput.el.value = '';
+			chatInput.el.value = '';
 			return false;
 		}
 		return true;

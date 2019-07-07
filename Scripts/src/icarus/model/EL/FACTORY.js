@@ -364,7 +364,7 @@ export default class FACTORY {
                         createInputModel('INPUT', 'Search').setAttribute('placeholder', 'Search ' + container.toString() + ' for...')
                     );
                     form.footer.buttonGroup.get()[0].setLabel('', ICONS.SEARCH);
-                    form.post = () => this.submitSearch(inp.input.el.value, container, prompt);
+                    form.post = () => container.submitSearch(inp.input.el.value, container, prompt);
 
                     prompt.form = form;
                     if (query !== null) {

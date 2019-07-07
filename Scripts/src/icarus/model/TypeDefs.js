@@ -13,10 +13,14 @@
 /** Unique Identifying Number
     @typedef {number} UId - Unique Identifying Number
 */
+/** Timed delay in milliseconds
+    @typedef {number} Delay - Timed delay in milliseconds
+*/
 /**
     @typedef {string} Label - A user-friendly string
 */
-/** A Machine Friendly String should only contain alphanumeric characters
+/** A Machine Friendly String should only contain alphanumeric characters and dashes (-).
+    No spaces are permitted
     @typedef {string} Name - A machine-friendly string
 */
 /** A valid email address in the format of user@domain
@@ -35,7 +39,7 @@
     @typedef {Array<El>} Elements - An ordered array of EL Classes
 */
 /** A key/value pair based on name
-    @typedef {{name:string, value:string}} NameValuePair - A key/value pair based on name
+    @typedef {{Name, value:string}} NameValuePair - A key/value pair based on name
 */
 
 /// STRUCTURES
@@ -95,3 +99,40 @@
     @typedef {Container} FormModel A Form Model Constructor TypeDef
     @property {Container} container Container
 */
+
+/// OPTIONS
+/** If true, this class can be activated
+    @typedef {boolean} canActivate - If true, this class can be activated
+*/
+/** If true, the menu is scrolled into view when activated
+    @typedef {boolean} scrollIntoView - If true, the menu is scrolled into view when activated
+*/
+/** A Class Type / name of a Class (ie: CONTAINER, FORMPOST)
+    @typedef {string} classType - A Class Type / name of Class (ie: CONTAINER, FORMPOST)
+*/
+/** Optional QueryString
+    @typedef {string} query - Optional QueryString
+*/
+/** Optional FormUId reference
+    @typedef {UId} formId - Optional FormUId Reference
+*/
+/** Represents a set of options for a ClassIndex
+    @typedef {Object} ClassIndexOptions A set of options for a ClassIndex
+    @property {classType} [classType="MAIN"] A Class Type / name of Class (ie: CONTAINER, FORMPOST)
+    @property {query} [query] Optional QueryString
+*/
+/** A ClassIndexOption with formId for FormPostIndex(es)
+    @typedef {ClassIndexOptions & {formId:formId}} FormPostIndexOptions - FormPost Index Options
+*/
+
+///// LOADER.log Specific
+
+/** Represents a set of options for a Loader log
+    @typedef {Object} LoaderLogOptions Represents a set of options for a Loader log
+    @property {boolean} show If true, the log will be displayed
+    @property {boolean} toConsole If true, logs to console as well
+    @property {Delay} delay Delay to hide when value reaches 100 or stay visible if value === 0
+    @property {string} type ie success, info, warning, danger
+*/
+
+///// END LOADER.log

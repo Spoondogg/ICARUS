@@ -1,6 +1,7 @@
 /** @module */
-import CONTAINER, { HEADER, MODEL } from '../../CONTAINER.js';
-/** Contains a high level view of the specified CONTAINER Class(es) if available to the user
+import CONTAINER from '../../../CONTAINER.js';
+/** An abstract Viewer for the specified Class
+    A Container that is capable of loading the specified classType into itself
     @class
 */
 export default class CLASSVIEWER extends CONTAINER {

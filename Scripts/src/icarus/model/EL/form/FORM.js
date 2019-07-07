@@ -554,7 +554,12 @@ export default class FORM extends CONTAINER {
                                 //console.warn('An Unknown Error Occurred');
                                 //console.log('Ajax Error: ' + statusText + '(' + xhr.status + ') Error: ' + errorThrown);
                                 let err = 'An Unknown Error Occurred.\nAjax Error: ' + statusText + '(' + xhr.status + ')\nError: ' + errorThrown
-                                loader.log(99, err, true, true, 1000, 'error');
+                                loader.log(99, err, {
+                                    show: true,
+                                    toConsole: true,
+                                    delay: 1000,
+                                    type: 'error'
+                                });
                             },
                             statusCode: { // https://www.digitalocean.com/community/tutorials/how-to-troubleshoot-common-http-error-codes
                                 200() { // response // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success
@@ -577,7 +582,12 @@ export default class FORM extends CONTAINER {
                                     message += response.message;
                                     console.warn('You shall not pass!');
                                     let err = this.toString() + '.post() StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message;
-                                    loader.log(99, err, true, true, 1000, 'warning').then(() => main.login());
+                                    loader.log(99, err, {
+                                        show: true,
+                                        toConsole: true,
+                                        delay: 300,
+                                        type: 'warning'
+                                    }).then(() => main.login());
                                     //console.log(this.toString() + '.post() StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message);
                                     //console.log('403 Error', response);
                                     //resolve(main.login());
@@ -589,9 +599,13 @@ export default class FORM extends CONTAINER {
                                 500(response) { // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#5xx_Server_errors
                                     statusCode = 500;
                                     message += response.message;
-                                    loader.log(99, 'StatusCode: 500, ' + response.message, true, true, 3000, 'warning');
+                                    loader.log(99, 'StatusCode: 500, ' + response.message, {
+                                        show: true,
+                                        toConsole: false,
+                                        delay: 3000,
+                                        type: 'warning'
+                                    });
                                     //resolve(payload);
-                                    //loader.log(99, err, true, true, 1000, 'warning');
                                 }
                             },
                             success: (payload) => {
@@ -610,7 +624,12 @@ export default class FORM extends CONTAINER {
                     });
 				} catch (e) {
                     console.warn(this.toString() + '.post() Post Failed to submit', e);
-                    loader.log(99, this.toString() + '.post() Post Failed to submit', true, true, 1000, 'error');
+                    loader.log(99, this.toString() + '.post() Post Failed to submit', {
+                        show: true,
+                        toConsole: true,
+                        delay: 300,
+                        type: 'error'
+                    });
 					reject(e); //new Error('Post Failed to submit')
 				}
 			} else {

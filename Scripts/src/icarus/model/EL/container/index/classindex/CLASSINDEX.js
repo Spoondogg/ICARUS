@@ -1,29 +1,33 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { Activate, Clickable } from '../../CONTAINER.js';
+import CONTAINER, { AbstractMethodError, Activate, Clickable } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
-import CLASSVIEWER from '../classviewer/CLASSVIEWER.js';
+import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-/** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
+/** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
+    the specified classType param (If available to this user)
+    @description A ClassIndex launches a ClassViewer which displays a view of that Class
     @class
 */
 export default class CLASSINDEX extends CONTAINER {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Parent node
-        @param {MODEL} model INDEX model
-        @param {string} classType Default class to display
-        @param {string} [query] Optional Query String
+        @param {MODEL} [model] Model
+        @param {ClassIndexOptions} [options] Optional options
 	*/
-    constructor(node, model, classType = model.data.classType || 'MAIN', query = '') {
-        //console.log('ClassIndex', classType, model.data.classType, query);
-        super(node, 'DIV', model, [classType]);
-        this.addClass('index-main');
-        this.query = query;
-        /** @type {string} The default class to display */
-        this.classType = classType;
+    constructor(node, model, options = {
+        classType: model.data.classType || 'MAIN',
+        query: ''
+    }) {
+        console.log('CLASSINDEX', options);
+        super(node, 'DIV', model, [options.classType]);
+        this.addClass('classindex');
+        this.query = options.query;
+        this.classType = options.classType;
+        /** @todo Consider creating a PAGEABLE interface */
 		/** @type {number} The current page */
 		this.page = 0;
 		/** @type {number} The number of items per page */
@@ -31,13 +35,27 @@ export default class CLASSINDEX extends CONTAINER {
 		/** @type {number} The total number of available pages */
 		this.pageTotal = 0;
 		/** @type {number} The maximum number of pages to cache */
-		this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
+        this.maxNavItems = this.pageLength * 2; // 3 pages worth of NavItems
+        /** @type {boolean} Indicates a LOADING state
+            @todo This should be an interface
+        */
         this.isLoading = false;
 
-        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || classType));
+        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || options.classType));
         $(this.header.el).insertBefore(this.body.el);
 
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        this.addMenuScrollEvents();        
+        this.configureHeader();
+        this.addEvents();
+        this.overrideHorizontalSwipe();		
+		this.pagination = this.createPaginationFooter();
+		//this.loadPage(this.page);
+    }
+    /** Adds scroll events to this menu
+        @returns {void}
+    */
+    addMenuScrollEvents() {
         this.menu.el.onscroll = () => {
             if (this.menu.el.scrollTop > 10) {
                 if (this.menu.el.scrollTop >= this.menu.el.scrollHeight - this.menu.el.offsetHeight) {
@@ -58,16 +76,6 @@ export default class CLASSINDEX extends CONTAINER {
 			    }, 300);			    
 			}*/
         };
-        
-        this.configureHeader();
-        this.header.el.dispatchEvent(new Activate(this.header));
-
-        this.addEvents();
-
-        this.overrideHorizontalSwipe();
-		
-		this.pagination = this.createPaginationFooter();
-		//this.loadPage(this.page);
     }
     /** Override swipe for horizontal menu 
         @returns {void}
@@ -81,24 +89,27 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     configureHeader() {
+
+        this.btnPageTotal = new BUTTON(this.header, this.pageTotal, ICONS.TAGS);
+        this.btnPageTotal.addClass('page-total');
+        this.btnPageTotal.el.onclick = (ev) => {
+            console.log('TODO: Not sure if this should trigger anything or not');
+            ev.stopPropagation();
+        };
+
+        this.btnSearch = new BUTTON(this.header, '', ICONS.SEARCH);
+        this.btnSearch.el.onclick = (ev) => {
+            console.log('TODO: Generate a SEARCH input to modify the query value');
+            ev.stopPropagation();
+        };
+
         this.header.implement(new Clickable(this.header));
         this.header.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
         this.header.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
         this.addHeaderEvents();
-    }
-    /** Appends chosen CONTAINER to target after confirmation
-        @param {MODEL} model Model
-        @returns {void}
-    */
-    confirmAppend(model) {
-        CONFIRM.confirmMethodCall(
-            'Append Confirmation',
-            'Append ' + this.classType + ': ' + model.label + '(' + model.id + ') to ' + this.getContainer().toString() + '?',
-            () => {
-                console.log('Confirmed.  Appending...', model, this.getContainer());
-                this.getContainer().getFactory().get(this.getContainer().childLocation, this.classType, model.id);
-            }
-        );
+        if (parseInt(this.data.showHeader) !== -1) {
+            this.header.el.dispatchEvent(new Activate(this.header));
+        }
     }
     /** Launches a Class Viewer after confirmation
         @param {MODEL} model Model
@@ -111,28 +122,35 @@ export default class CLASSINDEX extends CONTAINER {
             'Launch viewer for ' + this.classType + ' "' + model.label + '(' + model.id + ')"?',
             () => {
                 console.log('Confirmed.  Viewing ' + this.classType + '(' + model.id + ')');
-                this.launchClassViewer(model.id, this.classType, query);
+                this.launchViewer(model.id, this.classType, query);
             }
         );
+    }
+    /** An abstract/default search that promises to return a payload and status
+        @param {string} [query] Optional querystring
+        @returns {Promise<object, string>} Promise to return payload, status
+    */
+    searchClass(query = '') {
+        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, query);
     }
 	/** Constructs the CLASSINDEX Container
         @returns {void}
     */
     construct() {
-        //console.log('ClassIndex construct()', this.classType, this.data.classType, this.query);
+        console.log(this.toString() + '.construct()', this.classType, this.query);
         let query = this.query === null ? '' : this.query;
 		return new Promise((resolve, reject) => {
 			try {
 				if (!isNaN(this.page)) {
-                    $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
-                        '__RequestVerificationToken': this.getToken()
-                    }, (payload, status) => {
+                    this.searchClass(query).then((payload, status) => {
+                        console.log('Search Results', query, payload, status);
                         if (status === 'success') {
                             this.isLoading = true;
                             this.pageTotal = payload.total;
+                            this.btnPageTotal.setLabel(payload.total);
                             let pageNote = this.page > -1 ? ': Page ' + (this.page + 1) : '';
                             this.menu.addNavSeparator(this.classType + pageNote);
-                            payload.list.forEach((model) => this.addContainerThumbnailMethods(model));
+                            payload.list.forEach((model) => this.addThumbnailMethods(model));
                             this.isLoading = false;
                             this.purgeList();
                             if (!this.pagination.buttonGroup.loaded) {
@@ -160,53 +178,12 @@ export default class CLASSINDEX extends CONTAINER {
 			}
 		});
     }
-    /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
+    /** Creates a Thumbnail representation of a Class and adds relevant Events 
         @param {MODEL} model model
         @returns {void}
     */
-    addContainerThumbnailMethods(model) {
-        let thumb = this.createThumbnail(model, this.classType);
-
-        let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Append',
-            icon: ICONS.PENCIL,
-            name: 'APPEND'
-        }));
-        btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
-
-        let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'View ' + this.classType,
-            icon: ICONS[this.classType],
-            name: 'VIEW'
-        }));
-        btnView.el.addEventListener('click', () => this.confirmView(model));
-
-        let btnSearch = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Search ' + this.classType,
-            icon: ICONS.SEARCH,
-            name: 'SEARCH'
-        }));
-        btnSearch.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
-            this.classType + '.SEARCH',
-            'Search children of ' + this.classType,
-            () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/search/?query=' + this.query),
-            () => console.log(this.classType + '.SEARCH was not called.')
-        ));
-
-        // Add methods
-        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
-        for (let m = 0; m < methods.length; m++) {
-            thumb.menu.addNavItemIcon(new MODEL().set({
-                label: methods[m],
-                icon: ICONS[methods[m].toUpperCase()],
-                name: methods[m].toUpperCase()
-            })).el.onclick = () => CONFIRM.confirmMethodCall(
-                this.classType + '.' + methods[m],
-                methods[m] + ' description',
-                () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]),
-                () => console.log(this.classType + '.' + methods[m] + '() was not called.')
-            );
-        }
+    addThumbnailMethods(model) {
+        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, model);
     }
 	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
 	    @returns {void}
@@ -214,7 +191,7 @@ export default class CLASSINDEX extends CONTAINER {
 	addEvents() {
         //
 	}
-	/** Creates a Thumbnail that launches its respective MAIN
+	/** Creates a Thumbnail that launches its respective Container
 	    @param {MODEL} model The Thumbnail model
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
@@ -259,27 +236,8 @@ export default class CLASSINDEX extends CONTAINER {
         @param {string} classType CONTAINER class
         @returns {void}
     */
-    launchClassViewer(id, classType) {
-        if (classType === 'MAIN') {
-            CONFIRM.confirmMethodCall(
-                'Launch MAIN Viewer',
-                classType + ' "(' + id + ') will launch in a new window.  Proceed?',
-                () => {
-                    console.log('Confirmed.  Viewing ' + classType + '(' + id + ')');
-                    window.open('/' + id, '_blank');
-                }
-            );
-        } else {
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'ClassViewer: ' + classType + ' # ' + id
-                //text: 'Viewing ' + classType + ' (' + id + ')"'
-            }), false);
-            let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
-            viewer.body.el.dispatchEvent(new Expand(viewer));
-            this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
-        }
+    launchViewer(id, classType) {
+        throw new AbstractMethodError(this.toString() + '.launchClassViewer() not set', this, id, classType);
     }
 	/** Loads the page
 	    @param {number} page Page to load
@@ -340,7 +298,6 @@ export default class CLASSINDEX extends CONTAINER {
 			this.isLoading = false;
 		}
     }
-
     /** Empties the menu and resets pages
         @returns {Promise<ThisType>} Promise Chain
     */
@@ -351,7 +308,6 @@ export default class CLASSINDEX extends CONTAINER {
             });
         });
     }
-
 	/** Scrolls the Pagination Buttongroup to the active button
 	    @returns {void}
 	*/
@@ -367,3 +323,4 @@ export default class CLASSINDEX extends CONTAINER {
 		}
 	}
 }
+export { CLASSVIEWER, CONFIRM, Collapse, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT }

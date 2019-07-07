@@ -161,6 +161,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FormPostIndexController.cs" />
+    <Compile Include="Controllers\ContainerIndexController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\DocumentationController.cs" />
     <Compile Include="Controllers\FormTextAreaController.cs" />
@@ -535,6 +537,8 @@
       <DependentUpon>201906241603555_20190624__Tags.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Icarus\Elements\FORMPOSTINDEX.cs" />
+    <Compile Include="Models\Icarus\Elements\CONTAINERINDEX.cs" />
     <Compile Include="Models\Icarus\Elements\DICTIONARY.cs" />
     <Compile Include="Models\Icarus\Dictionary\Enums\WORDTYPE.cs" />
     <Compile Include="Models\Icarus\Elements\IMAGEINDEX.cs" />
@@ -699,6 +703,9 @@
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHATFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formcheckbox\FORMCHECKBOX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\classindex\formpostindex\FORMPOSTINDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\classindex\containerindex\CONTAINERINDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\INDEXFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
@@ -744,10 +751,10 @@
     <Content Include="Scripts\src\icarus\model\el\cite\CITE.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\BANNER.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\callout\CALLOUT.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\classviewer\CLASSVIEWER.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\imageindex\IMAGEINDEX.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\classindex\CLASSINDEX.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\banner\index\INDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\classindex\classviewer\CLASSVIEWER.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\classindex\imageindex\IMAGEINDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\classindex\CLASSINDEX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\index\INDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\banner\thumbnail\indexthumbnail\INDEXTHUMBNAIL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\navitem\navthumbnail\NAVTHUMBNAIL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHAT.js" />

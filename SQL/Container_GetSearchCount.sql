@@ -1,8 +1,8 @@
 /**	Return a Paginated List of Containers that match the given query
-	EXEC [ICARUS].[GetSearchCount] 'ryan@spoonmedia.ca', 'Form', 'imp'
+	EXEC [ICARUS].[GetSearchCount_Container] 'ryan@spoonmedia.ca', 'Form', 'imp'
 	http://localhost:8052/FORM/search/?page=0&pageLength=10&query=im
 */
-ALTER PROCEDURE [ICARUS].[GetSearchCount] 
+ALTER PROCEDURE [ICARUS].[GetSearchCount_Container] 
 	@authorId NVARCHAR(128),
 	@discriminator NVARCHAR(128),
 	@query NVARCHAR(128) = null
