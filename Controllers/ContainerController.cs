@@ -221,7 +221,7 @@ namespace ICARUS.Controllers {
         }
 
         /// <summary>
-        /// Returns a list of Container Ids that contain this container
+        /// Returns a list of Containers matching the search query
         /// </summary>
         /// <param name="page">Current Page</param>
         /// <param name="pageLength">Number of items per page</param>
@@ -248,7 +248,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(3, "page", page));
             parameters.Add(new Param(4, "query", query));
 
-            Procedure procedure = new Procedure("ICARUS.GetSearchList", columns, parameters);
+            Procedure procedure = new Procedure("ICARUS.GetSearchList_Container", columns, parameters);
 
             List<string> searchCountCols = new List<string>();
             searchCountCols.Add("count");
@@ -257,7 +257,7 @@ namespace ICARUS.Controllers {
             searchCountParams.Add(new Param(1, "discriminator", this.className));
             searchCountParams.Add(new Param(2, "query", query));
 
-            Procedure searchCount = new Procedure("ICARUS.GetSearchCount", searchCountCols, searchCountParams);
+            Procedure searchCount = new Procedure("ICARUS.GetSearchCount_Container", searchCountCols, searchCountParams);
             //int totalNew = this.Call(searchCount);
 
             /*int total = selectAll(getObjectDbContext()).Where(

@@ -34,35 +34,35 @@ export default class LOADER extends DIALOG {
 	}
 	/** Sets the progress bar status
 		@param {number} value Percentage as integer (ie: 50 means 50%).
-		@param {string} text Text displayed inside progress bar.  
-	    @param {boolean} show If true, the log will be displayed
-        @param {boolean} toConsole If true, logs to console as well
-        @param {number} delay Delay to hide when value reaches 100 or stay visible if value === 0
-        @param {string} type ie success, info, warning, danger
+		@param {string} [text] Text displayed inside progress bar.  
+	    @param {LoaderLogOptions} [options] Optional Options
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
-	log(value, text = '', show = true, toConsole = false, delay = 300, type = 'info') {
+    log(value, text = '', options = {
+        show: true,
+        toConsole: false,
+        delay: 300,
+        type: 'info'
+    }) {
         return this.chain(() => {
-            this.progressBar.setType(type);
+            this.progressBar.setType(options.type);
 			this.progressBar.el.style.width = value + '%';
 			this.progressBar.el.setAttribute('aria-valuenow', value);
 			if (typeof text !== 'undefined') {
 				let txt = text.substr(0, 32) + '...';
 				this.progressBar.text.setInnerHTML(txt);
-				this.console.addEntry(text, toConsole, type);
+                this.console.addEntry(text, options.toConsole, options.type);
 			}
 			if (value < 100) {
 				clearTimeout(this.logTimer);
-				if (show) {
+                if (options.show) {
 					this.show();
 				}
-				//resolve(show ? this.show() : this);
 			} else {
 				this.logTimer = window.setTimeout(() => {
 					clearTimeout(this.logTimer);
-					//setTimeout(() => this.hide().then((loader) => resolve(loader)), delay);
-					setTimeout(() => this.hide(), delay);
-				}, delay);
+                    setTimeout(() => this.hide(), options.delay);
+                }, options.delay);
 			}
 		});
     }

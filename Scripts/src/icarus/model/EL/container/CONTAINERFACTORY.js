@@ -8,12 +8,14 @@ import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import CHAT from '../container/chat/CHAT.js';
-import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
-import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
+//import CLASSINDEX from '../container/index/classindex/CLASSINDEX.js';
+import CLASSVIEWER from '../container/index/classindex/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
+import CONTAINERINDEX from './index/classindex/containerindex/CONTAINERINDEX.js';
 import DICTIONARY from '../container/dictionary/DICTIONARY.js';
-import IMAGEINDEX from '../container/banner/imageindex/IMAGEINDEX.js';
-import INDEX from '../container/banner/index/INDEX.js';
+import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTINDEX.js';
+import IMAGEINDEX from '../container/index/imageindex/IMAGEINDEX.js';
+import INDEX from '../container/index/INDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
@@ -68,14 +70,22 @@ export default class CONTAINERFACTORY extends FACTORY {
                 element = new FORM(span, model);
                 element.setFactory(this.factories.get('FORMFACTORY'));
                 break;
-            case 'IMAGEINDEX':
-                element = new IMAGEINDEX(span, model);
-                break;
+            ////////////
             case 'INDEX':
                 element = new INDEX(span, model);
+                element.setFactory(this.factories.get('INDEXFACTORY'));
                 break;
-            case 'CLASSINDEX':
+            /*case 'CLASSINDEX':
                 element = new CLASSINDEX(span, model);
+                break;*/
+            case 'CONTAINERINDEX':
+                element = new CONTAINERINDEX(span, model);
+                break;
+            case 'FORMPOSTINDEX':
+                element = new FORMPOSTINDEX(span, model);
+                break;
+            case 'IMAGEINDEX':
+                element = new IMAGEINDEX(span, model);
                 break;
             case 'INDEXTHUMBNAIL':
                 element = new INDEXTHUMBNAIL(span, model);
@@ -140,7 +150,10 @@ export default class CONTAINERFACTORY extends FACTORY {
                     label: classType + '(s)'
                     //text: 'Viewer Text'
                 }));
-                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType, query);
+                let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
+                    classType,
+                    query
+                });
                 viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));

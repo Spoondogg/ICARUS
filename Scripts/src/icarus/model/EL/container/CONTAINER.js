@@ -1339,11 +1339,21 @@ export default class CONTAINER extends GROUP {
         switch (payload.className) {
             case 'InvalidLoginAttempt': // payload.result === 4
                 msg = 'Login Failed. The email or password you entered is incorrect.';
-                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                loader.log(99, msg, {
+                    show: true,
+                    toConsole: false,
+                    delay: 1000,
+                    type: 'warning'
+                }).then(() => resolve(new Error(msg)));
                 break;
             case 'InvalidForgotPasswordAttempt': // payload.result === 5
                 msg = 'Unable to process forgotten password request.';
-                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                loader.log(99, msg, {
+                    show: true,
+                    toConsole: false,
+                    delay: 1000,
+                    type: 'warning'
+                }).then(() => resolve(new Error(msg)));
                 break;
             default: // 'Error':
                 msg = payload.result + ': ';
@@ -1357,7 +1367,12 @@ export default class CONTAINER extends GROUP {
                 }*/
                 loader.log(99, msg, true, false, 1000, payload.className.toLowerCase()).then(() => {
                     payload.model.Errors.forEach((er) => {
-                        loader.log(99, er, true, true, 300, 'warning');
+                        loader.log(99, er, {
+                            show: true,
+                            toConsole: true,
+                            delay: 300,
+                            type: 'warning'
+                        });
                     });
                     resolve(new Error(msg));
                 });
@@ -1399,7 +1414,12 @@ export default class CONTAINER extends GROUP {
                 } catch (e) {
                     console.warn('Unable to process Ajax Response', payload, status);
                     loader.console.el.dispatchEvent(new Activate(loader.console));
-					loader.log(99, location.href, true, true, 1000, 'warning').then(() => reject(e));
+                    loader.log(99, location.href, {
+                        show: true,
+                        toConsole: true,
+                        delay: 1000,
+                        type: 'warning'
+                    }).then(() => reject(e));
 				}
 			});
 		});
@@ -1419,7 +1439,7 @@ export default class CONTAINER extends GROUP {
 						caller: main
 					}));
 					dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.toString(), ICONS.REMOVE)
-						.el.onclick = () => loader.log(50, 'Disable', true).then(
+						.el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {

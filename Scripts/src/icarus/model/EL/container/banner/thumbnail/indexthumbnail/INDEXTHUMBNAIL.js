@@ -63,7 +63,8 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
         @param {number} id Object id
         @returns {void}
     */
-	launchPreview(delay = 500, className, id) { //title = 'Preview', // node
+    launchPreview(delay = 500, className, id) { //title = 'Preview', // node
+        console.log('launchPreview()', className, id);
         setTimeout(() => {
             this.getJson('/' + className + '/GET/' + id, (result) => {
 				console.log(className, result);

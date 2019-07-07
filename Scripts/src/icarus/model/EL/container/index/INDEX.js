@@ -1,11 +1,11 @@
 /** @module  */
-import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { MODEL } from '../../CONTAINER.js';
-import MENU, { Collapse, Expand } from '../../../nav/menu/MENU.js';
-import CLASSINDEX from '../classindex/CLASSINDEX.js';
-import CLASSVIEWER from '../classviewer/CLASSVIEWER.js';
-import { ICONS } from '../../../../../enums/ICONS.js';
-import PANEL from '../../../dialog/panel/PANEL.js';
+//import CLASSINDEX, { CLASSVIEWER } from './classindex/CLASSINDEX.js';
+import CONFIRM, { DIALOGMODEL, PROMPT } from '../../dialog/confirm/CONFIRM.js';
+import CONTAINER, { Activate, MODEL } from '../CONTAINER.js';
+import CONTAINERINDEX, { CLASSVIEWER } from './classindex/containerindex/CONTAINERINDEX.js';
+import MENU, { Collapse, Expand } from '../../nav/menu/MENU.js';
+import { ICONS } from '../../../../enums/ICONS.js';
+import PANEL from '../../dialog/panel/PANEL.js';
 /** Contains a high level view of all objects owned by this user
     @class
 */
@@ -44,21 +44,24 @@ export default class INDEX extends CONTAINER {
 	addContainersMenu() {
 		try {			
 			// Create Secondary Tabs and Horizontal Menus inside Menu
-            let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEINDEX'];
-			allowed.map((name) => {
+            let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEINDEX', 'CONTAINERINDEX', 'FORMPOSTINDEX'];
+			allowed.map((classType) => {
 				let tb = this.menu.addNavItemIcon(new MODEL().set({
-					label: name,
-					icon: ICONS[name]
+					label: classType,
+					icon: ICONS[classType]
                 }));
                 tb.el.addEventListener('activate', () => {
                     let prompt = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classindex'), {
                         container: this.getContainer(),
                         caller: tb,
-                        label: 'CLASSINDEX: ' + name,
-                        text: 'View ' + name
+                        label: 'CLASSINDEX: ' + classType,
+                        text: 'View ' + classType
                     }));
-                    let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), name);
+                    let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
+                        classType
+                    });
                     viewer.setContainer(this.node.node.node.getContainer());
+                    viewer.header.el.dispatchEvent(new Activate(this.header));
                     viewer.body.el.dispatchEvent(new Expand(viewer));
                     prompt.showDialog();
                 });

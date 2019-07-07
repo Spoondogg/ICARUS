@@ -84,8 +84,28 @@ export const DATAELEMENTS = new Map([
         }
     ],
     [
+        'CLASSINDEX', {
+            data: [
+                createInputModel('INPUT', 'classType', 'MAIN'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'MAIN'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
+        }
+    ],
+    [
         'CLASSVIEWER', {
             data: [createInputModel('INPUT', 'classType', 'MAIN')]
+        }
+    ],
+    [
+        'CONTAINERINDEX', {
+            data: [
+                createInputModel('INPUT', 'classType', 'MAIN'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'header', 'MAIN'),
+                createInputModel('TEXTAREA', 'p', 'Description')
+            ]
         }
     ],
     [
@@ -153,6 +173,14 @@ export const DATAELEMENTS = new Map([
     ],
     ['FORMPOST', {}],
     [
+        'FORMPOSTINDEX', {
+            data: [
+                createInputModel('INPUT', 'header', 'FORMPOSTINDEX'),
+                createInputModel('INPUT', 'formId', '-1')
+            ]
+        }
+    ],
+    [
         'FORMPOSTINPUT', {
             data: [
                 createInputModel('INPUT', 'type', 'TEXT'),
@@ -192,16 +220,6 @@ export const DATAELEMENTS = new Map([
         }
     ],
     [
-        'CLASSINDEX', {
-            data: [
-                createInputModel('INPUT', 'classType', 'MAIN'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'MAIN'),
-                createInputModel('TEXTAREA', 'p', 'Description')
-            ]
-        }
-    ],
-    [
         'INPUT', {
             data: [
                 createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
@@ -234,7 +252,7 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'MAIN', {
-            containers: ['ARTICLE', 'FORM', 'TABLE', 'BANNER', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'CLASSVIEWER', 'CHAT', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
+            containers: ['ARTICLE', 'FORM', 'TABLE', 'BANNER', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'FORMPOSTINDEX', 'CONTAINERINDEX', 'CLASSVIEWER', 'CHAT', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
             data: [
                 createInputModel('INPUT', 'author', 'AuthorName'),
                 createInputModel('INPUT', 'title', 'MAIN')

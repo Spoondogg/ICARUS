@@ -109,4 +109,4 @@ export default class NAVTHUMBNAIL extends NAVITEM {
 		}
 	}
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTRIBUTES, BUTTON, EL, MODEL }

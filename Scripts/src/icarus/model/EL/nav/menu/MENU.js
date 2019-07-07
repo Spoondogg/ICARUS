@@ -15,9 +15,7 @@ export default class MENU extends LIST {
 	    @param {EL} node Parent Node
 	    @param {MODEL} model Model
         @param {string} element HTML Element Tag
-        @param {{canActivate: boolean, scrollIntoView: boolean}} options Optional Parameters
-        @param {boolean} canActivate If false, the MENU will not expand on activation
-        @param {boolean} scrollIntoView If true, the menu is scrolled into view when activated
+        @param {{canActivate, scrollIntoView, UId}} options Optional Parameters
 	*/
 	constructor(node, model, element = 'UL', options = {
 		canActivate: true,
