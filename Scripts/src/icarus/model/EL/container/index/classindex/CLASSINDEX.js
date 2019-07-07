@@ -204,7 +204,10 @@ export default class CLASSINDEX extends CONTAINER {
         authorId,
         label,
         description,
-        tags
+        tags,
+        key,
+        value,
+        jsonResults
 	}, className) {
 		return this.menu.addNavThumbnail(new MODEL().set({
             id,
@@ -212,7 +215,10 @@ export default class CLASSINDEX extends CONTAINER {
             authorId,
             label,
             description,
-            tags
+            tags,
+            key,
+            value,
+            jsonResults
 		}), className);
 	}
 	/** Creates a Pagination Footer

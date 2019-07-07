@@ -31,6 +31,9 @@ export default class INDEXFACTORY extends CONTAINERFACTORY {
             /*case 'IMAGEINDEX':
                 element = new IMAGEINDEX(span, model);
                 break;*/
+            /*case 'FORM':
+                element = new FORM(span, model);
+                break;*/
             default:
                 throw Error('No constructor exists for CONTAINER{' + className + '}');
         }

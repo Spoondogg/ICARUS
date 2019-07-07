@@ -32,4 +32,3 @@ namespace ICARUS.Models.Icarus.Elements {
         }
     }
 }
-}

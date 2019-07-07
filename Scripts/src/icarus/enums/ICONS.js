@@ -41,6 +41,7 @@ export const ICONS = {
 	FORM: 'glyphicon-list-alt',
 	FORMELEMENTGROUP: 'glyphicon-tasks',
 	FORMINPUT: 'glyphicon-log-in',
+	FORMPOST: 'glyphicon-list-alt',
 	FORMPOSTINDEX: 'glyphicon-th',
 	FORMTEXTAREA: 'glyphicon-align-justify',
 	FULLSCREEN: 'glyphicon-new-window',
