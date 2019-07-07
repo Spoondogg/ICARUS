@@ -1,5 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
+import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
     @class
@@ -51,9 +52,28 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             name: 'DATA'
         }));
         btnFormData.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
-            this.classType + '.DATA',
-            'Show posts for ' + this.classType + '(' + model.id + ')',
-            () => window.open(new URL(window.location.href).origin + '/FORMPOST/search/?formId=' + model.id + '&query=' + this.query + '&page=0&pageLength=10'),
+            'FORM.DATA',
+            'Show posts for FORM(' + model.id + ')',
+            () => {
+                //window.open(new URL(window.location.href).origin + '/FORMPOST/search/?formId=' + model.id + '&query=' + this.query + '&page=0&pageLength=10');
+                let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-formpostviewer'), {
+                    container: this.getContainer(),
+                    caller: this,
+                    label: 'FormPostViewer: ' + model.label
+                    //text: 'Viewing ' + classType + ' (' + id + ')"'
+                }), false);
+                //let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
+                //viewer.body.el.dispatchEvent(new Expand(viewer));
+                let formpostindex = new FORMPOSTINDEX(dialog.body.pane, new MODEL(), {
+                    classType: 'FORMPOST',
+                    query: '',
+                    formId: model.id
+                });
+                formpostindex.body.el.dispatchEvent(new Expand(formpostindex));
+                //this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
+
+                dialog.showDialog();
+            },
             () => console.log('FORM.SEARCH was not called.')
         ));
     }
@@ -104,7 +124,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             })).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',
-                () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]),
+                () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m] + '/' + model.id),
                 () => console.log(this.classType + '.' + methods[m] + '() was not called.')
             );
         }

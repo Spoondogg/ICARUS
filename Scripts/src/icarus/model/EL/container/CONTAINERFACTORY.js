@@ -14,7 +14,7 @@ import CONTAINER from '../container/CONTAINER.js';
 import CONTAINERINDEX from './index/classindex/containerindex/CONTAINERINDEX.js';
 import DICTIONARY from '../container/dictionary/DICTIONARY.js';
 import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTINDEX.js';
-import IMAGEINDEX from '../container/index/imageindex/IMAGEINDEX.js';
+import IMAGEINDEX from '../container/index/classindex/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/index/INDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
@@ -161,4 +161,4 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK }

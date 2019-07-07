@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT, SPAN } from '../container/CONTAINERFACTORY.js'; // Deactivate
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK } from '../container/CONTAINERFACTORY.js'; // Deactivate
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import FIELDSET from '../fieldset/FIELDSET.js'
 import FORM from '../form/FORM.js';
@@ -50,6 +50,9 @@ export default class FORMFACTORY extends CONTAINERFACTORY {
                 break;
             case 'SPAN':
                 element = new SPAN(span, model);
+                break;
+            case 'TEXTBLOCK':
+                element = new TEXTBLOCK(span, model);
                 break;
             default:
                 throw Error('No constructor exists for CONTAINER{' + className + '}');

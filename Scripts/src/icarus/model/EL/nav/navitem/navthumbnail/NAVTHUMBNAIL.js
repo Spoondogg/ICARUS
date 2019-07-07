@@ -20,25 +20,52 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         @param {string} model.label The Thumbnail label
         @param {string} model.description Description
         @param {string} model.tags Comma delimited list of tag uids
+        @param {object} model.jsonResults JSON Results
         @param {string} classType The class that this thumbnail represents
     */
 	constructor(node, model, classType = 'MODEL') {
 		super(node, model);
         this.addClass('nav-item-thumbnail');
+
+        if (classType === 'FORMPOST') {
+            this.constructFormPostThumbnail(model);
+        } else {
+            this.constructContainerThumbnail(model, classType);
+        }
+        this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
+        this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
+        this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+    }
+    constructFormPostThumbnail(model) {
+        //this.image = new IMG(this.anchor, new MODEL('thumbnail-image'));
+        this.image = new GLYPHICON(this.anchor, ICONS.FORMPOST).addClass('thumbnail-image');
+        $(this.image.el).insertBefore(this.anchor.label.el);
+        let headerStr = 'id: ' + model.id;
+        if (model.key !== '') {
+            headerStr += ' ' + model.key + ' : ' + model.value;
+        }
+        this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', headerStr));
+        //let descString = model.description + ' (' + model.tags + ')'
+        this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(model.jsonResults).truncate(128)));
+        this.addThumbDetails(model);
+        this.addTags(model);
+        //this.fetchImage(); // Only if IMG exists
+    }
+    constructContainerThumbnail(model, classType) {
         //this.image = new IMG(this.anchor, new MODEL('thumbnail-image'));
         this.image = new GLYPHICON(this.anchor, ICONS[classType]).addClass('thumbnail-image');
-		$(this.image.el).insertBefore(this.anchor.label.el);
+        $(this.image.el).insertBefore(this.anchor.label.el);
         this.header = new HEADER(this.anchor, new MODEL().set('innerHTML', model.label + ' (' + classType + ' # ' + model.id + ')'));
         let descString = model.description + ' (' + model.tags + ')'
         this.p = new P(this.anchor, new MODEL().set('innerHTML', new STRING(descString || 'N/A').truncate(128)));
         this.addThumbDetails(model);
         this.addTags(model);
-        this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
-        this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
-        this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
-
-		//this.fetchImage(); // Only if IMG exists
+        //this.fetchImage(); // Only if IMG exists
     }
+    /** Adds a button group and a default tag
+        @param {MODEL} model Model
+        @returns {void}
+    */
     addTags(model) {
         this.tagGroup = new BUTTONGROUP(this.anchor, new MODEL('tag-group'));
         if (typeof model.tags === 'undefined') {
@@ -47,6 +74,10 @@ export default class NAVTHUMBNAIL extends NAVITEM {
             model.tags.split(',').forEach((t) => this.tagGroup.addButton('#' + t, ICONS.TAG));
         }
     }
+    /** Adds details like author and rating/rank
+        @param {MODEL} model Model
+        @returns {void}
+    */
     addThumbDetails(model) {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
         this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
@@ -57,7 +88,6 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         this.detail.rating.addButton('', ICONS.STAR);
         this.detail.rating.addButton('', ICONS.STAR);
     }
-
 	/** Retrieve a FormPost for the given MAIN and sets this image source
 	    @returns {void}
 	*/

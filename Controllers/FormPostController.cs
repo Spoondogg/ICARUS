@@ -206,8 +206,11 @@ namespace ICARUS.Controllers {
             List<string> columns = new List<string>();
             columns.Add("index");
             columns.Add("id");
-            columns.Add("formId");
-            columns.Add("authorId");            
+            //columns.Add("formId");
+            columns.Add("authorId");
+            columns.Add("key");
+            columns.Add("value");
+            columns.Add("jsonResults");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "formId", formId));

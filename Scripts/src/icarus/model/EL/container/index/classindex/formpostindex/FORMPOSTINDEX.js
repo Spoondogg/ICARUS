@@ -1,5 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
+import FORM from '../../../../form/FORM.js';
 /** Contains a list of THUMBNAILS for each Container of the specified 
     classType available to this user.
     @description Represents an indexed view of Images
@@ -36,6 +37,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @returns {void}
     */
     addThumbnailMethods(model) {
+        console.log('FORMPOSTINDEX.addThumbnailMethods()', model);
         let thumb = this.createThumbnail(model, this.classType);
         
         let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
@@ -64,20 +66,59 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         }
     }	
     /** Launches a CLASSVIEWER for the given id and classType
-        @param {UId} id CONTAINER UId
+        @param {UId} id CONTAINER/FORMPOST UId
         @param {string} classType CONTAINER class
         @returns {void}
     */
     launchViewer(id, classType) {
         console.log('FORMPOSTINDEX.launchViewer()', id, classType);
-        let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
+
+        let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
             container: this.getContainer(),
             caller: this,
             label: 'FormPostViewer: ' + classType + ' # ' + id
-        }), false);
-        let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
+        }));
+        let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', 'FORMPOST'));
         viewer.body.el.dispatchEvent(new Expand(viewer));
-        this.getContainer().getFactory().get(viewer.body.pane, 'FORMPOSTINDEX', id).then(() => dialog.showDialog());
+
+        this.getPayload(id).then((payload) => {
+            console.log('Retrieved formpost', payload);
+            console.log('Building formId', this.formId);
+            this.getContainer().getFactory().get(viewer.body.pane, 'FORM', this.formId).then(() => {
+                console.log('TODO: Populate values of form from result.model.jsonResults', payload.model.jsonResults);
+                let json = JSON.parse(payload.model.jsonResults);
+                console.log('JSON', json);
+                console.log('viewer', viewer);
+
+                ///  YOU UGLY BASTARD
+                /// You need to create a flag that indicates that the CONTAINER has finished loading
+                /// Then you need to poll for that flag at fixed intervals until the flag is valid
+                /// Once valid, retrieve the form and continue...
+                /** @type {[FORM]} */
+                let [form] = viewer.body.pane.get(null, 'FORM');
+
+                console.log('FORM', form);
+                setTimeout(() => {
+                    if (payload.model.jsonResults) { // Set values based on existing 
+                        json.forEach((inp) => {
+                            console.log('Set value', inp);
+                            form.setTextInputValue(inp);
+                        });
+                    }
+                }, 2000);
+
+                dialog.showDialog();
+            });
+        });
+
+        /*$.post('/FORMPOST/GET/' + id, {
+            '__RequestVerificationToken': this.getToken()
+        }).then((payload, status) => {
+            console.log('Retrieved formpost', this.formId, 
+        });*/
+
+        //this.getContainer().getFactory().get(viewer.body.pane, 'FORMPOST', id).then(() => dialog.showDialog());
+
     }
 }
 export { CLASSVIEWER }

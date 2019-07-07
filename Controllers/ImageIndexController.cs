@@ -78,9 +78,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(1, "pageLength", pageLen));
             parameters.Add(new Param(2, "page", page));
 
-            Procedure procedure = new Procedure(
-                "ICARUS.GetImageList", columns, parameters
-            );
+            Procedure procedure = new Procedure("ICARUS.GetImageList", columns, parameters);
 
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
