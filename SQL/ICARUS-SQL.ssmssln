@@ -3,104 +3,170 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Solution File, Format Version 18.00
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_WIP", "_WIP", "{6A761238-A0A4-4F70-ACB7-D48150AE8CE1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_wip", "_wip", "{6A761238-A0A4-4F70-ACB7-D48150AE8CE1}"
 	ProjectSection(SolutionItems) = preProject
-		_wip.sql = _wip.sql
-		_wip_FormPost_GetDescription.sql = _wip_FormPost_GetDescription.sql
-		AspNetUsers.sql = AspNetUsers.sql
-		FormPosts.sql = FormPosts.sql
-		Icarus-Forms.sql = Icarus-Forms.sql
-		JAC_Fix.sql = JAC_Fix.sql
-		job_BackupDatabase.sql = job_BackupDatabase.sql
-		Restore.sql = Restore.sql
-		Snippets.sql = Snippets.sql
-		testing.sql = testing.sql
-		User_OAuthDetails.sql = User_OAuthDetails.sql
+		ICARUS\_wip\_wip.sql = ICARUS\_wip\_wip.sql
+		ICARUS\_wip\_wip_FormPost_GetDescription.sql = ICARUS\_wip\_wip_FormPost_GetDescription.sql
+		ICARUS\_wip\AlterSchemaSnippet.sql = ICARUS\_wip\AlterSchemaSnippet.sql
+		ICARUS\_wip\Icarus-Forms.sql = ICARUS\_wip\Icarus-Forms.sql
+		ICARUS\_wip\JAC_Fix.sql = ICARUS\_wip\JAC_Fix.sql
+		ICARUS\_wip\Snippets.sql = ICARUS\_wip\Snippets.sql
+		ICARUS\_wip\SQLQuery1.sql = ICARUS\_wip\SQLQuery1.sql
+		ICARUS\_wip\SQLQuery2.sql = ICARUS\_wip\SQLQuery2.sql
+		ICARUS\_wip\testing.sql = ICARUS\_wip\testing.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Container", "Container", "{217058C0-1C11-4311-B2C3-018B1A084CB9}"
-	ProjectSection(SolutionItems) = preProject
-		Chat_UpdateDictionary.sql = Chat_UpdateDictionary.sql
-		Container_Construct.sql = Container_Construct.sql
-		Container_Example_SubSectionIndex.sql = Container_Example_SubSectionIndex.sql
-		Container_GetContainerParents.sql = Container_GetContainerParents.sql
-		Container_GetContainersWithMissingChildren.sql = Container_GetContainersWithMissingChildren.sql
-		Container_GetDependancies.sql = Container_GetDependancies.sql
-		Container_GetDescription.sql = Container_GetDescription.sql
-		Container_GetDisabledContainers.sql = Container_GetDisabledContainers.sql
-		Container_GetEmptyMains.sql = Container_GetEmptyMains.sql
-		Container_GetIndex.sql = Container_GetIndex.sql
-		Container_GetList.sql = Container_GetList.sql
-		Container_GetMostRecent.sql = Container_GetMostRecent.sql
-		Container_GetOrphans.sql = Container_GetOrphans.sql
-		Container_GetSearchCount.sql = Container_GetSearchCount.sql
-		Container_GetSearchList.sql = Container_GetSearchList.sql
-		Container_GetStats.sql = Container_GetStats.sql
-		Image_GetImageIndex.sql = Image_GetImageIndex.sql
-		ImageGallery_GetImageList.sql = ImageGallery_GetImageList.sql
-		Images.sql = Images.sql
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CONTAINER", "CONTAINER", "{217058C0-1C11-4311-B2C3-018B1A084CB9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{F1B59F23-EE5A-40F3-A492-D4910F08ADA5}"
-	ProjectSection(SolutionItems) = preProject
-		Container_GetSearchCount.sql = Container_GetSearchCount.sql
-		job_BackupDatabase.sql = job_BackupDatabase.sql
-		Restore.sql = Restore.sql
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FormPost", "FormPost", "{C1587909-2A7F-437D-BE93-9E1CFBA79D81}"
-	ProjectSection(SolutionItems) = preProject
-		Images.sql = Images.sql
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FORMPOST", "FORMPOST", "{C1587909-2A7F-437D-BE93-9E1CFBA79D81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LINGU", "LINGU", "{B12E2ABB-A55A-4C12-866F-D4463F77EA62}"
 	ProjectSection(SolutionItems) = preProject
-		Dictionary-Full.sql = Dictionary-Full.sql
-		Dictionary.sql = Dictionary.sql
-		Dictionary_GetDuplicateWords.sql = Dictionary_GetDuplicateWords.sql
-		Dictionary_GetSurroundingWords.sql = Dictionary_GetSurroundingWords.sql
-		..\..\..\..\icarus\_SQL\Dictionary_GetWordId.sql = ..\..\..\..\icarus\_SQL\Dictionary_GetWordId.sql
-		Sentence.sql = Sentence.sql
-		Sentence_GetWordIdList.sql = Sentence_GetWordIdList.sql
-		Sentence_Map.sql = Sentence_Map.sql
-		XML_GetStatement.sql = XML_GetStatement.sql
-		XML_GetWord.sql = XML_GetWord.sql
+		ICARUS\LINGU\Dictionary-Full.sql = ICARUS\LINGU\Dictionary-Full.sql
+		ICARUS\LINGU\Dictionary.sql = ICARUS\LINGU\Dictionary.sql
+		ICARUS\LINGU\Dictionary_GetDistinctWords.sql = ICARUS\LINGU\Dictionary_GetDistinctWords.sql
+		ICARUS\LINGU\Dictionary_GetDuplicateWords.sql = ICARUS\LINGU\Dictionary_GetDuplicateWords.sql
+		ICARUS\LINGU\Dictionary_GetSurroundingWords.sql = ICARUS\LINGU\Dictionary_GetSurroundingWords.sql
+		ICARUS\LINGU\Dictionary_GetWordId.sql = ICARUS\LINGU\Dictionary_GetWordId.sql
+		ICARUS\LINGU\Dictionary_Map.sql = ICARUS\LINGU\Dictionary_Map.sql
+		ICARUS\LINGU\Sentence.sql = ICARUS\LINGU\Sentence.sql
+		ICARUS\LINGU\Sentence_GetWordIdList.sql = ICARUS\LINGU\Sentence_GetWordIdList.sql
+		ICARUS\LINGU\Sentence_GetWordIdList_TVF.sql = ICARUS\LINGU\Sentence_GetWordIdList_TVF.sql
+		ICARUS\LINGU\Sentence_Map.sql = ICARUS\LINGU\Sentence_Map.sql
+		ICARUS\LINGU\XML_GetStatement.sql = ICARUS\LINGU\XML_GetStatement.sql
+		ICARUS\LINGU\XML_GetWord.sql = ICARUS\LINGU\XML_GetWord.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maintenance", "Maintenance", "{8375ACCE-61AF-4B0E-901C-E6B09980D44A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAINTENANCE", "MAINTENANCE", "{8375ACCE-61AF-4B0E-901C-E6B09980D44A}"
 	ProjectSection(SolutionItems) = preProject
-		Maintenance_PurgeContainerOrphans.sql = Maintenance_PurgeContainerOrphans.sql
-		Maintenance_PurgeContainers.sql = Maintenance_PurgeContainers.sql
-		Maintenance_PurgeEmptyMains.sql = Maintenance_PurgeEmptyMains.sql
-		Maintenance_PurgeFormPosts.sql = Maintenance_PurgeFormPosts.sql
+		ICARUS\MAINTENANCE\job_BackupDatabase.sql = ICARUS\MAINTENANCE\job_BackupDatabase.sql
+		ICARUS\MAINTENANCE\Maintenance_PurgeContainerOrphans.sql = ICARUS\MAINTENANCE\Maintenance_PurgeContainerOrphans.sql
+		ICARUS\MAINTENANCE\Maintenance_PurgeContainers.sql = ICARUS\MAINTENANCE\Maintenance_PurgeContainers.sql
+		ICARUS\MAINTENANCE\Maintenance_PurgeEmptyMains.sql = ICARUS\MAINTENANCE\Maintenance_PurgeEmptyMains.sql
+		ICARUS\MAINTENANCE\Maintenance_PurgeFormPosts.sql = ICARUS\MAINTENANCE\Maintenance_PurgeFormPosts.sql
+		ICARUS\MAINTENANCE\Maintenance_Restore.sql = ICARUS\MAINTENANCE\Maintenance_Restore.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dbo", "dbo", "{90D6EC88-5163-4540-B76A-C5C971AC4F56}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ICARUS", "ICARUS", "{90D6EC88-5163-4540-B76A-C5C971AC4F56}"
 	ProjectSection(SolutionItems) = preProject
 		LogEntry.sql = LogEntry.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "views", "views", "{E3CAE076-EAB0-4192-A9A9-E46B442B49D3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Views", "Views", "{E3CAE076-EAB0-4192-A9A9-E46B442B49D3}"
 	ProjectSection(SolutionItems) = preProject
-		Container_vw_ContainerParentIndex.sql = Container_vw_ContainerParentIndex.sql
-		Container_vw_ContainerSubSectionIndex.sql = Container_vw_ContainerSubSectionIndex.sql
+		ICARUS\CONTAINER\Views\Container_vw_ParentIndex.sql = ICARUS\CONTAINER\Views\Container_vw_ParentIndex.sql
+		ICARUS\CONTAINER\Views\Container_vw_SubSectionIndex.sql = ICARUS\CONTAINER\Views\Container_vw_SubSectionIndex.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Deprec", "_Deprec", "{30196BB5-3D96-4E9D-AC65-B537E7862DB9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deprec", "_deprec", "{30196BB5-3D96-4E9D-AC65-B537E7862DB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "STRING", "STRING", "{B95FB546-555C-4A59-9DFC-4695BCE4E38A}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\STRING\tvf_ParseSearchString.sql = ICARUS\STRING\tvf_ParseSearchString.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IMAGES", "IMAGES", "{BDA5FB43-C574-4C34-BBA0-C5EF3BD91613}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\IMAGES\Image_GetImageIndex.sql = ICARUS\FORMPOST\IMAGES\Image_GetImageIndex.sql
+		ICARUS\FORMPOST\IMAGES\Image_GetImageList.sql = ICARUS\FORMPOST\IMAGES\Image_GetImageList.sql
+		ICARUS\FORMPOST\IMAGES\Images.sql = ICARUS\FORMPOST\IMAGES\Images.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{9EBA9ABE-F54A-4058-9281-8CE1A600AA73}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql = ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql
+		ICARUS\FORMPOST\Functions\tvf_GetAvailableByDataType.sql = ICARUS\FORMPOST\Functions\tvf_GetAvailableByDataType.sql
+		ICARUS\FORMPOST\Functions\tvf_SearchByDataType.sql = ICARUS\FORMPOST\Functions\tvf_SearchByDataType.sql
+		ICARUS\FORMPOST\Functions\tvf_SearchByFormId.sql = ICARUS\FORMPOST\Functions\tvf_SearchByFormId.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CHAT", "CHAT", "{B9B84F90-277B-4EB5-9658-9DC1FF834A7C}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\CONTAINER\CHAT\Chat_UpdateDictionary.sql = ICARUS\CONTAINER\CHAT\Chat_UpdateDictionary.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{CF94CC3E-A4A0-48E8-A291-9218C3EFA112}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\CONTAINER\Functions\tvf_GetAvailableByDiscriminator.sql = ICARUS\CONTAINER\Functions\tvf_GetAvailableByDiscriminator.sql
+		ICARUS\CONTAINER\Functions\tvf_GetAvailableById.sql = ICARUS\CONTAINER\Functions\tvf_GetAvailableById.sql
+		ICARUS\CONTAINER\Functions\tvf_GetAvailableByLabel.sql = ICARUS\CONTAINER\Functions\tvf_GetAvailableByLabel.sql
+		ICARUS\CONTAINER\Functions\tvf_SearchByAttributesKey.sql = ICARUS\CONTAINER\Functions\tvf_SearchByAttributesKey.sql
+		ICARUS\CONTAINER\Functions\tvf_SearchByDataKey.sql = ICARUS\CONTAINER\Functions\tvf_SearchByDataKey.sql
+		ICARUS\CONTAINER\Functions\tvf_SearchByMetaKey.sql = ICARUS\CONTAINER\Functions\tvf_SearchByMetaKey.sql
+		ICARUS\CONTAINER\Functions\tvf_SearchByTagId.sql = ICARUS\CONTAINER\Functions\tvf_SearchByTagId.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored Procedures", "{D44241B6-D4EC-43FA-B889-0556FAC66ACA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored Procedures", "{A8D48066-94C2-4EA9-ACC7-426B10990B3D}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\CONTAINER\Stored Procedures\Example_SubSectionIndex.sql = ICARUS\CONTAINER\Stored Procedures\Example_SubSectionIndex.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_Get.sql = ICARUS\CONTAINER\Stored Procedures\sp_Get.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetContainersWithMissingChildren.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetContainersWithMissingChildren.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetDependancies.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetDependancies.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetDescription.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetDescription.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetDisabled.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetDisabled.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetEmptyMains.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetEmptyMains.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetIndex.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetIndex.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetList.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetList.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetMostRecent.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetMostRecent.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetOrphans.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetOrphans.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetParents.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetParents.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableCount.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableCount.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableList.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableList.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_GetStats.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetStats.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_SearchByTag.sql = ICARUS\CONTAINER\Stored Procedures\sp_SearchByTag.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored Procedures", "{356B43AB-1DD4-43AA-80BC-1E210E26C3D3}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\Stored Procedures\sp_GetAvailableByDataType.sql = ICARUS\FORMPOST\Stored Procedures\sp_GetAvailableByDataType.sql
+		ICARUS\FORMPOST\Stored Procedures\sp_GetAvailableByDataTypeCount.sql = ICARUS\FORMPOST\Stored Procedures\sp_GetAvailableByDataTypeCount.sql
+		ICARUS\FORMPOST\Stored Procedures\sp_GetSearchableCount.sql = ICARUS\FORMPOST\Stored Procedures\sp_GetSearchableCount.sql
+		ICARUS\FORMPOST\Stored Procedures\sp_GetSearchableList.sql = ICARUS\FORMPOST\Stored Procedures\sp_GetSearchableList.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Views", "Views", "{2AF91F31-D63D-42F8-8659-51451544D552}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\IMAGES\Images.sql = ICARUS\FORMPOST\IMAGES\Images.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TAGS", "TAGS", "{C18DA56A-3467-47C0-BC9C-9D6F82C5AC08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Views", "Views", "{10126F21-F8F5-45CB-9241-05070FBBDE8B}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\TAGS\Views\vw_Tags.sql = ICARUS\FORMPOST\TAGS\Views\vw_Tags.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{74B9E4D0-A03B-4D53-9915-760265CB4F48}.Default|Default.ActiveCfg = Default
+		{F70731DA-5987-4E74-B40E-F1754E56C9DF}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6A761238-A0A4-4F70-ACB7-D48150AE8CE1} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
+		{217058C0-1C11-4311-B2C3-018B1A084CB9} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
+		{C1587909-2A7F-437D-BE93-9E1CFBA79D81} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
 		{B12E2ABB-A55A-4C12-866F-D4463F77EA62} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{8375ACCE-61AF-4B0E-901C-E6B09980D44A} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
 		{E3CAE076-EAB0-4192-A9A9-E46B442B49D3} = {217058C0-1C11-4311-B2C3-018B1A084CB9}
+		{30196BB5-3D96-4E9D-AC65-B537E7862DB9} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
+		{B95FB546-555C-4A59-9DFC-4695BCE4E38A} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
+		{BDA5FB43-C574-4C34-BBA0-C5EF3BD91613} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{9EBA9ABE-F54A-4058-9281-8CE1A600AA73} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{B9B84F90-277B-4EB5-9658-9DC1FF834A7C} = {217058C0-1C11-4311-B2C3-018B1A084CB9}
+		{CF94CC3E-A4A0-48E8-A291-9218C3EFA112} = {217058C0-1C11-4311-B2C3-018B1A084CB9}
+		{D44241B6-D4EC-43FA-B889-0556FAC66ACA} = {90D6EC88-5163-4540-B76A-C5C971AC4F56}
+		{A8D48066-94C2-4EA9-ACC7-426B10990B3D} = {217058C0-1C11-4311-B2C3-018B1A084CB9}
+		{356B43AB-1DD4-43AA-80BC-1E210E26C3D3} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{2AF91F31-D63D-42F8-8659-51451544D552} = {BDA5FB43-C574-4C34-BBA0-C5EF3BD91613}
+		{C18DA56A-3467-47C0-BC9C-9D6F82C5AC08} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
+		{10126F21-F8F5-45CB-9241-05070FBBDE8B} = {C18DA56A-3467-47C0-BC9C-9D6F82C5AC08}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBFB882D-281E-4E76-8596-315CF2225C81}
