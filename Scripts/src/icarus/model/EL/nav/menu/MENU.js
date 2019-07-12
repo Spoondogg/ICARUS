@@ -13,8 +13,8 @@ import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 export default class MENU extends LIST {
 	/** Construct a MENU style list of NAVITEMS
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
-        @param {string} element HTML Element Tag
+	    @param {MODEL} [model] Model
+        @param {string} [element] HTML Element Tag
         @param {{canActivate, scrollIntoView, UId}} options Optional Parameters
 	*/
 	constructor(node, model, element = 'UL', options = {

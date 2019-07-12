@@ -75,7 +75,7 @@ export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
 		    @returns {void}
 		*/
         setTimeout(() => {
-            this.getJson('/' + className + '/GetContainerParents/' + id, (result) => {
+            this.getJson('/' + className + '/GetParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});

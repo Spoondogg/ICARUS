@@ -6,13 +6,12 @@ import UL from './ul/UL.js';
 /** List Constructor
     @description A Collection of ListItems
     @class
-    @extends ITEM
 */
 export default class LIST extends ITEM {
 	/** Constructs an abstract Collapsible List
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
-        @param {string} element HTML Element Tag
+	    @param {MODEL} [model] Model
+        @param {string} [element] HTML Element Tag
 	*/
 	constructor(node, model, element = 'UL') {
 		super(node, model, element);
@@ -34,7 +33,7 @@ export default class LIST extends ITEM {
 	    @returns {LI} A list item LI
 	*/
 	addLI(model) {
-		return this.addChild(new LI(this, model, model.label));
+        return this.addChild(new LI(this, model)); //model.label
 	}
 	/** Construct an unordered List (UL) and append to this element's children
 	    @param {MODEL} model Object Model

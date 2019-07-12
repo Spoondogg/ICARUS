@@ -8,7 +8,7 @@ import MENU, { ANCHOR, NAVITEM } from './menu/MENU.js';
 export default class NAV extends MENU {
 	/** Constructs a NAV
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {MODEL} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, model, 'NAV');

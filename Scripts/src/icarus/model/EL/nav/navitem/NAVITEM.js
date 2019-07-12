@@ -10,7 +10,7 @@ import ANCHOR from '../../a/anchor/ANCHOR.js';
 export default class NAVITEM extends LI {
 	/** Constructs a Nav Item (LI)
 	    @param {UL} node The element that will contain this object
-	    @param {MODEL} model The nav-item json object retrieved from the server
+	    @param {MODEL} [model] The nav-item json object retrieved from the server
 	*/
 	constructor(node, model) {
 		super(node, model); //new MODEL(model.attributes)

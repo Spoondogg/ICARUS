@@ -1,11 +1,12 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, Clickable } from '../../CONTAINER.js';
+import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate, NAVHEADER } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
+import NAVSEARCH from '../../../nav/navitem/NAVSEARCH.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -41,9 +42,8 @@ export default class CLASSINDEX extends CONTAINER {
         */
         this.isLoading = false;
 
-        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || options.classType));
-        $(this.header.el).insertBefore(this.body.el);
-
+        this.createHeader(model, options);
+        
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
         this.addMenuScrollEvents();        
         this.configureHeader();
@@ -51,6 +51,19 @@ export default class CLASSINDEX extends CONTAINER {
         this.overrideHorizontalSwipe();		
 		this.pagination = this.createPaginationFooter();
 		//this.loadPage(this.page);
+    }
+    createHeader(model, options) {
+        // THE HEADER NEEDS WORK.  CAN IT BE A NAVHEADER??
+        //this.header = new NAVHEADER(this.body, new MODEL('classindex-header'));
+        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || options.classType));
+        //this.header.el.dispatchEvent(new Expand(this.header));
+        $(this.header.el).insertBefore(this.body.el);
+        
+        /*
+        this.search = new NAVSEARCH(this.body, new MODEL());
+        this.search.input.setAttribute('value', this.query);
+        $(this.search.el).insertAfter(this.header.el);
+        */
     }
     /** Adds scroll events to this menu
         @returns {void}
@@ -89,6 +102,14 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     configureHeader() {
+        /*
+        let optionsMenu = this.header.getMenu('OPTIONS');
+        optionsMenu.addNavItemIcon(new MODEL().set({
+            label: 'btn-woot',
+            icon: ICONS.ALERT,
+            name: 'woot'
+        }));
+        */
 
         this.btnPageTotal = new BUTTON(this.header, this.pageTotal, ICONS.TAGS);
         this.btnPageTotal.addClass('page-total');
@@ -101,13 +122,16 @@ export default class CLASSINDEX extends CONTAINER {
         this.btnSearch.el.onclick = (ev) => {
             console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
-        };
+        };        
 
         this.header.implement(new Clickable(this.header));
+        this.header.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this));
         this.header.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
         this.header.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
         this.addHeaderEvents();
-        if (parseInt(this.data.showHeader) !== -1) {
+        if (parseInt(this.data.collapsed) === 1) {
+            this.header.el.dispatchEvent(new Deactivate(this.header));
+        } else {
             this.header.el.dispatchEvent(new Activate(this.header));
         }
     }
@@ -198,28 +222,8 @@ export default class CLASSINDEX extends CONTAINER {
 	    @param {string} className The className that the thumbnail represents
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail({
-        id,
-        subsections,
-        authorId,
-        label,
-        description,
-        tags,
-        key,
-        value,
-        jsonResults
-	}, className) {
-		return this.menu.addNavThumbnail(new MODEL().set({
-            id,
-            subsections,
-            authorId,
-            label,
-            description,
-            tags,
-            key,
-            value,
-            jsonResults
-		}), className);
+    createThumbnail(model, className) {
+        throw new AbstractMethodError(this.toString() + '.createThumbnail() not set', this, className, model);
 	}
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A Footer with a buttongroup for pagination

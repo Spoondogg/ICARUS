@@ -1,5 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
+import CONTAINERTHUMBNAIL from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
@@ -59,12 +60,14 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-formpostviewer'), {
                     container: this.getContainer(),
                     caller: this,
-                    label: 'FormPostViewer: ' + model.label
+                    label: 'Form( ' + model.id + ') ' + model.label
                     //text: 'Viewing ' + classType + ' (' + id + ')"'
                 }), false);
                 //let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
                 //viewer.body.el.dispatchEvent(new Expand(viewer));
-                let formpostindex = new FORMPOSTINDEX(dialog.body.pane, new MODEL(), {
+                let formpostindex = new FORMPOSTINDEX(dialog.body.pane, new MODEL().set({
+                    container: dialog.getContainer()
+                }), {
                     classType: 'FORMPOST',
                     query: '',
                     formId: model.id
@@ -76,6 +79,36 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             },
             () => console.log('FORM.SEARCH was not called.')
         ));
+    }
+    /** Creates a Thumbnail that launches its respective Container
+	    @param {MODEL} model The Thumbnail model
+        @param {number} model.id Unique Identifier that this thumbnail represents
+        @param {string} model.label The Thumbnail label
+	    @param {string} classType The className that the thumbnail represents
+	    @returns {NAVTHUMBNAIL} A thumbnail
+	*/
+    createThumbnail({
+        id,
+        subsections,
+        authorId,
+        label,
+        description,
+        tags,
+        key,
+        value,
+        jsonResults
+    }, classType) {
+        return this.menu.addChild(new CONTAINERTHUMBNAIL(this.menu, new MODEL().set({
+            id,
+            subsections,
+            authorId,
+            label,
+            description,
+            tags,
+            key,
+            value,
+            jsonResults
+        }), classType));
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {MODEL} model model
@@ -115,7 +148,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         ));
 
         // Add methods
-        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetContainerParents'];
+        let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {
             thumb.menu.addNavItemIcon(new MODEL().set({
                 label: methods[m],

@@ -176,7 +176,10 @@ export const DATAELEMENTS = new Map([
         'FORMPOSTINDEX', {
             data: [
                 createInputModel('INPUT', 'header', 'FORMPOSTINDEX'),
-                createInputModel('INPUT', 'formId', '-1')
+                createInputModel('TEXTAREA', 'p', 'Description'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                createInputModel('INPUT', 'formId', '-1'),
+                createInputModel('INPUT', 'query', '')
             ]
         }
     ],
@@ -208,6 +211,17 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'type', 'TEXT'),
                 createInputModel('INPUT', 'value', ''),
                 createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
+    [
+        'IMAGEINDEX', {
+            data: [
+                createInputModel('INPUT', 'header', 'IMAGEINDEX'),
+                createInputModel('TEXTAREA', 'p', 'Description'),
+                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                //createInputModel('INPUT', 'formId', '-1'),
+                createInputModel('INPUT', 'query', '')
             ]
         }
     ],

@@ -46,7 +46,7 @@ export const ICONS = {
 	FORMTEXTAREA: 'glyphicon-align-justify',
 	FULLSCREEN: 'glyphicon-new-window',
 	GET: 'glyphicon-duplicate',
-	GETCONTAINERPARENTS: 'glyphicon-duplicate',
+	GETPARENTS: 'glyphicon-duplicate',
     HISTORY: 'glyphicon-record',
 	HOME: 'glyphicon-home',
 	IFRAME: 'glyphicon-new-window',
