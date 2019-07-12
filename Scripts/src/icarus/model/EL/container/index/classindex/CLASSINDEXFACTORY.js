@@ -1,17 +1,17 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js';
-import CONTAINERINDEX from './classindex/containerindex/CONTAINERINDEX.js';
-import FORMPOSTINDEX from './classindex/formpostindex/FORMPOSTINDEX.js';
-import IMAGEINDEX from './classindex/formpostindex/imageindex/IMAGEINDEX.js';
-/** Constructs various Index Elements and returns them to be appended
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../../container/CONTAINERFACTORY.js';
+import CONTAINERINDEX from '../classindex/containerindex/CONTAINERINDEX.js';
+import FORMPOSTINDEX from '../classindex/formpostindex/FORMPOSTINDEX.js';
+import IMAGEINDEX from '../classindex/formpostindex/imageindex/IMAGEINDEX.js';
+/** Constructs various ClassIndex Elements and returns them to be appended
     Each Index Element child must be imported individually
     to avoid cyclic redundancy of dependencies
     @class
 */
-export default class INDEXFACTORY extends CONTAINERFACTORY {
+export default class CLASSINDEXFACTORY extends CONTAINERFACTORY {
     /** Constructs a FACTORY to build INDEX related CONTAINER Classes */
     constructor() {
-        super('INDEX');
+        super('CLASSINDEX');
     }
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
@@ -32,13 +32,10 @@ export default class INDEXFACTORY extends CONTAINERFACTORY {
             case 'IMAGEINDEX':
                 element = new IMAGEINDEX(span, model);
                 break;
-            /*case 'FORM':
-                element = new FORM(span, model);
-                break;*/
             default:
                 throw Error('No constructor exists for CONTAINER{' + className + '}');
         }
         return element;
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT }
+export { ATTRIBUTES, CONTAINER, CONTAINERINDEX, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT }

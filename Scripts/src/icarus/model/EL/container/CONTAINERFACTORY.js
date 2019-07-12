@@ -9,12 +9,13 @@ import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import CHAT from '../container/chat/CHAT.js';
 //import CLASSINDEX from '../container/index/classindex/CLASSINDEX.js';
+//import CLASSINDEXFACTORY from '../container/index/classindex/CLASSINDEXFACTORY.js';
 import CLASSVIEWER from '../container/index/classindex/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
 import CONTAINERINDEX from './index/classindex/containerindex/CONTAINERINDEX.js';
 import DICTIONARY from '../container/dictionary/DICTIONARY.js';
 import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTINDEX.js';
-import IMAGEINDEX from '../container/index/classindex/imageindex/IMAGEINDEX.js';
+import IMAGEINDEX from '../container/index/classindex/formpostindex/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/index/INDEX.js';
 import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
@@ -73,10 +74,10 @@ export default class CONTAINERFACTORY extends FACTORY {
             ////////////
             case 'INDEX':
                 element = new INDEX(span, model);
-                element.setFactory(this.factories.get('INDEXFACTORY'));
                 break;
             /*case 'CLASSINDEX':
                 element = new CLASSINDEX(span, model);
+                element.setFactory(this.factories.get('CLASSINDEXFACTORY'));
                 break;*/
             case 'CONTAINERINDEX':
                 element = new CONTAINERINDEX(span, model);

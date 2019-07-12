@@ -207,7 +207,7 @@ export default class INDEX extends CONTAINER {
 			});
 		}, delay);
         setTimeout(() => {
-            this.getJson('/' + className + '/GetContainerParents/' + id, (result) => {
+            this.getJson('/' + className + '/GetParents/' + id, (result) => {
 				console.log(className + ' Parents:', result, result.length + ' parent Containers');
 				this.modal.container.previewNotes.el.innerHTML = 'Parent Containers: ' + result.length;
 			});

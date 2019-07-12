@@ -44,19 +44,27 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
             @todo There has to be a more elegant solution here.
             @type {string}
         */
-        let type = this.attributes.name.substring(0, this.attributes.name.length - 2);
+        let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
 			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
             btnEdit.el.onclick = () => {
                 console.log('Create FORMPOST FORM for ' + id);
-                this.createForm(className, type, id, this.input);
+                this.createForm(className, dataType, id, this.input);
             }
 		}
 		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-        btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
+        btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
         let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
-        btnLoad.el.onclick = () => console.log('TODO: Browse FORMPOST(s)');
+        btnLoad.el.onclick = () => {
+            console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
+            let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
+                container: this.getContainer(),
+                caller: this,
+                label: 'FormPost: ClassName: ' + className + ', DataType: ' + dataType
+            }));
+            dialog.showDialog();
+        }
 	}
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)

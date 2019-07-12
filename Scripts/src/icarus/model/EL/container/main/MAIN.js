@@ -4,9 +4,10 @@ import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROM
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CHATFACTORY from '../chat/CHATFACTORY.js';
+import CLASSINDEXFACTORY from '../index/classindex/CLASSINDEXFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
-import INDEXFACTORY from '../../container/index/INDEXFACTORY.js';
+//import INDEXFACTORY from '../../container/index/INDEXFACTORY.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -57,10 +58,13 @@ export default class MAIN extends CONTAINER {
     deactivateParentContainer() {
         //console.log(this.toString() + '.deactivateParentContainer(TRUE)');
     }
+    /** Adds the given FACTORY to this CONTAINER's available factories
+        @returns {void}
+    */
     addFactories() {
         this.getFactory().factories.set('CHATFACTORY', new CHATFACTORY());
         this.getFactory().factories.set('FORMFACTORY', new FORMFACTORY());
-        this.getFactory().factories.set('INDEXFACTORY', new INDEXFACTORY());
+        this.getFactory().factories.set('CLASSINDEXFACTORY', new CLASSINDEXFACTORY());
         this.getFactory().factories.set('TABLEFACTORY', new TABLEFACTORY());
     }
     addMainActivateEvents() {

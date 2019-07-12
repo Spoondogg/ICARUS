@@ -7,8 +7,8 @@ import LIST, { ATTRIBUTES, EL, ITEM, MODEL } from '../LIST.js';
 export default class LI extends ITEM {
 	/** Constructs a List Item
 	    @param {LIST} node Parent List
-	    @param {MODEL} model The element's attributes
-        @param {string} element HTML Element Tag
+	    @param {MODEL} [model] The element's attributes
+        param {string} element HTML Element Tag
 	*/
 	constructor(node, model) {
 		super(node, model, 'LI'); // model.label

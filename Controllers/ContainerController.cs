@@ -179,7 +179,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(2, "pageLength", pageLen));
             parameters.Add(new Param(3, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
+            Procedure procedure = new Procedure("CONTAINER.GetList", columns, parameters);
 
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
@@ -206,7 +206,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(2, "pageLength", pageLen));
             parameters.Add(new Param(3, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetList", columns, parameters);
+            Procedure procedure = new Procedure("CONTAINER.GetList", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
                 m => m.authorId == User.Identity.Name || m.isPublic == 1
@@ -248,7 +248,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(3, "page", page));
             parameters.Add(new Param(4, "query", query));
 
-            Procedure procedure = new Procedure("ICARUS.GetSearchList_Container", columns, parameters);
+            Procedure searchList = new Procedure("CONTAINER.GetSearchableList", columns, parameters);
 
             List<string> searchCountCols = new List<string>();
             searchCountCols.Add("count");
@@ -257,7 +257,62 @@ namespace ICARUS.Controllers {
             searchCountParams.Add(new Param(1, "discriminator", this.className));
             searchCountParams.Add(new Param(2, "query", query));
 
-            Procedure searchCount = new Procedure("ICARUS.GetSearchCount_Container", searchCountCols, searchCountParams);
+            Procedure searchCount = new Procedure("CONTAINER.GetSearchableCount", searchCountCols, searchCountParams);
+            //int totalNew = this.Call(searchCount);
+
+            /*int total = selectAll(getObjectDbContext()).Where(
+                m => m.label.ToLower().Contains(query.ToLower())
+            ).Count();*/
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("total", this.Call(searchCount)[0]["count"]);
+            result.Add("list", this.Call(searchList));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of FormPosts for this container type (data, meta, attributes) matching the search query
+        /// </summary>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
+        /// <param name="query">Search string</param>
+        /// <returns>A Json PageIndex</returns>
+        public virtual async Task<ActionResult> GetFormPosts(string page = "0", string pageLength = "10", string dataType = "dataId,attributesId,metaId", string query = null) {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("type");
+            columns.Add("authorId");
+            columns.Add("status");
+            columns.Add("dateCreated");
+            columns.Add("dateLastModified");
+            columns.Add("shared");
+            columns.Add("isPublic");
+            columns.Add("jsonResults");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "dataType", dataType));
+            parameters.Add(new Param(3, "pageLength", pageLen));
+            parameters.Add(new Param(4, "page", page));
+            parameters.Add(new Param(5, "query", query));
+
+            Procedure procedure = new Procedure("FORMPOST.GetAvailableByDataType", columns, parameters);
+
+            List<string> searchCountCols = new List<string>();
+            searchCountCols.Add("count");
+
+            List<Param> searchCountParams = new List<Param>();
+            searchCountParams.Add(new Param(1, "discriminator", this.className));
+            searchCountParams.Add(new Param(2, "query", query));
+
+            Procedure searchCount = new Procedure("CONTAINER.GetSearchableCount", searchCountCols, searchCountParams);
             //int totalNew = this.Call(searchCount);
 
             /*int total = selectAll(getObjectDbContext()).Where(
@@ -277,17 +332,17 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <returns>A Json Object</returns>
         [Authorize]
-        public virtual async Task<ActionResult> GetContainerParents(int id = -1) {
+        public virtual async Task<ActionResult> GetParents(int id = -1) {
             List<string> columns = new List<string>();
             columns.Add("id");
             columns.Add("className");
             columns.Add("label");
-            //columns.Add("metaId");
+            columns.Add("tags");
 
             List<Param> parameters = new List<Param>();
             parameters.Add(new Param(1, "id", id));
 
-            Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
+            Procedure procedure = new Procedure("CONTAINER.GetParents", columns, parameters);
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
 
@@ -432,13 +487,13 @@ namespace ICARUS.Controllers {
                     columns.Add("id");
                     columns.Add("className");
                     columns.Add("label");
+                    columns.Add("tags");
 
                     List<Param> parameters = new List<Param>();
                     parameters.Add(new Param(1, "id", id));
 
                     // Only delete if this Container does not have parents
-                    Procedure procedure = new Procedure("ICARUS.GetContainerParents", columns, parameters);
-
+                    Procedure procedure = new Procedure("CONTAINER.GetParents", columns, parameters);
                     List<Dictionary<string, object>> records = this.Call(procedure);
                     if(records.Count <= 1) { // Should only exist in MAIN or nowhere
                         // Set new values

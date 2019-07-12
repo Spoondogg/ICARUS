@@ -10,9 +10,9 @@ import { ICONS } from '../../../../enums/ICONS.js';
 export default class NAVBAR extends NAV {
 	/** Constructs a Navigation Panel
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
-        @param {boolean} bottomUp If true, menus preceed tabs
-        @param {boolean} horizontalTabs If true (default), tabs are aligned horizontally
+	    @param {MODEL} [model] Model
+        @param {boolean} [bottomUp] If true, menus preceed tabs
+        @param {boolean} [horizontalTabs] If true (default), tabs are aligned horizontally
 	*/
 	constructor(node, model, bottomUp = false, horizontalTabs = true) {
 		super(node, model);

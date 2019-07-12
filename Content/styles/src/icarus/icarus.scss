@@ -1734,6 +1734,40 @@ html {
         @extend %wide-block;
         @include transition($transition-default);
         box-sizing: border-box;
+
+        > .classindex-header {
+            background-color: $color-dark;
+            border-bottom: 2px solid $color-darker;
+            box-shadow: $zero-px 1px 7px $zero-px $color-shadow-dark;
+            box-sizing: content-box;
+            color: $color-white;
+            font-weight: bold;
+            line-height: 3rem;
+            padding: .2rem .5rem;
+            position: sticky;
+            top: 0;
+            z-index: #{$z-top - 1};
+
+            &:hover {
+                //@include transition(color 400ms);
+                @include transition(background-color 400ms);
+                background-color: $color-dark-less;
+                //color: $color-secondary-neutral;
+                &.press {
+                    @include transition(background-color $longclick-delay);
+                    background-color: $color-red;
+                }
+            }
+
+            &.press {
+                @include transition(background-color $longclick-delay);
+                background-color: $color-red;
+            }
+
+            &.selected {
+                @extend %selected;
+            }
+        }
         /// editable header with toggle
         > header {
             position: sticky;
@@ -2046,8 +2080,8 @@ html {
                 }
             }
         }
-
-        &.index-image {
+        /// Image Gallery extending FORMPOSTINDEX
+        &.imageindex {
             color: inherit;
 
             > .body {
@@ -2076,6 +2110,11 @@ html {
                     max-height: 256px;
                     max-width: 256px;
                 }
+            }
+
+            .img-thumb {
+                max-width: 128px;
+                max-height: 128px;
             }
         }
         /// A full width block with impact
@@ -2917,28 +2956,42 @@ html {
                             //flex-grow: 1;
                             //height: $navbar-height;
                             //}
-                            button {
-                                background-color: $color-grey;
-                                border: 0;
-                                border-radius: .5rem;
-                                box-shadow: inset 1px 1px 2px $color-shadow-neutral;
-                                color: $color-white;
-                                //flex-basis: 16rem;
-                                flex-grow: 0;
-                                font-size: .8rem;
-                                font-weight: normal;
-                                height: 1.5rem;
-                                line-height: 1rem;
-                                margin-right: .5rem;
-                                padding: .25rem .5rem;
+                            
+                        }
+                    }
+                    /// Displays small image and details
+                    &.nav-item-thumbnail-image {
+                        height: 18rem;
 
-                                &:hover {
-                                    background-color: $color-blue-deep;
-                                }
+                        > a {
+                            height: 100%;
+                            text-align: center;
 
-                                > .icon {
+                            > span {
+                                width: 100%;
+
+                                &.thumbnail-image { // hide icon... or replace ICON!
                                     display: none;
                                 }
+                            }
+
+                            > img {
+                                &.thumbnail-image {
+                                    float: none;
+                                    height: auto;
+                                    margin: .5rem auto;
+                                    max-width: calc(100% - 1rem);
+                                    max-height: 12rem;
+                                    width: auto;
+                                }
+                            }
+
+                            header,
+                            p,
+                            .detail {
+                                clear: both;
+                                float: left;
+                                width: 100%;
                             }
                         }
                     }

@@ -198,7 +198,7 @@ namespace ICARUS.Controllers {
         /// <param name="pageLength">Number of items per page</param>
         /// <param name="query">Search string</param>
         /// <returns>A Json PageIndex</returns>
-        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", int formId = 0, string query = null) {
+        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", int formId = 0, string query = "") {
 
             int pageLen = Int32.Parse(pageLength);
             pageLen = (pageLen > 50) ? 50 : pageLen;
@@ -206,7 +206,7 @@ namespace ICARUS.Controllers {
             List<string> columns = new List<string>();
             columns.Add("index");
             columns.Add("id");
-            //columns.Add("formId");
+            columns.Add("formId");
             columns.Add("authorId");
             columns.Add("key");
             columns.Add("value");
@@ -218,7 +218,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(3, "page", page));
             parameters.Add(new Param(4, "query", query));
 
-            Procedure procedure = new Procedure("ICARUS.GetSearchList_FormPost", columns, parameters);
+            Procedure procedure = new Procedure("FORMPOST.GetSearchableList", columns, parameters);
 
             List<string> searchCountCols = new List<string>();
             searchCountCols.Add("count");
@@ -227,7 +227,7 @@ namespace ICARUS.Controllers {
             searchCountParams.Add(new Param(1, "formId", formId));
             searchCountParams.Add(new Param(2, "query", query));
 
-            Procedure searchCount = new Procedure("ICARUS.GetSearchCount_FormPost", searchCountCols, searchCountParams);
+            Procedure searchCount = new Procedure("FORMPOST.GetSearchableCount", searchCountCols, searchCountParams);
             //int totalNew = this.Call(searchCount);
 
             /*int total = selectAll(getObjectDbContext()).Where(

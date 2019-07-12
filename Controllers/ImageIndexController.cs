@@ -57,7 +57,7 @@ namespace ICARUS.Controllers {
         /// Returns a list of Container Ids that contain this container
         /// </summary>
         /// <returns>An image</returns>
-        public virtual async Task<ActionResult> Image(
+        public virtual async Task<ActionResult> GetImages(
             string page = "0", string pageLength = "10"
         ) {
 
@@ -78,7 +78,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(1, "pageLength", pageLen));
             parameters.Add(new Param(2, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetImageList", columns, parameters);
+            Procedure procedure = new Procedure("FORMPOST.GetImageList", columns, parameters);
 
             return Json(this.Call(procedure), JsonRequestBehavior.AllowGet);
         }
@@ -103,7 +103,7 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(1, "pageLength", pageLen));
             parameters.Add(new Param(2, "page", page));
 
-            Procedure procedure = new Procedure("ICARUS.GetImageIndex", columns, parameters);
+            Procedure procedure = new Procedure("FORMPOST.GetImageIndex", columns, parameters);
 
             int total = selectAll(getObjectDbContext()).Where(
                 m => m.authorId == User.Identity.Name || m.isPublic == 1
