@@ -225,6 +225,112 @@ namespace ICARUS.Controllers {
         /// </summary>
         /// <param name="page">Current Page</param>
         /// <param name="pageLength">Number of items per page</param>
+        /// <param name="tag">Search string</param>
+        /// <returns>A Json PageIndex</returns>
+        public virtual async Task<ActionResult> SearchByTag(string page = "0", string pageLength = "10", string tag = null) {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("subsections");
+            columns.Add("authorId");
+            columns.Add("label");
+            //columns.Add("description");
+            columns.Add("tags");
+            //columns.Add("metaId");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "tag", tag));
+            parameters.Add(new Param(3, "pageLength", pageLen));
+            parameters.Add(new Param(4, "page", page));
+            
+
+            Procedure searchList = new Procedure("CONTAINER.SearchByTag", columns, parameters);
+
+            List<string> searchCountCols = new List<string>();
+            searchCountCols.Add("count");
+
+            List<Param> searchCountParams = new List<Param>();
+            searchCountParams.Add(new Param(1, "discriminator", this.className));
+            searchCountParams.Add(new Param(2, "tag", tag));
+
+            Procedure searchCount = new Procedure("CONTAINER.SearchByTagCount", searchCountCols, searchCountParams);
+            //int totalNew = this.Call(searchCount);
+
+            /*int total = selectAll(getObjectDbContext()).Where(
+                m => m.label.ToLower().Contains(query.ToLower())
+            ).Count();*/
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("total", this.Call(searchCount)[0]["count"]);
+            result.Add("list", this.Call(searchList));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Containers matching the search query
+        /// </summary>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
+        /// <param name="tag">Search string</param>
+        /// <returns>A Json PageIndex</returns>
+        public virtual async Task<ActionResult> SearchByTagId(string page = "0", string pageLength = "10", string tag = null) {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("subsections");
+            columns.Add("authorId");
+            columns.Add("label");
+            //columns.Add("description");
+            columns.Add("tags");
+            //columns.Add("metaId");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "discriminator", this.className));
+            parameters.Add(new Param(2, "tag", tag));
+            parameters.Add(new Param(3, "pageLength", pageLen));
+            parameters.Add(new Param(4, "page", page));
+
+
+            Procedure searchList = new Procedure("CONTAINER.SearchByTagId", columns, parameters);
+
+            List<string> searchCountCols = new List<string>();
+            searchCountCols.Add("count");
+
+            List<Param> searchCountParams = new List<Param>();
+            searchCountParams.Add(new Param(1, "discriminator", this.className));
+            searchCountParams.Add(new Param(2, "tag", tag));
+
+            Procedure searchCount = new Procedure("CONTAINER.SearchByTagIdCount", searchCountCols, searchCountParams);
+            //int totalNew = this.Call(searchCount);
+
+            /*int total = selectAll(getObjectDbContext()).Where(
+                m => m.label.ToLower().Contains(query.ToLower())
+            ).Count();*/
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("className", className);
+            result.Add("total", this.Call(searchCount)[0]["count"]);
+            result.Add("list", this.Call(searchList));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Returns a list of Containers matching the search query
+        /// </summary>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
         /// <param name="query">Search string</param>
         /// <returns>A Json PageIndex</returns>
         public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", string query = null) {
@@ -289,6 +395,8 @@ namespace ICARUS.Controllers {
             columns.Add("id");
             columns.Add("type");
             columns.Add("authorId");
+            columns.Add("shared");
+            columns.Add("isPublic");
             columns.Add("status");
             columns.Add("dateCreated");
             columns.Add("dateLastModified");
