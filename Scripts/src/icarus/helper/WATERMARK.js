@@ -18,7 +18,7 @@ export default class WATERMARK {
 		console.log("      |__|                                                                  ");
         //console.log("\n\n");
         if (this.needsToSeePrompt()) {
-            alert('Install to Homescreen');
+            console.log('Install to Homescreen');
         }
     }
     /** Checks if environment should launch Add to Home Screen prompt 
