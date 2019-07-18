@@ -136,7 +136,11 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override JsonResult getJson(int id) {
             FormPost model = (FormPost) db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name || model.isPublic == 1) {
+
+            // NOTE: xmlResults is unnecessary on client
+            model.xmlResults = null;
+
+            if (model.authorId == User.Identity.Name || model.shared == 1 || model.isPublic == 1) {
 
                 string message = "Successfully retrieved " + this.className;
                 return Json(new Payload(
@@ -165,7 +169,7 @@ namespace ICARUS.Controllers {
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
                 FormPost model = ctx.FormPosts.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1 || m.isPublic == 1)
                 );
 
                 formPost.setXml();
@@ -208,6 +212,8 @@ namespace ICARUS.Controllers {
             columns.Add("id");
             columns.Add("formId");
             columns.Add("authorId");
+            columns.Add("shared");
+            columns.Add("isPublic");
             columns.Add("key");
             columns.Add("value");
             columns.Add("jsonResults");
