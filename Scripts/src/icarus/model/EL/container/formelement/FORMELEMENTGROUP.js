@@ -2,6 +2,7 @@
 import CONTAINER, { ATTRIBUTES, DATAELEMENTS, EL, Expand, MODEL, createInputModel } from '../CONTAINER.js';
 import FORMINPUT, { FORMELEMENT } from './forminput/FORMINPUT.js';
 import FORMPOSTINPUT from './formpostinput/FORMPOSTINPUT.js';
+import FORMPOSTLIST from './formpostlist/FORMPOSTLIST.js';
 import FORMSELECT from './formselect/FORMSELECT.js';
 import FORMTEXTAREA from './formtextarea/FORMTEXTAREA.js';
 import Hideable from '../../../../interface/Hideable.js';
@@ -44,6 +45,13 @@ export default class FORMELEMENTGROUP extends CONTAINER {
     addFormPostInput(model) {
         return this.addChild(new FORMPOSTINPUT(this.childLocation, model));
     }
+    /** Constructs a FORMPOSTINPUT for this FORMELEMENTGROUP
+	    @param {MODEL} model Model
+	    @returns {FORMPOSTLIST} A FORMPOSTLIST
+	*/
+    addFormPostList(model) {
+        return this.addChild(new FORMPOSTLIST(this.childLocation, model));
+    }
     /** Constructs a FORMTEXTAREA for this FORMELEMENTGROUP
 	    @param {MODEL} model Model
 	    @returns {FORMTEXTAREA} A FORMTEXTAREA
@@ -73,25 +81,30 @@ export default class FORMELEMENTGROUP extends CONTAINER {
     addInputElement(model) {
 		return new Promise((resolve, reject) => {
 			try {
-				let input = null;
-				if (model.type === 'FORMPOSTINPUT') {
-                    input = this.addFormPostInput(model);
-				} else {
-					switch (model.element) {
-						case 'TEXTAREA':
-                            input = this.addFormTextArea(model);
-							break;
-						case 'SELECT':
-                            input = this.addFormSelect(model);
-							break;
-						case 'INPUT':
-                            input = this.addFormInput(model);
-							break;
-						default:
-                            input = this.addFormInput(model);
-							break;
-					}
-				}
+                let input = null;
+                switch (model.type) {
+                    case 'FORMPOSTINPUT':
+                        input = this.addFormPostInput(model);
+                        break;
+                    case 'FORMPOSTLIST':
+                        input = this.addFormPostList(model);
+                        break;
+                    default:
+                        switch (model.element) {
+                            case 'TEXTAREA':
+                                input = this.addFormTextArea(model);
+                                break;
+                            case 'SELECT':
+                                input = this.addFormSelect(model);
+                                break;
+                            case 'INPUT':
+                                input = this.addFormInput(model);
+                                break;
+                            default:
+                                input = this.addFormInput(model);
+                                break;
+                        }
+                }
                 resolve(input);
 			} catch (e) {
 				reject(e);
@@ -99,4 +112,4 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER, createInputModel, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMINPUT, FORMPOSTINPUT, FORMSELECT, FORMTEXTAREA, MODEL }
+export { ATTRIBUTES, CONTAINER, createInputModel, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST, FORMSELECT, FORMTEXTAREA, MODEL }

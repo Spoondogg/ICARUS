@@ -6,6 +6,7 @@ import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
+import CACHE from '../container/main/CACHE.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
@@ -59,7 +60,7 @@ export default class CONTAINER extends GROUP {
         this.addEvents();
         this.addOptions();
 		this.updateDocumentMap();
-		this.setDefaultVisibility(model);
+        this.setDefaultVisibility(model);
     }
     addOptions() {
         let optionsMenu = this.navheader.getMenu('OPTIONS');
@@ -262,11 +263,11 @@ export default class CONTAINER extends GROUP {
     /** Searches children of this CONTAINER on given queryString
         @param {string} queryString Search String
         @param {string} [attributeName] Attribute to search (Default: label)
-        @param {boolean} [fuzzy] If true, fuzzy search is performed
-        @param {boolean} [recursive] If true, results are searched recursively
+        param {boolean} [fuzzy] If true, fuzzy search is performed
+        param {boolean} [recursive] If true, results are searched recursively
         @returns {Array<EL>} Array of results
     */
-    query(queryString, attributeName = 'label', fuzzy = true, recursive = false) {
+    query(queryString, attributeName = 'label') { //, fuzzy = true, recursive = false
         //console.log(this.toString() + '.query(' + queryString + ', ' + fuzzy + ', ' + recursive + ')', this.childLocation.children);
         let results = this.childLocation.children.filter((c) => this.queryFilter(c, queryString, attributeName));
         //console.log('Results', results);
@@ -289,6 +290,13 @@ export default class CONTAINER extends GROUP {
         }
         //console.log(result);
         return result;
+    }
+    /** Retrieves the MAIN Cache
+        @returns {CACHE} The Main Cache 
+    */
+    getCache() {
+        //console.log(this.toString() + '.getCache()');
+        return this.getContainer().getMain().cache;
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -457,10 +465,19 @@ export default class CONTAINER extends GROUP {
             } catch (e) {
                 console.warn('Unable to update document-map', this.className, e);
             }
-        } else {
-            console.warn('MAIN or no CONTAINER', this);
         }
-	}
+    }
+    /** Update tag cache with given tags
+        @param {string} tags Delimited string
+        @returns {Promise<MODEL>} Payload to cache
+    */
+    updateTagCache(tags) {
+        //console.log(this.toString() + ': Caching tags', tags);
+        if (typeof tags === 'string' && tags !== '0' && tags !== '') {
+            return Promise.all(tags.split(',').map((tag) => this.getCache().cacheObject('FORMPOST', tag)));
+        }
+        return Promise.reject(new Error('Unable to cache tags', tags, typeof tags));
+    }
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
         @abstract
@@ -850,7 +867,7 @@ export default class CONTAINER extends GROUP {
 			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
             createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
             createInputModel('INPUT', 'subsections', this.getSubSections().toString() || '0', 'SubSections', 'TEXT', true),
-            createInputModel('INPUT', 'tags', this.tags.toString() || '0', 'Tags', 'TEXT', true),
+            createInputModel('INPUT', 'tags', this.tags.toString() || '0', 'Tags', 'FORMPOSTLIST'),
 			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
             createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
             createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
@@ -1162,26 +1179,29 @@ export default class CONTAINER extends GROUP {
 		@returns {Promise<ThisType>} Promise Chain
 	*/
     load(id) {
-        console.log(this.toString() + '.load()', id);
+        //console.log(this.toString() + '.load()', id);
 		return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
+                        let { result, model, message } = payload;
+                        this.getMain().updateTagCache(model.tags);
+
                         switch (payload.result) {
                             case 0: // error
-                                console.error(this.toString() + '.load() error', payload.result, payload);
+                                console.error(this.toString() + '.load() error', result, payload);
                                 this.getMain().login();
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
                                 break;
                             case 1: // success
-                                this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
-                                resolve(this.make(payload.model));
+                                this.navheader.tab.anchor.label.setInnerHTML(model.label);
+                                resolve(this.make(model));
                                 break;
                             default: 
-                                console.log('Payload Result', payload.result, payload);
+                                console.log('Payload Result', result, payload);
                                 this.getMain().login();
                                 // @todo Create a LoginRequired type Error and appropriate handler
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
                         }
                     });
 				} else {
@@ -1472,5 +1492,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
-/* eslint-enable max-lines */
+export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
+/* eslint-enable max-lines, max-statements */

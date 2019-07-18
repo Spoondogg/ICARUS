@@ -45,8 +45,9 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'class')
             ],
             meta: [
-                createInputModel('TEXTAREA', 'description'),
-                createInputModel('INPUT', 'tags', '0')
+                createInputModel('TEXTAREA', 'description')
+                //createInputModel('INPUT', 'tags', '0')
+                // Conside a list of author ids (ie: authors)
             ]
         }
     ],
@@ -104,7 +105,9 @@ export const DATAELEMENTS = new Map([
                 createInputModel('INPUT', 'classType', 'MAIN'),
                 createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
                 createInputModel('INPUT', 'header', 'MAIN'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                createInputModel('TEXTAREA', 'p', 'Description'),
+                createInputModel('INPUT', 'searchType', 'CLASS'),
+                createInputModel('INPUT', 'query', '')
             ]
         }
     ],
@@ -171,7 +174,16 @@ export const DATAELEMENTS = new Map([
             ]
         }
     ],
-    ['FORMPOST', {}],
+    ['FORMPOST', {}], 
+    /*[
+        'FORMPOST', {
+            data: [
+                createInputModel('INPUT', 'id', '-1', 'id', 'NUMBER', true),
+                createInputModel('INPUT', 'shared', '-1', 'shared', 'CHECKBOX'),
+                createInputModel('INPUT', 'isPublic', '-1', 'isPublic', 'CHECKBOX')
+            ]
+        }
+    ],*/
     [
         'FORMPOSTINDEX', {
             data: [
@@ -185,6 +197,22 @@ export const DATAELEMENTS = new Map([
     ],
     [
         'FORMPOSTINPUT', {
+            data: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'Text Input'),
+                createInputModel('INPUT', 'label', 'Input Label'),
+                createInputModel('INPUT', 'value')
+            ],
+            attributes: [
+                createInputModel('INPUT', 'type', 'TEXT'),
+                createInputModel('INPUT', 'name', 'text-input'),
+                createInputModel('INPUT', 'value', ''),
+                createInputModel('INPUT', 'placeholder', '')
+            ]
+        }
+    ],
+    [
+        'FORMPOSTLIST', {
             data: [
                 createInputModel('INPUT', 'type', 'TEXT'),
                 createInputModel('INPUT', 'name', 'Text Input'),

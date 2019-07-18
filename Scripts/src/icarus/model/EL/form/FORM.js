@@ -2,13 +2,14 @@
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
-import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT } from '../container/formelement/FORMELEMENTGROUP.js';
+import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
 import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
 import LOADER from '../dialog/loader/LOADER.js';
+import PAYLOAD from './PAYLOAD.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
@@ -109,7 +110,10 @@ export default class FORM extends CONTAINER {
 			if (this.el.elements[name].type === 'textarea') {
 				this.el.elements[name].innerHTML = value;
 			} else {
-				this.el.elements[name].setAttribute('value', value);
+                this.el.elements[name].setAttribute('value', value);
+                if (this.el.elements[name].type === 'CHECKBOX') {
+                    console.warn('TODO: Checkbox should update its selected option, not just its input value');
+                }
 			}
 		} catch (e) {
 			if (!(e instanceof TypeError)) {
@@ -193,34 +197,42 @@ export default class FORM extends CONTAINER {
         }
     }
 	/** Returns the default Input array
-	    @param {object} data Payload
+	    @param {PAYLOAD} payload Payload
 	    @returns {Array} An array of INPUT models
 	*/
-	defaultFormPostInputArray(data) {
+	defaultFormPostInputArray(payload) {
 		return [
-			createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'shared', data.model.shared || -1, 'shared', 'CHECKBOX'),
-            createInputModel('INPUT', 'isPublic', data.model.isPublic || -1, 'isPublic', 'CHECKBOX')
+			createInputModel('INPUT', 'id', payload.model.id, 'ID', 'NUMBER', true),
+            createInputModel('INPUT', 'shared', payload.model.shared || -1, 'shared', 'CHECKBOX'),
+            createInputModel('INPUT', 'isPublic', payload.model.isPublic || -1, 'isPublic', 'CHECKBOX')
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST
-        @param {any} payload The FormPost Payload
+        @param {PAYLOAD} payload The FormPost Payload
 	    @param {string} className The container className
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @returns {Array<MODEL>} An array of MODEL inputs
 	*/
     generateFormPostInputs(payload, className, type) { // SEE CONTAINER.createElementCollection
         let inputs = this.defaultFormPostInputArray(payload);
-		try {
+        try {
+            //console.log('Adding CONTAINER DataElements', DATAELEMENTS.get('CONTAINER')[type]);
 			DATAELEMENTS.get('CONTAINER')[type].forEach((i) => inputs.push(i));
 		} catch (e) {
 			//console.warn(this.toString() + '.generateFormPostInputs()', className, type, inputs, e);
 		}
-		try {
+        try {
+            //console.log('Adding ' + className + ' DataElements', DATAELEMENTS.get(className)[type]);
 			DATAELEMENTS.get(className)[type].forEach((i) => inputs.push(i));
 		} catch (e) {
 			// No data element exists for 'className'
-		}
+        }
+
+        let { formId } = payload.model;
+        console.warn('TODO: Retrieve INPUT Layout from FormId', formId);
+        this.getJson('/FORM/GET/' + formId, (p) => {
+            console.log('FORMID: ' + formId, p);
+        });
 		return inputs;
 	}
 	/** Populates this form with a single fieldset and formelementgroup
@@ -640,5 +652,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, PAYLOAD }
 /* eslint-enable max-lines */

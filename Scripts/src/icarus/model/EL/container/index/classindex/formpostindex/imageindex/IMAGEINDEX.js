@@ -17,7 +17,7 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         query: model.data.query || '',
         formId: 3
     }) {
-        console.log('ImageIndex', 'FORMPOST', options);
+        //console.log('ImageIndex', 'FORMPOST', options);
         super(node, model, options);
         this.addClass('imageindex');        
     }
@@ -26,7 +26,7 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchClass(query = '') {
-        console.log('IMAGEINDEX Search', this.formId, query);
+        //console.log('IMAGEINDEX Search', this.formId, query);
         return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
             '__RequestVerificationToken': this.getToken()
         });

@@ -18,15 +18,52 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         this.addClass('containerindex');        
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {query} [query] Optional querystring
+        @param {query} [query] Optional querystring / delimited tag list
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchClass(query = '') {
-        console.log('CONTAINERINDEX Search', this.classType, query);
-        return $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+        //console.log('CONTAINERINDEX Search', this.classType, query, this.searchType);
+        let result = null;
+        //if (this.dataId > 0) {
+            switch (this.searchType) {
+                case 'TAG':
+                    result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                        '__RequestVerificationToken': this.getToken()
+                    });
+                    break;
+                case 'TAGID':
+                    result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                        '__RequestVerificationToken': this.getToken()
+                    });
+                    break
+                default:
+                    result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+                        '__RequestVerificationToken': this.getToken()
+                    });
+            }           
+        //}
+        return result;
+    }
+    /** An abstract/default search that promises to return a payload and status
+        @param {string} [tag] Optional comma delimited list of tags
+        @returns {Promise<object, string>} Promise to return payload, status
+    */
+    searchTags(tag = '') {
+        //console.log('CONTAINERINDEX SearchByTag', this.classType, tag);
+        return $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tag, {
             '__RequestVerificationToken': this.getToken()
         });
-    }	
+    }
+    /** An abstract/default search that promises to return a payload and status
+        @param {string} [tagId] Optional comma delimited list of tag uids
+        @returns {Promise<object, string>} Promise to return payload, status
+    */
+    searchTagIds(tagId = '') {
+        //console.log('CONTAINERINDEX SearchByTagId', this.classType, tagId);
+        return $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tagId, {
+            '__RequestVerificationToken': this.getToken()
+        });
+    }
     /** Appends chosen CONTAINER to target after confirmation
         @param {MODEL} model Model
         @returns {void}
@@ -57,7 +94,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             'Show posts for FORM(' + model.id + ')',
             () => {
                 //window.open(new URL(window.location.href).origin + '/FORMPOST/search/?formId=' + model.id + '&query=' + this.query + '&page=0&pageLength=10');
-                let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-formpostviewer'), {
+                let prompt = new PROMPT(new DIALOGMODEL(new MODEL('dialog-formpostviewer'), {
                     container: this.getContainer(),
                     caller: this,
                     label: 'Form( ' + model.id + ') ' + model.label
@@ -65,17 +102,17 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 }), false);
                 //let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
                 //viewer.body.el.dispatchEvent(new Expand(viewer));
-                let formpostindex = new FORMPOSTINDEX(dialog.body.pane, new MODEL().set({
-                    container: dialog.getContainer()
+                let formPostIndex = new FORMPOSTINDEX(prompt.body.pane, new MODEL().set({
+                    container: prompt.getContainer()
                 }), {
                     classType: 'FORMPOST',
                     query: '',
                     formId: model.id
                 });
-                formpostindex.body.el.dispatchEvent(new Expand(formpostindex));
+                formPostIndex.body.el.dispatchEvent(new Expand(formPostIndex));
                 //this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
 
-                dialog.showDialog();
+                prompt.showDialog();
             },
             () => console.log('FORM.SEARCH was not called.')
         ));
@@ -98,7 +135,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         value,
         jsonResults
     }, classType) {
-        return this.menu.addChild(new CONTAINERTHUMBNAIL(this.menu, new MODEL().set({
+        let thumbnail = this.menu.addChild(new CONTAINERTHUMBNAIL(this.menu, new MODEL().set({
             id,
             subsections,
             authorId,
@@ -109,6 +146,8 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             value,
             jsonResults
         }), classType));
+        thumbnail.container = this.getContainer();
+        return thumbnail;
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {MODEL} model model
@@ -146,7 +185,14 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/search/?query=' + this.query),
             () => console.log(this.classType + '.SEARCH was not called.')
         ));
-
+        /*
+        let btnSave = thumb.menu.addNavItemIcon(new MODEL().set({
+            label: 'Save ' + this.classType,
+            icon: ICONS.SAVE,
+            name: 'SAVE'
+        }));
+        btnSave.el.addEventListener('click', () => this.getFactory().save(false, this.getContainer(), this.getContainer()));
+        */
         // Add methods
         let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {

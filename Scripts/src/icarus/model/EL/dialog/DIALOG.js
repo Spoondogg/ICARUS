@@ -1,8 +1,8 @@
 /** @module */
 import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
+import Closeable, { Close, Open } from '../../../interface/Closeable.js';
 import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
-import Closeable from '../../../interface/Closeable.js';
 import DIALOGMODEL from './DIALOGMODEL.js';
 import { ICONS } from '../../../enums/ICONS.js';
 import Selectable from '../../../interface/Selectable.js';
@@ -111,6 +111,28 @@ export default class DIALOG extends EL {
             }
         }
     }
+    /** Dispatches a close event to all other DIALOGS 
+        @returns {void} 
+    */
+    closeActiveDialogs() {
+        // deactivate any active dialogs that arent this dialog
+        let activeDialogs = $('.dialog.in');
+        for (let t = 0; t < activeDialogs.length; t++) {
+            if (activeDialogs[t] === this.el) {
+                console.log('No need to deactivate this');
+            } else {
+                activeDialogs[t].dispatchEvent(new Close(activeDialogs[t]));
+            }
+        }
+        /*activeTags.each((t) => {
+        console.log('deactivate tag', activeTags[t]);
+        if (activeTags[t] === btn.el) {
+            console.log('No need to deactivate this');
+        } else {
+            activeTags[t].dispatchEvent(new Deactivate(activeTags[t]));
+        }
+        });*/
+    }
 	getContainer() {
 		return this.container;
 	}
@@ -137,5 +159,5 @@ export default class DIALOG extends EL {
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 }
-export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, ICONS, MENU, MODEL, NAVITEMICON }
+export { Activate, ATTRIBUTES, Close, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, ICONS, MENU, MODEL, NAVITEMICON, Open }
 /* eslint-enable */

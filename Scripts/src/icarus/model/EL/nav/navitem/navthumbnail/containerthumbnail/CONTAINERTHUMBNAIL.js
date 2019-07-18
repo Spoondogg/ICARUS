@@ -1,11 +1,17 @@
 /** @module */
-import BUTTONGROUP, { BUTTON } from '../../../../group/buttongroup/BUTTONGROUP.js';
+import BUTTONGROUP, { BUTTON, Deactivate } from '../../../../group/buttongroup/BUTTONGROUP.js';
 //import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
 import NAVTHUMBNAIL, { ATTRIBUTES, EL, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
+import PROMPT, { DIALOGMODEL } from '../../../../dialog/prompt/PROMPT.js';
+//import CACHE from '../../../../container/main/CACHE.js';
+//import Clickable from '../../../../../../interface/Clickable.js';
+import CONTAINERINDEX from '../../../../container/index/classindex/containerindex/CONTAINERINDEX.js';
+//import Close from '../../../../../../event/Close.js';
 import DIV from '../../../../div/DIV.js';
 //import GLYPHICON from '../../../span/GLYPHICON.js';
 //import HEADER from '../../../../header/header.js';
 //import { ICONS } from '../../../../../enums/ICONS.js';
+//import MENU from '../../../menu/MENU.js';
 //import P from '../../../p/P.js';
 //import STRING from '../../../../../STRING.js';
 /** A full-width NavItem with a Thumbnail image, label and description
@@ -28,10 +34,18 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
 		super(node, model, classType);
         this.addClass('nav-item-thumbnail-container');
     }
-    constructThumbnail(model, classType) {
-        this.header.setInnerHTML(model.label + ' (' + classType + ' # ' + model.id + ')');
-        let descString = model.description + ' (' + model.tags + ')'
-        this.p.setInnerHTML(new STRING(descString || 'N/A').truncate(128));
+    /** Constructs a thumbnail that represents the given model
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    constructThumbnail(model) {
+        this.header.setInnerHTML(model.label);
+        this.header.addClass('clickable');
+        this.header.el.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            console.warn('TODO: Launch viewer for container ' + model.id + ', ' + model.label);
+        });
+        this.p.setInnerHTML(new STRING(model.description || 'N/A').truncate(128));
         this.addThumbDetails(model);
         this.addTags(model);
         //this.fetchImage(); // Only if IMG exists
@@ -42,11 +56,141 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
     */
     addTags(model) {
         this.tagGroup = new BUTTONGROUP(this.anchor, new MODEL('tag-group'));
-        if (typeof model.tags === 'undefined') {
-            this.tagGroup.addButton('#0', ICONS.TAG);
-        } else {
-            model.tags.split(',').forEach((t) => this.tagGroup.addButton('#' + t, ICONS.TAG));
+        if (typeof model.tags !== 'undefined') {
+            model.tags.split(',').forEach((t) => {
+                if (t > 0) {
+                    // First, check if tag has been cached
+                    let container = this.getContainer();
+                    //let main = container.getMain();
+                    //console.log('addTags()', container, main, main.cache);
+                    /** @type {CACHE} */
+                    let cache = container.getCache();
+                    let cached = cache.FORMPOST[t];
+                    //console.log('Main Cache Formpost', cached);
+                    // If available, use cache to generate tag, or create cache
+                    if (typeof cached === 'undefined') {
+                        // Retrieve model and cache it
+                        //console.log('attempting to cache tag "' + t + '"');
+                        /** @type {CACHE} */
+                        cache.cacheObject('FORMPOST', t).then((mdl) => {
+                            //console.log('Successfully cached ' + t, mdl);
+                            this.createTagButton(mdl);
+                        });
+                        
+                    } else {
+                        //console.warn('Tag already cached', t, cached, cached.jsonResults[0].value);
+                        this.createTagButton(cached);
+                    }
+                    /*
+                    try {
+                        // Then use cache to generate tag
+                        let tagName = this.getContainer().getCache().FORMPOST[t].jsonResults[0].value;
+                        console.log('tagName', tagName);
+                        let btn = this.tagGroup.addButton('#' + t, ICONS.TAG);
+                        btn.el.addEventListener('click', () => {
+                            console.log('Clicked tag # ' + t, tagName);
+                        });
+                    } catch (e) {
+                        console.error('Unable to read cached tag', t, cache, e)
+                    }
+                    */
+                }
+            });
         }
+    }
+    /** Creates a TAG / Switchable Button inside a TAGGROUP and adds Events
+        @param {MODEL} model Model
+        @param {EL} caller Calling EL
+        @returns {void}
+    */
+    createTagButton(model) {
+        //console.log('createTagButton', model);
+        try {
+            // Then use cache to generate tag
+            let tagName = model.jsonResults[0].value;
+            //console.log('tagName', tagName);
+            let btn = this.tagGroup.addSwitch(tagName, ICONS.TAG);
+            btn.addClass('tag');
+            //btn.implement(new Clickable(btn));
+            btn.el.addEventListener('activate', (ev) => {
+                try {
+                    this.getDialog().close();
+                } catch (e) {
+                    console.warn('No dialog exists to close for TAG ' + tagName, btn);
+                }
+                ev.stopPropagation();
+                //console.log('Activated tag #' + model.id + ', ' + tagName);                
+                this.searchByTagId(model.id, btn).then((dialog) => {
+                    dialog.closeActiveDialogs();
+                    btn.el.addEventListener('deactivate', () => dialog.close());
+                });
+            });
+        } catch (e) {
+            console.error('Unable to create cached tag', model.id, e)
+        }
+    }
+    deactivateActiveTags() {
+        // deactivate any active tags
+        let activeTags = $('.tag.active');
+        for (let t = 0; t < activeTags.length; t++) {
+            activeTags[t].dispatchEvent(new Deactivate(activeTags[t]));
+        }
+        /*activeTags.each((t) => {
+        console.log('deactivate tag', activeTags[t]);
+        if (activeTags[t] === btn.el) {
+            console.log('No need to deactivate this');
+        } else {
+            activeTags[t].dispatchEvent(new Deactivate(activeTags[t]));
+        }
+        });*/
+    }
+    /** Retrieves a list of MAIN CONTAINERS that are tagged with the given tag uid
+        and sets the DIALOG for this CONTAINERTHUMBNAIL to a CONTAINERINDEX holding
+        the search results
+
+        @param {UId} id Tag UId
+        @param {EL} caller Calling EL
+        @returns {Promise<PROMPT>} Promise to resolve a DIALOG containing search results
+    */
+    searchByTagId(id, caller = this) { //
+        //this.getContainer().getJson('/MAIN/SearchByTagId?tag=' + id, (payload) => {
+        return new Promise((resolve, reject) => {
+            //console.log('SearchByTagId', id, 'Caller', caller);
+            try {
+                this.dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
+                    container: this.getContainer(),
+                    caller,
+                    label: 'SearchByTagId ' + id,
+                    text: 'Search by tag id'
+                }));
+                this.containerindex = new CONTAINERINDEX(this.dialog.body.pane, new MODEL().set({
+                    container: this.getContainer(),
+                    caller
+                }), {
+                    classType: 'MAIN',
+                    searchType: 'TAGID',
+                    query: id
+                });
+                
+                this.dialog.show().then((d) => {
+                    caller.el.dispatchEvent(new Deactivate(caller));
+                    resolve(d);
+                });
+            } catch (e) {
+                console.warn('SearchByTagId Error', e);
+                reject(e);
+            }
+        });
+    }
+    /** Retrieves a list of MAIN CONTAINERS that are tagged with the given tag uid
+        @param {string} tag Tag
+        @returns {void}
+    */
+    searchByTag(tag) {
+        console.log('Clicked tag ' + tag);
+        this.getContainer().getJson('/MAIN/SearchByTag?tag=' + tag, (payload) => {
+            console.log('SearchByTag', tag, payload);
+        });
     }
     /** Adds details like author and rating/rank
         @param {MODEL} model Model
