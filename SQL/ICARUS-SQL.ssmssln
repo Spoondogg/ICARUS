@@ -116,6 +116,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored
 		ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableList.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetSearchableList.sql
 		ICARUS\CONTAINER\Stored Procedures\sp_GetStats.sql = ICARUS\CONTAINER\Stored Procedures\sp_GetStats.sql
 		ICARUS\CONTAINER\Stored Procedures\sp_SearchByTag.sql = ICARUS\CONTAINER\Stored Procedures\sp_SearchByTag.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagCount.sql = ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagCount.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagId.sql = ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagId.sql
+		ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagIdCount.sql = ICARUS\CONTAINER\Stored Procedures\sp_SearchByTagIdCount.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored Procedures", "{356B43AB-1DD4-43AA-80BC-1E210E26C3D3}"

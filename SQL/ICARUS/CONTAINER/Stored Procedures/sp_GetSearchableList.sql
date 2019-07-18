@@ -1,4 +1,4 @@
-/**	Return a Paginated List of Containers that match the given query
+/**	Return a Paginated List of Containers that match on meta.description
 	EXEC [CONTAINER].[GetSearchableList] 'ryan@spoonmedia.ca', 'Form', 2000, 0, 'i'
 	http://localhost:8052/FORM/search/?page=0&pageLength=10&query=im
 */
