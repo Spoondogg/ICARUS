@@ -12,13 +12,21 @@ DECLARE @rowStart INT = (@pageLength * @page) + 1;
 DECLARE @rowEnd INT = @rowStart + @pageLength;
 
 SELECT 
-	--[rowNum] - 1 AS [index], 
-	*
+	[rowNum] - 1 AS [index], [id], 
+	[authorId], [status], 
+	[dateCreated], [dateLastModified], 
+	[shared], [isPublic],
+	[xmlResults], [jsonResults]
  
 FROM ( 
-	SELECT ROW_NUMBER() OVER ( ORDER BY [id] ) AS [rowNum], *
+	SELECT ROW_NUMBER() OVER ( ORDER BY [id] ) AS [rowNum],
+	[id], [authorId], [status], 
+	[dateCreated], [dateLastModified], 
+	[shared], [isPublic],
+	[xmlResults], 
+	[jsonResults]
     FROM [FORMPOST].[Images]
-    WHERE ([authorId] = @authorId OR [shared] = 1)	
+    WHERE ([authorId] = @authorId OR [shared] = 1 OR [isPublic] = 1)	
 ) AS [RowConstrainedResult]
 WHERE [rowNum] >= @rowStart AND [RowNum] < @rowEnd
 ORDER BY [rowNum]
