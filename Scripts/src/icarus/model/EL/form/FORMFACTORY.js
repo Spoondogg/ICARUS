@@ -6,6 +6,7 @@ import FORM from '../form/FORM.js';
 import FORMELEMENTGROUP from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMINPUT from '../container/formelement/forminput/FORMINPUT.js';
 import FORMPOSTINPUT from '../container/formelement/formpostinput/FORMPOSTINPUT.js';
+import FORMPOSTLIST from '../container/formelement/formpostlist/FORMPOSTLIST.js';
 import FORMTEXTAREA from '../container/formelement/formtextarea/FORMTEXTAREA.js';
 /** Constructs various Form Elements and returns them to be appended
     Each Form Element child must be imported individually
@@ -66,26 +67,31 @@ export default class FORMFACTORY extends CONTAINERFACTORY {
     */
     processFormElement(span, model) {
         let element = null;
-        if (model.type === 'FORMPOSTINPUT') {
-            element = new FORMPOSTINPUT(span, model);
-        } else {
-            switch (model.element) {
-                case 'TEXTAREA':
-                    element = new FORMTEXTAREA(span, model);
-                    break;
-                case 'SELECT':
-                    element = new FORMSELECT(span, model);
-                    break;
-                case 'INPUT':
-                    element = new FORMINPUT(span, model);
-                    break;
-                case 'OPTION':
-                    element = new OPTION(span, model);
-                    break;
-                default:
-                    element = new FORMINPUT(span, model);
-                    break;
-            }
+        switch (model.type) {
+            case 'FORMPOSTINPUT':
+                element = new FORMPOSTINPUT(span, model);
+                break;
+            case 'FORMPOSTLIST':
+                element = new FORMPOSTLIST(span, model);
+                break;
+            default:
+                switch (model.element) {
+                    case 'TEXTAREA':
+                        element = new FORMTEXTAREA(span, model);
+                        break;
+                    case 'SELECT':
+                        element = new FORMSELECT(span, model);
+                        break;
+                    case 'INPUT':
+                        element = new FORMINPUT(span, model);
+                        break;
+                    case 'OPTION':
+                        element = new OPTION(span, model);
+                        break;
+                    default:
+                        element = new FORMINPUT(span, model);
+                        break;
+                }
         }
         return element;
     }

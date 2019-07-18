@@ -119,7 +119,8 @@
 /** Represents a set of options for a ClassIndex
     @typedef {Object} ClassIndexOptions A set of options for a ClassIndex
     @property {classType} [classType="MAIN"] A Class Type / name of Class (ie: CONTAINER, FORMPOST)
-    @property {query} [query] Optional QueryString
+    @property {query} [query=""] Optional QueryString / comma delimited list of tags/tag uids
+    @property {string} [searchType="CLASS"] Optional search Type
 */
 /** A ClassIndexOption with formId for FormPostIndex(es)
     @typedef {ClassIndexOptions & {formId:formId}} FormPostIndexOptions - FormPost Index Options

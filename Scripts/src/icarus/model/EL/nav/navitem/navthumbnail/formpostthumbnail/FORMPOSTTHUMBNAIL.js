@@ -1,5 +1,5 @@
 /** @module */
-import NAVTHUMBNAIL, { ATTRIBUTES, Collapse, EL, Expand, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
+import NAVTHUMBNAIL, { ATTRIBUTES, Collapse, EL, Expand, ICONS, MODEL } from '../NAVTHUMBNAIL.js'; //STRING
 import BUTTON from '../../../../button/BUTTON.js';
 import { Clickable } from '../../../../container/CONTAINER.js';
 import UL from '../../../../list/ul/UL.js';
@@ -30,6 +30,7 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     constructThumbnail(model) {
+        //console.log('constructThumbnail', model);
         let { id, key, val } = model;
         let headerStr = 'id: ' + id;
         if (typeof model.key !== 'undefined') {
@@ -43,10 +44,16 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
                 button.addClass('pill-button');
 
                 let list = new UL(this.p);
-                JSON.parse(model.jsonResults).forEach(({
+                let jsonResults = JSON.parse(model.jsonResults);
+                jsonResults.forEach(({
                     name,
                     value
                 }) => list.addLI().setInnerHTML(name + ': ' + value));
+
+                ///  DO TAG THINGS ---  TODO: FIX ASAP
+                if (model.formId === 10128) {
+                    this.header.setInnerHTML(jsonResults[0].value);
+                }
 
                 button.implement(new Clickable(button));
                 button.el.addEventListener('activate', () => list.el.dispatchEvent(new Expand(list)));

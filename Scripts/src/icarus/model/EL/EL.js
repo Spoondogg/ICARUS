@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, max-statements */
 /** A generic HTML Element Node Module
     @module icarus/model/el
 */
@@ -57,7 +58,11 @@ export default class EL extends MODEL {
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
-		this.children = [];
+        this.children = [];
+        /** A dialog that belongs to this element 
+            @type {DIALOG}
+        */
+        this.dialog = null;
         /** A Collection of async Constructor methods
 		    ie: this.constructors[foo]
             @type {Object<string, Function>}
@@ -293,7 +298,20 @@ export default class EL extends MODEL {
 				throw e;
 			}
 		}
-    }
+	}
+    /** Returns the element's dialog
+        @returns {DIALOG} Dialog
+    */
+	getDialog() {
+        return this.dialog;
+	}
+    /** Sets the element's dialog
+        @param {DIALOG} dialog Dialog to set
+        @returns {void}
+    */
+	setDialog(dialog) {
+        this.dialog = dialog;
+	}
     /** Returns the element's factory
 	    @returns {FACTORY} An element factory
 	*/
@@ -359,23 +377,6 @@ export default class EL extends MODEL {
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
     }
-    /** Performs an AJAX request and calls the given method with the JSON response
-        @param {string} url HTTP Request Url
-        @param {Function} fn Function that accepts the resulting payload as its only argument
-        @param {string} method Request Method (ie: 'POST','GET')
-        @returns {Object} A JSON object retrieved from the given url
-    */
-    getJson(url, fn, method = 'GET') {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let payload = JSON.parse(this.responseText);
-                fn(payload);
-            }
-        };
-        xmlhttp.open(method, url, true);
-        xmlhttp.send();
-    }
 	/** Retrieve the application loader
 	    @returns {LOADER} Loader
 	*/
@@ -431,24 +432,6 @@ export default class EL extends MODEL {
 	*/
     getRole() {
         return document.getElementsByTagName('meta').roles.content || '';
-    } 
-    /** Retrieves a Payload matching the given params (if permitted)
-        @param {number} uid Type UId (ie: Formpost(123) = 123)
-        @param {string} [type] Payload type (default: FORMPOST)
-        @returns {Promise<PAYLOAD>} Promise to resolve a PAYLOAD Class
-        @todo Implement a non-jquery version 
-        @see https://www.w3schools.com/js/js_json_parse.asp 
-        @see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
-    */
-    getPayload(uid, type = 'FORMPOST') {
-        return new Promise((resolve, reject) => {
-            try {
-                this.getJson('/' + type + '/GET/' + uid, (payload) => resolve(new PAYLOAD(payload)));
-            } catch (e) {
-                console.warn('Unable to retrieve payload', type, uid, e);
-                reject(e);
-            }
-        });
     }
 	/** Retrieves the previous element (if exists) 
 	    @returns {EL} Previous Sibling Element
@@ -741,3 +724,4 @@ export default class EL extends MODEL {
 	}
 }
 export { AbstractMethodError, ATTRIBUTES, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
+/* eslint-enable max-lines, max-statements */

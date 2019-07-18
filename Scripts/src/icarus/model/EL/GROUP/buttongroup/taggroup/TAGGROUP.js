@@ -1,14 +1,13 @@
 /** @module */
-import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
-import SWITCH, { Activate, Deactivate } from '../../button/switch/SWITCH.js';
-import TOGGLEBUTTON, { BUTTON, ICONS } from '../../button/togglebutton/TOGGLEBUTTON.js';
-import { ALIGN } from '../../../../enums/ALIGN.js';
-/** A container for Buttons
+import BUTTONGROUP, { ATTRIBUTES, EL, MODEL } from '../BUTTONGROUP.js';
+import SWITCH, { Activate, Deactivate } from '../../../button/switch/SWITCH.js';
+import TOGGLEBUTTON, { BUTTON, ICONS } from '../../../button/togglebutton/TOGGLEBUTTON.js';
+import { ALIGN } from '../../../../../enums/ALIGN.js';
+/** A container for TAGS
     @class
-    @extends GROUP
 */
-export default class BUTTONGROUP extends GROUP {
-	/** Constructs a Group for containing Buttons
+export default class TAGGROUP extends BUTTONGROUP {
+	/** Constructs a Group for containing TAGS (Switchable Buttons)
 	    @param {EL} node Parent Node
         @param {MODEL} [model] Model
 	*/

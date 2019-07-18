@@ -1,12 +1,12 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate, NAVHEADER } from '../../CONTAINER.js';
+import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate } from '../../CONTAINER.js'; //NAVHEADER
 import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import NAVSEARCH from '../../../nav/navitem/NAVSEARCH.js';
+//import NAVSEARCH from '../../../nav/navitem/NAVSEARCH.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -21,13 +21,15 @@ export default class CLASSINDEX extends CONTAINER {
 	*/
     constructor(node, model, options = {
         classType: model.data.classType || 'MAIN',
-        query: ''
+        searchType: model.data.searchType || 'CLASS',
+        query: model.data.query || ''
     }) {
-        console.log('CLASSINDEX', options);
+        //console.log('CLASSINDEX', options);
         super(node, 'DIV', model, [options.classType]);
         this.addClass('classindex');
         this.query = options.query;
         this.classType = options.classType;
+        this.searchType = options.searchType;
         /** @todo Consider creating a PAGEABLE interface */
 		/** @type {number} The current page */
 		this.page = 0;
@@ -161,13 +163,15 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     construct() {
-        console.log(this.toString() + '.construct()', this.classType, this.query);
+        //console.log(this.toString() + '.construct()', this.classType, this.query);
         let query = this.query === null ? '' : this.query;
 		return new Promise((resolve, reject) => {
 			try {
-				if (!isNaN(this.page)) {
+                if (isNaN(this.page)) {
+                    console.log('Something aint right with this.page', this);
+                } else {
                     this.searchClass(query).then((payload, status) => {
-                        console.log('Search Results', query, payload, status);
+                        //console.log('Search Results', query, payload, status);
                         if (status === 'success') {
                             this.isLoading = true;
                             this.pageTotal = payload.total;
@@ -191,13 +195,14 @@ export default class CLASSINDEX extends CONTAINER {
                                 this.pagination.buttonGroup.loaded = true;
                                 this.pagination.buttonGroup.children[0].addClass('active');
                             }
-                            resolve(this);                            
+                            resolve(this);
                         } else {
                             reject(new Error('Failed to retrieve page'));
                         }
                     });
-				}
-			} catch (e) {
+                }
+            } catch (e) {
+                console.warn('ERROR!!!', e);
 				reject(e);
 			}
 		});

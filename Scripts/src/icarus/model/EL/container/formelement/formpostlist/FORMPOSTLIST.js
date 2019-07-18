@@ -2,12 +2,13 @@
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
 import PROMPT, { DIALOGMODEL, DIV } from '../../../dialog/prompt/PROMPT.js';
+import FORMPOSTINDEX from '../../index/classindex/formpostindex/FORMPOSTINDEX.js';
 import SPAN from '../../../span/SPAN.js';
-/** Represents an INPUT element inside a group of form elements
+/** Represents an INPUT element made up of a delimited list of formpost/container UId's
     @class
     @extends FORMELEMENT
 */
-export default class FORMPOSTINPUT extends FORMELEMENT {
+export default class FORMPOSTLIST extends FORMELEMENT {
 	constructElements() {
         /** The input-group contains the input element
             @type {DIV}
@@ -46,53 +47,46 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         */
         let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
-		if (id > 0) {
-			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-            btnEdit.el.onclick = () => this.createForm(className, dataType, id, this.input);
-		}
-		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-        btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
-        let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
-        btnLoad.el.onclick = () => {
-            console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'FormPost: ClassName: ' + className + ', DataType: ' + dataType
-            }));
-            dialog.showDialog();
+        let btnAdd = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'ADD'));
+        btnAdd.el.onclick = () => {
+            console.log('Add Tag to FORMPOSTLIST' + id);
+            this.launchViewer(className, dataType); //, id, this.input
         }
 	}
-	/** Creates a FORM that represents a given FORMPOST
+	/** Creates a prompt containing a list of available tags
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
-	    @param {string} type The key (dataId, attributesId, metaId) to add object to
-	    @param {UId} [id] FormPost Id to edit
-	    @param {INPUT} [inputNode] The input that spawned this DIALOG
-        @param {MODEL} [model] Optional MODEL to use for population
+	    @param {string} label Label for FORMPOSTINDEX header
+	    @param {UId} [formId] Form Id for formpostindex
+        @param {string} [query] Optional querystring
+	    param {INPUT} [inputNode] The input that spawned this DIALOG
 	    @returns {Promise<PROMPT>} Promise to create a new FormPost DIALOG and return it
 	*/
-	createForm(className, type, id = 0, inputNode = null, model = new MODEL()) {
+    launchViewer(className, label = 'Tags', formId = 10128, query = '') {
+        //inputNode = null
         return new Promise((resolve, reject) => {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
 				console.log('CreateForm', container, typeof container);
-				new PROMPT(new DIALOGMODEL(new MODEL(), {
-					container,
+                let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
+                    container,
                     caller: this,
-                    label: className + '.' + type + '(' + id + ') '
-                })).createForm(new MODEL().set({
-                    data: model.data,
-                    //attributes: model.attributes,
-					formtype: 'FORMPOST',
-					className,
-					type,
-					id,
-					inputNode,
-					container,
-					caller: this
-				})).then((form) => resolve(form.getDialog().show()));
+                    label
+                }));
+                let formPostIndex = new FORMPOSTINDEX(prompt.body.pane, new MODEL().set({
+                    container: prompt.getContainer(),
+                    data: {
+                        header: label
+                    }
+                }), {
+                    classType: 'FORMPOST',
+                    query,
+                    formId,
+                    caller: this
+                });
+                formPostIndex.body.el.dispatchEvent(new Expand(formPostIndex));
+                prompt.show();
 			} catch (e) {
-				console.warn('Failed to create FormPost Form', e, this);
+				console.warn('Failed to create Tag chooser', e, this);
 				reject(e);
 			}
 		});

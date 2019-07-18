@@ -652,6 +652,8 @@
     <Content Include="Scripts\src\icarus\controller\APP.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
+    <Content Include="Scripts\src\icarus\event\Close.js" />
+    <Content Include="Scripts\src\icarus\event\Open.js" />
     <Content Include="Scripts\src\icarus\event\Move.js" />
     <Content Include="Scripts\src\icarus\event\Modify.js" />
     <Content Include="Scripts\src\icarus\event\Flip.js" />
@@ -703,10 +705,12 @@
     <Content Include="Scripts\src\icarus\model\el\container\chat\CHATFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\CONTAINERFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formcheckbox\FORMCHECKBOX.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\formelement\formpostlist\FORMPOSTLIST.js" />
     <Content Include="Scripts\src\icarus\model\el\container\index\classindex\formpostindex\FORMPOSTINDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\index\classindex\containerindex\CONTAINERINDEX.js" />
     <Content Include="Scripts\src\icarus\model\el\container\index\classindex\CLASSINDEXFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\index\INDEXFACTORY.js" />
+    <Content Include="Scripts\src\icarus\model\el\container\main\CACHE.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\DOCUMENTMAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
@@ -717,6 +721,7 @@
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />
+    <Content Include="Scripts\src\icarus\model\el\group\buttongroup\taggroup\TAGGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\nav\menu\MENU.js" />

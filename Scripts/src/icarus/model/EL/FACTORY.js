@@ -117,15 +117,20 @@ export default class FACTORY {
                 node.children[index] = element;
                 element.setFactory(this);
                 this.injectDependencies(node, span, index, element);
-                //span.el.parentNode.replaceChild(element.el, span.el);
-				return node.children[index];
-			}
-		}).then(() => {
-			if (id === 0) {
-				console.log('SAVE', node);
-                let container = node.getContainer();
-                this.save(true, container, container);
-			}
+                //span.el.parentNode.replaceChild(element.el, span.el);				
+            }
+            try {
+                if (id === 0) {
+                    console.log('SAVE', node);
+                    let container = node.getContainer();
+                    this.save(true, container, container);
+                }
+            } catch (e) {
+                console.warn('Attempted SAVE failed', node, e);
+            }
+
+            return node.children[index];
+
 		});
     }
     /** Launches a FORM POST editor for the specified element
