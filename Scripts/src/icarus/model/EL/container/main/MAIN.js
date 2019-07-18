@@ -1,5 +1,6 @@
+/* eslint-disable max-lines, max-statements */
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
@@ -7,7 +8,6 @@ import CHATFACTORY from '../chat/CHATFACTORY.js';
 import CLASSINDEXFACTORY from '../index/classindex/CLASSINDEXFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
-//import INDEXFACTORY from '../../container/index/INDEXFACTORY.js';
 import LOADER from '../../dialog/loader/LOADER.js';
 import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
@@ -24,10 +24,10 @@ export default class MAIN extends CONTAINER {
 	constructor(model) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
         this.addClass('main');
+        this.cache = new CACHE();
         this.deactivateSiblingsOnActivate = false;
-		this.body.pane.addClass('pane-tall');
-		this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
-		this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
+        this.body.pane.addClass('pane-tall');
+        this.overrideSwipeEvents();
         this.navheader.setAttribute('draggable', false);
         this.navheader.tab.addClass('tab-center');
 		this.addNavOptions();
@@ -45,6 +45,13 @@ export default class MAIN extends CONTAINER {
         this.addFactories();
         this.addRefreshScroll();
         this.addMainActivateEvents();
+    }
+    /** Overrides the CONTAINER swipe events
+        @returns {void}
+    */
+    overrideSwipeEvents() {
+        this.body.pane.swipeUp = () => console.log('MAIN.body.pane.swipeUp');
+        this.body.pane.swipeDown = () => console.log('MAIN.body.pane.swipeDown');
     }
     /** Override and terminate parent activation at the top of the chain
         @returns {void}
@@ -770,3 +777,4 @@ export default class MAIN extends CONTAINER {
 	}
 }
 export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR, TABLEFACTORY }
+/* eslint-enable max-lines, max-statements */
