@@ -1,5 +1,7 @@
 /** @module */
 import Hideable, { EL, IFACE } from './Hideable.js';
+import Close from '../event/Close.js';
+import Open from '../event/Open.js';
 /** An interface for Open/Close/Destroy driven Events
     @class
     @extends Hideable
@@ -97,4 +99,4 @@ export default class Closeable extends Hideable {
 		console.log('Locked');
 	}*/
 }
-export { EL, Hideable, IFACE }
+export { Close, EL, Hideable, IFACE, Open }
