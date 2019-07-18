@@ -70,7 +70,9 @@ namespace ICARUS.Controllers {
             columns.Add("dateCreated");
             columns.Add("dateLastModified");
             columns.Add("authorId");
-            columns.Add("xmlResults");
+            columns.Add("shared");
+            columns.Add("isPublic");
+            //columns.Add("xmlResults");
             columns.Add("jsonResults");
             columns.Add("shared");
 
