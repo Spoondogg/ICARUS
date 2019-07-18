@@ -1,6 +1,6 @@
 /** @module */
+import Clickable, { Activate, Deactivate } from '../../../../interface/Clickable.js';
 import BUTTON from '../BUTTON.js';
-import Clickable from '../../../../interface/Clickable.js';
 /** Button that can be switched on or off
     @class
     @extends BUTTON
@@ -14,7 +14,7 @@ export default class SWITCH extends BUTTON {
 	*/
 	constructor(node, label, glyphicon, buttonType) {
 		super(node, label, glyphicon, buttonType);
-		this.implement(new Clickable(this));
+        this.implement(new Clickable(this));
 	}
 }
-export { BUTTON }
+export { Activate, BUTTON, Deactivate }
