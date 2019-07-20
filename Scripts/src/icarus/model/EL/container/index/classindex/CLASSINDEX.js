@@ -1,12 +1,11 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate } from '../../CONTAINER.js'; //NAVHEADER
+import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-//import NAVSEARCH from '../../../nav/navitem/NAVSEARCH.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -44,28 +43,57 @@ export default class CLASSINDEX extends CONTAINER {
         */
         this.isLoading = false;
 
-        this.createHeader(model, options);
-        
+        /** The ClassIndex Menu contains the results of the search */
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        this.createHeader(model, options);
         this.addMenuScrollEvents();        
         this.configureHeader();
         this.addEvents();
         this.overrideHorizontalSwipe();		
 		this.pagination = this.createPaginationFooter();
-		//this.loadPage(this.page);
     }
+    /** Creates a header with basic tabbable functionality, bound to this.menu
+        @param {MODEL} model Model
+        @param {ClassIndexOptions} options Constructor's options
+        @returns {void}
+    */
     createHeader(model, options) {
-        // THE HEADER NEEDS WORK.  CAN IT BE A NAVHEADER??
-        //this.header = new NAVHEADER(this.body, new MODEL('classindex-header'));
-        this.header = new HEADER(this.body, new MODEL().set('innerHTML', model.data.header || options.classType));
-        //this.header.el.dispatchEvent(new Expand(this.header));
+        this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
-        
-        /*
-        this.search = new NAVSEARCH(this.body, new MODEL());
-        this.search.input.setAttribute('value', this.query);
-        $(this.search.el).insertAfter(this.header.el);
-        */
+        this.headerTab = new BUTTON(this.header, model.data.header || options.classType, ICONS.BLANK);
+        this.headerTab.addClass('headerTab');
+        this.headerTab.implement(new Clickable(this.headerTab));
+        this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
+        this.headerTab.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.body)));
+        this.headerTab.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this.headerTab));
+
+        if (parseInt(this.data.collapsed) === 1) {
+            this.headerTab.el.dispatchEvent(new Deactivate(this.headerTab));
+        } else {
+            this.headerTab.el.dispatchEvent(new Activate(this.headerTab));
+        }
+
+        this.search = new MENU(this.body, new MODEL('search-menu'));
+        $(this.search.el).insertBefore(this.body.el);
+        let navSearch = this.search.addNavSearch(new MODEL().set({
+            label: 'Searchwoot',
+            icon: ICONS.SEARCH,
+            name: 'searchwoot'
+        }));
+        navSearch.input.setAttribute('value', this.query);
+        navSearch.button.el.addEventListener('click', () => this.callSearch(navSearch.input.el.value));
+    }
+    /** Calls the search using the current params and populates the results menu
+        @param {string} query Search string
+        @returns {void}
+    */
+    callSearch(query) {
+        this.query = query;
+        this.page = 0;
+        this.pageCount = 0;
+        this.pageTotal = 0;
+        this.menu.empty();
+        this.construct();
     }
     /** Adds scroll events to this menu
         @returns {void}
@@ -104,32 +132,34 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     configureHeader() {
-        /*
-        let optionsMenu = this.header.getMenu('OPTIONS');
-        optionsMenu.addNavItemIcon(new MODEL().set({
-            label: 'btn-woot',
-            icon: ICONS.ALERT,
-            name: 'woot'
-        }));
-        */
+        this.buttonGroup = new BUTTONGROUP(this.header);
+        //let searchToggle = this.buttonGroup.addToggleButton('', ICONS.SEARCH);
 
-        this.btnPageTotal = new BUTTON(this.header, this.pageTotal, ICONS.TAGS);
+        this.btnPageTotal = this.buttonGroup.addSwitch(this.pageTotal, ICONS.TAGS);
         this.btnPageTotal.addClass('page-total');
-        this.btnPageTotal.el.onclick = (ev) => {
+        this.btnPageTotal.el.addEventListener('activate', (ev) => {
             console.log('TODO: Not sure if this should trigger anything or not');
             ev.stopPropagation();
-        };
+        });
 
-        this.btnSearch = new BUTTON(this.header, '', ICONS.SEARCH);
-        this.btnSearch.el.onclick = (ev) => {
+        this.btnSearch = this.buttonGroup.addSwitch('', ICONS.SEARCH);
+        this.btnSearch.el.addEventListener('activate', (ev) => {
             console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
-        };        
+            this.search.el.dispatchEvent(new Expand(this.btnSearch));
+        });
+        this.btnSearch.el.addEventListener('deactivate', (ev) => {
+            ev.stopPropagation();
+            this.search.el.dispatchEvent(new Collapse(this.btnSearch));
+        });
+        //this.menu.el.dispatchEvent(new Expand(this.menu));
+        this.body.el.dispatchEvent(new Expand(this.body));
 
-        this.header.implement(new Clickable(this.header));
+        /*this.header.implement(new Clickable(this.header));
         this.header.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this));
         this.header.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
         this.header.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
+        */
         this.addHeaderEvents();
         if (parseInt(this.data.collapsed) === 1) {
             this.header.el.dispatchEvent(new Deactivate(this.header));
@@ -171,7 +201,7 @@ export default class CLASSINDEX extends CONTAINER {
                     console.log('Something aint right with this.page', this);
                 } else {
                     this.searchClass(query).then((payload, status) => {
-                        //console.log('Search Results', query, payload, status);
+                        console.log('Search Results', query, payload, status);
                         if (status === 'success') {
                             this.isLoading = true;
                             this.pageTotal = payload.total;

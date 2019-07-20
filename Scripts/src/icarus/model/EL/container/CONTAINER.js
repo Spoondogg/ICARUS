@@ -476,7 +476,7 @@ export default class CONTAINER extends GROUP {
         if (typeof tags === 'string' && tags !== '0' && tags !== '') {
             return Promise.all(tags.split(',').map((tag) => this.getCache().cacheObject('FORMPOST', tag)));
         }
-        return Promise.reject(new Error('Unable to cache tags', tags, typeof tags));
+        return Promise.reject(new Error(this.toString() + ' is unable to cache tags', tags, typeof tags));
     }
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
