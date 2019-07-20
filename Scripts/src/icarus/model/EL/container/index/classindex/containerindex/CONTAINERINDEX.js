@@ -22,7 +22,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchClass(query = '') {
-        //console.log('CONTAINERINDEX Search', this.classType, query, this.searchType);
+        console.log('CONTAINERINDEX Search', this.classType, query, this.searchType);
         let result = null;
         //if (this.dataId > 0) {
             switch (this.searchType) {
@@ -36,7 +36,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                         '__RequestVerificationToken': this.getToken()
                     });
                     break
-                default:
+                default: // generic search
                     result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
                         '__RequestVerificationToken': this.getToken()
                     });

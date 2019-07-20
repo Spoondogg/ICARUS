@@ -1742,6 +1742,7 @@ html {
             box-sizing: content-box;
             color: $color-white;
             font-weight: bold;
+            height: 3rem;
             line-height: 3rem;
             padding: .2rem .5rem;
             position: sticky;
@@ -1766,6 +1767,40 @@ html {
 
             &.selected {
                 @extend %selected;
+            }
+
+            > .btn-group {
+                float: right;
+
+                > button {
+                    background-color: transparent;
+                    border: 0;
+                    color: $color-white;
+                    height: 3rem;
+                    line-height: 3rem;
+                    margin: 0;
+                    padding: 0 1rem 0 0;
+                    width: 4rem;
+
+                    > .icon {
+                        padding-right: .5rem;
+                    }
+                }
+            }
+
+            > .headerTab { // header label
+                background-color: transparent;
+                border: 0;
+                color: $color-white;
+                float: left;
+                height: 3rem;
+                line-height: 3rem;
+                margin: 0;
+                padding: 0 1rem 0 0;
+                //width: 4rem;
+                > .icon {
+                    padding-right: .5rem;
+                }
             }
         }
         /// editable header with toggle
@@ -2969,6 +3004,7 @@ html {
                                     margin: 0 .5rem 0 0;
                                     max-width: fit-content;
                                     padding: 0 .5rem;
+
                                     &.active {
                                         background-color: orange;
                                     }

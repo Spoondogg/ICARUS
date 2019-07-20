@@ -139,21 +139,24 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {CONTAINER} [container] Calling container
         @param {EL} [caller] Calling element (ie: switchable element resolved)
         @param {string} [query] Optional Query String
+        @param {string} [searchType] Optional Search Type
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this, query = null) {
+    launchViewer(classType = 'MAIN', container = this, caller = this, query = null, searchType = null) {
         console.log(container.toString() + '.launchViewer()', query);
         return new Promise((resolve) => {
+            let label = classType === '*' ? 'Containers' : classType + '(s)';
+            label += query === null ? '' : ': ' + query;
             container.getLoader().log(25).then((loader) => {
                 let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
                     container,
                     caller,
-                    label: classType + '(s)'
-                    //text: 'Viewer Text'
+                    label
                 }));
                 let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
                     classType,
-                    query
+                    query,
+                    searchType
                 });
                 viewer.setContainer(container);
                 // Do viewer config here

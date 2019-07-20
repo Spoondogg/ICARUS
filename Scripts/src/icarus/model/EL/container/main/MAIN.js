@@ -315,15 +315,17 @@ export default class MAIN extends CONTAINER {
     }
     /** Launches the appropriate ClassViewer and passes it the querystring
         @param {Event} ev Evetn
-        @param {string} query QueryString
-        @param {EL} caller Calling element
+        @param {string} [query] QueryString
+        @param {EL} [caller] Calling element
+        @param {string} [classType] Class Type to Search (ie: MAIN, FORM)
+        @param {string} [searchType] Optional Search Type
         @returns {void}
     */
-    submitSearch(ev, query, caller) {
+    submitSearch(ev, query, caller, classType = this.classType, searchType = 'TAG') {
         ev.preventDefault();
         ev.stopPropagation();
         console.log('Search', query);
-        this.getFactory().launchViewer('MAIN', this, caller, query);
+        this.getFactory().launchViewer(classType, this, caller, query, searchType);
     }
 	/** Adds default Nav Items to the Nav Bar including the label
 	    @returns {Promise<ThisType>} Promise Chain

@@ -1,19 +1,10 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, Deactivate } from '../../../../group/buttongroup/BUTTONGROUP.js';
-//import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
 import NAVTHUMBNAIL, { ATTRIBUTES, EL, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
 import PROMPT, { DIALOGMODEL } from '../../../../dialog/prompt/PROMPT.js';
-//import CACHE from '../../../../container/main/CACHE.js';
-//import Clickable from '../../../../../../interface/Clickable.js';
 import CONTAINERINDEX from '../../../../container/index/classindex/containerindex/CONTAINERINDEX.js';
-//import Close from '../../../../../../event/Close.js';
 import DIV from '../../../../div/DIV.js';
-//import GLYPHICON from '../../../span/GLYPHICON.js';
-//import HEADER from '../../../../header/header.js';
-//import { ICONS } from '../../../../../enums/ICONS.js';
-//import MENU from '../../../menu/MENU.js';
-//import P from '../../../p/P.js';
-//import STRING from '../../../../../STRING.js';
+import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 /** A full-width NavItem with a Thumbnail image, label and description
     @class
 */
@@ -40,11 +31,6 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
     */
     constructThumbnail(model) {
         this.header.setInnerHTML(model.label);
-        this.header.addClass('clickable');
-        this.header.el.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            console.warn('TODO: Launch viewer for container ' + model.id + ', ' + model.label);
-        });
         this.p.setInnerHTML(new STRING(model.description || 'N/A').truncate(128));
         this.addThumbDetails(model);
         this.addTags(model);
@@ -55,7 +41,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     addTags(model) {
-        this.tagGroup = new BUTTONGROUP(this.anchor, new MODEL('tag-group'));
+        this.tagGroup = new TAGGROUP(this.anchor);
         if (typeof model.tags !== 'undefined') {
             model.tags.split(',').forEach((t) => {
                 if (t > 0) {

@@ -65,4 +65,4 @@ export default class BUTTONGROUP extends GROUP {
         return super.get(name, className);
     }
 }
-export { Activate, ALIGN, ATTRIBUTES, BUTTON, Deactivate, EL, ICONS, MODEL, TOGGLEBUTTON }
+export { Activate, ALIGN, ATTRIBUTES, BUTTON, Deactivate, EL, ICONS, MODEL, SWITCH, TOGGLEBUTTON }
