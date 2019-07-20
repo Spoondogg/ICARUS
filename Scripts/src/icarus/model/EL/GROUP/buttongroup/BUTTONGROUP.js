@@ -1,7 +1,6 @@
 /** @module */
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
-import SWITCH, { Activate, Deactivate } from '../../button/switch/SWITCH.js';
-import TOGGLEBUTTON, { BUTTON, ICONS } from '../../button/togglebutton/TOGGLEBUTTON.js';
+import TOGGLEBUTTON, { Activate, BUTTON, Deactivate, ICONS, SWITCH } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A container for Buttons
     @class
