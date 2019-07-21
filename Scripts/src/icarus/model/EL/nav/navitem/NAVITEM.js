@@ -5,7 +5,6 @@ import UL, { ATTRIBUTES, EL, LI, MODEL } from '../../list/ul/UL.js';
 import ANCHOR from '../../a/anchor/ANCHOR.js';
 /** A Navigation Item
     @class
-    @extends LI
 */
 export default class NAVITEM extends LI {
 	/** Constructs a Nav Item (LI)
