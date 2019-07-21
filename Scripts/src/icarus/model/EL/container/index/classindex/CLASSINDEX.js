@@ -63,12 +63,13 @@ export default class CLASSINDEX extends CONTAINER {
         this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
 
+        /*
         this.headerNew = new NAVHEADER(this, new MODEL().set('label', this.label.toString()), {
             tabTarget: this.menu
         });
         $(this.headerNew.el).insertBefore(this.body.el);
         this.headerNew.el.dispatchEvent(new Expand(this.headerNew));
-
+        */
         this.headerTab = new BUTTON(this.header, model.data.header || options.classType, ICONS.BLANK);
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
