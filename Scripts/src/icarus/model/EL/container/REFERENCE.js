@@ -22,6 +22,8 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
             ['PROPERTIES', 'METHODS', 'CHILDREN'], false
         );
 
+        this.createReferencePlaceholder(model);
+        
         let { tab } = this.options;
         this.el.addEventListener('deactivate', () => this.chain(() => {
             if (tab.hasClass('active')) {
@@ -38,6 +40,28 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
         }));
 
         this.container.constructReference(this);
+    }
+    /** Creates a temporary NAVITEMICON that acts as a placeholder for a subsection reference.
+        This is done in order to ensure that references are loaded in the appropriate order
+        when they are called asynchronously
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    createReferencePlaceholder(model) {
+        // create children temp placeholders with corresponding UId
+        //console.log('model.container.className', model.container.className);
+        if (typeof model.container.subsections !== 'undefined' && model.container.subsections.length > 0 && model.container.subsections[0] !== '0') {
+            let childrenMenu = this.options.menu.getMenu('CHILDREN');
+            //console.log(this.toString() + ' Adding ' + model.container.toString() + ' children reference placeholders', model.container.subsections);
+            model.container.subsections.forEach((s) => {
+                childrenMenu.addNavItemIcon(new MODEL().set({
+                    id: 'ref_' + s,
+                    label: s,
+                    icon: ICONS.ALERT,
+                    name: s + ' placeholder'
+                }));
+            });
+        }
     }
 }
 export { MODEL }

@@ -35,7 +35,8 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
 	    @param {MODEL} model The Thumbnail model
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
-	    @param {string} className The className that the thumbnail represents
+	    @param {string} className The className that the thumbnail represents,
+        @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail({
@@ -48,8 +49,9 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         dateCreated,
         dateLastModified,
         jsonResults
-    }, className) {
-        return this.menu.addChild(new IMAGETHUMBNAIL(this.menu, new MODEL().set({
+    }, className, pageNumber = 0) {
+        let [pagedMenu] = this.menu.get(pageNumber);
+        return pagedMenu.addChild(new IMAGETHUMBNAIL(pagedMenu, new MODEL().set({
             id,
             //formId,
             authorId,
@@ -63,10 +65,11 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {MODEL} model model
+        @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
-    addThumbnailMethods(model) {
-        let thumb = this.createThumbnail(model, this.classType);
+    addThumbnailMethods(model, pageNumber = 0) {
+        let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
         let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
             label: 'Append',

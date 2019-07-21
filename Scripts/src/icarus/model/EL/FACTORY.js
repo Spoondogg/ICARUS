@@ -133,7 +133,7 @@ export default class FACTORY {
 
 		});
     }
-    /** Launches a FORM POST editor for the specified element
+    /** Launches a FORMPOST editor for the specified element
         @todo Some map/reduce magic and this can turn into a proper collection for data, attr, meta
         
 	    @param {string} [name] The name of the input we are editing

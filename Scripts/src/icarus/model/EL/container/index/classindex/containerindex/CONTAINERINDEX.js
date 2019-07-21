@@ -22,26 +22,23 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchClass(query = '') {
-        console.log('CONTAINERINDEX Search', this.classType, query, this.searchType);
         let result = null;
-        //if (this.dataId > 0) {
-            switch (this.searchType) {
-                case 'TAG':
-                    result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
-                        '__RequestVerificationToken': this.getToken()
-                    });
-                    break;
-                case 'TAGID':
-                    result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
-                        '__RequestVerificationToken': this.getToken()
-                    });
-                    break
-                default: // generic search
-                    result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
-                        '__RequestVerificationToken': this.getToken()
-                    });
-            }           
-        //}
+        switch (this.searchType) {
+            case 'TAG':
+                result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
+                break;
+            case 'TAGID':
+                result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
+                break
+            default: // generic search
+                result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
+        }
         return result;
     }
     /** An abstract/default search that promises to return a payload and status
@@ -122,6 +119,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
 	    @param {string} classType The className that the thumbnail represents
+        @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail({
@@ -134,8 +132,9 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         key,
         value,
         jsonResults
-    }, classType) {
-        let thumbnail = this.menu.addChild(new CONTAINERTHUMBNAIL(this.menu, new MODEL().set({
+    }, classType, pageNumber = 0) {
+        let [pagedMenu] = this.menu.get(pageNumber);
+        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, new MODEL().set({
             id,
             subsections,
             authorId,
@@ -151,10 +150,11 @@ export default class CONTAINERINDEX extends CLASSINDEX {
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {MODEL} model model
+        @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
-    addThumbnailMethods(model) {
-        let thumb = this.createThumbnail(model, this.classType);
+    addThumbnailMethods(model, pageNumber = 0) {
+        let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
         let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
             label: 'Append',
