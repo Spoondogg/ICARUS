@@ -6,12 +6,16 @@ import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
     @extends NAVBAR
 */
 export default class NAVHEADER extends NAVBAR {
-	/** Constructs a NAVBAR that acts as a CONTAINER Header
+	/** Constructs a NAVBAR that acts as a Top level Header for a Container
 	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {MODEL} [model] Model
+        @param {object} [options] Optional options
 	*/
-	constructor(node, model) {
-		super(node, model);
+    constructor(node, model, options = {
+        tabTarget: null
+    }) {
+        super(node, model);
+        this.options = options;
 		this.addClass('nav-header');
 		/** The CONTAINER Tab 
 		    @todo Spoon.svg
@@ -23,6 +27,8 @@ export default class NAVHEADER extends NAVBAR {
         }));
         this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
         this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
+        //this.tab.el.addEventListener('activate', () => this.options.tabTarget.el.dispatchEvent(new Expand(this.tab)));
+        //this.tab.el.addEventListener('deactivate', () => this.options.tabTarget.el.dispatchEvent(new Collapse(this.tab)));
         this.tab.el.addEventListener('select', () => {
             let container = this.getContainer();
             container.getFactory().save(false, container, container, 'label');
