@@ -30,7 +30,7 @@ export default class MAIN extends CONTAINER {
         this.overrideSwipeEvents();
         this.navheader.setAttribute('draggable', false);
         this.navheader.tab.addClass('tab-center');
-		this.addNavOptions();
+		this.addNavOptions(model);
         this.setFactory(model.factory);
 		this.loader = model.loader;
 		this.url = model.url;
@@ -265,11 +265,27 @@ export default class MAIN extends CONTAINER {
 	*/
 	navigateForward() {
 		console.log('TODO: Forward');
-	}
+    }
+    /** Adds REFERENCE placeholders for this container's children
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    addReferencePlaceholder(model) {
+        let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
+        model.subsections.split(',').forEach((s) => {
+            childrenMenu.addNavItemIcon(new MODEL().set({
+                label: s,
+                id: 'ref_' + s,
+                icon: ICONS.ALERT,
+                name: s + ' placeholder'
+            }));
+        });
+    }
 	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
+        @param {MAINMODEL} model APP model
 	    @returns {void}
 	*/
-	createDocumentMap() {
+	createDocumentMap(model) {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
@@ -280,7 +296,6 @@ export default class MAIN extends CONTAINER {
             this.label, ICONS[this.className], this.toString(),
             ['PROPERTIES', 'METHODS', 'CHILDREN'], false //'DATA', 'ATTRIBUTES', 'META', 
         );
-
         let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
         this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, this.reference);
 
@@ -328,12 +343,13 @@ export default class MAIN extends CONTAINER {
         this.getFactory().launchViewer(classType, this, caller, query, searchType);
     }
 	/** Adds default Nav Items to the Nav Bar including the label
+        @param {MAINMODEL} model APP model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	addNavOptions() {
+	addNavOptions(model) {
 		return this.chain(() => {
 			// LEFT ALIGN
-			this.createDocumentMap();
+			this.createDocumentMap(model);
 			// Search
             let tabbable = this.navheader.addTabbableMenu('SEARCH', 'SEARCH', ICONS.SEARCH, []);
                 /*this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
