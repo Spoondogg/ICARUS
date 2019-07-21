@@ -62,6 +62,9 @@ export default class CONTAINER extends GROUP {
 		this.updateDocumentMap();
         this.setDefaultVisibility(model);
     }
+    /** Adds the default navitems to this container's options menu
+        @returns {void}
+    */
     addOptions() {
         let optionsMenu = this.navheader.getMenu('OPTIONS');
         this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
@@ -390,6 +393,9 @@ export default class CONTAINER extends GROUP {
             }
         }, this.toString() + ' is unable to activate its reference');
     }
+    /** Activates a submenu representing this reference's children
+        @returns {void}
+    */
     activateReferenceChildMenu() {
         //console.log('Activating childrenmenu');
         let [menu] = this.reference.menus.get(this.toString(), 'MENU');
@@ -432,10 +438,18 @@ export default class CONTAINER extends GROUP {
                     let parentReferenceMenu = container.reference.getMenu(container.toString());
                     let parentChildrenMenu = parentReferenceMenu.getMenu('CHILDREN');
 
+                    /// TODO:  This reference is not added in the correct order.  Investigate
+                    //console.log(this.toString() + '.CONTAINER REFERENCE', this.id);
                     this.reference = new REFERENCE(parentChildrenMenu, new MODEL().set({
                         name: this.toString(),
                         container: this
                     }));
+                    
+                    // Insert before reference placeholder
+                    $(this.reference.el).insertBefore('#ref_' + this.id);
+
+                    // Remove placeholder
+                    $('#ref_' + this.id).remove();
 
                     /// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
                     let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
@@ -486,7 +500,12 @@ export default class CONTAINER extends GROUP {
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
     }
-
+    /** Adds navitemicons for each given submenu
+        @param {Array<string>} arr Array of submenu names
+        @param {MENU} menu Menu to add submenus to
+        @param {REFERENCE} reference Reference.options.menu
+        @returns {void}
+    */
     constructReferenceSubMenus(arr, menu, reference) {
         arr.forEach((p) => {
             let t = menu.addNavItemIcon(new MODEL().set({
@@ -1169,7 +1188,24 @@ export default class CONTAINER extends GROUP {
 			this.el.setAttribute('name', name);
 			this.name = name;
 		}
-	}
+    }
+    /** Adds REFERENCE placeholders for this container's children
+        @param {MODEL} model Model
+        @returns {void}
+    */
+    addReferencePlaceholder(model) {
+        console.log(this.toString() + '.addReferencePlaceholder calls from REFERENCE.js', model);
+        /*let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
+        if (model.className === 'MAIN') {
+            model.subsections.split(',').forEach((s) => {
+                childrenMenu.addNavItemIcon(new MODEL().set({
+                    label: s,
+                    icon: ICONS.ALERT,
+                    name: s + ' placeholder'
+                }));
+            });
+        }*/
+    }
 	/** Loads the specified MODEL by UId into CONTAINER 
         Retrieves the MODEL from GET/{id} (if permitted)
 		then Populates accordingly
@@ -1179,12 +1215,15 @@ export default class CONTAINER extends GROUP {
 		@returns {Promise<ThisType>} Promise Chain
 	*/
     load(id) {
-        //console.log(this.toString() + '.load()', id);
+        console.log(this.toString() + '.load()', id);
 		return new Promise((resolve, reject) => { // Consider verifying cache before retrieving
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
                         let { result, model, message } = payload;
+                        
+                        this.addReferencePlaceholder(model);
+
                         this.getMain().updateTagCache(model.tags);
 
                         switch (payload.result) {

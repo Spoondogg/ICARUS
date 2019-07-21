@@ -6,6 +6,7 @@ import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
+import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -45,6 +46,7 @@ export default class CLASSINDEX extends CONTAINER {
 
         /** The ClassIndex Menu contains the results of the search */
         this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        //this.createPagedMenu(0);
         this.createHeader(model, options);
         this.addMenuScrollEvents();        
         this.configureHeader();
@@ -60,12 +62,19 @@ export default class CLASSINDEX extends CONTAINER {
     createHeader(model, options) {
         this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
+
+        this.headerNew = new NAVHEADER(this, new MODEL().set('label', this.label.toString()), {
+            tabTarget: this.menu
+        });
+        $(this.headerNew.el).insertBefore(this.body.el);
+        this.headerNew.el.dispatchEvent(new Expand(this.headerNew));
+
         this.headerTab = new BUTTON(this.header, model.data.header || options.classType, ICONS.BLANK);
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
         this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
         this.headerTab.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.body)));
-        this.headerTab.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this.headerTab));
+        //this.headerTab.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this.headerTab));
 
         if (parseInt(this.data.collapsed) === 1) {
             this.headerTab.el.dispatchEvent(new Deactivate(this.headerTab));
@@ -201,14 +210,15 @@ export default class CLASSINDEX extends CONTAINER {
                     console.log('Something aint right with this.page', this);
                 } else {
                     this.searchClass(query).then((payload, status) => {
-                        console.log('Search Results', query, payload, status);
+                        //console.log('Search Results', query, payload, status);
                         if (status === 'success') {
                             this.isLoading = true;
                             this.pageTotal = payload.total;
                             this.btnPageTotal.setLabel(payload.total);
                             let pageNote = this.page > -1 ? ': Page ' + (this.page + 1) : '';
-                            this.menu.addNavSeparator(this.classType + pageNote);
-                            payload.list.forEach((model) => this.addThumbnailMethods(model));
+                            let page = this.createPagedMenu(this.page);
+                            page.addNavSeparator(this.classType + pageNote);
+                            payload.list.forEach((model) => this.addThumbnailMethods(model, this.page));
                             this.isLoading = false;
                             this.purgeList();
                             if (!this.pagination.buttonGroup.loaded) {
@@ -225,6 +235,7 @@ export default class CLASSINDEX extends CONTAINER {
                                 this.pagination.buttonGroup.loaded = true;
                                 this.pagination.buttonGroup.children[0].addClass('active');
                             }
+                            page.el.dispatchEvent(new Expand(page));
                             resolve(this);
                         } else {
                             reject(new Error('Failed to retrieve page'));
@@ -237,12 +248,20 @@ export default class CLASSINDEX extends CONTAINER {
 			}
 		});
     }
+    /** Creates a menu representing a page
+        @param {number} pageNumber Page number
+        @returns {MENU} Paged menu
+    */
+    createPagedMenu(pageNumber) {
+        return this.menu.addMenu(new MODEL('page').set('name', pageNumber));
+    }
     /** Creates a Thumbnail representation of a Class and adds relevant Events 
         @param {MODEL} model model
+        @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
-    addThumbnailMethods(model) {
-        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, model);
+    addThumbnailMethods(model, pageNumber = 0) {
+        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, model, pageNumber);
     }
 	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
 	    @returns {void}

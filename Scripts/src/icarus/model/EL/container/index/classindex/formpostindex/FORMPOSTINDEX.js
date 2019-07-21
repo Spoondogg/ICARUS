@@ -50,6 +50,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @param {number} model.id Unique Identifier that this thumbnail represents
         @param {string} model.label The Thumbnail label
 	    @param {string} className The className that the thumbnail represents
+        @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail({
@@ -62,8 +63,9 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         dateCreated,
         dateLastModified,
         jsonResults
-    }, className) {
-        return this.menu.addChild(new FORMPOSTTHUMBNAIL(this.menu, new MODEL().set({
+    }, className, pageNumber = 0) {
+        let [pagedMenu] = this.menu.get(pageNumber);
+        return pagedMenu.addChild(new FORMPOSTTHUMBNAIL(pagedMenu, new MODEL().set({
             id,
             formId,
             authorId,
@@ -98,11 +100,12 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {MODEL} model Model
+        @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
-    addThumbnailMethods(model) {
+    addThumbnailMethods(model, pageNumber = 0) {
         //console.log('FORMPOSTINDEX.addThumbnailMethods()', model);
-        let thumb = this.createThumbnail(model, this.classType);
+        let thumb = this.createThumbnail(model, this.classType, pageNumber);
         let btnGet = thumb.menu.addNavItemIcon(new MODEL().set({
             label: 'Get ' + this.classType,
             icon: ICONS[this.classType],
@@ -163,8 +166,6 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @returns {void}
     */
     launchViewer(id, classType) {
-        //console.log('FORMPOSTINDEX.launchViewer()', id, classType);
-
         let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
             container: this.getContainer(),
             caller: this,

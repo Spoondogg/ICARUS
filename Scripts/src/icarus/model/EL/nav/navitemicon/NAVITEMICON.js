@@ -2,7 +2,6 @@
 import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js';
 /** A clickable icon with label 
     @class
-    @extends LI
 */
 export default class NAVITEMICON extends NAVITEM {
 	/** Constructs the Nav Item Icon

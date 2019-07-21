@@ -1,7 +1,6 @@
 /** @module */
+import BUTTONGROUP, { BUTTON, ICONS } from '../../group/buttongroup/BUTTONGROUP.js';
 import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
-import BUTTON from '../../button/BUTTON.js';
-import { ICONS } from '../../../../enums/ICONS.js';
 import NAVITEM from '../navitem/NAVITEM.js';
 /** A search input wrapped in a generic HTMLForm
     @todo Create a proper search type INPUT element
@@ -29,7 +28,11 @@ export default class NAVSEARCH extends NAVITEM {
 			name: 'q'
         })));
         this.button = new BUTTON(this, '', ICONS.SEARCH);
-		/*this.inputGroup.btnGroup = new EL(this.inputGroup, 'DIV', new MODEL('input-group-btn'));
+        this.buttonGroup = new BUTTONGROUP(this, new MODEL('input-buttons'));
+        //this.btnSearchType = this.buttonGroup.addButton('CLASS', ICONS.CLASSVIEWER);
+        //this.btnSearch = this.buttonGroup.addButton('', ICONS.SEARCH);
+
+        /*this.inputGroup.btnGroup = new EL(this.inputGroup, 'DIV', new MODEL('input-group-btn'));
 		this.inputGroup.btnGroup.btn = new EL(this.inputGroup.btnGroup, 'BUTTON', new MODEL(new ATTRIBUTES({
 			class: 'btn btn-default',
 			type: 'submit'
