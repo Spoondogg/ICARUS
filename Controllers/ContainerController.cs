@@ -301,7 +301,6 @@ namespace ICARUS.Controllers {
             parameters.Add(new Param(3, "pageLength", pageLen));
             parameters.Add(new Param(4, "page", page));
 
-
             Procedure searchList = new Procedure("CONTAINER.SearchByTagId", columns, parameters);
 
             List<string> searchCountCols = new List<string>();

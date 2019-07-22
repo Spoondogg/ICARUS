@@ -7,6 +7,7 @@ import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
+import PAYLOAD from '../../../form/PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -200,7 +201,7 @@ export default class CLASSINDEX extends CONTAINER {
         throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, query);
     }
 	/** Constructs the CLASSINDEX Container
-        @returns {void}
+        @returns {Promise<ThisType>} Promise to resolve ClassIndex
     */
     construct() {
         //console.log(this.toString() + '.construct()', this.classType, this.query);
@@ -213,30 +214,7 @@ export default class CLASSINDEX extends CONTAINER {
                     this.searchClass(query).then((payload, status) => {
                         //console.log('Search Results', query, payload, status);
                         if (status === 'success') {
-                            this.isLoading = true;
-                            this.pageTotal = payload.total;
-                            this.btnPageTotal.setLabel(payload.total);
-                            let pageNote = this.page > -1 ? ': Page ' + (this.page + 1) : '';
-                            let page = this.createPagedMenu(this.page);
-                            page.addNavSeparator(this.classType + pageNote);
-                            payload.list.forEach((model) => this.addThumbnailMethods(model, this.page));
-                            this.isLoading = false;
-                            this.purgeList();
-                            if (!this.pagination.buttonGroup.loaded) {
-                                this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
-                                if (this.pageCount < 1) {
-                                    this.pageCount = 1;
-                                }
-                                for (let p = 0; p < this.pageCount; p++) {
-                                    this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-                                        this.menu.empty().then(() => this.loadPage(p));
-                                        return false;
-                                    };
-                                }
-                                this.pagination.buttonGroup.loaded = true;
-                                this.pagination.buttonGroup.children[0].addClass('active');
-                            }
-                            page.el.dispatchEvent(new Expand(page));
+                            this.constructPage(payload);
                             resolve(this);
                         } else {
                             reject(new Error('Failed to retrieve page'));
@@ -248,6 +226,36 @@ export default class CLASSINDEX extends CONTAINER {
 				reject(e);
 			}
 		});
+    }
+    /** Constructs a page of results
+        @param {PAYLOAD} payload Payload
+        @returns {void}
+    */
+    constructPage(payload) {
+        this.isLoading = true;
+        this.pageTotal = payload.total;
+        this.btnPageTotal.setLabel(payload.total);
+        let pageNote = this.page > -1 ? ': Page ' + (this.page + 1) : '';
+        let page = this.createPagedMenu(this.page);
+        page.addNavSeparator(this.classType + pageNote);
+        payload.list.forEach((model) => this.addThumbnailMethods(model, this.page));
+        this.isLoading = false;
+        this.purgeList();
+        if (!this.pagination.buttonGroup.loaded) {
+            this.pageCount = Math.ceil(this.pageTotal / this.pageLength);
+            if (this.pageCount < 1) {
+                this.pageCount = 1;
+            }
+            for (let p = 0; p < this.pageCount; p++) {
+                this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
+                    this.menu.empty().then(() => this.loadPage(p));
+                    return false;
+                };
+            }
+            this.pagination.buttonGroup.loaded = true;
+            this.pagination.buttonGroup.children[0].addClass('active');
+        }
+        page.el.dispatchEvent(new Expand(page));
     }
     /** Creates a menu representing a page
         @param {number} pageNumber Page number
@@ -388,4 +396,4 @@ export default class CLASSINDEX extends CONTAINER {
 		}
 	}
 }
-export { CLASSVIEWER, CONFIRM, Collapse, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT }
+export { CLASSVIEWER, CONFIRM, Collapse, DIALOGMODEL, Expand, ICONS, MODEL, PAYLOAD, PROMPT }
