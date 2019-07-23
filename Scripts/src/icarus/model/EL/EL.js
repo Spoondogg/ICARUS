@@ -546,15 +546,18 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-	/** Removes all child Elements of this Element from the DOM (Preserves this.children)
+    /** Removes all child Elements of this Element from the DOM (Preserves this.children)
+        @param {boolean} [preserveChildren] If true (default), children are preserved
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	empty() {
+	empty(preserveChildren = true) {
 		return new Promise((resolve) => {
             while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
-			}
-			//this.children.length = 0;
+            }
+            if (!preserveChildren) {
+                this.children.length = 0;
+            }
 			resolve(this);
 		});
 	}
