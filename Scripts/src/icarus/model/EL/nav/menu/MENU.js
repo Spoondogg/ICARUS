@@ -100,9 +100,9 @@ export default class MENU extends LIST {
 	addNavItemIcon(model) {
 		return this.addChild(new NAVITEMICON(this, model));
     }
-    /** Constructs a Nav Item Icon
-	    @param {MODEL|{label:string, icon:string, name:string}} model Object model
-	    @returns {NAVITEMICON} Nav Item with Anchor
+    /** Constructs a NavItem with a search input
+	    @param {MODEL|{label:string, icon:string, name:string}} [model] Object model
+	    @returns {NAVSEARCH} Nav Item with Anchor
 	*/
     addNavSearch(model) {
         return this.addChild(new NAVSEARCH(this, model));
@@ -141,6 +141,17 @@ export default class MENU extends LIST {
             }
         };
     }
+    /** Deactivates all menu items except given
+        @param {any} el Element to remain active
+        @returns {void}
+    */
+    deactivateSiblings(el) {
+        this.get().forEach((li) => {
+            if (li !== el) {
+                li.el.dispatchEvent(new Deactivate(li));
+            }
+        });
+    }
     /** Returns the top level tab for this navbar
         @param {Name} name Tab Name
         @returns {NAVITEMICON} Reference Tab
@@ -156,4 +167,4 @@ export default class MENU extends LIST {
         return this.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, UL }
+export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVSEARCH, UL }
