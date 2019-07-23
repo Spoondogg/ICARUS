@@ -143,7 +143,7 @@ export default class CONTAINERFACTORY extends FACTORY {
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
     launchViewer(classType = 'MAIN', container = this, caller = this, query = null, searchType = null) {
-        console.log(container.toString() + '.launchViewer()', query);
+        console.log(container.toString() + '.launchViewer()', query, searchType);
         return new Promise((resolve) => {
             let label = classType === '*' ? 'Containers' : classType + '(s)';
             label += query === null ? '' : ': ' + query;
