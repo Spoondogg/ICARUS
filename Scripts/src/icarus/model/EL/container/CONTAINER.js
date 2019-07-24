@@ -486,11 +486,16 @@ export default class CONTAINER extends GROUP {
         @returns {Promise<MODEL>} Payload to cache
     */
     updateTagCache(tags) {
-        //console.log(this.toString() + ': Caching tags', tags);
-        if (typeof tags === 'string' && tags !== '0' && tags !== '') {
-            return Promise.all(tags.split(',').map((tag) => this.getCache().cacheObject('FORMPOST', tag)));
+        try {
+            //console.log(this.toString() + ': Caching tags', tags);
+            if (typeof tags === 'string' && tags !== '0' && tags !== '') {
+                return Promise.all(tags.split(',').map((tag) => this.getCache().cacheObject('FORMPOST', tag)));
+            }
+            return Promise.resolve(true);
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to cache tags', tags);
+            return Promise.reject(e); //tags, typeof tags
         }
-        return Promise.reject(new Error(this.toString() + ' is unable to cache tags', tags, typeof tags));
     }
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building

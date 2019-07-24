@@ -173,7 +173,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     searchByTag(tag) {
-        console.log('Clicked tag ' + tag);
+        console.log('SearchByTag: ' + tag);
         this.getContainer().getJson('/MAIN/SearchByTag?tag=' + tag, (payload) => {
             console.log('SearchByTag', tag, payload);
         });

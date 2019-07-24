@@ -18,12 +18,14 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         this.addClass('containerindex');        
     }
     /** An abstract/default search that promises to return a payload and status
+        @param {string} [type] Optional search type
         @param {query} [query] Optional querystring / delimited tag list
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    searchClass(query = '') {
+    search(type = this.searchType, query = '') {
+        console.log('CONTAINERINDEX.search', type, query);
         let result = null;
-        switch (this.searchType) {
+        switch (type) {
             case 'TAG':
                 result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
                     '__RequestVerificationToken': this.getToken()
@@ -154,6 +156,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {void}
     */
     addThumbnailMethods(model, pageNumber = 0) {
+        //console.log('.addThumbnailMethods()', pageNumber, model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
         let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
@@ -230,7 +233,11 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 label: 'ClassViewer: ' + classType + ' # ' + id
                 //text: 'Viewing ' + classType + ' (' + id + ')"'
             }), false);
-            let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
+            let model = new MODEL();
+            model.container = this.getContainer().getMain();
+            model.data.set('classType', classType);
+            let viewer = new CLASSVIEWER(dialog.body.pane, model);
+            //viewer.container = this.getContainer().getMain();
             viewer.body.el.dispatchEvent(new Expand(viewer));
             this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
         }

@@ -2,8 +2,8 @@
 /** @module icarus/model/el/container/MAIN */
 import CONTAINER, { Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
+import MENU, { NAVSEARCH } from '../../nav/menu/MENU.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
-import USERMENU, { MENU } from '../../nav/menu/usermenu/USERMENU.js';
 import CHATFACTORY from '../chat/CHATFACTORY.js';
 import CLASSINDEXFACTORY from '../index/classindex/CLASSINDEXFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
@@ -13,6 +13,7 @@ import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import TABLEFACTORY from '../../table/TABLEFACTORY.js';
+import USERMENU from '../../nav/menu/usermenu/USERMENU.js';
 /** A top level View that holds all other child Containers
     @class
     @extends CONTAINER
@@ -332,16 +333,36 @@ export default class MAIN extends CONTAINER {
         @param {Event} ev Evetn
         @param {string} [query] QueryString
         @param {EL} [caller] Calling element
-        @param {string} [classType] Class Type to Search (ie: MAIN, FORM)
+        @param {string} [classType] Class Type to Search (ie: MAIN, FORM, *)
         @param {string} [searchType] Optional Search Type
         @returns {void}
     */
-    submitSearch(ev, query, caller, classType = this.classType, searchType = 'TAG') {
+    submitSearch(ev, query, caller = this, classType = this.className, searchType = 'TAG') {
+        console.log(this.toString() + '.submitSearch', searchType, query);
         ev.preventDefault();
         ev.stopPropagation();
         console.log('Search', query);
         this.getFactory().launchViewer(classType, this, caller, query, searchType);
     }
+    /** Generates an array of TAG names that have been cached locally
+        @param {string} value Query String
+        @returns {void}
+    */
+    retrieveCachedTags(value) {
+        let tagList = [];
+        let formposts = this.getCache().FORMPOST;
+        Object.keys(formposts).forEach((key) => {
+            let fp = formposts[key];
+            if (fp.formId === 10128) { // should be filtering, not just assuming tag is indexed in position 0
+                let [tag] = fp.jsonResults.filter((r) => r.name === 'tag' && r.value.toString().startsWith(value));
+                if (typeof tag !== 'undefined') {
+                    tagList.push(tag.value);
+                }
+            }
+        });
+        return tagList;
+    }
+    /* eslint-disable max-lines-per-function */
 	/** Adds default Nav Items to the Nav Bar including the label
         @param {MAINMODEL} model APP model
 	    @returns {Promise<ThisType>} Promise Chain
@@ -355,30 +376,19 @@ export default class MAIN extends CONTAINER {
                 /*this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
                 this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
             ]);*/
+
             /// Override input defaults and pass to search
+            /** @type {NAVSEARCH} */
             let navsearch = tabbable.element.addNavSearch(new MODEL('navsearch-woot'));
-
-            navsearch.input.el.addEventListener('keypress', (ev) => {
-                let evt = ev;
-                if (!ev) {
-                    evt = window.event;
-                }
-                let keyCode = evt.keyCode || evt.which;
-                if (keyCode === '13') { // Enter Key
-                    this.submitSearch(evt, navsearch.input.el.value.toString(), navsearch.button)
-                    return false;
-                }
-            });
-
-            navsearch.input.el.addEventListener('keyup', (ev) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-                console.log('Populate datalist Search', navsearch.input.el.value.toString());
-            });
-            navsearch.button.el.addEventListener('click', (ev) => this.submitSearch(ev, navsearch.input.el.value.toString(), navsearch.button));
+            navsearch.submitSearch = (ev) => this.submitSearch( // When search button is clicked... OVERRIDE
+                ev,
+                navsearch.input.el.value.toString(),
+                navsearch.btnSearch,
+                this.className,
+                navsearch.searchType.el.value
+            );
 
             $(tabbable.tab.el).insertBefore(this.navheader.tab.el);
-
             tabbable.tab.el.addEventListener('activate', () => {
                 navsearch.el.dispatchEvent(new Activate(tabbable.tab));
                 navsearch.input.el.focus();
@@ -794,5 +804,5 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, SIDEBAR, TABLEFACTORY }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, NAVSEARCH, SIDEBAR, TABLEFACTORY }
 /* eslint-enable max-lines, max-statements */

@@ -121,6 +121,7 @@ export default class INDEX extends CONTAINER {
                 //text: 'Viewing ' + classType + ' (' + id + ')"'
             }), false);
             let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType), classType);
+            viewer.container = this.getContainer();
             viewer.body.el.dispatchEvent(new Expand(viewer));
             this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
         }
