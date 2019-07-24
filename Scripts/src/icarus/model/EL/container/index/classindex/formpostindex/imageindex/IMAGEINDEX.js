@@ -22,10 +22,11 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         this.addClass('imageindex');        
     }
     /** An abstract/default search that promises to return a payload and status
+        @param {string} [type] Optional search type
         @param {query} [query] Optional querystring
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    searchClass(query = '') {
+    searchClass(type = 'TAG', query = '') {
         //console.log('IMAGEINDEX Search', this.formId, query);
         return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
             '__RequestVerificationToken': this.getToken()

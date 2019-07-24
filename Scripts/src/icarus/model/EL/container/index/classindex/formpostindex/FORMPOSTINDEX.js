@@ -36,10 +36,11 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         this.formId = this.required(formId);
     }
     /** An abstract/default search that promises to return a payload and status
+        @param {string} [type] Optional search type
         @param {query} [query] Optional querystring
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    searchClass(query = '') {
+    search(type = 'TAG', query = '') {
         //console.log('FORMPOSTINDEX Search', this.formId, query);
         return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
             '__RequestVerificationToken': this.getToken()
@@ -172,6 +173,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
             label: 'FormPostViewer: ' + classType + ' # ' + id
         }));
         let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', 'FORMPOST'));
+        viewer.container = this.getContainer();
         this.populateFormPostForm(id, viewer, dialog);
         viewer.body.el.dispatchEvent(new Expand(viewer));
 

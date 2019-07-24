@@ -270,7 +270,8 @@ export default class FACTORY {
     save(noPrompt = false, container = this, caller = this, name = null) {
         console.log(caller.toString() + ' is attempting to SAVE ' + container.toString(), name);
         return new Promise((resolve) => {
-            caller.getLoader().log(25).then((loader) => {
+            console.log(this, caller, container, container.getMain());
+            caller.getMain().getLoader().log(25).then((loader) => {
                 let prompt = new PROMPT(new MODEL().set({
                     label: 'Save ' + container.toString() + ': ' + container.label,
                     container,

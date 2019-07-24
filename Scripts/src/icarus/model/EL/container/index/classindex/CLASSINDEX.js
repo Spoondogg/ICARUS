@@ -2,11 +2,11 @@
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { DIALOGMODEL, PROMPT } from '../../../dialog/confirm/CONFIRM.js';
 import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate } from '../../CONTAINER.js';
-import MENU, { Collapse, Expand, MODEL } from '../../../nav/menu/MENU.js';
+import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
-import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
+//import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
 import PAYLOAD from '../../../form/PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
@@ -84,27 +84,38 @@ export default class CLASSINDEX extends CONTAINER {
             this.headerTab.el.dispatchEvent(new Activate(this.headerTab));
         }
 
-        this.search = new MENU(this.body, new MODEL('search-menu'));
-        $(this.search.el).insertBefore(this.body.el);
-        let navSearch = this.search.addNavSearch(new MODEL().set({
+        this.searchMenu = new MENU(this.body, new MODEL('search-menu'));
+        $(this.searchMenu.el).insertBefore(this.body.el);
+        this.navSearch = this.searchMenu.addNavSearch(new MODEL().set({
             label: 'Searchwoot',
             icon: ICONS.SEARCH,
             name: 'searchwoot'
         }));
-        navSearch.input.setAttribute('value', this.query);
-        navSearch.button.el.addEventListener('click', () => this.callSearch(navSearch.input.el.value));
+        this.navSearch.input.setAttribute('value', this.query);
+        this.navSearch.btnSearch.el.addEventListener('click',
+            () => this.menu.empty(false).then(
+                () => this.callSearch(
+                    this.navSearch.searchType.el.value,
+                    this.navSearch.input.el.value
+                )
+            )
+        );
     }
     /** Calls the search using the current params and populates the results menu
+        @param {string} [type] Optional search type
         @param {string} query Search string
         @returns {void}
     */
-    callSearch(query) {
+    callSearch(type, query) {
+        console.log('CLASSINDEX.callSearch()', type, query);
+        this.searchType = type;
         this.query = query;
         this.page = 0;
         this.pageCount = 0;
         this.pageTotal = 0;
-        this.menu.empty();
-        this.construct();
+        //this.menu.empty().then(() => this.constructSearchResults(type, query));
+        this.constructSearchResults(type, query);
+        //this.construct();
     }
     /** Adds scroll events to this menu
         @returns {void}
@@ -157,11 +168,11 @@ export default class CLASSINDEX extends CONTAINER {
         this.btnSearch.el.addEventListener('activate', (ev) => {
             console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
-            this.search.el.dispatchEvent(new Expand(this.btnSearch));
+            this.searchMenu.el.dispatchEvent(new Expand(this.btnSearch));
         });
         this.btnSearch.el.addEventListener('deactivate', (ev) => {
             ev.stopPropagation();
-            this.search.el.dispatchEvent(new Collapse(this.btnSearch));
+            this.searchMenu.el.dispatchEvent(new Collapse(this.btnSearch));
         });
         //this.menu.el.dispatchEvent(new Expand(this.menu));
         this.body.el.dispatchEvent(new Expand(this.body));
@@ -194,25 +205,37 @@ export default class CLASSINDEX extends CONTAINER {
         );
     }
     /** An abstract/default search that promises to return a payload and status
+        @param {string} [type] Optional search type (default:TAG)
         @param {string} [query] Optional querystring
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    searchClass(query = '') {
-        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, query);
+    search(type = 'TAG', query = '') {
+        throw new AbstractMethodError(this.toString() + '.search() not set', this, type, query);
     }
 	/** Constructs the CLASSINDEX Container
         @returns {Promise<ThisType>} Promise to resolve ClassIndex
     */
     construct() {
-        //console.log(this.toString() + '.construct()', this.classType, this.query);
         let query = this.query === null ? '' : this.query;
-		return new Promise((resolve, reject) => {
-			try {
+        //console.log(this.toString() + '.construct()', this.classType, this.query);
+        //this.menu.empty().then(() => this.constructSearchResults(this.searchType, query));
+        this.constructSearchResults(this.searchType, query)
+    }
+    /** Constructs a list of search results based on the given query
+        @param {string} [type] Optional search type
+        @param {string} query Search Query String
+        @returns {Promise<ThisType>} Promise to resolve ClassIndex
+     */
+    constructSearchResults(type, query) {
+        console.log('constructSearchResults', type, query, this.page);
+        return new Promise((resolve, reject) => {
+            try {
                 if (isNaN(this.page)) {
                     console.log('Something aint right with this.page', this);
                 } else {
-                    this.searchClass(query).then((payload, status) => {
-                        //console.log('Search Results', query, payload, status);
+                    this.search(type, query).then((payload, status) => {
+                        console.log('Search Results', type, query, payload, status, this.menu.get());
+                        //this.menu
                         if (status === 'success') {
                             this.constructPage(payload);
                             resolve(this);
@@ -223,15 +246,17 @@ export default class CLASSINDEX extends CONTAINER {
                 }
             } catch (e) {
                 console.warn('ERROR!!!', e);
-				reject(e);
-			}
-		});
+                reject(e);
+            }
+        });
     }
+
     /** Constructs a page of results
         @param {PAYLOAD} payload Payload
         @returns {void}
     */
     constructPage(payload) {
+        console.log('Constructing a page of results', payload);
         this.isLoading = true;
         this.pageTotal = payload.total;
         this.btnPageTotal.setLabel(payload.total);
@@ -248,7 +273,8 @@ export default class CLASSINDEX extends CONTAINER {
             }
             for (let p = 0; p < this.pageCount; p++) {
                 this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
-                    this.menu.empty().then(() => this.loadPage(p));
+                    //this.menu.empty().then(() => this.loadPage(p));
+                    this.loadPage(p);
                     return false;
                 };
             }
@@ -270,7 +296,7 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     addThumbnailMethods(model, pageNumber = 0) {
-        throw new AbstractMethodError(this.toString() + '.searchClass() not set', this, model, pageNumber);
+        throw new AbstractMethodError(this.toString() + '.search() not set', this, model, pageNumber);
     }
 	/** Adds Scrolling and MouseEnter/Exit Events for this.body.pane
 	    @returns {void}
@@ -376,7 +402,7 @@ export default class CLASSINDEX extends CONTAINER {
     */
     refresh() {
         return this.chain(() => {
-            this.menu.empty().then(() => {
+            this.menu.empty(false).then(() => {
                 this.loadPage();
             });
         });
@@ -396,4 +422,4 @@ export default class CLASSINDEX extends CONTAINER {
 		}
 	}
 }
-export { CLASSVIEWER, CONFIRM, Collapse, DIALOGMODEL, Expand, ICONS, MODEL, PAYLOAD, PROMPT }
+export { CLASSVIEWER, CONFIRM, Collapse, DIALOGMODEL, Expand, ICONS, MODEL, NAVSEARCH, PAYLOAD, PROMPT }
