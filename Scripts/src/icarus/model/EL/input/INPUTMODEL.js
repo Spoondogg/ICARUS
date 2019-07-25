@@ -15,24 +15,13 @@ export default class INPUTMODEL extends MODEL {
     */
     constructor(model, attributes) {
         super(model.attributes, model.data, model.meta);        
-        if (attributes.name) {
-            this.attributes.set('name', attributes.name);
-        }
-        if (attributes.type) {
-            this.attributes.set('type', attributes.type);
-        }
-        if (attributes.class) {
-            this.attributes.set('class', attributes.class);
-        }
-        if (attributes.value) {
-            this.attributes.set('value', attributes.value);
-        }
-        if (attributes.readonly) {
-            this.attributes.set('readonly', attributes.readonly);
-        }
-        if (attributes.placeholder) {
-            this.attributes.set('placeholder', attributes.placeholder);
-        }
+        ['name', 'type', 'class', 'value', 'readonly', 'placeholder', 'autocomplete'].forEach(
+            (attribute) => {
+                if (typeof attributes[attribute] !== 'undefined') {
+                    this.attributes.set(attribute, attributes[attribute]);
+                }
+            }
+        );
     }
 }
 export { ATTRIBUTES, MODEL }
