@@ -64,4 +64,4 @@ export default class Switchable extends IFACE {
 		this.methods.flip = () => this.toggle('active', new Activate(node), new Deactivate(node));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, Deactivate, EL, MODEL, MissingContainerError, RecursionLimitError }
+export { AbstractMethodError, Activate, ATTRIBUTES, Deactivate, EL, IFACE, MODEL, MissingContainerError, RecursionLimitError }
