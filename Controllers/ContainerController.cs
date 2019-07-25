@@ -331,8 +331,9 @@ namespace ICARUS.Controllers {
         /// <param name="page">Current Page</param>
         /// <param name="pageLength">Number of items per page</param>
         /// <param name="query">Search string</param>
+        /// <param name="searchType">Determines the type of search being performed</param>
         /// <returns>A Json PageIndex</returns>
-        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", string query = null) {
+        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", string query = null, string searchType = "CLASS") {
 
             int pageLen = Int32.Parse(pageLength);
             pageLen = (pageLen > 50) ? 50 : pageLen;
