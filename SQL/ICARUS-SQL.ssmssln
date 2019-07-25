@@ -74,8 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IMAGES", "IMAGES", "{BDA5FB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{9EBA9ABE-F54A-4058-9281-8CE1A600AA73}"
 	ProjectSection(SolutionItems) = preProject
-		ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql = ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql
 		ICARUS\FORMPOST\Functions\tvf_GetAvailableByDataType.sql = ICARUS\FORMPOST\Functions\tvf_GetAvailableByDataType.sql
+		ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql = ICARUS\FORMPOST\Functions\tvf_GetAvailableByFormId.sql
 		ICARUS\FORMPOST\Functions\tvf_SearchByDataType.sql = ICARUS\FORMPOST\Functions\tvf_SearchByDataType.sql
 		ICARUS\FORMPOST\Functions\tvf_SearchByFormId.sql = ICARUS\FORMPOST\Functions\tvf_SearchByFormId.sql
 	EndProjectSection
@@ -141,12 +141,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Views", "Views", "{10126F21
 		ICARUS\FORMPOST\TAGS\Views\vw_Tags.sql = ICARUS\FORMPOST\TAGS\Views\vw_Tags.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stored Procedures", "Stored Procedures", "{6EC3D02D-DE4A-4B10-AE44-BC73BF4CA5E9}"
+	ProjectSection(SolutionItems) = preProject
+		ICARUS\FORMPOST\TAGS\Stored Procedures\sp_GetTags.sql = ICARUS\FORMPOST\TAGS\Stored Procedures\sp_GetTags.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F70731DA-5987-4E74-B40E-F1754E56C9DF}.Default|Default.ActiveCfg = Default
+		{367BBCB1-B0A1-4A71-BE4E-B51D83DD90B2}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +175,7 @@ Global
 		{2AF91F31-D63D-42F8-8659-51451544D552} = {BDA5FB43-C574-4C34-BBA0-C5EF3BD91613}
 		{C18DA56A-3467-47C0-BC9C-9D6F82C5AC08} = {C1587909-2A7F-437D-BE93-9E1CFBA79D81}
 		{10126F21-F8F5-45CB-9241-05070FBBDE8B} = {C18DA56A-3467-47C0-BC9C-9D6F82C5AC08}
+		{6EC3D02D-DE4A-4B10-AE44-BC73BF4CA5E9} = {C18DA56A-3467-47C0-BC9C-9D6F82C5AC08}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBFB882D-281E-4E76-8596-315CF2225C81}
