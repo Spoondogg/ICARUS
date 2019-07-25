@@ -1,4 +1,5 @@
 /**	Return a Paginated List of FormPosts that match the given query
+	EXEC [FORMPOST].[GetSearchableList] 'ryan@spoonmedia.ca', '10128', 20, 0, 'tag:w'
 	EXEC [FORMPOST].[GetSearchableList] 'ryan@spoonmedia.ca', '10128', 20, 0, 'tag:w,tag:d'
 	EXEC [FORMPOST].[GetSearchableList] 'ryan@spoonmedia.ca', '9842', 200, 0, 'ComplaintType:w,complaintDetails:d'
 	EXEC [FORMPOST].[GetSearchableList] 'ryan@spoonmedia.ca', '3', 20, 0, 'filename:doge'
