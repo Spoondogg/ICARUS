@@ -152,5 +152,30 @@ export default class MODEL {
             }
         });
     }
+    /** Structure Factory
+        See https://stackoverflow.com/a/502384/722785
+        let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
+        console.log('Options', options('a', 'b'), options(null, 'b'));
+
+        @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
+        @returns {Function} Structure Constructor
+    */
+    static makeStruct(params) {
+        //let n = names.split(',');
+        let count = params.length;
+        /** Structure Constructor
+            @returns {object} Newly created structure
+        */
+        let constructor = (...args) => {
+            //console.log('Struct', args);
+            let obj = {};
+            for (let i = 0; i < count; i++) {
+                //console.log(params[i], args[i]);
+                obj[params[i][0]] = args[i] || params[i][1]; // fallback to default value
+            }
+            return obj;
+        }
+        return constructor;
+    }
 }
 export { ATTRIBUTES }
