@@ -28,7 +28,7 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
     */
     searchClass(type = 'TAG', query = '') {
         //console.log('IMAGEINDEX Search', this.formId, query);
-        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + type + '&query=' + query, {
             '__RequestVerificationToken': this.getToken()
         });
     }
