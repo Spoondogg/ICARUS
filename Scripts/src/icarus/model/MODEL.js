@@ -158,19 +158,16 @@ export default class MODEL {
         console.log('Options', options('a', 'b'), options(null, 'b'));
 
         @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
-        @returns {Function} Structure Constructor
+        @returns {function(): object} Structure Constructor
     */
-    static makeStruct(params) {
-        //let n = names.split(',');
+    makeStruct(params = []) {
         let count = params.length;
         /** Structure Constructor
             @returns {object} Newly created structure
         */
         let constructor = (...args) => {
-            //console.log('Struct', args);
             let obj = {};
-            for (let i = 0; i < count; i++) {
-                //console.log(params[i], args[i]);
+            for (let i = 0; i < params.length; i++) {
                 obj[params[i][0]] = args[i] || params[i][1]; // fallback to default value
             }
             return obj;
