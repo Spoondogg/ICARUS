@@ -42,7 +42,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
     */
     search(type = 'TAG', query = '') {
         //console.log('FORMPOSTINDEX Search', this.formId, query);
-        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + type + '&query=' + query, {
             '__RequestVerificationToken': this.getToken()
         });
     }
