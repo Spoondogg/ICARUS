@@ -10,9 +10,10 @@ import P from '../../../../p/P.js';
     that can be loaded into the preview
     @class
     @extends NAVTHUMBNAIL
+    @deprecated
 */
 export default class INDEXTHUMBNAIL extends NAVTHUMBNAIL {
-	/** Constructs a Bootstrap Jumbotron
+	/** IndexThumbnail
         @param {CONTAINER} node The model
         @param {MODEL} model Object Model
     */
