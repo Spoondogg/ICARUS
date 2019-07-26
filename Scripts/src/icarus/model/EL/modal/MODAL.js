@@ -1,6 +1,6 @@
 /** @module */
+import BUTTON, { ICONS } from '../button/BUTTON.js';
 import CONTAINER, { ATTRIBUTES, EL, FOOTER, HEADER, MODEL } from '../container/CONTAINER.js';
-import BUTTON from '../button/BUTTON.js';
 import DIV from '../div/DIV.js';
 import WELL from '../p/WELL.js';
 /** A Bootstrap 3 Modal
@@ -8,6 +8,7 @@ import WELL from '../p/WELL.js';
     @todo Integreate DIALOG wherever possible
     @class
     @extends DIV
+    @deprecated
 */
 export default class MODAL extends CONTAINER {
 	/** Constructs a Modal
@@ -37,11 +38,11 @@ export default class MODAL extends CONTAINER {
 		this.body = new DIV(this.content, new MODEL('modal-body'));
 		// Footer : Contains options to save or cancel out of form
 		this.footer = new FOOTER(this.content, new MODEL('modal-footer'));
-		this.footer.btnClose = new BUTTON(this.footer, new MODEL(new ATTRIBUTES({
-			//class: 'btn btn-default btn-block',
-			'data-dismiss': 'modal',
-			'aria-hidden': 'true'
-		})), 'Close');
+        this.footer.btnClose = new BUTTON(this.footer, {
+            label: 'CLOSE',
+            glyphicon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        });
 		this.footer.btnClose.el.onclick = () => this.hide(1000, true);
 	}
 	/** Creates a generic Modal header with close button
@@ -50,11 +51,11 @@ export default class MODAL extends CONTAINER {
 	*/
 	createModalHeader(title) {
 		let header = new DIV(this.content, new MODEL('modal-header'));
-		header.btnClose = new BUTTON(header, new MODEL(new ATTRIBUTES({
-			class: 'close',
-			'data-dismiss': 'modal',
-			'aria-hidden': 'true'
-		})), 'x');
+        header.btnClose = new BUTTON(header, {
+            label: 'X',
+            glyphicon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        });
 		header.main = new HEADER(header, new MODEL('modal-title'));
 		header.text = new DIV(header.main, new MODEL(), title);
 		header.btnClose.el.onclick = this.hide.bind(this);
