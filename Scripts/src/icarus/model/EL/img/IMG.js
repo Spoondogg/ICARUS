@@ -6,17 +6,10 @@ import EL from '../EL.js';
 */
 export default class IMG extends EL {
 	/** Constructs an IMAGE element
-	    @param {EL} node The object to contain this element
-	    @param {MODEL} model The object
+	    @param {EL} node Node
+	    @param {ImageModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'IMG', model);
-		/*try {
-			if (this.getMain().getDev()) {
-				this.el.ondblclick = this.edit.bind(this);
-			}
-		} catch (e) {
-			//console.warn('IMG does not have a MAIN Container', e);
-		}*/
 	}
 }
