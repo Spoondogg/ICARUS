@@ -13,6 +13,9 @@
 /** Unique Identifying Number
     @typedef {number} UId - Unique Identifying Number
 */
+/** String of comma delimited values
+    @typedef {string} CSV - String of comma delimited values
+*/
 /** Timed delay in milliseconds
     @typedef {number} Delay - Timed delay in milliseconds
 */
@@ -79,7 +82,7 @@
     @typedef {Model & {container: ContainerLike, loader: LoaderLike}} ModelWithContainer - A MODEL requiring a CONTAINER
 */
 /**
-    @typedef {Model & {loader: LoaderLike}} ModelWithLoader - A MODEL requiring a CONTAINER
+    @typedef {Model & {loader: LoaderLike}} ModelWithLoader - A MODEL requiring a LOADER
 */
 /**
     @typedef {Model & {caller: LoaderLike}} ModelWithCaller - A MODEL requiring a CALLER
@@ -92,12 +95,13 @@
     @typedef {Object} FormPostFormModel A MODEL used to generate a FORM based on a FORMPOST
     @property {string} className Class Name
     @property {string} type Type
-    @property {boolean} hidden If true, hidden
+    @property {boolean} [hidden="false"] If true, hidden
     @property {UId} id UId
 */
 /** A Form-like Model, used in FORM.createForm()
     @typedef {Container} FormModel A Form Model Constructor TypeDef
     @property {Container} container Container
+    @property {boolean} [hidden="false"] If true, hidden
 */
 
 /// OPTIONS
@@ -137,3 +141,60 @@
 */
 
 ///// END LOADER.log
+
+///// CONTAINERTHUMBNAIL
+
+/** Represents a Container Thumbnail Model
+    @typedef {Object} ContainerThumbnailModel Represents a set of options for a Loader log
+    @property {UId} id Container UId
+    @property {CSV} subsections Delimited list of subsections
+    @property {string} authorId Author UId
+    @property {string} label Container Label
+    @property {string} description Container Description
+    @property {CSV} tags Delimited list of tag UIds
+    @property {string} key Key
+    @property {string} value Value
+    @property {object} jsonResults JSON Results
+*/
+
+/////
+
+///// NAVITEM 
+
+/** Represents a set of options for a ClassIndex
+    @typedef {Object} NavItemOptions A set of options for a NavItem
+    @property {boolean} [deactivateSiblings="false"] If true, siblings are deactivated when element is activated
+*/
+
+/** Represents a set of options for a Clickable interface
+    @typedef {Object} ClickableOptions A set of options for a NavItem
+    @property {boolean} [deactivateSiblings="false"] If true, siblings are deactivated when element is activated
+    @property {number} [delay="200"] Single Click Delay
+    @property {number} [longClickDelay="2000"] Press/Hold duration before long click is triggered
+    @property {boolean} [stopPropagation="true"] If true, siblings are deactivated when element is activated
+*/
+
+/** Represents a set of options for a Clickable interface
+    @typedef {Object} ButtonAttributes A set of options for a NavItem
+    @property {string} [label=""] Button text
+    @property {string} [glyphicon="ICONS.BLANK"] Button Icon
+    @property {string} [buttonType="BUTTON"] Button Type ie: BUTTON, RESET, SUBMIT
+*/
+
+/** Represents a model for a BUTTON
+    @typedef {Object} ButtonModel A Button Model
+    @property {ButtonAttributes} [attributes] Button Attributes
+*/
+
+/** Represents a set of attributes for an IMG Class
+    @typedef {Object} ImageAttributes A set of options for an Image
+    @property {string} [src=""] Image source url
+    @property {string} [class=""] Image class
+*/
+
+/** Represents a model for an IMG Class
+    @typedef {Object} ImageModel Image Model
+    @property {ImageAttributes} [attributes] Image Attributes
+*/
+
+////

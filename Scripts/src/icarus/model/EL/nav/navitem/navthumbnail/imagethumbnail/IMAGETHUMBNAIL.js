@@ -104,4 +104,4 @@ export default class IMAGETHUMBNAIL extends NAVTHUMBNAIL {
         }
     }
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTRIBUTES, EL, MODEL, NAVTHUMBNAIL }

@@ -1,6 +1,6 @@
 /** @module */
 import FORMPOSTINDEX, { CONFIRM, ICONS, MODEL } from '../FORMPOSTINDEX.js';
-import IMAGETHUMBNAIL from '../../../../../nav/navitem/navthumbnail/imagethumbnail/IMAGETHUMBNAIL.js';
+import IMAGETHUMBNAIL, { NAVTHUMBNAIL } from '../../../../../nav/navitem/navthumbnail/imagethumbnail/IMAGETHUMBNAIL.js';
 /** Contains a list of IMAGE THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
     @class

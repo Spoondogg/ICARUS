@@ -11,14 +11,7 @@ import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
         @param {CONTAINER} node The model
-        @param {MODEL} model The Thumbnail model
-        @param {number} model.id Unique Identifier that this thumbnail represents
-        @param {string} model.subsections Delimited string of uids
-        @param {string} model.authorId Author Id
-        @param {string} model.label The Thumbnail label
-        @param {string} model.description Description
-        @param {string} model.tags Comma delimited list of tag uids
-        @param {object} model.jsonResults JSON Results
+        @param {ContainerThumbnailModel} model The Thumbnail model
         @param {string} classType The class that this thumbnail represents
     */
 	constructor(node, model, classType) {
@@ -94,8 +87,11 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         try {
             // Then use cache to generate tag
             let tagName = model.jsonResults[0].value;
-            //console.log('tagName', tagName);
-            let btn = this.tagGroup.addSwitch(tagName, ICONS.TAG);
+            let btn = this.tagGroup.addSwitch(new MODEL({
+                label: tagName,
+                glyphicon: ICONS.TAG,
+                buttonType: 'BUTTON'
+            }));
             btn.addClass('tag');
             //btn.implement(new Clickable(btn));
             btn.el.addEventListener('activate', (ev) => {
@@ -186,11 +182,31 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
         this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
         this.detail.rating = new BUTTONGROUP(this.detail, new MODEL('right star-group'));
-        this.detail.rating.addButton('', ICONS.STAREMPTY);
-        this.detail.rating.addButton('', ICONS.STAREMPTY);
-        this.detail.rating.addButton('', ICONS.STAR);
-        this.detail.rating.addButton('', ICONS.STAR);
-        this.detail.rating.addButton('', ICONS.STAR);
+        this.detail.rating.addButton(new MODEL({
+            label: '',
+            glyphicon: ICONS.STAREMPTY,
+            buttonType: 'BUTTON'
+        }));
+        this.detail.rating.addButton(new MODEL({
+            label: '',
+            glyphicon: ICONS.STAREMPTY,
+            buttonType: 'BUTTON'
+        }));
+        this.detail.rating.addButton(new MODEL({
+            label: '',
+            glyphicon: ICONS.STAR,
+            buttonType: 'BUTTON'
+        }));
+        this.detail.rating.addButton(new MODEL({
+            label: '',
+            glyphicon: ICONS.STAR,
+            buttonType: 'BUTTON'
+        }));
+        this.detail.rating.addButton(new MODEL({
+            label: '',
+            glyphicon: ICONS.STAR,
+            buttonType: 'BUTTON'
+        }));
     }
 }
-export { ATTRIBUTES, BUTTON, EL, MODEL }
+export { ATTRIBUTES, BUTTON, EL, MODEL, NAVTHUMBNAIL }

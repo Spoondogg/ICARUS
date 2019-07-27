@@ -283,10 +283,10 @@ export default class MAIN extends CONTAINER {
         });
     }
 	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
-        @param {MAINMODEL} model APP model
+        param {MAINMODEL} model APP model
 	    @returns {void}
 	*/
-	createDocumentMap(model) {
+    createDocumentMap() {
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
@@ -466,11 +466,19 @@ export default class MAIN extends CONTAINER {
                                     text: 'Create a new page'
 								})).createForm().then((form) => {
 									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
-										form.footer.buttonGroup.addButton('Open in new window').el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(new MODEL({
+                                            label: 'Open in new window',
+                                            glyphicon: ICONS.BLANK,
+                                            buttonType: 'BUTTON'
+                                        })).el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
 										};
-										form.footer.buttonGroup.addButton('Open in this Window?').el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(new MODEL({
+                                            label: 'Open in this Window?',
+                                            glyphicon: ICONS.BLANK,
+                                            buttonType: 'BUTTON'
+                                        })).el.onclick = () => {
 											location.href = url;
 											form.getDialog().hide(300, true);
 										};
@@ -634,7 +642,11 @@ export default class MAIN extends CONTAINER {
                         btnSignIn.addClass('btn-sign-in');
                         btnSignIn.setLabel('Sign In');
 
-                        let btnOAuthGoogle = form.footer.buttonGroup.addButton('Sign in with Google', ICONS.USER);
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton(new MODEL({
+                            label: 'Sign in with Google',
+                            glyphicon: ICONS.USER,
+                            buttonType: 'BUTTON'
+                        }));
                         btnOAuthGoogle.addClass('btn-oauth-google');
                         btnOAuthGoogle.el.onclick = () => {
                             this.loginOAuth('Google');
@@ -644,7 +656,11 @@ export default class MAIN extends CONTAINER {
                             this.register();
                             return false;
                         }*/
-                        let btnForgotPassword = form.footer.buttonGroup.addButton('Forgot Your Password?');
+                        let btnForgotPassword = form.footer.buttonGroup.addButton(new MODEL({
+                            label: 'Forgot Your Password?',
+                            glyphicon: ICONS.BLANK,
+                            buttonType: 'BUTTON'
+                        }));
                         btnForgotPassword.addClass('btn-forgot-password');
                         btnForgotPassword.el.onclick = () => {
                             this.forgotPassword();
@@ -678,7 +694,11 @@ export default class MAIN extends CONTAINER {
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-			form.footer.buttonGroup.addButton('Register - Local').el.addEventListener('activate', () => this.register());
+            form.footer.buttonGroup.addButton(new MODEL({
+                label: 'Register - Local',
+                glyphicon: ICONS.BLANK,
+                buttonType: 'BUTTON'
+            })).el.addEventListener('activate', () => this.register());
 			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}

@@ -32,7 +32,7 @@ export default class PROMPT extends DIALOG {
 				} else if (model.formtype === 'CONTAINER') {
                     FORM.createContainerForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else {
-                    FORM.createEmptyForm(this.body.pane, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createEmptyForm(this.body.pane).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				}
 			} catch (e) {
 				console.error('PROMPT.createForm() Failed to create Form', model, this);

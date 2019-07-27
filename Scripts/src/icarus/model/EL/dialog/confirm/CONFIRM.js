@@ -18,14 +18,22 @@ export default class CONFIRM extends DIALOG {
         if (onCancel !== null) {
             this.onCancel = onCancel;
         }
-        this.btnConfirm = this.footer.buttonGroup.addButton('Confirm', ICONS.CONFIRM);
+        this.btnConfirm = this.footer.buttonGroup.addButton(new MODEL({
+            label: 'Confirm',
+            glyphicons: ICONS.CONFIRM,
+            buttonType: 'BUTTON'
+        }));
         this.btnConfirm.el.addEventListener('click', () => {
             this.onConfirm();
             this.closeDialog();
         });
         $(this.btnConfirm.el).insertBefore(this.footer.buttonGroup.get()[0].el);
         
-        this.btnCancel = this.footer.buttonGroup.addButton('Cancel', ICONS.CANCEL);
+        this.btnCancel = this.footer.buttonGroup.addButton(new MODEL({
+            label: 'Cancel',
+            glyphicon: ICONS.CANCEL,
+            buttonType: 'BUTTON'
+        }));
         this.btnCancel.el.addEventListener('click', () => {
             this.onCancel();
             this.closeDialog();

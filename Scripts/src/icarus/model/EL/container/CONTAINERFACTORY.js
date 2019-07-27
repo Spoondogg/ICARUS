@@ -17,7 +17,6 @@ import DICTIONARY from '../container/dictionary/DICTIONARY.js';
 import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTINDEX.js';
 import IMAGEINDEX from '../container/index/classindex/formpostindex/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/index/INDEX.js';
-import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
@@ -87,9 +86,6 @@ export default class CONTAINERFACTORY extends FACTORY {
                 break;
             case 'IMAGEINDEX':
                 element = new IMAGEINDEX(span, model);
-                break;
-            case 'INDEXTHUMBNAIL':
-                element = new INDEXTHUMBNAIL(span, model);
                 break;
             case 'JUMBOTRON':
                 element = new JUMBOTRON(span, model);

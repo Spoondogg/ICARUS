@@ -43,7 +43,11 @@ export default class DIALOG extends EL {
         }
 		this.navheader.tab.el.dispatchEvent(new Activate());
 		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
-		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
+        this.footer.buttonGroup.addButton(new MODEL({
+            label: 'CLOSE',
+            glyphicon: ICONS.CLOSE,
+            buttonType: 'BUTTON'
+        })).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
 		this.overrideBootstrap();
 	}

@@ -243,4 +243,4 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         }
     }    
 }
-export { CLASSVIEWER }
+export { CLASSVIEWER, NAVTHUMBNAIL }
