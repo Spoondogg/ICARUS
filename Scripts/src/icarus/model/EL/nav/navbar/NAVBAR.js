@@ -21,7 +21,6 @@ export default class NAVBAR extends NAV {
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
 		this.tabs = new MENU(this, new MODEL(horizontalTabs ? 'horizontal' : '').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
-		this.tabs.el.dispatchEvent(new Activate(this.tabs));
 		this.tabs.el.dispatchEvent(new Expand(this.tabs));
 		this.menus = new MENU(this, new MODEL().set('name', 'menus'));
 		if (bottomUp) {
