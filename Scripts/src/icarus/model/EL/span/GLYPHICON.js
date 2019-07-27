@@ -8,13 +8,13 @@ import { ICONS } from '../../../enums/ICONS.js';
 export default class GLYPHICON extends SPAN {
 	/** Construct a Glyphicon
 	    @param {EL} node Node
-	    @param {string} glyphicon The bootstrap glyphicon or ICON enum
-        @param {MODEL} model Optional Model
+	    @param {string} [glyphicon] Icon
+        @param {MODEL} [model] Model
 	*/
-	constructor(node, glyphicon, model) {
+	constructor(node, glyphicon = ICONS.BLANK, model) {
 		super(node, model);
 		this.addClass('icon glyphicon ' + glyphicon);
-	}
+	} 
 	/** Sets the ICON class to the given glyphicon
         @param {string} glyphicon The glyphicon name
         @returns {void}

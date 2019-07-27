@@ -18,18 +18,29 @@ export default class BUTTONGROUP extends GROUP {
 			this.addClass('btn-group-vertical');
 		}
 		/* Add cases for each relevant constructor that inherited class does not have */
-		this.addConstructor('BUTTON', () => this.addButton('BUTTON'));
-        this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton('TOGGLE'));
-        this.addConstructor('SWITCH', () => this.addSwitch('SWITCH'));
+        this.addConstructor('BUTTON', () => this.addButton(new MODEL({
+            label: 'BUTTON',
+            icon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        })));
+        this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton(new MODEL({
+            label: 'TOGGLE',
+            icon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        })));
+        this.addConstructor('SWITCH', () => this.addSwitch(new MODEL({
+            label: 'SWITCH',
+            icon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        })));
 	}
 	/** Creates a button and adds it to this button group, then adds it to the buttons array
-	    @param {string} label The label
-	    @param {string} glyphicon icon
-	    @param {string} [buttonType] The type of button ie: [button, reset, submit]
+	    @param {ButtonModel} model Model
 	    @returns {BUTTON} A generic button object
 	*/
-	addButton(label, glyphicon, buttonType) {
-		let btn = new BUTTON(this, label, glyphicon, buttonType);
+    addButton(model) {
+        //console.log('BUTTONGROUP.' + this.node.toString() + '.addButton', this.node)
+        let btn = new BUTTON(this, model);
         btn.el.onclick = (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -38,22 +49,18 @@ export default class BUTTONGROUP extends GROUP {
 		return this.addChild(btn);
 	}
 	/** Createa a switch button
-	    @param {string} label The label
-	    @param {string} glyphicon The icon
-	    @param {string} [buttonType] The type of button ie: [button, reset, submit]
+        @param {ButtonModel} model Button Attributes
 	    @returns {SWITCH} A toggle button
 	*/
-	addSwitch(label, glyphicon, buttonType) {
-		return this.addChild(new SWITCH(this, label, glyphicon, buttonType));
+	addSwitch(model) {
+        return this.addChild(new SWITCH(this, model));
     }
     /** Createa a toggle button with a corresponding dropdown menu
-	    @param {string} label The label
-	    @param {string} glyphicon The icon
-	    @param {string} [buttonType] The type of button ie: [button, reset, submit]
+        @param {ButtonModel} model Button Attributes
 	    @returns {TOGGLEBUTTON} A toggle button
 	*/
-    addToggleButton(label, glyphicon, buttonType) {
-        return this.addChild(new TOGGLEBUTTON(this, label, glyphicon, buttonType));
+    addToggleButton(model) {
+        return this.addChild(new TOGGLEBUTTON(this, model));
     }
     /** Get child BUTTON element by Name and optionally by Class
 	    @param {string} [name] Element Name

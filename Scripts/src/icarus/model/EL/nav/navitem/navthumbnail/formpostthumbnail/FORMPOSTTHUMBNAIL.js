@@ -40,7 +40,11 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         //this.p.setInnerHTML(new STRING(model.jsonResults).truncate(128));
         try {
             if (model.jsonResults) {
-                let button = new BUTTON(this.p, 'Show / Hide', ICONS.DATA);
+                let button = new BUTTON(this.p, new MODEL({
+                    label: 'Show / Hide',
+                    glyphicon: ICONS.DATA,
+                    buttonType: 'BUTTON'
+                }));
                 button.addClass('pill-button');
 
                 let list = new UL(this.p);

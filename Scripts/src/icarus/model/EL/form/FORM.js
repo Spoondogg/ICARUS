@@ -25,7 +25,11 @@ export default class FORM extends CONTAINER {
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
-		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
+        this.footer.buttonGroup.addButton(new MODEL({
+            label: 'Submit',
+            glyphicon: ICONS.SAVE,
+            buttonType: 'SUBMIT'
+        })).el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
@@ -149,10 +153,11 @@ export default class FORM extends CONTAINER {
 	    @param {Array<BUTTON>} buttons An array of buttons ([label, glyphicon, buttonType])
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	addButtons(buttons) {
+    addButtons(buttons) {
+        console.log('FORM.addButtons', buttons);
 		return new Promise((resolve) => {
-			if (buttons) {
-				buttons.forEach((btn) => this.footer.buttonGroup.addButton(btn[0], btn[1], btn[2]));
+            if (buttons) {
+                buttons.forEach((btn) => this.footer.buttonGroup.addButton(btn));
 			}
 			resolve(this);
 		});
@@ -172,7 +177,11 @@ export default class FORM extends CONTAINER {
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
 
         /** A button that restores functionality of the form */
-        let btnReset = this.footer.buttonGroup.addButton('Reset Form', ICONS.RESET); 
+        let btnReset = this.footer.buttonGroup.addButton(new MODEL({
+            label: 'Reset Form',
+            glyphicon: ICONS.RESET,
+            buttonType: 'BUTTON'
+        })); 
         btnReset.el.onclick = () => {
             toDisable.forEach((el) => el.removeAttribute('disabled'));
             btnReset.destroy();

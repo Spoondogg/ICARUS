@@ -1,5 +1,6 @@
 /** @module */
 import MODEL, { ATTRIBUTES } from '../model/MODEL.js';
+import { ICONS } from '../enums/ICONS.js';
 import INPUTMODEL from '../model/el/input/INPUT.js';
 /* eslint-disable max-params */
 /** Instantiates an INPUT MODEL with all required values
@@ -13,17 +14,59 @@ import INPUTMODEL from '../model/el/input/INPUT.js';
     @param {number} showNav If 1, NavBar is shown
     @returns {INPUTMODEL} An input model
 */
-export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0, ...attr) => new MODEL(new ATTRIBUTES({
+export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0, ...attr) => new MODEL({
 	name,
 	value,
 	type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
 	readonly
-})).set({
+}).set({
 	showNav,
 	element,
 	label,
 	type
 }).setAttribute(attr);
+/** Structure Constructor Factory
+    See https://stackoverflow.com/a/502384/722785
+    let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
+    console.log('Options', options('a', 'b'), options(null, 'b'));
+
+    @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
+    @returns {function(): object} Structure Constructor
+*/
+export const makeStruct = (params = []) => {
+    let count = params.length;
+    /** Structure Constructor
+        @returns {object} Newly created structure
+    */
+    let constructor = (...args) => {
+        let obj = {};
+        for (let i = 0; i < count; i++) {
+            obj[params[i][0]] = args[i] || params[i][1]; // fallback to default value
+        }
+        return obj;
+    }
+    return constructor;
+}
+export const MODELS = {
+    /* Create a generic element model structure constructor
+        type {function(object): MODEL}
+        param {object} Model Model
+        returns {MODEL} Model
+    
+    EL: () => new MODEL(),*/
+
+    /** Create a button model structure constructor
+        @type {function(ButtonModel): ButtonModel}
+        @param {ButtonModel} Model
+        @returns {ButtonModel} Button Model
+    */
+    BUTTON: makeStruct([
+        ['label', ''],
+        ['glyphicon', ICONS.BLANK],
+        ['buttonType', 'BUTTON']
+    ])
+    //model = MODELS.BUTTON()
+}
 /** Stores the default DATA ELEMENTS collections for each Class
     
     @description When working with a CONTAINER class, it makes more sense

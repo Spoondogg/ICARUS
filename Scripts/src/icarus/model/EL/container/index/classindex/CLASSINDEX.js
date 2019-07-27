@@ -7,6 +7,7 @@ import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 //import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
+import PAGINATION from '../../../footer/pagination/PAGINATION.js';
 import PAYLOAD from '../../../form/PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
@@ -53,7 +54,9 @@ export default class CLASSINDEX extends CONTAINER {
         this.configureHeader();
         this.addEvents();
         this.overrideHorizontalSwipe();		
-		this.pagination = this.createPaginationFooter();
+        this.pagination = new PAGINATION(this.body);
+        this.pagination.nextPage = () => this.nextPage();
+        this.pagination.prevPage = () => this.prevPage();//this.createPaginationFooter();
     }
     /** Creates a header with basic tabbable functionality, bound to this.menu
         @param {MODEL} model Model
@@ -71,7 +74,11 @@ export default class CLASSINDEX extends CONTAINER {
         $(this.headerNew.el).insertBefore(this.body.el);
         this.headerNew.el.dispatchEvent(new Expand(this.headerNew));
         */
-        this.headerTab = new BUTTON(this.header, model.data.header || options.classType, ICONS.BLANK);
+        this.headerTab = new BUTTON(this.header, new MODEL({
+            label: model.data.header || options.classType,
+            glyphicon: ICONS.BLANK,
+            buttonType: 'BUTTON'
+        }));
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
         this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
@@ -157,14 +164,22 @@ export default class CLASSINDEX extends CONTAINER {
         this.buttonGroup = new BUTTONGROUP(this.header);
         //let searchToggle = this.buttonGroup.addToggleButton('', ICONS.SEARCH);
 
-        this.btnPageTotal = this.buttonGroup.addSwitch(this.pageTotal, ICONS.TAGS);
+        this.btnPageTotal = this.buttonGroup.addSwitch(new MODEL({
+            label: this.pageTotal,
+            glyphicon: ICONS.TAGS,
+            buttonType: 'BUTTON'
+        }));
         this.btnPageTotal.addClass('page-total');
         this.btnPageTotal.el.addEventListener('activate', (ev) => {
             console.log('TODO: Not sure if this should trigger anything or not');
             ev.stopPropagation();
         });
 
-        this.btnSearch = this.buttonGroup.addSwitch('', ICONS.SEARCH);
+        this.btnSearch = this.buttonGroup.addSwitch(new MODEL({
+            label: '',
+            glyphicon: ICONS.SEARCH,
+            buttonType: 'BUTTON'
+        }));
         this.btnSearch.el.addEventListener('activate', (ev) => {
             console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
@@ -256,7 +271,7 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     constructPage(payload) {
-        console.log('Constructing a page of results', payload);
+        //console.log('Constructing a page of results', payload);
         this.isLoading = true;
         this.pageTotal = payload.total;
         this.btnPageTotal.setLabel(payload.total);
@@ -272,14 +287,20 @@ export default class CLASSINDEX extends CONTAINER {
                 this.pageCount = 1;
             }
             for (let p = 0; p < this.pageCount; p++) {
-                this.pagination.buttonGroup.addButton(p + 1).el.onclick = () => {
+                this.pagination.buttonGroup.addButton(new MODEL({
+                    label: p + 1,
+                    glyphicon: ICONS.BLANK,
+                    buttonType: 'BUTTON'
+                })).el.onclick = () => {
                     //this.menu.empty().then(() => this.loadPage(p));
                     this.loadPage(p);
                     return false;
                 };
             }
             this.pagination.buttonGroup.loaded = true;
-            this.pagination.buttonGroup.children[0].addClass('active');
+            //if (this.pageCount > 0) {
+            //    this.pagination.buttonGroup.children[0].addClass('active');
+            //}
         }
         page.el.dispatchEvent(new Expand(page));
     }
@@ -317,18 +338,32 @@ export default class CLASSINDEX extends CONTAINER {
 	/** Creates a Pagination Footer
 	    @returns {FOOTER} A Footer with a buttongroup for pagination
 	*/
-	createPaginationFooter() {
+    createPaginationFooter() {
+        /*
 		let pagination = new FOOTER(this.body, new MODEL('pagination'));
 		pagination.el.setAttribute('style', 'text-align:center;');
-        pagination.btnPrev = new BUTTON(pagination, '', ICONS.CHEVRON_LEFT);
+        pagination.btnPrev = new BUTTON(pagination, new MODEL({
+            label: '',
+            glyphicon: ICONS.CHEVRON_LEFT,
+            buttonType: 'BUTTON'
+        }));
         pagination.btnPrev.addClass('prev');
-		pagination.btnPrev.el.onclick = this.prevPage.bind(this);
+		pagination.btnPrev.el.onclick = () => this.prevPage();
 		pagination.buttonGroup = new BUTTONGROUP(pagination);
 		pagination.buttonGroup.loaded = false;
-        pagination.btnNext = new BUTTON(pagination, '', ICONS.CHEVRON_RIGHT);
+        pagination.btnNext = new BUTTON(pagination, new MODEL({
+            label: '',
+            glyphicon: ICONS.CHEVRON_RIGHT,
+            buttonType: 'BUTTON'
+        }));
         pagination.btnNext.addClass('next');
-		pagination.btnNext.el.onclick = this.nextPage.bind(this);
+		pagination.btnNext.el.onclick = () => this.nextPage();
+        
 		return pagination;
+        */
+        let pagination = new PAGINATION(this.body);
+        pagination.nextPage = () => this.nextPage();
+        pagination.prevPage = () => this.prevPage();
     }
     /** Launches a CLASSVIEWER for the given id and classType
         @param {UId} id CONTAINER UId

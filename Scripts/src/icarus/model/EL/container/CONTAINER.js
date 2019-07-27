@@ -1363,7 +1363,11 @@ export default class CONTAINER extends GROUP {
 					container: this.getMain(),
 					caller: this.getContainer() //.getMain()
 				}));
-				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.toString(), ICONS.REMOVE).el.onclick = () => {
+                dialog.footer.buttonGroup.addButton(new MODEL({
+                    label: 'Yes, Remove ' + this.toString(),
+                    glyphicon: ICONS.REMOVE,
+                    buttonType: 'BUTTON'
+                })).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
@@ -1502,8 +1506,11 @@ export default class CONTAINER extends GROUP {
 						container: main,
 						caller: main
 					}));
-					dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.toString(), ICONS.REMOVE)
-						.el.onclick = () => loader.log(50, 'Disable').then(
+                    dialog.footer.buttonGroup.addButton(new MODEL({
+                        label: 'Yes, Disable ' + this.toString(),
+                        glyphicon: ICONS.REMOVE,
+                        buttonType: 'BUTTON'
+                    })).el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {
