@@ -691,6 +691,7 @@
     <Content Include="Scripts\src\icarus\interface\Draggable.js" />
     <Content Include="Scripts\src\icarus\interface\Closeable.js" />
     <Content Include="Scripts\src\icarus\interface\Editable.js" />
+    <Content Include="Scripts\src\icarus\interface\Tabbable.js" />
     <Content Include="Scripts\src\icarus\interface\IFACE.js" />
     <Content Include="Scripts\src\icarus\interface\Movable.js" />
     <Content Include="Scripts\src\icarus\interface\Scrollable.js" />
@@ -716,6 +717,7 @@
     <Content Include="Scripts\src\icarus\model\el\container\REFERENCE.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\confirm\CONFIRM.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\SEARCH\SEARCH.js" />
+    <Content Include="Scripts\src\icarus\model\el\footer\pagination\PAGINATION.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
