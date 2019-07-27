@@ -1,6 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
-import CONTAINERTHUMBNAIL from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
+import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
@@ -117,9 +117,9 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         ));
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {MODEL} model The Thumbnail model
-        @param {number} model.id Unique Identifier that this thumbnail represents
-        @param {string} model.label The Thumbnail label
+	    @param {ContainerThumbnailModel} model The Thumbnail model
+        param {number} model.id Unique Identifier that this thumbnail represents
+        param {string} model.label The Thumbnail label
 	    @param {string} classType The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
