@@ -2,14 +2,10 @@
 import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
-import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
-//import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
 import CHAT from '../container/chat/CHAT.js';
-//import CLASSINDEX from '../container/index/classindex/CLASSINDEX.js';
-//import CLASSINDEXFACTORY from '../container/index/classindex/CLASSINDEXFACTORY.js';
 import CLASSVIEWER from '../container/index/classindex/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
 import CONTAINERINDEX from './index/classindex/containerindex/CONTAINERINDEX.js';
@@ -18,9 +14,11 @@ import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTI
 import IMAGEINDEX from '../container/index/classindex/formpostindex/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/index/INDEX.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
+import { MODELS } from '../../../enums/DATAELEMENTS.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+import PROMPT from '../dialog/prompt/PROMPT.js';
 import SECTION from '../section/SECTION.js';
 import TABLE from '../table/TABLE.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
@@ -144,11 +142,9 @@ export default class CONTAINERFACTORY extends FACTORY {
             let label = classType === '*' ? 'Containers' : classType + '(s)';
             label += query === null ? '' : ': ' + query;
             container.getLoader().log(25).then((loader) => {
-                let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                    container,
-                    caller,
-                    label
-                }));
+                let prompt = new PROMPT(MODELS.dialog(
+                    label, '', true, container, caller, container.getLoader()
+                ));
                 let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
                     classType,
                     query,
@@ -161,4 +157,4 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK }

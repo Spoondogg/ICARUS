@@ -1,8 +1,8 @@
 /** @module */
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
-import PROMPT, { DIALOGMODEL, DIV } from '../../../dialog/prompt/PROMPT.js';
-import SPAN from '../../../span/SPAN.js';
+import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
+import SPAN, { MODELS } from '../../../span/SPAN.js';
 /** Represents an INPUT element inside a group of form elements
     @class
     @extends FORMELEMENT
@@ -47,21 +47,23 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
-			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-            btnEdit.el.onclick = () => this.createForm(className, dataType, id, this.input);
+            new SPAN(this.inputGroup, MODELS.text('EDIT')).addClass('input-group-addon').then((btnEdit) => {
+                btnEdit.el.onclick = () => this.createForm(className, dataType, id, this.input);
+            });
 		}
-		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-        btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
-        let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
-        btnLoad.el.onclick = () => {
-            console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'FormPost: ClassName: ' + className + ', DataType: ' + dataType
-            }));
-            dialog.showDialog();
-        }
+        new SPAN(this.inputGroup, MODELS.text('NEW')).addClass('input-group-addon').then((btnNew) => {
+            btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
+        });
+        new SPAN(this.inputGroup, MODELS.text('LOAD')).addClass('input-group-addon').then((btnLoad) => {
+            btnLoad.el.onclick = () => {
+                console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
+                let dialog = new PROMPT(MODELS.dialog(
+                    'FormPost: ClassName: ' + className + ', DataType: ' + dataType, '', true,
+                    this.getContainer(), this, this.getLoader()
+                ));
+                dialog.showDialog();
+            }
+        });
 	}
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
@@ -76,11 +78,11 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
 				console.log('CreateForm', container, typeof container);
-				new PROMPT(new DIALOGMODEL(new MODEL(), {
-					container,
-                    caller: this,
-                    label: className + '.' + type + '(' + id + ') '
-                })).createForm(new MODEL().set({
+                let dialog = new PROMPT(MODELS.dialog(
+                    className + '.' + type + '(' + id + ') ', '', true,
+                    container, this, this.getLoader()
+                ));
+                dialog.createForm(new MODEL().set({
                     data: model.data,
                     //attributes: model.attributes,
 					formtype: 'FORMPOST',

@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js'; // Deactivate //SPAN
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js'; // Deactivate //SPAN
 import CHAT from './CHAT.js';
 import DICTIONARY from '../dictionary/DICTIONARY.js';
 import FORM from '../../form/FORM.js';
@@ -39,4 +39,4 @@ export default class CHATFACTORY extends CONTAINERFACTORY {
         return element;
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
+export { ATTRIBUTES, CONTAINER, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }

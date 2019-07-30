@@ -12,7 +12,7 @@ export default class PANEL extends DIALOG {
 	constructor(model) {
 		super(model);
 		this.addClass('panel');
-		/** Override MODAL Body with a Container
+		/** Override DIALOG Body with a Container
 		    @type {CONTAINER} 
 		*/
 		this.body = new CONTAINER(this.body, 'DIV');

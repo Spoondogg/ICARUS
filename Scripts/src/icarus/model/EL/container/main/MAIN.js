@@ -1,7 +1,7 @@
 /* eslint-disable max-lines, max-statements */
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
-import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, DIALOGMODEL, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
+import CONTAINER, { Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, MODELS, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import MENU, { NAVSEARCH } from '../../nav/menu/MENU.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
 import CHATFACTORY from '../chat/CHATFACTORY.js';
@@ -466,19 +466,11 @@ export default class MAIN extends CONTAINER {
                                     text: 'Create a new page'
 								})).createForm().then((form) => {
 									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
-                                        form.footer.buttonGroup.addButton(new MODEL({
-                                            label: 'Open in new window',
-                                            glyphicon: ICONS.BLANK,
-                                            buttonType: 'BUTTON'
-                                        })).el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(MODELS.button('Open in new window')).el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
 										};
-                                        form.footer.buttonGroup.addButton(new MODEL({
-                                            label: 'Open in this Window?',
-                                            glyphicon: ICONS.BLANK,
-                                            buttonType: 'BUTTON'
-                                        })).el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(MODELS.button('Open in this Window?')).el.onclick = () => {
 											location.href = url;
 											form.getDialog().hide(300, true);
 										};
@@ -529,12 +521,8 @@ export default class MAIN extends CONTAINER {
     */
     forgotPassword() {
         console.log('MAIN.forgotPassword');
-        this.loader.log(99, 'Forgot Password').then((loader) => new PROMPT(new DIALOGMODEL(
-            new MODEL('login'), {
-                container: this,
-                caller: this,
-                label: 'Forgot Password'
-            })).createForm(new MODEL('login').set({
+        this.loader.log(99, 'Forgot Password').then((loader) => new PROMPT(MODELS.dialog(
+            'Forgot Password', '', true, this, this, this.getLoader())).createForm(new MODEL('login').set({
                 label: 'Forgot Password',
                 container: this
             })).then((form) => {
@@ -618,16 +606,9 @@ export default class MAIN extends CONTAINER {
 		let label = 'LogIn';
 		this.loader.log(99, label).then(
 			(loader) => {
-				let prompt = new PROMPT(new DIALOGMODEL(new MODEL('login'), {
-					caller,
-					container: this,
-					label
-				}));
-                prompt.createForm(new DIALOGMODEL(new MODEL('login'), {
-                    caller,
-                    container: prompt,
-                    label: 'Login'
-                })).then(
+                let prompt = new PROMPT(MODELS.dialog(label, '', true, this, caller));
+                prompt.addClass('login');
+                prompt.createForm(MODELS.dialog('Login', '', true, prompt, caller, this.getLoader())).then(
                     (form) => {
                         let email = this.url.searchParams.get('email');
                         form.setAction('/Account/Login');
@@ -642,11 +623,7 @@ export default class MAIN extends CONTAINER {
                         btnSignIn.addClass('btn-sign-in');
                         btnSignIn.setLabel('Sign In');
 
-                        let btnOAuthGoogle = form.footer.buttonGroup.addButton(new MODEL({
-                            label: 'Sign in with Google',
-                            glyphicon: ICONS.USER,
-                            buttonType: 'BUTTON'
-                        }));
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton(MODELS.button('Sign in with Google', ICONS.USER));
                         btnOAuthGoogle.addClass('btn-oauth-google');
                         btnOAuthGoogle.el.onclick = () => {
                             this.loginOAuth('Google');
@@ -656,11 +633,7 @@ export default class MAIN extends CONTAINER {
                             this.register();
                             return false;
                         }*/
-                        let btnForgotPassword = form.footer.buttonGroup.addButton(new MODEL({
-                            label: 'Forgot Your Password?',
-                            glyphicon: ICONS.BLANK,
-                            buttonType: 'BUTTON'
-                        }));
+                        let btnForgotPassword = form.footer.buttonGroup.addButton(MODELS.button('Forgot Your Password?'));
                         btnForgotPassword.addClass('btn-forgot-password');
                         btnForgotPassword.el.onclick = () => {
                             this.forgotPassword();
@@ -694,11 +667,7 @@ export default class MAIN extends CONTAINER {
 				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-            form.footer.buttonGroup.addButton(new MODEL({
-                label: 'Register - Local',
-                glyphicon: ICONS.BLANK,
-                buttonType: 'BUTTON'
-            })).el.addEventListener('activate', () => this.register());
+            form.footer.buttonGroup.addButton(MODELS.button('Register - Local')).el.addEventListener('activate', () => this.register());
 			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}
@@ -732,12 +701,9 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
 	register(caller = this) {
-        this.loader.log(99, 'Register').then((loader) => new PROMPT(new DIALOGMODEL(
-            new MODEL('login'), {
-                container: this,
-                caller,
-                label: 'Sign Up'
-            })).createForm(new MODEL('login').set({
+        this.loader.log(99, 'Register').then((loader) => new PROMPT(MODELS.dialog(
+            'Sign Up', '', true, this, caller, this.getLoader()
+        )).createForm(new MODEL('login').set({
                 label: 'Sign Up',
                 container: this
             })).then((form) => {
@@ -771,12 +737,9 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     resetPassword() {
-        this.loader.log(99, 'Reset Password').then((loader) => new PROMPT(new DIALOGMODEL(
-            new MODEL('login'), {
-                container: this,
-                caller: this,
-                label: 'Reset Password'
-            })).createForm(new MODEL('login').set({
+        this.loader.log(99, 'Reset Password').then((loader) => new PROMPT(MODELS.dialog(
+                'Reset Password', '', true, this, this, this.getLoader())
+            ).createForm(new MODEL('login').set({
                 label: 'Reset Password',
                 container: this
             })).then((form) => {

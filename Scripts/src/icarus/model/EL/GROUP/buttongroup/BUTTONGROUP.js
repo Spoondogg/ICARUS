@@ -1,6 +1,6 @@
 /** @module */
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
-import TOGGLEBUTTON, { Activate, BUTTON, Deactivate, ICONS, SWITCH } from '../../button/togglebutton/TOGGLEBUTTON.js';
+import TOGGLEBUTTON, { Activate, BUTTON, Deactivate, ICONS, MODELS, SWITCH } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A container for Buttons
     @class
@@ -9,30 +9,18 @@ import { ALIGN } from '../../../../enums/ALIGN.js';
 export default class BUTTONGROUP extends GROUP {
 	/** Constructs a Group for containing Buttons
 	    @param {EL} node Parent Node
-        @param {MODEL} [model] Model
+        @param {ButtonGroupModel} [model] Model
 	*/
-	constructor(node, model = new MODEL().set('label', 'buttons')) {
+    constructor(node, model = MODELS.buttongroup()) {
 		super(node, 'DIV', model);
 		this.addClass('btn-group');
 		if (model.align === ALIGN.VERTICAL) {
 			this.addClass('btn-group-vertical');
 		}
 		/* Add cases for each relevant constructor that inherited class does not have */
-        this.addConstructor('BUTTON', () => this.addButton(new MODEL({
-            label: 'BUTTON',
-            icon: ICONS.BLANK,
-            buttonType: 'BUTTON'
-        })));
-        this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton(new MODEL({
-            label: 'TOGGLE',
-            icon: ICONS.BLANK,
-            buttonType: 'BUTTON'
-        })));
-        this.addConstructor('SWITCH', () => this.addSwitch(new MODEL({
-            label: 'SWITCH',
-            icon: ICONS.BLANK,
-            buttonType: 'BUTTON'
-        })));
+        this.addConstructor('BUTTON', () => this.addButton(MODELS.button('BUTTON')));
+        this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton(MODELS.button('TOGGLE')));
+        this.addConstructor('SWITCH', () => this.addSwitch(MODELS.button('SWITCH')));
 	}
 	/** Creates a button and adds it to this button group, then adds it to the buttons array
 	    @param {ButtonModel} model Model
@@ -72,4 +60,4 @@ export default class BUTTONGROUP extends GROUP {
         return super.get(name, className);
     }
 }
-export { Activate, ALIGN, ATTRIBUTES, BUTTON, Deactivate, EL, ICONS, MODEL, SWITCH, TOGGLEBUTTON }
+export { Activate, ALIGN, ATTRIBUTES, BUTTON, Deactivate, EL, ICONS, MODEL, MODELS, SWITCH, TOGGLEBUTTON }

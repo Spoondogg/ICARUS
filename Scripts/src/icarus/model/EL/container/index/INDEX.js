@@ -1,7 +1,7 @@
 /** @module  */
 //import CLASSINDEX, { CLASSVIEWER } from './classindex/CLASSINDEX.js';
-import CONFIRM, { DIALOGMODEL, PROMPT } from '../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { Activate, MODEL } from '../CONTAINER.js';
+import CONFIRM, { PROMPT } from '../../dialog/confirm/CONFIRM.js';
+import CONTAINER, { Activate, MODEL, MODELS } from '../CONTAINER.js';
 import CONTAINERINDEX, { CLASSVIEWER } from './classindex/containerindex/CONTAINERINDEX.js';
 import MENU, { Collapse, Expand } from '../../nav/menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';
@@ -38,7 +38,7 @@ export default class INDEX extends CONTAINER {
     }
 	/** Adds the Containers Menu, a collection of Container Types that can be browsed
 	    Adds a right aligned tab to show/hide the Container Menu
-	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or DIALOG
 	    @returns {void}
 	*/
 	addContainersMenu() {
@@ -51,12 +51,11 @@ export default class INDEX extends CONTAINER {
 					icon: ICONS[classType]
                 }));
                 tb.el.addEventListener('activate', () => {
-                    let prompt = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classindex'), {
-                        container: this.getContainer(),
-                        caller: tb,
-                        label: 'CLASSINDEX: ' + classType,
-                        text: 'View ' + classType
-                    }));
+                    let prompt = new PROMPT(MODELS.dialog(
+                        'CLASSINDEX: ' + classType, 'View ' + classType, true,
+                        this.getContainer(), tb, this.getLoader()
+                    ));
+                    prompt.addClass('dialog-classindex');
                     let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
                         classType
                     });
@@ -68,17 +67,17 @@ export default class INDEX extends CONTAINER {
 				///this.addThumbButtonActions(name, tb, opt);
 			});
 		} catch (e) {
-			let modal = this.getProtoTypeByClass('MODAL');
-			if (modal === null) {
+			let dialog = this.getProtoTypeByClass('DIALOG');
+			if (dialog === null) {
 				console.warn('Unable to retrieve MAIN Container', e);
 				throw e;
 			} else {
-				switch (modal.className) {
+				switch (dialog.className) {
 					case 'LOADER':
 					case 'PROMPT':
 						break;
 					default:
-						console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
+						console.warn(this.className + ' exists inside an unrecognized Modal window.', dialog);
 						break;
 				}
 			}
@@ -114,12 +113,11 @@ export default class INDEX extends CONTAINER {
                 }
             );
         } else {
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'ClassViewer: ' + classType + ' # ' + id
-                //text: 'Viewing ' + classType + ' (' + id + ')"'
-            }), false);
+            let dialog = new PROMPT(MODELS.dialog(
+                'ClassViewer: ' + classType + ' # ' + id, '', false,
+                this.getContainer(), this, this.getLoader()
+            ));
+            dialog.addClass('dialog-classviewer');
             let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType), classType);
             viewer.container = this.getContainer();
             viewer.body.el.dispatchEvent(new Expand(viewer));

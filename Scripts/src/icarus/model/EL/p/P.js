@@ -1,5 +1,6 @@
 /** @module */
 import EL, { MODEL } from '../EL.js';
+import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A Paragraph Element
     @class
     @extends EL
@@ -7,9 +8,9 @@ import EL, { MODEL } from '../EL.js';
 export default class P extends EL {
 	/** Constructs a Paragraph
 	    @param {EL} node Node
-	    @param {MODEL} [model] Model
+	    @param {TextModel} [model] Model
 	*/
-	constructor(node, model) {
+	constructor(node, model = MODELS.text()) {
 		super(node, 'P', model);
 	}
 }

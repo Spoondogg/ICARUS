@@ -1,5 +1,5 @@
 /** @module */
-import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
+import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import FORM, { PAYLOAD } from '../../../../form/FORM.js';
 import FORMPOSTTHUMBNAIL from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
 import { createInputModel } from '../../../CONTAINER.js';
@@ -129,11 +129,13 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         btnEdit.el.addEventListener('click', () => {
             console.log('FORMPOSTINDEX.btnEdit()', model);
             //this.getContainer().getFactory().editProperty();
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'Edit FormPost + (' + model.id + ') '
-            }));
+            let dialog = new PROMPT(MODELS.dialog(
+                'Edit FormPost + (' + model.id + ') ',
+                '', true, 
+                this.getContainer(),
+                this,
+                this.getContainer().getLoader()
+            ));
             this.getFactory().get(dialog.body.pane, 'FORM', model.formId).then((form) => {
                 form.setAction('/FORMPOST/SET');
                 form.container = this.required(this.getContainer());
@@ -167,11 +169,10 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @returns {void}
     */
     launchViewer(id, classType) {
-        let dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
-            container: this.getContainer(),
-            caller: this,
-            label: 'FormPostViewer: ' + classType + ' # ' + id
-        }));
+        let dialog = new PROMPT(MODELS.dialog(
+            'FormPostViewer: ' + classType + ' # ' + id,
+            '', true, this.getContainer(), this, this.getContainer().getLoader()
+        ));
         let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', 'FORMPOST'));
         viewer.container = this.getContainer();
         this.populateFormPostForm(id, viewer, dialog);
@@ -231,4 +232,4 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         }, 2000);
     }
 }
-export { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, FORM, ICONS, MODEL, PAYLOAD, PROMPT }
+export { CLASSVIEWER, CONFIRM, Expand, FORM, ICONS, MODEL, PAYLOAD, PROMPT }

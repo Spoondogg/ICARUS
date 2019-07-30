@@ -1,6 +1,5 @@
-/* eslint-disable max-lines */
 /** @module */
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
@@ -17,19 +16,15 @@ import PAYLOAD from './PAYLOAD.js';
 */
 export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
-	    @param {CONTAINER} node The parent object
-	    @param {FORMMODEL} model The object model
+	    @param {CONTAINER} node Node
+	    @param {FORMMODEL} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'FORM', model, DATAELEMENTS.get('FORM').containers);
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
-		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
-        this.footer.buttonGroup.addButton(new MODEL({
-            label: 'Submit',
-            glyphicon: ICONS.SAVE,
-            buttonType: 'SUBMIT'
-        })).el.onclick = (e) => {
+		this.footer = new FORMFOOTER(this.body);
+        this.footer.buttonGroup.addButton(MODELS.button('Submit', ICONS.SAVE, { type: 'SUBMIT' })).el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
@@ -177,11 +172,7 @@ export default class FORM extends CONTAINER {
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
 
         /** A button that restores functionality of the form */
-        let btnReset = this.footer.buttonGroup.addButton(new MODEL({
-            label: 'Reset Form',
-            glyphicon: ICONS.RESET,
-            buttonType: 'BUTTON'
-        })); 
+        let btnReset = this.footer.buttonGroup.addButton(MODELS.button('Reset Form', ICONS.RESET)); 
         btnReset.el.onclick = () => {
             toDisable.forEach((el) => el.removeAttribute('disabled'));
             btnReset.destroy();
@@ -661,5 +652,4 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, PAYLOAD }
-/* eslint-enable max-lines */
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, MODELS, PAYLOAD }

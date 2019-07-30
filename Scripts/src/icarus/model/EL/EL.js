@@ -26,9 +26,8 @@ export default class EL extends MODEL {
 	    @param {EL} node Parent Node
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
-        @param {object} [options] Options
 	*/
-    constructor(node, element = 'DIV', model = new MODEL(), options = {}) {
+    constructor(node, element = 'DIV', model = new MODEL()) {
 		super(model.attributes);
 		this.setContainer();
         this.setMain();

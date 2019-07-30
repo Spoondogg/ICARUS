@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK } from '../container/CONTAINERFACTORY.js'; // Deactivate
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT, SPAN, TEXTBLOCK } from '../container/CONTAINERFACTORY.js'; // Deactivate
 import FORMSELECT, { OPTION } from '../container/formelement/formselect/FORMSELECT.js';
 import FIELDSET from '../fieldset/FIELDSET.js'
 import FORM from '../form/FORM.js';
@@ -96,4 +96,4 @@ export default class FORMFACTORY extends CONTAINERFACTORY {
         return element;
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }
+export { ATTRIBUTES, CONTAINER, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT }

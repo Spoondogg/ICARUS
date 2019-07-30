@@ -1,13 +1,13 @@
 /** @module */
 import MENU, { Expand } from '../../../nav/menu/MENU.js';
-import PROMPT, { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, ICONS, MODEL } from '../PROMPT.js';
+import PROMPT, { ATTRIBUTES, DIALOG, DIV, EL, ICONS, MODEL } from '../PROMPT.js';
 /** A Prompt that has a form configured as a SEARCH
     @description Creates a modal and displays a text well and any included buttons
     @class
 */
 export default class SEARCH extends PROMPT {
 	/** Constructs a SEARCH
-        @param {DIALOGMODEL} model DIALOG MODEL
+        @param {DialogModel} model Model
     */
 	constructor(model) {
 		super(model);
@@ -18,4 +18,4 @@ export default class SEARCH extends PROMPT {
         this.results.el.dispatchEvent(new Expand(this.results));
     }
 }
-export { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, ICONS, MODEL, PROMPT }
+export { ATTRIBUTES, DIALOG, DIV, EL, ICONS, MODEL, PROMPT }

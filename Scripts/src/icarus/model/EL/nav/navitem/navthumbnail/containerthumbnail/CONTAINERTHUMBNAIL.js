@@ -1,8 +1,7 @@
 /** @module */
-import BUTTONGROUP, { BUTTON, Deactivate } from '../../../../group/buttongroup/BUTTONGROUP.js';
+import BUTTONGROUP, { BUTTON, Deactivate, MODELS } from '../../../../group/buttongroup/BUTTONGROUP.js';
+import CONTAINERINDEX, { PROMPT } from '../../../../container/index/classindex/containerindex/CONTAINERINDEX.js';
 import NAVTHUMBNAIL, { ATTRIBUTES, EL, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
-import PROMPT, { DIALOGMODEL } from '../../../../dialog/prompt/PROMPT.js';
-import CONTAINERINDEX from '../../../../container/index/classindex/containerindex/CONTAINERINDEX.js';
 import DIV from '../../../../div/DIV.js';
 import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 /** A full-width NavItem with a Thumbnail image, label and description
@@ -78,7 +77,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         }
     }
     /** Creates a TAG / Switchable Button inside a TAGGROUP and adds Events
-        @param {MODEL} model Model
+        @param {ButtonModel} model Model
         @param {EL} caller Calling EL
         @returns {void}
     */
@@ -87,11 +86,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         try {
             // Then use cache to generate tag
             let tagName = model.jsonResults[0].value;
-            let btn = this.tagGroup.addSwitch(new MODEL({
-                label: tagName,
-                glyphicon: ICONS.TAG,
-                buttonType: 'BUTTON'
-            }));
+            let btn = this.tagGroup.addSwitch(MODELS.button(tagName, ICONS.TAG));
             btn.addClass('tag');
             //btn.implement(new Clickable(btn));
             btn.el.addEventListener('activate', (ev) => {
@@ -139,12 +134,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         return new Promise((resolve, reject) => {
             //console.log('SearchByTagId', id, 'Caller', caller);
             try {
-                this.dialog = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                    container: this.getContainer(),
-                    caller,
-                    label: 'SearchByTagId ' + id,
-                    text: 'Search by tag id'
-                }));
+                this.dialog = new PROMPT(MODELS.dialog('SearchByTagId ' + id, 'Search by tag id', true, this.getContainer(), caller, this.getLoader()));
                 this.containerindex = new CONTAINERINDEX(this.dialog.body.pane, new MODEL().set({
                     container: this.getContainer(),
                     caller
@@ -182,31 +172,11 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
         this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
         this.detail.rating = new BUTTONGROUP(this.detail, new MODEL('right star-group'));
-        this.detail.rating.addButton(new MODEL({
-            label: '',
-            glyphicon: ICONS.STAREMPTY,
-            buttonType: 'BUTTON'
-        }));
-        this.detail.rating.addButton(new MODEL({
-            label: '',
-            glyphicon: ICONS.STAREMPTY,
-            buttonType: 'BUTTON'
-        }));
-        this.detail.rating.addButton(new MODEL({
-            label: '',
-            glyphicon: ICONS.STAR,
-            buttonType: 'BUTTON'
-        }));
-        this.detail.rating.addButton(new MODEL({
-            label: '',
-            glyphicon: ICONS.STAR,
-            buttonType: 'BUTTON'
-        }));
-        this.detail.rating.addButton(new MODEL({
-            label: '',
-            glyphicon: ICONS.STAR,
-            buttonType: 'BUTTON'
-        }));
+        this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
+        this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
+        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
+        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
+        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
     }
 }
 export { ATTRIBUTES, BUTTON, EL, MODEL, NAVTHUMBNAIL }

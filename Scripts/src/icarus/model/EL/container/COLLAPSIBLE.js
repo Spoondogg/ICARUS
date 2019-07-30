@@ -9,13 +9,13 @@ import PANE from './PANE.js';
 export default class COLLAPSIBLE extends EL {
 	/** Construct a collapsible DIV with an embedded PANE
         @param {CONTAINER} node Parent
-        @param {string} element Element tag name
-        @param {MODEL} model Object
+        @param {string} [element="DIV"] Element tag name
+        @param {MODEL} [model] Model
 	*/
 	constructor(node, element = 'DIV', model) {
 		super(node, element, model);
 		this.implement(new Collapsible(this));
-		this.pane = new PANE(this, new MODEL());
+		this.pane = new PANE(this);
 	}
 }
 export { ATTRIBUTES, Collapsible, Collapse, DIV, EL, Expand, MODEL, Toggle }

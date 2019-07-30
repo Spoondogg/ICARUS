@@ -6,6 +6,7 @@ import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
+import SPAN, { MODELS } from '../span/SPAN.js';
 import CACHE from '../container/main/CACHE.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
@@ -21,7 +22,6 @@ import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import REFERENCE from './REFERENCE.js';
-import SPAN from '../span/SPAN.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
@@ -33,7 +33,7 @@ export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} [element] HTML element Tag
-	    @param {MODEL} [model] Model
+	    @param {ContainerModel} [model] Model
 	    @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
 	*/
     constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
@@ -47,7 +47,7 @@ export default class CONTAINER extends GROUP {
         this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
 		this.setContainerDefaults(model);		
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
+		this.navheader = new NAVHEADER(this, MODELS.navheader(this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
         this.implement(new Draggable(this));        
@@ -71,6 +71,10 @@ export default class CONTAINER extends GROUP {
             () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
                 () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
     }
+    /** Retrieves the set element type for this.body (COLLAPSIBLE)
+        @param {MODEL} model Model
+        @returns {string} Collapsible Element Tagname
+    */
     getBodyElement(model) {
         let bodyElement = 'DIV';
         try {
@@ -191,7 +195,7 @@ export default class CONTAINER extends GROUP {
         });
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
-	    @param {CONTAINERMODEL|MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {void}
 	*/
 	setContainerDefaults(model) {
@@ -1294,7 +1298,7 @@ export default class CONTAINER extends GROUP {
 		try {
 			return this.getProtoTypeByClass('MAIN');
 		} catch (e) {
-			switch (this.getProtoTypeByClass('MODAL').className) {
+			switch (this.getProtoTypeByClass('DIALOG').className) {
 				case 'LOADER':
 					console.warn('Modals exist in body.document and do not have a parent Container');
 					break;
@@ -1302,7 +1306,7 @@ export default class CONTAINER extends GROUP {
 					console.warn('Prompts exist in body.document and do not have a parent Container');
 					break;
 				default:
-					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('MODAL'));
+					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('DIALOG'));
 			}
 		}
 	}
@@ -1358,16 +1362,11 @@ export default class CONTAINER extends GROUP {
 	removeDialog() {
 		return new Promise((resolve, reject) => {
 			try {
-				let dialog = new DIALOG(new MODEL('prompt').set({
-					label: 'Remove ' + this.toString() + ' from ' + this.container.toString(),
-					container: this.getMain(),
-					caller: this.getContainer() //.getMain()
-				}));
-                dialog.footer.buttonGroup.addButton(new MODEL({
-                    label: 'Yes, Remove ' + this.toString(),
-                    glyphicon: ICONS.REMOVE,
-                    buttonType: 'BUTTON'
-                })).el.onclick = () => {
+                let dialog = new DIALOG(MODELS.dialog(
+                    'Remove ' + this.toString() + ' from ' + this.container.toString(),
+                    this.getMain(), this.getContainer(), this.getLoader()
+                ));
+                dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Remove ' + this.toString(), ICONS.REMOVE)).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
@@ -1501,16 +1500,8 @@ export default class CONTAINER extends GROUP {
 			let main = this.getContainer().getMain();
 			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
-					let dialog = new DIALOG(new MODEL().set({
-						label: 'Disable ' + this.toString(),
-						container: main,
-						caller: main
-					}));
-                    dialog.footer.buttonGroup.addButton(new MODEL({
-                        label: 'Yes, Disable ' + this.toString(),
-                        glyphicon: ICONS.REMOVE,
-                        buttonType: 'BUTTON'
-                    })).el.onclick = () => loader.log(50, 'Disable').then(
+					let dialog = new DIALOG(MODELS.dialog('Disable ' + this.toString(), main, main, this.getLoader()));
+                    dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Disable ' + this.toString(), ICONS.REMOVE)).el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {
@@ -1543,5 +1534,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
+export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
 /* eslint-enable max-lines, max-statements */
