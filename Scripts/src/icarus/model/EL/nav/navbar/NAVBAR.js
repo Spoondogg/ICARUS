@@ -59,7 +59,7 @@ export default class NAVBAR extends NAV {
         @param {string} name MENU name
         @param {Array<string>} children Sample child tabs
         @param {boolean} isHorizontal If true (default), sub-menu is horizontal with icons, else vertical
-	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or MODAL
+	    @throws Throws an error if this NAVHEADER is not a child of a valid CONTAINER or DIALOG
 	    @returns {{tab:NAVITEMICON, menu:MENU}} Tab and Menu
 	*/
 	addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
@@ -86,20 +86,20 @@ export default class NAVBAR extends NAV {
                 menu
             }
 		} catch (e) {
-			let modal = this.getProtoTypeByClass('MODAL');
-			if (modal === null) {
-				console.warn('Unable to retrieve MAIN Container', e);
-				throw e;
-			} else {
-				switch (modal.className) {
-					case 'LOADER':
-					case 'PROMPT':
-						break;
-					default:
-						console.warn(this.className + ' exists inside an unrecognized Modal window.', modal);
-						break;
-				}
-			}
+            let dialog = this.getProtoTypeByClass('DIALOG');
+            if (dialog === null) {
+                console.warn('Unable to retrieve MAIN Container', e);
+                throw e;
+            } else {
+                switch (dialog.className) {
+                    case 'LOADER':
+                    case 'PROMPT':
+                        break;
+                    default:
+                        console.warn(this.className + ' exists inside an unrecognized Modal window.', dialog);
+                        break;
+                }
+            }
 		}
 	}
 	/** Adds 'activate' and 'deactivate' Events that trigger the EL when the Tab is activated

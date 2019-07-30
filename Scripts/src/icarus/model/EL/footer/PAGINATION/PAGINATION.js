@@ -1,5 +1,5 @@
 ﻿/** @module */
-import BUTTONGROUP, { BUTTON, ICONS } from '../../group/buttongroup/BUTTONGROUP.js';
+import BUTTONGROUP, { BUTTON, ICONS, MODELS } from '../../group/buttongroup/BUTTONGROUP.js';
 import FOOTER, { EL, MODEL } from '../FOOTER.js';
 import Collapsible from '../../../../interface/Collapsible.js';
 /** A Footer containing a collection of page buttons
@@ -18,20 +18,12 @@ export default class PAGINATION extends FOOTER {
         this.implement(new Collapsible(this));
 
         
-        this.btnPrev = new BUTTON(this, new MODEL({
-            label: '',
-            glyphicon: ICONS.CHEVRON_LEFT,
-            buttonType: 'BUTTON'
-        }));
+        this.btnPrev = new BUTTON(this, MODELS.button('', ICONS.CHEVRON_LEFT));
         this.btnPrev.addClass('prev');
         this.btnPrev.el.onclick = () => this.prevPage();
         this.buttonGroup = new BUTTONGROUP(this);
         this.buttonGroup.loaded = false;
-        this.btnNext = new BUTTON(this, new MODEL({
-            label: '',
-            glyphicon: ICONS.CHEVRON_RIGHT,
-            buttonType: 'BUTTON'
-        }));
+        this.btnNext = new BUTTON(this, MODELS.button('', ICONS.CHEVRON_RIGHT));
         this.btnNext.addClass('next');
         this.btnNext.el.onclick = () => this.nextPage();
     }
@@ -48,4 +40,4 @@ export default class PAGINATION extends FOOTER {
         console.warn('PAGINATION.prevPage() has not been set');
     }
 }
-export { EL, FOOTER }
+export { EL, FOOTER, MODEL }

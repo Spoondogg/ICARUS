@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js';
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js';
 import CONTAINERINDEX from './classindex/containerindex/CONTAINERINDEX.js';
 import FORMPOSTINDEX from './classindex/formpostindex/FORMPOSTINDEX.js';
 import IMAGEINDEX from './classindex/formpostindex/imageindex/IMAGEINDEX.js';
@@ -41,4 +41,4 @@ export default class INDEXFACTORY extends CONTAINERFACTORY {
         return element;
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, PAYLOAD, PROMPT }
+export { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT }

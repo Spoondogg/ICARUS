@@ -1,5 +1,5 @@
 /** @module */
-import CLASSINDEX, { CLASSVIEWER, CONFIRM, DIALOGMODEL, Expand, ICONS, MODEL, PROMPT } from '../CLASSINDEX.js';
+import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
@@ -93,12 +93,10 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             'Show posts for FORM(' + model.id + ')',
             () => {
                 //window.open(new URL(window.location.href).origin + '/FORMPOST/search/?formId=' + model.id + '&query=' + this.query + '&page=0&pageLength=10');
-                let prompt = new PROMPT(new DIALOGMODEL(new MODEL('dialog-formpostviewer'), {
-                    container: this.getContainer(),
-                    caller: this,
-                    label: 'Form( ' + model.id + ') ' + model.label
-                    //text: 'Viewing ' + classType + ' (' + id + ')"'
-                }), false);
+                let prompt = new PROMPT(MODELS.dialog(
+                    'Form( ' + model.id + ') ' + model.label, '', false,
+                    this.getContainer(), this, this.getLoader()
+                ));
                 //let viewer = new CLASSVIEWER(dialog.body.pane, new MODEL().data.set('classType', classType));
                 //viewer.body.el.dispatchEvent(new Expand(viewer));
                 let formPostIndex = new FORMPOSTINDEX(prompt.body.pane, new MODEL().set({
@@ -227,12 +225,11 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 }
             );
         } else {
-            let dialog = new PROMPT(new DIALOGMODEL(new MODEL('dialog-classviewer'), {
-                container: this.getContainer(),
-                caller: this,
-                label: 'ClassViewer: ' + classType + ' # ' + id
-                //text: 'Viewing ' + classType + ' (' + id + ')"'
-            }), false);
+            let dialog = new PROMPT(MODELS.dialog(
+                'ClassViewer: ' + classType + ' # ' + id, '', false,
+                this.getContainer(), this, this.getLoader()
+            ));
+            dialog.addClass('dialog-classviewer');
             let model = new MODEL();
             model.container = this.getContainer().getMain();
             model.data.set('classType', classType);
@@ -243,4 +240,4 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         }
     }    
 }
-export { CLASSVIEWER, NAVTHUMBNAIL }
+export { CLASSVIEWER, NAVTHUMBNAIL, PROMPT }

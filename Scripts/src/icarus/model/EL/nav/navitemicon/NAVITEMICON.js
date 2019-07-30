@@ -5,8 +5,8 @@ import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js';
 */
 export default class NAVITEMICON extends NAVITEM {
 	/** Constructs the Nav Item Icon
-	    @param {EL} node The element that will contain this object
-	    @param {MODEL} model The nav-item json object retrieved from the server
+	    @param {EL} node Node
+	    @param {NavItemModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, model);

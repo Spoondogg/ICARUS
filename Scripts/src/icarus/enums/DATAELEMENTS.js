@@ -1,5 +1,6 @@
 /** @module */
 import MODEL, { ATTRIBUTES } from '../model/MODEL.js';
+import { ALIGN } from '../enums/ALIGN.js';
 import { ICONS } from '../enums/ICONS.js';
 import INPUTMODEL from '../model/el/input/INPUT.js';
 /* eslint-disable max-params */
@@ -25,28 +26,34 @@ export const createInputModel = (element, name, value = '', label = name, type =
 	label,
 	type
 }).setAttribute(attr);
-/** Structure Constructor Factory
-    See https://stackoverflow.com/a/502384/722785
+/** Model Constructor Factory
+    @description See https://stackoverflow.com/a/502384/722785
     let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
     console.log('Options', options('a', 'b'), options(null, 'b'));
 
     @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
-    @returns {function(): object} Structure Constructor
+    @returns {function(): MODEL} Model Constructor
 */
 export const makeStruct = (params = []) => {
     let count = params.length;
     /** Structure Constructor
-        @returns {object} Newly created structure
+        @returns {MODEL} Newly created model
     */
     let constructor = (...args) => {
-        let obj = {};
+        let model = new MODEL(); // {};
         for (let i = 0; i < count; i++) {
-            obj[params[i][0]] = args[i] || params[i][1]; // fallback to default value
+            //obj[params[i][0]] = args[i] || params[i][1]; // fallback to default value
+            model.set(params[i][0], args[i] || params[i][1]); 
         }
-        return obj;
+        return model;
     }
     return constructor;
 }
+/** A collection of Object model constructors
+    @description Each constructor constructs the default model 
+    for the element it represents.  Structures are created using
+    a centralized structure constructor.
+*/
 export const MODELS = {
     /* Create a generic element model structure constructor
         type {function(object): MODEL}
@@ -54,18 +61,121 @@ export const MODELS = {
         returns {MODEL} Model
     
     EL: () => new MODEL(),*/
+    /** Create an anchor model structure constructor
+        @type {function(AnchorModel): MODEL}
+        @param {AnchorModel} Model
+        @returns {MODEL} Model
+    */
+    anchor: makeStruct([
+        ['icon', ICONS.BLANK],
+        ['label', '']
+    ]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(ButtonGroupModel): MODEL}
+        @param {ButtonGroupModel} Model
+        @returns {MODEL} Model
+    */
+    buttongroup: makeStruct([
+        ['label', 'buttons'],
+        ['align', '']
+    ]),
 
     /** Create a button model structure constructor
-        @type {function(ButtonModel): ButtonModel}
+        @type {function(ButtonModel): MODEL}
         @param {ButtonModel} Model
-        @returns {ButtonModel} Button Model
+        @returns {MODEL} Model
     */
-    BUTTON: makeStruct([
+    button: makeStruct([
         ['label', ''],
-        ['glyphicon', ICONS.BLANK],
-        ['buttonType', 'BUTTON']
-    ])
-    //model = MODELS.BUTTON()
+        ['icon', ICONS.BLANK],
+        ['type', 'BUTTON']
+    ]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(ButtonGroupModel): MODEL}
+        @param {ButtonGroupModel} Model
+        @returns {MODEL} Model
+    */
+    container: makeStruct([
+        ['label', 'buttons'],
+        ['align', ''],
+        ['name', '']
+    ]),
+
+    /** Create a dialog model structure constructor
+        @type {function(DialogModel): MODEL}
+        @param {DialogModel} Model
+        @returns {MODEL} Model
+    */
+    dialog: makeStruct([
+        ['label', 'Dialog'],
+        ['text', ''],
+        ['showHeader', true],
+        ['container', null],
+        ['caller', null],
+        ['loader', null]        
+    ]),
+
+    /** Create a form model structure constructor
+        @type {function(FormModel): MODEL}
+        @param {FormModel} Model
+        @returns {MODEL} Model
+    */
+    form: makeStruct([
+        ['label', 'Dialog'],
+        //['text', ''],
+        //['showHeader', true],
+        ['container', null]
+        //['caller', null],
+        //['loader', null]
+    ]),
+
+    /** Create a navheader model structure constructor
+        @type {function(FormFooterModel): MODEL}
+        @param {FormFooterModel} Model
+        @returns {MODEL} Model
+    */
+    formfooter: makeStruct([['align', ALIGN.VERTICAL]]),
+
+    /** Create a dialog model structure constructor
+        @type {function(GroupModel): MODEL}
+        @param {GroupModel} Model
+        @returns {MODEL} Model
+    */
+    group: makeStruct([['name', '']]),
+
+    /** Create an icon model structure constructor
+        @type {function(IconModel): MODEL}
+        @param {IconModel} Model
+        @returns {MODEL} Model
+    */
+    icon: makeStruct([['icon', ICONS.BLANK]]),
+
+    /** Create a navheader model structure constructor
+        @type {function(NavHeaderModel): MODEL}
+        @param {NavHeaderModel} Model
+        @returns {MODEL} Model
+    */
+    navheader: makeStruct([['label', '']]),
+
+    /** Create a navitem model structure constructor
+        @type {function(NavItemModel): MODEL}
+        @param {NavItemModel} Model
+        @returns {MODEL} Model
+    */
+    navitem: makeStruct([
+        ['label', ''],
+        ['icon', ICONS.BLANK],
+        ['target', '']
+    ]),
+
+    /** Create a generic text element model structure constructor
+        @type {function(TextModel): MODEL}
+        @param {TextModel} Model
+        @returns {MODEL} Model
+    */
+    text: makeStruct([['text', '']])
 }
 /** Stores the default DATA ELEMENTS collections for each Class
     

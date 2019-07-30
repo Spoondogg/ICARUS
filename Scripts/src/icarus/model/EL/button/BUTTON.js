@@ -1,5 +1,6 @@
 /** @module */
 import GLYPHICON, { EL, ICONS, MODEL, SPAN } from '../span/GLYPHICON.js';
+import { LongclickDelay } from '../../../enums/StyleVars.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A generic BUTTON Element with an Icon and Label
     @class
@@ -10,22 +11,22 @@ export default class BUTTON extends EL {
 	    @param {EL} node Node
         @param {ButtonModel} model Model
 	*/
-    constructor(node, model = MODELS.BUTTON()) {
+    constructor(node, model = MODELS.button()) {
 		super(node, 'BUTTON', model);
         this.addClass('btn glyphicon');
-        this.setAttribute('type', model.attributes.buttonType || 'BUTTON');
-        this.icon = new GLYPHICON(this, model.attributes.glyphicon);
-        this.label = new SPAN(this, new MODEL('button-label').set('innerHTML', model.attributes.label));
+        this.icon = new GLYPHICON(this, model);
+        this.label = new SPAN(this, MODELS.text(model.label));
+        this.label.addClass('button-label');
 	}
 	/** Sets the label within the button to the given string
         @param {string} [label] A button label
-        @param {string} [glyphicon] Glyphicon string or ICON.ENUM
+        @param {string} [icon] Glyphicon string or ICON.ENUM
         @returns {void}
     */
-	setLabel(label = '', glyphicon = null) {
+	setLabel(label = '', icon = null) {
 		this.label.setInnerHTML(label);
-		if (glyphicon !== null) {
-			this.icon.setIcon(glyphicon);
+		if (icon !== null) {
+			this.icon.setIcon(icon);
 		}
     }
     /** Creates a default button model
@@ -40,4 +41,4 @@ export default class BUTTON extends EL {
         ]);
     }
 }
-export { EL, ICONS, MODEL, SPAN }
+export { EL, ICONS, MODEL, MODELS, SPAN }

@@ -1,9 +1,9 @@
 ﻿/** @module */
-import CONTAINER, { Deactivate } from './container/CONTAINER.js';
-import PROMPT, { DIALOGMODEL } from './dialog/prompt/PROMPT.js';
+import CONTAINER, { Deactivate, MODELS } from './container/CONTAINER.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import { ICONS } from '../../enums/ICONS.js';
 import PAYLOAD from './form/PAYLOAD.js';
+import PROMPT from './dialog/prompt/PROMPT.js';
 import SEARCH from './dialog/prompt/SEARCH/SEARCH.js';
 import { createInputModel } from '../../enums/DATAELEMENTS.js'; //DATAELEMENTS
 //import { showdown } from 'showdown';
@@ -148,11 +148,10 @@ export default class FACTORY {
             try {
                 let typeIdStr = type + 'Id';
                 if (container[typeIdStr] > 0) {
-                    new PROMPT(new DIALOGMODEL(new MODEL(), {
-                        caller,
-                        container,
-                        label: 'Edit ' + container.toString() + '[' + type + '].' + name
-                    })).createForm(new MODEL().set({
+                    new PROMPT(MODELS.dialog(
+                        'Edit ' + container.toString() + '[' + type + '].' + name, '', true,
+                        container, caller, container.getLoader()
+                    )).createForm(new MODEL().set({
                         formtype: 'FORMPOST',
                         className: container.className,
                         type,
@@ -390,5 +389,5 @@ export default class FACTORY {
     }
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTRIBUTES, CONTAINER, EL, MODEL, PAYLOAD, PROMPT, SPAN }
 /* eslint-enable */
