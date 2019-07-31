@@ -1,17 +1,18 @@
+/* eslint-disable max-lines, max-statements */
 /** @module */
-import BUTTONGROUP, { Activate, BUTTON, Deactivate, ICONS } from '../../group/buttongroup/BUTTONGROUP.js';
+import BUTTONGROUP, { Activate, BUTTON, Deactivate, ICONS, MODELS } from '../../group/buttongroup/BUTTONGROUP.js';
 import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
 import MENU, { Collapse, Expand, NAVITEM } from '../menu/MENU.js';
-//import NAVITEM from '../navitem/NAVITEM.js';
+import INPUT from '../../input/INPUT.js';
+//import Tabbable from '../../../../interface/Tabbable.js';
 /** A search input wrapped in a generic HTMLForm
-    @todo Create a proper search type INPUT element
     @class
     @extends NAVITEM
 */
 export default class NAVSEARCH extends NAVITEM {
 	/** Construct a NAVSEARCH
-	    @param {EL} node Parent Node
-        @param {MODEL} [model] Model
+	    @param {EL} node Node
+        @param {NavItemModel} [model] Model
 	*/
 	constructor(node, model) {
         super(node, model);
@@ -22,28 +23,44 @@ export default class NAVSEARCH extends NAVITEM {
         this.typingTimer = null; // timer
         this.doneTypingInterval = 300; //time in ms
 
-
-		this.input = new EL(this, 'INPUT', new MODEL(new ATTRIBUTES({
-			type: 'text',
-			placeholder: 'Search',
+        this.input = new INPUT(this, MODELS.input(new MODEL(), {
+            type: 'text',
+            placeholder: 'Search',
             name: 'q',
             autocomplete: 'off'
-        })));
+        }));
         this.input.el.addEventListener('focus', () => this.showSearchOptions());
         //this.input.el.addEventListener('blur', () => this.hideSearchOptions());
-        this.searchType = new EL(this, 'INPUT', new MODEL(new ATTRIBUTES({
+        this.searchType = new INPUT(this, MODELS.input(new MODEL(), {
             type: 'hidden',
             name: 'type',
             value: 'CLASS'
-        })));
+        }));
+
         this.buttonGroup = new BUTTONGROUP(this, new MODEL('input-buttons'));
-        this.btnSearchType = this.buttonGroup.addSwitch('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE');
-        this.btnSearch = this.buttonGroup.addButton('', ICONS.SEARCH).set('name', 'SEARCH');
+        this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE'));
+        this.btnSearch = this.buttonGroup.addButton(MODELS.button('', ICONS.SEARCH).set('name', 'SEARCH'));
 
         // Add a list of searchtypes
         this.searchTypes = new MENU(this, new MODEL('search-types'));
         this.createSearchTypes(['TAG', 'CLASS', 'TAGID']);
 
+        /*let tab = this.searchTypes.addNavItem(new MODEL('tab-woot').set('label', 'tab-woot'));
+        let menu = this.searchTypes.addMenu(new MODEL('tabbable-menu-woot'));
+        menu.addNavItem(new MODEL().set('label', 'ONE'));
+        menu.addNavItem(new MODEL().set('label', 'TWO'));
+        //menu.addNavItem(new MODEL().set('label', 'THREE'));
+        tab.addTabbableElement(menu);*/
+        this.addSearchTypeEvents();
+
+        // Add a list of search-options
+        this.searchOptions = new MENU(this, new MODEL('search-options'));
+        //let options = ['A', 'B', 'C'];
+        //this.setSearchOptions(options);
+        this.addSearchEvents();
+    }
+
+    addSearchTypeEvents() {
         // Show list of search types as dropdown-menu
         this.btnSearchType.el.addEventListener('activate', () => {
             this.searchOptions.empty();
@@ -51,12 +68,6 @@ export default class NAVSEARCH extends NAVITEM {
         });
         this.btnSearchType.el.addEventListener('deactivate',
             () => this.searchTypes.el.dispatchEvent(new Collapse(this.btnSearchType)));
-
-        // Add a list of search-options
-        this.searchOptions = new MENU(this, new MODEL('search-options'));
-        //let options = ['A', 'B', 'C'];
-        //this.setSearchOptions(options);
-        this.addSearchEvents();
     }
     /* eslint-disable max-lines-per-function */
     addSearchEvents() {
@@ -144,10 +155,8 @@ export default class NAVSEARCH extends NAVITEM {
     */
     createSearchTypes(types, activateIndex = 0) {
         types.forEach((type) => {
-            let btn = this.searchTypes.addNavItem(new MODEL().set({
-                label: type,
-                icon: ICONS[type],
-                name: type
+            let btn = this.searchTypes.addNavItem(MODELS.navitem(type, ICONS[type], {
+                type
             }));
             btn.el.addEventListener('activate', () => {
                 this.setSearchType(type);
