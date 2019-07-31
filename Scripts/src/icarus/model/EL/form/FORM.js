@@ -1,9 +1,10 @@
+/* eslint-disable max-lines */
 /** @module */
 import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../container/CONTAINER.js';
 import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
-import { ALIGN } from '../../../enums/ALIGN.js';
+//import { ALIGN } from '../../../enums/ALIGN.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
@@ -17,7 +18,7 @@ import PAYLOAD from './PAYLOAD.js';
 export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
 	    @param {CONTAINER} node Node
-	    @param {FORMMODEL} model Model
+	    @param {FormModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'FORM', model, DATAELEMENTS.get('FORM').containers);
@@ -653,3 +654,4 @@ export default class FORM extends CONTAINER {
 	/* eslint-enable max-lines-per-function */
 }
 export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, MODELS, PAYLOAD }
+/* eslint-enable max-lines */

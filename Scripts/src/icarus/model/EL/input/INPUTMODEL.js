@@ -7,11 +7,12 @@
     @property {any} [value] Element Value Attribute
     @property {boolean} [readonly=false] Element ReadOnly Attribute
     @property {string} [placeholder] Element Placeholder Attribute
+    @deprecated Replaced with DATAELEMENTS.MODELS.input()
 */
 export default class INPUTMODEL extends MODEL {
     /** An INPUT MODEL
-        @param {MODEL} model MODEL
-        @param {attributes} attributes Attributes
+        @param {MODEL} model Model
+        @param {InputAttributes} attributes Attributes
     */
     constructor(model, attributes) {
         super(model.attributes, model.data, model.meta);        

@@ -1,9 +1,9 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
-import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
+import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
+import INPUT from '../../../input/INPUT.js';
 import MENU from '../../../nav/menu/MENU.js';
 /** Represents an INPUT for an Icarus Form
     @class
@@ -11,14 +11,14 @@ import MENU from '../../../nav/menu/MENU.js';
 */
 export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
-		return this.chain(() => {
-            this.input = new INPUT(this.body.pane, new INPUTMODEL(new MODEL(), {
-				type: this.attributes.type || 'TEXT', // || this.data.type
-				list: this.attributes.name + '-options',
-				name: this.attributes.name,
-				value: this.attributes.value || '',
-				placeholder: this.attributes.placeholder || ''
-			}));
+        return this.chain(() => {
+            this.input = new INPUT(this.body.pane, MODELS.input(new MODEL(), {
+                type: this.attributes.type || 'TEXT', // || this.data.type
+                list: this.attributes.name + '-options',
+                name: this.attributes.name,
+                value: this.attributes.value || '',
+                placeholder: this.attributes.placeholder || ''
+            }));
 			this.configureInput();
 		});
 	}

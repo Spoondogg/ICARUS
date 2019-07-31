@@ -1,8 +1,8 @@
+/* eslint-disable max-lines */
 /** @module */
 import MODEL, { ATTRIBUTES } from '../model/MODEL.js';
 import { ALIGN } from '../enums/ALIGN.js';
 import { ICONS } from '../enums/ICONS.js';
-import INPUTMODEL from '../model/el/input/INPUT.js';
 /* eslint-disable max-params */
 /** Instantiates an INPUT MODEL with all required values
     @todo Refactor to MODELS, a class that handles the Application MODEL(s), caching, queueing etc
@@ -13,7 +13,7 @@ import INPUTMODEL from '../model/el/input/INPUT.js';
     @param {string} type The input type
     @param {boolean} readonly If true, element is readonly
     @param {number} showNav If 1, NavBar is shown
-    @returns {INPUTMODEL} An input model
+    @returns {InputModel} An input model
 */
 export const createInputModel = (element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0, ...attr) => new MODEL({
 	name,
@@ -55,6 +55,21 @@ export const makeStruct = (params = []) => {
     a centralized structure constructor.
 */
 export const MODELS = {
+    /** Create a navitem model structure constructor
+        @type {function(InputModel): MODEL}
+        @param {InputModel} Model
+        @returns {MODEL} Model
+    */
+    input: makeStruct([
+        ['model', new MODEL()],
+        ['attributes']
+        //['type'],
+        //['class'],
+        //['value'],
+        //['readonly'],
+        //['placeholder'],
+        //['autocomplete']
+    ]),
     /* Create a generic element model structure constructor
         type {function(object): MODEL}
         param {object} Model Model
@@ -152,6 +167,16 @@ export const MODELS = {
     */
     icon: makeStruct([['icon', ICONS.BLANK]]),
 
+    /** Create a navitem model structure constructor
+        @type {function(MainModel): MODEL}
+        @param {MainModel} Model
+        @returns {MODEL} Model
+    */
+    main: makeStruct([
+        ['model', new MODEL()],
+        ['props']
+    ]),
+
     /** Create a navheader model structure constructor
         @type {function(NavHeaderModel): MODEL}
         @param {NavHeaderModel} Model
@@ -170,7 +195,14 @@ export const MODELS = {
         ['target', '']
     ]),
 
-    /** Create a generic text element model structure constructor
+    /** Create a paragraph model structure constructor
+        @type {function(TextModel): MODEL}
+        @param {TextModel} Model
+        @returns {MODEL} Model
+    */
+    p: makeStruct([['text', '']]),
+
+    /** Create a span model structure constructor
         @type {function(TextModel): MODEL}
         @param {TextModel} Model
         @returns {MODEL} Model
@@ -549,4 +581,5 @@ export const DATAELEMENTS = new Map([
 	]
 ]);
 /* eslint-enable max-params */
-export { INPUTMODEL }
+export { ATTRIBUTES }
+/* eslint-enable max-lines */
