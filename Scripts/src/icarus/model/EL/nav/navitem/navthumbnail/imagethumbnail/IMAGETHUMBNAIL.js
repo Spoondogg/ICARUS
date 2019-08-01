@@ -1,31 +1,21 @@
 /** @module */
 import NAVTHUMBNAIL, { ATTRIBUTES, EL, MODEL } from '../NAVTHUMBNAIL.js';
 import IMG from '../../../../img/IMG.js';
-//import UL from '../../../../list/ul/UL.js';
 /** A full-width NavItem with a Thumbnail image, label and description
     @class
 */
 export default class IMAGETHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
-        @param {CONTAINER} node The model
-        @param {MODEL} model The Thumbnail model
-        @param {UId} model.id Unique Identifier that this thumbnail represents
-        param {UId} model.formId Unique Identifier that this thumbnail represents
-        @param {string} model.authorId Author Id
-        @param {int} model.shared Shared status
-        @param {int} model.isPublic Public status
-        @param {int} model.status Status
-        @param {string} model.dateCreated Date Created
-        @param {string} model.dateLastModified Date LastModified
-        param {object} model.xmlResults Shared status
-        @param {object} model.jsonResults JSON Results
+        @param {CONTAINER} node Node
+        @param {FormPostModel} model Model
     */
 	constructor(node, model) {
 		super(node, model);
         this.addClass('nav-item-thumbnail-image');
     }
     /** Constructs a thumbnail that represents the given image formpost model
-        @param {MODEL} model Model
+        @augments NAVTHUMBNAIL
+        @param {FormPostModel} model Model
         @returns {void}
     */
     constructThumbnail(model) {

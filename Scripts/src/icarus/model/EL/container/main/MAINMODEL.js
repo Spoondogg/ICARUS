@@ -9,7 +9,7 @@ import LOADER from '../../dialog/loader/LOADER.js';
 */
 export default class MAINMODEL extends MODEL {
     /** A MAIN MODEL
-        @param {MODEL} model MODEL
+        @param {MODEL} model Model
         @param {props} props Properties
     */
     constructor(model, props) {

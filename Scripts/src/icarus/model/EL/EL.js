@@ -319,16 +319,6 @@ export default class EL extends MODEL {
         //console.log(this.toString() + ': Retrieving ' + this.factory.toString());
         return this.factory;
     }
-    /** Sets this element's factory
-        @param {FACTORY} factory An element factory
-        @returns {void}
-    */
-    setFactory(factory) {
-        if (this.factory === null) {
-            //console.log(this.toString() + '.factory set to ' + factory.toString());
-            this.factory = factory;
-        }
-    }
     /** Catches DOM Exception when event is already being dispatched
 	    @param {EL} element Element Class to dispatch event
 	    @param {Event} event Event

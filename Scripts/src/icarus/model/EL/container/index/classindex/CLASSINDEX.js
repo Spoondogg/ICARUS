@@ -21,11 +21,11 @@ export default class CLASSINDEX extends CONTAINER {
         @param {MODEL} [model] Model
         @param {ClassIndexOptions} [options] Optional options
 	*/
-    constructor(node, model, options = {
-        classType: model.data.classType || 'MAIN',
-        searchType: model.data.searchType || 'CLASS',
-        query: model.data.query || ''
-    }) {
+    constructor(node, model, options = MODELS.classIndexOptions(
+        model.data.classType || 'MAIN',
+        model.data.query || '',
+        model.data.searchType || 'CLASS'
+    )) {
         //console.log('CLASSINDEX', options);
         super(node, 'DIV', model, [options.classType]);
         this.addClass('classindex');
