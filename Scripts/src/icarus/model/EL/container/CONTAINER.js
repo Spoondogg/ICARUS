@@ -124,11 +124,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addSaveButton() {
-        let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-            label: 'SAVE',
-            icon: ICONS.SAVE,
-            name: 'btn-save'
-        }));
+        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem('SAVE', ICONS.SAVE, 'btn-save', new ATTRIBUTES('tab-narrow')));
         btnSave.el.addEventListener('activate', () => this.chain(() => {
             this.el.dispatchEvent(new Modify(btnSave));
         }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
@@ -139,11 +135,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addRefreshButton() {
-        let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-            label: 'REFRESH',
-            icon: ICONS.REFRESH,
-            name: 'btn-refresh'
-        }));
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem('REFRESH', ICONS.REFRESH, 'btn-refresh', new ATTRIBUTES('tab-narrow')));
         btnRefresh.el.addEventListener('activate', () => this.chain(
             () => this.getMain().focusBody().then(
                 () => this.refresh().then(
@@ -187,7 +179,11 @@ export default class CONTAINER extends GROUP {
                 dir: 2
             }
         ].forEach((model) => {
-            let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+            let btn = this.navheader.tabs.addNavItemIcon(
+                MODELS.navitem(model.label, model.icon, model.name, new ATTRIBUTES('tab-narrow')).set({
+                    dir: model.dir
+                })
+            );
             btn.el.addEventListener('activate', () => {
                 this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
                     () => btn.el.dispatchEvent(new Deactivate(btn)));
@@ -517,11 +513,7 @@ export default class CONTAINER extends GROUP {
     */
     constructReferenceSubMenus(arr, menu, reference) {
         arr.forEach((p) => {
-            let t = menu.addNavItemIcon(new MODEL().set({
-                label: p,
-                icon: ICONS[p],
-                name: p
-            }));
+            let t = menu.addNavItemIcon(MODELS.navitem(p, ICONS[p], p));
             let m = menu.addMenu(MODELS.menu(p));
             reference.addTabbableElement(t, m);
         });
@@ -1055,10 +1047,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	createNavItem(className, menu, close = true) {
 		try {
-			let item = menu.addNavItemIcon(new MODEL().set({
-				icon: ICONS[className],
-				label: className
-			}));
+            let item = menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
 			if (close) {
 				item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 			}
@@ -1160,10 +1149,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addContainerCaseButton(className, menu) {
 		try {
-			return menu.addNavItemIcon(new MODEL().set({
-				icon: ICONS[className],
-				label: className
-			}));
+            return menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}

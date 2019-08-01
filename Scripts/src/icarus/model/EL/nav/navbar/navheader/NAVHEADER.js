@@ -1,5 +1,5 @@
 /** @module */
-import NAVBAR, { ANCHOR, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
+import NAVBAR, { ANCHOR, ATTRIBUTES, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
 import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
@@ -17,10 +17,7 @@ export default class NAVHEADER extends NAVBAR {
 		    @todo Spoon.svg
 		    @todo Consider moving into CONTAINER
 		*/
-		this.tab = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
-			icon: ICONS.CERTIFICATE,
-			label: model.label
-        }));
+        this.tab = this.tabs.addNavItemIcon(MODELS.navitem(model.label, ICONS.CERTIFICATE, 'tab', new ATTRIBUTES('tab-wide')));
         this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
         this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
         //this.tab.el.addEventListener('activate', () => this.options.tabTarget.el.dispatchEvent(new Expand(this.tab)));
@@ -36,19 +33,15 @@ export default class NAVHEADER extends NAVBAR {
         ]);
 	}
 	/** Adds a single NAV Icon and associated SIDEBAR
-	    @param {string} name Name
+	    @param {Name} name Name
 	    @param {string} label Label
 	    @param {string} icon Icon
 	    @param {string} align Alignment
 	    @returns {{tab:NAVITEMICON, element:SIDEBAR}} Tabbable Element {tab,element}
 	*/
 	addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
-		return this.addTabbableElement(
-			this.tabs.addNavItemIcon(new MODEL().set({
-				icon,
-				label,
-				name
-			})),
+        return this.addTabbableElement(
+            this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name)),
 			this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
 				name,
 				align

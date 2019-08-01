@@ -336,11 +336,7 @@ export default class FACTORY {
                 //icon: ICONS[r.className],
                 name: r.toString()
             }), [r.className]);
-            let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
-                label: 'View ' + r.className,
-                icon: ICONS[r.className],
-                name: 'VIEW'
-            }));
+            let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + r.className, ICONS[r.className], 'VIEW'));
             //btnView.el.addEventListener('click', () => this.confirmView(model));
             btnView.el.addEventListener('click', () => console.log('TODO: Launch Viewer'));
         });
