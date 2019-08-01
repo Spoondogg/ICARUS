@@ -1,14 +1,14 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
+import CONTAINER, { AbstractMethodError, Activate, ATTRIBUTES, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 //import FOOTER from '../../../footer/FOOTER.js';
 import HEADER from '../../../header/HEADER.js';
 //import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
 import PAGINATION from '../../../footer/pagination/PAGINATION.js';
-import PAYLOAD, { ATTRIBUTES } from '../../../form/PAYLOAD.js';
+import PAYLOAD from '../../../form/PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -76,7 +76,7 @@ export default class CLASSINDEX extends CONTAINER {
             this.headerTab.el.dispatchEvent(new Activate(this.headerTab));
         }
 
-        this.searchMenu = new MENU(this.body, MODELS.menu(null, new MODEL('search-menu')));
+        this.searchMenu = new MENU(this.body, MODELS.menu('searchmenu', new ATTRIBUTES('search-menu')));
         $(this.searchMenu.el).insertBefore(this.body.el);
         this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem('Searchwoot', ICONS.SEARCH, 'searchwoot'));
         this.navSearch.input.setAttribute('value', this.query);
