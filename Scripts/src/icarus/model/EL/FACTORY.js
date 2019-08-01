@@ -55,8 +55,8 @@ export default class FACTORY {
     }
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
-        @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {SPAN} span Placeholder
+        @param {MODEL} model Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {
@@ -336,11 +336,7 @@ export default class FACTORY {
                 //icon: ICONS[r.className],
                 name: r.toString()
             }), [r.className]);
-            let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
-                label: 'View ' + r.className,
-                icon: ICONS[r.className],
-                name: 'VIEW'
-            }));
+            let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + r.className, ICONS[r.className], 'VIEW'));
             //btnView.el.addEventListener('click', () => this.confirmView(model));
             btnView.el.addEventListener('click', () => console.log('TODO: Launch Viewer'));
         });

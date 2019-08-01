@@ -127,7 +127,7 @@ export default class EL extends MODEL {
     }
     /** A callback Function that accepts a MODEL as a parameter
         @typedef {Function<MODEL>} ModelFunction A Function that accepts a MODEL
-        @param {MODEL} model
+        @param {MODEL} model Model
     */
 
 	/** Add a constructor style function to this classes constructor collection
@@ -445,7 +445,7 @@ export default class EL extends MODEL {
 	}
 	/** Attempts to call the constructor of the given MODEL
         @see https://stackoverflow.com/a/35769291/722785	    
-        @param {MODEL} model MODEL
+        @param {MODEL} model Model
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
@@ -485,7 +485,7 @@ export default class EL extends MODEL {
 		});
 	}
 	/** Combines the given model with this model, overriding initial values with given ones
-        @param {MODEL} model A generic MODEL object
+        @param {MODEL} model Model
         @returns {void}
     */
 	merge(model) {

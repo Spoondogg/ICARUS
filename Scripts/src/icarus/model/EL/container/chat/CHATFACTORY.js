@@ -17,7 +17,7 @@ export default class CHATFACTORY extends CONTAINERFACTORY {
     /** Switch statement to determine appropriate element for this factory to construct
         @param {string} className Container Constructor Name
         @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {ContainerModel} model Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {

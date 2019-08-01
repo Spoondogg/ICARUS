@@ -1,17 +1,13 @@
 /** @module */
-import EL, {
-	ATTRIBUTES,
-	MODEL
-} from '../../el/EL.js';
+import EL, { ATTRIBUTES, MODEL } from '../../el/EL.js';
 /** An Inline Frame
     @deprecated
     @class
-    @extends CONTAINER
 */
 export default class IFRAME extends EL {
 	/** Constructs an iframe
-	    @param {EL} node Parent
-	    @param {MODEL} model Object Model
+	    @param {EL} node Node
+	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'IFRAME', model);
@@ -21,8 +17,4 @@ export default class IFRAME extends EL {
 		this.el.setAttribute('background-color', 'white');
 	}
 }
-export {
-	ATTRIBUTES,
-	EL,
-	MODEL
-};
+export { ATTRIBUTES, EL, MODEL }

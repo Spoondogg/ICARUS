@@ -6,8 +6,8 @@ import CONTAINER from '../../container/CONTAINER.js';
 */
 export default class DICTIONARY extends CONTAINER {
 	/** Construct a DICTIONARY Container
-	    @param {MAIN} node The APP to contain the article
-	    @param {MODEL} model The text that is displayed within the footer
+	    @param {MAIN} node Node
+	    @param {ContainerModel} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, 'DIV', model, ['WORD']);

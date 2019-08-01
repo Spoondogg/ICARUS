@@ -14,4 +14,4 @@ export default class P extends EL {
 		super(node, 'P', model);
 	}
 }
-export { MODEL }
+export { MODEL, MODELS }

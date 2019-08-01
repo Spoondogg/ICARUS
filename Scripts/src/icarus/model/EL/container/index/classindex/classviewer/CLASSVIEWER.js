@@ -6,8 +6,8 @@ import CONTAINER from '../../../CONTAINER.js';
 */
 export default class CLASSVIEWER extends CONTAINER {
 	/** A Container that is designed to spawn containers of a specified type
-	    @param {CONTAINER} node Parent node
-	    @param {MODEL} model INDEX model
+	    @param {CONTAINER} node Node
+	    @param {ContainerModel} [model] Model
         @param {string} classType Default class to display
         @param {string} [query] Optional Query String
 	*/

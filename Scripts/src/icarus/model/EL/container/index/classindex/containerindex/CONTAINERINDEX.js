@@ -83,11 +83,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {void}
     */
     addFormMethods(model, thumb) {
-        let btnFormData = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Form Data',
-            icon: ICONS.DATA,
-            name: 'DATA'
-        }));
+        let btnFormData = thumb.menu.addNavItemIcon(MODELS.navitem('Form Data', ICONS.DATA, 'DATA'));
         btnFormData.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             'FORM.DATA',
             'Show posts for FORM(' + model.id + ')',
@@ -183,7 +179,9 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         // Add methods
         let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {
-            thumb.menu.addNavItemIcon(MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase())).el.onclick = () => CONFIRM.confirmMethodCall(
+            thumb.menu.addNavItemIcon(
+                MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase())
+            ).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',
                 () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m] + '/' + model.id),

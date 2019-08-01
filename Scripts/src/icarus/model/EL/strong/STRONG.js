@@ -1,15 +1,16 @@
 /** @module */
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A STRONG element
     @class
     @extends EL
 */
 export default class STRONG extends EL {
 	/** Constructs a STRONG element
-	    @param {EL} node The object to contain this element
-	    @param {MODEL} model The object attributes
+	    @param {EL} node Node
+	    @param {TextModel} model Model
 	*/
-	constructor(node, model) {
+	constructor(node, model = MODELS.text()) {
 		super(node, 'STRONG', model);
 	}
 }

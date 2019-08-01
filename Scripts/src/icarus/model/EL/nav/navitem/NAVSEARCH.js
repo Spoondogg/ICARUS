@@ -44,13 +44,6 @@ export default class NAVSEARCH extends NAVITEM {
         // Add a list of searchtypes
         this.searchTypes = new MENU(this, MODELS.menu('types', new ATTRIBUTES('search-types')));
         this.createSearchTypes(['TAG', 'CLASS', 'TAGID']);
-
-        /*let tab = this.searchTypes.addNavItem(new MODEL('tab-woot').set('label', 'tab-woot'));
-        let menu = this.searchTypes.addMenu(new MODEL('tabbable-menu-woot'));
-        menu.addNavItem(new MODEL().set('label', 'ONE'));
-        menu.addNavItem(new MODEL().set('label', 'TWO'));
-        //menu.addNavItem(new MODEL().set('label', 'THREE'));
-        tab.addTabbableElement(menu);*/
         this.addSearchTypeEvents();
 
         // Add a list of search-options
@@ -188,11 +181,7 @@ export default class NAVSEARCH extends NAVITEM {
     */
     createSearchOption(option) {
         if (this.searchOptions.get(option).length === 0 && option !== '') {
-            let btn = this.searchOptions.addNavItem(new MODEL().set({
-                label: option,
-                icon: ICONS.BLANK,
-                name: option
-            }));
+            let btn = this.searchOptions.addNavItem(MODELS.navitem(option, ICONS.BLANK, option));
             btn.el.addEventListener('activate', () => {
                 //this.searchOptions.deactivateSiblings(btn);
                 this.selectSearchOption(option);

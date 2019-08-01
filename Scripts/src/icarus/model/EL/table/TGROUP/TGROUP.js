@@ -7,9 +7,9 @@ import TR from './row/TR.js';
 /** A TABLE GROUP (TGROUP) element: ie: THEAD, TBODY, TFOOT */
 export default class TGROUP extends CONTAINER {
 	/** Constructs a table group element
-        @param {EL} node Parent
+        @param {EL} node Node
         @param {string} element HTML element Tag
-        @param {MODEL} model The model
+        @param {ContainerModel} [model] Model
     */
 	constructor(node, element, model) {
         super(node, element, model, ['TR']);
@@ -23,7 +23,7 @@ export default class TGROUP extends CONTAINER {
         return Promise.resolve();
     }
 	/** Adds the given table-row to this table-group
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {TR} A Table row
 	*/
     addTr(model) {

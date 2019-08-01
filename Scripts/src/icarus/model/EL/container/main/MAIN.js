@@ -275,7 +275,7 @@ export default class MAIN extends CONTAINER {
 		console.log('TODO: Forward');
     }
     /** Adds REFERENCE placeholders for this container's children
-        @param {MODEL} model Model
+        @param {ContainerModel} model Model
         @returns {void}
     */
     addReferencePlaceholder(model) {
@@ -421,11 +421,7 @@ export default class MAIN extends CONTAINER {
 	    @returns {NAVITEMICON} A Nav Item with an Icon and optional label
 	*/
 	addNavItemIcon(menu, icon = ICONS.DEFAULT, label = '', url = '#') {
-		return menu ? menu.addNavItemIcon(new MODEL().set({
-			icon,
-			label,
-			url
-		})) : null;
+		return menu ? menu.addNavItemIcon(MODELS.navitem(label, icon, '').set('url', url)) : null;
 	}
 	/** Adds the default User, Crud and Dom menus to this Container
 	    @returns {void}

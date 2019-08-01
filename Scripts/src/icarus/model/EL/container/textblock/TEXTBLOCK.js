@@ -8,11 +8,10 @@ import CONTAINER, { MODEL } from '../CONTAINER.js';
 */
 export default class TEXTBLOCK extends CONTAINER {
 	/** Construct a block to contain text
-	    @param {EL} node The object to contain this element
-	    @param {MODEL} model The textblock
-	    param {number} depth The heirarchy for header elements, classes etc
+	    @param {EL} node Node
+	    @param {ContainerModel} model Model
     */
-	constructor(node, model) { // depth
+	constructor(node, model) {
 		super(node, 'DIV', model);
 		this.addClass('textblock');
 	}

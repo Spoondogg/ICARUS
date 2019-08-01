@@ -7,8 +7,8 @@ import { Switchable } from '../../../../interface/Clickable.js';
 */
 export default class CONSOLE extends LIST {
 	/** Construct a console
-	    @param {EL} node Console parent
-	    @param {MODEL} model Console model
+	    @param {EL} node Node
+	    @param {MODEL} model Model
 	*/
 	constructor(node, model = new MODEL().set('name', 'console')) {
 		super(node, model);

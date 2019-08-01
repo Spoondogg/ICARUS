@@ -7,8 +7,8 @@ import THEAD from './TGROUP/THEAD.js';
 /** A TABLE */
 export default class TABLE extends CONTAINER {
     /** @constructs CONTAINER
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {EL} node Node
+	    @param {ContainerModel} model Model
 	    @param {Array<string>} containerList An array of strings representing child Containers that this Container can create
 	*/
     constructor(node, model) {
@@ -32,28 +32,28 @@ export default class TABLE extends CONTAINER {
         });
     }
 	/** Adds the given table group to the table
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {TGROUP} A Table group
 	*/
 	addTHead(model) {
         return this.addChild(new THEAD(this.childLocation, model));
     }
     /** Adds the given table group to the table
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {TGROUP} A Table group
 	*/
     addTBody(model) {
         return this.addChild(new TBODY(this.childLocation, model));
     }
     /** Adds the given table group to the table
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {TGROUP} A Table group
 	*/
     addTFoot(model) {
         return this.addChild(new TFOOT(this.childLocation, model));
     }
     /** Adds a row to the table body group
-        @param {MODEL} model Object model
+        @param {ContainerModel} model Model
         @returns {TR} A table row
     */
     addRow(model) {

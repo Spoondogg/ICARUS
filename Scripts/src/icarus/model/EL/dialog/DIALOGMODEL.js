@@ -9,7 +9,7 @@
 */
 export default class DIALOGMODEL extends MODEL {
     /** A DIALOG MODEL
-        @param {MODEL} model Model
+        @param {DialogModel} model Model
         @param {props} props Object Properties
     */
     constructor(model, props) {

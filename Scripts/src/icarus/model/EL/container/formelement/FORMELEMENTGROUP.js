@@ -12,8 +12,8 @@ import Hideable from '../../../../interface/Hideable.js';
 */
 export default class FORMELEMENTGROUP extends CONTAINER {
 	/** Constructs a Form Element Group
-	    @param {EL} node The parent
-	    @param {MODEL} model datamodel
+	    @param {EL} node Node
+	    @param {ContainerModel} model Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model, DATAELEMENTS.get('FORMELEMENTGROUP').containers);
@@ -39,42 +39,42 @@ export default class FORMELEMENTGROUP extends CONTAINER {
 		});
     }
     /** Constructs a FORMPOSTINPUT for this FORMELEMENTGROUP
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {FORMPOSTINPUT} A FORMPOSTINPUT
 	*/
     addFormPostInput(model) {
         return this.addChild(new FORMPOSTINPUT(this.childLocation, model));
     }
     /** Constructs a FORMPOSTINPUT for this FORMELEMENTGROUP
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {FORMPOSTLIST} A FORMPOSTLIST
 	*/
     addFormPostList(model) {
         return this.addChild(new FORMPOSTLIST(this.childLocation, model));
     }
     /** Constructs a FORMTEXTAREA for this FORMELEMENTGROUP
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {FORMTEXTAREA} A FORMTEXTAREA
 	*/
     addFormTextArea(model) {
         return this.addChild(new FORMTEXTAREA(this.childLocation, model));
     }
     /** Constructs a FORMSELECT for this FORMELEMENTGROUP
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {FORMSELECT} A FORMSELECT
 	*/
     addFormSelect(model) {
         return this.addChild(new FORMSELECT(this.childLocation, model));
     }
     /** Constructs a FORMINPUT for this FORMELEMENTGROUP
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {FORMINPUT} A FORMINPUT
 	*/
     addFormInput(model) {
         return this.addChild(new FORMINPUT(this.childLocation, model));
     }
 	/** Adds the given FORMELEMENT to this group
-	    @param {MODEL} model A FORM INPUT MODEL
+	    @param {ContainerModel} model A FORM INPUT MODEL
 	    @returns {FORMELEMENT} A FORMELEMENT object
         @todo Consider making a FORMINPUTFACTORY
 	*/

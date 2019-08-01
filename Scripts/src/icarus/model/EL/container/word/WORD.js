@@ -8,8 +8,8 @@ import MODEL from '../../../MODEL.js';
 */
 export default class WORD extends CONTAINER {
 	/** Constructs a WORD Container Element
-	    @param {DICTIONARY} node The ARTICLE to contain the section
-	    @param {MODEL} model The SECTION object retrieves from the server
+	    @param {DICTIONARY} node Node
+	    @param {ContainerModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'DIV', model);

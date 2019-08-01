@@ -15,8 +15,8 @@ export default class INDEXFACTORY extends CONTAINERFACTORY {
     }
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
-        @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {SPAN} span Placeholder
+        @param {ContainerModel} model Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {

@@ -5,8 +5,8 @@ import LIST, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, MODEL } from '
 */
 export default class UL extends LIST {
 	/** Constructs an Unordered List
-	    @param {EL} node The node to contain this element
-	    @param {MODEL} [model] The element model
+	    @param {EL} node Node
+	    @param {MODEL} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, model, 'UL');

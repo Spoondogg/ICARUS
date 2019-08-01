@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, Activate, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL, MODELS } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, Activate, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../CONTAINER.js';
 import Hideable from '../../../../interface/Hideable.js';
 import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
@@ -9,8 +9,8 @@ import LABEL from '../../label/LABEL.js';
 */
 export default class FORMELEMENT extends CONTAINER {
 	/** Constructs a Form Element
-        @param {EL} node Parent Node
-        @param {MODEL} model Model
+        @param {EL} node Node
+        @param {ContainerModel} model Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model);
@@ -78,4 +78,4 @@ export default class FORMELEMENT extends CONTAINER {
 		return Promise.resolve(this);
     }
 }
-export { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, LABEL, MODEL, MODELS }
+export { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, LABEL, MODEL, MODELS }

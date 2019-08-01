@@ -9,7 +9,7 @@ import UL from './ul/UL.js';
 */
 export default class LIST extends ITEM {
 	/** Constructs an abstract Collapsible List
-	    @param {EL} node Parent Node
+	    @param {EL} node Node
 	    @param {MODEL} [model] Model
         @param {string} [element] HTML Element Tag
 	*/
@@ -29,14 +29,14 @@ export default class LIST extends ITEM {
 		});
 	}
 	/** Construct a generic List Item (LI) and append to this element's children
-	    @param {MODEL} model Object Model
+	    @param {TextModel} model Model
 	    @returns {LI} A list item LI
 	*/
 	addLI(model) {
         return this.addChild(new LI(this, model)); //model.label
 	}
 	/** Construct an unordered List (UL) and append to this element's children
-	    @param {MODEL} model Object Model
+	    @param {MODEL} model Model
 	    @returns {UL} An Unordered List (UL)
 	*/
 	addUL(model) {

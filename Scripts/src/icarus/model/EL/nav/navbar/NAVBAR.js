@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, MODELS, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
+import MENU, { ANCHOR, ATTRIBUTES, Collapse, Collapsible, Expand, LIST, MODELS, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
@@ -119,4 +119,4 @@ export default class NAVBAR extends NAV {
         return this.menus.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON }
+export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON }
