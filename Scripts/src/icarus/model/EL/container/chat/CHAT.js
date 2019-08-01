@@ -11,8 +11,8 @@ import STRONG from '../../strong/STRONG.js';
 */
 export default class CHAT extends CONTAINER {
 	/** Constructs a SECTION Container Element
-        @param {CONTAINER} node The ARTICLE to contain the section
-        @param {MODEL} model The SECTION object retrieves from the server
+        @param {CONTAINER} node Node
+        @param {ContainerModel} model Model
     */
 	constructor(node, model) {
 		super(node, 'DIV', model, []);
@@ -36,7 +36,6 @@ export default class CHAT extends CONTAINER {
                 console.log('Chat Input', chatInput);
                 chatInput.el.onkeypress = () => this.postStatement(chatInput);
             });
-
             this.form = form;
         });
 	}

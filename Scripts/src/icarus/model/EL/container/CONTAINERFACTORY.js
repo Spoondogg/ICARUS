@@ -38,8 +38,8 @@ export default class CONTAINERFACTORY extends FACTORY {
     }
     /** Switch statement to determine appropriate element for this factory to construct
         @param {string} className Container Constructor Name
-        @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {SPAN} span Placeholder
+        @param {ContainerModel} model Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {
@@ -91,7 +91,7 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'LI':
                 element = new LI(span, model);
                 break;
-            case 'MENU':
+            case 'MENU': // MIGHT NOT BE NEEDED
                 element = new MENU(span, model);
                 break;
             case 'NAVITEM':

@@ -321,7 +321,8 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['label'],
         ['icon', ICONS.BLANK],
         ['name'],
-        ['target']
+        ['attributes', {}]
+        //['target']
     ]),
 
     /** Create a paragraph model structure constructor

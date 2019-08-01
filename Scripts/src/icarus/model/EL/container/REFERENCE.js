@@ -1,5 +1,5 @@
 ﻿/** @module */
-import NAVBAR, { Activate, Deactivate, MODEL } from '../nav/navbar/NAVBAR.js';
+import NAVBAR, { Activate, Deactivate, MODEL, MODELS } from '../nav/navbar/NAVBAR.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** A REFERENCE represents a collection of menus and tabs representing the MODEL
     of its given CONTAINER as part of the document-map
@@ -7,8 +7,8 @@ import { ICONS } from '../../../enums/ICONS.js';
 */
 export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends REFERENCE
     /** Constructs a Navigation Panel
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {EL} node Node
+	    @param {MenuModel} model Model
     */
     constructor(node, model) {
         super(node, model);
@@ -53,14 +53,8 @@ export default class REFERENCE extends NAVBAR { // CONTAINERREFERENCE extends RE
         if (typeof model.container.subsections !== 'undefined' && model.container.subsections.length > 0 && model.container.subsections[0] !== '0') {
             let childrenMenu = this.options.menu.getMenu('CHILDREN');
             //console.log(this.toString() + ' Adding ' + model.container.toString() + ' children reference placeholders', model.container.subsections);
-            model.container.subsections.forEach((s) => {
-                childrenMenu.addNavItemIcon(new MODEL().set({
-                    id: 'ref_' + s,
-                    label: s,
-                    icon: ICONS.ALERT,
-                    name: s + ' placeholder'
-                }));
-            });
+            model.container.subsections.forEach((s) => childrenMenu.addNavItemIcon(
+                MODELS.navitem(s, ICONS.ALERT, s + ' placeholder').set('id', 'ref_' + s)));
         }
     }
 }

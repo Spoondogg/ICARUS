@@ -1,7 +1,7 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, ATTRIBUTES, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, Activate, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 //import FOOTER from '../../../footer/FOOTER.js';
@@ -17,7 +17,7 @@ import PAYLOAD from '../../../form/PAYLOAD.js';
 export default class CLASSINDEX extends CONTAINER {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
-        @param {CONTAINER} node Parent node
+        @param {CONTAINER} node Node
         @param {ContainerModel} [model] Model
         @param {ClassIndexOptions} [options] Optional options
 	*/
@@ -57,8 +57,8 @@ export default class CLASSINDEX extends CONTAINER {
         this.createPaginationFooter();
     }
     /** Creates a header with basic tabbable functionality, bound to this.menu
-        @param {MODEL} model Model
-        @param {ClassIndexOptions} options Constructor's options
+        @param {ContainerModel} model Model
+        @param {ClassIndexOptions} options Options
         @returns {void}
     */
     createHeader(model, options) {
@@ -178,14 +178,14 @@ export default class CLASSINDEX extends CONTAINER {
         }
     }
     /** Launches a Class Viewer after confirmation
-        @param {MODEL} model Model
+        @param {ClassModel} model Model
         @param {string} [query] Optional Query String
         @returns {void}
     */
     confirmView(model, query = null) {
         CONFIRM.confirmMethodCall(
             'Launch Viewer',
-            'Launch viewer for ' + this.classType + ' "' + model.label + '(' + model.id + ')"?',
+            'Launch viewer for ' + this.classType + ' # ' + model.id + '"?',
             () => {
                 console.log('Confirmed.  Viewing ' + this.classType + '(' + model.id + ')');
                 this.launchViewer(model.id, this.classType, query);
@@ -295,9 +295,7 @@ export default class CLASSINDEX extends CONTAINER {
         //
 	}
 	/** Creates a Thumbnail that launches its respective Container
-	    @param {MODEL} model The Thumbnail model
-        @param {number} model.id Unique Identifier that this thumbnail represents
-        @param {string} model.label The Thumbnail label
+	    @param {ClassModel} model Model
 	    @param {string} className The className that the thumbnail represents
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/

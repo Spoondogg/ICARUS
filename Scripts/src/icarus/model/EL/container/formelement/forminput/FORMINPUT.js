@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -57,14 +57,8 @@ export default class FORMINPUT extends FORMELEMENT {
     buildCheckbox(labelOn = 'YES', labelOff = 'NO') {
         this.optionsMenu = new MENU(this.body.pane, new MODEL('checkmark-menu'));
 
-        let on = this.optionsMenu.addNavItem(new MODEL().set({
-            label: labelOn,
-            name: 'yes'
-        }));
-        let off = this.optionsMenu.addNavItem(new MODEL().set({
-            label: labelOff,
-            name: 'no'
-        }));
+        let on = this.optionsMenu.addNavItem(MODELS.navitem(labelOn, ICONS.BLANK, 'yes'));
+        let off = this.optionsMenu.addNavItem(MODELS.navitem(labelOff, ICONS.BLANK, 'no'));
 
         on.el.addEventListener('activate', () => {
             this.input.el.checked = true;

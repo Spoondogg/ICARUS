@@ -7,8 +7,8 @@ import Collapsible from '../../../../interface/Collapsible.js';
 */
 export default class STICKYFOOTER extends FOOTER {
 	/** Constructs a footer stuck to the bottom of the viewpane
-	    @param {EL} node The object to contain the table
-	    @param {MODEL} model stickyfooter model
+	    @param {EL} node Node
+	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
 		super(node, model);

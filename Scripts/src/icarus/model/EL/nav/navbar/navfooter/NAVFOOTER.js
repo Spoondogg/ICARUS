@@ -2,12 +2,11 @@
 import NAVBAR, { ANCHOR, Collapse, Collapsible, EL, Expand, LIST, MENU, MODEL, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
-    @extends NAVBAR
 */
 export default class NAVFOOTER extends NAVBAR {
 	/** Constructs a NAVBAR that acts as a CONTAINER Header
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {EL} node Node
+	    @param {MenuModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, model, true);

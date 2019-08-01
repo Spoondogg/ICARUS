@@ -86,8 +86,8 @@
 /** Represents a collection of Container Properties
     @typedef {Object} ContainerProps A collections of Container Properties
     @property {Label} [label=""] Label
-    @property {UIdList} [subsections] Child Container UIds
-    @property {UIdList} [tags] Tag UIds
+    @property {CSV} [subsections] Child Container UIds
+    @property {CSV} [tags] Tag UIds
     @property {string} [name=''] Name
     @property {UId} [dataId] Data Formpost UId
     @property {UId} [attributesId] Attributes Formpost UId

@@ -10,8 +10,8 @@ import P from '../../../p/P.js';
 */
 export default class HEADERWRAP extends JUMBOTRON {
 	/** Constructs a Header with clearfix
-        @param {CONTAINER} node The model
-        @param {MODEL} model Object Model
+        @param {CONTAINER} node Node
+        @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
 		super(node, model);

@@ -7,7 +7,7 @@ import CONTAINER, { MODEL } from '../container/CONTAINER.js';
 export default class SECTION extends CONTAINER {
 	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Node
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
     */
 	constructor(node, model) {
         super(node, 'SECTION', model, ['SECTION', 'TEXTBLOCK', 'FORM', 'TABLE', 'FORMPOSTINDEX', 'CONTAINERINDEX', 'IMAGEINDEX']);

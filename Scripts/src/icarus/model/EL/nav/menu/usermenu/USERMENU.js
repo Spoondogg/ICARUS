@@ -9,8 +9,8 @@ import IMG from '../../../img/IMG.js';
 */
 export default class USERMENU extends MENU {
 	/** Constructs a User Menu
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {EL} node Node
+	    @param {MenuModel} model Model
 	*/
 	constructor(node) {
 		super(node, new MODEL('usermenu in').set('name', 'USER'));

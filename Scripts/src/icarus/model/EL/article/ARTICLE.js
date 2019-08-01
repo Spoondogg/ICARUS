@@ -7,7 +7,7 @@ import CONTAINER, { COLLAPSIBLE, Clickable, Expand, MODEL, MODELS, SPAN, Toggle 
 export default class ARTICLE extends CONTAINER {
 	/** Construct an ARTICLE
 	    @param {CONTAINER} node Node
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	*/
 	constructor(node, model) {
         super(node, 'ARTICLE', model, ['JUMBOTRON', 'FORM', 'SECTION', 'TEXTBLOCK', 'TABLE', 'FORMPOSTINDEX', 'CONTAINERINDEX', 'IMAGEINDEX', 'INDEX']);

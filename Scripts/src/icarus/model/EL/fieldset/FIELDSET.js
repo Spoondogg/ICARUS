@@ -6,8 +6,8 @@ import FORMELEMENTGROUP, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../container
 */
 export default class FIELDSET extends CONTAINER {
 	/** A fieldset that contains form elements
-	    @param {FORM} node The parent object
-	    @param {MODEL} model The model
+	    @param {FORM} node Node
+	    @param {ContainerModel} model Model
 	*/
 	constructor(node, model) {
         super(node, 'FIELDSET', model, ['FORMELEMENTGROUP', 'TEXTBLOCK']);

@@ -30,7 +30,7 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
     }
     /** Constructs a thumbnail that represents the given model
-        @param {MODEL} model Model
+        @param {ThumbnailModel} model Model
         @returns {void}
     */
     constructThumbnail(model) {

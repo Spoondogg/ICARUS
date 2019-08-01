@@ -45,7 +45,7 @@ export default class FORM extends CONTAINER {
         });
     }
     /** Constructs a Fieldset for this FORM
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
 	addFieldset(model) {

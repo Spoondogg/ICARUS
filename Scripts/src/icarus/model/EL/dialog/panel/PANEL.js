@@ -7,7 +7,7 @@ import CONTAINER from '../../container/CONTAINER.js';
 */
 export default class PANEL extends DIALOG {
 	/** Constructs a PANEL
-        @param {MODEL} model Model
+        @param {DialogModel} model Model
     */
 	constructor(model) {
 		super(model);
