@@ -87,7 +87,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
             }
         }
     }
-    /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
+    /** Creates a Thumbnail representation of a FORMPOST and adds relevant Events 
         @param {MODEL} model Model
         @param {number} [pageNumber] Page to load results into
         @returns {void}

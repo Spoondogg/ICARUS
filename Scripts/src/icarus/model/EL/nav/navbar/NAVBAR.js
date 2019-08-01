@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
+import MENU, { ANCHOR, Collapse, Collapsible, Expand, LIST, MODELS, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
@@ -9,8 +9,8 @@ import { ICONS } from '../../../../enums/ICONS.js';
 */
 export default class NAVBAR extends NAV {
 	/** Constructs a Navigation Panel
-	    @param {EL} node Parent Node
-	    @param {MODEL} [model] Model
+	    @param {EL} node Node
+	    @param {MenuModel} [model] Model
         @param {boolean} [bottomUp] If true, menus preceed tabs
         @param {boolean} [horizontalTabs] If true (default), tabs are aligned horizontally
 	*/
@@ -20,9 +20,10 @@ export default class NAVBAR extends NAV {
 		this.implement(new Switchable(this));
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
-		this.tabs = new MENU(this, new MODEL(horizontalTabs ? 'horizontal' : '').set('name', 'tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tabs = new MENU(this, MODELS.menu('tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tabs.addClass(horizontalTabs ? 'horizontal' : '');
 		this.tabs.el.dispatchEvent(new Expand(this.tabs));
-		this.menus = new MENU(this, new MODEL().set('name', 'menus'));
+        this.menus = new MENU(this, MODELS.menu('menus'));
 		if (bottomUp) {
 			$(this.menus.el).insertBefore(this.tabs.el);
 		}
@@ -39,12 +40,8 @@ export default class NAVBAR extends NAV {
     */
     addTabbableMenu(name, label = name, icon = ICONS[name], secondaryTabs = [], isHorizontal = true) {
         let tabbable = this.addTabbableElement( // Create Primary tab and Menu
-            this.tabs.addNavItemIcon(new MODEL().set({
-                icon,
-                label,
-                name
-            })),
-            this.menus.addMenu(new MODEL().set('name', name))
+            this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name)),
+            this.menus.addMenu(MODELS.menu(name))
         );
         secondaryTabs.forEach((t) => this.addTabbableElement( // Create Secondary Tabs and Horizontal Menus inside Menu
             tabbable.element.addNavItemIcon(new MODEL().set(t)),
@@ -65,21 +62,18 @@ export default class NAVBAR extends NAV {
 	addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
 		try {
 			// Create Primary Options tab and Menu
-			let tab = this.tabs.addNavItemIcon(new MODEL('tab-wide').set({
-				icon,
-				label,
-				name
-            }));
-            let menu = this.menus.addMenu(new MODEL().set('name', name));
+            let tab = this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name));
+            tab.addClass('tab-wide');
+            let menu = this.menus.addMenu(MODELS.menu(name));
             tab.addTabbableElement(menu);
 
 			// Create Secondary Tabs and Horizontal Menus inside Options Menu
-			let optMenuClass = isHorizontal ? 'horizontal' : '';
-            children.map((str) => menu.addNavItemIcon(new MODEL().set({
-                label: str,
-                icon: ICONS[str],
-                name: str
-            })).addTabbableElement(menu.addMenu(new MODEL(optMenuClass).set('name', str))));
+            let optMenuClass = isHorizontal ? 'horizontal' : '';
+            children.map((str) => {
+                let model = MODELS.menu(str, new MODEL(optMenuClass));
+                menu.addNavItemIcon(MODELS.navitem(str, ICONS[str], str))
+                    .addTabbableElement(menu.addMenu(model));
+            });
 
             return {
                 tab,
@@ -125,4 +119,4 @@ export default class NAVBAR extends NAV {
         return this.menus.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, NAVITEM, NAVITEMICON }
+export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON }

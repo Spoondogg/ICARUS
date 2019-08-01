@@ -13,8 +13,8 @@ import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
 */
 export default class MENU extends LIST {
 	/** Construct a MENU style list of NAVITEMS
-	    @param {EL} node Parent Node
-	    @param {MODEL} [model] Model
+	    @param {EL} node Node
+	    @param {MenuModel} [model] Model
         @param {string} [element] HTML Element Tag
         @param {{canActivate, scrollIntoView, UId}} options Optional Parameters
 	*/
@@ -32,19 +32,6 @@ export default class MENU extends LIST {
 			this.scrollOnExpand();
 		}
 	}
-    /** This should be a typedef
-        @param {string} name Tab Name
-        @param {string} [label] Tab Label
-        @param {string} [icon] Tab Icon
-        @returns {{name:string, label:string, icon:string}} NavItemIconModel
-    */
-    createNavItemIconModel(name, label = name, icon = name) {
-        return {
-            name,
-            label,
-            icon
-        };
-    }
 	/** Scroll the menu into view on Expansion
 	    @returns {void}
 	*/
@@ -60,7 +47,7 @@ export default class MENU extends LIST {
 		});
 	}
 	/** Adds relevant cases to this element
-	    @param {MODEL} model MENU Model
+	    @param {MenuModel} model Model
 	    @returns {void}
 	*/
 	addCases(model) {
@@ -71,25 +58,25 @@ export default class MENU extends LIST {
 		this.addConstructor('NAVSEPARATOR', () => this.addNavSeparator());
 	}
 	/** Constructs a MENU inside this MENU
-	    @param {MODEL} model Object model
-	    @returns {MENU} Nav Item with Anchor
+	    @param {MenuModel} model Model
+	    @returns {MENU} Menu
 	*/
 	addMenu(model) {
 		return this.addChild(new MENU(this, model));
 	}
 	/** Constructs a NavBar Element with TABS and MENUS
-	    @param {MODEL} model Object model
+	    @param {MenuModel} model Model
 	    @returns {NAVBAR} NavBar
 	*/
 	addNavBar(model) {
-		return this.addChild(new NAVBAR(this, model)); //model.url, model.label
+		return this.addChild(new NAVBAR(this, model));
 	}
 	/** Constructs a Nav Item (Anchor)
 	    @param {NavItemModel} model Model
 	    @returns {NAVITEM} Nav Item with Anchor
 	*/
 	addNavItem(model) {
-		return this.addChild(new NAVITEM(this, model)); //model.url, model.label
+		return this.addChild(new NAVITEM(this, model));
 	}
 	/** Constructs a Nav Item Icon
 	    @param {NavItemModel} model Model
@@ -99,14 +86,14 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEMICON(this, model));
     }
     /** Constructs a NavItem with a search input
-	    @param {MODEL|{label:string, icon:string, name:string}} [model] Object model
+	    @param {NavItemModel} [model] Model
 	    @returns {NAVSEARCH} Nav Item with Anchor
 	*/
     addNavSearch(model) {
         return this.addChild(new NAVSEARCH(this, model));
     }
 	/** Constructs a Nav Item Thumbnail
-	    @param {MODEL} model The model
+	    @param {NavItemModel} model Model
         @param {string} classType The class type that this thumbnail represents
 	    @returns {NAVITEMTHUMBNAIL} A nav item with a thumbnail
 	*/
@@ -114,7 +101,7 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEMTHUMBNAIL(this, model, classType));
 	}
 	/** Adds an array of Nav Items
-        @param {Array} navItems An array of NAVITEM
+        @param {Array<NavItemModel>} navItems An array of NAVITEM(s)
         @returns {void}
     */
 	addNavItems(navItems) {
@@ -165,4 +152,4 @@ export default class MENU extends LIST {
         return this.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVSEARCH, UL }
+export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVSEARCH, UL }

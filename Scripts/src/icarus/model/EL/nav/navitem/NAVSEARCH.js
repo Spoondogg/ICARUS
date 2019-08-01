@@ -37,12 +37,12 @@ export default class NAVSEARCH extends NAVITEM {
             value: 'CLASS'
         }));
 
-        this.buttonGroup = new BUTTONGROUP(this, new MODEL('input-buttons'));
+        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new MODEL('input-buttons')));
         this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE'));
         this.btnSearch = this.buttonGroup.addButton(MODELS.button('', ICONS.SEARCH).set('name', 'SEARCH'));
 
         // Add a list of searchtypes
-        this.searchTypes = new MENU(this, new MODEL('search-types'));
+        this.searchTypes = new MENU(this, MODELS.menu('types', new MODEL('search-types')));
         this.createSearchTypes(['TAG', 'CLASS', 'TAGID']);
 
         /*let tab = this.searchTypes.addNavItem(new MODEL('tab-woot').set('label', 'tab-woot'));
@@ -54,7 +54,7 @@ export default class NAVSEARCH extends NAVITEM {
         this.addSearchTypeEvents();
 
         // Add a list of search-options
-        this.searchOptions = new MENU(this, new MODEL('search-options'));
+        this.searchOptions = new MENU(this, MODELS.menu('options', new MODEL('search-options')));
         //let options = ['A', 'B', 'C'];
         //this.setSearchOptions(options);
         this.addSearchEvents();

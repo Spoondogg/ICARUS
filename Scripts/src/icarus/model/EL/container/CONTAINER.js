@@ -522,7 +522,7 @@ export default class CONTAINER extends GROUP {
                 icon: ICONS[p],
                 name: p
             }));
-            let m = menu.addMenu(new MODEL().set('name', p));
+            let m = menu.addMenu(MODELS.menu(p));
             reference.addTabbableElement(t, m);
         });
     }

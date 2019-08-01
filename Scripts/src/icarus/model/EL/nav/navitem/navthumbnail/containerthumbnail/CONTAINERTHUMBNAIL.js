@@ -9,7 +9,7 @@ import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 */
 export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
-        @param {CONTAINER} node The model
+        @param {CONTAINER} node Node
         @param {ContainerThumbnailModel} model The Thumbnail model
         @param {string} classType The class that this thumbnail represents
     */
@@ -122,8 +122,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         });*/
     }
     /** Retrieves a list of MAIN CONTAINERS that are tagged with the given tag uid
-        and sets the DIALOG for this CONTAINERTHUMBNAIL to a CONTAINERINDEX holding
-        the search results
+        and sets this DIALOG to a CONTAINERINDEX holding the search results
 
         @param {UId} id Tag UId
         @param {EL} caller Calling EL
@@ -171,7 +170,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
     addThumbDetails(model) {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
         this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
-        this.detail.rating = new BUTTONGROUP(this.detail, new MODEL('right star-group'));
+        this.detail.rating = new BUTTONGROUP(this.detail, MODELS.buttongroup(model.align, null, new MODEL('right star-group')));
         this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
         this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
         this.detail.rating.addButton(MODELS.button('', ICONS.STAR));

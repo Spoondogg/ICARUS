@@ -9,9 +9,9 @@ import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 export default class CONTAINERINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
-        @param {CONTAINER} node Parent node
-        @param {MODEL} [model] Model
-        @param {ClassIndexOptions} [options] Optional options
+        @param {CONTAINER} node Node
+        @param {ContainerModel} [model] Model
+        @param {ClassIndexOptions} [options] Options
 	*/
     constructor(node, model, options) {
         super(node, model, options);
@@ -44,7 +44,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         return result;
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [tag] Optional comma delimited list of tags
+        @param {CSV} [tag] Optional comma delimited list of tags
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTags(tag = '') {
@@ -54,7 +54,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         });
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [tagId] Optional comma delimited list of tag uids
+        @param {CSV} [tagId] Optional comma delimited list of tag uids
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTagIds(tagId = '') {
@@ -116,8 +116,6 @@ export default class CONTAINERINDEX extends CLASSINDEX {
     }
     /** Creates a Thumbnail that launches its respective Container
 	    @param {ContainerThumbnailModel} model The Thumbnail model
-        param {number} model.id Unique Identifier that this thumbnail represents
-        param {string} model.label The Thumbnail label
 	    @param {string} classType The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
@@ -149,7 +147,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         return thumbnail;
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
-        @param {MODEL} model model
+        @param {ContainerModel} model model
         @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
@@ -157,29 +155,17 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         //console.log('.addThumbnailMethods()', pageNumber, model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
-        let btnAppend = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Append',
-            icon: ICONS.PENCIL,
-            name: 'APPEND'
-        }));
+        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem('Append', ICONS.PENCIL, 'APPEND'));
         btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
 
-        let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'View ' + this.classType,
-            icon: ICONS[this.classType],
-            name: 'VIEW'
-        }));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
         if (this.classType === 'FORM') {
             this.addFormMethods(model, thumb);
         }
 
-        let btnSearch = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Search ' + this.classType,
-            icon: ICONS.SEARCH,
-            name: 'SEARCH'
-        }));
+        let btnSearch = thumb.menu.addNavItemIcon(MODELS.navitem('Search ' + this.classType, ICONS.SEARCH, 'SEARCH'));
         btnSearch.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             this.classType + '.SEARCH',
             'Search children of ' + this.classType,
@@ -197,11 +183,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         // Add methods
         let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {
-            thumb.menu.addNavItemIcon(new MODEL().set({
-                label: methods[m],
-                icon: ICONS[methods[m].toUpperCase()],
-                name: methods[m].toUpperCase()
-            })).el.onclick = () => CONFIRM.confirmMethodCall(
+            thumb.menu.addNavItemIcon(MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase())).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',
                 () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m] + '/' + model.id),

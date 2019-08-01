@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ATTRIBUTES, Activate, EL, Expand, MODEL, NAVBAR } from '../MENU.js'
+import MENU, { ATTRIBUTES, Activate, EL, Expand, MODEL, MODELS, NAVBAR } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
@@ -48,30 +48,24 @@ export default class USERMENU extends MENU {
         if (this.getRole() === 'Guest') {
             this.account.tab.el.style.flexBasis = '20rem'; // this should be a style rule
 
-            this.btnLogin = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('log-in', 'Log In', ICONS.LOGIN)
-            ));
+            this.btnLogin = this.account.element.addNavItemIcon(MODELS.navitem('Log In', ICONS.LOGIN, 'log-in'));
             this.btnLogin.el.addEventListener('activate', () => this.login(this.btnLogin));
-            this.btnRegister = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('register', 'Sign Up', ICONS.USER)
-            ));
+            this.btnRegister = this.account.element.addNavItemIcon(MODELS.navitem('Sign Up', ICONS.USER, 'register'));
             this.btnRegister.el.addEventListener('activate', () => this.register(this.btnRegister));
         } else {
-            this.btnLogout = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('log-out', 'Log Out', ICONS.LOGOUT)
-            ));
+            this.btnLogout = this.account.element.addNavItemIcon(MODELS.navitem('Log Out', ICONS.LOGOUT, 'log-out'));
             this.btnLogout.el.addEventListener('activate', () => this.logout());
             // Application Communications, Alerts etc
             this.chat = this.navbar.addTabbableMenu('CHAT', 'CHAT', ICONS.CHAT, [
-                this.createNavItemIconModel('chat-one', 'Chat One', ICONS.CHAT),
-                this.createNavItemIconModel('chat-two', 'Chat Two', ICONS.CHAT)
+                MODELS.navitem('Chat One', ICONS.CHAT, 'chat-one'),
+                MODELS.navitem('Chat Two', ICONS.CHAT, 'chat-two')
             ], true);
             this.chat.element.swipeSensitivity = 150;
             // User Settings / Options
             this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [
-                this.createNavItemIconModel('Styles', 'Styles', ICONS.DOM),
-                this.createNavItemIconModel('Alerts', 'Alerts', ICONS.ALERT),
-                this.createNavItemIconModel('Security', 'Security', ICONS.LOCK)
+                MODELS.navitem('Styles', ICONS.DOM, 'Styles'),
+                MODELS.navitem('Alerts', ICONS.ALERT, 'Alerts'),
+                MODELS.navitem('Security', ICONS.LOCK, 'Security')
             ], true);
             this.options.element.swipeSensitivity = 150;
         }
