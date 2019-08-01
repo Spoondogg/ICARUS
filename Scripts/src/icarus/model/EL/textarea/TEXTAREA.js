@@ -4,7 +4,7 @@ import EL from '../EL.js';
 export default class TEXTAREA extends EL {
 	/** Constructs a TEXTAREA element
         @param {EL} node Node
-        @param {MODEL} model Model
+        @param {TextModel} model Model
     */
 	constructor(node, model) {
 		super(node, 'TEXTAREA', model);

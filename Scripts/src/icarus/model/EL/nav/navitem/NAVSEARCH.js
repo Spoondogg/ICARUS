@@ -37,7 +37,7 @@ export default class NAVSEARCH extends NAVITEM {
             value: 'CLASS'
         }));
 
-        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new MODEL('input-buttons')));
+        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new ATTRIBUTES('input-buttons')));
         this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE'));
         this.btnSearch = this.buttonGroup.addButton(MODELS.button('', ICONS.SEARCH).set('name', 'SEARCH'));
 
@@ -102,9 +102,7 @@ export default class NAVSEARCH extends NAVITEM {
                 if (this.searchType.el.value === 'TAG') {
                     let { value } = this.input.el;
                     if (value.trim().length > 0) {
-                        //let tagList = this.getContainer().getMain().retrieveCachedTags(value);
                         let tagList = this.getContainer().getContainer().getMain().retrieveCachedTags(value);
-                        //console.log('TODO Populate datalist Search: "' + value.toString() + '"', tagList);
                         this.createSearchOptions(tagList);
                     } else {
                         this.hideSearchOptions();
@@ -148,9 +146,7 @@ export default class NAVSEARCH extends NAVITEM {
     */
     createSearchTypes(types, activateIndex = 0) {
         types.forEach((type) => {
-            let btn = this.searchTypes.addNavItem(MODELS.navitem(type, ICONS[type], {
-                type
-            }));
+            let btn = this.searchTypes.addNavItem(MODELS.navitem(type, ICONS[type]));
             btn.el.addEventListener('activate', () => {
                 this.setSearchType(type);
                 this.searchTypes.deactivateSiblings(btn);

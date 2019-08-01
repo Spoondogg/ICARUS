@@ -83,7 +83,8 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     */
     anchor: makeStruct([
         ['icon', ICONS.BLANK],
-        ['label', '']
+        ['label', ''],
+        ['attributes', {}]
     ]),
 
     /** Create a buttonGroup model structure constructor
