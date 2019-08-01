@@ -62,6 +62,7 @@
     @property {Attributes} [attributes] Attributes
     @property {Data} [data] Data
     @property {Meta} [meta] Meta
+    @property {Array<Model>} [children] Children
 */
 /** Represents a Controller Class Structure
     @typedef {Object} Controller A Controller-like Object Model
@@ -257,8 +258,9 @@
 */
 
 /** Represents a model for an Anchor
-    @typedef {Object} AnchorModel Model
-    @property {IconModel & {label: string}} model
+    @typedef {IconModel & {attributes:AnchorAttributes}} AnchorModel Model
+    @property {string} [label=""] Label
+    @property {string} [icon="ICONS.BLANK"] Icon
     @property {AnchorAttributes} [attributes] Attributes
 */
 
@@ -275,6 +277,7 @@
 /** Represents a model for an Icon
     @typedef {Object} IconModel Model
     @property {string} icon Icon
+    @property {string} [label] Label
 */
 
 /** Represents a model for an Icon
@@ -346,7 +349,7 @@
 */
 
 /** Represents a model for a NAVITEM
-    @typedef {ButtonModel & {name:Name, target:EL}} NavItemModel - NavItemModel
+    @typedef {ButtonModel} NavItemModel - NavItemModel
 */
 
 /** Represents a model for an IMG Class

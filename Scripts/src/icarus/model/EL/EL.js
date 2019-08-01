@@ -83,10 +83,7 @@ export default class EL extends MODEL {
         this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
-        param {HTMLElement} el The HTML Element
-	    param {EL} node Parent node to append to
-	    @param {MODEL} model A set of key/value pairs for this element's model
-	    param {string} innerHTML This text will be displayed within the HTML element
+	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
@@ -108,7 +105,7 @@ export default class EL extends MODEL {
 		}, this.toString() + '.make() Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
-        @param {MODEL} model Model
+        @param {Model} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
