@@ -95,34 +95,19 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
     addThumbnailMethods(model, pageNumber = 0) {
         //console.log('FORMPOSTINDEX.addThumbnailMethods()', model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
-        let btnGet = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Get ' + this.classType,
-            icon: ICONS[this.classType],
-            name: 'GET'
-        }));
+        let btnGet = thumb.menu.addNavItemIcon(MODELS.navitem('Get ' + this.classType, ICONS[this.classType], 'GET'));
         btnGet.el.addEventListener('click', () => this.retrieveFormPost(model.id));
 
-        let btnView = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'View ' + this.classType,
-            icon: ICONS[this.classType],
-            name: 'VIEW'
-        }));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
-        let btnEdit = thumb.menu.addNavItemIcon(new MODEL().set({
-            label: 'Edit ' + this.classType,
-            icon: ICONS[this.classType],
-            name: 'EDIT'
-        }));
+        let btnEdit = thumb.menu.addNavItemIcon(MODELS.navitem('Edit ' + this.classType, ICONS[this.classType], 'EDIT'));
         btnEdit.el.addEventListener('click', () => {
             console.log('FORMPOSTINDEX.btnEdit()', model);
             //this.getContainer().getFactory().editProperty();
             let dialog = new PROMPT(MODELS.dialog(
-                'Edit FormPost + (' + model.id + ') ',
-                '', true, 
-                this.getContainer(),
-                this,
-                this.getContainer().getLoader()
+                'Edit FormPost + (' + model.id + ') ', '', true, 
+                this.getContainer(), this, this.getContainer().getLoader()
             ));
             this.getFactory().get(dialog.body.pane, 'FORM', model.formId).then((form) => {
                 form.setAction('/FORMPOST/SET');

@@ -1,7 +1,7 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { AbstractMethodError, Activate, ATTRIBUTES, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, AbstractMethodError, Activate, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 //import FOOTER from '../../../footer/FOOTER.js';
