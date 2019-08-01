@@ -12,7 +12,7 @@ export default class SEARCH extends PROMPT {
 	constructor(model) {
 		super(model);
         this.addClass('prompt-search');
-        this.results = new MENU(this.body.pane, MODELS.menu('results', new MODEL('search-results')));
+        this.results = new MENU(this.body.pane, MODELS.menu('results', new ATTRIBUTES('search-results')));
         this.results.el.dispatchEvent(new Expand(this.results));
     }
 }
