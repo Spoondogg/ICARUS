@@ -14,7 +14,7 @@ export default class FORMFOOTER extends FOOTER {
 	constructor(node, model = MODELS.formfooter()) {
 		super(node, model);
 		this.addClass('form-footer');
-        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup('', model.align, 'form-buttons'));
+        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(model.align, 'form-buttons'));
 	}
 }
 export { ALIGN, BUTTON, BUTTONGROUP, EL, FOOTER, MODEL }

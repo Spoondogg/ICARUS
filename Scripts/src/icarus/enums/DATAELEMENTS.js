@@ -54,7 +54,7 @@ export const makeStruct = (params = []) => {
     for the element it represents.  Structures are created using
     a centralized structure constructor.
 */
-export const MODELS = {
+export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     /** Create a navitem model structure constructor
         @type {function(InputModel): MODEL}
         @param {InputModel} Model
@@ -93,7 +93,11 @@ export const MODELS = {
     */
     buttongroup: makeStruct([
         ['label', 'buttons'],
-        ['align', '']
+        ['align'],
+        ['name'],
+        ['attributes', {}],
+        ['data', {}],
+        ['meta', {}]
     ]),
 
     /** Create a button model structure constructor
@@ -107,15 +111,70 @@ export const MODELS = {
         ['type', 'BUTTON']
     ]),
 
-    /** Create a buttonGroup model structure constructor
-        @type {function(ButtonGroupModel): MODEL}
-        @param {ButtonGroupModel} Model
+    /** Create a generic container model structure constructor
+        @type {function(ClassModel): MODEL}
+        @param {ClassModel} Model
+        @returns {MODEL} Model
+    */
+    class: makeStruct([
+        ['id'],
+        ['shared', -1],
+        ['status', 1],
+        ['authorId'],
+        ['dateCreated'],
+        ['dateLastModified']
+    ]),
+
+    /** Create a generic container model structure constructor
+        @type {function(ContainerModel): MODEL}
+        @param {ContainerModel} Model
         @returns {MODEL} Model
     */
     container: makeStruct([
-        ['label', 'buttons'],
-        ['align', ''],
-        ['name', '']
+        ['id'],
+        ['label'],
+        ['shared', -1],
+        ['status', 1],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name'],
+        ['authorId'],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['dataId', '0'],
+        ['attributesId', '0'],
+        ['metaId', '0']
+    ]),
+
+    /** Create a generic container model structure constructor
+        @type {function(ContainerModel): MODEL}
+        @param {ContainerModel} Model
+        @returns {MODEL} Model
+    */
+    containerThumbnail: makeStruct([
+        ['id'],
+        ['label'],
+        ['shared', -1],
+        ['status', 1],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name'],
+        ['authorId'],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['dataId', '0'],
+        ['attributesId', '0'],
+        ['metaId', '0']
+    ]),
+
+    /** Create a generic container model structure constructor
+        @type {function(ContainerModel): MODEL}
+        @param {ContainerModel} Model
+        @returns {MODEL} Model
+    */
+    thumbnail: makeStruct([
+        ['id'],
+        ['label']
     ]),
 
     /** Create a buttonGroup model structure constructor
@@ -214,7 +273,19 @@ export const MODELS = {
         ['type', 'info']
     ]),
 
-    /** Create a buttonGroup model structure constructor
+    /** Create a Menu model structure constructor
+        @type {function(MenuModel): MODEL}
+        @param {MenuModel} Model
+        @returns {MODEL} Model
+    */
+    menu: makeStruct([
+        ['name', ''],
+        ['attributes', {}],
+        ['data', {}],
+        ['meta', {}]
+    ]),
+
+    /** Create a menu options model structure constructor
         @type {function(MenuOptions): MODEL}
         @param {MenuOptions} Model
         @returns {MODEL} Model
@@ -247,9 +318,10 @@ export const MODELS = {
         @returns {MODEL} Model
     */
     navitem: makeStruct([
-        ['label', ''],
+        ['label'],
         ['icon', ICONS.BLANK],
-        ['target', '']
+        ['name'],
+        ['target']
     ]),
 
     /** Create a paragraph model structure constructor

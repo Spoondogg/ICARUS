@@ -39,7 +39,7 @@ export default class NAVITEM extends LI {
         ]);
     }
 	/** Add a MENU to this NAVITEM
-	    @param {MODEL} model NavBarNav model
+	    @param {MenuModel} model Model
 	    @returns {MENU} The newly created element
     */
     addMenu(model) {

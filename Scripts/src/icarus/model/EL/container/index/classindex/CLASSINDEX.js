@@ -8,7 +8,7 @@ import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import HEADER from '../../../header/HEADER.js';
 //import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
 import PAGINATION from '../../../footer/pagination/PAGINATION.js';
-import PAYLOAD from '../../../form/PAYLOAD.js';
+import PAYLOAD, { ATTRIBUTES } from '../../../form/PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class
@@ -18,7 +18,7 @@ export default class CLASSINDEX extends CONTAINER {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Parent node
-        @param {MODEL} [model] Model
+        @param {ContainerModel} [model] Model
         @param {ClassIndexOptions} [options] Optional options
 	*/
     constructor(node, model, options = MODELS.classIndexOptions(
@@ -47,7 +47,7 @@ export default class CLASSINDEX extends CONTAINER {
         this.isLoading = false;
 
         /** The ClassIndex Menu contains the results of the search */
-        this.menu = new MENU(this.body.pane, new MODEL('index-menu').set('label', 'INDEX'));
+        this.menu = new MENU(this.body.pane, MODELS.menu('INDEX', new ATTRIBUTES('index-menu')));
         //this.createPagedMenu(0);
         this.createHeader(model, options);
         this.addMenuScrollEvents();        
@@ -64,20 +64,11 @@ export default class CLASSINDEX extends CONTAINER {
     createHeader(model, options) {
         this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
-
-        /*
-        this.headerNew = new NAVHEADER(this, new MODEL().set('label', this.label.toString()), {
-            tabTarget: this.menu
-        });
-        $(this.headerNew.el).insertBefore(this.body.el);
-        this.headerNew.el.dispatchEvent(new Expand(this.headerNew));
-        */
         this.headerTab = new BUTTON(this.header, MODELS.button(model.data.header || options.classType, ICONS.BLANK));
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
         this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
         this.headerTab.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.body)));
-        //this.headerTab.el.addEventListener('select', () => this.getFactory().editProperty('header', 'data', this, this.headerTab));
 
         if (parseInt(this.data.collapsed) === 1) {
             this.headerTab.el.dispatchEvent(new Deactivate(this.headerTab));
@@ -85,13 +76,9 @@ export default class CLASSINDEX extends CONTAINER {
             this.headerTab.el.dispatchEvent(new Activate(this.headerTab));
         }
 
-        this.searchMenu = new MENU(this.body, new MODEL('search-menu'));
+        this.searchMenu = new MENU(this.body, MODELS.menu(null, new MODEL('search-menu')));
         $(this.searchMenu.el).insertBefore(this.body.el);
-        this.navSearch = this.searchMenu.addNavSearch(new MODEL().set({
-            label: 'Searchwoot',
-            icon: ICONS.SEARCH,
-            name: 'searchwoot'
-        }));
+        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem('Searchwoot', ICONS.SEARCH, 'searchwoot'));
         this.navSearch.input.setAttribute('value', this.query);
         this.navSearch.btnSearch.el.addEventListener('click',
             () => this.menu.empty(false).then(
@@ -294,7 +281,7 @@ export default class CLASSINDEX extends CONTAINER {
         return this.menu.addMenu(new MODEL('page').set('name', pageNumber));
     }
     /** Creates a Thumbnail representation of a Class and adds relevant Events 
-        @param {MODEL} model model
+        @param {ClassModel} model model
         @param {number} [pageNumber] Page to load results into
         @returns {void}
     */

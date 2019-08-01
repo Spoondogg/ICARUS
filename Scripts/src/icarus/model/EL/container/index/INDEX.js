@@ -12,12 +12,12 @@ import PANEL from '../../dialog/panel/PANEL.js';
 export default class INDEX extends CONTAINER {
 	/** An abstract indexed view of a collection of Objects
 	    @param {CONTAINER} node Parent node
-	    @param {MODEL} [model] INDEX model	    
+	    @param {ContainerModel} [model] Model	    
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);
         this.addClass('index');
-        this.menu = new MENU(this.body.pane, new MODEL().set('name', 'index'));
+        this.menu = new MENU(this.body.pane, MODELS.menu('index'));
         this.addContainersMenu();
         this.menu.el.dispatchEvent(new Expand(this.menu));
 	}

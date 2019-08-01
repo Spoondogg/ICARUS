@@ -379,9 +379,6 @@ export default class MAIN extends CONTAINER {
 			this.createDocumentMap(model);
 			// Search
             let tabbable = this.navheader.addTabbableMenu('SEARCH', 'SEARCH', ICONS.SEARCH, []);
-                /*this.navheader.createNavItemIconModel('HISTORY1', 'HISTORY1', ICONS.HISTORY),
-                this.navheader.createNavItemIconModel('HISTORY2', 'HISTORY2', ICONS.HISTORY)
-            ]);*/
 
             /// Override input defaults and pass to search
             /** @type {NAVSEARCH} */

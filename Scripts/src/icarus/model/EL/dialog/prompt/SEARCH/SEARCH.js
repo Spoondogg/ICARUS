@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { Expand } from '../../../nav/menu/MENU.js';
+import MENU, { Expand, MODELS } from '../../../nav/menu/MENU.js';
 import PROMPT, { ATTRIBUTES, DIALOG, DIV, EL, ICONS, MODEL } from '../PROMPT.js';
 /** A Prompt that has a form configured as a SEARCH
     @description Creates a modal and displays a text well and any included buttons
@@ -12,9 +12,7 @@ export default class SEARCH extends PROMPT {
 	constructor(model) {
 		super(model);
         this.addClass('prompt-search');
-        //$(this.form.el).insertBefore(this.footer.buttonGroup.el);
-        this.results = new MENU(this.body.pane, new MODEL('search-results').set('name', 'results'));
-        //$(this.results.el).insertAfter(this.form.el);
+        this.results = new MENU(this.body.pane, MODELS.menu('results', new MODEL('search-results')));
         this.results.el.dispatchEvent(new Expand(this.results));
     }
 }

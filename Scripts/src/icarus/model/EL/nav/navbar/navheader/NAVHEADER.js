@@ -1,5 +1,5 @@
 /** @module */
-import NAVBAR, { ANCHOR, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
+import NAVBAR, { ANCHOR, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
 import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
@@ -7,13 +7,11 @@ import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 */
 export default class NAVHEADER extends NAVBAR {
 	/** Constructs a NAVBAR that acts as a Top level Header for a Container
-	    @param {EL} node Parent Node
-	    @param {MODEL} [model] Model
-        param {object} [options] Optional options
+	    @param {EL} node Node
+	    @param {MenuModel} [model] Model
 	*/
-    constructor(node, model) { //options = { tabTarget: null }
+    constructor(node, model) {
         super(node, model);
-        //this.options = options;
 		this.addClass('nav-header');
 		/** The CONTAINER Tab 
 		    @todo Spoon.svg
@@ -32,9 +30,9 @@ export default class NAVHEADER extends NAVBAR {
             container.getFactory().save(false, container, container, 'label');
         });
         this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, [
-            this.createNavItemIconModel('ELEMENTS'),
-            this.createNavItemIconModel('CRUD'),
-            this.createNavItemIconModel('DOM')
+            MODELS.navitem('ELEMENTS', ICONS.ELEMENTS, 'ELEMENTS'),
+            MODELS.navitem('CRUD', ICONS.CRUD, 'CRUD'),
+            MODELS.navitem('DOM', ICONS.DOM, 'DOM')
         ]);
 	}
 	/** Adds a single NAV Icon and associated SIDEBAR

@@ -63,29 +63,32 @@
     @property {Data} [data] Data
     @property {Meta} [meta] Meta
 */
-/** Represents a CONTAINER Class Structure
+/** Represents a Controller Class Structure
     @typedef {Object} Controller A Controller-like Object Model
     @param {UId} id The unique application id
-        @param {Name} user A machine friendly username
-        @param {boolean} dev If true, dev-options are enabled
-        @param {number} recursionLimit The maximum number of recursive loops before an error is thrown
-        @param {Name} name The application name
-        @param {string} version The application version
-        @param {string} token The session token
-        @param {FACTORY} factory The default FACTORY
+    @param {Name} user A machine friendly username
+    @param {boolean} dev If true, dev-options are enabled
+    @param {number} recursionLimit The maximum number of recursive loops before an error is thrown
+    @param {Name} name The application name
+    @param {string} version The application version
+    @param {string} token The session token
+    @param {FACTORY} factory The default FACTORY
 */
 /** Represents a CONTAINER Class Structure
-    @typedef {Object} ContainerLike A Container-like Object Model
+    @typedef {Object} ClassModel A generic Class-like Object Model
     @property {UId} [id] UId
-    @property {Label} [label=""] Label
-    @property {boolean} [shared=false] Shared
+    @property {number} [shared=-1] Shared
     @property {string} [status=1] Status
-    @property {UIdList} [subsections] Child Container UIds
-    @property {UIdList} [tags] Tag UIds
-    @property {string} [name=''] Name
     @property {string} [authorId=null] Author Id
     @property {string} [dateCreated=null] Date Created
     @property {string} [dateLastModified=null] Date LastModified
+*/
+/** Represents a collection of Container Properties
+    @typedef {Object} ContainerProps A collections of Container Properties
+    @property {Label} [label=""] Label
+    @property {UIdList} [subsections] Child Container UIds
+    @property {UIdList} [tags] Tag UIds
+    @property {string} [name=''] Name
     @property {UId} [dataId] Data Formpost UId
     @property {UId} [attributesId] Attributes Formpost UId
     @property {UId} [metaId] Meta Formpost UId
@@ -102,7 +105,7 @@
 */
 
 /** An abstract CONTAINER Class
-    @typedef {Model & ContainerLike} ContainerModel - Represents a Container Object Model
+    @typedef {Model & ContainerProps} ContainerModel - Represents a Container Object Model
 */
 
 /** An abstract CONTAINER Class
@@ -113,7 +116,7 @@
 
 /**
     FORM generators often need to pass on a Container reference
-    @typedef {Model & {container: ContainerLike, loader: LoaderLike}} ModelWithContainer - A MODEL requiring a CONTAINER
+    @typedef {ContainerModel & {container: ContainerModel, loader: LoaderLike}} ModelWithContainer - A MODEL requiring a CONTAINER
 */
 /**
     @typedef {Model & {loader: LoaderLike}} ModelWithLoader - A MODEL requiring a LOADER
@@ -184,6 +187,10 @@
 
 ///// END LOADER.log
 
+/** Represents a MENU Object Model
+    @typedef {{name: Name} & Model} MenuModel Represents a MENU Object Model
+*/
+
 /** Represents a set of options for a Loader log
     @typedef {Object} MenuOptions Represents a set of options for a Menu
     @property {boolean} canActivate Can be activated
@@ -191,9 +198,14 @@
 */
 
 ///// CONTAINERTHUMBNAIL
+/** Represents a generic Thumbnail Model
+    @typedef {Object} ThumbnailModel Represents a generic Thumbnail Model
+    @property {UId} id Unique Identifier that this thumbnail represents
+    @property {string} label Label
+*/
 
 /** Represents a Container Thumbnail Model
-    @typedef {Object} ContainerThumbnailModel Represents a set of options for a Loader log
+    @typedef {Object} ContainerThumbnailModel Represents a set of options for a Container Thumbnail
     @property {UId} id Container UId
     @property {CSV} subsections Delimited list of subsections
     @property {string} authorId Author UId
@@ -204,8 +216,6 @@
     @property {string} value Value
     @property {object} jsonResults JSON Results
 */
-
-/////
 
 ///// NAVITEM 
 
@@ -223,10 +233,7 @@
 */
 
 /** Represents a model for a ButtonGroup
-    @typedef {Object} ButtonGroupModel Model
-    @property {string} [label="buttons"] Label
-    @property {string} [align=""] Alignment
-    @property {string} [name=""] Name
+    @typedef {{align:string, name: Name} & Model} ButtonGroupModel Represents a model for a ButtonGroup
 */
 
 /** Represents a set of options for a Clickable interface
@@ -239,6 +246,7 @@
     @typedef {Object} ButtonModel Model
     @property {string} [label=""] Label
     @property {string} [icon="ICONS.BLANK"] Icon
+    @property {Name} [name=""] Name
     @property {ButtonAttributes} [attributes] Button Attributes
 */
 
@@ -338,7 +346,7 @@
 */
 
 /** Represents a model for a NAVITEM
-    @typedef {ButtonModel & {target:EL}} NavItemModel - NavItemModel
+    @typedef {ButtonModel & {name:Name, target:EL}} NavItemModel - NavItemModel
 */
 
 /** Represents a model for an IMG Class
