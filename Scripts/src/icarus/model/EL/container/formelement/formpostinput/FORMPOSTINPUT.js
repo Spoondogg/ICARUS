@@ -1,8 +1,8 @@
 /** @module */
 import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
-import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
 import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
 import SPAN, { MODELS } from '../../../span/SPAN.js';
+import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element inside a group of form elements
     @class
     @extends FORMELEMENT
@@ -16,7 +16,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, new INPUTMODEL(new MODEL(), {
+        this.input = new INPUT(this.inputGroup, MODELS.input(new MODEL(), {
 			name: this.attributes.name,
 			value: this.attributes.value,
 			type: this.attributes.type || 'TEXT',

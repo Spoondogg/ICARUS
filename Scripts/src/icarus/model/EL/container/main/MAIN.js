@@ -9,7 +9,6 @@ import CLASSINDEXFACTORY from '../index/classindex/CLASSINDEXFACTORY.js';
 import FORMFACTORY from '../../form/FORMFACTORY.js';
 import IMG from '../../img/IMG.js';
 import LOADER from '../../dialog/loader/LOADER.js';
-import MAINMODEL from './MAINMODEL.js';
 import NAVFOOTER from '../../nav/navbar/navfooter/NAVFOOTER.js';
 import SIDEBAR from '../sidebar/SIDEBAR.js';
 import TABLEFACTORY from '../../table/TABLEFACTORY.js';
@@ -20,7 +19,7 @@ import USERMENU from '../../nav/menu/usermenu/USERMENU.js';
 */
 export default class MAIN extends CONTAINER {
 	/** Constructs a MAIN Container and populates the DOM with any relevant elements
-	    @param {MAINMODEL} model APP model
+	    @param {MainModel} model Model
     */
 	constructor(model) {
         super(document.body, 'MAIN', model, DATAELEMENTS.get('MAIN').containers);
@@ -33,7 +32,7 @@ export default class MAIN extends CONTAINER {
         this.navheader.tab.addClass('tab-center');
 		this.addNavOptions(model);
         this.setFactory(model.factory);
-		this.loader = model.loader;
+        this.setLoader(model.loader);
 		this.url = model.url;
 		/** The active container has access to keybindings */
 		this.activeContainer = null;
@@ -99,7 +98,6 @@ export default class MAIN extends CONTAINER {
             }*/
         });
     }
-
     /** Scroll to refresh
         @see https://dev.to/vijitail/pull-to-refresh-animation-with-vanilla-javascript-17oc
         @returns {void}
@@ -118,6 +116,15 @@ export default class MAIN extends CONTAINER {
         };
         //let main = this.el;
         this.isLoading = false;
+    }
+    /** Sets this element's loader
+        @param {LOADER} loader An element loader
+        @returns {void}
+    */
+    setLoader(loader) {
+        if (this.loader === null) {
+            this.loader = loader;
+        }
     }
     /** In the swipeStart() function, we’ll capture the touch coordinates 
         and assign it to the pStart object.
@@ -282,8 +289,7 @@ export default class MAIN extends CONTAINER {
             }));
         });
     }
-	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants.  
-        param {MAINMODEL} model APP model
+	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants. 
 	    @returns {void}
 	*/
     createDocumentMap() {
@@ -364,7 +370,7 @@ export default class MAIN extends CONTAINER {
     }
     /* eslint-disable max-lines-per-function */
 	/** Adds default Nav Items to the Nav Bar including the label
-        @param {MAINMODEL} model APP model
+        @param {MainModel} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	addNavOptions(model) {
@@ -787,5 +793,5 @@ export default class MAIN extends CONTAINER {
 		document.body.classList.remove('compact');
 	}
 }
-export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MAINMODEL, MENU, MODEL, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, NAVSEARCH, SIDEBAR, TABLEFACTORY }
+export { Activate, BUTTON, BUTTONGROUP, CONTAINERFACTORY, Deactivate, EL, FACTORY, FORM, LOADER, MENU, MODEL, MODELS, NAVBAR, NAVHEADER, NAVITEM, NAVITEMICON, NAVSEARCH, SIDEBAR, TABLEFACTORY }
 /* eslint-enable max-lines, max-statements */

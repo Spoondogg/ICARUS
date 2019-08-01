@@ -332,6 +332,14 @@ $z-bottom: -1;
     &.selected {
         @extend %selected;
     }
+
+    > .icon {
+        float: left;
+    }
+
+    > .button-label {
+        line-height: 2.5rem;
+    }
 }
 // An abstract navigation item with clickable events
 %nav-item {
@@ -3024,6 +3032,10 @@ html {
 
                                     &.active {
                                         background-color: orange;
+                                    }
+
+                                    > .icon {
+
                                     }
                                 }
                             }

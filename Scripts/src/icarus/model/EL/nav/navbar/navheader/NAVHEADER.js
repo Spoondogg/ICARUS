@@ -9,13 +9,11 @@ export default class NAVHEADER extends NAVBAR {
 	/** Constructs a NAVBAR that acts as a Top level Header for a Container
 	    @param {EL} node Parent Node
 	    @param {MODEL} [model] Model
-        @param {object} [options] Optional options
+        param {object} [options] Optional options
 	*/
-    constructor(node, model, options = {
-        tabTarget: null
-    }) {
+    constructor(node, model) { //options = { tabTarget: null }
         super(node, model);
-        this.options = options;
+        //this.options = options;
 		this.addClass('nav-header');
 		/** The CONTAINER Tab 
 		    @todo Spoon.svg

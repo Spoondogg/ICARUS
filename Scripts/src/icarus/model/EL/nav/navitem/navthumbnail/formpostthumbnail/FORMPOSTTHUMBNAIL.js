@@ -1,6 +1,6 @@
 /** @module */
+import BUTTON, { MODELS } from '../../../../button/BUTTON.js';
 import NAVTHUMBNAIL, { ATTRIBUTES, Collapse, EL, Expand, ICONS, MODEL } from '../NAVTHUMBNAIL.js'; //STRING
-import BUTTON from '../../../../button/BUTTON.js';
 import { Clickable } from '../../../../container/CONTAINER.js';
 import UL from '../../../../list/ul/UL.js';
 /** A full-width NavItem with a Thumbnail image, label and description
@@ -8,29 +8,19 @@ import UL from '../../../../list/ul/UL.js';
 */
 export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
-        @param {CONTAINER} node The model
-        @param {MODEL} model The Thumbnail model
-        @param {UId} model.id Unique Identifier that this thumbnail represents
-        @param {UId} model.formId Unique Identifier that this thumbnail represents
-        @param {string} model.authorId Author Id
-        @param {int} model.shared Shared status
-        @param {int} model.isPublic Public status
-        @param {int} model.status Status
-        @param {string} model.dateCreated Date Created
-        @param {string} model.dateLastModified Date LastModified
-        param {object} model.xmlResults Shared status
-        @param {object} model.jsonResults JSON Results
+        @param {CONTAINER} node Node
+        @param {ContainerModel} model Model
     */
 	constructor(node, model) {
 		super(node, model);
         this.addClass('nav-item-thumbnail-formpost');
     }
     /** Constructs a thumbnail that represents the given model
-        @param {MODEL} model Model
+        @param {FormPostModel} model Model
         @returns {void}
     */
     constructThumbnail(model) {
-        //console.log('constructThumbnail', model);
+        console.log('FORMPOSTTHUMBNAIL.constructThumbnail', model);
         let { id, key, val } = model;
         let headerStr = 'id: ' + id;
         if (typeof model.key !== 'undefined') {
@@ -40,11 +30,7 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         //this.p.setInnerHTML(new STRING(model.jsonResults).truncate(128));
         try {
             if (model.jsonResults) {
-                let button = new BUTTON(this.p, new MODEL({
-                    label: 'Show / Hide',
-                    glyphicon: ICONS.DATA,
-                    buttonType: 'BUTTON'
-                }));
+                let button = new BUTTON(this.p, MODELS.button('Show / Hide', ICONS.DATA));
                 button.addClass('pill-button');
 
                 let list = new UL(this.p);
@@ -118,4 +104,4 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         }
     }*/
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTRIBUTES, EL, MODEL, NAVTHUMBNAIL }

@@ -42,7 +42,7 @@ export default class Cacheable extends IFACE {
 	    
         this.methods.getId = () => node.id;*/
         /** Sets this Container's unique identifier to the given id
-            @param {number} id Container UId
+            @param {UId} id Container UId
             @returns {ThisType} Method Chain
         
         this.methods.setId = (id) => {

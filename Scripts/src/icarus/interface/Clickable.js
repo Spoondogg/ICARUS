@@ -5,6 +5,7 @@ import Deactivate from '../event/Deactivate.js';
 import Deselect from '../event/Deselect.js';
 import LongClick from '../event/LongClick.js';
 import { LongclickDelay } from '../enums/StyleVars.js';
+import { MODELS } from '../enums/DATAELEMENTS.js';
 import Select from '../event/Select.js';
 import Selectable from './Selectable.js';
 import Switchable from './Switchable.js';
@@ -20,14 +21,10 @@ export default class Clickable extends IFACE {
             - Long Click performs contextual Events, Triggers etc
         @todo Stop Propagation could use some work
         @param {EL} node Class to implement this interface (Typically 'this')
-        @param {MODEL} options Click Timer Options
+        @param {ClickableOptions} options Click Timer Options
 	*/
-	constructor(node, options = new MODEL().set({
-		delay: 200,
-		longClickDelay: LongclickDelay,
-		stopPropagation: true
-	})) {
-		super(node, 'clickable');
+    constructor(node, options = MODELS.clickableOptions()) {
+        super(node, 'clickable');
         this.options = options;
 		node.implement(new Switchable(node));
 		node.implement(new Selectable(node));
@@ -35,6 +32,17 @@ export default class Clickable extends IFACE {
 		node.timer = null;
         node.touchtime = 0; // mobile double click detection
     }
+    /** Creates a Clickable Options constructor
+        @returns {function(): ClickableOptions} ClickableOptions Constructor
+    
+    createOptions() {
+        return this.node.makeStruct([
+            ['deactivateSiblings', false],
+            ['delay', 200],
+            ['longClickDelay', LongclickDelay],
+            ['stopPropagation', true]
+        ]);
+    }*/
     /** Disables the browser context menu
         @description This is generally not considered a good practice.  Use sparingly and be sure to enable again once you're done
         @see https://stackoverflow.com/questions/737022/how-do-i-disable-right-click-on-my-web-page
@@ -47,7 +55,7 @@ export default class Clickable extends IFACE {
         });       
     }
     /** Enables the Context Menu in cases where it may have been disabled
-        @param {number} delay Delay
+        @param {Delay} delay Delay
         @returns {Promise<boolean>} Resolves true on completion
     */
     enableContextmenu(delay = 500) {
@@ -185,4 +193,4 @@ export default class Clickable extends IFACE {
 		}
 	}
 }
-export { Activate, Deactivate, Deselect, EL, IFACE, Select, Selectable, Switchable }
+export { Activate, Deactivate, Deselect, EL, IFACE, MODEL, Select, Selectable, Switchable }

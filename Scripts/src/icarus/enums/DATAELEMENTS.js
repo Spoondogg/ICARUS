@@ -118,6 +118,41 @@ export const MODELS = {
         ['name', '']
     ]),
 
+    /** Create a buttonGroup model structure constructor
+        @type {function(FormPostIndexOptions): MODEL}
+        @param {FormPostIndexOptions} Model
+        @returns {MODEL} Model
+    */
+    formPostIndexOptions: makeStruct([
+        ['classType', 'MAIN'],
+        ['query', ''],
+        ['searchType', 'CLASS'],
+        ['formId']
+    ]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(ClassIndexOptions): MODEL}
+        @param {ClassIndexOptions} Model
+        @returns {MODEL} Model
+    */
+    classIndexOptions: makeStruct([
+        ['classType', 'MAIN'],
+        ['query', ''],
+        ['searchType', 'CLASS']
+    ]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(ClickableOptions): MODEL}
+        @param {ClickableOptions} Model
+        @returns {MODEL} Model
+    */
+    clickableOptions: makeStruct([
+        ['deactivateSiblings', false],
+        ['delay', 200],
+        ['longClickDelay', 2000],
+        ['stopPropagation', true]
+    ]),
+
     /** Create a dialog model structure constructor
         @type {function(DialogModel): MODEL}
         @param {DialogModel} Model
@@ -166,6 +201,28 @@ export const MODELS = {
         @returns {MODEL} Model
     */
     icon: makeStruct([['icon', ICONS.BLANK]]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(LoaderLogOptions): MODEL}
+        @param {LoaderLogOptions} Model
+        @returns {MODEL} Model
+    */
+    loaderLogOptions: makeStruct([
+        ['show', true],
+        ['toConsole', false],
+        ['delay', 300],
+        ['type', 'info']
+    ]),
+
+    /** Create a buttonGroup model structure constructor
+        @type {function(MenuOptions): MODEL}
+        @param {MenuOptions} Model
+        @returns {MODEL} Model
+    */
+    menuOptions: makeStruct([
+        ['canActivate', true],
+        ['scrollIntoView', false]
+    ]),
 
     /** Create a navitem model structure constructor
         @type {function(MainModel): MODEL}

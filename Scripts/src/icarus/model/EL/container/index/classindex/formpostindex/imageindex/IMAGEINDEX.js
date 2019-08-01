@@ -1,5 +1,5 @@
 /** @module */
-import FORMPOSTINDEX, { CONFIRM, ICONS, MODEL } from '../FORMPOSTINDEX.js';
+import FORMPOSTINDEX, { CONFIRM, ICONS, MODEL, MODELS } from '../FORMPOSTINDEX.js';
 import IMAGETHUMBNAIL, { NAVTHUMBNAIL } from '../../../../../nav/navitem/navthumbnail/imagethumbnail/IMAGETHUMBNAIL.js';
 /** Contains a list of IMAGE THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
@@ -8,16 +8,11 @@ import IMAGETHUMBNAIL, { NAVTHUMBNAIL } from '../../../../../nav/navitem/navthum
 export default class IMAGEINDEX extends FORMPOSTINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
-        @param {CONTAINER} node Parent node
-        @param {MODEL} model INDEX model
-        @param {FormPostIndexOptions} [options] Optional options
+        @param {CONTAINER} node Node
+        @param {MODEL} model Model
+        @param {FormPostIndexOptions} [options] Options
 	*/
-    constructor(node, model, options = {
-        classType: 'IMAGE',
-        query: model.data.query || '',
-        formId: 3
-    }) {
-        //console.log('ImageIndex', 'FORMPOST', options);
+    constructor(node, model, options = MODELS.formPostIndexOptions('IMAGE', model.data.query || '', 'CLASS', 3)) {
         super(node, model, options);
         this.addClass('imageindex');        
     }
@@ -33,39 +28,27 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         });
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {MODEL} model The Thumbnail model
-        @param {number} model.id Unique Identifier that this thumbnail represents
-        @param {string} model.label The Thumbnail label
+	    @param {FormPostModel} model The Thumbnail model
 	    @param {string} className The className that the thumbnail represents,
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail({
-        id,
-        //formId,
-        authorId,
-        shared,
-        isPublic,
-        status,
-        dateCreated,
-        dateLastModified,
-        jsonResults
-    }, className, pageNumber = 0) {
+    createThumbnail(model, className, pageNumber = 0) {
         let [pagedMenu] = this.menu.get(pageNumber);
         return pagedMenu.addChild(new IMAGETHUMBNAIL(pagedMenu, new MODEL().set({
-            id,
-            //formId,
-            authorId,
-            shared,
-            isPublic,
-            status,
-            dateCreated,
-            dateLastModified,
-            jsonResults
+            id: model.id,
+            //formId: model.formId,
+            authorId: model.authorId,
+            shared: model.shared,
+            isPublic: model.isPublic,
+            status: model.status,
+            dateCreated: model.dateCreated,
+            dateLastModified: model.dateLastModified,
+            jsonResults: model.jsonResults
         }), className));
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
-        @param {MODEL} model model
+        @param {FormPostModel} model model
         @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
@@ -115,3 +98,4 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         }
     }
 }
+export { NAVTHUMBNAIL }

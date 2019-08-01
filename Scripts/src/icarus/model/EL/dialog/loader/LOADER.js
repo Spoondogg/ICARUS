@@ -1,5 +1,5 @@
 /** @module */
-import DIALOG, { DIV, EL, MODEL } from '../../dialog/DIALOG.js'; //ATTRIBUTES
+import DIALOG, { DIV, EL, MODEL, MODELS } from '../../dialog/DIALOG.js'; //ATTRIBUTES
 import CONSOLE from '../../list/console/CONSOLE.js';
 import PROGRESSBAR from './PROGRESSBAR.js';
 /** A Dialog showing loading details
@@ -9,9 +9,9 @@ import PROGRESSBAR from './PROGRESSBAR.js';
 */
 export default class LOADER extends DIALOG {
 	/** Constructs a LOADER dialog
-        @param {number} value Percentage complete (integer)
-        @param {string} label The header text for this modal	 
-        @param {CONTAINER} container Parent Container
+        @param {number} [value] Percentage complete (integer)
+        @param {string} [label] The header text for this modal	 
+        @param {ContainerModel} container Parent Container
     */
 	constructor(value = 0, label = '', container = null) {
 		super(new MODEL().set({
@@ -38,12 +38,7 @@ export default class LOADER extends DIALOG {
 	    @param {LoaderLogOptions} [options] Optional Options
 	    @returns {Promise<LOADER>} Promise to return this LOADER after success
 	*/
-    log(value, text = '', options = {
-        show: true,
-        toConsole: false,
-        delay: 300,
-        type: 'info'
-    }) {
+    log(value, text = '', options = MODELS.loaderLogOptions(true, false, 300, 'info')) {
         return this.chain(() => {
             this.progressBar.setType(options.type);
 			this.progressBar.el.style.width = value + '%';

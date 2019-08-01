@@ -1,7 +1,7 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import FORM, { PAYLOAD } from '../../../../form/FORM.js';
-import FORMPOSTTHUMBNAIL from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
+import FORMPOSTTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
 import { createInputModel } from '../../../CONTAINER.js';
 /** Contains a list of THUMBNAILS for each Container of the specified 
     classType available to this user.
@@ -13,14 +13,14 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Parent node
         @param {MODEL} model INDEX model
-        @param {FormPostIndexOptions} [options] Optional options
+        @param {FormPostIndexOptions} [options] Options
 	*/
-    constructor(node, model, options = {
-        classType: 'FORMPOST',
-        query: model.data.query || '',
-        formId: model.data.formId || -1,
-        caller: null
-    }) {
+    constructor(node, model, options = MODELS.formPostIndexOptions(
+        'FORMPOST',
+        model.data.query || '',
+        'CLASS',
+        model.data.formId || -1
+    )) {
         super(node, model, options);
         this.addClass('formpostindex');
         this.setFormId(model.data.formId || options.formId);
@@ -47,35 +47,23 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         });
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {MODEL} model The Thumbnail model
-        @param {number} model.id Unique Identifier that this thumbnail represents
-        @param {string} model.label The Thumbnail label
+	    @param {FormPostModel} model The Thumbnail model
 	    @param {string} className The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail({
-        id,
-        formId,
-        authorId,
-        shared,
-        isPublic,
-        status,
-        dateCreated,
-        dateLastModified,
-        jsonResults
-    }, className, pageNumber = 0) {
+    createThumbnail(model, className, pageNumber = 0) {
         let [pagedMenu] = this.menu.get(pageNumber);
         return pagedMenu.addChild(new FORMPOSTTHUMBNAIL(pagedMenu, new MODEL().set({
-            id,
-            formId,
-            authorId,
-            shared,
-            isPublic,
-            status,
-            dateCreated,
-            dateLastModified,
-            jsonResults
+            id: model.id,
+            formId: model.formId,
+            authorId: model.authorId,
+            shared: model.shared,
+            isPublic: model.isPublic,
+            status: model.status,
+            dateCreated: model.dateCreated,
+            dateLastModified: model.dateLastModified,
+            jsonResults: model.jsonResults
         }), className));
     }
     /** Retrieves the given formpost by id and updates caller with id
@@ -232,4 +220,4 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         }, 2000);
     }
 }
-export { CLASSVIEWER, CONFIRM, Expand, FORM, ICONS, MODEL, PAYLOAD, PROMPT }
+export { CLASSVIEWER, CONFIRM, Expand, FORM, ICONS, MODEL, MODELS, NAVTHUMBNAIL, PAYLOAD, PROMPT }

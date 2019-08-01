@@ -3,7 +3,7 @@
 import CONFIRM, { PROMPT } from '../../dialog/confirm/CONFIRM.js';
 import CONTAINER, { Activate, MODEL, MODELS } from '../CONTAINER.js';
 import CONTAINERINDEX, { CLASSVIEWER } from './classindex/containerindex/CONTAINERINDEX.js';
-import MENU, { Collapse, Expand } from '../../nav/menu/MENU.js';
+import MENU, { Collapse, Expand, NAVITEMICON } from '../../nav/menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 import PANEL from '../../dialog/panel/PANEL.js';
 /** Contains a high level view of all objects owned by this user
@@ -191,11 +191,11 @@ export default class INDEX extends CONTAINER {
 		});
 	}
 	/** Creates a modal and loads the specified container
-	    @param {number} delay Delay in milliseconds
+	    @param {Delay} delay Delay in milliseconds
 	    param {string} title Modal Title
 	    param {EL} node Modal node to append to
 	    @param {string} className Object class name
-	    @param {number} id Object id
+	    @param {UId} id Container UId
 	    @returns {void}
 	*/
 	launchPreview(delay = 500, className, id) { // title = 'Preview', // node
@@ -213,4 +213,4 @@ export default class INDEX extends CONTAINER {
 		}, delay);
 	}
 }
-export { CONTAINER }
+export { CONTAINER, NAVITEMICON }

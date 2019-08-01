@@ -11,10 +11,10 @@ import CACHE from '../container/main/CACHE.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
+import FACTORY from '../FACTORY.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
-import INPUTMODEL from '../input/INPUTMODEL.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
@@ -753,7 +753,7 @@ export default class CONTAINER extends GROUP {
         });
     }
     /** Adds CRUD related events for this CONTAINER
-        @param {number} delay Delay
+        @param {Delay} delay Delay
         @todo Implement [create, read/open/load, update/modify, remove,delete]
         @returns {void}
     */
@@ -885,7 +885,7 @@ export default class CONTAINER extends GROUP {
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
         to represent this CONTAINER in a FORM
-	    @returns {Array<INPUTMODEL>} An array of input models
+	    @returns {Array<InputModel>} An array of input models
 	*/
 	createContainerInputs() {
 		//console.log(this.toString() + '.createContainerInputs()', this);
@@ -964,7 +964,16 @@ export default class CONTAINER extends GROUP {
 			return [a, b, c];
 		}
 		return [false, false, false];
-	}
+    }
+    /** Sets this element's factory
+        @param {FACTORY} factory An element factory
+        @returns {void}
+    */
+    setFactory(factory) {
+        if (this.factory === null) {
+            this.factory = factory;
+        }
+    }
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
         @param {MENU} menu Target Menu
 	    @param {Array<string>} containerList An array of container class names
@@ -1167,7 +1176,7 @@ export default class CONTAINER extends GROUP {
 		//return this.el.getAttribute('id');
 	}
 	/** Sets this Container's unique identifier to the given id
-	    @param {number} id Container UId
+	    @param {UId} id Container UId
 	    @returns {ThisType} Method Chain
 	*/
     setId(id) {
@@ -1220,7 +1229,7 @@ export default class CONTAINER extends GROUP {
 		then Populates accordingly
 	    @todo Prompt the user for an Id to load
 	    @todo create a simple application browser to retrieve a MAIN
-		@param {number} id App Id to load
+		@param {UId} id App Id to load
 		@returns {Promise<ThisType>} Promise Chain
 	*/
     load(id) {
@@ -1534,5 +1543,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
+export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
 /* eslint-enable max-lines, max-statements */

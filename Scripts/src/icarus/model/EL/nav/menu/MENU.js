@@ -2,6 +2,7 @@
 import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import UL, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL } from '../../list/ul/UL.js';
+import { MODELS } from '../../../../enums/DATAELEMENTS.js';
 import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
@@ -17,10 +18,7 @@ export default class MENU extends LIST {
         @param {string} [element] HTML Element Tag
         @param {{canActivate, scrollIntoView, UId}} options Optional Parameters
 	*/
-	constructor(node, model, element = 'UL', options = {
-		canActivate: true,
-		scrollIntoView: false
-	}) {
+    constructor(node, model, element = 'UL', options = MODELS.menuOptions()) {
 		super(node, model, element);
 		this.addClass('menu');
 		this.setAttribute('name', model.name);

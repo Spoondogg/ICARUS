@@ -1,6 +1,6 @@
 /** @module */
 import Switchable, { Activate, Deactivate, EL, IFACE } from './Switchable.js';
-
+import { MODELS } from '../enums/DATAELEMENTS.js';
 /** An interface for Tab driven Events.  
     @description An element is tabbable when it can be activated/deactivated by a separate element
     @class
@@ -10,12 +10,9 @@ export default class Tabbable extends Switchable {
 	/** A series of Tab-Switch Related Events and Methods
         @param {EL} node Class to implement this interface (Typically 'this')
         @param {EL} tab Switchable element bound to node
-        @param {object} [options] Optional options
-        @param {boolean} [deactivateSiblings] If true, tab siblings are deactivated when tab is activated
+        @param {ClickableOptions} [options] Options
 	*/
-    constructor(node, tab, options = {
-        deactivateSiblings: false
-    }) {
+    constructor(node, tab, options = MODELS.clickableOptions()) {
         super(node, 'tabbable');
         this.options = options;
         tab.el.addEventListener('activate', () => {
