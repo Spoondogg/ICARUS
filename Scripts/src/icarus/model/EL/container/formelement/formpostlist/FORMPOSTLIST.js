@@ -17,12 +17,12 @@ export default class FORMPOSTLIST extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, MODELS.input(new MODEL(), {
-			name: this.attributes.name,
-			value: this.attributes.value,
-			type: this.attributes.type || 'TEXT',
-			readonly: true
-        }));
+        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', MODELS.inputAttributes(
+			this.attributes.name,
+            this.attributes.value,
+            this.attributes.type || 'TEXT',
+			true
+        )));
         /** @type {FORM} */
 		this.form = null;
 		this.createInput();

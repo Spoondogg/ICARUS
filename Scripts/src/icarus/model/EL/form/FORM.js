@@ -202,10 +202,13 @@ export default class FORM extends CONTAINER {
 	    @returns {Array} An array of INPUT models
 	*/
 	defaultFormPostInputArray(payload) {
-		return [
-			createInputModel('INPUT', 'id', payload.model.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'shared', payload.model.shared || -1, 'shared', 'CHECKBOX'),
-            createInputModel('INPUT', 'isPublic', payload.model.isPublic || -1, 'isPublic', 'CHECKBOX')
+        return [
+            MODELS.input('INPUT', MODELS.inputAttributes('id', payload.model.id, 'NUMBER', true), 'ID', 'NUMBER'),
+			//createInputModel('INPUT', 'id', payload.model.id, 'ID', 'NUMBER', true),
+            MODELS.input('INPUT', MODELS.inputAttributes('shared', payload.model.shared || -1, 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            //createInputModel('INPUT', 'shared', payload.model.shared || -1, 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', MODELS.inputAttributes('isPublic', payload.model.isPublic || -1, 'CHECKBOX'), 'isPublic', 'CHECKBOX')
+            //createInputModel('INPUT', 'isPublic', payload.model.isPublic || -1, 'isPublic', 'CHECKBOX')
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST

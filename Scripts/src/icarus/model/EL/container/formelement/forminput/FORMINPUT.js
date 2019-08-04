@@ -7,18 +7,19 @@ import INPUT from '../../../input/INPUT.js';
 import MENU from '../../../nav/menu/MENU.js';
 /** Represents an INPUT for an Icarus Form
     @class
-    @extends FORMELEMENT
 */
 export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
         return this.chain(() => {
-            this.input = new INPUT(this.body.pane, MODELS.input(new MODEL(), {
-                type: this.attributes.type || 'TEXT', // || this.data.type
-                list: this.attributes.name + '-options',
-                name: this.attributes.name,
-                value: this.attributes.value || '',
-                placeholder: this.attributes.placeholder || ''
-            }));
+            this.input = new INPUT(this.body.pane, MODELS.input('INPUT', 
+                MODELS.inputAttributes(
+                    this.attributes.name,
+                    this.attributes.value || '',
+                    this.attributes.type || 'TEXT',
+                    false,
+                    this.attributes.placeholder || ''
+                ))
+            );
 			this.configureInput();
 		});
 	}

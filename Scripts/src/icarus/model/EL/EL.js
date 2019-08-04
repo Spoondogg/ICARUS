@@ -522,10 +522,11 @@ export default class EL extends MODEL {
 	processAttributes(attributes) {
 		for (let attr in attributes) {
             if (attr !== 'innerHTML') {
+                let value = attributes[attr];
                 if (attr === 'class') {
-                    this.addClass(attributes[attr]);
-                } else {
-                    this.setAttribute(attr, attributes[attr]);
+                    this.addClass(value);
+                } else if (value !== null && typeof value !== 'object' && typeof value !== 'undefined') {
+                    this.setAttribute(attr, value);
                 }
             } else if (attr === 'innerHTML') {
                 console.log(this.toString() + '.processAttributes()', attr, attributes[attr]);

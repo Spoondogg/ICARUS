@@ -6,14 +6,14 @@ import INPUT, { ATTRIBUTES, EL, MODEL, MODELS } from '../../../../input/INPUT.js
 */
 export default class FORMINPUTTOKEN extends INPUT {
 	/** Constructs a FORMINPUTTOKEN element
-	    @param {EL} node Parent
+	    @param {EL} node Node
 	*/
 	constructor(node) {
-		super(node, MODELS.input(new MODEL(), {
-			type: 'HIDDEN',
-			name: '__RequestVerificationToken',
-			value: document.getElementsByTagName('meta').token.content
-		}));
+		super(node, MODELS.input('INPUT', MODELS.inputAttributes(
+            '__RequestVerificationToken',
+            document.getElementsByTagName('meta').token.content,
+            'HIDDEN'
+		)));
 	}
 }
 export { ATTRIBUTES, EL, MODEL }

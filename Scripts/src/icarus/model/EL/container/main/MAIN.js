@@ -530,7 +530,8 @@ export default class MAIN extends CONTAINER {
                 form.label = 'Forgot Password';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
+                    MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL')
+                    //createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
                 ]);
 
                 let [btnForgotPassword] = form.footer.buttonGroup.get();
@@ -612,9 +613,12 @@ export default class MAIN extends CONTAINER {
                         let email = this.url.searchParams.get('email');
                         form.setAction('/Account/Login');
                         form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                            createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
-                            createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                            createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+                            MODELS.input('INPUT', MODELS.inputAttributes('Email', email, 'EMAIL'), 'Email / Username', 'EMAIL'),
+                            //createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
+                            MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'EMAIL'), 'Password', 'PASSWORD'),
+                            //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                            MODELS.input('INPUT', MODELS.inputAttributes('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
+                            //createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                         ]);
                         //console.log('ButtonGroup', form.footer.buttonGroup.get());
 
@@ -660,10 +664,13 @@ export default class MAIN extends CONTAINER {
 			form.setAction('/Account/Login');
             form.addClass('login');
             //form.children[0].children[0].addInputElements([
-			form.get()[0].get()[0].addInputElements([
-				createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-				createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-				createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
+            form.get()[0].get()[0].addInputElements([
+                MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
+                MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                MODELS.input('INPUT', MODELS.inputAttributes('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
+				//createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+				//createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+				//createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
             form.footer.buttonGroup.addButton(MODELS.button('Register - Local')).el.addEventListener('activate', () => this.register());
@@ -711,9 +718,12 @@ export default class MAIN extends CONTAINER {
                 form.label = 'Sign Up';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
-                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                    MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
+                    MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                    MODELS.input('INPUT', MODELS.inputAttributes('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
+                    //createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
+                    //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    //createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
                 ]);
 
                 let [btnSignIn] = form.footer.buttonGroup.get();
@@ -750,10 +760,14 @@ export default class MAIN extends CONTAINER {
                 let email = this.url.searchParams.get('email');
 
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
-                    createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
-                    createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                    createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
+                    MODELS.input('INPUT', MODELS.inputAttributes('Code', this.url.searchParams.get('code'), 'HIDDEN'), 'Code', 'HIDDEN'),
+                    MODELS.input('INPUT', MODELS.inputAttributes('Email', email, 'HIDDEN'), 'Email / Username', 'HIDDEN'),
+                    MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                    MODELS.input('INPUT', MODELS.inputAttributes('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
+                    //createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
+                    //createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
+                    //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
+                    //createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
                 ]);
 
                 let [btnSignIn] = form.footer.buttonGroup.get();

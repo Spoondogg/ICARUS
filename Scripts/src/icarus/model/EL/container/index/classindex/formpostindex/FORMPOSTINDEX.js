@@ -191,7 +191,8 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         setTimeout(() => {
             if (model.jsonResults) { // Set values based on existing 
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElement(
-                    createInputModel('TEXT', 'id', model.id, 'id', 'HIDDEN', true)
+                    MODELS.input('INPUT', MODELS.inputAttributes('id', model.id, 'HIDDEN', true), 'id', 'HIDDEN')
+                    //createInputModel('TEXT', 'id', model.id, 'id', 'HIDDEN', true)
                 );
                 //[...form.el.elements].forEach((el) => {
                 //    el.setAttribute('value', '');

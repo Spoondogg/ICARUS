@@ -56,19 +56,37 @@ export const makeStruct = (params = []) => {
 */
 export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     /** Create a navitem model structure constructor
+     * element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0
         @type {function(InputModel): MODEL}
         @param {InputModel} Model
         @returns {MODEL} Model
     */
     input: makeStruct([
-        ['model', new MODEL()],
-        ['attributes']
-        //['type'],
+        ['element', 'INPUT'],
+        ['attributes'],
+        ['label', null],
+        ['type', 'TEXT'],
+        ['showNav', 0]        
         //['class'],
         //['value'],
         //['readonly'],
         //['placeholder'],
         //['autocomplete']
+    ]),
+
+    /** Create a navitem model structure constructor
+     * element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0
+        @type {function(InputAttributes): ATTRIBUTES}
+        @param {InputAttributes} Attributes
+        @returns {ATTRIBUTES} Attributes
+    */
+    inputAttributes: makeStruct([
+        ['name', null],
+        ['value', null],
+        ['type', 'TEXT'], //type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
+        ['readonly', null],        
+        ['placeholder', null],
+        ['autocomplete', null]
     ]),
     /* Create a generic element model structure constructor
         type {function(object): MODEL}

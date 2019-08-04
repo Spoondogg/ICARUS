@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL, MODELS, createInputModel } from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
@@ -22,7 +22,8 @@ export default class CHAT extends CONTAINER {
             form.el.style = 'height:68px;background-color:#5a5a5a;';
             form.setAction('CHAT/Talk');
             $(form.el).insertAfter(this.body.pane.el);
-            let inputs = [createInputModel('TEXTAREA', 'statement', '', 'element', 'TEXTAREA')];
+            //let inputs = [createInputModel('TEXTAREA', 'statement', '', 'element', 'TEXTAREA')];
+            let inputs = [MODELS.input('TEXTAREA', MODELS.inputAttributes('statement'), 'statement')];
             form.getFieldset()[0].getFormElementGroup()[0].addInputElements(inputs).then(() => {
                 /** Show the Payload response
                     @param {Payload} payload The payload

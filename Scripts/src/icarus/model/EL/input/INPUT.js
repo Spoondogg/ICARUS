@@ -8,7 +8,7 @@ export default class INPUT extends EL {
         @param {InputModel} model Model
     */
     constructor(node, model = MODELS.input()) {
-		super(node, 'INPUT', model);
+        super(node, 'INPUT', model);
 	}
 }
 export { ATTRIBUTES, EL, MODEL, MODELS }

@@ -333,23 +333,25 @@
 
 /** Represents a model for an Input Class
     @typedef {Object} InputModel Model
-    @property {ContainerModel} model Model
+    @property {string} [element="INPUT"] Element
     @property {InputAttributes} [attributes] Input Attributes
+    @property {string} [label] Label
+    @property {string} [type="TEXT"] Type // type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
+    @property {string} [showNav="0"] Show Nav
 */
 
 /** Represents a set of attributes for an input
     @typedef {Object} InputAttributes A set of options for an anchor
     @property {string} [name=""] Name
-    @property {string} [type="TEXT"] Type
-    @property {string} [class=""] Class Name
     @property {string} [value=""] Value
+    @property {string} [type="TEXT"] Type
     @property {string} [readonly="false"] Name
     @property {string} [placeholder=""] Placeholder text
     @property {string} [autocomplete="false"] Enables browser autocomplete
 */
 
 /** Represents a model for a NAVITEM
-    @typedef {ButtonModel} NavItemModel - NavItemModel
+    @typedef {ButtonModel & {name:Name, target:EL}} NavItemModel - NavItemModel
 */
 
 /** Represents a model for an IMG Class
