@@ -23,19 +23,10 @@ export default class NAVSEARCH extends NAVITEM {
         this.typingTimer = null; // timer
         this.doneTypingInterval = 300; //time in ms
 
-        this.input = new INPUT(this, MODELS.input(new MODEL(), {
-            type: 'text',
-            placeholder: 'Search',
-            name: 'q',
-            autocomplete: 'off'
-        }));
+        this.input = new INPUT(this, MODELS.input('INPUT', MODELS.inputAttributes('q', '', 'TEXT', false, 'Search', 'off')));
         this.input.el.addEventListener('focus', () => this.showSearchOptions());
         //this.input.el.addEventListener('blur', () => this.hideSearchOptions());
-        this.searchType = new INPUT(this, MODELS.input(new MODEL(), {
-            type: 'hidden',
-            name: 'type',
-            value: 'CLASS'
-        }));
+        this.searchType = new INPUT(this, MODELS.input('INPUT', MODELS.inputAttributes('type', 'CLASS', 'HIDDEN')));
 
         this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new ATTRIBUTES('input-buttons')));
         this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE'));
