@@ -4,8 +4,7 @@ import CONTAINERINDEX from './classindex/containerindex/CONTAINERINDEX.js';
 import FORMPOSTINDEX from './classindex/formpostindex/FORMPOSTINDEX.js';
 import IMAGEINDEX from './classindex/formpostindex/imageindex/IMAGEINDEX.js';
 /** Constructs various Index Elements and returns them to be appended
-    Each Index Element child must be imported individually
-    to avoid cyclic redundancy of dependencies
+    @description Each Element must be imported individually to avoid cyclic redundancy
     @class
 */
 export default class INDEXFACTORY extends CONTAINERFACTORY {
@@ -16,8 +15,8 @@ export default class INDEXFACTORY extends CONTAINERFACTORY {
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
         @param {SPAN} span Placeholder
-        @param {ContainerModel} model Model
-        @returns {CONTAINER} Newly constructed CONTAINER Class
+        @param {ContainerModel} [model] Model
+        @returns {CONTAINER} Container
     */
     build(className, span, model) {
         /** @type {CONTAINER} */

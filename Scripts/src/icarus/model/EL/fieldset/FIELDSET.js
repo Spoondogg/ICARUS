@@ -2,12 +2,11 @@
 import FORMELEMENTGROUP, { ATTRIBUTES, CONTAINER, EL, MODEL } from '../container/formelement/FORMELEMENTGROUP.js';
 /** Construct a Form Fieldset
     @class
-    @extends CONTAINER
 */
 export default class FIELDSET extends CONTAINER {
 	/** A fieldset that contains form elements
 	    @param {FORM} node Node
-	    @param {ContainerModel} model Model
+	    @param {ContainerModel} [model] Model
 	*/
 	constructor(node, model) {
         super(node, 'FIELDSET', model, ['FORMELEMENTGROUP', 'TEXTBLOCK']);

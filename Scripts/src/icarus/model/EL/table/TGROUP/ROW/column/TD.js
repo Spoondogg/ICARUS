@@ -4,7 +4,7 @@ import COLUMN, { EL, MODEL } from './COLUMN.js';
 export default class TD extends COLUMN {
 	/** Constructs a TD element
         @param {EL} node Node
-        @param {MODEL} model Model
+        @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
         super(node, 'TD', model);

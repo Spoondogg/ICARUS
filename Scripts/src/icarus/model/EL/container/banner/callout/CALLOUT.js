@@ -8,7 +8,7 @@ import GLYPHICON from '../../../span/GLYPHICON.js';
 export default class CALLOUT extends CONTAINER {
 	/** Constructs a Callout
 	    @param {CONTAINER} node Node
-	    @param {ContainerModel} model Model
+	    @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model);

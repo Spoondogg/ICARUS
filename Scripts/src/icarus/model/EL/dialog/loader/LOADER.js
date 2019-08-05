@@ -14,7 +14,7 @@ export default class LOADER extends DIALOG {
         @param {ContainerModel} container Parent Container
     */
 	constructor(value = 0, label = '', container = null) {
-		super(new MODEL().set({
+		super(new MODEL().set({ //@todo MODEL.dialog or equivalent
 			value,
 			label,
 			container,
