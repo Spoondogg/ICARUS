@@ -4,7 +4,7 @@ import TGROUP, { MODEL, TD, TH, TR } from './TGROUP.js';
 export default class THEAD extends TGROUP {
     /** TBODY Constructor
         @param {CONTAINER} node Node
-        @param {ContainerModel} model Model
+        @param {ContainerModel} [model] Model
     */
     constructor(node, model) {
         super(node, 'THEAD', model);		

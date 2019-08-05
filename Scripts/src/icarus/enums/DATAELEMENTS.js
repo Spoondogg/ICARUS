@@ -178,7 +178,7 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['status', 1],
         ['subsections', '0'],
         ['tags', '0'],
-        ['name'],
+        ['name', ''],
         ['authorId'],
         ['dateCreated'],
         ['dateLastModified'],
