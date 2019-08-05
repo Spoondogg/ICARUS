@@ -49,6 +49,28 @@ export const makeStruct = (params = []) => {
     }
     return constructor;
 }
+/** Model Constructor Factory
+    @description See https://stackoverflow.com/a/502384/722785
+    let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
+    console.log('Options', options('a', 'b'), options(null, 'b'));
+
+    @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
+    @returns {function(): ATTRIBUTES} Attributes Constructor
+*/
+export const makeAttrStruct = (params = []) => {
+    let count = params.length;
+    /** Structure Constructor
+        @returns {ATTRIBUTES} Newly created ATTRIBUTES
+    */
+    let constructor = (...args) => {
+        let attributes = new ATTRIBUTES();
+        for (let i = 0; i < count; i++) {
+            attributes.set(params[i][0], args[i] || params[i][1]); // fallback to default value
+        }
+        return attributes;
+    }
+    return constructor;
+}
 /** A collection of Object model constructors
     @description Each constructor constructs the default model 
     for the element it represents.  Structures are created using
@@ -80,13 +102,13 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @param {InputAttributes} Attributes
         @returns {ATTRIBUTES} Attributes
     */
-    inputAttributes: makeStruct([
-        ['name', null],
-        ['value', null],
+    inputAttributes: makeAttrStruct([ // CONSIDER ATTRIBUTES.input instead of MODELS.inputAttributes
+        ['name'],
+        ['value'],
         ['type', 'TEXT'], //type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
-        ['readonly', null],        
-        ['placeholder', null],
-        ['autocomplete', null]
+        ['readonly'],        
+        ['placeholder'],
+        ['autocomplete']
     ]),
     /* Create a generic element model structure constructor
         type {function(object): MODEL}
@@ -371,360 +393,351 @@ export const DATAELEMENTS = new Map([
     [
         'CONTAINER', {
             data: [
-                createInputModel('INPUT', 'showNav', '-1', 'showNav', 'CHECKBOX'),
-                createInputModel('INPUT', 'collapsed', '-1', 'collapsed', 'CHECKBOX')
+                MODELS.input('INPUT', MODELS.inputAttributes('showNav', '-1', 'CHECKBOX'), 'showNav', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('collapsed', '-1', 'CHECKBOX'), 'collapsed', 'CHECKBOX')
             ],
             attributes: [
-                createInputModel('INPUT', 'name'),
-                createInputModel('INPUT', 'class')
+                MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('class'), 'class')
             ],
-            meta: [
-                createInputModel('TEXTAREA', 'description')
-                //createInputModel('INPUT', 'tags', '0')
-                // Conside a list of author ids (ie: authors)
+            meta: [ // Conside a list of author ids (ie: authors)
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('description'), 'description')
             ]
         }
     ],
     [
         'ARTICLE', {
             containers: ['JUMBOTRON', 'FORM', 'SECTION'],
-            data: [createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX')]
         }
     ],
     [
         'BANNER', {
             data: [
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description'))
             ]
         }
     ],
     [
         'CALLOUT', {
             data: [
-                createInputModel('INPUT', 'icon'),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('INPUT', 'p', 'Text')
+                MODELS.input('INPUT', MODELS.inputAttributes('icon'), 'icon'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header'), 'header'),
+                MODELS.input('INPUT', MODELS.inputAttributes('p', 'Text'), 'p')
             ]
         }
     ],
     [
         'CHAT', {
             data: [
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description'))
             ]
         }
     ],
     [
         'CLASSINDEX', {
             data: [
-                createInputModel('INPUT', 'classType', 'MAIN'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'MAIN'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                MODELS.input('INPUT', MODELS.inputAttributes('classType', 'MAIN'), 'classType'),
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'MAIN'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description'))
             ]
         }
     ],
     [
         'CLASSVIEWER', {
-            data: [createInputModel('INPUT', 'classType', 'MAIN')]
+            
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('classType', 'MAIN'), 'classType')]
         }
     ],
     [
         'CONTAINERINDEX', {
             data: [
-                createInputModel('INPUT', 'classType', 'MAIN'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'MAIN'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'searchType', 'CLASS'),
-                createInputModel('INPUT', 'query', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('classType', 'MAIN'), 'classType'),
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'MAIN'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description')),
+                MODELS.input('INPUT', MODELS.inputAttributes('searchType', 'CLASS'), 'searchType'),
+                MODELS.input('INPUT', MODELS.inputAttributes('query', ''), 'query')
             ]
         }
     ],
     [
         'DICTIONARY', {
-            data: [createInputModel('INPUT', 'language')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('language'), 'language')]
         }
     ],
     [
         'FIELDSET', {
-            data: [createInputModel('INPUT', 'legend')],
-            attributes: [createInputModel('INPUT', 'name', 'fieldset-name')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('legend'), 'legend')],
+            attributes: [MODELS.input('INPUT', MODELS.inputAttributes('name', 'fieldset-name'), 'name')]
         }
     ],
     [
         'FORM', {
             containers: ['TEXTBLOCK', 'JUMBOTRON', 'FIELDSET'],
             data: [
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'hidden', '0', 'hidden', 'CHECKBOX')
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header', 'TEXT'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description')),
+                MODELS.input('INPUT', MODELS.inputAttributes('hidden', '0', 'CHECKBOX'), 'hidden')
             ],
             attributes: [
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'method', 'POST'),
-                createInputModel('INPUT', 'action', 'FORM/SUBMIT')
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'text-input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('method', 'POST'), 'method'),
+                MODELS.input('INPUT', MODELS.inputAttributes('action', 'FORM/SUBMIT'), 'action')
             ]
         }
     ],
     [
         'FORMELEMENT', {
             data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'Text Input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('label', 'Input Label'), 'label'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
             attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('placeholder', ''), 'placeholder')
             ]
         }
     ],
     [
         'FORMELEMENTGROUP', {
             containers: ['FORMINPUT', 'FORMTEXTAREA', 'TEXTBLOCK'],
-            data: [createInputModel('INPUT', 'header')],
-            attributes: [createInputModel('INPUT', 'name', 'text-input')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('header'), 'header')],
+            attributes: [MODELS.input('INPUT', MODELS.inputAttributes('name', 'text-input'), 'name')]
         }
     ],
     [
         'FORMINPUT', {
             data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'Text Input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('label', 'Input Label'), 'label'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
             attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('placeholder', ''), 'placeholder')
             ]
         }
     ],
-    ['FORMPOST', {}], 
-    /*[
-        'FORMPOST', {
-            data: [
-                createInputModel('INPUT', 'id', '-1', 'id', 'NUMBER', true),
-                createInputModel('INPUT', 'shared', '-1', 'shared', 'CHECKBOX'),
-                createInputModel('INPUT', 'isPublic', '-1', 'isPublic', 'CHECKBOX')
-            ]
-        }
-    ],*/
+    ['FORMPOST', {}],
     [
         'FORMPOSTINDEX', {
             data: [
-                createInputModel('INPUT', 'header', 'FORMPOSTINDEX'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'formId', '-1'),
-                createInputModel('INPUT', 'query', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'FORMPOSTINDEX'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description')),
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('formId', '-1'), 'formId'),
+                MODELS.input('INPUT', MODELS.inputAttributes('query', ''), 'query')
             ]
         }
     ],
     [
         'FORMPOSTINPUT', {
             data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'Text Input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('label', 'Input Label'), 'label'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
             attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'text-input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('placeholder', ''), 'placeholder')
             ]
         }
     ],
     [
         'FORMPOSTLIST', {
             data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'Text Input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('label', 'Input Label'), 'label'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
             attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'text-input'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'text-input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('placeholder', ''), 'placeholder')
             ]
         }
     ],
     [
         'FORMTEXTAREA', {
             data: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name', 'Text Input'),
-                createInputModel('INPUT', 'label', 'Input Label'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name', 'Text Input'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('label', 'Input Label'), 'label'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
             attributes: [
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'value', ''),
-                createInputModel('INPUT', 'placeholder', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('placeholder', ''), 'placeholder')
             ]
         }
     ],
     [
         'IMAGEINDEX', {
             data: [
-                createInputModel('INPUT', 'header', 'IMAGEINDEX'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'IMAGEINDEX'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description')),
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
                 //createInputModel('INPUT', 'formId', '-1'),
-                createInputModel('INPUT', 'query', '')
+                MODELS.input('INPUT', MODELS.inputAttributes('query', ''), 'query')
             ]
         }
     ],
     [
         'INDEX', {
             data: [
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'INDEX')
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'INDEX'), 'header')
             ]
         }
     ],
     [
         'INPUT', {
             data: [
-                createInputModel('INPUT', 'showNav', '1', 'showNav', 'NUMBER'),
-                createInputModel('INPUT', 'type', 'TEXT'),
-                createInputModel('INPUT', 'name'),
-                createInputModel('INPUT', 'value')
+                MODELS.input('INPUT', MODELS.inputAttributes('showNav', '1', 'NUMBER'), 'showNav'),
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'TEXT'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value')
             ],
-            attributes: [createInputModel('INPUT', 'placeholder')]
+            attributes: [MODELS.input('INPUT', MODELS.inputAttributes('placeholder'), 'placeholder')]
         }
     ],
     [
         'JUMBOTRON', {
             data: [
-                createInputModel('INPUT', 'slogan', 'JT Slogan'),
-                createInputModel('TEXTAREA', 'p', 'JT Textarea'),
-                createInputModel('BUTTON', 'bgimage', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-                    inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE', true)]
+                MODELS.input('INPUT', MODELS.inputAttributes('slogan', 'JT Slogan'), 'slogan'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'JT Textarea'), 'p'),                
+                MODELS.input('BUTTON', MODELS.inputAttributes('bgimage', '-1', 'NUMBER', true), 'bgimage', 'FORMPOSTINPUT').set({
+                    inputs: [MODELS.input('INPUT', MODELS.inputAttributes('file', null, 'FILE', true), 'file')]
                 }),
-                createInputModel('INPUT', 'screencolor', '.', 'screencolor', 'TEXT', true),
-                createInputModel('INPUT', 'bgcolor', '.', 'bgcolor', 'TEXT', true)
+                MODELS.input('INPUT', MODELS.inputAttributes('screencolor', '.', 'TEXT', true), 'screencolor'),
+                MODELS.input('INPUT', MODELS.inputAttributes('bgcolor', '.', 'TEXT', true), 'bgcolor')
             ],
-            attributes: [createInputModel('INPUT', 'bgcolor', '#333')]
+            attributes: [MODELS.input('INPUT', MODELS.inputAttributes('bgcolor', '#333'), 'bgcolor')]
         }
     ],
     ['LIST', {}],
     [
         'LISTITEM', {
-            data: [createInputModel('INPUT', 'p', 'Text')]
+
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('p', 'Text'), 'p')]
         }
     ],
     [
         'MAIN', {
             containers: ['ARTICLE', 'FORM', 'TABLE', 'BANNER', 'JUMBOTRON', 'TEXTBLOCK', 'INDEX', 'CLASSINDEX', 'FORMPOSTINDEX', 'CONTAINERINDEX', 'CLASSVIEWER', 'CHAT', 'IMAGEINDEX', 'DICTIONARY', 'WORD'],
             data: [
-                createInputModel('INPUT', 'author', 'AuthorName'),
-                createInputModel('INPUT', 'title', 'MAIN')
+                MODELS.input('INPUT', MODELS.inputAttributes('author', 'AuthorName'), 'author'),
+                MODELS.input('INPUT', MODELS.inputAttributes('title', 'MAIN'), 'title')
             ]
         }
     ],
     [
         'PARAGRAPH', {
-            data: [createInputModel('INPUT', 'p', 'Paragraph Text')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('p', 'Paragraph Text'), 'p')]
         }
     ],
     [
         'SECTION', {
             data: [
-                createInputModel('INPUT', 'showHeader', '1', 'showHeader', 'CHECKBOX'),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                MODELS.input('INPUT', MODELS.inputAttributes('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header', 'TEXT'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description'))
             ]
 		}
 	],
 	['SIDEBAR', {}],
     [
         'TABLE', {
-            data: [createInputModel('INPUT', 'header', 'Header')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header', 'TEXT'), 'header')]
         }
     ],
     [
         'TGROUP', {
-            data: [createInputModel('INPUT', 'name')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name')]
         }
     ],
     [
         'TBODY', {
-            data: [createInputModel('INPUT', 'name')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name')]
         }
     ],
     [
         'THEAD', {
-            data: [createInputModel('INPUT', 'name')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name')]
         }
     ],
     [
         'TFOOT', {
-            data: [createInputModel('INPUT', 'name')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name')]
         }
     ],
     [
         'TR', {
-            data: [createInputModel('INPUT', 'columns')]
+            data: [MODELS.input('INPUT', MODELS.inputAttributes('columns'), 'columns')]
         }
     ],
     [
         'TD', {
             data: [
-                createInputModel('INPUT', 'type', 'text'),
-                createInputModel('INPUT', 'name', 'null'),
-                createInputModel('TEXTAREA', 'span', 'null')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'text'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('span'), 'span')
             ]
         }
     ],
     [
         'TH', {
             data: [
-                createInputModel('INPUT', 'type', 'text'),
-                createInputModel('INPUT', 'name', 'null'),
-                createInputModel('TEXTAREA', 'span', 'null')
+                MODELS.input('INPUT', MODELS.inputAttributes('type', 'text'), 'type'),
+                MODELS.input('INPUT', MODELS.inputAttributes('name'), 'name'),
+                MODELS.input('INPUT', MODELS.inputAttributes('span'), 'span')
             ]
         }
     ],
 	[
 		'TEXTBLOCK', {
 			data: [
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description')
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header', 'TEXT'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description'))
 			]
 		}
 	],
 	[
 		'THUMBNAIL', {
-			data: [
-				createInputModel('BUTTON', 'img', '-1', 'bgimage', 'FORMPOSTINPUT', true).set({
-					inputs: [createInputModel('INPUT', 'file', null, 'file', 'FILE')]
-				}),
-                createInputModel('INPUT', 'header', 'Header'),
-                createInputModel('TEXTAREA', 'p', 'Description'),
-				createInputModel('INPUT', 'bgImage')
+            data: [
+                MODELS.input('BUTTON', MODELS.inputAttributes('img', '-1', 'NUMBER', true), 'bgimage', 'FORMPOSTINPUT').set({
+                    inputs: [MODELS.input('INPUT', MODELS.inputAttributes('file', null, 'FILE'), 'file')]
+                }),
+                MODELS.input('INPUT', MODELS.inputAttributes('header', 'Header', 'TEXT'), 'header'),
+                MODELS.input('TEXTAREA', MODELS.inputAttributes('p', 'Description')),
+                MODELS.input('INPUT', MODELS.inputAttributes('bgImage'), 'bgImage')
 			]
 		}
 	],
 	[
 		'WORD', {
-			data: [
-				createInputModel('INPUT', 'language'),
-				createInputModel('INPUT', 'typeId', '-1', 'typeId', 'NUMBER', true),
-				createInputModel('INPUT', 'value'),
-				createInputModel('INPUT', 'definition')
+            data: [
+                MODELS.input('INPUT', MODELS.inputAttributes('language'), 'language'),
+                MODELS.input('INPUT', MODELS.inputAttributes('typeId', '-1', 'NUMBER', true), 'typeId'),
+                MODELS.input('INPUT', MODELS.inputAttributes('value', ''), 'value'),
+                MODELS.input('INPUT', MODELS.inputAttributes('definition'), 'definition')
 			]
 		}
 	]
