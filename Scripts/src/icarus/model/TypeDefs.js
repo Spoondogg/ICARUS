@@ -341,7 +341,7 @@
 */
 
 /** Represents a set of attributes for an input
-    @typedef {Object} InputAttributes A set of options for an anchor
+    @typedef {Object} InputAttributes A set of attributes for an Input
     @property {string} [name=""] Name
     @property {string} [value=""] Value
     @property {string} [type="TEXT"] Type
