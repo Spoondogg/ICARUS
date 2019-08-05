@@ -2,7 +2,6 @@
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import FORM, { PAYLOAD } from '../../../../form/FORM.js';
 import FORMPOSTTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
-import { createInputModel } from '../../../CONTAINER.js';
 /** Contains a list of THUMBNAILS for each Container of the specified 
     classType available to this user.
     @description Represents an indexed view of Images

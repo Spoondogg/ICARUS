@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL, MODELS, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, MODEL, MODELS } from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
