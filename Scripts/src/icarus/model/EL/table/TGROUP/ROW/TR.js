@@ -8,7 +8,7 @@ import TGROUP, { TD, TH } from '../TGROUP.js';
 export default class TR extends CONTAINER {
 	/** Constructs a TR element
         @param {EL} node Node
-        @param {MODEL} [model] Model
+        @param {ContainerModel} [model] Model
         @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
     */
     constructor(node, model, containerList = node.getContainer().className === 'TBODY' ? ['TD'] : ['TH']) { // 
@@ -55,6 +55,10 @@ export default class TR extends CONTAINER {
     getActiveColumns() { 
         return this.getColumns().filter((c) => c.hasClass('active') && c !== this);
     }
+    /** Adds a Column to this TR
+        @param {ContainerModel} [model] Model
+        @returns {COLUMN} Column
+    */
     addColumn(model) {
         let col = null;
         switch (this.getColType()) {
@@ -83,14 +87,14 @@ export default class TR extends CONTAINER {
         siblings.forEach((s) => s.dispatchEvent(new Deactivate(s)));
     }
 	/** Adds the given table data to the table
-	    @param {ContainerModel} model Mmodel
+	    @param {ContainerModel} [model] Model
 	    @returns {TD} A Table group
 	*/
     addTd(model) {
         return this.addChild(new TD(this.childLocation, model));
     }
     /** Adds the given table header data to the table
-	    @param {ContainerModel} model Model
+	    @param {ContainerModel} [model] Model
 	    @returns {TH} A Table group
 	*/
     addTh(model) {

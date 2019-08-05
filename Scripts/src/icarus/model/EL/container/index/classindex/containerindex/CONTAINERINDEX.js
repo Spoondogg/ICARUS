@@ -143,7 +143,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         return thumbnail;
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
-        @param {ContainerModel} model model
+        @param {ContainerModel} model Model
         @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
