@@ -516,7 +516,7 @@ export default class EL extends MODEL {
     }
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
-	    @param {object} attributes A set of key/value pairs
+	    @param {object} attributes Object
 	    @returns {void}
 	*/
 	processAttributes(attributes) {
