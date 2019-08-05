@@ -9,7 +9,7 @@ import UL from '../../../../list/ul/UL.js';
 export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
         @param {CONTAINER} node Node
-        @param {ContainerModel} model Model
+        @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
 		super(node, model);

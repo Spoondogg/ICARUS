@@ -9,7 +9,7 @@ import DIV from '../../div/DIV.js';
 export default class JUMBOTRON extends CONTAINER {
 	/** Constructs large banner with a single title and text block
         @param {CONTAINER} node Node
-        @param {ContainerModel} model Model        
+        @param {ContainerModel} [model] Model        
     */
 	constructor(node, model) {
 		super(node, 'DIV', model);

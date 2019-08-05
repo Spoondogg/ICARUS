@@ -23,7 +23,7 @@ export default class TGROUP extends CONTAINER {
         return Promise.resolve();
     }
 	/** Adds the given table-row to this table-group
-	    @param {ContainerModel} model Model
+	    @param {ContainerModel} [model] Model
 	    @returns {TR} A Table row
 	*/
     addTr(model) {

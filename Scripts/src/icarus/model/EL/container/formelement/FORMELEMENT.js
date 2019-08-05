@@ -5,12 +5,11 @@ import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
     @abstract
     @class
-    @extends CONTAINER
 */
 export default class FORMELEMENT extends CONTAINER {
 	/** Constructs a Form Element
         @param {EL} node Node
-        @param {ContainerModel} model Model
+        @param {FormElementModel} [model] Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model);

@@ -56,7 +56,7 @@ export default class FORMINPUT extends FORMELEMENT {
         @returns {void}
     */
     buildCheckbox(labelOn = 'YES', labelOff = 'NO') {
-        this.optionsMenu = new MENU(this.body.pane, new MODEL('checkmark-menu'));
+        this.optionsMenu = new MENU(this.body.pane, MODELS.menu('optionsMenu', new ATTRIBUTES('checkmark-menu')));
 
         let on = this.optionsMenu.addNavItem(MODELS.navitem(labelOn, ICONS.BLANK, 'yes'));
         let off = this.optionsMenu.addNavItem(MODELS.navitem(labelOff, ICONS.BLANK, 'no'));

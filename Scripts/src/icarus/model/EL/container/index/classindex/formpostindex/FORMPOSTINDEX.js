@@ -11,7 +11,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} model Model
+        @param {ContainerModel} [model] Model
         @param {FormPostIndexOptions} [options] Options
 	*/
     constructor(node, model, options = MODELS.formPostIndexOptions(

@@ -280,14 +280,9 @@ export default class MAIN extends CONTAINER {
     */
     addReferencePlaceholder(model) {
         let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
-        model.subsections.split(',').forEach((s) => {
-            childrenMenu.addNavItemIcon(new MODEL().set({
-                label: s,
-                id: 'ref_' + s,
-                icon: ICONS.ALERT,
-                name: s + ' placeholder'
-            }));
-        });
+        model.subsections.split(',').forEach((s) => childrenMenu.addNavItemIcon(
+            MODELS.navitem(s, ICONS.ALERT, s + ' placeholder').set('id', 'ref_' + s)
+        ));
     }
 	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants. 
 	    @returns {void}

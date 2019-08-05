@@ -271,7 +271,7 @@
 
 /** Represents a model for a Group
     @typedef {Object} GroupModel Model
-    @property {string} name Group Name
+    @property {Name} name Group Name
 */
 
 /** Represents a model for an Icon
@@ -323,12 +323,15 @@
     @typedef {ContainerModel & MainProperties} MainModel - Represents a Container Object Model
 */
 
-
 /** Represents a set of attributes for an MAIN
     @typedef {Object} MainProperties A set of options for an anchor
     @property {FactoryLike} [factory] Factory
     @property {LoaderLike} [loader] Loader
     @property {URL} [url] Url
+*/
+
+/** Represents a model for an Form Element / Input Class
+    @typedef {ContainerModel & {element:string, type:string}} FormElementModel - Represents a FormElement Container Object Model
 */
 
 /** Represents a model for an Input Class
