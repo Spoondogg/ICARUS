@@ -172,40 +172,36 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     container: makeStruct([
-        ['id'],
         ['label'],
-        ['shared', -1],
-        ['status', 1],
         ['subsections', '0'],
         ['tags', '0'],
         ['name', ''],
+        ['id'],
         ['authorId'],
+        ['shared', -1],
+        ['status', 1],        
         ['dateCreated'],
         ['dateLastModified'],
-        ['dataId', '0'],
-        ['attributesId', '0'],
-        ['metaId', '0']
+        ['attributes', new ATTRIBUTES()],
+        ['data', new ATTRIBUTES()],
+        ['meta', new ATTRIBUTES()]
     ]),
 
     /** Create a generic container model structure constructor
-        @type {function(ContainerModel): MODEL}
-        @param {ContainerModel} Model
+        @type {function(FormPostModel): MODEL}
+        @param {FormPostModel} Model
         @returns {MODEL} Model
     */
-    containerThumbnail: makeStruct([
+    formPost: makeStruct([
         ['id'],
-        ['label'],
-        ['shared', -1],
-        ['status', 1],
-        ['subsections', '0'],
-        ['tags', '0'],
-        ['name'],
+        ['formId', '0'],
         ['authorId'],
+        ['shared', -1],
+        ['isPublic', 1],
+        ['status', 1],
         ['dateCreated'],
         ['dateLastModified'],
-        ['dataId', '0'],
-        ['attributesId', '0'],
-        ['metaId', '0']
+        ['jsonResults']
     ]),
 
     /** Create a generic container model structure constructor

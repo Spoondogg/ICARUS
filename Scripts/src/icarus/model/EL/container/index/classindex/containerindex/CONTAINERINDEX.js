@@ -1,5 +1,5 @@
 /** @module */
-import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
+import CLASSINDEX, { CLASSVIEWER, CONFIRM, CONTAINER, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
@@ -64,7 +64,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         });
     }
     /** Appends chosen CONTAINER to target after confirmation
-        @param {MODEL} model Model
+        @param {ContainerModel} model Model
         @returns {void}
     */
     confirmAppend(model) {
@@ -111,34 +111,17 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         ));
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {ContainerThumbnailModel} model The Thumbnail model
+	    @param {ContainerModel} model Container model
 	    @param {string} classType The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail({
-        id,
-        subsections,
-        authorId,
-        label,
-        description,
-        tags,
-        key,
-        value,
-        jsonResults
-    }, classType, pageNumber = 0) {
+    createThumbnail(model, classType, pageNumber = 0) {
+        //console.log('.createThumbnail()', classType, pageNumber, model);
         let [pagedMenu] = this.menu.get(pageNumber);
-        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, new MODEL().set({
-            id,
-            subsections,
-            authorId,
-            label,
-            description,
-            tags,
-            key,
-            value,
-            jsonResults
-        }), classType));
+        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, MODELS.container(
+            model.label, model.subsections, model.tags, model.name, model.id, model.authorId), classType)
+        );
         thumbnail.container = this.getContainer();
         return thumbnail;
     }

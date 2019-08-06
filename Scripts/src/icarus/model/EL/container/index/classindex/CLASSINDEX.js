@@ -238,7 +238,6 @@ export default class CLASSINDEX extends CONTAINER {
             }
         });
     }
-
     /** Constructs a page of results
         @param {PAYLOAD} payload Payload
         @returns {void}
@@ -402,4 +401,4 @@ export default class CLASSINDEX extends CONTAINER {
 		}
 	}
 }
-export { CLASSVIEWER, CONFIRM, Collapse, Expand, ICONS, MODEL, MODELS, NAVSEARCH, PAYLOAD, PROMPT }
+export { CLASSVIEWER, CONFIRM, Collapse, CONTAINER, Expand, ICONS, MODEL, MODELS, NAVSEARCH, PAYLOAD, PROMPT }

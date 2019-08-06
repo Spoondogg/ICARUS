@@ -23,6 +23,9 @@
 /** A valid email address in the format of user@domain
     @typedef {string} EmailAddress - A valid email address string
 */
+/** A Key/Value Tuple
+    @typedef {[Name, any]} KeyValuePair - Key/Value Pair
+*/
 /** A list of Container Class Names
     @typedef {Array<Name>} ContainerList - A list of Container Class Names
 */
@@ -38,8 +41,6 @@
 /** A key/value pair based on name
     @typedef {{Name, value:string}} NameValuePair - A key/value pair based on name
 */
-
-/// STRUCTURES
 /** A collection of Attributes
     @typedef {Object} Attributes A collection of Element Attributes
     @property {string} [className] - Element className attribute
@@ -78,9 +79,9 @@
 /** Represents a CONTAINER Class Structure
     @typedef {Object} ClassModel A generic Class-like Object Model
     @property {UId} [id] UId
+    @property {string} [authorId=null] Author Id
     @property {number} [shared=-1] Shared
     @property {string} [status=1] Status
-    @property {string} [authorId=null] Author Id
     @property {string} [dateCreated=null] Date Created
     @property {string} [dateLastModified=null] Date LastModified
 */
@@ -89,32 +90,24 @@
     @property {Label} [label=""] Label
     @property {CSV} [subsections] Child Container UIds
     @property {CSV} [tags] Tag UIds
-    @property {string} [name=''] Name
-    @property {UId} [dataId] Data Formpost UId
-    @property {UId} [attributesId] Attributes Formpost UId
-    @property {UId} [metaId] Meta Formpost UId
-    property {object} [jsonResults=null] JSON Results
+    @property {string} [name=""] Name
 */
 /** Represents a LOADER Class Structure
     @typedef {Object} LoaderLike A Container-like Object Model
     @property {Name} [name] Name
 */
-
 /** Represents a LOADER Class Structure
     @typedef {Object} FactoryLike A Factory-like Object Model
     @property {string} [type] Type
 */
-
 /** An abstract CONTAINER Class
-    @typedef {Model & ContainerProps} ContainerModel - Represents a Container Object Model
+    @typedef {ContainerProps & ClassModel & Model} ContainerModel - Represents a Container Object Model
 */
-
 /** An abstract CONTAINER Class
     @typedef {{name: string, method: string} & ContainerModel} FormModel - Represents a Container Object Model
     @property {Name} [name] Name
     @property {string} [method] Method
 */
-
 /**
     FORM generators often need to pass on a Container reference
     @typedef {ContainerModel & {container: ContainerModel, loader: LoaderLike}} ModelWithContainer - A MODEL requiring a CONTAINER
@@ -133,8 +126,7 @@
     @property {boolean} [showHeader="true"] Show/Hide header
     @property {ContainerLike} container Container
     @property {ContainerLike} caller Caller
-    @property {LoaderLike} loader Loader
-    
+    @property {LoaderLike} loader Loader    
 */
 /**
     See FORM.createFormPostForm
@@ -149,8 +141,6 @@
     @property {Container} container Container
     @property {boolean} [hidden="false"] If true, hidden
 */
-
-/// OPTIONS
 /** If true, this class can be activated
     @typedef {boolean} canActivate - If true, this class can be activated
 */
@@ -175,9 +165,6 @@
 /** A ClassIndexOption with formId for FormPostIndex(es)
     @typedef {ClassIndexOptions & {formId:formId}} FormPostIndexOptions - FormPost Index Options
 */
-
-///// LOADER.log Specific
-
 /** Represents a set of options for a Loader log
     @typedef {Object} LoaderLogOptions Represents a set of options for a Loader log
     @property {boolean} show If true, the log will be displayed
@@ -185,26 +172,20 @@
     @property {Delay} delay Delay to hide when value reaches 100 or stay visible if value === 0
     @property {string} type ie success, info, warning, danger
 */
-
-///// END LOADER.log
-
 /** Represents a MENU Object Model
     @typedef {{name: Name} & Model} MenuModel Represents a MENU Object Model
 */
-
 /** Represents a set of options for a Loader log
     @typedef {Object} MenuOptions Represents a set of options for a Menu
     @property {boolean} canActivate Can be activated
     @property {boolean} scrollIntoView Scrolls into view
 */
-
 ///// CONTAINERTHUMBNAIL
 /** Represents a generic Thumbnail Model
     @typedef {Object} ThumbnailModel Represents a generic Thumbnail Model
     @property {UId} id Unique Identifier that this thumbnail represents
     @property {string} label Label
 */
-
 /** Represents a Container Thumbnail Model
     @typedef {Object} ContainerThumbnailModel Represents a set of options for a Container Thumbnail
     @property {UId} id Container UId
@@ -213,18 +194,16 @@
     @property {string} label Container Label
     @property {string} description Container Description
     @property {CSV} tags Delimited list of tag UIds
-    @property {string} key Key
-    @property {string} value Value
+    @property {string} key Key - Search Key
+    @property {string} value Value - Search Value
     @property {object} jsonResults JSON Results
 */
-
 ///// NAVITEM 
 
 /** Represents a set of options for a ClassIndex
     @typedef {Object} NavItemOptions A set of options for a NavItem
     @property {boolean} [deactivateSiblings="false"] If true, siblings are deactivated when element is activated
 */
-
 /** Represents a set of options for a Clickable interface
     @typedef {Object} ClickableOptions A set of options for a NavItem
     @property {boolean} [deactivateSiblings="false"] If true, siblings are deactivated when element is activated
@@ -232,17 +211,14 @@
     @property {Delay} [longClickDelay="2000"] Press/Hold duration before long click is triggered
     @property {boolean} [stopPropagation="true"] If true, siblings are deactivated when element is activated
 */
-
 /** Represents a model for a ButtonGroup
     @typedef {{align:string, name: Name} & Model} ButtonGroupModel Represents a model for a ButtonGroup
 */
-
 /** Represents a set of options for a Clickable interface
     @typedef {Object} ButtonAttributes A set of options for a NavItem
     @property {string} [type="BUTTON"] Type ie: BUTTON, RESET, SUBMIT
     @property {string} [title=""] Title text
 */
-
 /** Represents a model for a BUTTON
     @typedef {Object} ButtonModel Model
     @property {string} [label=""] Label
@@ -250,61 +226,51 @@
     @property {Name} [name=""] Name
     @property {ButtonAttributes} [attributes] Button Attributes
 */
-
 /** Represents a set of attributes for an anchor
     @typedef {Object} AnchorAttributes A set of options for an anchor
     @property {string} [href="#"] Anchor target url
     @property {string} [target="_blank"] Anchor target method
 */
-
 /** Represents a model for an Anchor
     @typedef {IconModel & {attributes:AnchorAttributes}} AnchorModel Model
     @property {string} [label=""] Label
     @property {string} [icon="ICONS.BLANK"] Icon
     @property {AnchorAttributes} [attributes] Attributes
 */
-
 /** Represents a model for a FormFooter
     @typedef {Object} FormFooterModel Model
     @property {string} [align="vertical"] Alignment
 */
-
 /** Represents a model for a Group
     @typedef {Object} GroupModel Model
     @property {Name} name Group Name
 */
-
 /** Represents a model for an Icon
     @typedef {Object} IconModel Model
     @property {string} icon Icon
     @property {string} [label] Label
 */
-
 /** Represents a model for an Icon
     @typedef {Object} FormPostModel Model
     @property {UId} id Unique Identifier that this FormPost represents
     @property {UId} formId Unique Identifier that this FormPost belongs to
     @property {string} authorId Author Id
-    @property {int} shared Shared status
-    @property {int} isPublic Public status
-    @property {int} status Status
+    @property {number} shared Shared/Editable status
+    @property {number} isPublic Public/Viewable status
+    @property {number} status Status
     @property {string} dateCreated Date Created
     @property {string} dateLastModified Date LastModified
-    property {object} xmlResults Shared status
     @property {object} jsonResults JSON Results
 */
-
 /** Represents a set of attributes for an IMG Class
     @typedef {Object} ImageAttributes A set of options for an Image
     @property {string} [src=""] Image source url
     @property {string} [class=""] Image class
 */
-
 /** Represents a model for an IMG Class
     @typedef {Object} ImageModel Model
     @property {ImageAttributes} [attributes] Image Attributes
 */
-
 /* Represents a model for a NAVITEM
     @typedef {Object} NavItemModel Model
     @property {string} [label=""] Label
@@ -312,28 +278,18 @@
     @property {EL} [target=""] Switchable EL for NAV related events
     property {NavItemAttributes} [attributes] Button Attributes
 */
-
-/** Represents a model for an Input Class
-    @typedef {Object} MainModelz Model
-    @property {ContainerModel} model Model
-    @property {MainProperties} [attributes] Main Properties
-*/
-
 /** An abstract CONTAINER Class
     @typedef {ContainerModel & MainProperties} MainModel - Represents a Container Object Model
 */
-
 /** Represents a set of attributes for an MAIN
     @typedef {Object} MainProperties A set of options for an anchor
     @property {FactoryLike} [factory] Factory
     @property {LoaderLike} [loader] Loader
     @property {URL} [url] Url
 */
-
 /** Represents a model for an Form Element / Input Class
     @typedef {ContainerModel & {element:string, type:string}} FormElementModel - Represents a FormElement Container Object Model
 */
-
 /** Represents a model for an Input Class
     @typedef {Object} InputModel Model
     @property {string} [element="INPUT"] Element
@@ -342,7 +298,6 @@
     @property {string} [type="TEXT"] Type // type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
     @property {string} [showNav="0"] Show Nav
 */
-
 /** Represents a set of attributes for an input
     @typedef {Object} InputAttributes A set of attributes for an Input
     @property {string} [name=""] Name
@@ -352,19 +307,14 @@
     @property {string} [placeholder=""] Placeholder text
     @property {string} [autocomplete="false"] Enables browser autocomplete
 */
-
 /** Represents a model for a NAVITEM
     @typedef {ButtonModel & {name:Name, target:EL}} NavItemModel - NavItemModel
 */
-
 /** Represents a model for an IMG Class
     @typedef {Object} NavHeaderModel Model
     @property {string} [label=""] Label
 */
-
 /** Represents a model for an element that contains text
     @typedef {Object} TextModel Model
     @property {string} [text=""] InnerText
 */
-
-////

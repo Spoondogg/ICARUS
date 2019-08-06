@@ -9,8 +9,8 @@ import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 */
 export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
 	/** Constructs a THUMBNAIL displaying details of a given CONTAINER
-        @param {CONTAINER} node Node
-        @param {ContainerThumbnailModel} model The Thumbnail model
+        @param {EL} node Node
+        @param {ContainerModel} model Model
         @param {string} classType The class that this thumbnail represents
     */
 	constructor(node, model, classType) {
@@ -18,7 +18,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         this.addClass('nav-item-thumbnail-container');
     }
     /** Constructs a thumbnail that represents the given model
-        @param {MODEL} model Model
+        @param {ContainerModel} model Model
         @returns {void}
     */
     constructThumbnail(model) {
@@ -29,7 +29,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         //this.fetchImage(); // Only if IMG exists
     }
     /** Adds a button group and a default tag
-        @param {MODEL} model Model
+        @param {ContainerModel} model Model
         @returns {void}
     */
     addTags(model) {
@@ -164,8 +164,9 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         });
     }
     /** Adds details like author and rating/rank
-        @param {MODEL} model Model
+        @param {ContainerModel} model Model
         @returns {void}
+        @todo Correct model for model.align reference
     */
     addThumbDetails(model) {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
