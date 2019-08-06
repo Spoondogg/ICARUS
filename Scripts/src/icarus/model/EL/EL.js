@@ -146,7 +146,22 @@ export default class EL extends MODEL {
         this.get().push(model);
         //console.log('Added Child', this.getTail());
 		return this.getTail();
-	}
+    }
+    /** Adds an array of classes
+        @param {Array<string>} classes Array of class names
+        @returns {void}
+    */
+    addClassInline(classes) {
+        classes.forEach((c) => {
+            try {
+                if (c.length > 0) {
+                    this.el.classList.add(c);
+                }
+            } catch (e) {
+                console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
+            }
+        });
+    }
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
         @see https://stackoverflow.com/a/9229821/722785
@@ -154,20 +169,20 @@ export default class EL extends MODEL {
 	*/
 	addClass(className) {
 		return this.chain(() => {
-			if (className === 'undefined') {
-				console.log('ClassName Undefined');
-            } else {
-                className.split(' ').forEach((c) => {
-                    try {
-                        if (c.length > 0) {
-                            this.el.classList.add(c);
-                        }
-                    } catch (e) {
-                        console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
-                    }
-                });
-                this.attributes.class = this.el.classList.value;
-			}
+            try {
+                switch (typeof className) {
+                    case 'string':
+                        this.addClassInline(className.split(' '));
+                        break;
+                    case 'array':
+                        this.addClassInline(className);
+                        break;
+                    default:
+                        console.warn('Unable to add classname', className, typeof className);
+                }                
+            } catch (e) {
+                console.error('Unable to add classname', className, typeof className);
+            }
 		});
     }
     /** Adds the given class name to the element's list of classes
