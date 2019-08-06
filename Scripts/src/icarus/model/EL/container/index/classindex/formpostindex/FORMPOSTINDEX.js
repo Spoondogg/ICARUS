@@ -46,24 +46,24 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         });
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {FormPostModel} model The Thumbnail model
+	    @param {FormPostModel} model FormPost Model
 	    @param {string} className The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail(model, className, pageNumber = 0) {
         let [pagedMenu] = this.menu.get(pageNumber);
-        return pagedMenu.addChild(new FORMPOSTTHUMBNAIL(pagedMenu, new MODEL().set({
-            id: model.id,
-            formId: model.formId,
-            authorId: model.authorId,
-            shared: model.shared,
-            isPublic: model.isPublic,
-            status: model.status,
-            dateCreated: model.dateCreated,
-            dateLastModified: model.dateLastModified,
-            jsonResults: model.jsonResults
-        }), className));
+        return pagedMenu.addChild(new FORMPOSTTHUMBNAIL(pagedMenu, MODELS.formPost(
+            model.id,
+            model.formId,
+            model.authorId,
+            model.shared,
+            model.isPublic,
+            model.status,
+            model.dateCreated,
+            model.dateLastModified,
+            model.jsonResults
+        ), className));
     }
     /** Retrieves the given formpost by id and updates caller with id
         @param {UId} id FormPost uid
