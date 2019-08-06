@@ -66,7 +66,25 @@ export default class MODEL {
 			}
 		}
 		return this;
-	}
+    }
+    /** Appends/Overrides property (or a collection of properties) for the specified Attributes collection
+        @description Similar to right join, new values override existing
+	    @param {string} attrName Attribute Collection Name
+        @param {Object} obj An object containing key/value pairs
+	    @param {any} value Value for property
+        @param {boolean} [allowEmpty=true] If true (default) empty values can be added
+	    @returns {MODEL} The object MODEL
+	*/
+    append(attrName, obj, value, allowEmpty = true) {
+        for (let prop in obj) {
+            if (typeof prop === 'string') {
+                if (allowEmpty || obj[prop] !== 'undefined') {
+                    this[attrName].set(prop, obj[prop]);
+                }
+            }
+        }
+        return this;
+    }
 	/** Throws an error if given value is not defined
 	    @param {any} value Value
 	    @returns {any} Verified required value
