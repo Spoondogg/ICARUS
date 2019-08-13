@@ -5,7 +5,6 @@ import CONTROLLER from './CONTROLLER.js';
 import TOKEN from './TOKEN.js';
 /** An Application Controller
     @class
-    @extends CONTROLLER
     @memberof ICARUS
     @description An Application Controller (APP)
     Constructs the MAIN Controller and initializes the MAIN Container
@@ -19,6 +18,6 @@ export default class APP extends CONTROLLER {
 		@param {number} recursionLimit Limits recursion depth
 	*/
 	constructor(id = 0, user = 'Guest', dev = false, recursionLimit = 100) {
-		super(id, user, dev, recursionLimit, 'spoonMEDIA', '0.6.20190501', TOKEN.setToken().value, new CONTAINERFACTORY());
+		super(id, user, dev, recursionLimit, 'spoonMEDIA', '0.6.7.20190813', TOKEN.setToken().value, new CONTAINERFACTORY());
 	}
 }
