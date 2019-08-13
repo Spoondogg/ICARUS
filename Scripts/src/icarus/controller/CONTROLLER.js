@@ -5,7 +5,6 @@ import WATERMARK from '../helper/WATERMARK.js';
     @description Constructs the Application Controller and initializes the MAIN Container
     This should be instantiated during the init phase of the html document
     @class
-    @extends MODEL
 */
 export default class CONTROLLER extends MODEL {
 	/** Constructs an Application Controller

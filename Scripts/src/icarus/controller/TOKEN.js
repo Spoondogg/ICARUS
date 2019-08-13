@@ -3,7 +3,6 @@ import EL, { ATTRIBUTES, MODEL } from '../model/el/EL.js';
 import TokenError from '../error/TokenError.js';
 /** A Token to prevent Cross Site Request Forgery (CSRF)
     @class
-    @extends EL
     @see csrf https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
 */
 export default class TOKEN extends EL {
