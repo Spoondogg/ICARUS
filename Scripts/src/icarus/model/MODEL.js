@@ -163,7 +163,12 @@ export default class MODEL {
     getPayload(uid, type = 'FORMPOST') {
         return new Promise((resolve, reject) => {
             try {
-                this.getJson('/' + type + '/GET/' + uid, (payload) => resolve(new PAYLOAD(payload)));
+                this.getJson('/' + type + '/GET/' + uid, (payload) => {
+                    /*if (payload.className === 'ERROR') {
+                        console.error(this.toString() + '.getPayload', uid, type, payload.message);
+                    }*/
+                    resolve(new PAYLOAD(payload));
+                });
             } catch (e) {
                 console.warn('Unable to retrieve payload', type, uid, e);
                 reject(e);
