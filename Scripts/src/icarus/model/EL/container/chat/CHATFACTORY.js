@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js'; // Deactivate //SPAN
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, PAYLOAD, PROMPT } from '../../container/CONTAINERFACTORY.js';
 import CHAT from './CHAT.js';
 import DICTIONARY from '../dictionary/DICTIONARY.js';
 import FORM from '../../form/FORM.js';
