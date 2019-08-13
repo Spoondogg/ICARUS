@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTRIBUTES, MODEL, MODELS } from '../CONTAINER.js';
+import CONTAINER, { ATTR, ATTRIBUTES, MODEL, MODELS } from '../CONTAINER.js';
 import CITE from '../../cite/CITE.js';
 import DIV from '../../div/DIV.js';
 import FORM from '../../form/FORM.js';
@@ -23,7 +23,7 @@ export default class CHAT extends CONTAINER {
             form.setAction('CHAT/Talk');
             $(form.el).insertAfter(this.body.pane.el);
             //let inputs = [createInputModel('TEXTAREA', 'statement', '', 'element', 'TEXTAREA')];
-            let inputs = [MODELS.input('TEXTAREA', MODELS.inputAttributes('statement'), 'statement')];
+            let inputs = [MODELS.input('TEXTAREA', ATTR.input('statement'), 'statement')];
             form.getFieldset()[0].getFormElementGroup()[0].addInputElements(inputs).then(() => {
                 /** Show the Payload response
                     @param {Payload} payload The payload
