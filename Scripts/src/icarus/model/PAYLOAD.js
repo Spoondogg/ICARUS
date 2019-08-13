@@ -1,4 +1,4 @@
-﻿import ATTRIBUTES from '../../ATTRIBUTES.js';
+﻿import ATTRIBUTES from './ATTRIBUTES.js';
 import FORMPOST from './FORMPOST.js';
 /** @module */
 /** Represents a standardized response from API get() calls

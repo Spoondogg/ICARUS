@@ -722,7 +722,7 @@
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
-    <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />
+    <Content Include="Scripts\src\icarus\model\PAYLOAD.js" />
     <Content Include="Scripts\src\icarus\model\el\group\buttongroup\taggroup\TAGGROUP.js" />
     <Content Include="Scripts\src\icarus\model\el\input\INPUTMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\dialog\DIALOGMODEL.js" />
@@ -782,11 +782,10 @@
     <Content Include="Scripts\src\icarus\model\el\container\formelement\formtextarea\FORMTEXTAREA.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORM.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFOOTER.js" />
-    <Content Include="Scripts\src\icarus\model\el\form\FORMPOST.js" />
+    <Content Include="Scripts\src\icarus\model\FORMPOST.js" />
     <Content Include="Scripts\src\icarus\model\el\form\forms\LogoutForm.js" />
     <Content Include="Scripts\src\icarus\model\el\form\forms\RegistrationForm.js" />
     <Content Include="Scripts\src\icarus\model\el\iframe\IFRAME.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\jumbotron\headerwrap\HEADERWRAP.js" />
     <Content Include="Scripts\src\icarus\model\el\container\jumbotron\JUMBOTRON.js" />
     <Content Include="Scripts\src\icarus\model\el\container\main\MAIN.js" />
     <Content Include="Scripts\src\icarus\model\el\legend\LEGEND.js" />
@@ -813,8 +812,6 @@
     <Content Include="Scripts\src\icarus\model\el\p\P.js" />
     <Content Include="Scripts\src\icarus\model\el\p\WELL.js" />
     <Content Include="Scripts\src\icarus\model\el\select\SELECT.js" />
-    <Content Include="Scripts\src\icarus\model\el\span\badge\BADGE.js" />
-    <Content Include="Scripts\src\icarus\model\el\span\CARET.js" />
     <Content Include="Scripts\src\icarus\model\el\span\GLYPHICON.js" />
     <Content Include="Scripts\src\icarus\model\el\span\SPAN.js" />
     <Content Include="Scripts\src\icarus\model\el\svg\SVG.js" />
