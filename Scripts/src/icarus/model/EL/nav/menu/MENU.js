@@ -86,7 +86,7 @@ export default class MENU extends LIST {
 		return this.addChild(new NAVITEMICON(this, model));
     }
     /** Constructs a NavItem with a search input
-	    @param {NavItemModel} [model] Model
+	    @param {NavItemSearchModel} [model] Model
 	    @returns {NAVSEARCH} Nav Item with Anchor
 	*/
     addNavSearch(model) {

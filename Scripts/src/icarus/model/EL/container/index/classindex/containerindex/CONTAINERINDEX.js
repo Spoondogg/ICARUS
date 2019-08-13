@@ -10,37 +10,35 @@ export default class CONTAINERINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
-        @param {ClassIndexOptions} [options] Options
+        @param {ClassIndexModel} [model] Model
 	*/
-    constructor(node, model, options) {
-        super(node, model, options);
+    constructor(node, model = MODELS.classIndex()) {
+        super(node, model);
         this.addClass('containerindex');        
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [type] Optional search type
-        @param {query} [query] Optional querystring / delimited tag list
+        @param {SearchData} [search] Search Parameters
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(type = this.searchType, query = '') {
-        console.log('CONTAINERINDEX.search', type, query);
+    search(search = MODELS.search('MAIN', 'CLASS')) {
         let result = null;
-        switch (type) {
+        let url = '/';
+        switch (search.searchType) {
             case 'TAG':
-                result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                url += search.searchClass + '/SearchByTag';
                 break;
             case 'TAGID':
-                result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                url += search.searchClass + '/SearchByTagId';
                 break
+            case 'CLASS':
             default: // generic search
-                result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                url += search.searchClass + '/search';
         }
+        url += '?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query;
+        console.log(url);
+        result = $.post(url, {
+            '__RequestVerificationToken': this.getToken()
+        });
         return result;
     }
     /** An abstract/default search that promises to return a payload and status
@@ -48,7 +46,6 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTags(tag = '') {
-        //console.log('CONTAINERINDEX SearchByTag', this.classType, tag);
         return $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tag, {
             '__RequestVerificationToken': this.getToken()
         });
@@ -58,7 +55,6 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTagIds(tagId = '') {
-        //console.log('CONTAINERINDEX SearchByTagId', this.classType, tagId);
         return $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tagId, {
             '__RequestVerificationToken': this.getToken()
         });
@@ -174,33 +170,32 @@ export default class CONTAINERINDEX extends CLASSINDEX {
     }	
     /** Launches a CLASSVIEWER for the given id and classType
         @param {UId} id CONTAINER UId
-        @param {string} classType CONTAINER class
+        @param {SearchModel} search Search
         @returns {void}
     */
-    launchViewer(id, classType) {
-        if (classType === 'MAIN') {
+    launchViewer(id, search) {
+        if (search.searchClass === 'MAIN') {
             CONFIRM.confirmMethodCall(
                 'Launch MAIN Viewer',
-                classType + ' "(' + id + ') will launch in a new window.  Proceed?',
+                search.searchClass + ' "(' + id + ') will launch in a new window.  Proceed?',
                 () => {
-                    console.log('Confirmed.  Viewing ' + classType + '(' + id + ')');
+                    console.log('Confirmed.  Viewing ' + search.searchClass + '(' + id + ')');
                     window.open('/' + id, '_blank');
                 }
             );
         } else {
             let dialog = new PROMPT(MODELS.dialog(
-                'ClassViewer: ' + classType + ' # ' + id, '', false,
+                'ClassViewer: ' + search.searchClass + ' # ' + id, '', false,
                 this.getContainer(), this, this.getLoader()
             ));
             dialog.addClass('dialog-classviewer');
             let model = new MODEL();
             model.container = this.getContainer().getMain();
-            model.data.set('classType', classType);
+            model.data.set('searchClass', search.searchClass);
             let viewer = new CLASSVIEWER(dialog.body.pane, model);
-            //viewer.container = this.getContainer().getMain();
             viewer.body.el.dispatchEvent(new Expand(viewer));
-            this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
+            this.getContainer().getFactory().get(viewer.body.pane, search.searchClass, id).then(() => dialog.showDialog());
         }
     }    
 }
-export { CLASSVIEWER, NAVTHUMBNAIL, PROMPT }
+export { CLASSVIEWER, CONTAINER, NAVTHUMBNAIL, PROMPT }

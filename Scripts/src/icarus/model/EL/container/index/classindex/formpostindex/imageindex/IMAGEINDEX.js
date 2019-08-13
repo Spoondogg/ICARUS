@@ -9,23 +9,11 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
-        @param {FormPostIndexOptions} [options] Options
+        @param {FormPostIndexModel} [model] Model
 	*/
-    constructor(node, model, options = MODELS.formPostIndexOptions('IMAGE', model.data.query || '', 'CLASS', 3)) {
-        super(node, model, options);
+    constructor(node, model = MODELS.formPostIndex().append('data', MODELS.search('IMAGE', 'CLASS', '', 3))) { //options = MODELS.search('IMAGE', 'CLASS', model.data.query || '', 'CLASS', 3)
+        super(node, model);
         this.addClass('imageindex');        
-    }
-    /** An abstract/default search that promises to return a payload and status
-        @param {string} [type] Optional search type
-        @param {query} [query] Optional querystring
-        @returns {Promise<object, string>} Promise to return payload, status
-    */
-    searchClass(type = 'TAG', query = '') {
-        //console.log('IMAGEINDEX Search', this.formId, query);
-        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + type + '&query=' + query, {
-            '__RequestVerificationToken': this.getToken()
-        });
     }
     /** Creates a Thumbnail that launches its respective Container
 	    @param {FormPostModel} model The Thumbnail model
@@ -35,17 +23,17 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
 	*/
     createThumbnail(model, className, pageNumber = 0) {
         let [pagedMenu] = this.menu.get(pageNumber);
-        return pagedMenu.addChild(new IMAGETHUMBNAIL(pagedMenu, new MODEL().set({
-            id: model.id,
-            //formId: model.formId,
-            authorId: model.authorId,
-            shared: model.shared,
-            isPublic: model.isPublic,
-            status: model.status,
-            dateCreated: model.dateCreated,
-            dateLastModified: model.dateLastModified,
-            jsonResults: model.jsonResults
-        }), className));
+        return pagedMenu.addChild(new IMAGETHUMBNAIL(pagedMenu, MODELS.formPost(
+            model.id,
+            model.formId,
+            model.authorId,
+            model.shared,
+            model.isPublic,
+            model.status,
+            model.dateCreated,
+            model.dateLastModified,
+            model.jsonResults
+        ), className));
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {FormPostModel} model model

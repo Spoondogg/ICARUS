@@ -1118,12 +1118,12 @@ export default class CONTAINER extends GROUP {
 				if (typeof this.getMain() !== 'undefined') {
 					if (addButton) {
 						//let menu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
-						let item = this.addContainerCaseButton(className, menu);
-						item.el.addEventListener('activate', () => this.create(new MODEL().set('className', className)));
+                        let item = this.addContainerCaseButton(className, menu);
+                        item.el.addEventListener('activate', () => this.create(MODELS.container().set('className', className)));
 						//item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this));
+                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(MODELS.search(className, 'CLASS'), this));
 					}
-					this.addConstructor(className, (model) => {
+                    this.addConstructor(className, (model) => {
 						try {
                             resolve(this.getFactory().get(this.childLocation, className, model.id || 0));
 						} catch (ee) {
@@ -1133,7 +1133,7 @@ export default class CONTAINER extends GROUP {
 					});
 				}
 			} catch (e) {
-				console.warn(this.toString() + '.addContainerCase(' + className + '): Unable to add Container Case', e);
+                console.warn(this.toString() + '.addContainerCase(' + className + '): Unable to add Container Case', e);
 				reject(e);
 			}
 		});
@@ -1221,27 +1221,33 @@ export default class CONTAINER extends GROUP {
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
-                        let { result, model, message } = payload;
-                        
-                        this.addReferencePlaceholder(model);
+                        console.log(this.toString() + '.load(' + id + ')', this.className, payload);
+                        if (payload.result === 0) {
+                            console.warn('Todo: Launch LOADER');
+                            console.error('Unable to load ID: ' + id, payload.message);
+                        } else {
+                            let { result, model, message } = payload;
 
-                        this.getMain().updateTagCache(model.tags);
+                            this.addReferencePlaceholder(model);
 
-                        switch (payload.result) {
-                            case 0: // error
-                                console.error(this.toString() + '.load() error', result, payload);
-                                this.getMain().login();
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
-                                break;
-                            case 1: // success
-                                this.navheader.tab.anchor.label.setInnerHTML(model.label);
-                                resolve(this.make(model));
-                                break;
-                            default: 
-                                console.log('Payload Result', result, payload);
-                                this.getMain().login();
-                                // @todo Create a LoginRequired type Error and appropriate handler
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
+                            this.getMain().updateTagCache(model.tags);
+
+                            switch (payload.result) {
+                                case 0: // error
+                                    console.error(this.toString() + '.load() error', result, payload);
+                                    this.getMain().login();
+                                    reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
+                                    break;
+                                case 1: // success
+                                    this.navheader.tab.anchor.label.setInnerHTML(model.label);
+                                    resolve(this.make(model));
+                                    break;
+                                default:
+                                    console.log('Payload Result', result, payload);
+                                    this.getMain().login();
+                                    // @todo Create a LoginRequired type Error and appropriate handler
+                                    reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
+                            }
                         }
                     });
 				} else {
