@@ -1,9 +1,6 @@
-/**
-    @module
-*/
+/** @module */
 import ExtendableError from './ExtendableError.js';
-/**
-    Thrown if the recursion limit is exceeded
+/** Thrown if the recursion limit is exceeded
     @class
     @extends ExtendableError
 */

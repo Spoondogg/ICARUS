@@ -158,7 +158,7 @@ export default class EL extends MODEL {
                     this.el.classList.add(c);
                 }
             } catch (e) {
-                console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
+                console.warn(this.toString() + ' Unable to add class to classList', [c, classes], e);
             }
         });
     }
