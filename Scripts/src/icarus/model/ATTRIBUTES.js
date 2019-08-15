@@ -1,10 +1,8 @@
-/** @module icarus/model */
+/** @module */
 /** A generic set of ATTRIBUTES for an EL
     @class
-    @todo Consider just extending Map()
-    @see https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
 */
-export default class ATTRIBUTES { // extends Map 
+export default class ATTRIBUTES {
 	/** If the 'className' argument is an object, break it out into individual attributes
 	    Otherwise, map to className, name, type and value
 	    @param {Object|string} [className] A collection of attributes || className Element class attribute

@@ -1,11 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
 import SPAN, { MODELS } from '../../../span/SPAN.js';
 import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element inside a group of form elements
     @class
-    @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
 	constructElements() {
@@ -16,7 +15,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', MODELS.inputAttributes(
+        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', ATTR.input(
             this.attributes.name,
             this.attributes.value,
             this.attributes.type || 'TEXT',

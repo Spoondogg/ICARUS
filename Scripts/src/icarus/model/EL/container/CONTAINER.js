@@ -1,8 +1,8 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
+import { ATTR, DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import Clickable, { Switchable } from '../../../interface/Clickable.js';
-import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
@@ -27,7 +27,6 @@ import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
     @description A CONTAINER is a groupable, expandable {@link EL} that can have children
     @class
-    @extends GROUP
 */
 export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
@@ -877,20 +876,20 @@ export default class CONTAINER extends GROUP {
 	*/
 	createContainerInputs() {
 		//console.log(this.toString() + '.createContainerInputs()', this);
-        //[MODELS.input('TEXTAREA', 'statement', MODELS.inputAttributes('statement'))
+        //[MODELS.input('TEXTAREA', 'statement', ATTR.input('statement'))
         return [
-            MODELS.input('INPUT', MODELS.inputAttributes('className', this.className), 'className'),
-            MODELS.input('INPUT', MODELS.inputAttributes('element', this.element, 'TEXT', true), 'element'),
-            MODELS.input('INPUT', MODELS.inputAttributes('id', this.id, 'NUMBER', true), 'ID', 'NUMBER'),
-            MODELS.input('INPUT', MODELS.inputAttributes('label', this.label.toString(), 'TEXT'), 'Label'),
-            MODELS.input('INPUT', MODELS.inputAttributes('subsections', this.getSubSections().toString() || '0', 'TEXT', true), 'SubSections'),
-            MODELS.input('INPUT', MODELS.inputAttributes('tags', this.tags.toString() || '0', 'TEXT', true), 'Tags', 'FORMPOSTLIST'),
-            MODELS.input('INPUT', MODELS.inputAttributes('status', this.status.toString(), 'NUMBER', true), 'Status', 'NUMBER'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('dataId', this.dataId.toString(), 'TEXT', true), 'dataId', 'FORMPOSTINPUT'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('attributesId', this.attributesId.toString(), 'TEXT', true), 'attributesId', 'FORMPOSTINPUT'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('metaId', this.metaId.toString(), 'TEXT', true), 'metaId', 'FORMPOSTINPUT'),
-            MODELS.input('INPUT', MODELS.inputAttributes('shared', this.shared.toString(), 'CHECKBOX'), 'shared', 'CHECKBOX'),
-            MODELS.input('INPUT', MODELS.inputAttributes('isPublic', this.isPublic.toString(), 'CHECKBOX'), 'isPublic', 'CHECKBOX')
+            MODELS.input('INPUT', ATTR.input('className', this.className), 'className'),
+            MODELS.input('INPUT', ATTR.input('element', this.element, 'TEXT', true), 'element'),
+            MODELS.input('INPUT', ATTR.input('id', this.id, 'NUMBER', true), 'ID', 'NUMBER'),
+            MODELS.input('INPUT', ATTR.input('label', this.label.toString(), 'TEXT'), 'Label'),
+            MODELS.input('INPUT', ATTR.input('subsections', this.getSubSections().toString() || '0', 'TEXT', true), 'SubSections'),
+            MODELS.input('INPUT', ATTR.input('tags', this.tags.toString() || '0', 'TEXT', true), 'Tags', 'FORMPOSTLIST'),
+            MODELS.input('INPUT', ATTR.input('status', this.status.toString(), 'NUMBER', true), 'Status', 'NUMBER'),
+            MODELS.input('BUTTON', ATTR.input('dataId', this.dataId.toString(), 'TEXT', true), 'dataId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('attributesId', this.attributesId.toString(), 'TEXT', true), 'attributesId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('metaId', this.metaId.toString(), 'TEXT', true), 'metaId', 'FORMPOSTINPUT'),
+            MODELS.input('INPUT', ATTR.input('shared', this.shared.toString(), 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', ATTR.input('isPublic', this.isPublic.toString(), 'CHECKBOX'), 'isPublic', 'CHECKBOX')
 		];
     }
     /** Dispatches the given Event to this CONTAINER's children
@@ -1515,5 +1514,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
+export { AbstractMethodError, Activate, ATTR, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
 /* eslint-enable max-lines, max-statements */

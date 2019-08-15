@@ -1,6 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
-import FORM, { PAYLOAD } from '../../../../form/FORM.js';
+import FORM, { ATTR, PAYLOAD } from '../../../../form/FORM.js';
 import FORMPOSTTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
 /** Contains a list of THUMBNAILS for each Container of the specified 
     classType available to this user.
@@ -190,7 +190,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         setTimeout(() => {
             if (model.jsonResults) { // Set values based on existing 
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElement(
-                    MODELS.input('INPUT', MODELS.inputAttributes('id', model.id, 'HIDDEN', true), 'id', 'HIDDEN')
+                    MODELS.input('INPUT', ATTR.input('id', model.id, 'HIDDEN', true), 'id', 'HIDDEN')
                     //createInputModel('TEXT', 'id', model.id, 'id', 'HIDDEN', true)
                 );
                 //[...form.el.elements].forEach((el) => {

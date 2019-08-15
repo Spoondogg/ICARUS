@@ -2,7 +2,7 @@
 /** A generic HTML Element Node Module
     @module icarus/model/el
 */
-import MODEL, { ATTRIBUTES } from '../MODEL.js';
+import MODEL, { ATTR, ATTRIBUTES } from '../MODEL.js';
 import AbstractMethodError from '../../error/AbstractMethodError.js';
 import FACTORY from './FACTORY.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
@@ -714,5 +714,5 @@ export default class EL extends MODEL {
 		return this.className + '()';
 	}
 }
-export { AbstractMethodError, ATTRIBUTES, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
+export { AbstractMethodError, ATTR, ATTRIBUTES, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
 /* eslint-enable max-lines, max-statements */

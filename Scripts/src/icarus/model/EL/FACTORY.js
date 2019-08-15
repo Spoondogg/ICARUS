@@ -1,5 +1,5 @@
 ﻿/** @module */
-import CONTAINER, { Deactivate, MODELS } from './container/CONTAINER.js';
+import CONTAINER, { ATTR, Deactivate, MODELS } from './container/CONTAINER.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import { ICONS } from '../../enums/ICONS.js';
 import PAYLOAD from './form/PAYLOAD.js';
@@ -360,7 +360,7 @@ export default class FACTORY {
                     form.setId(0);
                     form.label = 'Search';
                     let inp = form.getFieldset()[0].getFormElementGroup()[0].addFormInput(
-                        MODELS.input('INPUT', MODELS.inputAttributes('Search', '', 'TEXT', null, 'Search ' + container.toString() + ' for...'), 'Search')
+                        MODELS.input('INPUT', ATTR.input('Search', '', 'TEXT', null, 'Search ' + container.toString() + ' for...'), 'Search')
                         //createInputModel('INPUT', 'Search').setAttribute('placeholder', 'Search ' + container.toString() + ' for...')
                     );
                     form.footer.buttonGroup.get()[0].setLabel('', ICONS.SEARCH);

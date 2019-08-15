@@ -1,6 +1,6 @@
 /* eslint-disable max-lines, max-statements */
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, MODELS, NAVBAR, NAVHEADER, createInputModel } from '../CONTAINER.js';
+import CONTAINER, { ATTR, Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, MODELS, NAVBAR, NAVHEADER } from '../CONTAINER.js';
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import MENU, { NAVSEARCH } from '../../nav/menu/MENU.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
@@ -532,7 +532,7 @@ export default class MAIN extends CONTAINER {
                 form.label = 'Forgot Password';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL')
+                    MODELS.input('INPUT', ATTR.input('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL')
                     //createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL')
                 ]);
 
@@ -615,11 +615,11 @@ export default class MAIN extends CONTAINER {
                         let email = this.url.searchParams.get('email');
                         form.setAction('/Account/Login');
                         form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                            MODELS.input('INPUT', MODELS.inputAttributes('Email', email, 'EMAIL'), 'Email / Username', 'EMAIL'),
+                            MODELS.input('INPUT', ATTR.input('Email', email, 'EMAIL'), 'Email / Username', 'EMAIL'),
                             //createInputModel('INPUT', 'Email', email, 'Email / Username', 'EMAIL'),
-                            MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'EMAIL'), 'Password', 'PASSWORD'),
+                            MODELS.input('INPUT', ATTR.input('Password', '', 'EMAIL'), 'Password', 'PASSWORD'),
                             //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
-                            MODELS.input('INPUT', MODELS.inputAttributes('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
+                            MODELS.input('INPUT', ATTR.input('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
                             //createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
                         ]);
                         //console.log('ButtonGroup', form.footer.buttonGroup.get());
@@ -667,9 +667,9 @@ export default class MAIN extends CONTAINER {
             form.addClass('login');
             //form.children[0].children[0].addInputElements([
             form.get()[0].get()[0].addInputElements([
-                MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
-                MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
-                MODELS.input('INPUT', MODELS.inputAttributes('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
+                MODELS.input('INPUT', ATTR.input('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
+                MODELS.input('INPUT', ATTR.input('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                MODELS.input('INPUT', ATTR.input('RememberMe', '', 'CHECKBOX'), 'Remember Me', 'CHECKBOX')
 				//createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
 				//createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
 				//createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
@@ -720,9 +720,9 @@ export default class MAIN extends CONTAINER {
                 form.label = 'Sign Up';
                 form.addClass('register');
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    MODELS.input('INPUT', MODELS.inputAttributes('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
-                    MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
-                    MODELS.input('INPUT', MODELS.inputAttributes('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
+                    MODELS.input('INPUT', ATTR.input('Email', '', 'EMAIL'), 'Email / Username', 'EMAIL'),
+                    MODELS.input('INPUT', ATTR.input('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                    MODELS.input('INPUT', ATTR.input('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
                     //createInputModel('INPUT', 'Email', '', 'Email / Username', 'EMAIL'),
                     //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),
                     //createInputModel('INPUT', 'PasswordConfirm', '', 'Confirm Password', 'PASSWORD')
@@ -762,10 +762,10 @@ export default class MAIN extends CONTAINER {
                 let email = this.url.searchParams.get('email');
 
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElements([ // fieldset.formElementGroup
-                    MODELS.input('INPUT', MODELS.inputAttributes('Code', this.url.searchParams.get('code'), 'HIDDEN'), 'Code', 'HIDDEN'),
-                    MODELS.input('INPUT', MODELS.inputAttributes('Email', email, 'HIDDEN'), 'Email / Username', 'HIDDEN'),
-                    MODELS.input('INPUT', MODELS.inputAttributes('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
-                    MODELS.input('INPUT', MODELS.inputAttributes('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
+                    MODELS.input('INPUT', ATTR.input('Code', this.url.searchParams.get('code'), 'HIDDEN'), 'Code', 'HIDDEN'),
+                    MODELS.input('INPUT', ATTR.input('Email', email, 'HIDDEN'), 'Email / Username', 'HIDDEN'),
+                    MODELS.input('INPUT', ATTR.input('Password', '', 'PASSWORD', null, null, 'off'), 'Password', 'PASSWORD'),
+                    MODELS.input('INPUT', ATTR.input('PasswordConfirm', '', 'PASSWORD', null, null, 'off'), 'Confirm Password', 'PASSWORD')
                     //createInputModel('INPUT', 'Code', this.url.searchParams.get('code'), 'Code', 'HIDDEN'),
                     //createInputModel('INPUT', 'Email', email, 'Email / Username', 'HIDDEN'),                    
                     //createInputModel('INPUT', 'Password', '', 'Password', 'PASSWORD'),

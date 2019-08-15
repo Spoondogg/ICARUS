@@ -1,9 +1,6 @@
-﻿import MODEL, { ALIGN, ICONS } from '../model/MODEL.js';
+﻿import MODEL, { ALIGN, ATTR, ATTRIBUTES, ICONS } from '../model/MODEL.js';
 /** Model Constructor Factory
-    @description See https://stackoverflow.com/a/502384/722785
-    let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
-    console.log('Options', options('a', 'b'), options(null, 'b'));
-
+    @see https://stackoverflow.com/a/502384/722785
     @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
     @returns {function(): MODEL} Model Constructor
 */
@@ -328,4 +325,4 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     */
     text: makeStruct([['text', '']])
 }
-export { MODEL }
+export { ALIGN, ATTR, ATTRIBUTES, ICONS, MODEL }

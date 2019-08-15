@@ -1,7 +1,7 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
 import BUTTONGROUP, { Activate, BUTTON, Deactivate, ICONS, MODELS } from '../../group/buttongroup/BUTTONGROUP.js';
-import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
+import EL, { ATTR, ATTRIBUTES, MODEL } from '../../EL.js';
 import MENU, { Collapse, Expand, NAVITEM } from '../menu/MENU.js';
 import INPUT from '../../input/INPUT.js';
 /** A search input wrapped in a generic HTMLForm
@@ -21,10 +21,10 @@ export default class NAVSEARCH extends NAVITEM {
         this.typingTimer = null; // timer
         this.doneTypingInterval = 300; //time in ms
 
-        this.input = new INPUT(this, MODELS.input('INPUT', MODELS.inputAttributes('q', '', 'TEXT', false, 'Search', 'off')));
+        this.input = new INPUT(this, MODELS.input('INPUT', ATTR.input('q', '', 'TEXT', false, 'Search', 'off')));
         this.input.el.addEventListener('focus', () => this.showSearchOptions());
         //this.input.el.addEventListener('blur', () => this.hideSearchOptions());
-        this.searchType = new INPUT(this, MODELS.input('INPUT', MODELS.inputAttributes('type', 'CLASS', 'HIDDEN')));
+        this.searchType = new INPUT(this, MODELS.input('INPUT', ATTR.input('type', 'CLASS', 'HIDDEN')));
 
         this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new ATTRIBUTES('input-buttons')));
         this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button('CLASS', ICONS.CLASSVIEWER).set('name', 'TYPE'));

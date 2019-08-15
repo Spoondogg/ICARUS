@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -12,7 +12,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
         return this.chain(() => {
             this.input = new INPUT(this.body.pane, MODELS.input('INPUT', 
-                MODELS.inputAttributes(
+                ATTR.input(
                     this.attributes.name,
                     this.attributes.value || '',
                     this.attributes.type || 'TEXT',
