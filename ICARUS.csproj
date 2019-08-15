@@ -650,6 +650,11 @@
     <Content Include="Content\Images\user256.png" />
     <Content Include="gulpfile.babel.js" />
     <Content Include="Scripts\src\icarus\controller\APP.js" />
+    <Content Include="Scripts\src\icarus\enums\ATTR.js" />
+    <Content Include="Scripts\src\icarus\enums\DATA.js" />
+    <Content Include="Scripts\src\icarus\enums\ERRORS.js" />
+    <Content Include="Scripts\src\icarus\enums\MODELS.js" />
+    <Content Include="Scripts\src\icarus\enums\MODELS_Legacy.js" />
     <Content Include="Scripts\src\icarus\model\BUILDER.js" />
     <Content Include="Scripts\src\icarus\controller\CONTROLLER.js" />
     <Content Include="Scripts\src\icarus\enums\StyleVars.js" />
