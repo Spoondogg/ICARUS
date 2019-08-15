@@ -82,28 +82,30 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     createTagButton(model) {
-        //console.log('createTagButton', model);
-        try {
-            // Then use cache to generate tag
-            let tagName = model.jsonResults[0].value;
-            let btn = this.tagGroup.addSwitch(MODELS.button(tagName, ICONS.TAG));
-            btn.addClass('tag');
-            //btn.implement(new Clickable(btn));
-            btn.el.addEventListener('activate', (ev) => {
-                try {
-                    this.getDialog().close();
-                } catch (e) {
-                    console.warn('No dialog exists to close for TAG ' + tagName, btn);
-                }
-                ev.stopPropagation();
-                //console.log('Activated tag #' + model.id + ', ' + tagName);                
-                this.searchByTagId(model.id, btn).then((dialog) => {
-                    dialog.closeActiveDialogs();
-                    btn.el.addEventListener('deactivate', () => dialog.close());
+        console.log('createTagButton', model);
+        if (model !== null) {
+            try {
+                // Then use cache to generate tag
+                let tagName = model.jsonResults[0].value;
+                let btn = this.tagGroup.addSwitch(MODELS.button(tagName, ICONS.TAG));
+                btn.addClass('tag');
+                //btn.implement(new Clickable(btn));
+                btn.el.addEventListener('activate', (ev) => {
+                    try {
+                        this.getDialog().close();
+                    } catch (e) {
+                        console.warn('No dialog exists to close for TAG ' + tagName, btn);
+                    }
+                    ev.stopPropagation();
+                    //console.log('Activated tag #' + model.id + ', ' + tagName);                
+                    this.searchByTagId(model.id, btn).then((dialog) => {
+                        dialog.closeActiveDialogs();
+                        btn.el.addEventListener('deactivate', () => dialog.close());
+                    });
                 });
-            });
-        } catch (e) {
-            console.error('Unable to create cached tag', model.id, e)
+            } catch (e) {
+                console.error('Unable to create cached tag', model.id, e)
+            }
         }
     }
     deactivateActiveTags() {
