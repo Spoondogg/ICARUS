@@ -4,7 +4,6 @@ import Move from '../event/Move.js';
 /** An interface for Cache driven Events
     @description A Cacheable object has an unique identifier and discriminator
     @class
-    @extends IFACE
 */
 export default class Cacheable extends IFACE {
 	/** A series of Cache Related Events and Methods
@@ -54,4 +53,4 @@ export default class Cacheable extends IFACE {
         }*/
     }
 }
-export { EL, IFACE, Move }
+export { EL, Move }

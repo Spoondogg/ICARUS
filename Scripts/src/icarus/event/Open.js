@@ -1,8 +1,5 @@
 /** @module */
-import EL from '../model/el/EL.js';
-/** An Element Open Event
-    @extends CustomEvent
-*/
+/** An Element Open Event */
 export default class Open extends CustomEvent {
 	/** An element Open event
 	    @param {EL} caller Calling node
@@ -16,4 +13,3 @@ export default class Open extends CustomEvent {
 		});
 	}
 }
-export { EL }

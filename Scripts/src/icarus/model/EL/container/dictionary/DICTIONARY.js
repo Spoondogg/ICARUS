@@ -2,7 +2,6 @@
 import CONTAINER from '../../container/CONTAINER.js';
 /** A collection of words
     @class
-    @extends CONTAINER
 */
 export default class DICTIONARY extends CONTAINER {
 	/** Construct a DICTIONARY Container

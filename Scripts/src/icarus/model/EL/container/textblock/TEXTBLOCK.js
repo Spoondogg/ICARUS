@@ -1,10 +1,9 @@
 /** @module */
-import CONTAINER, { MODEL } from '../CONTAINER.js';
+import CONTAINER from '../CONTAINER.js';
 /** Textblock Constructor
     @description A TEXTBLOCK is essentially a DIV that is designed to contain
     rich text (paragraph and span with formatting attributes) and images.
     @class
-    @extends CONTAINER
 */
 export default class TEXTBLOCK extends CONTAINER {
 	/** Construct a block to contain text
@@ -27,4 +26,3 @@ export default class TEXTBLOCK extends CONTAINER {
 		});
 	}
 }
-export { MODEL }

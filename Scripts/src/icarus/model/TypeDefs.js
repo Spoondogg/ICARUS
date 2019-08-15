@@ -64,12 +64,17 @@
     @typedef {Object} Meta A collection of Meta Attributes
 	@property {string} [description] - Element description text
 */
-/** Represents a generic EL Model
+/** Represents a generic Object Element Model
     @typedef {Object} Model An Element MODEL like structure
     @property {Attributes} [attributes] Attributes
     @property {Data} [data] Data
-    @property {Meta} [meta] Meta
-    
+    @property {Meta} [meta] Meta    
+*/
+/** Represents a generic Object Element Model
+    @typedef {Object} ListModel A LIST like structure
+    @property {Attributes} [attributes] Attributes
+    @property {Data} [data] Data
+    @property {Meta} [meta] Meta    
 */
 /** Represents a generic EL Model
     @typedef {Object} El An Element MODEL like structure

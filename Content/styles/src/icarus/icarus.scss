@@ -420,7 +420,7 @@ $z-bottom: -1;
             float: left;
             height: 3rem;
             margin: 0 0 0 .5rem;
-            width: calc(100% - 10rem);
+            width: calc(100% - 7rem);
         }
 
         > .btn-group {
@@ -431,24 +431,34 @@ $z-bottom: -1;
             margin: 0 .5rem 0 0;
             overflow: hidden;
             padding: 0;
-            width: 9rem;
-        }
+            width: 6rem;
 
-        > button {
-            border-left: 1px solid #ef3131;
-            border-radius: 0 5px 5px 0;
-            box-sizing: border-box;
-            clear: right;
-            float: right;
-            height: 3rem;
-            margin: 0 .5rem 0 0;
-            padding: 0;
-            width: 3rem;
+            > button {
+                /*border-left: 1px solid #ef3131;
+                border-radius: 0 5px 5px 0;
+                box-sizing: border-box;
+                clear: right;
+                float: right;
+                height: 3rem;
+                margin: 0 .5rem 0 0;
+                padding: 0;
+                width: 3rem;*/
+
+                &[name='CLASS'],
+                &[name='TYPE'],
+                &[name='FORMID'] {
+                    display: none;
+                }
+            }
         }
 
         .search-options {
             max-height: 24rem;
             overflow-y: auto;
+        }
+
+        .search-params {
+            clear: both;
         }
     }
 }
@@ -603,7 +613,7 @@ html {
     background-color: $color-dark-less;
     background-image: url('../Images/Logo.png');
     background-position: center;
-    background-position-y: 85px;
+    //background-position-y: 85px;
     background-repeat: no-repeat;
     color: $color-primary;
     font-family: $font-primary;
