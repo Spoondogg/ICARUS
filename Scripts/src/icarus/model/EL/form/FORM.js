@@ -7,9 +7,9 @@ import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
 import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
-import FORMPOST from './FORMPOST.js';
+import FORMPOST from '../../FORMPOST.js';
 import LOADER from '../dialog/loader/LOADER.js';
-import PAYLOAD from './PAYLOAD.js';
+import PAYLOAD from '../../PAYLOAD.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class

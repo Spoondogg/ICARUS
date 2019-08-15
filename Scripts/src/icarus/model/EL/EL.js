@@ -6,7 +6,7 @@ import MODEL, { ATTRIBUTES } from '../MODEL.js';
 import AbstractMethodError from '../../error/AbstractMethodError.js';
 import FACTORY from './FACTORY.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
-import PAYLOAD from './form/PAYLOAD.js';
+import PAYLOAD from '../PAYLOAD.js';
 import RecursionLimitError from '../../error/RecursionLimitError.js';
 import { STATUS } from '../../enums/STATUS.js';
 /** A Generic HTML Element Node Class

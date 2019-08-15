@@ -8,7 +8,7 @@ import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 import HEADER from '../../../header/HEADER.js';
 //import NAVHEADER from '../../../nav/navbar/navheader/NAVHEADER.js';
 import PAGINATION from '../../../footer/pagination/PAGINATION.js';
-import PAYLOAD from '../../../form/PAYLOAD.js';
+import PAYLOAD from '../../../../PAYLOAD.js';
 /** A Class Index contains a list of THUMBNAILS for each Object (Container,FormPost) of 
     the specified classType param (If available to this user)
     @description A ClassIndex launches a ClassViewer which displays a view of that Class

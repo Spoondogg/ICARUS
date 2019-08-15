@@ -2,7 +2,7 @@
 import CONTAINER, { Deactivate, MODELS } from './container/CONTAINER.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import { ICONS } from '../../enums/ICONS.js';
-import PAYLOAD from './form/PAYLOAD.js';
+import PAYLOAD from '../PAYLOAD.js';
 import PROMPT from './dialog/prompt/PROMPT.js';
 import SEARCH from './dialog/prompt/SEARCH/SEARCH.js';
 //import { showdown } from 'showdown';
