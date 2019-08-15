@@ -743,5 +743,5 @@ export const DATAELEMENTS = new Map([
 	]
 ]);
 /* eslint-enable max-params */
-export { ATTRIBUTES }
+export { ALIGN, ATTRIBUTES }
 /* eslint-enable max-lines */

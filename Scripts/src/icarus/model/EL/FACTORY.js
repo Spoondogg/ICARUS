@@ -5,8 +5,6 @@ import { ICONS } from '../../enums/ICONS.js';
 import PAYLOAD from './form/PAYLOAD.js';
 import PROMPT from './dialog/prompt/PROMPT.js';
 import SEARCH from './dialog/prompt/SEARCH/SEARCH.js';
-import { createInputModel } from '../../enums/DATAELEMENTS.js'; //DATAELEMENTS
-//import { showdown } from 'showdown';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class

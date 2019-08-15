@@ -82,7 +82,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     createTagButton(model) {
-        console.log('createTagButton', model);
+        //console.log('createTagButton', model);
         if (model !== null) {
             try {
                 // Then use cache to generate tag
