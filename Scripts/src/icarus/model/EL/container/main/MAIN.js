@@ -359,10 +359,12 @@ export default class MAIN extends CONTAINER {
         let formposts = this.getCache().FORMPOST;
         Object.keys(formposts).forEach((key) => {
             let fp = formposts[key];
-            if (fp.formId === 10128) { // should be filtering, not just assuming tag is indexed in position 0
-                let [tag] = fp.jsonResults.filter((r) => r.name === 'tag' && r.value.toString().startsWith(value));
-                if (typeof tag !== 'undefined') {
-                    tagList.push(tag.value);
+            if (fp !== null) {
+                if (fp.formId === 10128) { // should be filtering, not just assuming tag is indexed in position 0
+                    let [tag] = fp.jsonResults.filter((r) => r.name === 'tag' && r.value.toString().startsWith(value));
+                    if (typeof tag !== 'undefined') {
+                        tagList.push(tag.value);
+                    }
                 }
             }
         });
