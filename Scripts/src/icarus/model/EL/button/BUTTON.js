@@ -4,7 +4,6 @@ import { LongclickDelay } from '../../../enums/StyleVars.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A generic BUTTON Element with an Icon and Label
     @class
-    @extends EL
 */
 export default class BUTTON extends EL {
 	/** Construct a generic Button

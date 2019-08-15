@@ -3,7 +3,6 @@ import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A SPAN Element
     @class
-    @extends EL
 */
 export default class SPAN extends EL {
 	/** Constructs a simple SPAN Element

@@ -6,7 +6,6 @@ import FORMPOSTINDEX from '../../index/classindex/formpostindex/FORMPOSTINDEX.js
 import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element made up of a delimited list of formpost/container UId's
     @class
-    @extends FORMELEMENT
 */
 export default class FORMPOSTLIST extends FORMELEMENT {
 	constructElements() {

@@ -3,7 +3,6 @@ import NAVBAR, { ANCHOR, ATTRIBUTES, Activate, Collapse, Collapsible, Deactivate
 import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
-    @extends NAVBAR
 */
 export default class NAVHEADER extends NAVBAR {
 	/** Constructs a NAVBAR that acts as a Top level Header for a Container

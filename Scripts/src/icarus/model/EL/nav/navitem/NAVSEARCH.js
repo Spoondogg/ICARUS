@@ -4,10 +4,8 @@ import BUTTONGROUP, { Activate, BUTTON, Deactivate, ICONS, MODELS } from '../../
 import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
 import MENU, { Collapse, Expand, NAVITEM } from '../menu/MENU.js';
 import INPUT from '../../input/INPUT.js';
-//import Tabbable from '../../../../interface/Tabbable.js';
 /** A search input wrapped in a generic HTMLForm
     @class
-    @extends NAVITEM
 */
 export default class NAVSEARCH extends NAVITEM {
 	/** Construct a NAVSEARCH
