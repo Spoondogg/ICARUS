@@ -653,6 +653,18 @@ html {
     .hidden {
         display: block;
     }
+    /// A footer that contains form event buttons
+    .form-footer {
+        background-color: transparent;
+
+        > .btn-group {
+            width: 100%;
+
+            > button {
+                width: 100%;
+            }
+        }
+    }
     /* #endregion */
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
@@ -1408,10 +1420,6 @@ html {
                 margin: 0;
                 padding: 0 .5rem;
             }
-        }
-        /// A footer that contains form event buttons
-        &.form-footer {
-            background-color: transparent;
         }
     }
     /// Standard Input Elements
@@ -3035,7 +3043,6 @@ html {
                                     }
 
                                     > .icon {
-
                                     }
                                 }
                             }

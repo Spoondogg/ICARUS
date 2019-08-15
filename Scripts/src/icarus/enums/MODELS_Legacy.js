@@ -1,4 +1,4 @@
-﻿import MODEL, { ICONS } from '../model/MODEL.js';
+﻿import MODEL, { ALIGN, ICONS } from '../model/MODEL.js';
 /** Model Constructor Factory
     @description See https://stackoverflow.com/a/502384/722785
     let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
@@ -44,6 +44,19 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         //['readonly'],
         //['placeholder'],
         //['autocomplete']
+    ]),
+    /** Create a navitem model structure constructor
+        @type {function(InputModel): MODEL}
+        @param {InputModel} Model
+        @returns {MODEL} Attributes
+    */
+    inputAttributes: makeStruct([
+        ['name'],
+        ['value'],
+        ['type', 'TEXT'], //type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
+        ['readonly'],
+        ['placeholder'],
+        ['autocomplete']
     ]),
     /* Create a generic element model structure constructor
         type {function(object): MODEL}
