@@ -1,6 +1,6 @@
 /** @module */
-import GLYPHICON, { MODELS } from '../../../span/GLYPHICON.js';
-import NAVITEM, { ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
+import GLYPHICON, { DATA, MODELS } from '../../../span/GLYPHICON.js';
+import NAVITEM, { ATTR, ATTRIBUTES, Collapse, EL, Expand, MODEL } from '../../../nav/navitem/NAVITEM.js';
 import AbstractMethodError from '../../../../../error/AbstractMethodError.js';
 import HEADER from '../../../header/header.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
@@ -19,13 +19,13 @@ export default class NAVTHUMBNAIL extends NAVITEM {
 		super(node, model);
         this.addClass('nav-item-thumbnail');
         this.classType = classType;
-        this.image = new GLYPHICON(this.anchor, MODELS.icon(ICONS[classType]));
+        this.image = new GLYPHICON(this.anchor, MODELS.icon(new ATTRIBUTES(), DATA.icon(ICONS[classType])));
         this.image.addClass('thumbnail-image');
         $(this.image.el).insertBefore(this.anchor.label.el);
         this.header = new HEADER(this.anchor);
         this.p = new P(this.anchor);
         this.constructThumbnail(model);
-        this.menu = this.addMenu(new MODEL('horizontal thumbnail-menu'));
+        this.menu = this.addMenu(MODELS.menu(ATTR.menu('menu', 'horizontal thumbnail-menu')));
         this.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.menu)));
         this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.menu)));
     }
@@ -37,4 +37,4 @@ export default class NAVTHUMBNAIL extends NAVITEM {
         throw new AbstractMethodError(this.toString() + '.constructThumbnail() not set', this, model);
     }
 }
-export { ATTRIBUTES, Collapse, EL, Expand, GLYPHICON, ICONS, MODEL, P, STRING }
+export { ATTR, ATTRIBUTES, Collapse, DATA, EL, Expand, GLYPHICON, ICONS, MODEL, P, STRING }

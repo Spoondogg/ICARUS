@@ -1,6 +1,6 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
-import { ATTR, DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
+import { ATTR, DATA, DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import Clickable, { Switchable } from '../../../interface/Clickable.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
@@ -45,7 +45,7 @@ export default class CONTAINER extends GROUP {
         /** If true, siblings are deactivated when this CONTAINER is activated */
         this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
-		this.setContainerDefaults(model);		
+		this.setContainerDefaults(model);
 		this.navheader = new NAVHEADER(this, MODELS.navheader(this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
@@ -65,7 +65,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addOptions() {
-        let optionsMenu = this.navheader.getMenu('OPTIONS');
+        let [optionsMenu] = this.navheader.menus.get('OPTIONS');
         this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
             () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
                 () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
@@ -102,6 +102,7 @@ export default class CONTAINER extends GROUP {
         this.navheader.tab.el.addEventListener('longclick', () => this.toggleClass('allow-drag'));
 
         // Trigger reference on OPTIONS long-click
+        //this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
@@ -123,7 +124,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addSaveButton() {
-        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem('SAVE', ICONS.SAVE, 'btn-save', new ATTRIBUTES('tab-narrow')));
+        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('SAVE'), DATA.navitem('btn-save', ICONS.SAVE))); //new ATTRIBUTES('tab-narrow')));
+        btnSave.addClass('tab-narrow');
         btnSave.el.addEventListener('activate', () => this.chain(() => {
             this.el.dispatchEvent(new Modify(btnSave));
         }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
@@ -134,7 +136,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addRefreshButton() {
-        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem('REFRESH', ICONS.REFRESH, 'btn-refresh', new ATTRIBUTES('tab-narrow')));
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('REFRESH'), DATA.navitem('btn-refresh', ICONS.REFRESH)));
+        btnRefresh.addClass('tab-narrow');
         btnRefresh.el.addEventListener('activate', () => this.chain(
             () => this.getMain().focusBody().then(
                 () => this.refresh().then(
@@ -179,10 +182,11 @@ export default class CONTAINER extends GROUP {
             }
         ].forEach((model) => {
             let btn = this.navheader.tabs.addNavItemIcon(
-                MODELS.navitem(model.label, model.icon, model.name, new ATTRIBUTES('tab-narrow')).set({
+                MODELS.navitem(ATTR.navitem(model.name), DATA.navitem(model.label, model.icon)).set({
                     dir: model.dir
                 })
             );
+            btn.addClass('tab-narrow');
             btn.el.addEventListener('activate', () => {
                 this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
                     () => btn.el.dispatchEvent(new Deactivate(btn)));
@@ -345,7 +349,7 @@ export default class CONTAINER extends GROUP {
         this.elements.get(type).forEach((d) => {
             //console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
-            let tab = dataMenu.addNavItem(MODELS.navitem(d.label, ICONS.BLANK, name));
+            let tab = dataMenu.addNavItem(MODELS.navitem(ATTR.navitem(d.label), DATA.navitem(name, ICONS.BLANK)));
             tab.el.addEventListener('activate', () => {
                 try {
                     this.createNewFormPost(type, name);
@@ -509,8 +513,9 @@ export default class CONTAINER extends GROUP {
     */
     constructReferenceSubMenus(arr, menu, reference) {
         arr.forEach((p) => {
-            let t = menu.addNavItemIcon(MODELS.navitem(p, ICONS[p], p));
-            let m = menu.addMenu(MODELS.menu(p));
+            //console.log(this.toString() + 'constructReferenceSubMenus()', p);
+            let t = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(p), DATA.navitem(p, ICONS[p])));
+            let m = menu.addMenu(MODELS.menu(ATTR.menu(p, 'reference-submenu')));
             reference.addTabbableElement(t, m);
         });
     }
@@ -521,12 +526,11 @@ export default class CONTAINER extends GROUP {
     */
     constructReference(reference) {
         try {
-            let { menu } = reference.options;
-
-            let propertiesMenu = menu.getMenu('PROPERTIES');
+            //let refmenu = reference.options.menu;
+            let propertiesMenu = reference.options.menu.getMenu('PROPERTIES');
             this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, reference);
 
-            let methodsMenu = menu.getMenu('METHODS');
+            let methodsMenu = reference.options.menu.getMenu('METHODS');
             this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
             this.addCrudItems(methodsMenu.getMenu('CRUD'));
             this.addDomItems(methodsMenu.getMenu('DOM'));
@@ -811,7 +815,7 @@ export default class CONTAINER extends GROUP {
 							this[name] = new LABEL(node, new MODEL().set('innerHTML', this.data[name]));
                             break;
                         case 'span':
-                            this[name] = new SPAN(node, new MODEL().set('innerHTML', this.data[name]));
+                            this[name] = new SPAN(node, MODELS.text(new ATTRIBUTES(), DATA.text(this.data[name])));
                             break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
@@ -968,10 +972,12 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     addElementItems(menu, containerList) {
+        //console.log(this.toString() + '.addElementItems()', menu, containerList);
 		return this.chain(() => {
 			if (containerList.length > 0) {
 				//let defaultContainers = []; // First two are normal
 				//containerList.splice(2, 0, ...defaultContainers);
+                //console.log(this.toString() + '.addElementItems', menu, containerList);
 				Promise.all([containerList.map((c) => this.addContainerCase(menu, c))]);
 			}
 		});
@@ -1043,7 +1049,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	createNavItem(className, menu, close = true) {
 		try {
-            let item = menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
+            let item = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 			if (close) {
 				item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 			}
@@ -1069,7 +1075,8 @@ export default class CONTAINER extends GROUP {
         @param {MENU} menu Target Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems(menu) {
+    addDomItems(menu) {
+        //console.log(this.toString() + '.addDomItems()', menu);
         return this.chain(() => {
             let arr = ['REFRESH', 'FULLSCREEN'];
             if (this.className !== 'MAIN') {
@@ -1096,6 +1103,7 @@ export default class CONTAINER extends GROUP {
         @returns {GROUP} A Menu Group
 	*/
     addCrudItems(menu) {
+        //console.log(this.toString() + '.addCrudItems()', menu);
 		return this.chain(() => {
 			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
             let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu); //[0]
@@ -1107,11 +1115,12 @@ export default class CONTAINER extends GROUP {
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
         @param {MENU} menu Target Menu
-        @param {string} className ie SECTION or FORM
+        @param {Name} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
         @returns {Promise<ThisType>} Promise Chain
     */
     addContainerCase(menu, className, addButton = true) {
+        //console.log(this.toString() + '.addContainerCase()', className, menu);
 		return new Promise((resolve, reject) => {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
@@ -1145,7 +1154,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addContainerCaseButton(className, menu) {
 		try {
-            return menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
+            return menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
@@ -1514,5 +1523,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTR, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
+export { AbstractMethodError, Activate, ATTR, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATA, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
 /* eslint-enable max-lines, max-statements */

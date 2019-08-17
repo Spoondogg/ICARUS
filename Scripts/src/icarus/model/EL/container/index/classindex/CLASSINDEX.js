@@ -1,7 +1,7 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, Activate, Clickable, Deactivate, MODELS } from '../../CONTAINER.js';
+import CONTAINER, { ATTR, ATTRIBUTES, AbstractMethodError, Activate, Clickable, DATA, Deactivate, MODELS } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 //import FOOTER from '../../../footer/FOOTER.js';
@@ -47,7 +47,7 @@ export default class CLASSINDEX extends CONTAINER {
         this.isLoading = false;
 
         /** The ClassIndex Menu contains the results of the search */
-        this.menu = new MENU(this.body.pane, MODELS.menu('INDEX', new ATTRIBUTES('index-menu')));
+        this.menu = new MENU(this.body.pane, MODELS.menu(ATTR.menu('INDEX', 'index-menu')));
         //this.createPagedMenu(0);
         this.createHeader(model, options);
         this.addMenuScrollEvents();        
@@ -76,9 +76,9 @@ export default class CLASSINDEX extends CONTAINER {
             this.headerTab.el.dispatchEvent(new Activate(this.headerTab));
         }
 
-        this.searchMenu = new MENU(this.body, MODELS.menu('searchmenu', new ATTRIBUTES('search-menu')));
+        this.searchMenu = new MENU(this.body, MODELS.menu(ATTR.menu('searchmenu', 'search-menu')));
         $(this.searchMenu.el).insertBefore(this.body.el);
-        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem('Searchwoot', ICONS.SEARCH, 'searchwoot'));
+        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem(ATTR.navitem('Searchwoot'), DATA.navitem('searchwoot', ICONS.SEARCH)));
         this.navSearch.input.setAttribute('value', this.query);
         this.navSearch.btnSearch.el.addEventListener('click',
             () => this.menu.empty(false).then(
@@ -278,7 +278,7 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {MENU} Paged menu
     */
     createPagedMenu(pageNumber) {
-        return this.menu.addMenu(new MODEL('page').set('name', pageNumber));
+        return this.menu.addMenu(MODELS.menu(ATTR.menu(pageNumber, 'page')));
     }
     /** Creates a Thumbnail representation of a Class and adds relevant Events 
         @param {ClassModel} model model
@@ -402,4 +402,4 @@ export default class CLASSINDEX extends CONTAINER {
 		}
 	}
 }
-export { CLASSVIEWER, CONFIRM, Collapse, Expand, ICONS, MODEL, MODELS, NAVSEARCH, PAYLOAD, PROMPT }
+export { ATTR, CLASSVIEWER, CONFIRM, Collapse, DATA, Expand, ICONS, MODEL, MODELS, NAVSEARCH, PAYLOAD, PROMPT }

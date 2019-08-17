@@ -1,6 +1,6 @@
 /** @module */
 import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible.js';
-import ITEM, { ATTRIBUTES, EL, MODEL } from './item/ITEM.js';
+import ITEM, { ATTR, ATTRIBUTES, DATA, EL, MODEL } from './item/ITEM.js';
 import LI from './li/LI.js';
 import UL from './ul/UL.js';
 /** List Constructor
@@ -43,4 +43,4 @@ export default class LIST extends ITEM {
 		return this.addChild(new UL(this, model));
 	}
 }
-export { ATTRIBUTES, Collapse, Collapsible, EL, Expand, ITEM, LI, MODEL }
+export { ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, EL, Expand, ITEM, LI, MODEL }

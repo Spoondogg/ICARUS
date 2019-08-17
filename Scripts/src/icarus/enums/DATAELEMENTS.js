@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 /** @module */
-import MODEL, { ATTR, ATTRIBUTES } from '../model/MODEL.js';
+import MODEL, { ATTR, ATTRIBUTES, DATA } from '../model/MODEL.js';
 import { ALIGN } from '../enums/ALIGN.js';
 import { ICONS } from '../enums/ICONS.js';
 /* eslint-disable max-params */
@@ -285,7 +285,11 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @param {IconModel} Model
         @returns {MODEL} Model
     */
-    icon: makeStruct([['icon', ICONS.BLANK]]),
+    icon: makeStruct([
+        //['icon', ICONS.BLANK]
+        ['attributes', new ATTRIBUTES()],
+        ['data', DATA.icon()]
+    ]),
 
     /** Create a buttonGroup model structure constructor
         @type {function(LoaderLogOptions): MODEL}
@@ -305,9 +309,8 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     menu: makeStruct([
-        ['name', ''],
-        ['attributes', {}],
-        ['data', {}],
+        ['attributes', ATTR.menu()],
+        ['data', DATA.menu()],
         ['meta', {}]
     ]),
 
@@ -344,26 +347,27 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     navitem: makeStruct([
-        ['label'],
-        ['icon', ICONS.BLANK],
-        ['name'],
-        ['attributes', {}]
-        //['target']
+        ['attributes', ATTR.navitem()],
+        ['data', DATA.navitem()]
     ]),
-
     /** Create a paragraph model structure constructor
         @type {function(TextModel): MODEL}
         @param {TextModel} Model
         @returns {MODEL} Model
     */
-    p: makeStruct([['text', '']]),
-
+    p: makeStruct([
+        ['attributes', new ATTRIBUTES()],
+        ['data', DATA.text()]
+    ]),
     /** Create a span model structure constructor
         @type {function(TextModel): MODEL}
         @param {TextModel} Model
         @returns {MODEL} Model
     */
-    text: makeStruct([['text', '']])
+    text: makeStruct([
+        ['attributes', new ATTRIBUTES()],
+        ['data', DATA.text()]
+    ])
 }
 /** Stores the default DATA ELEMENTS collections for each Class
     
@@ -728,5 +732,5 @@ export const DATAELEMENTS = new Map([
 	]
 ]);
 /* eslint-enable max-params */
-export { ALIGN, ATTR, ATTRIBUTES }
+export { ALIGN, ATTR, ATTRIBUTES, DATA }
 /* eslint-enable max-lines */

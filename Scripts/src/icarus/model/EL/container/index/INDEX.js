@@ -1,7 +1,7 @@
 /** @module  */
 //import CLASSINDEX, { CLASSVIEWER } from './classindex/CLASSINDEX.js';
 import CONFIRM, { PROMPT } from '../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { ATTRIBUTES, Activate, MODEL, MODELS } from '../CONTAINER.js';
+import CONTAINER, { ATTR, ATTRIBUTES, Activate, DATA, MODEL, MODELS } from '../CONTAINER.js';
 import CONTAINERINDEX, { CLASSVIEWER } from './classindex/containerindex/CONTAINERINDEX.js';
 import MENU, { Collapse, Expand, NAVITEMICON } from '../../nav/menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';
@@ -17,7 +17,7 @@ export default class INDEX extends CONTAINER {
 	constructor(node, model) {
 		super(node, 'DIV', model);
         this.addClass('index');
-        this.menu = new MENU(this.body.pane, MODELS.menu('index'));
+        this.menu = new MENU(this.body.pane, MODELS.menu(ATTR.menu('index')));
         this.addContainersMenu();
         this.menu.el.dispatchEvent(new Expand(this.menu));
 	}
@@ -46,7 +46,7 @@ export default class INDEX extends CONTAINER {
 			// Create Secondary Tabs and Horizontal Menus inside Menu
             let allowed = ['ARTICLE', 'FORM', 'JUMBOTRON', 'BANNER', 'CALLOUT', 'THUMBNAIL', 'CHAT', 'DICTIONARY', 'IMAGEINDEX', 'CONTAINERINDEX', 'FORMPOSTINDEX'];
 			allowed.map((classType) => {
-                let tb = this.menu.addNavItemIcon(MODELS.navitem(classType, ICONS[classType]));
+                let tb = this.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(classType), DATA.navitem(classType, ICONS[classType])));
                 tb.el.addEventListener('activate', () => {
                     let prompt = new PROMPT(MODELS.dialog(
                         'CLASSINDEX: ' + classType, 'View ' + classType, true,
@@ -147,7 +147,8 @@ export default class INDEX extends CONTAINER {
 						thumb.el.addEventListener('activate', () => console.warn('Payload for ' + element, payload));
                         payload.list.forEach((li) => {
                             let { id, label } = li;
-							let icon = menu.addNavItemIcon(MODELS.navitem(id, ICONS[element], '', new ATTRIBUTES('card')));
+                            let icon = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(element), DATA.navitem(id, ICONS[element]))); 
+                            icon.addClass('card');
 							icon.el.setAttribute('title', label);
 							icon.el.addEventListener('activate', () => {
                                 this.getPayload(id, element).then((result) => {

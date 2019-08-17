@@ -1,6 +1,6 @@
 /* eslint-disable max-lines, max-statements */
 /** @module icarus/model/el/container/MAIN */
-import CONTAINER, { ATTR, Activate, CACHE, Collapse, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, MODELS, NAVBAR, NAVHEADER } from '../CONTAINER.js';
+import CONTAINER, { ATTR, Activate, CACHE, Collapse, DATA, DATAELEMENTS, Deactivate, Expand, ICONS, MODEL, MODELS, NAVBAR, NAVHEADER } from '../CONTAINER.js';
 import CONTAINERFACTORY, { BUTTON, BUTTONGROUP, FACTORY, FORM, PROMPT } from '../CONTAINERFACTORY.js';
 import MENU, { NAVSEARCH } from '../../nav/menu/MENU.js';
 import NAVITEMICON, { EL, NAVITEM } from '../../nav/navitemicon/NAVITEMICON.js';
@@ -279,20 +279,17 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     addReferencePlaceholder(model) {
+        /** @type {MENU} */
         let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
         model.subsections.split(',').forEach((s) => {
-            childrenMenu.addNavItemIcon(new MODEL().set({
-                label: s,
-                id: 'ref_' + s,
-                icon: ICONS.ALERT,
-                name: s + ' placeholder'
-            }));
+            childrenMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem(s + ' placeholder'), DATA.navitem(s, ICONS.ALERT)).set('id', 'ref_' + s));
         });
     }
 	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants. 
 	    @returns {void}
 	*/
     createDocumentMap() {
+        console.log(this.toString() + '.createDocumentMap()');
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
@@ -421,24 +418,25 @@ export default class MAIN extends CONTAINER {
 	    @param {string} label The displayed text
 	    @param {string} url The optional url that this Nav Item references 
 	    @returns {NAVITEMICON} A Nav Item with an Icon and optional label
-	*/
+	
 	addNavItemIcon(menu, icon = ICONS.DEFAULT, label = '', url = '#') {
-		return menu ? menu.addNavItemIcon(MODELS.navitem(label, icon, '').set('url', url)) : null;
-	}
+		return menu ? menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(label), DATA.navitem(label, icon)).set('url', url)) : null;
+	}*/
 	/** Adds the default User, Crud and Dom menus to this Container
 	    @returns {void}
 	*/
-	addDefaultMenuItems() {
-		let optionsMenu = this.navheader.menus.get('OPTIONS', 'MENU');
-		let domMenu = optionsMenu[0].get('DOM', 'MENU');
-		this.addNavItemIcon(domMenu[0], ICONS.HOME, 'Home').el.onclick = () => setTimeout(() => {
+    addDefaultMenuItems() {
+        console.log(this.toString() + '.addDefaultMenuItems()');
+		let [optionsMenu] = this.navheader.menus.get('OPTIONS', 'MENU');
+		let [domMenu] = optionsMenu.get('DOM', 'MENU');
+        domMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('HOME'), DATA.navitem('Home', ICONS.HOME))).el.onclick = () => setTimeout(() => {
 			location.href = this.url.origin;
 		}, 300);
-		this.addNavItemIcon(domMenu[0], ICONS.TOGGLE, 'Headers').el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
-		this.addNavItemIcon(domMenu[0], ICONS.REFRESH, 'Reload').el.onclick = () => setTimeout(() => location.reload(true), 1000);
-		this.addNavItemIcon(domMenu[0], ICONS.CONSOLE, 'Console').el.onclick = () => this.loader.show();
-		let crudMenu = optionsMenu[0].get('CRUD', 'MENU');
-		this.addNavItemIcon(crudMenu[0], ICONS.MAIN, 'New').el.onclick = () => this.createNew();
+        domMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('HEADERS'), DATA.navitem('Headers', ICONS.TOGGLE))).el.onclick = () => this.toggleHeaders().then(() => this.navheader.toggle());
+        domMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('RELOAD'), DATA.navitem('Reload', ICONS.REFRESH))).el.onclick = () => setTimeout(() => location.reload(true), 1000);
+        domMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('CONSOLE'), DATA.navitem('Console', ICONS.CONSOLE))).el.onclick = () => this.loader.show();
+		let [crudMenu] = optionsMenu.get('CRUD', 'MENU');
+        crudMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('NEW'), DATA.navitem('New', ICONS.MAIN))).el.onclick = () => this.createNew();
     }
 	/** Requests a new {@link MAIN} from the server and redirects to that page
         @todo This should be a POST to avoid CSRF

@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { ATTR, ATTRIBUTES, Activate, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../CONTAINER.js';
+import CONTAINER, { ATTR, ATTRIBUTES, Activate, Collapse, DATA, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../CONTAINER.js';
 import Hideable from '../../../../interface/Hideable.js';
 import LABEL from '../../label/LABEL.js';
 /** An abstract Form Element
@@ -77,4 +77,4 @@ export default class FORMELEMENT extends CONTAINER {
 		return Promise.resolve(this);
     }
 }
-export { ATTR, ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, LABEL, MODEL, MODELS }
+export { ATTR, ATTRIBUTES, Activate, CONTAINER, Collapse, DATA, Deactivate, EL, Expand, ICONS, INPUTTYPES, LABEL, MODEL, MODELS }

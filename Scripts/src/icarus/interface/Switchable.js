@@ -4,7 +4,6 @@ import Activate from '../event/Activate.js';
 import Deactivate from '../event/Deactivate.js';
 /** An interface for Toggle driven Events for a collapsable element
     @class
-    @extends IFACE
 */
 export default class Switchable extends IFACE {
 	/** A series of Switch Related Events and Methods

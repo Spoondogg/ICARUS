@@ -3,7 +3,6 @@ import EL, { MODEL } from '../EL.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A Paragraph Element
     @class
-    @extends EL
 */
 export default class P extends EL {
 	/** Constructs a Paragraph

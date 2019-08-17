@@ -189,7 +189,7 @@
 ///// END LOADER.log
 
 /** Represents a MENU Object Model
-    @typedef {{name: Name} & Model} MenuModel Represents a MENU Object Model
+    @typedef {{attributes:MenuAttributes, data:MenuData}} MenuModel Represents a MENU Object Model
 */
 
 /** Represents a set of options for a Loader log
@@ -258,10 +258,7 @@
 */
 
 /** Represents a model for an Anchor
-    @typedef {IconModel & {attributes:AnchorAttributes}} AnchorModel Model
-    @property {string} [label=""] Label
-    @property {string} [icon="ICONS.BLANK"] Icon
-    @property {AnchorAttributes} [attributes] Attributes
+    @typedef {IconModel & {attributes:AnchorAttributes, data:AnchorData}} AnchorModel Model
 */
 
 /** Represents a model for a FormFooter
@@ -273,11 +270,15 @@
     @typedef {Object} GroupModel Model
     @property {string} name Group Name
 */
-
-/** Represents a model for an Icon
-    @typedef {Object} IconModel Model
+/** Icon Data
+    @typedef {Object} IconData Data
     @property {string} icon Icon
     @property {string} [label] Label
+*/
+/** Represents a model for an Icon
+    @typedef {Object} IconModel Model
+    @property {ATTRIBUTES} [attributes] Attributes
+    @property {IconData} [data] Label
 */
 
 /** Represents a model for an Icon
@@ -304,7 +305,25 @@
     @typedef {Object} ImageModel Model
     @property {ImageAttributes} [attributes] Image Attributes
 */
-
+/** MenuAttributes
+    @typedef {Object} MenuAttributes A set of attributes for an menu
+    @property {Name} [name=""] Menu Name
+    @property {Name} [class] Menu Optional ClassName
+*/
+/** MenuAttributes
+    @typedef {ATTRIBUTES} MenuData A set of data for an menu
+*/
+/** NavItemAttributes
+    @typedef {Object} NavItemAttributes Attributes
+    @property {Name} [name] Name
+    @property {string} [title] Title
+    @property {string} [target] Target
+*/
+/** NavItemData
+    @typedef {Object} NavItemData Attributes
+    @property {string} [label] Label
+    @property {string} [icon] Icon
+*/
 /* Represents a model for a NAVITEM
     @typedef {Object} NavItemModel Model
     @property {string} [label=""] Label
@@ -351,7 +370,7 @@
 */
 
 /** Represents a model for a NAVITEM
-    @typedef {ButtonModel & {name:Name, target:EL}} NavItemModel - NavItemModel
+    @typedef {{attributes:NavItemAttributes, data:NavItemData} NavItemModel - NavItemModel
 */
 
 /** Represents a model for an IMG Class
@@ -361,7 +380,8 @@
 
 /** Represents a model for an element that contains text
     @typedef {Object} TextModel Model
-    @property {string} [text=""] InnerText
+    @property {ATTRIBUTES} [attributes] Attributes
+    @property {TextData} [data] Data
 */
 
 ////

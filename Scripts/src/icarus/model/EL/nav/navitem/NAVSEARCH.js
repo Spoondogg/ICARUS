@@ -1,7 +1,7 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
 import BUTTONGROUP, { Activate, BUTTON, Deactivate, ICONS, MODELS } from '../../group/buttongroup/BUTTONGROUP.js';
-import EL, { ATTR, ATTRIBUTES, MODEL } from '../../EL.js';
+import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../../EL.js';
 import MENU, { Collapse, Expand, NAVITEM } from '../menu/MENU.js';
 import INPUT from '../../input/INPUT.js';
 /** A search input wrapped in a generic HTMLForm
@@ -31,12 +31,12 @@ export default class NAVSEARCH extends NAVITEM {
         this.btnSearch = this.buttonGroup.addButton(MODELS.button('', ICONS.SEARCH).set('name', 'SEARCH'));
 
         // Add a list of searchtypes
-        this.searchTypes = new MENU(this, MODELS.menu('types', new ATTRIBUTES('search-types')));
+        this.searchTypes = new MENU(this, MODELS.menu(ATTR.menu('types', 'search-types')));
         this.createSearchTypes(['TAG', 'CLASS', 'TAGID']);
         this.addSearchTypeEvents();
 
         // Add a list of search-options
-        this.searchOptions = new MENU(this, MODELS.menu('options', new ATTRIBUTES('search-options')));
+        this.searchOptions = new MENU(this, MODELS.menu(ATTR.menu('options', 'search-options')));
         //let options = ['A', 'B', 'C'];
         //this.setSearchOptions(options);
         this.addSearchEvents();
@@ -135,7 +135,7 @@ export default class NAVSEARCH extends NAVITEM {
     */
     createSearchTypes(types, activateIndex = 0) {
         types.forEach((type) => {
-            let btn = this.searchTypes.addNavItem(MODELS.navitem(type, ICONS[type]));
+            let btn = this.searchTypes.addNavItem(MODELS.navitem(ATTR.navitem(type), DATA.navitem(type, ICONS[type])));
             btn.el.addEventListener('activate', () => {
                 this.setSearchType(type);
                 this.searchTypes.deactivateSiblings(btn);
@@ -166,7 +166,7 @@ export default class NAVSEARCH extends NAVITEM {
     */
     createSearchOption(option) {
         if (this.searchOptions.get(option).length === 0 && option !== '') {
-            let btn = this.searchOptions.addNavItem(MODELS.navitem(option, ICONS.BLANK, option));
+            let btn = this.searchOptions.addNavItem(MODELS.navitem(ATTR.navitem(option), DATA.navitem(option, ICONS.BLANK)));
             btn.el.addEventListener('activate', () => {
                 //this.searchOptions.deactivateSiblings(btn);
                 this.selectSearchOption(option);
@@ -244,4 +244,4 @@ export default class NAVSEARCH extends NAVITEM {
         this.searchOptions.el.dispatchEvent(new Collapse(this.searchOptions));
     }
 }
-export { ATTRIBUTES, BUTTON, EL, MODEL, NAVITEM }
+export { ATTRIBUTES, BUTTON, DATA, EL, MODEL, NAVITEM }

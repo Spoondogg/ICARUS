@@ -2,7 +2,7 @@
 import P, { MODELS } from './P.js';
 /** A block of text contained within a Well.
     @class
- */
+*/
 export default class WELL extends P {
 	/** Constructs a Well
 	    @param {EL} node Node

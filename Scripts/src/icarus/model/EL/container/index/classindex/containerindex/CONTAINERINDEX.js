@@ -1,5 +1,5 @@
 /** @module */
-import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
+import CLASSINDEX, { ATTR, CLASSVIEWER, CONFIRM, DATA, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
@@ -83,7 +83,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {void}
     */
     addFormMethods(model, thumb) {
-        let btnFormData = thumb.menu.addNavItemIcon(MODELS.navitem('Form Data', ICONS.DATA, 'DATA'));
+        let btnFormData = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('DATA'), DATA.navitem('Form Data', ICONS.DATA)));
         btnFormData.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             'FORM.DATA',
             'Show posts for FORM(' + model.id + ')',
@@ -151,17 +151,17 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         //console.log('.addThumbnailMethods()', pageNumber, model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
-        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem('Append', ICONS.PENCIL, 'APPEND'));
+        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('APPEND'), DATA.navitem('Append', ICONS.PENCIL)));
         btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
 
-        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('VIEW'), DATA.navitem('View ' + this.classType, ICONS[this.classType])));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
         if (this.classType === 'FORM') {
             this.addFormMethods(model, thumb);
         }
 
-        let btnSearch = thumb.menu.addNavItemIcon(MODELS.navitem('Search ' + this.classType, ICONS.SEARCH, 'SEARCH'));
+        let btnSearch = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('SEARCH'), DATA.navitem('Search ' + this.classType, ICONS.SEARCH)));
         btnSearch.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             this.classType + '.SEARCH',
             'Search children of ' + this.classType,
@@ -180,7 +180,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {
             thumb.menu.addNavItemIcon(
-                MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase())
+                MODELS.navitem(ATTR.navitem(methods[m].toUpperCase()), DATA.navitem(methods[m], ICONS[methods[m].toUpperCase()]))
             ).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',

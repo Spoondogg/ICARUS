@@ -1,6 +1,7 @@
 /** @module */
 //import ATTRIBUTES from './ATTRIBUTES.js';
 import { ATTR, ATTRIBUTES } from '../enums/ATTR.js';
+import { DATA } from '../enums/DATA.js';
 import PAYLOAD from './el/form/PAYLOAD.js';
 /** A Map like object, representative of an Element Model
     @class
@@ -154,4 +155,4 @@ export default class MODEL {
         });
     }
 }
-export { ATTR, ATTRIBUTES }
+export { ATTR, ATTRIBUTES, DATA }

@@ -38,7 +38,7 @@ export const DATA = { ////  CACHE THESE CONSTRUCTORS
     ]),
     /** Create a button model structure constructor
         @type {function(ButtonData): ATTRIBUTES}
-        @param {ButtonData} [Attributes]
+        @param {ButtonData} [Attributes] Attributes
         @returns {ATTRIBUTES} Attributes
     */
     button: makeDataStruct([
@@ -47,8 +47,8 @@ export const DATA = { ////  CACHE THESE CONSTRUCTORS
     ]),
     /** Create an icon data structure constructor
         @type {function(IconData): ATTRIBUTES}
-        @param {IconData} Attributes
-        @returns {ATTRIBUTES} Model
+        @param {IconData} Attributes Attributes
+        @returns {ATTRIBUTES} Attributes
     */
     icon: makeDataStruct([
         ['label'],
@@ -57,14 +57,20 @@ export const DATA = { ////  CACHE THESE CONSTRUCTORS
     ]),
     /** Create a text model structure constructor
         @type {function(TextData): ATTRIBUTES}
-        @param {TextData} [Attributes]
+        @param {TextData} [Attributes] Attributes
         @returns {ATTRIBUTES} Attributes
     */
     text: makeDataStruct([['text', '']]),
+    /** Create an menu attributes structure constructor
+        @type {function(MenuData): ATTRIBUTES}
+        @param {MenuData} [Attributes]
+        @returns {ATTRIBUTES} Attributes
+    */
+    menu: makeDataStruct([['name']]),
     /** Create a navitem model structure constructor
         @type {function(NavItemData): ATTRIBUTES}
-        @param {NavItemData} Attributes
-        @returns {ATTRIBUTES} Model
+        @param {NavItemData} Attributes Attributes
+        @returns {ATTRIBUTES} Attributes
     */
     navitem: makeDataStruct([
         ['label'],

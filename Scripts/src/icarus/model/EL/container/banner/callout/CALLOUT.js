@@ -1,9 +1,8 @@
 /** @module */
-import CONTAINER, { MODELS } from '../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, DATA, MODELS } from '../../CONTAINER.js';
 import GLYPHICON from '../../../span/GLYPHICON.js';
 /** A panel with an icon and some text
     @class
-    @extends CONTAINER
 */
 export default class CALLOUT extends CONTAINER {
 	/** Constructs a Callout
@@ -19,7 +18,7 @@ export default class CALLOUT extends CONTAINER {
 		return this.chain(() => {
 			if (this.dataId > 0) {
 				if (this.data.icon) {
-                    this.icon = new GLYPHICON(this.childLocation, MODELS.icon(this.data.icon));
+                    this.icon = new GLYPHICON(this.childLocation, MODELS.icon(new ATTRIBUTES(), DATA.icon(this.data.icon)));
 				}
 				if (this.data.header) {
                     this.createEditableElement('header', this.childLocation).then((header) => {

@@ -1,5 +1,5 @@
 /** @module */
-import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
+import COLLAPSIBLE, { ATTR, ATTRIBUTES, DATA, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
 import Closeable, { Close, Open } from '../../../interface/Closeable.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import FORMFOOTER from '../form/FORMFOOTER.js';
@@ -10,7 +10,6 @@ import { TransitionSpeed } from '../../../enums/StyleVars.js';
 /* eslint-disable max-statements */
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
-    @extends EL
 */
 export default class DIALOG extends EL {
 	/** Constructs a generic DIALOG Element
@@ -49,7 +48,7 @@ export default class DIALOG extends EL {
 	    @returns {NAVITEMICON} Close Button / Icon
 	*/
 	createCloseButton() {
-        let btn = this.navheader.tabs.addNavItemIcon(MODELS.navitem('close', ICONS.CLOSE));
+        let btn = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('CLOSE'), DATA.navitem('close', ICONS.CLOSE)));
         btn.addClass('btn-close');
 		btn.el.addEventListener('activate', () => this.closeDialog());
 		return btn;

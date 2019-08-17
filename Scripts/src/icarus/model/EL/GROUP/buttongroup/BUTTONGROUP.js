@@ -4,7 +4,6 @@ import TOGGLEBUTTON, { Activate, BUTTON, Deactivate, ICONS, MODELS, SWITCH } fro
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A container for Buttons
     @class
-    @extends GROUP
 */
 export default class BUTTONGROUP extends GROUP {
 	/** Constructs a Group for containing Buttons

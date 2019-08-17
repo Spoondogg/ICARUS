@@ -1,7 +1,7 @@
 /** @module */
 import Clickable, { Activate, Deactivate } from '../../../../interface/Clickable.js';
 import MENU, { Collapse, Expand } from '../menu/MENU.js';
-import UL, { ATTRIBUTES, EL, LI, MODEL } from '../../list/ul/UL.js';
+import UL, { ATTR, ATTRIBUTES, DATA, EL, LI, MODEL } from '../../list/ul/UL.js';
 import ANCHOR from '../../a/anchor/ANCHOR.js';
 import { LongclickDelay } from '../../../../enums/StyleVars.js';
 import { MODELS } from '../../../../enums/DATAELEMENTS.js';
@@ -22,9 +22,9 @@ export default class NAVITEM extends LI {
 		this.anchor = new ANCHOR(this, model);
 		this.addConstructor('MENU', () => this.addMenu(model));
 		/** @type {EL} target Target switchable EL for NAV related events */
-		this.target = model.target;
-		if (model.label) {
-			this.el.setAttribute('title', model.label);
+		this.target = model.attributes.target;
+		if (model.data.label) {
+			this.el.setAttribute('title', model.data.label);
 		}
     }
     /** Creates a NavItemOptions constructor
@@ -77,4 +77,4 @@ export default class NAVITEM extends LI {
 		};
 	}
 }
-export { ANCHOR, ATTRIBUTES, Collapse, EL, Expand, LI, MENU, MODEL, UL }
+export { ATTR, ANCHOR, ATTRIBUTES, Collapse, DATA, EL, Expand, LI, MENU, MODEL, MODELS, UL }

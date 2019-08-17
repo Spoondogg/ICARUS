@@ -1,5 +1,5 @@
 /** @module */
-import NAVBAR, { ANCHOR, ATTRIBUTES, Activate, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
+import NAVBAR, { ANCHOR, ATTR, ATTRIBUTES, Activate, Collapse, Collapsible, DATA, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
 import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class
@@ -16,7 +16,8 @@ export default class NAVHEADER extends NAVBAR {
 		    @todo Spoon.svg
 		    @todo Consider moving into CONTAINER
 		*/
-        this.tab = this.tabs.addNavItemIcon(MODELS.navitem(model.label, ICONS.CERTIFICATE, 'tab', new ATTRIBUTES('tab-wide')));
+        this.tab = this.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('tab'), DATA.navitem(model.label, ICONS.CERTIFICATE)));
+        this.tab.addClass('tab-wide');
         this.tab.el.addEventListener('activate', () => node.body.el.dispatchEvent(new Expand(this.tab)));
         this.tab.el.addEventListener('deactivate', () => node.body.el.dispatchEvent(new Collapse(this.tab)));
         //this.tab.el.addEventListener('activate', () => this.options.tabTarget.el.dispatchEvent(new Expand(this.tab)));
@@ -26,9 +27,9 @@ export default class NAVHEADER extends NAVBAR {
             container.getFactory().save(false, container, container, 'label');
         });
         this.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.COG, [
-            MODELS.navitem('ELEMENTS', ICONS.ELEMENTS, 'ELEMENTS'),
-            MODELS.navitem('CRUD', ICONS.CRUD, 'CRUD'),
-            MODELS.navitem('DOM', ICONS.DOM, 'DOM')
+            MODELS.navitem(ATTR.navitem('ELEMENTS'), DATA.navitem('ELEMENTS', ICONS.ELEMENTS)),
+            MODELS.navitem(ATTR.navitem('CRUD'), DATA.navitem('CRUD', ICONS.CRUD)),
+            MODELS.navitem(ATTR.navitem('DOM'), DATA.navitem('DOM', ICONS.DOM))
         ]);
 	}
 	/** Adds a single NAV Icon and associated SIDEBAR
@@ -40,7 +41,7 @@ export default class NAVHEADER extends NAVBAR {
 	*/
 	addTabbableSidebar(name, label, icon = ICONS.CERTIFICATE, align = 'left') {
         return this.addTabbableElement(
-            this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name)),
+            this.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem(name), DATA.navitem(label, icon))),
 			this.menus.addChild(new SIDEBAR(this.menus, new MODEL().set({
 				name,
 				align
@@ -48,4 +49,4 @@ export default class NAVHEADER extends NAVBAR {
 		);
 	}
 }
-export { Activate, ANCHOR, Collapse, Collapsible, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, SIDEBAR }
+export { Activate, ANCHOR, ATTR, Collapse, Collapsible, DATA, Deactivate, EL, Expand, LIST, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, SIDEBAR }

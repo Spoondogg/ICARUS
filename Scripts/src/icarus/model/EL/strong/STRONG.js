@@ -3,7 +3,6 @@ import EL, { ATTRIBUTES, MODEL } from '../EL.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A STRONG element
     @class
-    @extends EL
 */
 export default class STRONG extends EL {
 	/** Constructs a STRONG element
