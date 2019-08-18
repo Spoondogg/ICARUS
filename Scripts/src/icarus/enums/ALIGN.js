@@ -1,5 +1,4 @@
-/**
-    CSS Alignment options
+/** CSS Alignment options
     @readonly
     @enum {number|string}
 */
