@@ -1,6 +1,6 @@
 /** @module */
 import CLASSINDEX, { CLASSVIEWER, CONFIRM, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
-import FORM, { PAYLOAD } from '../../../../form/FORM.js';
+import FORM, { ATTR, DATA, PAYLOAD } from '../../../../form/FORM.js';
 import FORMPOSTTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/formpostthumbnail/FORMPOSTTHUMBNAIL.js';
 /** Contains a list of THUMBNAILS for each Container of the specified 
     classType available to this user.
@@ -94,13 +94,13 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
     addThumbnailMethods(model, pageNumber = 0) {
         //console.log('FORMPOSTINDEX.addThumbnailMethods()', model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
-        let btnGet = thumb.menu.addNavItemIcon(MODELS.navitem('Get ' + this.classType, ICONS[this.classType], 'GET'));
+        let btnGet = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('GET'), DATA.navitem('Get ' + this.classType, ICONS[this.classType])));
         btnGet.el.addEventListener('click', () => this.retrieveFormPost(model.id));
 
-        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('VIEW'), DATA.navitem('View ' + this.classType, ICONS[this.classType])));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
-        let btnEdit = thumb.menu.addNavItemIcon(MODELS.navitem('Edit ' + this.classType, ICONS[this.classType], 'EDIT'));
+        let btnEdit = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('EDIT'), DATA.navitem('Edit ' + this.classType, ICONS[this.classType])));
         btnEdit.el.addEventListener('click', () => {
             console.log('FORMPOSTINDEX.btnEdit()', model);
             //this.getContainer().getFactory().editProperty();
@@ -190,7 +190,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         setTimeout(() => {
             if (model.jsonResults) { // Set values based on existing 
                 form.getFieldset()[0].getFormElementGroup()[0].addInputElement(
-                    MODELS.input('INPUT', MODELS.inputAttributes('id', model.id, 'HIDDEN', true), 'id', 'HIDDEN')
+                    MODELS.input('INPUT', ATTR.input('id', model.id, 'HIDDEN', true), 'id', 'HIDDEN')
                     //createInputModel('TEXT', 'id', model.id, 'id', 'HIDDEN', true)
                 );
                 //[...form.el.elements].forEach((el) => {
@@ -205,4 +205,4 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         }, 2000);
     }
 }
-export { CLASSVIEWER, CONFIRM, Expand, FORM, ICONS, MODEL, MODELS, NAVTHUMBNAIL, PAYLOAD, PROMPT }
+export { ATTR, CLASSVIEWER, CONFIRM, DATA, Expand, FORM, ICONS, MODEL, MODELS, NAVTHUMBNAIL, PAYLOAD, PROMPT }

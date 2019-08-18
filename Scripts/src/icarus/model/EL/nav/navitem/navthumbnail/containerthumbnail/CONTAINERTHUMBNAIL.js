@@ -1,7 +1,7 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, Deactivate, MODELS } from '../../../../group/buttongroup/BUTTONGROUP.js';
 import CONTAINERINDEX, { PROMPT } from '../../../../container/index/classindex/containerindex/CONTAINERINDEX.js';
-import NAVTHUMBNAIL, { ATTRIBUTES, EL, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
+import NAVTHUMBNAIL, { ATTR, ATTRIBUTES, DATA, EL, ICONS, MODEL, STRING } from '../NAVTHUMBNAIL.js';
 import DIV from '../../../../div/DIV.js';
 import TAGGROUP from '../../../../group/buttongroup/taggroup/TAGGROUP.js';
 /** A full-width NavItem with a Thumbnail image, label and description
@@ -83,27 +83,29 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
     */
     createTagButton(model) {
         //console.log('createTagButton', model);
-        try {
-            // Then use cache to generate tag
-            let tagName = model.jsonResults[0].value;
-            let btn = this.tagGroup.addSwitch(MODELS.button(tagName, ICONS.TAG));
-            btn.addClass('tag');
-            //btn.implement(new Clickable(btn));
-            btn.el.addEventListener('activate', (ev) => {
-                try {
-                    this.getDialog().close();
-                } catch (e) {
-                    console.warn('No dialog exists to close for TAG ' + tagName, btn);
-                }
-                ev.stopPropagation();
-                //console.log('Activated tag #' + model.id + ', ' + tagName);                
-                this.searchByTagId(model.id, btn).then((dialog) => {
-                    dialog.closeActiveDialogs();
-                    btn.el.addEventListener('deactivate', () => dialog.close());
+        if (model !== null) {
+            try {
+                // Then use cache to generate tag
+                let tagName = model.jsonResults[0].value;
+                let btn = this.tagGroup.addSwitch(MODELS.button(ATTR.button(), DATA.button(tagName, ICONS.TAG)));
+                btn.addClass('tag');
+                //btn.implement(new Clickable(btn));
+                btn.el.addEventListener('activate', (ev) => {
+                    try {
+                        this.getDialog().close();
+                    } catch (e) {
+                        console.warn('No dialog exists to close for TAG ' + tagName, btn);
+                    }
+                    ev.stopPropagation();
+                    //console.log('Activated tag #' + model.id + ', ' + tagName);                
+                    this.searchByTagId(model.id, btn).then((dialog) => {
+                        dialog.closeActiveDialogs();
+                        btn.el.addEventListener('deactivate', () => dialog.close());
+                    });
                 });
-            });
-        } catch (e) {
-            console.error('Unable to create cached tag', model.id, e)
+            } catch (e) {
+                console.error('Unable to create cached tag', model.id, e)
+            }
         }
     }
     deactivateActiveTags() {
@@ -172,11 +174,11 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
         this.detail = new DIV(this.anchor, new MODEL('detail'));
         this.detail.authorId = new DIV(this.detail, new MODEL('left').set('innerHTML', model.authorId));
         this.detail.rating = new BUTTONGROUP(this.detail, MODELS.buttongroup(model.align, null, new MODEL('right star-group')));
-        this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
-        this.detail.rating.addButton(MODELS.button('', ICONS.STAREMPTY));
-        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
-        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
-        this.detail.rating.addButton(MODELS.button('', ICONS.STAR));
+        this.detail.rating.addButton(MODELS.button(ATTR.button(), DATA.button('', ICONS.STAREMPTY)));
+        this.detail.rating.addButton(MODELS.button(ATTR.button(), DATA.button('', ICONS.STAREMPTY)));
+        this.detail.rating.addButton(MODELS.button(ATTR.button(), DATA.button('', ICONS.STAR)));
+        this.detail.rating.addButton(MODELS.button(ATTR.button(), DATA.button('', ICONS.STAR)));
+        this.detail.rating.addButton(MODELS.button(ATTR.button(), DATA.button('', ICONS.STAR)));
     }
 }
-export { ATTRIBUTES, BUTTON, EL, MODEL, NAVTHUMBNAIL }
+export { ATTR, ATTRIBUTES, BUTTON, DATA, EL, MODEL, NAVTHUMBNAIL }

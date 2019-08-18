@@ -1,9 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../EL.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A SPAN Element
     @class
-    @extends EL
 */
 export default class SPAN extends EL {
 	/** Constructs a simple SPAN Element
@@ -12,7 +11,7 @@ export default class SPAN extends EL {
     */
 	constructor(node, model = MODELS.text()) {
         super(node, 'SPAN', model);
-        this.setInnerHTML(model.text);
+        this.setInnerHTML(model.data.text);
 	}
 }
-export { ATTRIBUTES, EL, MODEL, MODELS, SPAN }
+export { ATTR, ATTRIBUTES, DATA, EL, MODEL, MODELS, SPAN }

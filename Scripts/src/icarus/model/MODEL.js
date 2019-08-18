@@ -2,8 +2,7 @@
 //import ATTRIBUTES from './ATTRIBUTES.js';
 import { ATTR, ATTRIBUTES } from '../enums/ATTR.js';
 import { DATA } from '../enums/DATA.js';
-import { ICONS } from '../enums/ICONS.js';
-import PAYLOAD from './PAYLOAD.js';
+import PAYLOAD from './el/form/PAYLOAD.js';
 /** A Map like object, representative of an Element Model
     @class
 */
@@ -166,12 +165,7 @@ export default class MODEL {
     getPayload(uid, type = 'FORMPOST') {
         return new Promise((resolve, reject) => {
             try {
-                this.getJson('/' + type + '/GET/' + uid, (payload) => {
-                    /*if (payload.className === 'ERROR') {
-                        console.error(this.toString() + '.getPayload', uid, type, payload.message);
-                    }*/
-                    resolve(new PAYLOAD(payload));
-                });
+                this.getJson('/' + type + '/GET/' + uid, (payload) => resolve(new PAYLOAD(payload)));
             } catch (e) {
                 console.warn('Unable to retrieve payload', type, uid, e);
                 reject(e);
@@ -179,4 +173,4 @@ export default class MODEL {
         });
     }
 }
-export { ATTR, ATTRIBUTES, DATA, ICONS }
+export { ATTR, ATTRIBUTES, DATA }

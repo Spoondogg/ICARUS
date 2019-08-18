@@ -1,5 +1,5 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, Activate, CONTAINER, Collapse, DATA, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
@@ -12,7 +12,7 @@ export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
         return this.chain(() => {
             this.input = new INPUT(this.body.pane, MODELS.input('INPUT', 
-                MODELS.inputAttributes(
+                ATTR.input(
                     this.attributes.name,
                     this.attributes.value || '',
                     this.attributes.type || 'TEXT',
@@ -56,10 +56,10 @@ export default class FORMINPUT extends FORMELEMENT {
         @returns {void}
     */
     buildCheckbox(labelOn = 'YES', labelOff = 'NO') {
-        this.optionsMenu = new MENU(this.body.pane, MODELS.menu('optionsMenu', new ATTRIBUTES('checkmark-menu')));
+        this.optionsMenu = new MENU(this.body.pane, MODELS.menu(ATTR.menu('checkbox', 'checkmark-menu')));
 
-        let on = this.optionsMenu.addNavItem(MODELS.navitem(labelOn, ICONS.BLANK, 'yes'));
-        let off = this.optionsMenu.addNavItem(MODELS.navitem(labelOff, ICONS.BLANK, 'no'));
+        let on = this.optionsMenu.addNavItem(MODELS.navitem(ATTR.navitem(labelOn), DATA.navitem('yes', ICONS.BLANK)));
+        let off = this.optionsMenu.addNavItem(MODELS.navitem(ATTR.navitem(labelOff), DATA.navitem('no', ICONS.BLANK)));
 
         on.el.addEventListener('activate', () => {
             this.input.el.checked = true;
@@ -207,4 +207,4 @@ export default class FORMINPUT extends FORMELEMENT {
 		return this;
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, INPUTTYPES, MODEL }
+export { ATTRIBUTES, CONTAINER, DATA, EL, FORMELEMENT, INPUTTYPES, MODEL }

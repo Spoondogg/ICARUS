@@ -1,5 +1,4 @@
-/**
-    Bootstrap button types
+/** Bootstrap button types
     @readonly
     @enum {string}
 */

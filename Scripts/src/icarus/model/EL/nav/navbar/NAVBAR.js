@@ -1,11 +1,10 @@
 /** @module */
-import MENU, { ANCHOR, ATTRIBUTES, Collapse, Collapsible, Expand, LIST, MODELS, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
+import MENU, { ANCHOR, ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, Expand, LIST, MODELS, NAVITEM, NAVITEMICON } from '../menu/MENU.js';
 import NAV, { EL, MODEL } from '../NAV.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
 import { ICONS } from '../../../../enums/ICONS.js';
 /** A full width collapseable NAV Element that generally contains tabs
     @class
-    @extends NAV
 */
 export default class NAVBAR extends NAV {
 	/** Constructs a Navigation Panel
@@ -20,10 +19,10 @@ export default class NAVBAR extends NAV {
 		this.implement(new Switchable(this));
 		this.implement(new Collapsible(this));
 		//this.icon = new SVG(this, '0 0 32 32', '', '#CCC').addClass('icon');
-        this.tabs = new MENU(this, MODELS.menu('tabs')); // @todo Should be its own class Horizontal Menu?
+        this.tabs = new MENU(this, MODELS.menu(ATTR.menu('tabs'))); // @todo Should be its own class Horizontal Menu?
         this.tabs.addClass(horizontalTabs ? 'horizontal' : '');
 		this.tabs.el.dispatchEvent(new Expand(this.tabs));
-        this.menus = new MENU(this, MODELS.menu('menus'));
+        this.menus = new MENU(this, MODELS.menu(ATTR.menu('menus')));
 		if (bottomUp) {
 			$(this.menus.el).insertBefore(this.tabs.el);
 		}
@@ -31,22 +30,25 @@ export default class NAVBAR extends NAV {
 		this.menus.el.dispatchEvent(new Expand(this.menus));
 	}
     /** Creates a NAVITEMICON with an associated MENU, then adds given secondary tabbable sub-menus
-        @param {string} name MENU Name
+        @param {Name} name MENU Name
         @param {string} label TAB Label
         @param {string} icon TAB Icon
-        @param {Array<{label:string, icon:string, name:string}>} secondaryTabs Array of Tab names ie label:string, icon:string, name:string
+        @param {Array<NavItemModel>} secondaryTabs Array of Tab names ie label:string, icon:string, name:string
         @param {boolean} isHorizontal If true (default), secondary tab menu is horizontal
         @returns {{tab:NAVITEMICON, element:MENU}} Tabbable Element with submenus
     */
     addTabbableMenu(name, label = name, icon = ICONS[name], secondaryTabs = [], isHorizontal = true) {
         let tabbable = this.addTabbableElement( // Create Primary tab and Menu
-            this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name)),
-            this.menus.addMenu(MODELS.menu(name))
+            this.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem(name), DATA.navitem(label, icon))),
+            this.menus.addMenu(MODELS.menu(ATTR.menu(name, 'tabbable-menu')))
         );
-        secondaryTabs.forEach((t) => this.addTabbableElement( // Create Secondary Tabs and Horizontal Menus inside Menu
-            tabbable.element.addNavItemIcon(new MODEL().set(t)),
-            tabbable.element.addMenu(new MODEL(isHorizontal ? 'horizontal' : '').set('name', t.name))
-        ));
+        secondaryTabs.forEach((t) => {
+            //console.log('SecondaryTab', t);
+            this.addTabbableElement( // Create Secondary Tabs and Horizontal Menus inside Menu
+                tabbable.element.addNavItemIcon(t), //MODELS.navitem(ATTR.navitem(t), DATA.navitem(t))
+                tabbable.element.addMenu(MODELS.menu(ATTR.menu(t.attributes.name, isHorizontal ? 'horizontal' : '')))
+            );
+        });
         return tabbable;
 	}	
 	/** Adds the Options/Config menu
@@ -62,17 +64,15 @@ export default class NAVBAR extends NAV {
 	addOptionsMenu(label = 'OPTIONS', icon = ICONS.COG, name = label, children = ['SUB1', 'SUB2'], isHorizontal = true) {
 		try {
 			// Create Primary Options tab and Menu
-            let tab = this.tabs.addNavItemIcon(MODELS.navitem(label, icon, name));
+            let tab = this.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem(name), DATA.navitem(label, icon)));
             tab.addClass('tab-wide');
-            let menu = this.menus.addMenu(MODELS.menu(name));
+            let menu = this.menus.addMenu(MODELS.menu(ATTR.menu(name, 'options-menu-menu')));
             tab.addTabbableElement(menu);
 
 			// Create Secondary Tabs and Horizontal Menus inside Options Menu
-            let optMenuClass = isHorizontal ? 'horizontal' : '';
             children.map((str) => {
-                let model = MODELS.menu(str, new MODEL(optMenuClass));
-                menu.addNavItemIcon(MODELS.navitem(str, ICONS[str], str))
-                    .addTabbableElement(menu.addMenu(model));
+                menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(str), DATA.navitem(str, ICONS[str])))
+                    .addTabbableElement(menu.addMenu(MODELS.menu(ATTR.menu(str, isHorizontal ? 'horizontal' : ''))));
             });
 
             return {
@@ -119,4 +119,4 @@ export default class NAVBAR extends NAV {
         return this.menus.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON }
+export { Activate, ANCHOR, ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON }

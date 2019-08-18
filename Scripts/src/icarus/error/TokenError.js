@@ -1,8 +1,6 @@
 /** @module */
 import ExtendableError from './ExtendableError.js';
-/** Thrown if the recursion limit is exceeded
-    @class
-*/
+/** Thrown if the recursion limit is exceeded */
 export default class TokenError extends ExtendableError {
 	/** Constructs a Token Error
 		@param {string} message An error message

@@ -1,5 +1,5 @@
 /** @module */
-import CLASSINDEX, { CLASSVIEWER, CONFIRM, CONTAINER, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
+import CLASSINDEX, { ATTR, CLASSVIEWER, CONFIRM, DATA, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
 import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
@@ -10,35 +10,37 @@ export default class CONTAINERINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ClassIndexModel} [model] Model
+        @param {ContainerModel} [model] Model
+        @param {ClassIndexOptions} [options] Options
 	*/
-    constructor(node, model = MODELS.classIndex()) {
-        super(node, model);
+    constructor(node, model, options) {
+        super(node, model, options);
         this.addClass('containerindex');        
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {SearchData} [search] Search Parameters
+        @param {string} [type] Optional search type
+        @param {query} [query] Optional querystring / delimited tag list
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(search = MODELS.search('MAIN', 'CLASS')) {
+    search(type = this.searchType, query = '') {
+        console.log('CONTAINERINDEX.search', type, query);
         let result = null;
-        let url = '/';
-        switch (search.searchType) {
+        switch (type) {
             case 'TAG':
-                url += search.searchClass + '/SearchByTag';
+                result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
                 break;
             case 'TAGID':
-                url += search.searchClass + '/SearchByTagId';
+                result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
                 break
-            case 'CLASS':
             default: // generic search
-                url += search.searchClass + '/search';
+                result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+                    '__RequestVerificationToken': this.getToken()
+                });
         }
-        url += '?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query;
-        console.log(url);
-        result = $.post(url, {
-            '__RequestVerificationToken': this.getToken()
-        });
         return result;
     }
     /** An abstract/default search that promises to return a payload and status
@@ -46,6 +48,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTags(tag = '') {
+        //console.log('CONTAINERINDEX SearchByTag', this.classType, tag);
         return $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tag, {
             '__RequestVerificationToken': this.getToken()
         });
@@ -55,12 +58,13 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     searchTagIds(tagId = '') {
+        //console.log('CONTAINERINDEX SearchByTagId', this.classType, tagId);
         return $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + tagId, {
             '__RequestVerificationToken': this.getToken()
         });
     }
     /** Appends chosen CONTAINER to target after confirmation
-        @param {ContainerModel} model Model
+        @param {MODEL} model Model
         @returns {void}
     */
     confirmAppend(model) {
@@ -79,7 +83,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         @returns {void}
     */
     addFormMethods(model, thumb) {
-        let btnFormData = thumb.menu.addNavItemIcon(MODELS.navitem('Form Data', ICONS.DATA, 'DATA'));
+        let btnFormData = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('DATA'), DATA.navitem('Form Data', ICONS.DATA)));
         btnFormData.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             'FORM.DATA',
             'Show posts for FORM(' + model.id + ')',
@@ -107,22 +111,39 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         ));
     }
     /** Creates a Thumbnail that launches its respective Container
-	    @param {ContainerModel} model Container model
+	    @param {ContainerThumbnailModel} model The Thumbnail model
 	    @param {string} classType The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail(model, classType, pageNumber = 0) {
-        //console.log('.createThumbnail()', classType, pageNumber, model);
+    createThumbnail({
+        id,
+        subsections,
+        authorId,
+        label,
+        description,
+        tags,
+        key,
+        value,
+        jsonResults
+    }, classType, pageNumber = 0) {
         let [pagedMenu] = this.menu.get(pageNumber);
-        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, MODELS.container(
-            model.label, model.subsections, model.tags, model.name, model.id, model.authorId), classType)
-        );
+        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, new MODEL().set({
+            id,
+            subsections,
+            authorId,
+            label,
+            description,
+            tags,
+            key,
+            value,
+            jsonResults
+        }), classType));
         thumbnail.container = this.getContainer();
         return thumbnail;
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
-        @param {ContainerModel} model Model
+        @param {ContainerModel} model model
         @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
@@ -130,17 +151,17 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         //console.log('.addThumbnailMethods()', pageNumber, model);
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
-        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem('Append', ICONS.PENCIL, 'APPEND'));
+        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('APPEND'), DATA.navitem('Append', ICONS.PENCIL)));
         btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
 
-        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('VIEW'), DATA.navitem('View ' + this.classType, ICONS[this.classType])));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
         if (this.classType === 'FORM') {
             this.addFormMethods(model, thumb);
         }
 
-        let btnSearch = thumb.menu.addNavItemIcon(MODELS.navitem('Search ' + this.classType, ICONS.SEARCH, 'SEARCH'));
+        let btnSearch = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('SEARCH'), DATA.navitem('Search ' + this.classType, ICONS.SEARCH)));
         btnSearch.el.addEventListener('click', () => CONFIRM.confirmMethodCall(
             this.classType + '.SEARCH',
             'Search children of ' + this.classType,
@@ -159,7 +180,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         let methods = ['Index', 'List', 'Count', 'Page', 'PageIndex', 'GetParents'];
         for (let m = 0; m < methods.length; m++) {
             thumb.menu.addNavItemIcon(
-                MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase())
+                MODELS.navitem(ATTR.navitem(methods[m].toUpperCase()), DATA.navitem(methods[m], ICONS[methods[m].toUpperCase()]))
             ).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',
@@ -170,32 +191,33 @@ export default class CONTAINERINDEX extends CLASSINDEX {
     }	
     /** Launches a CLASSVIEWER for the given id and classType
         @param {UId} id CONTAINER UId
-        @param {SearchModel} search Search
+        @param {string} classType CONTAINER class
         @returns {void}
     */
-    launchViewer(id, search) {
-        if (search.searchClass === 'MAIN') {
+    launchViewer(id, classType) {
+        if (classType === 'MAIN') {
             CONFIRM.confirmMethodCall(
                 'Launch MAIN Viewer',
-                search.searchClass + ' "(' + id + ') will launch in a new window.  Proceed?',
+                classType + ' "(' + id + ') will launch in a new window.  Proceed?',
                 () => {
-                    console.log('Confirmed.  Viewing ' + search.searchClass + '(' + id + ')');
+                    console.log('Confirmed.  Viewing ' + classType + '(' + id + ')');
                     window.open('/' + id, '_blank');
                 }
             );
         } else {
             let dialog = new PROMPT(MODELS.dialog(
-                'ClassViewer: ' + search.searchClass + ' # ' + id, '', false,
+                'ClassViewer: ' + classType + ' # ' + id, '', false,
                 this.getContainer(), this, this.getLoader()
             ));
             dialog.addClass('dialog-classviewer');
             let model = new MODEL();
             model.container = this.getContainer().getMain();
-            model.data.set('searchClass', search.searchClass);
+            model.data.set('classType', classType);
             let viewer = new CLASSVIEWER(dialog.body.pane, model);
+            //viewer.container = this.getContainer().getMain();
             viewer.body.el.dispatchEvent(new Expand(viewer));
-            this.getContainer().getFactory().get(viewer.body.pane, search.searchClass, id).then(() => dialog.showDialog());
+            this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
         }
     }    
 }
-export { CLASSVIEWER, CONTAINER, NAVTHUMBNAIL, PROMPT }
+export { CLASSVIEWER, NAVTHUMBNAIL, PROMPT }

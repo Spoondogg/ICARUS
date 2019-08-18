@@ -12,7 +12,7 @@ import STRONG from '../../strong/STRONG.js';
 export default class CHAT extends CONTAINER {
 	/** Constructs a SECTION Container Element
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
+        @param {ContainerModel} model Model
     */
 	constructor(node, model) {
 		super(node, 'DIV', model, []);

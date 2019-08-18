@@ -1,5 +1,5 @@
 /** @module */
-import DIALOG, { ATTRIBUTES, DIV, EL, ICONS, MODEL, MODELS } from '../DIALOG.js';
+import DIALOG, { ATTR, ATTRIBUTES, DATA, DIV, EL, ICONS, MODEL, MODELS } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
@@ -59,4 +59,4 @@ export default class PROMPT extends DIALOG {
 		});
 	}
 }
-export { ATTRIBUTES, DIALOG, DIV, EL, FORM, ICONS, MODEL, MODELS }
+export { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, FORM, ICONS, MODEL, MODELS }

@@ -1,6 +1,6 @@
 /** @module */
 import Collapsible, { Collapse, Expand, Toggle } from '../../../interface/Collapsible.js';
-import DIV, { ATTRIBUTES, EL, MODEL } from '../div/DIV.js';
+import DIV, { ATTR, ATTRIBUTES, DATA, EL, MODEL } from '../div/DIV.js';
 import PANE from './PANE.js';
 /** A collapsible DIV with an embedded PANE
     @class
@@ -18,4 +18,4 @@ export default class COLLAPSIBLE extends EL {
 		this.pane = new PANE(this);
 	}
 }
-export { ATTRIBUTES, Collapsible, Collapse, DIV, EL, Expand, MODEL, Toggle }
+export { ATTR, ATTRIBUTES, Collapsible, Collapse, DATA, DIV, EL, Expand, MODEL, Toggle }

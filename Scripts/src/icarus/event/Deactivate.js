@@ -1,4 +1,5 @@
 /** @module */
+import EL from '../model/el/EL.js';
 /** An Element Deactivate Event */
 export default class Deactivate extends CustomEvent {
 	/** An element deactivation event
@@ -13,3 +14,4 @@ export default class Deactivate extends CustomEvent {
 		});
 	}
 }
+export { EL }

@@ -4,7 +4,6 @@ import Clickable, { Activate, Deactivate } from '../../../../interface/Clickable
 //import { LongclickDelay } from '../../../../enums/StyleVars.js';
 /** Button that can be switched on or off
     @class
-    @extends BUTTON
 */
 export default class SWITCH extends BUTTON {
 	/** Construct a switchable button that can be toggled on/off

@@ -1,5 +1,5 @@
 /** @module */
-import LIST, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, MODEL } from '../LIST.js';
+import LIST, { ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, EL, Expand, LI, MODEL } from '../LIST.js';
 /** A generic unorganized list that can be collapsed
     @class
 */
@@ -12,4 +12,4 @@ export default class UL extends LIST {
 		super(node, model, 'UL');
 	}
 }
-export { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL }
+export { ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, EL, Expand, LI, LIST, MODEL }

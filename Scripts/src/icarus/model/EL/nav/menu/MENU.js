@@ -1,16 +1,14 @@
 /** @module */
 import NAVITEM, { ANCHOR } from '../navitem/NAVITEM.js';
 import Switchable, { Activate, Deactivate } from '../../../../interface/Switchable.js';
-import UL, { ATTRIBUTES, Collapse, Collapsible, EL, Expand, LI, LIST, MODEL } from '../../list/ul/UL.js';
+import UL, { ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, EL, Expand, LI, LIST, MODEL } from '../../list/ul/UL.js';
 import { MODELS } from '../../../../enums/DATAELEMENTS.js';
 import NAVBAR from '../navbar/NAVBAR.js';
 import NAVITEMICON from '../navitemicon/NAVITEMICON.js';
 import NAVITEMTHUMBNAIL from '../navitem/navthumbnail/NAVTHUMBNAIL.js';
 import NAVSEARCH from '../navitem/NAVSEARCH.js';
 import NAVSEPARATOR from '../navitem/NAVSEPARATOR.js';
-/** A collapseable list of NAVITEMS
-    @extends LIST
-*/
+/** A collapseable list of NAVITEMS */
 export default class MENU extends LIST {
 	/** Construct a MENU style list of NAVITEMS
 	    @param {EL} node Node
@@ -21,7 +19,7 @@ export default class MENU extends LIST {
     constructor(node, model, element = 'UL', options = MODELS.menuOptions()) {
 		super(node, model, element);
 		this.addClass('menu');
-		this.setAttribute('name', model.name);
+		//this.setAttribute('name', model.name);
 		this.addCases(model);
 		this.implement(new Switchable(this));
 		if (options.canActivate) {
@@ -152,4 +150,4 @@ export default class MENU extends LIST {
         return this.get(name, 'MENU')[0];
     }
 }
-export { Activate, ANCHOR, ATTRIBUTES, Collapse, Collapsible, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVSEARCH, UL }
+export { Activate, ANCHOR, ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, Deactivate, EL, Expand, /*GROUP,*/ LI, LIST, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVSEARCH, UL }
