@@ -240,15 +240,16 @@
 /** Represents a set of options for a Clickable interface
     @typedef {Object} ButtonAttributes A set of options for a NavItem
     @property {string} [type="BUTTON"] Type ie: BUTTON, RESET, SUBMIT
+    @property {string} [name=""] Title text
     @property {string} [title=""] Title text
 */
-
+/** Represents a set of options for a BUTTON
+    @typedef {NavItemData} ButtonData A set of options for a NavItem
+*/
 /** Represents a model for a BUTTON
     @typedef {Object} ButtonModel Model
-    @property {string} [label=""] Label
-    @property {string} [icon="ICONS.BLANK"] Icon
-    @property {Name} [name=""] Name
     @property {ButtonAttributes} [attributes] Button Attributes
+    @property {ButtonData} [data] Button Data
 */
 
 /** Represents a set of attributes for an anchor
@@ -372,12 +373,27 @@
 /** Represents a model for a NAVITEM
     @typedef {{attributes:NavItemAttributes, data:NavItemData} NavItemModel - NavItemModel
 */
-
+/** Represents a model for a NAVITEM
+    @typedef {NavItemModel & {data:SearchModel}} NavItemSearchModel - NavItemModel
+*/
+/** Represents a model for a Search Method
+    @typedef {Object} SearchModel Model
+    @property {string} [searchClass="MAIN"] Class to search/display
+    @property {string} [searchType="TAG"] Type/filter to apply to query
+    @property {string} [query=""] Search QueryString
+    @property {number} [formId="-1"] Optional FormPost Form UId
+*/
 /** Represents a model for an IMG Class
     @typedef {Object} NavHeaderModel Model
     @property {string} [label=""] Label
 */
-
+/** Represents a set of search options for a ClassIndex
+    @typedef {Object} SearchData A set of options for a ClassIndex
+    @property {classType} [searchClass="MAIN"] A Class Type / name of Class (ie: CONTAINER, FORMPOST)
+    @property {string} [searchType="CLASS"] Optional search Type
+    @property {query} [query=""] Optional QueryString / comma delimited list of tags/tag uids
+    @property {query} [formId=""] Optional FormPost Form UId
+*/
 /** Represents a model for an element that contains text
     @typedef {Object} TextModel Model
     @property {ATTRIBUTES} [attributes] Attributes

@@ -64,7 +64,7 @@ export default class CLASSINDEX extends CONTAINER {
     createHeader(model, options) {
         this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
-        this.headerTab = new BUTTON(this.header, MODELS.button(model.data.header || options.classType, ICONS.BLANK));
+        this.headerTab = new BUTTON(this.header, MODELS.button(ATTR.button(), DATA.button(model.data.header || options.classType, ICONS.BLANK)));
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
         this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
@@ -78,13 +78,13 @@ export default class CLASSINDEX extends CONTAINER {
 
         this.searchMenu = new MENU(this.body, MODELS.menu(ATTR.menu('searchmenu', 'search-menu')));
         $(this.searchMenu.el).insertBefore(this.body.el);
-        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem(ATTR.navitem('Searchwoot'), DATA.navitem('searchwoot', ICONS.SEARCH)));
-        this.navSearch.input.setAttribute('value', this.query);
+        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem(ATTR.navitem('navsearch'), DATA.navitem('', ICONS.SEARCH)));
+        this.navSearch.query.setAttribute('value', this.query);
         this.navSearch.btnSearch.el.addEventListener('click',
             () => this.menu.empty(false).then(
                 () => this.callSearch(
                     this.navSearch.searchType.el.value,
-                    this.navSearch.input.el.value
+                    this.navSearch.query.el.value
                 )
             )
         );
@@ -145,14 +145,14 @@ export default class CLASSINDEX extends CONTAINER {
         this.buttonGroup = new BUTTONGROUP(this.header);
         //let searchToggle = this.buttonGroup.addToggleButton('', ICONS.SEARCH);
 
-        this.btnPageTotal = this.buttonGroup.addSwitch(MODELS.button(this.pageTotal, ICONS.TAGS));
+        this.btnPageTotal = this.buttonGroup.addSwitch(MODELS.button(ATTR.button(), DATA.button(this.pageTotal, ICONS.TAGS)));
         this.btnPageTotal.addClass('page-total');
         this.btnPageTotal.el.addEventListener('activate', (ev) => {
             console.log('TODO: Not sure if this should trigger anything or not');
             ev.stopPropagation();
         });
 
-        this.btnSearch = this.buttonGroup.addSwitch(MODELS.button('', ICONS.SEARCH));
+        this.btnSearch = this.buttonGroup.addSwitch(MODELS.button(ATTR.button(), DATA.button('', ICONS.SEARCH)));
         this.btnSearch.el.addEventListener('activate', (ev) => {
             console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
@@ -260,7 +260,7 @@ export default class CLASSINDEX extends CONTAINER {
                 this.pageCount = 1;
             }
             for (let p = 0; p < this.pageCount; p++) {
-                this.pagination.buttonGroup.addButton(MODELS.button(p + 1)).el.onclick = () => {
+                this.pagination.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button(p + 1))).el.onclick = () => {
                     //this.menu.empty().then(() => this.loadPage(p));
                     this.loadPage(p);
                     return false;

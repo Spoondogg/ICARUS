@@ -1355,7 +1355,7 @@ export default class CONTAINER extends GROUP {
                     'Remove ' + this.toString() + ' from ' + this.container.toString(),
                     this.getMain(), this.getContainer(), this.getLoader()
                 ));
-                dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Remove ' + this.toString(), ICONS.REMOVE)).el.onclick = () => {
+                dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Remove ' + this.toString(), ICONS.REMOVE))).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
@@ -1490,7 +1490,7 @@ export default class CONTAINER extends GROUP {
 			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
 					let dialog = new DIALOG(MODELS.dialog('Disable ' + this.toString(), main, main, this.getLoader()));
-                    dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Disable ' + this.toString(), ICONS.REMOVE)).el.onclick = () => loader.log(50, 'Disable').then(
+                    dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Disable ' + this.toString(), ICONS.REMOVE))).el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {

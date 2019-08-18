@@ -40,7 +40,7 @@ export default class DIALOG extends EL {
         }
 		this.navheader.tab.el.dispatchEvent(new Activate());
         this.footer = new FORMFOOTER(this);
-        this.footer.buttonGroup.addButton(MODELS.button('CLOSE', ICONS.CLOSE)).el.onclick = () => this.closeDialog();
+        this.footer.buttonGroup.addButton(MODELS.button(ATTR.button('BUTTON', 'CLOSE'), DATA.button('CLOSE', ICONS.CLOSE))).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
 		this.overrideBootstrap();
 	}
@@ -154,5 +154,5 @@ export default class DIALOG extends EL {
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 }
-export { Activate, ATTRIBUTES, Close, COLLAPSIBLE, Deactivate, DIV, EL, ICONS, MENU, MODEL, MODELS, NAVITEMICON, Open }
+export { Activate, ATTR, ATTRIBUTES, Close, COLLAPSIBLE, DATA, Deactivate, DIV, EL, ICONS, MENU, MODEL, MODELS, NAVITEMICON, Open }
 /* eslint-enable */

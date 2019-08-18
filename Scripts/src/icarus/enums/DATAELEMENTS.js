@@ -132,11 +132,9 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     button: makeStruct([
-        ['label', ''],
-        ['icon', ICONS.BLANK],
-        ['type', 'BUTTON']
+        ['attributes', ATTR.button()],
+        ['data', DATA.button()]
     ]),
-
     /** Create a generic container model structure constructor
         @type {function(ClassModel): MODEL}
         @param {ClassModel} Model

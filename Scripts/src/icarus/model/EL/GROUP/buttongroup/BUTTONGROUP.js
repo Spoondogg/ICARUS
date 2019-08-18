@@ -1,6 +1,6 @@
 /** @module */
 import GROUP, { ATTRIBUTES, EL, MODEL } from '../GROUP.js';
-import TOGGLEBUTTON, { Activate, BUTTON, Deactivate, ICONS, MODELS, SWITCH } from '../../button/togglebutton/TOGGLEBUTTON.js';
+import TOGGLEBUTTON, { ATTR, Activate, BUTTON, DATA, Deactivate, ICONS, MODELS, SWITCH } from '../../button/togglebutton/TOGGLEBUTTON.js';
 import { ALIGN } from '../../../../enums/ALIGN.js';
 /** A container for Buttons
     @class
@@ -17,9 +17,9 @@ export default class BUTTONGROUP extends GROUP {
 			this.addClass('btn-group-vertical');
 		}
 		/* Add cases for each relevant constructor that inherited class does not have */
-        this.addConstructor('BUTTON', () => this.addButton(MODELS.button('BUTTON')));
-        this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton(MODELS.button('TOGGLE')));
-        this.addConstructor('SWITCH', () => this.addSwitch(MODELS.button('SWITCH')));
+        //this.addConstructor('BUTTON', () => this.addButton(MODELS.button()));
+        //this.addConstructor('TOGGLEBUTTON', () => this.addToggleButton(MODELS.button()));
+        //this.addConstructor('SWITCH', () => this.addSwitch(MODELS.button()));
 	}
 	/** Creates a button and adds it to this button group, then adds it to the buttons array
 	    @param {ButtonModel} model Model
@@ -59,4 +59,4 @@ export default class BUTTONGROUP extends GROUP {
         return super.get(name, className);
     }
 }
-export { Activate, ALIGN, ATTRIBUTES, BUTTON, Deactivate, EL, ICONS, MODEL, MODELS, SWITCH, TOGGLEBUTTON }
+export { ATTR, Activate, ALIGN, ATTRIBUTES, BUTTON, DATA, Deactivate, EL, ICONS, MODEL, MODELS, SWITCH, TOGGLEBUTTON }

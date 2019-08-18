@@ -343,6 +343,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     p: makeStruct([
         ['attributes', new ATTRIBUTES()],
         ['data', new ATTRIBUTES()]
-    ])
+    ])    
 }
 export { ALIGN, ATTR, ATTRIBUTES, DATA, ICONS, MODEL }

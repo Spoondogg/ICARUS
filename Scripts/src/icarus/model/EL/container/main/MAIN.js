@@ -384,7 +384,7 @@ export default class MAIN extends CONTAINER {
             let navsearch = tabbable.element.addNavSearch(new MODEL('navsearch-woot'));
             navsearch.submitSearch = (ev) => this.submitSearch( // When search button is clicked... OVERRIDE
                 ev,
-                navsearch.input.el.value.toString(),
+                navsearch.query.el.value.toString(),
                 navsearch.btnSearch,
                 this.className,
                 navsearch.searchType.el.value
@@ -393,7 +393,7 @@ export default class MAIN extends CONTAINER {
             $(tabbable.tab.el).insertBefore(this.navheader.tab.el);
             tabbable.tab.el.addEventListener('activate', () => {
                 navsearch.el.dispatchEvent(new Activate(tabbable.tab));
-                navsearch.input.el.focus();
+                navsearch.query.el.focus();
             });
 
 			// RIGHT ALIGN
@@ -465,11 +465,11 @@ export default class MAIN extends CONTAINER {
                                     text: 'Create a new page'
 								})).createForm().then((form) => {
 									form.footer.buttonGroup.get()[0].destroy().then(() => { //dialog
-                                        form.footer.buttonGroup.addButton(MODELS.button('Open in new window')).el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Open in new window'))).el.onclick = () => {
 											window.open(url, '_blank');
 											form.getDialog().hide(300, true);
 										};
-                                        form.footer.buttonGroup.addButton(MODELS.button('Open in this Window?')).el.onclick = () => {
+                                        form.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Open in this Window?'))).el.onclick = () => {
 											location.href = url;
 											form.getDialog().hide(300, true);
 										};
@@ -626,7 +626,7 @@ export default class MAIN extends CONTAINER {
                         btnSignIn.addClass('btn-sign-in');
                         btnSignIn.setLabel('Sign In');
 
-                        let btnOAuthGoogle = form.footer.buttonGroup.addButton(MODELS.button('Sign in with Google', ICONS.USER));
+                        let btnOAuthGoogle = form.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Sign in with Google', ICONS.USER)));
                         btnOAuthGoogle.addClass('btn-oauth-google');
                         btnOAuthGoogle.el.onclick = () => {
                             this.loginOAuth('Google');
@@ -636,7 +636,7 @@ export default class MAIN extends CONTAINER {
                             this.register();
                             return false;
                         }*/
-                        let btnForgotPassword = form.footer.buttonGroup.addButton(MODELS.button('Forgot Your Password?'));
+                        let btnForgotPassword = form.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Forgot Your Password?')));
                         btnForgotPassword.addClass('btn-forgot-password');
                         btnForgotPassword.el.onclick = () => {
                             this.forgotPassword();
@@ -673,7 +673,7 @@ export default class MAIN extends CONTAINER {
 				//createInputModel('INPUT', 'RememberMe', '', 'Remember Me', 'CHECKBOX')
 			]);
 			form.footer.buttonGroup.children[0].label.setInnerHTML('Login - Local');
-            form.footer.buttonGroup.addButton(MODELS.button('Register - Local')).el.addEventListener('activate', () => this.register());
+            form.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Register - Local'))).el.addEventListener('activate', () => this.register());
 			form.afterSuccessfulPost = (payload, status) => this.processAjaxResponse(payload, status);
 		});
 	}

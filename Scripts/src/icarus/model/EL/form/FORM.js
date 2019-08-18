@@ -23,7 +23,7 @@ export default class FORM extends CONTAINER {
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body);
-        this.footer.buttonGroup.addButton(MODELS.button('Submit', ICONS.SAVE, { type: 'SUBMIT' })).el.onclick = (e) => {
+		this.footer.buttonGroup.addButton(MODELS.button(ATTR.button('SUBMIT'), DATA.button('Submit', ICONS.SAVE))).el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
@@ -171,7 +171,7 @@ export default class FORM extends CONTAINER {
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
 
         /** A button that restores functionality of the form */
-        let btnReset = this.footer.buttonGroup.addButton(MODELS.button('Reset Form', ICONS.RESET)); 
+        let btnReset = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Reset Form', ICONS.RESET))); 
         btnReset.el.onclick = () => {
             toDisable.forEach((el) => el.removeAttribute('disabled'));
             btnReset.destroy();

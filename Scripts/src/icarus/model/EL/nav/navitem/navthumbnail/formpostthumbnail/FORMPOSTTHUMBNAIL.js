@@ -1,5 +1,5 @@
 /** @module */
-import BUTTON, { MODELS } from '../../../../button/BUTTON.js';
+import BUTTON, { ATTR, DATA, MODELS } from '../../../../button/BUTTON.js';
 import NAVTHUMBNAIL, { ATTRIBUTES, Collapse, EL, Expand, ICONS, MODEL } from '../NAVTHUMBNAIL.js'; //STRING
 import { Clickable } from '../../../../container/CONTAINER.js';
 import UL from '../../../../list/ul/UL.js';
@@ -30,7 +30,7 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         //this.p.setInnerHTML(new STRING(model.jsonResults).truncate(128));
         try {
             if (model.jsonResults) {
-                let button = new BUTTON(this.p, MODELS.button('Show / Hide', ICONS.DATA));
+                let button = new BUTTON(this.p, MODELS.button(ATTR.button(), DATA.button('Show / Hide', ICONS.DATA)));
                 button.addClass('pill-button');
 
                 let list = new UL(this.p);

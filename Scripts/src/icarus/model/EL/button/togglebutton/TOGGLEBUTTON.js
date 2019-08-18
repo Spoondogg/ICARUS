@@ -1,5 +1,5 @@
 /** @module */
-import MENU, { ATTR, Collapse, EL, Expand } from '../../nav/menu/MENU.js';
+import MENU, { ATTR, Collapse, DATA, EL, Expand } from '../../nav/menu/MENU.js';
 import SWITCH, { Activate, BUTTON, Deactivate, ICONS, MODELS } from '../switch/SWITCH.js';
 import STRING from '../../../../STRING.js';
 /** Button that show/hides a list of options
@@ -17,4 +17,4 @@ export default class TOGGLEBUTTON extends SWITCH {
         this.el.addEventListener('deactivate', () => this.menu.el.dispatchEvent(new Collapse(this.el)));
 	}
 }
-export { Activate, BUTTON, Collapse, Deactivate, EL, Expand, SWITCH, ICONS, MENU, MODELS }
+export { ATTR, Activate, BUTTON, Collapse, DATA, Deactivate, EL, Expand, SWITCH, ICONS, MENU, MODELS }
