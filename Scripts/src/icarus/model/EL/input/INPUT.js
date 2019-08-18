@@ -1,6 +1,6 @@
 /** @module */
+import { ATTR, MODELS } from '../../../enums/DATAELEMENTS.js';
 import EL, { ATTRIBUTES, MODEL } from '../EL.js';
-import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** An INPUT element */
 export default class INPUT extends EL {
     /** Constructs a generic INPUT Element
@@ -11,4 +11,4 @@ export default class INPUT extends EL {
         super(node, 'INPUT', model);
 	}
 }
-export { ATTRIBUTES, EL, MODEL, MODELS }
+export { ATTR, ATTRIBUTES, EL, MODEL, MODELS }

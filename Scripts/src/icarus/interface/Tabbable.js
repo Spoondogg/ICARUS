@@ -4,7 +4,6 @@ import { MODELS } from '../enums/DATAELEMENTS.js';
 /** An interface for Tab driven Events.  
     @description An element is tabbable when it can be activated/deactivated by a separate element
     @class
-    @extends Switchable
 */
 export default class Tabbable extends Switchable {
 	/** A series of Tab-Switch Related Events and Methods

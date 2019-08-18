@@ -1,5 +1,5 @@
 /** @module */
-import FORMPOSTINDEX, { CONFIRM, ICONS, MODEL, MODELS } from '../FORMPOSTINDEX.js';
+import FORMPOSTINDEX, { ATTR, CONFIRM, DATA, ICONS, MODEL, MODELS } from '../FORMPOSTINDEX.js';
 import IMAGETHUMBNAIL, { NAVTHUMBNAIL } from '../../../../../nav/navitem/navthumbnail/imagethumbnail/IMAGETHUMBNAIL.js';
 /** Contains a list of IMAGE THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
@@ -43,10 +43,10 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
     addThumbnailMethods(model, pageNumber = 0) {
         let thumb = this.createThumbnail(model, this.classType, pageNumber);
 
-        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem('Append', ICONS.PENCIL, 'APPEND'));
+        let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('APPEND'), DATA.navitem('Append', ICONS.PENCIL)));
         btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
 
-        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + this.classType, ICONS[this.classType], 'VIEW'));
+        let btnView = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('VIEW'), DATA.navitem('View ' + this.classType, ICONS[this.classType])));
         btnView.el.addEventListener('click', () => this.confirmView(model));
 
         // Add methods
@@ -54,8 +54,8 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         let methods = ['GetParents'];
         for (let m = 0; m < methods.length; m++) {
             thumb.menu.addNavItemIcon(
-                MODELS.navitem(methods[m], ICONS[methods[m].toUpperCase()], methods[m].toUpperCase()
-            )).el.onclick = () => CONFIRM.confirmMethodCall(
+                MODELS.navitem(ATTR.navitem(methods[m]), DATA.navitem(methods[m].toUpperCase(), ICONS[methods[m].toUpperCase()]))
+            ).el.onclick = () => CONFIRM.confirmMethodCall(
                 this.classType + '.' + methods[m],
                 methods[m] + ' description',
                 () => window.open(new URL(window.location.href).origin + '/' + this.classType + '/' + methods[m]),

@@ -1,9 +1,8 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../container/CONTAINER.js';
+import CONTAINER, { ATTR, ATTRIBUTES, AbstractMethodError, DATA, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../container/CONTAINER.js';
 import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
-//import { ALIGN } from '../../../enums/ALIGN.js';
 import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
@@ -13,7 +12,6 @@ import PAYLOAD from './PAYLOAD.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
-    @extends CONTAINER
 */
 export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
@@ -25,7 +23,7 @@ export default class FORM extends CONTAINER {
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
 		this.footer = new FORMFOOTER(this.body);
-        this.footer.buttonGroup.addButton(MODELS.button('Submit', ICONS.SAVE, { type: 'SUBMIT' })).el.onclick = (e) => {
+		this.footer.buttonGroup.addButton(MODELS.button(ATTR.button('SUBMIT'), DATA.button('Submit', ICONS.SAVE))).el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
@@ -173,7 +171,7 @@ export default class FORM extends CONTAINER {
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
 
         /** A button that restores functionality of the form */
-        let btnReset = this.footer.buttonGroup.addButton(MODELS.button('Reset Form', ICONS.RESET)); 
+        let btnReset = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Reset Form', ICONS.RESET))); 
         btnReset.el.onclick = () => {
             toDisable.forEach((el) => el.removeAttribute('disabled'));
             btnReset.destroy();
@@ -203,11 +201,11 @@ export default class FORM extends CONTAINER {
 	*/
 	defaultFormPostInputArray(payload) {
         return [
-            MODELS.input('INPUT', MODELS.inputAttributes('id', payload.model.id, 'NUMBER', true), 'ID', 'NUMBER'),
+            MODELS.input('INPUT', ATTR.input('id', payload.model.id, 'NUMBER', true), 'ID', 'NUMBER'),
 			//createInputModel('INPUT', 'id', payload.model.id, 'ID', 'NUMBER', true),
-            MODELS.input('INPUT', MODELS.inputAttributes('shared', payload.model.shared || -1, 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', ATTR.input('shared', payload.model.shared || -1, 'CHECKBOX'), 'shared', 'CHECKBOX'),
             //createInputModel('INPUT', 'shared', payload.model.shared || -1, 'shared', 'CHECKBOX'),
-            MODELS.input('INPUT', MODELS.inputAttributes('isPublic', payload.model.isPublic || -1, 'CHECKBOX'), 'isPublic', 'CHECKBOX')
+            MODELS.input('INPUT', ATTR.input('isPublic', payload.model.isPublic || -1, 'CHECKBOX'), 'isPublic', 'CHECKBOX')
             //createInputModel('INPUT', 'isPublic', payload.model.isPublic || -1, 'isPublic', 'CHECKBOX')
 		];
 	}
@@ -656,5 +654,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, MODELS, PAYLOAD }
+export { ATTR, ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DATA, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, MODELS, PAYLOAD }
 /* eslint-enable max-lines */

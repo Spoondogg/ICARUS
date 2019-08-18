@@ -1,5 +1,5 @@
 /** @module */
-import PROMPT, { ATTRIBUTES, DIALOG, DIV, EL, ICONS, MODEL, MODELS } from '../prompt/PROMPT.js';
+import PROMPT, { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, ICONS, MODEL, MODELS } from '../prompt/PROMPT.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
     @class
@@ -17,14 +17,14 @@ export default class CONFIRM extends DIALOG {
         if (onCancel !== null) {
             this.onCancel = onCancel;
         }
-        this.btnConfirm = this.footer.buttonGroup.addButton(MODELS.button('Confirm', ICONS.CONFIRM));
+        this.btnConfirm = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Confirm', ICONS.CONFIRM)));
         this.btnConfirm.el.addEventListener('click', () => {
             this.onConfirm();
             this.closeDialog();
         });
         $(this.btnConfirm.el).insertBefore(this.footer.buttonGroup.get()[0].el);
         
-        this.btnCancel = this.footer.buttonGroup.addButton(MODELS.button('Cancel', ICONS.CANCEL));
+        this.btnCancel = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Cancel', ICONS.CANCEL)));
         this.btnCancel.el.addEventListener('click', () => {
             this.onCancel();
             this.closeDialog();
@@ -55,4 +55,4 @@ export default class CONFIRM extends DIALOG {
         confirm.showDialog();
     }
 }
-export { ATTRIBUTES, DIALOG, DIV, EL, MODEL, PROMPT }
+export { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, MODEL, PROMPT }

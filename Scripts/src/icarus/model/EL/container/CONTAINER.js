@@ -1,5 +1,6 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
+import { ATTR, DATA, DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import Clickable, { Switchable } from '../../../interface/Clickable.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
@@ -7,7 +8,6 @@ import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import SPAN, { MODELS } from '../span/SPAN.js';
 import CACHE from '../container/main/CACHE.js';
-import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
@@ -27,7 +27,6 @@ import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
     @description A CONTAINER is a groupable, expandable {@link EL} that can have children
     @class
-    @extends GROUP
 */
 export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
@@ -46,7 +45,7 @@ export default class CONTAINER extends GROUP {
         /** If true, siblings are deactivated when this CONTAINER is activated */
         this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
-		this.setContainerDefaults(model);		
+		this.setContainerDefaults(model);
 		this.navheader = new NAVHEADER(this, MODELS.navheader(this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
@@ -66,7 +65,7 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addOptions() {
-        let optionsMenu = this.navheader.getMenu('OPTIONS');
+        let [optionsMenu] = this.navheader.menus.get('OPTIONS');
         this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
             () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
                 () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
@@ -103,6 +102,7 @@ export default class CONTAINER extends GROUP {
         this.navheader.tab.el.addEventListener('longclick', () => this.toggleClass('allow-drag'));
 
         // Trigger reference on OPTIONS long-click
+        //this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
@@ -124,7 +124,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addSaveButton() {
-        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem('SAVE', ICONS.SAVE, 'btn-save', new ATTRIBUTES('tab-narrow')));
+        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('SAVE'), DATA.navitem('btn-save', ICONS.SAVE))); //new ATTRIBUTES('tab-narrow')));
+        btnSave.addClass('tab-narrow');
         btnSave.el.addEventListener('activate', () => this.chain(() => {
             this.el.dispatchEvent(new Modify(btnSave));
         }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
@@ -135,7 +136,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addRefreshButton() {
-        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem('REFRESH', ICONS.REFRESH, 'btn-refresh', new ATTRIBUTES('tab-narrow')));
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('REFRESH'), DATA.navitem('btn-refresh', ICONS.REFRESH)));
+        btnRefresh.addClass('tab-narrow');
         btnRefresh.el.addEventListener('activate', () => this.chain(
             () => this.getMain().focusBody().then(
                 () => this.refresh().then(
@@ -180,10 +182,11 @@ export default class CONTAINER extends GROUP {
             }
         ].forEach((model) => {
             let btn = this.navheader.tabs.addNavItemIcon(
-                MODELS.navitem(model.label, model.icon, model.name, new ATTRIBUTES('tab-narrow')).set({
+                MODELS.navitem(ATTR.navitem(model.name), DATA.navitem(model.label, model.icon)).set({
                     dir: model.dir
                 })
             );
+            btn.addClass('tab-narrow');
             btn.el.addEventListener('activate', () => {
                 this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
                     () => btn.el.dispatchEvent(new Deactivate(btn)));
@@ -346,7 +349,7 @@ export default class CONTAINER extends GROUP {
         this.elements.get(type).forEach((d) => {
             //console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
-            let tab = dataMenu.addNavItem(MODELS.navitem(d.label, ICONS.BLANK, name));
+            let tab = dataMenu.addNavItem(MODELS.navitem(ATTR.navitem(d.label), DATA.navitem(name, ICONS.BLANK)));
             tab.el.addEventListener('activate', () => {
                 try {
                     this.createNewFormPost(type, name);
@@ -510,8 +513,9 @@ export default class CONTAINER extends GROUP {
     */
     constructReferenceSubMenus(arr, menu, reference) {
         arr.forEach((p) => {
-            let t = menu.addNavItemIcon(MODELS.navitem(p, ICONS[p], p));
-            let m = menu.addMenu(MODELS.menu(p));
+            //console.log(this.toString() + 'constructReferenceSubMenus()', p);
+            let t = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(p), DATA.navitem(p, ICONS[p])));
+            let m = menu.addMenu(MODELS.menu(ATTR.menu(p, 'reference-submenu')));
             reference.addTabbableElement(t, m);
         });
     }
@@ -522,12 +526,11 @@ export default class CONTAINER extends GROUP {
     */
     constructReference(reference) {
         try {
-            let { menu } = reference.options;
-
-            let propertiesMenu = menu.getMenu('PROPERTIES');
+            //let refmenu = reference.options.menu;
+            let propertiesMenu = reference.options.menu.getMenu('PROPERTIES');
             this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, reference);
 
-            let methodsMenu = menu.getMenu('METHODS');
+            let methodsMenu = reference.options.menu.getMenu('METHODS');
             this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
             this.addCrudItems(methodsMenu.getMenu('CRUD'));
             this.addDomItems(methodsMenu.getMenu('DOM'));
@@ -812,7 +815,7 @@ export default class CONTAINER extends GROUP {
 							this[name] = new LABEL(node, new MODEL().set('innerHTML', this.data[name]));
                             break;
                         case 'span':
-                            this[name] = new SPAN(node, new MODEL().set('innerHTML', this.data[name]));
+                            this[name] = new SPAN(node, MODELS.text(new ATTRIBUTES(), DATA.text(this.data[name])));
                             break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
@@ -877,20 +880,20 @@ export default class CONTAINER extends GROUP {
 	*/
 	createContainerInputs() {
 		//console.log(this.toString() + '.createContainerInputs()', this);
-        //[MODELS.input('TEXTAREA', 'statement', MODELS.inputAttributes('statement'))
+        //[MODELS.input('TEXTAREA', 'statement', ATTR.input('statement'))
         return [
-            MODELS.input('INPUT', MODELS.inputAttributes('className', this.className), 'className'),
-            MODELS.input('INPUT', MODELS.inputAttributes('element', this.element, 'TEXT', true), 'element'),
-            MODELS.input('INPUT', MODELS.inputAttributes('id', this.id, 'NUMBER', true), 'ID', 'NUMBER'),
-            MODELS.input('INPUT', MODELS.inputAttributes('label', this.label.toString(), 'TEXT'), 'Label'),
-            MODELS.input('INPUT', MODELS.inputAttributes('subsections', this.getSubSections().toString() || '0', 'TEXT', true), 'SubSections'),
-            MODELS.input('INPUT', MODELS.inputAttributes('tags', this.tags.toString() || '0', 'TEXT', true), 'Tags', 'FORMPOSTLIST'),
-            MODELS.input('INPUT', MODELS.inputAttributes('status', this.status.toString(), 'NUMBER', true), 'Status', 'NUMBER'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('dataId', this.dataId.toString(), 'TEXT', true), 'dataId', 'FORMPOSTINPUT'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('attributesId', this.attributesId.toString(), 'TEXT', true), 'attributesId', 'FORMPOSTINPUT'),
-            MODELS.input('BUTTON', MODELS.inputAttributes('metaId', this.metaId.toString(), 'TEXT', true), 'metaId', 'FORMPOSTINPUT'),
-            MODELS.input('INPUT', MODELS.inputAttributes('shared', this.shared.toString(), 'CHECKBOX'), 'shared', 'CHECKBOX'),
-            MODELS.input('INPUT', MODELS.inputAttributes('isPublic', this.isPublic.toString(), 'CHECKBOX'), 'isPublic', 'CHECKBOX')
+            MODELS.input('INPUT', ATTR.input('className', this.className), 'className'),
+            MODELS.input('INPUT', ATTR.input('element', this.element, 'TEXT', true), 'element'),
+            MODELS.input('INPUT', ATTR.input('id', this.id, 'NUMBER', true), 'ID', 'NUMBER'),
+            MODELS.input('INPUT', ATTR.input('label', this.label.toString(), 'TEXT'), 'Label'),
+            MODELS.input('INPUT', ATTR.input('subsections', this.getSubSections().toString() || '0', 'TEXT', true), 'SubSections'),
+            MODELS.input('INPUT', ATTR.input('tags', this.tags.toString() || '0', 'TEXT', true), 'Tags', 'FORMPOSTLIST'),
+            MODELS.input('INPUT', ATTR.input('status', this.status.toString(), 'NUMBER', true), 'Status', 'NUMBER'),
+            MODELS.input('BUTTON', ATTR.input('dataId', this.dataId.toString(), 'TEXT', true), 'dataId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('attributesId', this.attributesId.toString(), 'TEXT', true), 'attributesId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('metaId', this.metaId.toString(), 'TEXT', true), 'metaId', 'FORMPOSTINPUT'),
+            MODELS.input('INPUT', ATTR.input('shared', this.shared.toString(), 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', ATTR.input('isPublic', this.isPublic.toString(), 'CHECKBOX'), 'isPublic', 'CHECKBOX')
 		];
     }
     /** Dispatches the given Event to this CONTAINER's children
@@ -969,10 +972,12 @@ export default class CONTAINER extends GROUP {
 	    @returns {void}
 	*/
     addElementItems(menu, containerList) {
+        //console.log(this.toString() + '.addElementItems()', menu, containerList);
 		return this.chain(() => {
 			if (containerList.length > 0) {
 				//let defaultContainers = []; // First two are normal
 				//containerList.splice(2, 0, ...defaultContainers);
+                //console.log(this.toString() + '.addElementItems', menu, containerList);
 				Promise.all([containerList.map((c) => this.addContainerCase(menu, c))]);
 			}
 		});
@@ -1044,7 +1049,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	createNavItem(className, menu, close = true) {
 		try {
-            let item = menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
+            let item = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 			if (close) {
 				item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 			}
@@ -1070,7 +1075,8 @@ export default class CONTAINER extends GROUP {
         @param {MENU} menu Target Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems(menu) {
+    addDomItems(menu) {
+        //console.log(this.toString() + '.addDomItems()', menu);
         return this.chain(() => {
             let arr = ['REFRESH', 'FULLSCREEN'];
             if (this.className !== 'MAIN') {
@@ -1097,6 +1103,7 @@ export default class CONTAINER extends GROUP {
         @returns {GROUP} A Menu Group
 	*/
     addCrudItems(menu) {
+        //console.log(this.toString() + '.addCrudItems()', menu);
 		return this.chain(() => {
 			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
             let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu); //[0]
@@ -1108,22 +1115,23 @@ export default class CONTAINER extends GROUP {
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
         @param {MENU} menu Target Menu
-        @param {string} className ie SECTION or FORM
+        @param {Name} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
         @returns {Promise<ThisType>} Promise Chain
     */
     addContainerCase(menu, className, addButton = true) {
+        //console.log(this.toString() + '.addContainerCase()', className, menu);
 		return new Promise((resolve, reject) => {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
 					if (addButton) {
 						//let menu = this.navheader.getMenu('OPTIONS').getMenu('ELEMENTS');
-                        let item = this.addContainerCaseButton(className, menu);
-                        item.el.addEventListener('activate', () => this.create(MODELS.container().set('className', className)));
+						let item = this.addContainerCaseButton(className, menu);
+						item.el.addEventListener('activate', () => this.create(new MODEL().set('className', className)));
 						//item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(MODELS.search(className, 'CLASS'), this));
+                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this));
 					}
-                    this.addConstructor(className, (model) => {
+					this.addConstructor(className, (model) => {
 						try {
                             resolve(this.getFactory().get(this.childLocation, className, model.id || 0));
 						} catch (ee) {
@@ -1133,7 +1141,7 @@ export default class CONTAINER extends GROUP {
 					});
 				}
 			} catch (e) {
-                console.warn(this.toString() + '.addContainerCase(' + className + '): Unable to add Container Case', e);
+				console.warn(this.toString() + '.addContainerCase(' + className + '): Unable to add Container Case', e);
 				reject(e);
 			}
 		});
@@ -1146,7 +1154,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addContainerCaseButton(className, menu) {
 		try {
-            return menu.addNavItemIcon(MODELS.navitem(className, ICONS[className]));
+            return menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
@@ -1221,33 +1229,27 @@ export default class CONTAINER extends GROUP {
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
-                        console.log(this.toString() + '.load(' + id + ')', this.className, payload);
-                        if (payload.result === 0) {
-                            console.warn('Todo: Launch LOADER');
-                            console.error('Unable to load ID: ' + id, payload.message);
-                        } else {
-                            let { result, model, message } = payload;
+                        let { result, model, message } = payload;
+                        
+                        this.addReferencePlaceholder(model);
 
-                            this.addReferencePlaceholder(model);
+                        this.getMain().updateTagCache(model.tags);
 
-                            this.getMain().updateTagCache(model.tags);
-
-                            switch (payload.result) {
-                                case 0: // error
-                                    console.error(this.toString() + '.load() error', result, payload);
-                                    this.getMain().login();
-                                    reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
-                                    break;
-                                case 1: // success
-                                    this.navheader.tab.anchor.label.setInnerHTML(model.label);
-                                    resolve(this.make(model));
-                                    break;
-                                default:
-                                    console.log('Payload Result', result, payload);
-                                    this.getMain().login();
-                                    // @todo Create a LoginRequired type Error and appropriate handler
-                                    reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
-                            }
+                        switch (payload.result) {
+                            case 0: // error
+                                console.error(this.toString() + '.load() error', result, payload);
+                                this.getMain().login();
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
+                                break;
+                            case 1: // success
+                                this.navheader.tab.anchor.label.setInnerHTML(model.label);
+                                resolve(this.make(model));
+                                break;
+                            default: 
+                                console.log('Payload Result', result, payload);
+                                this.getMain().login();
+                                // @todo Create a LoginRequired type Error and appropriate handler
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
                         }
                     });
 				} else {
@@ -1353,7 +1355,7 @@ export default class CONTAINER extends GROUP {
                     'Remove ' + this.toString() + ' from ' + this.container.toString(),
                     this.getMain(), this.getContainer(), this.getLoader()
                 ));
-                dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Remove ' + this.toString(), ICONS.REMOVE)).el.onclick = () => {
+                dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Remove ' + this.toString(), ICONS.REMOVE))).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
@@ -1488,7 +1490,7 @@ export default class CONTAINER extends GROUP {
 			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
 					let dialog = new DIALOG(MODELS.dialog('Disable ' + this.toString(), main, main, this.getLoader()));
-                    dialog.footer.buttonGroup.addButton(MODELS.button('Yes, Disable ' + this.toString(), ICONS.REMOVE)).el.onclick = () => loader.log(50, 'Disable').then(
+                    dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Disable ' + this.toString(), ICONS.REMOVE))).el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {
@@ -1521,5 +1523,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
+export { AbstractMethodError, Activate, ATTR, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATA, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
 /* eslint-enable max-lines, max-statements */

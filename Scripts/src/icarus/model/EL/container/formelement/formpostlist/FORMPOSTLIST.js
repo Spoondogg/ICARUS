@@ -1,12 +1,11 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, CONTAINER, Collapse, DATA, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
 import SPAN, { MODELS } from '../../../span/SPAN.js';
 import FORMPOSTINDEX from '../../index/classindex/formpostindex/FORMPOSTINDEX.js';
 import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element made up of a delimited list of formpost/container UId's
     @class
-    @extends FORMELEMENT
 */
 export default class FORMPOSTLIST extends FORMELEMENT {
 	constructElements() {
@@ -17,7 +16,7 @@ export default class FORMPOSTLIST extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', MODELS.inputAttributes(
+        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', ATTR.input(
 			this.attributes.name,
             this.attributes.value,
             this.attributes.type || 'TEXT',
@@ -47,7 +46,7 @@ export default class FORMPOSTLIST extends FORMELEMENT {
         */
         let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
         let id = this.attributes.value;
-        new SPAN(this.inputGroup, MODELS.text('ADD')).addClass('input-group-addon').then((btnAdd) => {
+        new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('ADD'))).addClass('input-group-addon').then((btnAdd) => {
             btnAdd.el.onclick = () => {
                 console.log('Add Tag to FORMPOSTLIST' + id);
                 this.launchViewer(className, dataType); //, id, this.input
@@ -89,4 +88,4 @@ export default class FORMPOSTLIST extends FORMELEMENT {
 		});
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, LABEL, MODEL }
+export { ATTRIBUTES, CONTAINER, DATA, EL, LABEL, MODEL }

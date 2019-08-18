@@ -1,8 +1,7 @@
 /** @module */
-import CONTAINER, { COLLAPSIBLE, Clickable, Expand, MODEL, MODELS, SPAN, Toggle } from '../container/CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, COLLAPSIBLE, Clickable, DATA, Expand, MODEL, MODELS, SPAN, Toggle } from '../container/CONTAINER.js';
 /** A generic ARTICLE Element
     @class
-    @extends CONTAINER
 */
 export default class ARTICLE extends CONTAINER {
 	/** Construct an ARTICLE
@@ -20,12 +19,12 @@ export default class ARTICLE extends CONTAINER {
             if (this.dataId > 0) {                
                 this.createEditableElement('header', this.childLocation);
 				let date = this.getDateCreated();
-                new SPAN(this.containerHeader.pane, MODELS.text(date.date)).addClass('date-created').then(
+                new SPAN(this.containerHeader.pane, MODELS.text(new ATTRIBUTES(), DATA.text(date.date))).addClass('date-created').then(
                     (articleDate) => {
                         this.articleDate = articleDate;
                     }
                 );
-                new SPAN(this.containerHeader.pane, MODELS.text(this.authorId)).addClass('author').then(
+                new SPAN(this.containerHeader.pane, MODELS.text(new ATTRIBUTES(), DATA.text(this.authorId))).addClass('author').then(
                     (articleAuthor) => {
                         articleAuthor.implement(new Clickable(articleAuthor));
                         articleAuthor.el.addEventListener('longclick', () => {

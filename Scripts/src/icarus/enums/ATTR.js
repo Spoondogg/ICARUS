@@ -1,7 +1,7 @@
 ﻿/** @module */
 import ATTRIBUTES from '../model/ATTRIBUTES.js';
 /** Attribute Constructor Factory
-    @description See https://stackoverflow.com/a/502384/722785
+    @see https://stackoverflow.com/a/502384/722785
     @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
     @returns {function(): ATTRIBUTES} Attributes Constructor
 */
@@ -46,19 +46,13 @@ export const ATTR = { ////  CACHE THESE CONSTRUCTORS
         ['longClickDelay', 2000],
         ['stopPropagation', true]
     ]),
-    /** Create an anchor model structure constructor
-        @type {function(TextData): ATTRIBUTES}
-        @param {TextData} [Attributes]
-        @returns {ATTRIBUTES} Attributes
-    */
-    text: makeAttrStruct([['text', '']]),
     /** Create a navitem model structure constructor
      * element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0
         @type {function(InputAttributes): ATTRIBUTES}
         @param {InputAttributes} Attributes
         @returns {ATTRIBUTES} Attributes
     */
-    input: makeAttrStruct([ // CONSIDER ATTRIBUTES.input instead of ATTR.inputAttributes
+    input: makeAttrStruct([
         ['name'],
         ['value'],
         ['type', 'TEXT'], //type: type === 'FORMPOSTINPUT' ? 'NUMBER' : type,
@@ -84,6 +78,15 @@ export const ATTR = { ////  CACHE THESE CONSTRUCTORS
         ['href', '#'],
         ['name'],
         ['target']
+    ]),
+    /** Create an menu attributes structure constructor
+        @type {function(MenuAttributes): ATTRIBUTES}
+        @param {MenuAttributes} [Attributes]
+        @returns {ATTRIBUTES} Attributes
+    */
+    menu: makeAttrStruct([
+        ['name'],
+        ['class']
     ]),
     /** Create a navitem model structure constructor
         @type {function(NavItemAttributes): ATTRIBUTES}

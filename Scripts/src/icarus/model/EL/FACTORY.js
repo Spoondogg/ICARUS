@@ -1,11 +1,10 @@
 ﻿/** @module */
-import CONTAINER, { Deactivate, MODELS } from './container/CONTAINER.js';
+import CONTAINER, { ATTR, DATA, Deactivate, MODELS } from './container/CONTAINER.js';
 import SPAN, { ATTRIBUTES, EL, MODEL } from './span/SPAN.js';
 import { ICONS } from '../../enums/ICONS.js';
 import PAYLOAD from './form/PAYLOAD.js';
 import PROMPT from './dialog/prompt/PROMPT.js';
 import SEARCH from './dialog/prompt/SEARCH/SEARCH.js';
-//import { showdown } from 'showdown';
 /** Abstract Factory that constructs Element Classes
     @description Each child must be imported individually to avoid cyclic redundancy of dependencies
     @class
@@ -335,7 +334,7 @@ export default class FACTORY {
                 //icon: ICONS[r.className],
                 name: r.toString()
             }), [r.className]);
-            let btnView = thumb.menu.addNavItemIcon(MODELS.navitem('View ' + r.className, ICONS[r.className], 'VIEW'));
+            let btnView = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('VIEW'), DATA.navitem('View ' + r.className, ICONS[r.className])));
             //btnView.el.addEventListener('click', () => this.confirmView(model));
             btnView.el.addEventListener('click', () => console.log('TODO: Launch Viewer'));
         });
@@ -361,7 +360,7 @@ export default class FACTORY {
                     form.setId(0);
                     form.label = 'Search';
                     let inp = form.getFieldset()[0].getFormElementGroup()[0].addFormInput(
-                        MODELS.input('INPUT', MODELS.inputAttributes('Search', '', 'TEXT', null, 'Search ' + container.toString() + ' for...'), 'Search')
+                        MODELS.input('INPUT', ATTR.input('Search', '', 'TEXT', null, 'Search ' + container.toString() + ' for...'), 'Search')
                         //createInputModel('INPUT', 'Search').setAttribute('placeholder', 'Search ' + container.toString() + ' for...')
                     );
                     form.footer.buttonGroup.get()[0].setLabel('', ICONS.SEARCH);
@@ -385,5 +384,5 @@ export default class FACTORY {
     }
 	/* eslint-enable max-lines-per-function, complexity, max-statements */
 }
-export { ATTRIBUTES, CONTAINER, EL, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTR, ATTRIBUTES, CONTAINER, DATA, EL, MODEL, PAYLOAD, PROMPT, SPAN }
 /* eslint-enable */

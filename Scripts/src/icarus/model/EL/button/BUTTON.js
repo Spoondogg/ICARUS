@@ -1,10 +1,9 @@
 /** @module */
-import GLYPHICON, { EL, ICONS, MODEL, SPAN } from '../span/GLYPHICON.js';
+import GLYPHICON, { ATTR, ATTRIBUTES, DATA, EL, ICONS, MODEL, SPAN } from '../span/GLYPHICON.js';
 import { LongclickDelay } from '../../../enums/StyleVars.js';
 import { MODELS } from '../../../enums/DATAELEMENTS.js';
 /** A generic BUTTON Element with an Icon and Label
     @class
-    @extends EL
 */
 export default class BUTTON extends EL {
 	/** Construct a generic Button
@@ -15,7 +14,7 @@ export default class BUTTON extends EL {
 		super(node, 'BUTTON', model);
         this.addClass('btn glyphicon');
         this.icon = new GLYPHICON(this, model);
-        this.label = new SPAN(this, MODELS.text(model.label));
+        this.label = new SPAN(this, MODELS.text(new ATTRIBUTES(), DATA.text(model.data.label)));
         this.label.addClass('button-label');
 	}
 	/** Sets the label within the button to the given string
@@ -41,4 +40,4 @@ export default class BUTTON extends EL {
         ]);
     }
 }
-export { EL, ICONS, MODEL, MODELS, SPAN }
+export { ATTR, ATTRIBUTES, DATA, EL, ICONS, MODEL, MODELS, SPAN }

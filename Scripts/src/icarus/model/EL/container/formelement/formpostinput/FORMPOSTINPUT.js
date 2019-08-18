@@ -1,11 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, CONTAINER, Collapse, DATA, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
 import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
 import SPAN, { MODELS } from '../../../span/SPAN.js';
 import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element inside a group of form elements
     @class
-    @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
 	constructElements() {
@@ -16,7 +15,7 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', MODELS.inputAttributes(
+        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', ATTR.input(
             this.attributes.name,
             this.attributes.value,
             this.attributes.type || 'TEXT',
@@ -47,14 +46,14 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
-            new SPAN(this.inputGroup, MODELS.text('EDIT')).addClass('input-group-addon').then((btnEdit) => {
+            new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('EDIT'))).addClass('input-group-addon').then((btnEdit) => {
                 btnEdit.el.onclick = () => this.createForm(className, dataType, id, this.input);
             });
 		}
-        new SPAN(this.inputGroup, MODELS.text('NEW')).addClass('input-group-addon').then((btnNew) => {
+        new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('NEW'))).addClass('input-group-addon').then((btnNew) => {
             btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
         });
-        new SPAN(this.inputGroup, MODELS.text('LOAD')).addClass('input-group-addon').then((btnLoad) => {
+        new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('LOAD'))).addClass('input-group-addon').then((btnLoad) => {
             btnLoad.el.onclick = () => {
                 console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
                 let dialog = new PROMPT(MODELS.dialog(

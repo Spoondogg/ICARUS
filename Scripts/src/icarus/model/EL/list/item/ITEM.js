@@ -1,9 +1,8 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../../EL.js';
+import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../../EL.js';
 import { MODELS } from '../../../../enums/DATAELEMENTS.js';
 /** An abstract List Item Constructor
     @class
-    @extends EL
 */
 export default class ITEM extends EL {
 	/** Constructs a List Item
@@ -15,4 +14,4 @@ export default class ITEM extends EL {
 		super(node, element, model);
 	}
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTR, ATTRIBUTES, DATA, EL, MODEL }
