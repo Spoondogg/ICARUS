@@ -1,7 +1,7 @@
 /** @module */
-import SPAN, { ATTRIBUTES, EL, MODEL } from './SPAN.js';
+//import { ATTR, DATA, MODELS } from '../../../enums/DATAELEMENTS.js';
+import SPAN, { ATTR, ATTRIBUTES, DATA, EL, MODEL, MODELS } from './SPAN.js';
 import { ICONS } from '../../../enums/ICONS.js';
-import { ATTR, DATA, MODELS } from '../../../enums/DATAELEMENTS.js';
 /** Bootstrap 3 Glyph Icon
     @class
 */

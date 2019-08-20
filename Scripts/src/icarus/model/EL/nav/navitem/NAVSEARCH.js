@@ -12,7 +12,7 @@ export default class NAVSEARCH extends NAVITEM {
 	    @param {EL} node Node
         @param {NavItemSearchModel} [model] Model
 	*/
-	constructor(node, model) {
+	constructor(node, model = MODELS.navitemsearch()) {
         super(node, model);
         this.addClass('nav-item-search');
         /** @type {boolean} Indicates if the user is typing (true) or has stopped for X duration (false) */
@@ -28,7 +28,7 @@ export default class NAVSEARCH extends NAVITEM {
         this.searchType = new INPUT(this, MODELS.input('INPUT', ATTR.input('searchtype', model.data.searchType, 'HIDDEN')));
         this.formId = new INPUT(this, MODELS.input('INPUT', ATTR.input('formId', model.data.formId, 'HIDDEN')));
 
-        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup(null, null, new ATTRIBUTES('input-buttons')));
+        this.buttonGroup = new BUTTONGROUP(this, MODELS.buttongroup());
         this.btnSearchClass = this.buttonGroup.addSwitch(MODELS.button(ATTR.button('BUTTON', 'CLASS'), DATA.button('', ICONS.CLASS)));
         this.btnSearchType = this.buttonGroup.addSwitch(MODELS.button(ATTR.button('BUTTON', 'TYPE'), DATA.button('', ICONS.STAR)));
         this.btnFormId = this.buttonGroup.addSwitch(MODELS.button(ATTR.button('BUTTON', 'FORMID'), DATA.button('', ICONS.FORM)));
@@ -103,7 +103,6 @@ export default class NAVSEARCH extends NAVITEM {
                 ev.stopPropagation();
                 console.log('ENTER was pressed');
                 this.btnSearch.el.click();
-                //this.submitSearch(evt, navsearch.input.el.value.toString(), navsearch.button, this.className, navsearch.searchType.el.value)
                 return false;
             }
         });
@@ -156,7 +155,7 @@ export default class NAVSEARCH extends NAVITEM {
         @returns {SearchModel} A Search MODEL
     */
     getSearchModel() {
-        return ATTR.search(
+        return DATA.search(
             this.searchClass.el.value, this.searchType.el.value,
             this.query.el.value, this.formId.el.value
         );

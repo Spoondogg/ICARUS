@@ -35,6 +35,12 @@ export const ATTR = { ////  CACHE THESE CONSTRUCTORS
         ['name'],
         ['title']
     ]),
+    /** Create a buttongroup model structure constructor
+        @type {function(ButtonGroupAttributes): ATTRIBUTES}
+        @param {ButtonGroupAttributes} Attributes
+        @returns {ATTRIBUTES} Model
+    */
+    buttongroup: makeAttrStruct([['name']]),
     /** Create a buttonGroup model structure constructor
         @type {function(ClickableOptions): ATTRIBUTES}
         @param {ClickableOptions} Attributes
@@ -98,16 +104,15 @@ export const ATTR = { ////  CACHE THESE CONSTRUCTORS
         ['title'],
         ['target']
     ]),
-    /** Create a buttonGroup model structure constructor
-        @type {function(SearchData): ATTRIBUTES}
-        @param {SearchData} Attributes
-        @returns {ATTRIBUTES} Attributes
+    /** Create a navitemsearch model structure constructor
+        @type {function(NavItemAttributes): ATTRIBUTES}
+        @param {NavItemAttributes} Attributes
+        @returns {ATTRIBUTES} Model
     */
-    search: makeAttrStruct([
-        ['searchClass', 'MAIN'],
-        ['searchType', 'TAG'],
-        ['query', ''],
-        ['formId', '-1']
+    navitemsearch: makeAttrStruct([
+        ['name'],
+        ['title'],
+        ['target']
     ])
 }
 export { ATTRIBUTES }

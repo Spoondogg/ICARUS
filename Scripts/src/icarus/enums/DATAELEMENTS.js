@@ -111,21 +111,16 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['label', ''],
         ['attributes', {}]
     ]),
-
     /** Create a buttonGroup model structure constructor
         @type {function(ButtonGroupModel): MODEL}
         @param {ButtonGroupModel} Model
         @returns {MODEL} Model
     */
     buttongroup: makeStruct([
-        ['label', 'buttons'],
-        ['align'],
-        ['name'],
-        ['attributes', {}],
-        ['data', {}],
-        ['meta', {}]
+        ['attributes', ATTR.buttongroup()],
+        ['data', DATA.buttongroup()],
+        ['meta', new ATTRIBUTES()]
     ]),
-
     /** Create a button model structure constructor
         @type {function(ButtonModel): MODEL}
         @param {ButtonModel} Model
@@ -186,7 +181,26 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['dateLastModified'],
         ['jsonResults']
     ]),
-
+    /** Create a generic ClassIndex Model structure constructor
+        @type {function(FormPostIndexModel): MODEL}
+        @param {FormPostIndexModel} Model
+        @returns {MODEL} Model
+    */
+    formPostIndex: makeStruct([
+        ['label'],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name', ''],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['attributes', new ATTRIBUTES()],
+        ['data', new ATTRIBUTES()],
+        ['meta', new ATTRIBUTES()]
+    ]),
     /** Create a generic container model structure constructor
         @type {function(ContainerModel): MODEL}
         @param {ContainerModel} Model
@@ -196,19 +210,26 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['id'],
         ['label']
     ]),
-
-    /** Create a buttonGroup model structure constructor
-        @type {function(FormPostIndexOptions): MODEL}
-        @param {FormPostIndexOptions} Model
+    /** Create a generic ClassIndex Model structure constructor
+        @type {function(ClassIndexModel): MODEL}
+        @param {ClassIndexModel} Model
         @returns {MODEL} Model
     */
-    formPostIndexOptions: makeStruct([
-        ['classType', 'MAIN'],
-        ['query', ''],
-        ['searchType', 'CLASS'],
-        ['formId']
+    classIndex: makeStruct([
+        ['label'],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name', ''],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['attributes', new ATTRIBUTES()],
+        ['data', new ATTRIBUTES()],
+        ['meta', new ATTRIBUTES()]
     ]),
-
     /** Create a buttonGroup model structure constructor
         @type {function(ClassIndexOptions): MODEL}
         @param {ClassIndexOptions} Model
@@ -219,7 +240,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['query', ''],
         ['searchType', 'CLASS']
     ]),
-
     /** Create a buttonGroup model structure constructor
         @type {function(ClickableOptions): MODEL}
         @param {ClickableOptions} Model
@@ -231,7 +251,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['longClickDelay', 2000],
         ['stopPropagation', true]
     ]),
-
     /** Create a dialog model structure constructor
         @type {function(DialogModel): MODEL}
         @param {DialogModel} Model
@@ -245,7 +264,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['caller', null],
         ['loader', null]        
     ]),
-
     /** Create a form model structure constructor
         @type {function(FormModel): MODEL}
         @param {FormModel} Model
@@ -259,7 +277,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         //['caller', null],
         //['loader', null]
     ]),
-
     /** Create a navheader model structure constructor
         @type {function(FormFooterModel): MODEL}
         @param {FormFooterModel} Model
@@ -307,7 +324,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['data', DATA.menu()],
         ['meta', {}]
     ]),
-
     /** Create a menu options model structure constructor
         @type {function(MenuOptions): MODEL}
         @param {MenuOptions} Model
@@ -352,6 +368,17 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     p: makeStruct([
         ['attributes', new ATTRIBUTES()],
         ['data', DATA.text()]
+    ]),
+    /** Create a buttonGroup model structure constructor
+        @type {function(SearchData): ATTRIBUTES}
+        @param {SearchData} Attributes
+        @returns {ATTRIBUTES} Attributes
+    */
+    search: makeAttrStruct([
+        ['searchClass', 'MAIN'],
+        ['searchType', 'TAG'],
+        ['query', ''],
+        ['formId', '-1']
     ]),
     /** Create a span model structure constructor
         @type {function(TextModel): MODEL}
@@ -444,6 +471,7 @@ export const DATAELEMENTS = new Map([
                 MODELS.input('INPUT', ATTR.input('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
                 MODELS.input('INPUT', ATTR.input('header', 'MAIN'), 'header'),
                 MODELS.input('TEXTAREA', ATTR.input('p', 'Description')),
+                MODELS.input('INPUT', ATTR.input('searchClass', 'MAIN'), 'searchClass'),
                 MODELS.input('INPUT', ATTR.input('searchType', 'CLASS'), 'searchType'),
                 MODELS.input('INPUT', ATTR.input('query', ''), 'query')
             ]
@@ -519,8 +547,10 @@ export const DATAELEMENTS = new Map([
                 MODELS.input('INPUT', ATTR.input('header', 'FORMPOSTINDEX'), 'header'),
                 MODELS.input('TEXTAREA', ATTR.input('p', 'Description')),
                 MODELS.input('INPUT', ATTR.input('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
-                MODELS.input('INPUT', ATTR.input('formId', '-1'), 'formId'),
-                MODELS.input('INPUT', ATTR.input('query', ''), 'query')
+                MODELS.input('INPUT', ATTR.input('searchClass', 'MAIN'), 'searchClass'),
+                MODELS.input('INPUT', ATTR.input('searchType', 'CLASS'), 'searchType'),
+                MODELS.input('INPUT', ATTR.input('query', ''), 'query'),
+                MODELS.input('INPUT', ATTR.input('formId', '-1'), 'formId')
             ]
         }
     ],
@@ -577,8 +607,10 @@ export const DATAELEMENTS = new Map([
                 MODELS.input('INPUT', ATTR.input('header', 'IMAGEINDEX'), 'header'),
                 MODELS.input('TEXTAREA', ATTR.input('p', 'Description')),
                 MODELS.input('INPUT', ATTR.input('showHeader', '1', 'CHECKBOX'), 'showHeader', 'CHECKBOX'),
-                //createInputModel('INPUT', 'formId', '-1'),
-                MODELS.input('INPUT', ATTR.input('query', ''), 'query')
+                MODELS.input('INPUT', ATTR.input('searchClass', 'MAIN'), 'searchClass'),
+                MODELS.input('INPUT', ATTR.input('searchType', 'CLASS'), 'searchType'),
+                MODELS.input('INPUT', ATTR.input('query', ''), 'query'),
+                createInputModel('INPUT', 'formId', '3')
             ]
         }
     ],
@@ -726,5 +758,5 @@ export const DATAELEMENTS = new Map([
 	]
 ]);
 /* eslint-enable max-params */
-export { ALIGN, ATTR, ATTRIBUTES, DATA }
+export { ALIGN, ATTR, ATTRIBUTES, DATA, ICONS, MODEL }
 /* eslint-enable max-lines */

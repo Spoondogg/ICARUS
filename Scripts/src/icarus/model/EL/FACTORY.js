@@ -250,11 +250,11 @@ export default class FACTORY {
         @param {string} classType Default class to display
         @param {CONTAINER} container Calling container
         @param {EL} caller Calling element (ie: switchable element resolved)
-        @param {string} [query] Optional Query String
+        @param {SearchData} [search] Optional Search
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this, query = null) {
-        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller, query);
+    launchViewer(classType = 'MAIN', container = this, caller = this, search = null) {
+        console.warn('FACTORY does not have a valid viewer at this time', classType, container, caller, search);
         return Promise.resolve(false);
     }
     /** Saves the state of the CONTAINER

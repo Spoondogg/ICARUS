@@ -725,7 +725,6 @@
     <Content Include="Scripts\src\icarus\model\el\dialog\prompt\SEARCH\SEARCH.js" />
     <Content Include="Scripts\src\icarus\model\el\footer\pagination\PAGINATION.js" />
     <Content Include="Scripts\src\icarus\model\el\form\FORMFACTORY.js" />
-    <Content Include="Scripts\src\icarus\model\el\container\main\MAINMODEL.js" />
     <Content Include="Scripts\src\icarus\model\el\container\PANE.js" />
     <Content Include="Scripts\src\icarus\model\el\FACTORY.js" />
     <Content Include="Scripts\src\icarus\model\el\form\PAYLOAD.js" />

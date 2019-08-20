@@ -21,9 +21,9 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail(model, className, pageNumber = 0) {
-        let [pagedMenu] = this.menu.get(pageNumber);
-        return pagedMenu.addChild(new IMAGETHUMBNAIL(pagedMenu, MODELS.formPost(
+    createThumbnail(model, className) { //, pageNumber = 0
+        //let [pagedMenu] = this.menu.get(pageNumber);
+        return this.menu.addChild(new IMAGETHUMBNAIL(this.menu, MODELS.formPost(
             model.id,
             model.formId,
             model.authorId,

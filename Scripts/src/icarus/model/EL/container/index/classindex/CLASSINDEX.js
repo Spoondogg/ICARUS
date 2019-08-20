@@ -18,20 +18,13 @@ export default class CLASSINDEX extends CONTAINER {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
-        @param {ClassIndexOptions} [options] Optional options
+        @param {ClassIndexModel} [model] Model
 	*/
-    constructor(node, model, options = MODELS.classIndexOptions(
-        model.data.classType || 'MAIN',
-        model.data.query || '',
-        model.data.searchType || 'CLASS'
-    )) {
+    constructor(node, model = MODELS.classIndex()) {
         //console.log('CLASSINDEX', options);
-        super(node, 'DIV', model, [options.classType]);
+        super(node, 'DIV', model, [model.data.searchClass]);
         this.addClass('classindex');
-        this.query = options.query;
-        this.classType = options.classType;
-        this.searchType = options.searchType;
+        this.classType = model.data.searchClass;
         /** @todo Consider creating a PAGEABLE interface */
 		/** @type {number} The current page */
 		this.page = 0;
@@ -49,7 +42,7 @@ export default class CLASSINDEX extends CONTAINER {
         /** The ClassIndex Menu contains the results of the search */
         this.menu = new MENU(this.body.pane, MODELS.menu(ATTR.menu('INDEX', 'index-menu')));
         //this.createPagedMenu(0);
-        this.createHeader(model, options);
+        this.createHeader(model);
         this.addMenuScrollEvents();        
         this.configureHeader();
         this.addEvents();
@@ -57,14 +50,13 @@ export default class CLASSINDEX extends CONTAINER {
         this.createPaginationFooter();
     }
     /** Creates a header with basic tabbable functionality, bound to this.menu
-        @param {ContainerModel} model Model
-        @param {ClassIndexOptions} options Options
+        @param {ClassIndexModel} model Model
         @returns {void}
     */
-    createHeader(model, options) {
+    createHeader(model) {
         this.header = new HEADER(this.body, new MODEL('classindex-header'));
         $(this.header.el).insertBefore(this.body.el);
-        this.headerTab = new BUTTON(this.header, MODELS.button(ATTR.button(), DATA.button(model.data.header || options.classType, ICONS.BLANK)));
+        this.headerTab = new BUTTON(this.header, MODELS.button(ATTR.button(), DATA.button(model.data.header || model.data.searchClass, ICONS.BLANK)));
         this.headerTab.addClass('headerTab');
         this.headerTab.implement(new Clickable(this.headerTab));
         this.headerTab.el.addEventListener('activate', () => this.menu.el.dispatchEvent(new Expand(this.body)));
@@ -78,31 +70,35 @@ export default class CLASSINDEX extends CONTAINER {
 
         this.searchMenu = new MENU(this.body, MODELS.menu(ATTR.menu('searchmenu', 'search-menu')));
         $(this.searchMenu.el).insertBefore(this.body.el);
-        this.navSearch = this.searchMenu.addNavSearch(MODELS.navitem(ATTR.navitem('navsearch'), DATA.navitem('', ICONS.SEARCH)));
-        this.navSearch.query.setAttribute('value', this.query);
+        this.navSearch = this.searchMenu.addNavSearch(model);
+        //this.navSearch.query.setAttribute('value', model.data.query);
         this.navSearch.btnSearch.el.addEventListener('click',
             () => this.menu.empty(false).then(
-                () => this.callSearch(
+                () => this.callSearch(MODELS.search(
+                    this.navSearch.searchClass.el.value,
                     this.navSearch.searchType.el.value,
-                    this.navSearch.query.el.value
-                )
+                    this.navSearch.query.el.value,
+                    this.navSearch.formId.el.value
+                ))
             )
         );
     }
     /** Calls the search using the current params and populates the results menu
-        @param {string} [type] Optional search type
-        @param {string} query Search string
+        @param {SearchModel} [search] Search
         @returns {void}
     */
-    callSearch(type, query) {
-        console.log('CLASSINDEX.callSearch()', type, query);
-        this.searchType = type;
-        this.query = query;
+    callSearch(search) {
+        console.log('CLASSINDEX.callSearch()', search);
+        this.append('data', search);
+        //this.data.searchClass = search.searchClass;
+        //this.data.searchType = search.searchType;
+        //this.data.query = search.query;
+        //this.data.formId = search.formId;
         this.page = 0;
         this.pageCount = 0;
         this.pageTotal = 0;
         //this.menu.empty().then(() => this.constructSearchResults(type, query));
-        this.constructSearchResults(type, query);
+        this.constructSearchResults(search);
         //this.construct();
     }
     /** Adds scroll events to this menu
@@ -193,37 +189,37 @@ export default class CLASSINDEX extends CONTAINER {
         );
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [type] Optional search type (default:TAG)
-        @param {string} [query] Optional querystring
+        @param {SearchModel} [search] Search
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(type = 'TAG', query = '') {
-        throw new AbstractMethodError(this.toString() + '.search() not set', this, type, query);
+    search(search) {
+        throw new AbstractMethodError(this.toString() + '.search() not set', this, search);
     }
 	/** Constructs the CLASSINDEX Container
+        @param {ClassIndexModel} model Model
         @returns {Promise<ThisType>} Promise to resolve ClassIndex
     */
-    construct() {
-        let query = this.query === null ? '' : this.query;
-        //console.log(this.toString() + '.construct()', this.classType, this.query);
+    construct(model) {
+        //if (typeof this.data.className !== 'undefined') {
+        //let query = this.data.query === null ? '' : this.data.query;
+        console.log(this.toString() + '.construct()', model);
         //this.menu.empty().then(() => this.constructSearchResults(this.searchType, query));
-        this.constructSearchResults(this.searchType, query)
+        this.constructSearchResults(model.data)
+        //}
     }
     /** Constructs a list of search results based on the given query
-        @param {string} [type] Optional search type
-        @param {string} query Search Query String
+        @param {SearchModel} [search] Search
         @returns {Promise<ThisType>} Promise to resolve ClassIndex
-     */
-    constructSearchResults(type, query) {
-        console.log('constructSearchResults', type, query, this.page);
+    */
+    constructSearchResults(search = MODELS.search(this.classType, 'CLASS')) {
+        console.log('constructSearchResults', search, this.page);
         return new Promise((resolve, reject) => {
             try {
                 if (isNaN(this.page)) {
                     console.log('Something aint right with this.page', this);
                 } else {
-                    this.search(type, query).then((payload, status) => {
-                        console.log('Search Results', type, query, payload, status, this.menu.get());
-                        //this.menu
+                    this.search(search).then((payload, status) => {
+                        console.log('Search Results', search, payload, status, this.menu.get());
                         if (status === 'success') {
                             this.constructPage(payload);
                             resolve(this);
@@ -238,7 +234,6 @@ export default class CLASSINDEX extends CONTAINER {
             }
         });
     }
-
     /** Constructs a page of results
         @param {PAYLOAD} payload Payload
         @returns {void}
@@ -332,7 +327,7 @@ export default class CLASSINDEX extends CONTAINER {
 			}
 			$(buttons[page]).addClass('active');
 			this.page = page;
-			this.construct();
+			this.construct(this);
 		});
 	}
 	/** Loads the next page in sequence

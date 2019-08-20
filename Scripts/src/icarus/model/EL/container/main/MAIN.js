@@ -334,18 +334,17 @@ export default class MAIN extends CONTAINER {
     }
     /** Launches the appropriate ClassViewer and passes it the querystring
         @param {Event} ev Evetn
-        @param {string} [query] QueryString
+        @param {SearchData} [search] Search
         @param {EL} [caller] Calling element
-        @param {string} [classType] Class Type to Search (ie: MAIN, FORM, *)
-        @param {string} [searchType] Optional Search Type
+        param {string} [classType] Class Type to Search (ie: MAIN, FORM, *)
+        param {string} [searchType] Optional Search Type
         @returns {void}
     */
-    submitSearch(ev, query, caller = this, classType = this.className, searchType = 'TAG') {
-        console.log(this.toString() + '.submitSearch', searchType, query);
+    submitSearch(ev, search, caller = this) { //, classType = this.className, searchType = 'TAG'
+        console.log(this.toString() + '.submitSearch', search);
         ev.preventDefault();
         ev.stopPropagation();
-        console.log('Search', query);
-        this.getFactory().launchViewer(classType, this, caller, query, searchType);
+        this.getFactory().launchViewer(search.searchClass, this, caller, search);
     }
     /** Generates an array of TAG names that have been cached locally
         @param {string} value Query String
@@ -382,12 +381,10 @@ export default class MAIN extends CONTAINER {
             /// Override input defaults and pass to search
             /** @type {NAVSEARCH} */
             let navsearch = tabbable.element.addNavSearch(new MODEL('navsearch-woot'));
-            navsearch.submitSearch = (ev) => this.submitSearch( // When search button is clicked... OVERRIDE
+            navsearch.submitSearch = (ev) => this.submitSearch(
                 ev,
-                navsearch.query.el.value.toString(),
-                navsearch.btnSearch,
-                this.className,
-                navsearch.searchType.el.value
+                navsearch.getSearchModel(),
+                navsearch.btnSearch
             );
 
             $(tabbable.tab.el).insertBefore(this.navheader.tab.el);

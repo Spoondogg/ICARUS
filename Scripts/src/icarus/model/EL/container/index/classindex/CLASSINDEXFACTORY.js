@@ -16,8 +16,8 @@ export default class CLASSINDEXFACTORY extends CONTAINERFACTORY {
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
         @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
-        @returns {CONTAINER} Newly constructed CONTAINER Class
+        @param {ClassIndexModel} model Model
+        @returns {CONTAINER} Newly constructed CLASSINDEX Container Class
     */
     build(className, span, model) {
         /** @type {CONTAINER} */

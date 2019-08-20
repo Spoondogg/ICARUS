@@ -1,6 +1,6 @@
 ﻿/** @module */
 import ATTRIBUTES from '../model/ATTRIBUTES.js';
-//import { ALIGN } from '../enums/ALIGN.js';
+import { ALIGN } from '../enums/ALIGN.js';
 import { ICONS } from '../enums/ICONS.js';
 /** Attribute Constructor Factory
     @description See https://stackoverflow.com/a/502384/722785
@@ -45,6 +45,12 @@ export const DATA = { ////  CACHE THESE CONSTRUCTORS
         ['label'],
         ['icon', ICONS.BLANK]
     ]),
+    /** Create a buttongroup model structure constructor
+        @type {function(ButtonGroupData): ATTRIBUTES}
+        @param {ButtonGroupData} Attributes
+        @returns {ATTRIBUTES} Model
+    */
+    buttongroup: makeDataStruct([['align']]),
     /** Create an icon data structure constructor
         @type {function(IconData): ATTRIBUTES}
         @param {IconData} Attributes Attributes
@@ -75,6 +81,30 @@ export const DATA = { ////  CACHE THESE CONSTRUCTORS
     navitem: makeDataStruct([
         ['label'],
         ['icon', ICONS.BLANK]
+    ]),
+    /** Create a navitem model structure constructor
+        @type {function({NavItemData & SearchData}): ATTRIBUTES}
+        @param {{NavItemData & SearchData}} Attributes Attributes
+        @returns {ATTRIBUTES} Attributes
+    */
+    navitemsearch: makeDataStruct([
+        ['label', ''],
+        ['icon', ICONS.BLANK],
+        ['searchClass', 'MAIN'],
+        ['searchType', 'TAG'],
+        ['query', ''],
+        ['formId', '-1']
+    ]),
+    /** Create a search data structure constructor
+        @type {function(SearchData): ATTRIBUTES}
+        @param {SearchData} Attributes
+        @returns {ATTRIBUTES} Attributes
+    */
+    search: makeDataStruct([
+        ['searchClass', 'MAIN'],
+        ['searchType', 'TAG'],
+        ['query', ''],
+        ['formId', '-1']
     ])
 }
 export { ICONS }

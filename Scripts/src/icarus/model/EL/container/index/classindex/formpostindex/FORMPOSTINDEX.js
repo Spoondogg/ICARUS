@@ -11,20 +11,14 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
-        @param {FormPostIndexOptions} [options] Options
+        @param {ClassIndexModel} [model] Model
+        @param {SearchModel} [options] Options
 	*/
-    constructor(node, model, options = MODELS.formPostIndexOptions(
-        'FORMPOST',
-        model.data.query || '',
-        'CLASS',
-        model.data.formId || -1
-    )) {
-        super(node, model, options);
+    constructor(node, model) {
+        super(node, model);
         this.addClass('formpostindex');
-        this.setFormId(model.data.formId || options.formId);
-        this.formId = model.data.formId || options.formId;
-        this.caller = options.caller;
+        //this.setFormId(model.data.formId || options.formId);
+        //this.caller = options.caller;
         //console.log('FPI:', this.formId, model, options);
     }
     /** Sets the form that this index represents
@@ -35,13 +29,12 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         this.formId = this.required(formId);
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [type] Optional search type
-        @param {query} [query] Optional querystring
+        @param {SearchData} search Search Data Object
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(type = 'TAG', query = '') {
-        //console.log('FORMPOSTINDEX Search', this.formId, query);
-        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + type + '&query=' + query, {
+    search(search) {
+        console.log('FORMPOSTINDEX Search', search);
+        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + search.searchType + '&query=' + search.query, {
             '__RequestVerificationToken': this.getToken()
         });
     }
@@ -52,8 +45,8 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail(model, className, pageNumber = 0) {
-        let [pagedMenu] = this.menu.get(pageNumber);
-        return pagedMenu.addChild(new FORMPOSTTHUMBNAIL(pagedMenu, MODELS.formPost(
+        //let [pagedMenu] = this.menu.get(pageNumber);
+        return this.menu.addChild(new FORMPOSTTHUMBNAIL(this.menu, MODELS.formPost(
             model.id,
             model.formId,
             model.authorId,

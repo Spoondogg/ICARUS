@@ -77,8 +77,7 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @param {ButtonGroupModel} Model
         @returns {MODEL} Model
     */
-    buttongroup: makeStruct([
-        ['label', 'buttons'],
+    buttongroup: makeStruct([        
         ['align'],
         ['name'],
         ['attributes', {}],

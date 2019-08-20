@@ -1,6 +1,6 @@
 /** @module */
 import CLASSINDEX, { ATTR, CLASSVIEWER, CONFIRM, DATA, Expand, ICONS, MODEL, MODELS, PROMPT } from '../CLASSINDEX.js';
-import CONTAINERTHUMBNAIL, { NAVTHUMBNAIL } from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
+import CONTAINERTHUMBNAIL from '../../../../nav/navitem/navthumbnail/containerthumbnail/CONTAINERTHUMBNAIL.js';
 import FORMPOSTINDEX from '../formpostindex/FORMPOSTINDEX.js';
 /** Contains a list of THUMBNAILS for each Container of the specified classType available to this user
     Represents an indexed view of Images
@@ -10,34 +10,42 @@ export default class CONTAINERINDEX extends CLASSINDEX {
 	/** Container with a header affixed outside of the its pane
         Contents are paged and pagination exists in the footer
         @param {CONTAINER} node Node
-        @param {ContainerModel} [model] Model
-        @param {ClassIndexOptions} [options] Options
+        @param {ClassIndexModel} [model] Model
 	*/
-    constructor(node, model, options) {
-        super(node, model, options);
-        this.addClass('containerindex');        
+    constructor(node, model) {
+        super(node, model);
+        this.addClass('containerindex');
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {string} [type] Optional search type
-        @param {query} [query] Optional querystring / delimited tag list
+        @param {query} [query] Optional querystring
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(type = this.searchType, query = '') {
-        console.log('CONTAINERINDEX.search', type, query);
+    searchClass(query = '') {
+        console.log('CONTAINERINDEX Search', this.data);
+        return $.post('/' + this.data.searchClass + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + this.data.query, {
+            '__RequestVerificationToken': this.getToken()
+        });
+    }	
+    /** An abstract/default search that promises to return a payload and status
+        @param {SearchData} search Search Data
+        @returns {Promise<object, string>} Promise to return payload, status
+    */
+    search(search) { //type = this.searchType, query = ''
+        console.log('CONTAINERINDEX.search', search);
         let result = null;
-        switch (type) {
+        switch (search.searchType) {
             case 'TAG':
-                result = $.post('/' + this.classType + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                result = $.post('/' + search.searchClass + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query, {
                     '__RequestVerificationToken': this.getToken()
                 });
                 break;
             case 'TAGID':
-                result = $.post('/' + this.classType + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + query, {
+                result = $.post('/' + search.searchClass + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query, {
                     '__RequestVerificationToken': this.getToken()
                 });
                 break
             default: // generic search
-                result = $.post('/' + this.classType + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + query, {
+                result = $.post('/' + search.searchClass + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + search.query, {
                     '__RequestVerificationToken': this.getToken()
                 });
         }
@@ -98,10 +106,10 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 let formPostIndex = new FORMPOSTINDEX(prompt.body.pane, new MODEL().set({
                     container: prompt.getContainer()
                 }), {
-                    classType: 'FORMPOST',
-                    query: '',
-                    formId: model.id
-                });
+                        classType: 'FORMPOST',
+                        query: '',
+                        formId: model.id
+                    });
                 formPostIndex.body.el.dispatchEvent(new Expand(formPostIndex));
                 //this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
 
@@ -113,7 +121,6 @@ export default class CONTAINERINDEX extends CLASSINDEX {
     /** Creates a Thumbnail that launches its respective Container
 	    @param {ContainerThumbnailModel} model The Thumbnail model
 	    @param {string} classType The className that the thumbnail represents
-        @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
     createThumbnail({
@@ -126,9 +133,8 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         key,
         value,
         jsonResults
-    }, classType, pageNumber = 0) {
-        let [pagedMenu] = this.menu.get(pageNumber);
-        let thumbnail = pagedMenu.addChild(new CONTAINERTHUMBNAIL(pagedMenu, new MODEL().set({
+    }, classType) {
+        return this.menu.addChild(new CONTAINERTHUMBNAIL(this.menu, new MODEL().set({
             id,
             subsections,
             authorId,
@@ -139,17 +145,13 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             value,
             jsonResults
         }), classType));
-        thumbnail.container = this.getContainer();
-        return thumbnail;
     }
     /** Creates a Thumbnail representation of a CONTAINER and adds relevant Events 
         @param {ContainerModel} model model
-        @param {number} [pageNumber] Page to load results into
         @returns {void}
     */
-    addThumbnailMethods(model, pageNumber = 0) {
-        //console.log('.addThumbnailMethods()', pageNumber, model);
-        let thumb = this.createThumbnail(model, this.classType, pageNumber);
+    addThumbnailMethods(model) {
+        let thumb = this.createThumbnail(model, this.classType);
 
         let btnAppend = thumb.menu.addNavItemIcon(MODELS.navitem(ATTR.navitem('APPEND'), DATA.navitem('Append', ICONS.PENCIL)));
         btnAppend.el.addEventListener('click', () => this.confirmAppend(model));
@@ -188,7 +190,7 @@ export default class CONTAINERINDEX extends CLASSINDEX {
                 () => console.log(this.classType + '.' + methods[m] + '() was not called.')
             );
         }
-    }	
+    }
     /** Launches a CLASSVIEWER for the given id and classType
         @param {UId} id CONTAINER UId
         @param {string} classType CONTAINER class
@@ -218,6 +220,6 @@ export default class CONTAINERINDEX extends CLASSINDEX {
             viewer.body.el.dispatchEvent(new Expand(viewer));
             this.getContainer().getFactory().get(viewer.body.pane, classType, id).then(() => dialog.showDialog());
         }
-    }    
+    }
 }
-export { CLASSVIEWER, NAVTHUMBNAIL, PROMPT }
+export { CLASSVIEWER, PROMPT }

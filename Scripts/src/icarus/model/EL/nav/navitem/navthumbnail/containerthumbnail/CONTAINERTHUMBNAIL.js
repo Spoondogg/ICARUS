@@ -136,14 +136,10 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
             //console.log('SearchByTagId', id, 'Caller', caller);
             try {
                 this.dialog = new PROMPT(MODELS.dialog('SearchByTagId ' + id, 'Search by tag id', true, this.getContainer(), caller, this.getLoader()));
-                this.containerindex = new CONTAINERINDEX(this.dialog.body.pane, new MODEL().set({
+                this.containerindex = new CONTAINERINDEX(this.dialog.body.pane, MODELS.classIndex().set({
                     container: this.getContainer(),
                     caller
-                }), {
-                    classType: 'MAIN',
-                    searchType: 'TAGID',
-                    query: id
-                });
+                }).append('data', MODELS.search('MAIN', 'TAGID', id))); 
                 
                 this.dialog.show().then((d) => {
                     caller.el.dispatchEvent(new Deactivate(caller));

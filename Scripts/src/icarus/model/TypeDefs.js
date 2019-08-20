@@ -136,6 +136,19 @@
     @property {LoaderLike} loader Loader
     
 */
+/** ClassIndex Model
+    @typedef {ContainerProps & ClassModel & {attributes:Attributes, data:ContainerData & SearchData, meta:Meta} ClassIndexModel - ClassIndex Model
+*/
+/** FormPostIndex Model
+    @typedef {ContainerModel & {data:SearchData}} FormPostIndexModel - FormPostIndexModel Model
+*/
+
+/** A collection of Attributes
+    @typedef {Object} ContainerData A collection of ContainerData Attributes
+	@property {number} [collapsed] - Element collapsed attribute
+    @property {number} [showNav] - Element showNav attribute
+    @property {number} [showHeader] - Element showHeader attribute
+*/
 /**
     See FORM.createFormPostForm
     @typedef {Object} FormPostFormModel A MODEL used to generate a FORM based on a FORMPOST
@@ -234,7 +247,7 @@
 */
 
 /** Represents a model for a ButtonGroup
-    @typedef {{align:string, name: Name} & Model} ButtonGroupModel Represents a model for a ButtonGroup
+    @typedef {{attributes:ButtonGroupAttributes, data:ButtonGroupData}} ButtonGroupModel Represents a model for a ButtonGroup
 */
 
 /** Represents a set of options for a Clickable interface
@@ -319,6 +332,14 @@
     @property {Name} [name] Name
     @property {string} [title] Title
     @property {string} [target] Target
+*/
+/** ButtonGroupAttributes
+    @typedef {Object} ButtonGroupAttributes Attributes
+    @property {Name} [name] Name
+*/
+/** ButtonGroupData
+    @typedef {Object} ButtonGroupData Data
+    @property {string} [align] Align
 */
 /** NavItemData
     @typedef {Object} NavItemData Attributes

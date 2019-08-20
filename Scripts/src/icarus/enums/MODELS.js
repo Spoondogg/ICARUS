@@ -1,13 +1,9 @@
 ﻿/** @module */
-//import { ATTR, ATTRIBUTES } from './ATTR.js';
-//import MODEL, { ATTR, ATTRIBUTES, DATA, ICONS } from '../model/MODEL.js';
-import { ATTR, ATTRIBUTES, DATA, ICONS, MODEL } from '../enums/DATAELEMENTS.js';
-import { ALIGN } from '../enums/ALIGN.js';
+import { ALIGN, ATTR, ATTRIBUTES, DATA, ICONS, MODEL } from '../enums/DATAELEMENTS.js';
 /** Model Constructor Factory
     @description See https://stackoverflow.com/a/502384/722785
-    let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
-    console.log('Options', options('a', 'b'), options(null, 'b'));
-
+    @example let options = this.makeStruct([['woot', 'one'], ['snoot', 'two'], ['boot', 'three']]);
+    @example console.log('Options', options('a', 'b'), options(null, 'b'));
     @param {Array<[string,any]>} params Constructor parameters and default values names ie: [['first','john'],['last','smith']]
     @returns {function(): MODEL} Model Constructor
 */
@@ -103,10 +99,8 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     buttongroup: makeStruct([
-        ['align'],
-        ['name'],
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()],
+        ['attributes', ATTR.buttongroup()],
+        ['data', DATA.buttongroup()],
         ['meta', new ATTRIBUTES()]
     ]),
     /** Create a button model structure constructor
@@ -332,8 +326,8 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['label'],
         ['icon', ICONS.BLANK],
         ['name'],
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()]
+        ['attributes', ATTR.navitemsearch()],
+        ['data', DATA.navitemsearch()]
     ]),
     /** Create a paragraph model structure constructor
         @type {function(TextModel): MODEL}

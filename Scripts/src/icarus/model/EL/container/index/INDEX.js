@@ -53,7 +53,7 @@ export default class INDEX extends CONTAINER {
                         this.getContainer(), tb, this.getLoader()
                     ));
                     prompt.addClass('dialog-classindex');
-                    let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
+                    let viewer = new CONTAINERINDEX(prompt.body.pane, MODELS.classIndex(), {
                         classType
                     });
                     viewer.setContainer(this.node.node.node.getContainer());

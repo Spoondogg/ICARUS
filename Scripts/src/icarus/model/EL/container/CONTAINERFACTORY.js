@@ -1,5 +1,5 @@
 /** @module */
-import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
+import FACTORY, { ATTRIBUTES, DATA, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
 import ARTICLE from '../article/ARTICLE.js';
@@ -132,24 +132,21 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {string} [classType] Default class to display (ie: MAIN)
         @param {CONTAINER} [container] Calling container
         @param {EL} [caller] Calling element (ie: switchable element resolved)
-        @param {string} [query] Optional Query String
-        @param {string} [searchType] Optional Search Type
+        @param {SearchData} [search] Optional Search
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this, query = null, searchType = null) {
-        console.log(container.toString() + '.launchViewer()', query, searchType);
+    launchViewer(classType = 'MAIN', container = this, caller = this, search = null) {
+        console.log(container.toString() + '.launchViewer()', search);
         return new Promise((resolve) => {
             let label = classType === '*' ? 'Containers' : classType + '(s)';
-            label += query === null ? '' : ': ' + query;
+            if (search !== null) {
+                label += ': ' + search.query;
+            }
             container.getLoader().log(25).then((loader) => {
                 let prompt = new PROMPT(MODELS.dialog(
                     label, '', true, container, caller, container.getLoader()
                 ));
-                let viewer = new CONTAINERINDEX(prompt.body.pane, new MODEL(), {
-                    classType,
-                    query,
-                    searchType
-                });
+                let viewer = new CONTAINERINDEX(prompt.body.pane, MODELS.classIndex().append('data', search === null ? DATA.search() : search));
                 viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));
