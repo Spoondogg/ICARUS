@@ -1,7 +1,7 @@
 /** @module */
 import GLYPHICON, { ATTR, ATTRIBUTES, DATA, EL, ICONS, MODEL, MODELS, SPAN } from '../span/GLYPHICON.js';
 import { LongclickDelay } from '../../../enums/StyleVars.js';
-//import { MODELS } from '../../../enums/DATAELEMENTS.js';
+//import { MODELS } from '../../../enums/MODELS.js';
 /** A generic BUTTON Element with an Icon and Label
     @class
 */

@@ -34,7 +34,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
     */
     search(search) {
         let searchUrl = '/FORMPOST/search?formId=' + search.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + search.searchType + '&query=' + search.query;
-        console.info('FORMPOSTINDEX Search', searchUrl, search);
+        //console.info('FORMPOSTINDEX Search', searchUrl, search);
         return $.post(searchUrl, {
             '__RequestVerificationToken': this.getToken()
         });

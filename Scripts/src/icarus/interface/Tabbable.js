@@ -1,6 +1,6 @@
 /** @module */
 import Switchable, { Activate, Deactivate, EL, IFACE } from './Switchable.js';
-import { MODELS } from '../enums/DATAELEMENTS.js';
+import { MODELS } from '../enums/MODELS.js';
 /** An interface for Tab driven Events.  
     @description An element is tabbable when it can be activated/deactivated by a separate element
     @class

@@ -20,7 +20,7 @@ export default class FORMPOSTTHUMBNAIL extends NAVTHUMBNAIL {
         @returns {void}
     */
     constructThumbnail(model) {
-        console.log('FORMPOSTTHUMBNAIL.constructThumbnail', model);
+        //console.log('FORMPOSTTHUMBNAIL.constructThumbnail', model);
         let { id, key, val } = model;
         let headerStr = 'id: ' + id;
         if (typeof model.key !== 'undefined') {

@@ -289,7 +289,6 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     createDocumentMap() {
-        console.log(this.toString() + '.createDocumentMap()');
         let sidebar = this.navheader.addTabbableSidebar('document-map', 'NAV', ICONS.SIDEBAR, 'left');
 
         /** There has to be a better way of doing this.  What is wrong with using the REFERENCE class / this.reference?
@@ -380,7 +379,7 @@ export default class MAIN extends CONTAINER {
 
             /// Override input defaults and pass to search
             /** @type {NAVSEARCH} */
-            let navsearch = tabbable.element.addNavSearch(new MODEL('navsearch-woot'));
+            let navsearch = tabbable.element.addNavSearch();
             navsearch.submitSearch = (ev) => this.submitSearch(
                 ev,
                 navsearch.getSearchModel(),
@@ -423,7 +422,6 @@ export default class MAIN extends CONTAINER {
 	    @returns {void}
 	*/
     addDefaultMenuItems() {
-        console.log(this.toString() + '.addDefaultMenuItems()');
 		let [optionsMenu] = this.navheader.menus.get('OPTIONS', 'MENU');
 		let [domMenu] = optionsMenu.get('DOM', 'MENU');
         domMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem('HOME'), DATA.navitem('Home', ICONS.HOME))).el.onclick = () => setTimeout(() => {

@@ -5,7 +5,7 @@ import Deactivate from '../event/Deactivate.js';
 import Deselect from '../event/Deselect.js';
 import LongClick from '../event/LongClick.js';
 //import { LongclickDelay } from '../enums/StyleVars.js';
-import { MODELS } from '../enums/DATAELEMENTS.js';
+import { MODELS } from '../enums/MODELS.js';
 import Select from '../event/Select.js';
 import Selectable from './Selectable.js';
 import Switchable from './Switchable.js';
