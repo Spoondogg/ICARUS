@@ -1,7 +1,7 @@
 /** @module */
 import BUTTONGROUP, { BUTTON, ICONS } from '../../../group/buttongroup/BUTTONGROUP.js';
 import CONFIRM, { PROMPT } from '../../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { ATTR, ATTRIBUTES, AbstractMethodError, Activate, Clickable, DATA, Deactivate, MODELS } from '../../CONTAINER.js';
+import CONTAINER, { ATTR, AbstractMethodError, Activate, Clickable, DATA, Deactivate, MODELS } from '../../CONTAINER.js';
 import MENU, { Collapse, Expand, MODEL, NAVSEARCH } from '../../../nav/menu/MENU.js';
 import CLASSVIEWER from './classviewer/CLASSVIEWER.js';
 //import FOOTER from '../../../footer/FOOTER.js';
@@ -74,12 +74,7 @@ export default class CLASSINDEX extends CONTAINER {
         //this.navSearch.query.setAttribute('value', model.data.query);
         this.navSearch.btnSearch.el.addEventListener('click',
             () => this.menu.empty(false).then(
-                () => this.callSearch(MODELS.search(
-                    this.navSearch.searchClass.el.value,
-                    this.navSearch.searchType.el.value,
-                    this.navSearch.query.el.value,
-                    this.navSearch.formId.el.value
-                ))
+                () => this.callSearch(this.navSearch.getSearchModel())
             )
         );
     }
@@ -88,7 +83,7 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {void}
     */
     callSearch(search) {
-        console.log('CLASSINDEX.callSearch()', search);
+        console.log(this.toString() + '.callSearch()', search);
         this.append('data', search);
         //this.data.searchClass = search.searchClass;
         //this.data.searchType = search.searchType;
@@ -150,7 +145,6 @@ export default class CLASSINDEX extends CONTAINER {
 
         this.btnSearch = this.buttonGroup.addSwitch(MODELS.button(ATTR.button(), DATA.button('', ICONS.SEARCH)));
         this.btnSearch.el.addEventListener('activate', (ev) => {
-            console.log('TODO: Generate a SEARCH input to modify the query value');
             ev.stopPropagation();
             this.searchMenu.el.dispatchEvent(new Expand(this.btnSearch));
         });
@@ -202,8 +196,8 @@ export default class CLASSINDEX extends CONTAINER {
     construct(model) {
         //if (typeof this.data.className !== 'undefined') {
         //let query = this.data.query === null ? '' : this.data.query;
-        console.log(this.toString() + '.construct()', model);
         //this.menu.empty().then(() => this.constructSearchResults(this.searchType, query));
+        //console.log(this.toString() + '.construct()', model);
         this.constructSearchResults(model.data)
         //}
     }
@@ -212,19 +206,19 @@ export default class CLASSINDEX extends CONTAINER {
         @returns {Promise<ThisType>} Promise to resolve ClassIndex
     */
     constructSearchResults(search = MODELS.search(this.classType, 'CLASS')) {
-        console.log('constructSearchResults', search, this.page);
+        //console.log(this.toString() + '.constructSearchResults', search, this.page);
         return new Promise((resolve, reject) => {
             try {
                 if (isNaN(this.page)) {
                     console.log('Something aint right with this.page', this);
                 } else {
                     this.search(search).then((payload, status) => {
-                        console.log('Search Results', search, payload, status, this.menu.get());
+                        //console.log('Search Results', search, payload, status); //this.menu.get()
                         if (status === 'success') {
                             this.constructPage(payload);
                             resolve(this);
                         } else {
-                            reject(new Error('Failed to retrieve page'));
+                            reject(new Error('Failed to retrieve page', search));
                         }
                     });
                 }
@@ -318,7 +312,7 @@ export default class CLASSINDEX extends CONTAINER {
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
     loadPage(page = 0) {
-        console.log(this.toString() + '.loadPage()', page);
+        console.info(this.toString() + '.loadPage()', page);
 		return this.chain(() => {
 			//this.header.setInnerHTML(this.label + ': Page ' + (page + 1));
 			let buttons = this.pagination.buttonGroup.el.children;

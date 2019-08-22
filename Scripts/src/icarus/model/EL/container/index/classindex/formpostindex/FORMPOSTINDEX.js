@@ -33,8 +33,9 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @returns {Promise<object, string>} Promise to return payload, status
     */
     search(search) {
-        console.log('FORMPOSTINDEX Search', search);
-        return $.post('/FORMPOST/search?formId=' + this.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + search.searchType + '&query=' + search.query, {
+        let searchUrl = '/FORMPOST/search?formId=' + search.formId + '&page=' + this.page + '&pageLength=' + this.pageLength + '&type=' + search.searchType + '&query=' + search.query;
+        console.info('FORMPOSTINDEX Search', searchUrl, search);
+        return $.post(searchUrl, {
             '__RequestVerificationToken': this.getToken()
         });
     }
@@ -44,7 +45,7 @@ export default class FORMPOSTINDEX extends CLASSINDEX {
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/
-    createThumbnail(model, className, pageNumber = 0) {
+    createThumbnail(model, className) {
         //let [pagedMenu] = this.menu.get(pageNumber);
         return this.menu.addChild(new FORMPOSTTHUMBNAIL(this.menu, MODELS.formPost(
             model.id,

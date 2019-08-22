@@ -155,7 +155,7 @@ export default class MAIN extends CONTAINER {
         //const rotation = this.changeY < 
         if (this.body.pane.el.scrollTop === 0) {
             if (changeY < -100) {
-                console.warn('Scroll triggered a refresh!');
+                ////console.warn('Scroll triggered a refresh!');
                 // Find a way to detect MAIN.body.pane scroll 
                 // Avoid refresh when sidebar scroll takes place and scrollTop === 0
                 /*this.isLoading = true;

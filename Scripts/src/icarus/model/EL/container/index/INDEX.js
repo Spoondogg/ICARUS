@@ -1,7 +1,7 @@
 /** @module  */
 //import CLASSINDEX, { CLASSVIEWER } from './classindex/CLASSINDEX.js';
 import CONFIRM, { PROMPT } from '../../dialog/confirm/CONFIRM.js';
-import CONTAINER, { ATTR, ATTRIBUTES, Activate, DATA, MODEL, MODELS } from '../CONTAINER.js';
+import CONTAINER, { ATTR, Activate, DATA, MODEL, MODELS } from '../CONTAINER.js';
 import CONTAINERINDEX, { CLASSVIEWER } from './classindex/containerindex/CONTAINERINDEX.js';
 import MENU, { Collapse, Expand, NAVITEMICON } from '../../nav/menu/MENU.js';
 import { ICONS } from '../../../../enums/ICONS.js';

@@ -24,7 +24,8 @@ export default class MODEL {
 	    @param {string|ATTRIBUTES} attributes Attributes
 	    @returns {ATTRIBUTES} Resolved attributes class
 	*/
-	defaultAttributes(attributes) {
+    defaultAttributes(attributes = null) {
+        //console.log('defaultAttributes', attributes);
         /** @type {ATTRIBUTES} */
         let attr = null;
 		switch (typeof attributes) {
@@ -81,7 +82,8 @@ export default class MODEL {
         for (let prop in obj) {
             if (typeof prop === 'string') {
                 if (allowEmpty || obj[prop] !== 'undefined') {
-                    this[attrName].set(prop, obj[prop]);
+                    //this[attrName].set(prop, obj[prop]);
+                    this[attrName][prop] = obj[prop];
                 }
             }
         }

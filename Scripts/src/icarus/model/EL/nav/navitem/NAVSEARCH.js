@@ -217,6 +217,7 @@ export default class NAVSEARCH extends NAVITEM {
         @returns {void}
     */
     createSearchOption(option) {
+        console.log('NAVSEARCH.createSearchOption()', option);
         if (this.searchOptions.get(option).length === 0 && option !== '') {
             let btn = this.searchOptions.addNavItem(MODELS.navitem(ATTR.navitem(option), DATA.navitem(option, ICONS.BLANK)));
             btn.el.addEventListener('activate', () => {

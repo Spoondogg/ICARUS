@@ -17,38 +17,37 @@ export default class CONTAINERINDEX extends CLASSINDEX {
         this.addClass('containerindex');
     }
     /** An abstract/default search that promises to return a payload and status
-        @param {query} [query] Optional querystring
+        param {query} [query] Optional querystring
         @returns {Promise<object, string>} Promise to return payload, status
-    */
-    searchClass(query = '') {
+    
+    searchClass() {
         console.log('CONTAINERINDEX Search', this.data);
         return $.post('/' + this.data.searchClass + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + this.data.query, {
             '__RequestVerificationToken': this.getToken()
         });
-    }	
+    }	*/
     /** An abstract/default search that promises to return a payload and status
         @param {SearchData} search Search Data
         @returns {Promise<object, string>} Promise to return payload, status
     */
-    search(search) { //type = this.searchType, query = ''
-        console.log('CONTAINERINDEX.search', search);
+    search(search) {
         let result = null;
+        let searchUrl = '/' + search.searchClass;
         switch (search.searchType) {
             case 'TAG':
-                result = $.post('/' + search.searchClass + '/SearchByTag?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                searchUrl += '/SearchByTag?tag=' + search.query;
                 break;
             case 'TAGID':
-                result = $.post('/' + search.searchClass + '/SearchByTagId?page=' + this.page + '&pageLength=' + this.pageLength + '&tag=' + search.query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                searchUrl += '/SearchByTagId?tag=' + search.query;
                 break
             default: // generic search
-                result = $.post('/' + search.searchClass + '/search?page=' + this.page + '&pageLength=' + this.pageLength + '&query=' + search.query, {
-                    '__RequestVerificationToken': this.getToken()
-                });
+                searchUrl += '/search?query=' + search.query;
         }
+        searchUrl += '&page=' + this.page + '&pageLength=' + this.pageLength;
+        console.info('CONTAINERINDEX.search', searchUrl);
+        result = $.post(searchUrl, {
+            '__RequestVerificationToken': this.getToken()
+        });
         return result;
     }
     /** An abstract/default search that promises to return a payload and status

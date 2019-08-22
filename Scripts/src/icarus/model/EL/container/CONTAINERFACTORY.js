@@ -146,6 +146,7 @@ export default class CONTAINERFACTORY extends FACTORY {
                 let prompt = new PROMPT(MODELS.dialog(
                     label, '', true, container, caller, container.getLoader()
                 ));
+                console.log('CONTAINERFACTORY.search', search);
                 let viewer = new CONTAINERINDEX(prompt.body.pane, MODELS.classIndex().append('data', search === null ? DATA.search() : search));
                 viewer.setContainer(container);
                 // Do viewer config here

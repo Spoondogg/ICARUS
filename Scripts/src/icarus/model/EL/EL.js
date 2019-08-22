@@ -12,12 +12,11 @@ import { STATUS } from '../../enums/STATUS.js';
     In the future, I might consider creating a NODE class and having EL
     extend it.  I'm certain that there are certain methods and properties 
     of EL that would be better suited to a NODE class.    
-    @todo Create a NODE class to handle methods for accessing its parent/child
+    @todo Create a NODE class to handle methods for accessing its parent/child, tree traversal etc
     @todo Extend MODEL (current) and implement NODE for descendants of CONTAINER
     @description This would result in CONTAINERS having NODE features...  But what about cases
     where EL needs to access?  Maybe this isn't such a good idea afterall.
     @class
-    @extends MODEL
 */
 export default class EL extends MODEL {
 	/** Constructs a node representing an HTMLElement that can be represented in the DOM
@@ -26,7 +25,7 @@ export default class EL extends MODEL {
 	    @param {MODEL} [model] Model
 	*/
     constructor(node, element = 'DIV', model = new MODEL()) {
-		super(model.attributes);
+		super(model.attributes, model.data, model.meta);
 		this.setContainer();
         this.setMain();
         /** An element FACTORY

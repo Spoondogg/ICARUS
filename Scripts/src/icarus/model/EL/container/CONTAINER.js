@@ -1129,7 +1129,7 @@ export default class CONTAINER extends GROUP {
 						let item = this.addContainerCaseButton(className, menu);
 						item.el.addEventListener('activate', () => this.create(new MODEL().set('className', className)));
 						//item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this));
+                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this, DATA.search(className, 'CLASS', '', -1)));
 					}
 					this.addConstructor(className, (model) => {
 						try {
