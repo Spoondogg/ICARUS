@@ -14,7 +14,7 @@ import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTI
 import IMAGEINDEX from '../container/index/classindex/formpostindex/imageindex/IMAGEINDEX.js';
 import INDEX from '../container/index/INDEX.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
-import { MODELS } from '../../../enums/DATAELEMENTS.js';
+import { MODELS } from '../../../enums/MODELS.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';

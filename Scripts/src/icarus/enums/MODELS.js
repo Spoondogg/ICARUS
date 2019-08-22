@@ -36,24 +36,111 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['attributes', ATTR.anchor()],
         ['data', DATA.anchor()]
     ]),
-    /** Create an anchor model structure constructor
-        @type {function(TextModel): MODEL}
-        @param {TextModel} [Model]
+    /** Create a button model structure constructor
+        @type {function(ButtonModel): MODEL}
+        @param {ButtonModel} Model
         @returns {MODEL} Model
     */
-    text: makeStruct([
-        ['attributes', new ATTRIBUTES()],
-        ['data', DATA.text()]
+    button: makeStruct([
+        ['attributes', ATTR.button()],
+        ['data', DATA.button()]
     ]),
-    /** Create an anchor model structure constructor
-        @type {function(Model): MODEL}
-        @param {Model} Model
+    /** Create a buttonGroup model structure constructor
+        @type {function(ButtonGroupModel): MODEL}
+        @param {ButtonGroupModel} Model
         @returns {MODEL} Model
     */
-    model: makeStruct([
+    buttongroup: makeStruct([
+        ['attributes', ATTR.buttongroup()],
+        ['data', DATA.buttongroup()],
+        ['meta', new ATTRIBUTES()]
+    ]),
+    /** Create a generic container model structure constructor
+        @type {function(ClassModel): MODEL}
+        @param {ClassModel} Model
+        @returns {MODEL} Model
+    */
+    class: makeStruct([
+        ['id'],
+        ['shared', -1],
+        ['status', 1],
+        ['authorId'],
+        ['dateCreated'],
+        ['dateLastModified']
+    ]),
+    /** Create a generic ClassIndex Model structure constructor
+        @type {function(ClassIndexModel): MODEL}
+        @param {ClassIndexModel} Model
+        @returns {MODEL} Model
+    */
+    classIndex: makeStruct([
+        ['label'],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name', ''],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
         ['attributes', new ATTRIBUTES()],
         ['data', new ATTRIBUTES()],
         ['meta', new ATTRIBUTES()]
+    ]),
+    /** Create a buttonGroup model structure constructor
+        @type {function(ClassIndexOptions): MODEL}
+        @param {ClassIndexOptions} Model
+        @returns {MODEL} Model
+    */
+    classIndexOptions: makeStruct([
+        ['classType', 'MAIN'],
+        ['query', ''],
+        ['searchType', 'CLASS']
+    ]),
+    /** Create a buttonGroup model structure constructor
+        @type {function(ClickableOptions): MODEL}
+        @param {ClickableOptions} Model
+        @returns {MODEL} Model
+    */
+    clickableOptions: makeStruct([
+        ['deactivateSiblings', false],
+        ['delay', 200],
+        ['longClickDelay', 2000],
+        ['stopPropagation', true]
+    ]),
+    /** Create a generic container model structure constructor
+        @type {function(ContainerModel): MODEL}
+        @param {ContainerModel} Model
+        @returns {MODEL} Model
+    */
+    container: makeStruct([
+        ['label'],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name', ''],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['attributes', new ATTRIBUTES()],
+        ['data', new ATTRIBUTES()],
+        ['meta', new ATTRIBUTES()]
+    ]),
+    /** Create a dialog model structure constructor
+        @type {function(DialogModel): MODEL}
+        @param {DialogModel} Model
+        @returns {MODEL} Model
+    */
+    dialog: makeStruct([
+        ['label', 'Dialog'],
+        ['text', ''],
+        ['showHeader', true],
+        ['container', null],
+        ['caller', null],
+        ['loader', null]
     ]),
     /** Create an anchor model structure constructor
         @type {function(El): MODEL}
@@ -65,6 +152,67 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['className'],
         ['children']
     ]),
+    /** Create a form model structure constructor
+        @type {function(FormModel): MODEL}
+        @param {FormModel} Model
+        @returns {MODEL} Model
+    */
+    form: makeStruct([
+        ['label', 'Dialog'],
+        //['text', ''],
+        //['showHeader', true],
+        ['container', null]
+        //['caller', null],
+        //['loader', null]
+    ]),
+    /** Create a navheader model structure constructor
+        @type {function(FormFooterModel): MODEL}
+        @param {FormFooterModel} Model
+        @returns {MODEL} Model
+    */
+    formfooter: makeStruct([['align', ALIGN.VERTICAL]]),
+    /** Create a dialog model structure constructor
+        @type {function(GroupModel): MODEL}
+        @param {GroupModel} Model
+        @returns {MODEL} Model
+    */
+    group: makeStruct([['name', '']]),
+    /** Create a generic container model structure constructor
+        @type {function(FormPostModel): MODEL}
+        @param {FormPostModel} Model
+        @returns {MODEL} Model
+    */
+    formPost: makeStruct([
+        ['formId', '-1'],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['isPublic', 1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['jsonResults']
+    ]),
+    /** Create a generic ClassIndex Model structure constructor
+        @type {function(FormPostIndexModel): MODEL}
+        @param {FormPostIndexModel} Model
+        @returns {MODEL} Model
+    */
+    formPostIndex: makeStruct([
+        ['label'],
+        ['subsections', '0'],
+        ['tags', '0'],
+        ['name', ''],
+        ['id'],
+        ['authorId'],
+        ['shared', -1],
+        ['status', 1],
+        ['dateCreated'],
+        ['dateLastModified'],
+        ['attributes', new ATTRIBUTES()],
+        ['data', new ATTRIBUTES()],
+        ['meta', new ATTRIBUTES()]
+    ]),    
     /** Create a navitem model structure constructor
      * element, name, value = '', label = name, type = 'TEXT', readonly = false, showNav = 0
         @type {function(InputModel): MODEL}
@@ -93,166 +241,16 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         ['data', new ATTRIBUTES()],
         ['meta', new ATTRIBUTES()]
     ]),
-    /** Create a buttonGroup model structure constructor
-        @type {function(ButtonGroupModel): MODEL}
-        @param {ButtonGroupModel} Model
+    /** Create an anchor model structure constructor
+        @type {function(Model): MODEL}
+        @param {Model} Model
         @returns {MODEL} Model
     */
-    buttongroup: makeStruct([
-        ['attributes', ATTR.buttongroup()],
-        ['data', DATA.buttongroup()],
-        ['meta', new ATTRIBUTES()]
-    ]),
-    /** Create a button model structure constructor
-        @type {function(ButtonModel): MODEL}
-        @param {ButtonModel} Model
-        @returns {MODEL} Model
-    */
-    button: makeStruct([
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()]
-    ]),
-    /** Create a generic container model structure constructor
-        @type {function(ClassModel): MODEL}
-        @param {ClassModel} Model
-        @returns {MODEL} Model
-    */
-    class: makeStruct([
-        ['id'],
-        ['shared', -1],
-        ['status', 1],
-        ['authorId'],
-        ['dateCreated'],
-        ['dateLastModified']
-    ]),
-
-    /** Create a generic ClassIndex Model structure constructor
-        @type {function(ClassIndexModel): MODEL}
-        @param {ClassIndexModel} Model
-        @returns {MODEL} Model
-    */
-    classIndex: makeStruct([
-        ['label'],
-        ['subsections', '0'],
-        ['tags', '0'],
-        ['name', ''],
-        ['id'],
-        ['authorId'],
-        ['shared', -1],
-        ['status', 1],
-        ['dateCreated'],
-        ['dateLastModified'],
+    model: makeStruct([
         ['attributes', new ATTRIBUTES()],
         ['data', new ATTRIBUTES()],
         ['meta', new ATTRIBUTES()]
     ]),
-    /** Create a generic container model structure constructor
-        @type {function(ContainerModel): MODEL}
-        @param {ContainerModel} Model
-        @returns {MODEL} Model
-    */
-    container: makeStruct([
-        ['label'],
-        ['subsections', '0'],
-        ['tags', '0'],
-        ['name', ''],
-        ['id'],
-        ['authorId'],
-        ['shared', -1],
-        ['status', 1],
-        ['dateCreated'],
-        ['dateLastModified'],
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()],
-        ['meta', new ATTRIBUTES()]
-    ]),
-
-    /** Create a dialog model structure constructor
-        @type {function(DialogModel): MODEL}
-        @param {DialogModel} Model
-        @returns {MODEL} Model
-    */
-    dialog: makeStruct([
-        ['label', 'Dialog'],
-        ['text', ''],
-        ['showHeader', true],
-        ['container', null],
-        ['caller', null],
-        ['loader', null]
-    ]),
-
-    /** Create a generic container model structure constructor
-        @type {function(FormPostModel): MODEL}
-        @param {FormPostModel} Model
-        @returns {MODEL} Model
-    */
-    formPost: makeStruct([
-        ['formId', '-1'],
-        ['id'],
-        ['authorId'],
-        ['shared', -1],
-        ['isPublic', 1],
-        ['status', 1],
-        ['dateCreated'],
-        ['dateLastModified'],
-        ['jsonResults']
-    ]),
-
-    /** Create a generic ClassIndex Model structure constructor
-        @type {function(FormPostIndexModel): MODEL}
-        @param {FormPostIndexModel} Model
-        @returns {MODEL} Model
-    */
-    formPostIndex: makeStruct([
-        ['label'],
-        ['subsections', '0'],
-        ['tags', '0'],
-        ['name', ''],
-        ['id'],
-        ['authorId'],
-        ['shared', -1],
-        ['status', 1],
-        ['dateCreated'],
-        ['dateLastModified'],
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()],
-        ['meta', new ATTRIBUTES()]
-    ]),
-
-    /** Create a generic container model structure constructor
-        @type {function(ContainerModel): MODEL}
-        @param {ContainerModel} Model
-        @returns {MODEL} Model
-    */
-    thumbnail: makeStruct([
-        ['id'],
-        ['label']
-    ]),
-    /** Create a form model structure constructor
-        @type {function(FormModel): MODEL}
-        @param {FormModel} Model
-        @returns {MODEL} Model
-    */
-    form: makeStruct([
-        ['label', 'Dialog'],
-        //['text', ''],
-        //['showHeader', true],
-        ['container', null]
-        //['caller', null],
-        //['loader', null]
-    ]),
-    /** Create a navheader model structure constructor
-        @type {function(FormFooterModel): MODEL}
-        @param {FormFooterModel} Model
-        @returns {MODEL} Model
-    */
-    formfooter: makeStruct([['align', ALIGN.VERTICAL]]),
-    /** Create a dialog model structure constructor
-        @type {function(GroupModel): MODEL}
-        @param {GroupModel} Model
-        @returns {MODEL} Model
-    */
-    group: makeStruct([['name', '']]),
     /** Create an icon model structure constructor
         @type {function(IconModel): MODEL}
         @param {IconModel} Model
@@ -279,10 +277,9 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     menu: makeStruct([
-        ['name', ''],
-        ['attributes', new ATTRIBUTES()],
-        ['data', new ATTRIBUTES()],
-        ['meta', new ATTRIBUTES()]
+        ['attributes', ATTR.menu()],
+        ['data', DATA.menu()],
+        ['meta', {}]
     ]),
     /** Create a menu options model structure constructor
         @type {function(MenuOptions): MODEL}
@@ -323,9 +320,6 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
         @returns {MODEL} Model
     */
     navitemsearch: makeStruct([
-        ['label'],
-        ['icon', ICONS.BLANK],
-        ['name'],
         ['attributes', ATTR.navitemsearch()],
         ['data', DATA.navitemsearch()]
     ]),
@@ -337,6 +331,24 @@ export const MODELS = { ////  CACHE THESE CONSTRUCTORS
     p: makeStruct([
         ['attributes', new ATTRIBUTES()],
         ['data', new ATTRIBUTES()]
-    ])    
+    ]),
+    /** Create an anchor model structure constructor
+        @type {function(TextModel): MODEL}
+        @param {TextModel} [Model]
+        @returns {MODEL} Model
+    */
+    text: makeStruct([
+        ['attributes', new ATTRIBUTES()],
+        ['data', DATA.text()]
+    ]),
+    /** Create a generic container model structure constructor
+        @type {function(ContainerModel): MODEL}
+        @param {ContainerModel} Model
+        @returns {MODEL} Model
+    */
+    thumbnail: makeStruct([
+        ['id'],
+        ['label']
+    ])
 }
 export { ALIGN, ATTR, ATTRIBUTES, DATA, ICONS, MODEL }

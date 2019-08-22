@@ -4,7 +4,7 @@ import Closeable, { Close, Open } from '../../../interface/Closeable.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
 import FORMFOOTER from '../form/FORMFOOTER.js';
 import { ICONS } from '../../../enums/ICONS.js';
-import { MODELS } from '../../../enums/DATAELEMENTS.js';
+import { MODELS } from '../../../enums/MODELS.js';
 import Selectable from '../../../interface/Selectable.js';
 import { TransitionSpeed } from '../../../enums/StyleVars.js';
 /* eslint-disable max-statements */

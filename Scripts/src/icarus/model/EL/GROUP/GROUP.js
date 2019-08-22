@@ -1,6 +1,6 @@
 /** @module */
 import Switchable, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError, RecursionLimitError } from '../../../interface/Switchable.js';
-import { MODELS } from '../../../enums/DATAELEMENTS.js';
+import { MODELS } from '../../../enums/MODELS.js';
 /** A group acts as a named, Switchable element used for grouping items
     @class
 */

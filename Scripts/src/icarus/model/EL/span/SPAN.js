@@ -1,6 +1,6 @@
 /** @module */
 import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../EL.js';
-import { MODELS } from '../../../enums/DATAELEMENTS.js';
+import { MODELS } from '../../../enums/MODELS.js';
 /** A SPAN Element
     @class
 */
