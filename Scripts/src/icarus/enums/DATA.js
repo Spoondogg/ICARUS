@@ -1,6 +1,6 @@
 ﻿/** @module */
+//import { ALIGN } from '../enums/ALIGN.js';
 import ATTRIBUTES from '../model/ATTRIBUTES.js';
-import { ALIGN } from '../enums/ALIGN.js';
 import { ICONS } from '../enums/ICONS.js';
 /** Attribute Constructor Factory
     @description See https://stackoverflow.com/a/502384/722785

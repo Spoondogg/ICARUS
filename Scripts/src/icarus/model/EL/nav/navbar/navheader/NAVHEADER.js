@@ -1,5 +1,5 @@
 /** @module */
-import NAVBAR, { ANCHOR, ATTR, ATTRIBUTES, Activate, Collapse, Collapsible, DATA, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
+import NAVBAR, { ANCHOR, ATTR, Activate, Collapse, Collapsible, DATA, Deactivate, EL, Expand, ICONS, LIST, MENU, MODEL, MODELS, NAVITEM, NAVITEMICON } from '../NAVBAR.js';
 import SIDEBAR from '../../../container/sidebar/SIDEBAR.js';
 /** A NAVBAR that acts as a CONTAINER Header
     @class

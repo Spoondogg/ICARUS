@@ -279,11 +279,15 @@ export default class MAIN extends CONTAINER {
         @returns {void}
     */
     addReferencePlaceholder(model) {
-        /** @type {MENU} */
-        let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
-        model.subsections.split(',').forEach((s) => {
-            childrenMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem(s + ' placeholder'), DATA.navitem(s, ICONS.ALERT)).set('id', 'ref_' + s));
-        });
+        try {
+            /** @type {MENU} */
+            let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
+            model.subsections.split(',').forEach((s) => {
+                childrenMenu.addNavItemIcon(MODELS.navitem(ATTR.navitem(s + ' placeholder'), DATA.navitem(s, ICONS.ALERT)).set('id', 'ref_' + s));
+            });
+        } catch (e) {
+            console.warn('Unable to add reference placeholder', model, e);
+        }
     }
 	/** Creates a SIDEBAR that contains an outline of MAIN and its descendants. 
 	    @returns {void}

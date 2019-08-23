@@ -333,9 +333,9 @@ $z-bottom: -1;
         @extend %selected;
     }
 
-    > .icon {
-        float: left;
-    }
+    //> .icon {
+    //    float: left;
+    //}
 
     > .button-label {
         line-height: 2.5rem;
@@ -783,16 +783,6 @@ html {
                     animation: slideOutUp $transition-speed $transition-motion;
                 }
             }
-            /*> .form-footer {
-                border: 0;
-
-                button {
-                    border-radius: 0;
-                    height: $navbar-height - 1rem;
-                    line-height: $navbar-height - 1rem;
-                    padding: 0;
-                }
-            }*/
             > .body {
                 overflow-x: hidden;
 
@@ -878,16 +868,12 @@ html {
                                 > footer {
                                     .btn-forgot-password {
                                         @include transition($transition-default);
-                                        //background-color: $color-grey-lighter;
                                         background-color: $color-grey-dark;
                                         border: 0;
-                                        //color: $color-grey;
                                         color: $color-white;
                                         font-size: .8rem;
                                         font-weight: lighter;
-                                        //height: 6rem;
                                         margin: 1rem auto 0;
-                                        //padding: 1rem;
                                         &:hover {
                                             color: $color-blue-light;
                                             text-decoration: underline;
@@ -1220,10 +1206,10 @@ html {
     }
 
     .btn-group {
-        height: $navbar-height;
+        //height: $navbar-height;
 
         .btn {
-            height: $navbar-height;
+            //height: $navbar-height;
         }
         /// A vertically aligned button group
         /// @todo This should just be a list...  shouldn't it?

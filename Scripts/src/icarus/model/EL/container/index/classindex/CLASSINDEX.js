@@ -205,7 +205,7 @@ export default class CLASSINDEX extends CONTAINER {
         @param {SearchModel} [search] Search
         @returns {Promise<ThisType>} Promise to resolve ClassIndex
     */
-    constructSearchResults(search = MODELS.search(this.classType, 'CLASS')) {
+    constructSearchResults(search = DATA.search(this.classType, 'CLASS')) {
         //console.log(this.toString() + '.constructSearchResults', search, this.page);
         return new Promise((resolve, reject) => {
             try {

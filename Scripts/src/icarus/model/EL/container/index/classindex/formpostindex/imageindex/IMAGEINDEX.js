@@ -11,13 +11,13 @@ export default class IMAGEINDEX extends FORMPOSTINDEX {
         @param {CONTAINER} node Node
         @param {FormPostIndexModel} [model] Model
 	*/
-    constructor(node, model = MODELS.formPostIndex().append('data', DATA.search('IMAGE', 'CLASS', '', 3))) { //options = MODELS.search('IMAGE', 'CLASS', model.data.query || '', 'CLASS', 3)
+    constructor(node, model = MODELS.formPostIndex().append('data', DATA.search('IMAGE', 'CLASS', '', 3))) {
         super(node, model);
         this.addClass('imageindex');        
     }
     /** Creates a Thumbnail that launches its respective Container
 	    @param {FormPostModel} model The Thumbnail model
-	    @param {string} className The className that the thumbnail represents,
+	    @param {string} className The className that the thumbnail represents
         @param {number} [pageNumber] Page to load results into
 	    @returns {NAVTHUMBNAIL} A thumbnail
 	*/

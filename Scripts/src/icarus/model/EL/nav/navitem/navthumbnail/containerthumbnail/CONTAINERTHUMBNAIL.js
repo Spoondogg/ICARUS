@@ -139,7 +139,7 @@ export default class CONTAINERTHUMBNAIL extends NAVTHUMBNAIL {
                 this.containerindex = new CONTAINERINDEX(this.dialog.body.pane, MODELS.classIndex().set({
                     container: this.getContainer(),
                     caller
-                }).append('data', MODELS.search('MAIN', 'TAGID', id))); 
+                }).append('data', DATA.search('MAIN', 'TAGID', id))); 
                 
                 this.dialog.show().then((d) => {
                     caller.el.dispatchEvent(new Deactivate(caller));

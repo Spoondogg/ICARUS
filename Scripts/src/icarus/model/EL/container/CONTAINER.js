@@ -1233,7 +1233,9 @@ export default class CONTAINER extends GROUP {
                         
                         this.addReferencePlaceholder(model);
 
-                        this.getMain().updateTagCache(model.tags);
+                        if (model !== null) {
+                            this.getMain().updateTagCache(model.tags);
+                        }
 
                         switch (payload.result) {
                             case 0: // error
