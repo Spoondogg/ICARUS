@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL } from '../container/CONTAINERFACTORY.js'; // Deactivate // PAYLOAD, PROMPT, SPAN
+import CONTAINERFACTORY, { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL } from '../container/CONTAINERFACTORY.js'; // Deactivate // PAYLOAD, PROMPT, SPAN
 import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
 /** Constructs various Table Elements and returns them to be appended
     Each Table Element child must be imported individually
@@ -13,8 +13,8 @@ export default class TABLEFACTORY extends CONTAINERFACTORY {
     }
     /** Constructs the appropriate element
         @param {string} className Container Constructor Name
-        @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {SPAN} span Placeholder
+        @param {ContainerModel} [model] Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {
@@ -48,4 +48,4 @@ export default class TABLEFACTORY extends CONTAINERFACTORY {
         return element;
     }
 }
-export { ATTRIBUTES, CONTAINER, DIALOGMODEL, EL, FACTORY, MODEL, TABLE }
+export { ATTRIBUTES, CONTAINER, EL, FACTORY, MODEL, TABLE }

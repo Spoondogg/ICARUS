@@ -1,8 +1,6 @@
 /** @module */
 import EL from '../model/el/EL.js';
-/** An Element Deactivate Event
-    @extends CustomEvent
-*/
+/** An Element Deactivate Event */
 export default class Deactivate extends CustomEvent {
 	/** An element deactivation event
 	    @param {EL} caller Calling node

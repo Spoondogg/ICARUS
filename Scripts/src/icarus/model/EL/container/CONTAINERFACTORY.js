@@ -1,25 +1,28 @@
 /** @module */
-import FACTORY, { ATTRIBUTES, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
+import FACTORY, { ATTRIBUTES, DATA, EL, MODEL, PAYLOAD, SPAN } from '../FACTORY.js';
 import FORM, { BUTTON, BUTTONGROUP } from '../form/FORM.js';
 import MENU, { Deactivate, LI, UL } from '../nav/menu/MENU.js';
-import PROMPT, { DIALOGMODEL } from '../dialog/prompt/PROMPT.js';
-//import TABLE, { TBODY, TD, TFOOT, TH, THEAD, TR } from '../table/TABLE.js';
 import ARTICLE from '../article/ARTICLE.js';
 import BANNER from '../container/banner/BANNER.js';
 import CALLOUT from '../container/banner/callout/CALLOUT.js';
-import CLASSINDEX from '../container/banner/classindex/CLASSINDEX.js';
-import CLASSVIEWER from '../container/banner/classviewer/CLASSVIEWER.js';
+import CHAT from '../container/chat/CHAT.js';
+import CLASSVIEWER from '../container/index/classindex/classviewer/CLASSVIEWER.js';
 import CONTAINER from '../container/CONTAINER.js';
-import IMAGEGALLERY from '../container/banner/imagegallery/IMAGEGALLERY.js';
-import INDEX from '../container/banner/index/INDEX.js';
-import INDEXTHUMBNAIL from '../container/banner/thumbnail/indexthumbnail/INDEXTHUMBNAIL.js';
+import CONTAINERINDEX from './index/classindex/containerindex/CONTAINERINDEX.js';
+import DICTIONARY from '../container/dictionary/DICTIONARY.js';
+import FORMPOSTINDEX from '../container/index/classindex/formpostindex/FORMPOSTINDEX.js';
+import IMAGEINDEX from '../container/index/classindex/formpostindex/imageindex/IMAGEINDEX.js';
+import INDEX from '../container/index/INDEX.js';
 import JUMBOTRON from '../container/jumbotron/JUMBOTRON.js';
+import { MODELS } from '../../../enums/MODELS.js';
 import NAVITEM from '../nav/navitem/NAVITEM.js';
 import NAVSEPARATOR from '../nav/navitem/NAVSEPARATOR.js';
 import NAVTHUMBNAIL from '../nav/navitem/navthumbnail/NAVTHUMBNAIL.js';
+import PROMPT from '../dialog/prompt/PROMPT.js';
 import SECTION from '../section/SECTION.js';
 import TABLE from '../table/TABLE.js';
 import TEXTBLOCK from './textblock/TEXTBLOCK.js';
+import WORD from '../container/word/WORD.js';
 /** Constructs various Containers and returns them to be appended
     Each Container child must be imported individually
     to avoid cyclic redundancy of dependencies
@@ -35,8 +38,8 @@ export default class CONTAINERFACTORY extends FACTORY {
     }
     /** Switch statement to determine appropriate element for this factory to construct
         @param {string} className Container Constructor Name
-        @param {SPAN} span Element Placeholder
-        @param {MODEL} model Element MODEL
+        @param {SPAN} span Placeholder
+        @param {ContainerModel} model Model
         @returns {CONTAINER} Newly constructed CONTAINER Class
     */
     build(className, span, model) {
@@ -51,24 +54,36 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'CALLOUT':
                 element = new CALLOUT(span, model);
                 break;
+            case 'CHAT':
+                element = new CHAT(span, model);
+                element.setFactory(this.factories.get('CHATFACTORY'));
+                break;
             case 'CLASSVIEWER':
                 element = new CLASSVIEWER(span, model);
+                break;
+            case 'DICTIONARY':
+                element = new DICTIONARY(span, model);
                 break;
             case 'FORM':
                 element = new FORM(span, model);
                 element.setFactory(this.factories.get('FORMFACTORY'));
                 break;
-            case 'IMAGEGALLERY':
-                element = new IMAGEGALLERY(span, model);
-                break;
+            ////////////
             case 'INDEX':
                 element = new INDEX(span, model);
                 break;
-            case 'CLASSINDEX':
+            /*case 'CLASSINDEX':
                 element = new CLASSINDEX(span, model);
+                element.setFactory(this.factories.get('CLASSINDEXFACTORY'));
+                break;*/
+            case 'CONTAINERINDEX':
+                element = new CONTAINERINDEX(span, model);
                 break;
-            case 'INDEXTHUMBNAIL':
-                element = new INDEXTHUMBNAIL(span, model);
+            case 'FORMPOSTINDEX':
+                element = new FORMPOSTINDEX(span, model);
+                break;
+            case 'IMAGEINDEX':
+                element = new IMAGEINDEX(span, model);
                 break;
             case 'JUMBOTRON':
                 element = new JUMBOTRON(span, model);
@@ -76,7 +91,7 @@ export default class CONTAINERFACTORY extends FACTORY {
             case 'LI':
                 element = new LI(span, model);
                 break;
-            case 'MENU':
+            case 'MENU': // MIGHT NOT BE NEEDED
                 element = new MENU(span, model);
                 break;
             case 'NAVITEM':
@@ -103,7 +118,10 @@ export default class CONTAINERFACTORY extends FACTORY {
                 break;
             case 'UL':
                 element = new UL(span, model);
-                break;            
+                break;       
+            case 'WORD':
+                element = new WORD(span, model);
+                break;       
             default:
                 throw Error(this.toString() + ' No constructor exists for "' + className + '"');
         }
@@ -114,18 +132,22 @@ export default class CONTAINERFACTORY extends FACTORY {
         @param {string} [classType] Default class to display (ie: MAIN)
         @param {CONTAINER} [container] Calling container
         @param {EL} [caller] Calling element (ie: switchable element resolved)
+        @param {SearchData} [search] Optional Search
         @returns {Promise<PROMPT>} Prompt configured to view given classType
     */
-    launchViewer(classType = 'MAIN', container = this, caller = this) {
+    launchViewer(classType = 'MAIN', container = this, caller = this, search = null) {
+        console.log(container.toString() + '.launchViewer()', search);
         return new Promise((resolve) => {
+            let label = classType === '*' ? 'Containers' : classType + '(s)';
+            if (search !== null) {
+                label += ': ' + search.query;
+            }
             container.getLoader().log(25).then((loader) => {
-                let prompt = new PROMPT(new DIALOGMODEL(new MODEL(), {
-                    container,
-                    caller,
-                    label: classType + '(s)'
-                    //text: 'Viewer Text'
-                }));
-                let viewer = new CLASSINDEX(prompt.body.pane, new MODEL(), classType);
+                let prompt = new PROMPT(MODELS.dialog(
+                    label, '', true, container, caller, container.getLoader()
+                ));
+                console.log('CONTAINERFACTORY.search', search);
+                let viewer = new CONTAINERINDEX(prompt.body.pane, MODELS.classIndex().append('data', search === null ? DATA.search() : search));
                 viewer.setContainer(container);
                 // Do viewer config here
                 loader.log(100).then(() => resolve(prompt.show()));
@@ -133,4 +155,4 @@ export default class CONTAINERFACTORY extends FACTORY {
         });
     }
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DIALOGMODEL, Deactivate, EL, FACTORY, FORM, MODEL, PAYLOAD, PROMPT, SPAN }
+export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, Deactivate, EL, FACTORY, FORM, MODEL, MODELS, PAYLOAD, PROMPT, SPAN, TEXTBLOCK }

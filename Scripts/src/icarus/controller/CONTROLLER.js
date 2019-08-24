@@ -1,14 +1,14 @@
 /** @module */
 import MAIN, { FACTORY, LOADER, MODEL } from '../model/el/container/main/MAIN.js';
 import WATERMARK from '../helper/WATERMARK.js';
-/** An Application Class
+/** An Application Controller Class
     @description Constructs the Application Controller and initializes the MAIN Container
     This should be instantiated during the init phase of the html document
     @class
     @extends MODEL
 */
 export default class CONTROLLER extends MODEL {
-	/** Constructs an Application
+	/** Constructs an Application Controller
         @param {UId} id The unique application id
         @param {Name} user A machine friendly username
         @param {boolean} dev If true, dev-options are enabled
@@ -108,12 +108,13 @@ export default class CONTROLLER extends MODEL {
             console.log('showResetPasswordPrompt()');
             this.main.resetPassword();
         }
-
+        /* eslint-disable no-alert */
         // 'proceed' not required in cases where session has been corrupted
         // You will get stuck in an endless loop doing this, so be warned.
         if (this.url.searchParams.get('logout')) {
             return confirm('Manually log out?') ? this.main.logout() : window.history.pushState({}, null, '/');
         }
+        /* eslint-enable no-alert */
     }
 	/** If a ReturnUrl is provided, redirect to that Url
 	    @returns {APP} This APP

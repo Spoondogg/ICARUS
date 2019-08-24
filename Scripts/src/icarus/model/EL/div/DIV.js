@@ -1,16 +1,15 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../EL.js';
 /** A DIV element
     @class
-    @extends EL
 */
 export default class DIV extends EL {
 	/** Constructs a DIV element
-	    @param {EL} node Parent Node
+	    @param {EL} node Node
 	    @param {MODEL} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, 'DIV', model);
 	}
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTR, ATTRIBUTES, DATA, EL, MODEL }

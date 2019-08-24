@@ -332,6 +332,14 @@ $z-bottom: -1;
     &.selected {
         @extend %selected;
     }
+
+    //> .icon {
+    //    float: left;
+    //}
+
+    > .button-label {
+        line-height: 2.5rem;
+    }
 }
 // An abstract navigation item with clickable events
 %nav-item {
@@ -363,7 +371,7 @@ $z-bottom: -1;
     }
 
     &.selected {
-        background-color: red;
+        background-color: $color-red;
     }
 
     &.wide-tab {
@@ -389,6 +397,67 @@ $z-bottom: -1;
             > span {
                 line-height: 2rem;
             }
+        }
+    }
+
+    &.nav-item-search {
+        box-sizing: border-box;
+        height: auto;
+        line-height: 4rem;
+        margin: 0;
+        min-height: 4rem;
+        padding: .5rem 0;
+
+        > a {
+            display: none;
+        }
+
+        > input {
+            border-radius: 5px 0 0 5px;
+            border-right: 1px solid #676767;
+            box-sizing: border-box;
+            clear: left;
+            float: left;
+            height: 3rem;
+            margin: 0 0 0 .5rem;
+            width: calc(100% - 7rem);
+        }
+
+        > .btn-group {
+            border: 0;
+            display: flex;
+            float: right;
+            height: 3rem;
+            margin: 0 .5rem 0 0;
+            overflow: hidden;
+            padding: 0;
+            width: 6rem;
+
+            > button {
+                /*border-left: 1px solid #ef3131;
+                border-radius: 0 5px 5px 0;
+                box-sizing: border-box;
+                clear: right;
+                float: right;
+                height: 3rem;
+                margin: 0 .5rem 0 0;
+                padding: 0;
+                width: 3rem;*/
+                &[name='CLASS'],
+                &[name='TYPE'],
+                &[name='FORMID'] {
+                    display: none;
+                }
+            }
+        }
+
+        .search-options {
+            max-height: 24rem;
+            overflow-y: auto;
+        }
+
+        .search-params {
+            clear: both;
         }
     }
 }
@@ -543,7 +612,7 @@ html {
     background-color: $color-dark-less;
     background-image: url('../Images/Logo.png');
     background-position: center;
-    background-position-y: 85px;
+    //background-position-y: 85px;
     background-repeat: no-repeat;
     color: $color-primary;
     font-family: $font-primary;
@@ -593,6 +662,18 @@ html {
     .hidden {
         display: block;
     }
+    /// A footer that contains form event buttons
+    .form-footer {
+        background-color: transparent;
+
+        > .btn-group {
+            width: 100%;
+
+            > button {
+                width: 100%;
+            }
+        }
+    }
     /* #endregion */
     /// Bootstrap Modal and non-standard DIALOG Element
     .modal {
@@ -602,7 +683,9 @@ html {
         border-radius: .6rem;
         box-shadow: 0 0 1rem $color-shadow-dark;
         margin: 1rem auto;
+        max-height: 100vh;
         max-width: $body-width;
+        overflow-y: auto;
         padding: 0;
         position: absolute;
         top: 0;
@@ -700,16 +783,7 @@ html {
                     animation: slideOutUp $transition-speed $transition-motion;
                 }
             }
-            /*> .form-footer {
-                border: 0;
 
-                button {
-                    border-radius: 0;
-                    height: $navbar-height - 1rem;
-                    line-height: $navbar-height - 1rem;
-                    padding: 0;
-                }
-            }*/
             > .body {
                 overflow-x: hidden;
 
@@ -795,16 +869,13 @@ html {
                                 > footer {
                                     .btn-forgot-password {
                                         @include transition($transition-default);
-                                        //background-color: $color-grey-lighter;
                                         background-color: $color-grey-dark;
                                         border: 0;
-                                        //color: $color-grey;
                                         color: $color-white;
                                         font-size: .8rem;
                                         font-weight: lighter;
-                                        //height: 6rem;
                                         margin: 1rem auto 0;
-                                        //padding: 1rem;
+
                                         &:hover {
                                             color: $color-blue-light;
                                             text-decoration: underline;
@@ -865,6 +936,41 @@ html {
 
                 > .form-footer {
                     display: none;
+                }
+            }
+
+            &.prompt-search {
+                height: calc(100vh - 4rem);
+
+                > .body {
+                    height: calc(100vh - 11rem);
+
+                    > .pane {
+                        height: auto;
+                        max-height: initial;
+
+                        .search-results {
+                            height: calc(100vh - 20rem);
+                            max-height: calc(100vh - 20rem);
+                            overflow-y: auto;
+                        }
+
+                        form {
+                            //bottom: 3rem;
+                            //position: fixed;
+                            .form-element {
+                                &[name='Search'] {
+                                    label {
+                                        display: none;
+                                    }
+                                }
+                            }
+
+                            .form-footer {
+                                height: calc(4rem - 1px);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1100,28 +1206,36 @@ html {
             }
         }
     }
-    /// A vertically aligned button group
-    /// @todo This should just be a list...  shouldn't it?
-    /// @group review
-    .btn-group-vertical {
-        width: 100%;
 
-        button {
-            &:first-child {
-                &:not(:last-child) {
-                    border-radius: 0;
+    .btn-group {
+        //height: $navbar-height;
+        .btn {
+            //height: $navbar-height;
+        }
+        /// A vertically aligned button group
+        /// @todo This should just be a list...  shouldn't it?
+        /// @group review
+        &.btn-group-vertical {
+            height: auto;
+            width: 100%;
+
+            button {
+                &:first-child {
+                    &:not(:last-child) {
+                        border-radius: 0;
+                    }
                 }
-            }
 
-            &:last-child {
-                &:not(:first-child) {
-                    // override vendor
-                    border-radius: 0;
+                &:last-child {
+                    &:not(:first-child) {
+                        // override vendor
+                        border-radius: 0;
+                    }
                 }
-            }
 
-            .btn {
-                margin: 0;
+                .btn {
+                    margin: 0;
+                }
             }
         }
     }
@@ -1136,9 +1250,9 @@ html {
         display: block;
         float: left;
         font-size: smaller;
-        height: $navbar-height - 1rem;
-        line-height: $navbar-height - 1rem;
-        overflow: hidden;
+        line-height: $navbar-height;
+        min-height: $navbar-height;
+        //overflow: hidden;
         padding: 0;
         width: 100%;
         /// Button within a footer
@@ -1222,12 +1336,17 @@ html {
                 flex-grow: 2;
             }
             /// Button representing a paged result
-            /*button {
-                background-color: $color-grey-darker;
+            button {
+                background-color: $color-transparent;
                 border: 0;
+                border-left: 1px solid $color-shadow-light;
+                border-right: 1px solid $color-shadow-light;
+                box-shadow: none;
+                color: $color-white;
                 flex-basis: 5rem;
                 flex-grow: 1;
                 font-family: $font-primary;
+                height: $navbar-height;
                 text-transform: uppercase;
 
                 &:focus {
@@ -1236,11 +1355,21 @@ html {
                 }
 
                 &.active {
-                    background-color: $color-grey-dark;
+                    background-color: darken($color-grey, 10%);
+                    border-left: 1px solid $color-shadow-dark;
+                    border-right: 1px solid $color-shadow-dark;
                     color: $color-blue-light;
                     outline: none;
                 }
-            }*/
+
+                &.prev {
+                    margin-right: 1rem;
+                }
+
+                &.next {
+                    margin-left: 1rem;
+                }
+            }
         }
     }
     /// Showdown.js Markdown (Github flavor) for checkboxes (ie: - [ ])
@@ -1287,10 +1416,6 @@ html {
                 margin: 0;
                 padding: 0 .5rem;
             }
-        }
-        /// A footer that contains form event buttons
-        &.form-footer {
-            background-color: transparent;
         }
     }
     /// Standard Input Elements
@@ -1604,6 +1729,14 @@ html {
         transition: position 800ms;
         transition-delay: 300ms;
     }
+    /// https://stackoverflow.com/a/22913340/722785
+    .glyphicon-blank {
+        &::before {
+            content: '\620'; // unicode blank space
+            color: transparent !important;
+            visibility: hidden;
+        }
+    }
     /// A clickable icon with embedded label
     &.icon {
 
@@ -1633,6 +1766,75 @@ html {
         @extend %wide-block;
         @include transition($transition-default);
         box-sizing: border-box;
+
+        > .classindex-header {
+            background-color: $color-dark;
+            border-bottom: 2px solid $color-darker;
+            box-shadow: $zero-px 1px 7px $zero-px $color-shadow-dark;
+            box-sizing: content-box;
+            color: $color-white;
+            font-weight: bold;
+            height: 3rem;
+            line-height: 3rem;
+            padding: .2rem .5rem;
+            position: sticky;
+            top: 0;
+            z-index: #{$z-top - 1};
+
+            &:hover {
+                //@include transition(color 400ms);
+                @include transition(background-color 400ms);
+                background-color: $color-dark-less;
+                //color: $color-secondary-neutral;
+                &.press {
+                    @include transition(background-color $longclick-delay);
+                    background-color: $color-red;
+                }
+            }
+
+            &.press {
+                @include transition(background-color $longclick-delay);
+                background-color: $color-red;
+            }
+
+            &.selected {
+                @extend %selected;
+            }
+
+            > .btn-group {
+                float: right;
+
+                > button {
+                    background-color: transparent;
+                    border: 0;
+                    color: $color-white;
+                    height: 3rem;
+                    line-height: 3rem;
+                    margin: 0;
+                    padding: 0 1rem 0 0;
+                    width: 4rem;
+
+                    > .icon {
+                        padding-right: .5rem;
+                    }
+                }
+            }
+
+            > .headerTab { // header label
+                background-color: transparent;
+                border: 0;
+                color: $color-white;
+                float: left;
+                height: 3rem;
+                line-height: 3rem;
+                margin: 0;
+                padding: 0 1rem 0 0;
+                //width: 4rem;
+                > .icon {
+                    padding-right: .5rem;
+                }
+            }
+        }
         /// editable header with toggle
         > header {
             position: sticky;
@@ -1898,7 +2100,27 @@ html {
             }
         }
 
-        &.index-main {
+        &.classindex {
+
+            > header {
+                > button {
+                    background-color: transparent;
+                    border: none;
+                    //clear: right;
+                    color: $color-white;
+                    float: right;
+
+                    > .icon {
+                        padding: 0 1rem;
+                        float: right;
+                        line-height: 3rem;
+                    }
+
+                    &.page-total {
+                    }
+                }
+            }
+
             > .body {
                 background-color: $color-grey-dark;
 
@@ -1925,8 +2147,8 @@ html {
                 }
             }
         }
-
-        &.image-gallery {
+        /// Image Gallery extending FORMPOSTINDEX
+        &.imageindex {
             color: inherit;
 
             > .body {
@@ -1955,6 +2177,11 @@ html {
                     max-height: 256px;
                     max-width: 256px;
                 }
+            }
+
+            .img-thumb {
+                max-width: 128px;
+                max-height: 128px;
             }
         }
         /// A full width block with impact
@@ -2291,9 +2518,9 @@ html {
                         th {
                             background-color: $color-blue-deep;
                             border-right: 1px solid grey;
+                            bottom: 0;
                             color: $color-white;
                             position: sticky;
-                            bottom: 0;
                             z-index: #{$z-top - 1};
 
                             &.active {
@@ -2667,7 +2894,7 @@ html {
                         }
                     }
                 }
-
+                ///
                 &.nav-item-thumbnail {
                     @extend %bevel-up;
                     //height: $thumbnail-height;
@@ -2701,45 +2928,158 @@ html {
                         }
 
                         header,
-                        p {
-                            color: $color-white;
+                        p,
+                        .detail {
                             clear: right;
+                            color: $color-white;
                             display: block;
                             float: left;
+                            margin: 0;
                             width: calc(100% - #{$thumbnail-height});
                         }
 
                         header {
                             font-weight: bold;
-                            padding-top: .5rem;
+                            height: 1rem;
+                            line-height: 1rem;
+                            margin-bottom: .25rem;
                         }
 
                         p {
-                            font-style: italic;
-                            height: 4rem;
-                            margin: 0;
+                            font-size: .8rem;
+                            height: 2rem;
+                            line-height: 1rem;
+                            max-height: 2rem;
                             overflow: hidden;
                         }
 
-                        .btn-group {
-                            float: right;
+                        .detail {
+                            font-size: .8rem;
+                            font-style: italic;
+                            height: 1rem;
+                            line-height: 1rem;
+                            overflow: hidden;
+
+                            .left,
+                            .right {
+                                display: block;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                width: 50%;
+                            }
+
+                            .left {
+                                clear: left;
+                                float: left;
+                            }
+
+                            .right {
+                                clear: right;
+                                float: right;
+                                text-align: right;
+
+                                > .icon {
+                                    font-size: 1rem;
+                                    padding-right: 1rem;
+                                }
+                            }
+                        }
+                        /// A group of star buttons representing a rating
+                        .star-group {
+                            &.right {
+                                padding-right: 1rem;
+
+                                button {
+                                    float: right;
+                                }
+                            }
 
                             button {
-                                background-color: $color-grey;
-                                border-radius: .8rem;
+                                background-color: transparent;
                                 border: 0;
-                                box-shadow: inset 1px 1px 2px $color-shadow-neutral;
+                                box-shadow: none;
                                 color: $color-white;
-                                font-size: smaller;
-                                font-weight: normal;
-                                height: 2rem;
+                                font-size: 1rem;
+                                height: 1rem;
                                 line-height: 1rem;
-                                margin-right: 1rem;
-                                padding: 0 1rem;
+                                margin: 0 1px;
+                                padding: 0;
+                            }
+                        }
+                        /// A group of pill buttons representing tags
+                        .tag-group {
+                            @extend %horizontal-scroll;
+                            @extend %no-scroll-bar;
+                            display: inline-flex;
+                            height: 1.5rem;
+                            margin-top: .25rem;
+                            float: right;
+                            max-height: 1.5rem;
+                            width: calc(100% - #{$thumbnail-height});
+                            /// A tab style nav item
+                            //.nav-item {
+                            //    flex-basis: 8rem;
+                            //flex-grow: 1;
+                            //height: $navbar-height;
+                            //}
+                            button {
+                                &.tag {
+                                    background-color: red;
+                                    border: 0;
+                                    border-radius: .3rem;
+                                    box-shadow: none;
+                                    color: $color-white;
+                                    font-size: 1rem;
+                                    height: 1.5rem;
+                                    line-height: 1rem;
+                                    margin: 0 .5rem 0 0;
+                                    max-width: fit-content;
+                                    padding: 0 .5rem;
 
-                                &:hover {
-                                    background-color: $color-blue-deep;
+                                    &.active {
+                                        background-color: orange;
+                                    }
+
+                                    > .icon {
+                                    }
                                 }
+                            }
+                        }
+                    }
+                    /// Displays small image and details
+                    &.nav-item-thumbnail-image {
+                        height: 18rem;
+
+                        > a {
+                            height: 100%;
+                            text-align: center;
+
+                            > span {
+                                width: 100%;
+
+                                &.thumbnail-image { // hide icon... or replace ICON!
+                                    display: none;
+                                }
+                            }
+
+                            > img {
+                                &.thumbnail-image {
+                                    float: none;
+                                    height: auto;
+                                    margin: .5rem auto;
+                                    max-width: calc(100% - 1rem);
+                                    max-height: 12rem;
+                                    width: auto;
+                                }
+                            }
+
+                            header,
+                            p,
+                            .detail {
+                                clear: both;
+                                float: left;
+                                width: 100%;
                             }
                         }
                     }

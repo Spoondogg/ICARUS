@@ -1,10 +1,8 @@
-/** @module icarus/model */
+/** @module */
 /** A generic set of ATTRIBUTES for an EL
     @class
-    @todo Consider just extending Map()
-    @see https://medium.com/front-end-hacking/es6-map-vs-object-what-and-when-b80621932373
 */
-export default class ATTRIBUTES { // extends Map 
+export default class ATTRIBUTES {
 	/** If the 'className' argument is an object, break it out into individual attributes
 	    Otherwise, map to className, name, type and value
 	    @param {Object|string} [className] A collection of attributes || className Element class attribute
@@ -57,7 +55,10 @@ export default class ATTRIBUTES { // extends Map
 	set(key, value) {
 		if (typeof key === 'string') {
 			try {
-				this[key] = typeof value !== 'undefined' && value !== null ? value : '';
+				//this[key] = typeof value !== 'undefined' && value !== null ? value : '';
+                if (typeof value !== 'undefined' && value !== null) {
+                    this[key] = value;
+                }
 				return this;
 			} catch (e) {
 				console.log('Unable to set attribute of this ATTRIBUTES');
@@ -65,7 +66,7 @@ export default class ATTRIBUTES { // extends Map
 			}
 		}
 		for (let prop in key) {
-			if (typeof prop === 'string') {
+            if (typeof prop === 'string' && typeof key[prop] !== 'undefined' && key[prop] !== null) {
 				this[prop] = key[prop];
 			}
 		}

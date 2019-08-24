@@ -1,13 +1,12 @@
 /** @module */
-import PROMPT, { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, ICONS, MODEL } from '../prompt/PROMPT.js';
-//import FORM from '../../form/FORM.js';
+import PROMPT, { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, ICONS, MODEL, MODELS } from '../prompt/PROMPT.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
     @class
 */
 export default class CONFIRM extends DIALOG {
 	/** Constructs a CONFIRM Dialog
-        @param {DIALOGMODEL} model DIALOG MODEL
+        @param {DialogModel} model Model
         @param {Function} onConfirm Function called on confirm
         @param {Function} [onCancel] Function called on cancel
     */
@@ -18,14 +17,14 @@ export default class CONFIRM extends DIALOG {
         if (onCancel !== null) {
             this.onCancel = onCancel;
         }
-        this.btnConfirm = this.footer.buttonGroup.addButton('Confirm', ICONS.CONFIRM);
+        this.btnConfirm = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Confirm', ICONS.CONFIRM)));
         this.btnConfirm.el.addEventListener('click', () => {
             this.onConfirm();
             this.closeDialog();
         });
         $(this.btnConfirm.el).insertBefore(this.footer.buttonGroup.get()[0].el);
         
-        this.btnCancel = this.footer.buttonGroup.addButton('Cancel', ICONS.CANCEL);
+        this.btnCancel = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Cancel', ICONS.CANCEL)));
         this.btnCancel.el.addEventListener('click', () => {
             this.onCancel();
             this.closeDialog();
@@ -52,13 +51,8 @@ export default class CONFIRM extends DIALOG {
         @returns {void}
     */
     static confirmMethodCall(label, text, onConfirm, onCancel) {
-        let confirm = new CONFIRM(new DIALOGMODEL(new MODEL(), {
-            container: null,
-            caller: null,
-            label,
-            text
-        }), onConfirm, onCancel);
+        let confirm = new CONFIRM(MODELS.dialog(label, text, true, null, null, null), onConfirm, onCancel);
         confirm.showDialog();
     }
 }
-export { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, MODEL, PROMPT }
+export { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, MODEL, PROMPT }

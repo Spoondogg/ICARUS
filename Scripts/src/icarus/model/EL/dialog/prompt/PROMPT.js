@@ -1,5 +1,5 @@
 /** @module */
-import DIALOG, { ATTRIBUTES, DIALOGMODEL, DIV, EL, ICONS, MODEL } from '../DIALOG.js';
+import DIALOG, { ATTR, ATTRIBUTES, DATA, DIV, EL, ICONS, MODEL, MODELS } from '../DIALOG.js';
 import FORM from '../../form/FORM.js';
 /** A DIALOG with an embedded FORM that can be used to recieve input
     @description Creates a modal and displays a text well and any included buttons
@@ -8,7 +8,7 @@ import FORM from '../../form/FORM.js';
 */
 export default class PROMPT extends DIALOG {
 	/** Constructs a PROMPT
-        @param {DIALOGMODEL} model DIALOG MODEL
+        @param {DialogModel} model Model
     */
 	constructor(model) {
 		super(model);
@@ -20,16 +20,19 @@ export default class PROMPT extends DIALOG {
 	    @param {FormModel} [model] FormModel
 	    @returns {Promise<FORM>} Promise to return a FORM
 	*/
-    createForm(model = new MODEL()) {
-        console.log('PROMPT.createForm()', model);
+    createForm(model = new MODEL().set({
+        container: this.container
+    })) {
+        //console.log(this.toString() + '.createForm()', model);
 		return new Promise((resolve, reject) => {
-			try {
+            try {
+                // @todo These should just be their own classes!!!
 				if (model.formtype === 'FORMPOST') {
 					FORM.createFormPostForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else if (model.formtype === 'CONTAINER') {
                     FORM.createContainerForm(this.body.pane, model).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				} else {
-                    FORM.createEmptyForm(this.body.pane, false).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
+                    FORM.createEmptyForm(this.body.pane).then((form) => this.configureForm(form, model).then((f) => resolve(f)));
 				}
 			} catch (e) {
 				console.error('PROMPT.createForm() Failed to create Form', model, this);
@@ -43,7 +46,7 @@ export default class PROMPT extends DIALOG {
 	    @returns {Promise<FORM>} Promise Chain
 	*/
     configureForm(form, model) {
-        console.log(this.toString() + '.configureForm()', form, model);
+        //console.log(this.toString() + '.configureForm()', form, model);
 		return new Promise((resolve, reject) => {
             try {
 				form.getDialog = () => this;
@@ -56,4 +59,4 @@ export default class PROMPT extends DIALOG {
 		});
 	}
 }
-export { ATTRIBUTES, DIALOG, DIALOGMODEL, DIV, EL, FORM, ICONS, MODEL }
+export { ATTR, ATTRIBUTES, DATA, DIALOG, DIV, EL, FORM, ICONS, MODEL, MODELS }

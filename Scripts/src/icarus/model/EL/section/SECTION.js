@@ -1,5 +1,5 @@
 /** @module */
-import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
+import CONTAINER, { MODEL } from '../container/CONTAINER.js';
 /** A generic SECTION within an ARTICLE
     @class
     @extends CONTAINER
@@ -7,10 +7,10 @@ import CONTAINER, { Expand, MODEL } from '../container/CONTAINER.js';
 export default class SECTION extends CONTAINER {
 	/** Constructs a SECTION Container Element
 	    @param {CONTAINER} node Node
-	    @param {MODEL} model Model
+	    @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
-		super(node, 'SECTION', model, ['SECTION', 'TEXTBLOCK', 'FORM', 'TABLE']);
+        super(node, 'SECTION', model, ['SECTION', 'TEXTBLOCK', 'FORM', 'TABLE', 'FORMPOSTINDEX', 'CONTAINERINDEX', 'IMAGEINDEX']);
         this.addClass('section');
         this.deactivateSiblingsOnActivate = false;
 	}
@@ -21,10 +21,7 @@ export default class SECTION extends CONTAINER {
                 if (parseInt(this.data.showHeader) === 1) {
                     this.createEditableElement('p', this.childLocation);
                 }
-			} else {
-                console.log('No data exists for ' + this.toString());
-				this.navheader.el.dispatchEvent(new Expand(this.navheader));
-            }
+			}
 		});
 	}
 }

@@ -1,26 +1,23 @@
 /** @module */
-import COLLAPSIBLE, { ATTRIBUTES, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
-import FORMFOOTER, { ALIGN } from '../form/FORMFOOTER.js';
+import COLLAPSIBLE, { ATTR, ATTRIBUTES, DATA, DIV, EL, MODEL } from '../container/COLLAPSIBLE.js';
+import Closeable, { Close, Open } from '../../../interface/Closeable.js';
 import NAVHEADER, { Activate, Deactivate, MENU, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
-import Closeable from '../../../interface/Closeable.js';
-import DIALOGMODEL from './DIALOGMODEL.js';
+import FORMFOOTER from '../form/FORMFOOTER.js';
 import { ICONS } from '../../../enums/ICONS.js';
+import { MODELS } from '../../../enums/MODELS.js';
 import Selectable from '../../../interface/Selectable.js';
 import { TransitionSpeed } from '../../../enums/StyleVars.js';
 /* eslint-disable max-statements */
 /** An HTML5 Dialog Element (Only supported in Chrome as of 2018-09-28)
     @class
-    @extends EL
 */
 export default class DIALOG extends EL {
 	/** Constructs a generic DIALOG Element
 	    @constructs DIALOG
-	    @param {DIALOGMODEL} model Dialog Model
-        @param {boolean} [showHeader=true] If true (default), header is shown
+	    @param {DialogModel} model Dialog Model
 	*/
-	constructor(model, showHeader = true) {
-        super(document.body, 'DIV', model);
-        
+	constructor(model) {
+        super(document.body, 'DIV', model);        
 		this.className = 'DIALOG';
 		this.addClasses(['dialog', 'modal']);
 		this.implement(new Closeable(this));
@@ -30,11 +27,11 @@ export default class DIALOG extends EL {
 		this.hide = () => this.hideDialog();
         /** @type {EL} Element that called this DIALOG */
         this.caller = this.required(model.caller); // Switchable Element
-        /** @type {Container} DIALOG Container/Holder */
+        /** @type {ContainerModel} DIALOG Container/Holder */
 		this.container = this.required(model.container); // Container Element for linked list head
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', model.label));
+		this.navheader = new NAVHEADER(this, MODELS.navheader(model.label));
 		this.btnClose = this.createCloseButton();
-		if (showHeader) {
+		if (model.showHeader) {
 			this.navheader.expand();
 		}
         this.body = new COLLAPSIBLE(this, 'DIV', new MODEL('body'));
@@ -42,8 +39,8 @@ export default class DIALOG extends EL {
             this.text = new DIV(this.body.pane, new MODEL('text').set('innerHTML', model.text));
         }
 		this.navheader.tab.el.dispatchEvent(new Activate());
-		this.footer = new FORMFOOTER(this, new MODEL().set('align', ALIGN.VERTICAL));
-		this.footer.buttonGroup.addButton('CLOSE', ICONS.CLOSE).el.onclick = () => this.closeDialog();
+        this.footer = new FORMFOOTER(this);
+        this.footer.buttonGroup.addButton(MODELS.button(ATTR.button('BUTTON', 'CLOSE'), DATA.button('CLOSE', ICONS.CLOSE))).el.onclick = () => this.closeDialog();
 		this.closeOnFocusOut();
 		this.overrideBootstrap();
 	}
@@ -51,10 +48,8 @@ export default class DIALOG extends EL {
 	    @returns {NAVITEMICON} Close Button / Icon
 	*/
 	createCloseButton() {
-		let btn = this.navheader.tabs.addNavItemIcon(new MODEL('btn-close').set({
-			label: 'close',
-			icon: ICONS.CLOSE
-		}));
+        let btn = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('CLOSE'), DATA.navitem('close', ICONS.CLOSE)));
+        btn.addClass('btn-close');
 		btn.el.addEventListener('activate', () => this.closeDialog());
 		return btn;
 	}
@@ -104,8 +99,34 @@ export default class DIALOG extends EL {
     */
     deactivateCaller() {
         if (this.caller !== null) {
-            this.caller.deactivate();
+            try {
+                this.caller.deactivate();
+            } catch (e) {
+                console.warn('Unable to deactivate caller', this.caller.toString());
+            }
         }
+    }
+    /** Dispatches a close event to all other DIALOGS 
+        @returns {void} 
+    */
+    closeActiveDialogs() {
+        // deactivate any active dialogs that arent this dialog
+        let activeDialogs = $('.dialog.in');
+        for (let t = 0; t < activeDialogs.length; t++) {
+            if (activeDialogs[t] === this.el) {
+                console.log('No need to deactivate this');
+            } else {
+                activeDialogs[t].dispatchEvent(new Close(activeDialogs[t]));
+            }
+        }
+        /*activeTags.each((t) => {
+        console.log('deactivate tag', activeTags[t]);
+        if (activeTags[t] === btn.el) {
+            console.log('No need to deactivate this');
+        } else {
+            activeTags[t].dispatchEvent(new Deactivate(activeTags[t]));
+        }
+        });*/
     }
 	getContainer() {
 		return this.container;
@@ -133,5 +154,5 @@ export default class DIALOG extends EL {
 		//$(this.el).on('shown.bs.modal', () => { /**/ });
 	}
 }
-export { Activate, ATTRIBUTES, COLLAPSIBLE, Deactivate, DIALOGMODEL, DIV, EL, ICONS, MENU, MODEL, NAVITEMICON }
+export { Activate, ATTR, ATTRIBUTES, Close, COLLAPSIBLE, DATA, Deactivate, DIV, EL, ICONS, MENU, MODEL, MODELS, NAVITEMICON, Open }
 /* eslint-enable */

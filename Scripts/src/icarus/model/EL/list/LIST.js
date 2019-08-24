@@ -1,18 +1,17 @@
 /** @module */
 import Collapsible, { Collapse, Expand } from '../../../interface/Collapsible.js';
-import ITEM, { ATTRIBUTES, EL, MODEL } from './item/ITEM.js';
+import ITEM, { ATTR, ATTRIBUTES, DATA, EL, MODEL } from './item/ITEM.js';
 import LI from './li/LI.js';
 import UL from './ul/UL.js';
 /** List Constructor
     @description A Collection of ListItems
     @class
-    @extends ITEM
 */
 export default class LIST extends ITEM {
 	/** Constructs an abstract Collapsible List
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
-        @param {string} element HTML Element Tag
+	    @param {EL} node Node
+	    @param {MODEL} [model] Model
+        @param {string} [element] HTML Element Tag
 	*/
 	constructor(node, model, element = 'UL') {
 		super(node, model, element);
@@ -30,18 +29,18 @@ export default class LIST extends ITEM {
 		});
 	}
 	/** Construct a generic List Item (LI) and append to this element's children
-	    @param {MODEL} model Object Model
+	    @param {TextModel} model Model
 	    @returns {LI} A list item LI
 	*/
 	addLI(model) {
-		return this.addChild(new LI(this, model, model.label));
+        return this.addChild(new LI(this, model)); //model.label
 	}
 	/** Construct an unordered List (UL) and append to this element's children
-	    @param {MODEL} model Object Model
+	    @param {MODEL} model Model
 	    @returns {UL} An Unordered List (UL)
 	*/
 	addUL(model) {
 		return this.addChild(new UL(this, model));
 	}
 }
-export { ATTRIBUTES, Collapse, Collapsible, EL, Expand, ITEM, LI, MODEL }
+export { ATTR, ATTRIBUTES, Collapse, Collapsible, DATA, EL, Expand, ITEM, LI, MODEL }

@@ -8,7 +8,7 @@ import DT from './dt/DT.js';
 */
 export default class DL extends LIST {
 	/** Constructs a Description List (DL)
-	    @param {EL} node Parent Node
+	    @param {EL} node Node
 	    @param {MODEL} model Model
 	*/
 	constructor(node, model) {
@@ -17,14 +17,14 @@ export default class DL extends LIST {
 		this.addConstructor('DD', () => this.addDD(model));
 	}
 	/** Construct a Description Term (DT) and append to this element's children
-	    @param {MODEL} model Model
+	    @param {TextModel} [model] Model
 	    @returns {DT} A Term (DT)
 	*/
 	addDT(model) {
 		return this.addChild(new DT(this, model));
 	}
 	/** Construct a Description Term Definition (UL) and append to this element's children
-	    @param {MODEL} model Model
+	    @param {TextModel} model Model
 	    @returns {DD} An Definition (DD)
 	*/
 	addDD(model) {

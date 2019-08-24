@@ -1,16 +1,16 @@
 /** @module */
-import EL, { ATTRIBUTES, MODEL } from '../EL.js';
+import EL, { ATTR, ATTRIBUTES, DATA, MODEL } from '../EL.js';
+import { MODELS } from '../../../enums/MODELS.js';
 /** A BLOCKQUOTE element
     @class
-    @extends EL
 */
 export default class BLOCKQUOTE extends EL {
 	/** Constructs a BLOCKQUOTE element
 	    @param {EL} node Node
-	    @param {MODEL} model Model
-	 */
-	constructor(node, model) {
+	    @param {TextModel} model Model
+	*/
+	constructor(node, model = MODELS.text()) {
 		super(node, 'BLOCKQUOTE', model);
 	}
 }
-export { ATTRIBUTES, EL, MODEL }
+export { ATTR, ATTRIBUTES, DATA, EL, MODEL }

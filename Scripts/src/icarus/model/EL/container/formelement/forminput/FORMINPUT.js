@@ -1,24 +1,25 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, Activate, CONTAINER, Collapse, Deactivate, EL, Expand, INPUTTYPES, MODEL } from '../FORMELEMENT.js';
-import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, Activate, CONTAINER, Collapse, DATA, Deactivate, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../FORMELEMENT.js';
 import DATALIST from '../../../datalist/DATALIST.js';
 import FORMTEXTAREA from '../formtextarea/FORMTEXTAREA.js';
 import IMG from '../../../img/IMG.js';
+import INPUT from '../../../input/INPUT.js';
 import MENU from '../../../nav/menu/MENU.js';
 /** Represents an INPUT for an Icarus Form
     @class
-    @extends FORMELEMENT
 */
 export default class FORMINPUT extends FORMELEMENT {
 	constructElements() {
-		return this.chain(() => {
-            this.input = new INPUT(this.body.pane, new INPUTMODEL(new MODEL(), {
-				type: this.attributes.type || 'TEXT', // || this.data.type
-				list: this.attributes.name + '-options',
-				name: this.attributes.name,
-				value: this.attributes.value || '',
-				placeholder: this.attributes.placeholder || ''
-			}));
+        return this.chain(() => {
+            this.input = new INPUT(this.body.pane, MODELS.input('INPUT', 
+                ATTR.input(
+                    this.attributes.name,
+                    this.attributes.value || '',
+                    this.attributes.type || 'TEXT',
+                    false,
+                    this.attributes.placeholder || ''
+                ))
+            );
 			this.configureInput();
 		});
 	}
@@ -55,16 +56,10 @@ export default class FORMINPUT extends FORMELEMENT {
         @returns {void}
     */
     buildCheckbox(labelOn = 'YES', labelOff = 'NO') {
-        this.optionsMenu = new MENU(this.body.pane, new MODEL('checkmark-menu'));
+        this.optionsMenu = new MENU(this.body.pane, MODELS.menu(ATTR.menu('checkbox', 'checkmark-menu')));
 
-        let on = this.optionsMenu.addNavItem(new MODEL().set({
-            label: labelOn,
-            name: 'yes'
-        }));
-        let off = this.optionsMenu.addNavItem(new MODEL().set({
-            label: labelOff,
-            name: 'no'
-        }));
+        let on = this.optionsMenu.addNavItem(MODELS.navitem(ATTR.navitem(labelOn), DATA.navitem('yes', ICONS.BLANK)));
+        let off = this.optionsMenu.addNavItem(MODELS.navitem(ATTR.navitem(labelOff), DATA.navitem('no', ICONS.BLANK)));
 
         on.el.addEventListener('activate', () => {
             this.input.el.checked = true;
@@ -212,4 +207,4 @@ export default class FORMINPUT extends FORMELEMENT {
 		return this;
 	}
 }
-export { ATTRIBUTES, CONTAINER, EL, FORMELEMENT, INPUTTYPES, MODEL }
+export { ATTRIBUTES, CONTAINER, DATA, EL, FORMELEMENT, INPUTTYPES, MODEL }
