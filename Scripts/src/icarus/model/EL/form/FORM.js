@@ -1,30 +1,29 @@
 /* eslint-disable max-lines */
 /** @module */
-import CONTAINER, { ATTRIBUTES, AbstractMethodError, EL, Expand, ICONS, INPUTTYPES, MODEL } from '../container/CONTAINER.js';
-import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
-import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT } from '../container/formelement/FORMELEMENTGROUP.js';
+import CONTAINER, { ATTR, ATTRIBUTES, AbstractMethodError, DATA, EL, Expand, ICONS, INPUTTYPES, MODEL, MODELS } from '../container/CONTAINER.js';
+import FORMELEMENTGROUP, { FORMELEMENT, FORMINPUT, FORMPOSTINPUT, FORMPOSTLIST } from '../container/formelement/FORMELEMENTGROUP.js';
 import FORMFOOTER, { BUTTON, BUTTONGROUP } from './FORMFOOTER.js';
-import { ALIGN } from '../../../enums/ALIGN.js';
+import { DATAELEMENTS } from '../../../enums/DATAELEMENTS.js';
 import FIELDSET from '../fieldset/FIELDSET.js';
 import FORMINPUTTOKEN from '../container/formelement/forminput/forminputtoken/FORMINPUTTOKEN.js';
 import FORMPOST from './FORMPOST.js';
 import LOADER from '../dialog/loader/LOADER.js';
+import PAYLOAD from './PAYLOAD.js';
 /** A FORM is the underlying form data type for all other page constructors
     and is designed to submit an XML object for Object States.
     @class
-    @extends CONTAINER
 */
 export default class FORM extends CONTAINER {
 	/** Constructs a Form for collecting and posting
-	    @param {CONTAINER} node The parent object
-	    @param {FORMMODEL} model The object model
+	    @param {CONTAINER} node Node
+	    @param {FormModel} model Model
 	*/
 	constructor(node, model) {
 		super(node, 'FORM', model, DATAELEMENTS.get('FORM').containers);
 		this.addClass('form');
 		this.tokenInput = new FORMINPUTTOKEN(this);
-		this.footer = new FORMFOOTER(this.body, new MODEL().set('align', ALIGN.VERTICAL));
-		this.footer.buttonGroup.addButton('Submit', ICONS.SAVE, 'SUBMIT').el.onclick = (e) => {
+		this.footer = new FORMFOOTER(this.body);
+		this.footer.buttonGroup.addButton(MODELS.button(ATTR.button('SUBMIT'), DATA.button('Submit', ICONS.SAVE))).el.onclick = (e) => {
 			e.preventDefault();
 			this.post();
 			return false;
@@ -44,7 +43,7 @@ export default class FORM extends CONTAINER {
         });
     }
     /** Constructs a Fieldset for this FORM
-	    @param {MODEL} model Object model
+	    @param {ContainerModel} model Model
 	    @returns {FIELDSET} A Form Fieldset element
 	*/
 	addFieldset(model) {
@@ -109,7 +108,10 @@ export default class FORM extends CONTAINER {
 			if (this.el.elements[name].type === 'textarea') {
 				this.el.elements[name].innerHTML = value;
 			} else {
-				this.el.elements[name].setAttribute('value', value);
+                this.el.elements[name].setAttribute('value', value);
+                if (this.el.elements[name].type === 'CHECKBOX') {
+                    console.warn('TODO: Checkbox should update its selected option, not just its input value');
+                }
 			}
 		} catch (e) {
 			if (!(e instanceof TypeError)) {
@@ -145,10 +147,11 @@ export default class FORM extends CONTAINER {
 	    @param {Array<BUTTON>} buttons An array of buttons ([label, glyphicon, buttonType])
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	addButtons(buttons) {
+    addButtons(buttons) {
+        console.log('FORM.addButtons', buttons);
 		return new Promise((resolve) => {
-			if (buttons) {
-				buttons.forEach((btn) => this.footer.buttonGroup.addButton(btn[0], btn[1], btn[2]));
+            if (buttons) {
+                buttons.forEach((btn) => this.footer.buttonGroup.addButton(btn));
 			}
 			resolve(this);
 		});
@@ -168,7 +171,7 @@ export default class FORM extends CONTAINER {
         toDisable.forEach((el) => el.setAttribute('disabled', 'disabled'));
 
         /** A button that restores functionality of the form */
-        let btnReset = this.footer.buttonGroup.addButton('Reset Form', ICONS.RESET); 
+        let btnReset = this.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Reset Form', ICONS.RESET))); 
         btnReset.el.onclick = () => {
             toDisable.forEach((el) => el.removeAttribute('disabled'));
             btnReset.destroy();
@@ -193,34 +196,45 @@ export default class FORM extends CONTAINER {
         }
     }
 	/** Returns the default Input array
-	    @param {object} data Payload
+	    @param {PAYLOAD} payload Payload
 	    @returns {Array} An array of INPUT models
 	*/
-	defaultFormPostInputArray(data) {
-		return [
-			createInputModel('INPUT', 'id', data.model.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'shared', data.model.shared || -1, 'shared', 'CHECKBOX'),
-            createInputModel('INPUT', 'isPublic', data.model.isPublic || -1, 'isPublic', 'CHECKBOX')
+	defaultFormPostInputArray(payload) {
+        return [
+            MODELS.input('INPUT', ATTR.input('id', payload.model.id, 'NUMBER', true), 'ID', 'NUMBER'),
+			//createInputModel('INPUT', 'id', payload.model.id, 'ID', 'NUMBER', true),
+            MODELS.input('INPUT', ATTR.input('shared', payload.model.shared || -1, 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            //createInputModel('INPUT', 'shared', payload.model.shared || -1, 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', ATTR.input('isPublic', payload.model.isPublic || -1, 'CHECKBOX'), 'isPublic', 'CHECKBOX')
+            //createInputModel('INPUT', 'isPublic', payload.model.isPublic || -1, 'isPublic', 'CHECKBOX')
 		];
 	}
 	/** Generates the appropriate INPUT(s) for this FORMPOST
-        @param {any} payload The FormPost Payload
+        @param {PAYLOAD} payload The FormPost Payload
 	    @param {string} className The container className
 	    @param {string} type The key (dataId, attributesId, metaId) to add object to
 	    @returns {Array<MODEL>} An array of MODEL inputs
 	*/
     generateFormPostInputs(payload, className, type) { // SEE CONTAINER.createElementCollection
         let inputs = this.defaultFormPostInputArray(payload);
-		try {
+        try {
+            //console.log('Adding CONTAINER DataElements', DATAELEMENTS.get('CONTAINER')[type]);
 			DATAELEMENTS.get('CONTAINER')[type].forEach((i) => inputs.push(i));
 		} catch (e) {
 			//console.warn(this.toString() + '.generateFormPostInputs()', className, type, inputs, e);
 		}
-		try {
+        try {
+            //console.log('Adding ' + className + ' DataElements', DATAELEMENTS.get(className)[type]);
 			DATAELEMENTS.get(className)[type].forEach((i) => inputs.push(i));
 		} catch (e) {
 			// No data element exists for 'className'
-		}
+        }
+
+        let { formId } = payload.model;
+        console.warn('TODO: Retrieve INPUT Layout from FormId', formId);
+        this.getJson('/FORM/GET/' + formId, (p) => {
+            console.log('FORMID: ' + formId, p);
+        });
 		return inputs;
 	}
 	/** Populates this form with a single fieldset and formelementgroup
@@ -230,7 +244,7 @@ export default class FORM extends CONTAINER {
 	    @returns {Promise<FORM>} An empty form container
 	*/
     static createEmptyForm(node, hidden = false) {
-        console.log('FORM.createEmptyForm()');
+        //console.log('FORM.createEmptyForm()');
 		return new Promise((resolve, reject) => {
 			try {
 				let form = new FORM(node, new MODEL(new ATTRIBUTES('style', hidden ? 'display:none;' : '')).set('showNav', 0));
@@ -554,7 +568,12 @@ export default class FORM extends CONTAINER {
                                 //console.warn('An Unknown Error Occurred');
                                 //console.log('Ajax Error: ' + statusText + '(' + xhr.status + ') Error: ' + errorThrown);
                                 let err = 'An Unknown Error Occurred.\nAjax Error: ' + statusText + '(' + xhr.status + ')\nError: ' + errorThrown
-                                loader.log(99, err, true, true, 1000, 'error');
+                                loader.log(99, err, {
+                                    show: true,
+                                    toConsole: true,
+                                    delay: 1000,
+                                    type: 'error'
+                                });
                             },
                             statusCode: { // https://www.digitalocean.com/community/tutorials/how-to-troubleshoot-common-http-error-codes
                                 200() { // response // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success
@@ -577,7 +596,12 @@ export default class FORM extends CONTAINER {
                                     message += response.message;
                                     console.warn('You shall not pass!');
                                     let err = this.toString() + '.post() StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message;
-                                    loader.log(99, err, true, true, 1000, 'warning').then(() => main.login());
+                                    loader.log(99, err, {
+                                        show: true,
+                                        toConsole: true,
+                                        delay: 300,
+                                        type: 'warning'
+                                    }).then(() => main.login());
                                     //console.log(this.toString() + '.post() StatusCode: ' + statusCode + ', "' + url + '" Access Denied. Log in to continue. ' + response.message);
                                     //console.log('403 Error', response);
                                     //resolve(main.login());
@@ -589,9 +613,13 @@ export default class FORM extends CONTAINER {
                                 500(response) { // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#5xx_Server_errors
                                     statusCode = 500;
                                     message += response.message;
-                                    loader.log(99, 'StatusCode: 500, ' + response.message, true, true, 3000, 'warning');
+                                    loader.log(99, 'StatusCode: 500, ' + response.message, {
+                                        show: true,
+                                        toConsole: false,
+                                        delay: 3000,
+                                        type: 'warning'
+                                    });
                                     //resolve(payload);
-                                    //loader.log(99, err, true, true, 1000, 'warning');
                                 }
                             },
                             success: (payload) => {
@@ -610,7 +638,12 @@ export default class FORM extends CONTAINER {
                     });
 				} catch (e) {
                     console.warn(this.toString() + '.post() Post Failed to submit', e);
-                    loader.log(99, this.toString() + '.post() Post Failed to submit', true, true, 1000, 'error');
+                    loader.log(99, this.toString() + '.post() Post Failed to submit', {
+                        show: true,
+                        toConsole: true,
+                        delay: 300,
+                        type: 'error'
+                    });
 					reject(e); //new Error('Post Failed to submit')
 				}
 			} else {
@@ -621,5 +654,5 @@ export default class FORM extends CONTAINER {
 	}
 	/* eslint-enable max-lines-per-function */
 }
-export { ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, INPUTTYPES, LOADER, MODEL }
+export { ATTR, ATTRIBUTES, BUTTON, BUTTONGROUP, CONTAINER, DATA, EL, Expand, FORMELEMENT, FORMELEMENTGROUP, FORMFOOTER, FORMINPUT, FORMPOST, FORMPOSTINPUT, FORMPOSTLIST, INPUTTYPES, LOADER, MODEL, MODELS, PAYLOAD }
 /* eslint-enable max-lines */

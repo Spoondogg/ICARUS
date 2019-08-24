@@ -5,10 +5,11 @@
     @property {EL} caller A Switchable Element that called this DIALOG
     @property {string} label A DIALOG Label
     @property {string} [text] DIALOG Text 
+    @deprecated See DATAELEMENTS.MODELS
 */
 export default class DIALOGMODEL extends MODEL {
     /** A DIALOG MODEL
-        @param {MODEL} model Dialog MODEL
+        @param {DialogModel} model Model
         @param {props} props Object Properties
     */
     constructor(model, props) {

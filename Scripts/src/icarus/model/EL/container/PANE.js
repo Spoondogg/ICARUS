@@ -8,8 +8,8 @@ import Swipeable from '../../../interface/Swipeable.js';
 */
 export default class PANE extends DIV {
 	/** Construct a panel with swipe detection
-        @param {CONTAINER} node Parent
-        @param {MODEL} model Object
+        @param {CONTAINER} node Node
+        @param {MODEL} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, model);

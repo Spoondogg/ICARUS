@@ -1,21 +1,15 @@
-/**
-    @module
-*/
-import SPAN from '../SPAN.js';
-/**
-    A bootstrap badge, typically contained within a list-item
+/** @module */
+import SPAN, { MODELS } from '../SPAN.js';
+/** A bootstrap badge, typically contained within a list-item
     @class
-    @extends EL
 */
 export default class BADGE extends SPAN {
-	/**
-	    Construct a Badge Element
-	    @param {EL} node The object to contain this element
-	    @param {string} label The inner text for this element
+	/** Construct a Badge Element
+	    @param {EL} node Node
+	    @param {TextModel} model Model
 	*/
-	constructor(node, label) {
-		super(node, {
-			'class': 'badge'
-		}, label);
+	constructor(node, model = MODELS.text()) {
+        super(node, model);
+        this.addClass('badge');
 	}
 }

@@ -1,7 +1,6 @@
-/** A generic HTML Element Node Module
-    @module icarus/model/el
-*/
-import MODEL, { ATTRIBUTES } from '../MODEL.js';
+/* eslint-disable max-lines, max-statements */
+/** @module */
+import MODEL, { ATTR, ATTRIBUTES, DATA } from '../MODEL.js';
 import AbstractMethodError from '../../error/AbstractMethodError.js';
 import FACTORY from './FACTORY.js';
 import MissingContainerError from '../../error/MissingContainerError.js';
@@ -13,12 +12,11 @@ import { STATUS } from '../../enums/STATUS.js';
     In the future, I might consider creating a NODE class and having EL
     extend it.  I'm certain that there are certain methods and properties 
     of EL that would be better suited to a NODE class.    
-    @todo Create a NODE class to handle methods for accessing its parent/child
+    @todo Create a NODE class to handle methods for accessing its parent/child, tree traversal etc
     @todo Extend MODEL (current) and implement NODE for descendants of CONTAINER
     @description This would result in CONTAINERS having NODE features...  But what about cases
     where EL needs to access?  Maybe this isn't such a good idea afterall.
     @class
-    @extends MODEL
 */
 export default class EL extends MODEL {
 	/** Constructs a node representing an HTMLElement that can be represented in the DOM
@@ -26,8 +24,8 @@ export default class EL extends MODEL {
 	    @param {Name} [element=DIV] HTMLElement tagName
 	    @param {MODEL} [model] Model
 	*/
-	constructor(node, element = 'DIV', model = new MODEL()) {
-		super(model.attributes);
+    constructor(node, element = 'DIV', model = new MODEL()) {
+		super(model.attributes, model.data, model.meta);
 		this.setContainer();
         this.setMain();
         /** An element FACTORY
@@ -57,7 +55,11 @@ export default class EL extends MODEL {
 		/** An array of MODELS that are children of this EL
 		    @type {Array<MODEL>} children 
 		*/
-		this.children = [];
+        this.children = [];
+        /** A dialog that belongs to this element 
+            @type {DIALOG}
+        */
+        this.dialog = null;
         /** A Collection of async Constructor methods
 		    ie: this.constructors[foo]
             @type {Object<string, Function>}
@@ -78,10 +80,7 @@ export default class EL extends MODEL {
         this.make(model);
 	}
 	/** Creates an HTMLElement based based on this MODEL and appends to this Node Element
-        param {HTMLElement} el The HTML Element
-	    param {EL} node Parent node to append to
-	    @param {MODEL} model A set of key/value pairs for this element's model
-	    param {string} innerHTML This text will be displayed within the HTML element
+	    @param {MODEL} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	make(model) {
@@ -103,7 +102,7 @@ export default class EL extends MODEL {
 		}, this.toString() + '.make() Unable to make ' + this.element);
 	}
 	/** Perform any async actions required to construct the Element
-        @param {MODEL} model Model
+        @param {Model} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
@@ -122,7 +121,7 @@ export default class EL extends MODEL {
     }
     /** A callback Function that accepts a MODEL as a parameter
         @typedef {Function<MODEL>} ModelFunction A Function that accepts a MODEL
-        @param {MODEL} model
+        @param {MODEL} model Model
     */
 
 	/** Add a constructor style function to this classes constructor collection
@@ -144,7 +143,22 @@ export default class EL extends MODEL {
         this.get().push(model);
         //console.log('Added Child', this.getTail());
 		return this.getTail();
-	}
+    }
+    /** Adds an array of classes
+        @param {Array<string>} classes Array of class names
+        @returns {void}
+    */
+    addClassInline(classes) {
+        classes.forEach((c) => {
+            try {
+                if (c.length > 0) {
+                    this.el.classList.add(c);
+                }
+            } catch (e) {
+                console.warn(this.toString() + ' Unable to add class to classList', [c, classes], e);
+            }
+        });
+    }
 	/** Adds the given class name to the element's list of classes
 	    @param {string} className the class to be appended
         @see https://stackoverflow.com/a/9229821/722785
@@ -152,20 +166,20 @@ export default class EL extends MODEL {
 	*/
 	addClass(className) {
 		return this.chain(() => {
-			if (className === 'undefined') {
-				console.log('ClassName Undefined');
-            } else {
-                className.split(' ').forEach((c) => {
-                    try {
-                        if (c.length > 0) {
-                            this.el.classList.add(c);
-                        }
-                    } catch (e) {
-                        console.warn(this.toString() + ' Unable to add class to classList', [c, className], e);
-                    }
-                });
-                this.attributes.class = this.el.classList.value;
-			}
+            try {
+                switch (typeof className) {
+                    case 'string':
+                        this.addClassInline(className.split(' '));
+                        break;
+                    case 'array':
+                        this.addClassInline(className);
+                        break;
+                    default:
+                        console.warn('Unable to add classname', className, typeof className);
+                }                
+            } catch (e) {
+                console.error('Unable to add classname', className, typeof className);
+            }
 		});
     }
     /** Adds the given class name to the element's list of classes
@@ -293,23 +307,26 @@ export default class EL extends MODEL {
 				throw e;
 			}
 		}
-    }
+	}
+    /** Returns the element's dialog
+        @returns {DIALOG} Dialog
+    */
+	getDialog() {
+        return this.dialog;
+	}
+    /** Sets the element's dialog
+        @param {DIALOG} dialog Dialog to set
+        @returns {void}
+    */
+	setDialog(dialog) {
+        this.dialog = dialog;
+	}
     /** Returns the element's factory
 	    @returns {FACTORY} An element factory
 	*/
     getFactory() {
         //console.log(this.toString() + ': Retrieving ' + this.factory.toString());
         return this.factory;
-    }
-    /** Sets this element's factory
-        @param {FACTORY} factory An element factory
-        @returns {void}
-    */
-    setFactory(factory) {
-        if (this.factory === null) {
-            //console.log(this.toString() + '.factory set to ' + factory.toString());
-            this.factory = factory;
-        }
     }
     /** Catches DOM Exception when event is already being dispatched
 	    @param {EL} element Element Class to dispatch event
@@ -336,7 +353,7 @@ export default class EL extends MODEL {
 		if (name === null && className === null) {
 			return this.children;
 		}
-		return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+		return this.get().filter((c) => (c.name === name || c.attributes.name === name || name === null) && (c.className === className || className === null));
 	}
 	/** Retrieves MODEL.ATTRIBUTES.class 
 	    @returns {string} Class Name
@@ -358,23 +375,6 @@ export default class EL extends MODEL {
 			console.warn(e);
 			throw new MissingContainerError(this.className + ' is unable to find a parent Container');
 		}
-    }
-    /** Performs an AJAX request and calls the given method with the JSON response
-        @param {string} url HTTP Request Url
-        @param {Function} fn Function that accepts the resulting payload as its only argument
-        @param {string} method Request Method (ie: 'POST','GET')
-        @returns {Object} A JSON object retrieved from the given url
-    */
-    getJson(url, fn, method = 'GET') {
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let payload = JSON.parse(this.responseText);
-                fn(payload);
-            }
-        };
-        xmlhttp.open(method, url, true);
-        xmlhttp.send();
     }
 	/** Retrieve the application loader
 	    @returns {LOADER} Loader
@@ -431,24 +431,6 @@ export default class EL extends MODEL {
 	*/
     getRole() {
         return document.getElementsByTagName('meta').roles.content || '';
-    } 
-    /** Retrieves a Payload matching the given params (if permitted)
-        @param {number} uid Type UId (ie: Formpost(123) = 123)
-        @param {string} [type] Payload type (default: FORMPOST)
-        @returns {Promise<PAYLOAD>} Promise to resolve a PAYLOAD Class
-        @todo Implement a non-jquery version 
-        @see https://www.w3schools.com/js/js_json_parse.asp 
-        @see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
-    */
-    getPayload(uid, type = 'FORMPOST') {
-        return new Promise((resolve, reject) => {
-            try {
-                this.getJson('/' + type + '/GET/' + uid, (payload) => resolve(new PAYLOAD(payload)));
-            } catch (e) {
-                console.warn('Unable to retrieve payload', type, uid, e);
-                reject(e);
-            }
-        });
     }
 	/** Retrieves the previous element (if exists) 
 	    @returns {EL} Previous Sibling Element
@@ -472,7 +454,7 @@ export default class EL extends MODEL {
 	}
 	/** Attempts to call the constructor of the given MODEL
         @see https://stackoverflow.com/a/35769291/722785	    
-        @param {MODEL} model MODEL
+        @param {MODEL} model Model
         @returns {Promise<EL>} Promise to return a Constructed Element
     */
 	create(model) {
@@ -512,7 +494,7 @@ export default class EL extends MODEL {
 		});
 	}
 	/** Combines the given model with this model, overriding initial values with given ones
-        @param {MODEL} model A generic MODEL object
+        @param {MODEL} model Model
         @returns {void}
     */
 	merge(model) {
@@ -546,16 +528,17 @@ export default class EL extends MODEL {
     }
 	/** Iterates through attributes and sets accordingly
 	    If attribute is 'innerHTML', the element's innerHTML is modified
-	    @param {object} attributes A set of key/value pairs
+	    @param {object} attributes Object
 	    @returns {void}
 	*/
 	processAttributes(attributes) {
 		for (let attr in attributes) {
             if (attr !== 'innerHTML') {
+                let value = attributes[attr];
                 if (attr === 'class') {
-                    this.addClass(attributes[attr]);
-                } else {
-                    this.setAttribute(attr, attributes[attr]);
+                    this.addClass(value);
+                } else if (value !== null && typeof value !== 'object' && typeof value !== 'undefined') {
+                    this.setAttribute(attr, value);
                 }
             } else if (attr === 'innerHTML') {
                 console.log(this.toString() + '.processAttributes()', attr, attributes[attr]);
@@ -563,15 +546,18 @@ export default class EL extends MODEL {
 			}
 		}
 	}
-	/** Removes all child Elements of this Element from the DOM (Preserves this.children)
+    /** Removes all child Elements of this Element from the DOM (Preserves this.children)
+        @param {boolean} [preserveChildren] If true (default), children are preserved
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
-	empty() {
+	empty(preserveChildren = true) {
 		return new Promise((resolve) => {
             while (this.el.firstChild) {
 				this.el.removeChild(this.el.firstChild);
-			}
-			//this.children.length = 0;
+            }
+            if (!preserveChildren) {
+                this.children.length = 0;
+            }
 			resolve(this);
 		});
 	}
@@ -740,4 +726,5 @@ export default class EL extends MODEL {
 		return this.className + '()';
 	}
 }
-export { AbstractMethodError, ATTRIBUTES, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
+export { AbstractMethodError, ATTR, ATTRIBUTES, DATA, FACTORY, MissingContainerError, MODEL, PAYLOAD, RecursionLimitError }
+/* eslint-enable max-lines, max-statements */

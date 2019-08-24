@@ -1,16 +1,15 @@
 /** @module */
-import MENU, { ATTRIBUTES, Activate, EL, Expand, MODEL, NAVBAR } from '../MENU.js'
+import MENU, { ATTR, ATTRIBUTES, Activate, DATA, EL, Expand, MODEL, MODELS, NAVBAR } from '../MENU.js'
 import DIV from '../../../div/DIV.js';
 import { ICONS } from '../../../../../enums/ICONS.js';
 import IMG from '../../../img/IMG.js';
 /** User Menu 
     @class
-    @extends MENU
 */
 export default class USERMENU extends MENU {
 	/** Constructs a User Menu
-	    @param {EL} node Parent Node
-	    @param {MODEL} model Model
+	    @param {EL} node Node
+	    @param {MenuModel} model Model
 	*/
 	constructor(node) {
 		super(node, new MODEL('usermenu in').set('name', 'USER'));
@@ -48,30 +47,24 @@ export default class USERMENU extends MENU {
         if (this.getRole() === 'Guest') {
             this.account.tab.el.style.flexBasis = '20rem'; // this should be a style rule
 
-            this.btnLogin = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('log-in', 'Log In', ICONS.LOGIN)
-            ));
+            this.btnLogin = this.account.element.addNavItemIcon(MODELS.navitem(ATTR.navitem('log-in'), DATA.navitem('Log In', ICONS.LOGIN)));
             this.btnLogin.el.addEventListener('activate', () => this.login(this.btnLogin));
-            this.btnRegister = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('register', 'Sign Up', ICONS.USER)
-            ));
+            this.btnRegister = this.account.element.addNavItemIcon(MODELS.navitem(ATTR.navitem('register'), DATA.navitem('Sign Up', ICONS.USER)));
             this.btnRegister.el.addEventListener('activate', () => this.register(this.btnRegister));
         } else {
-            this.btnLogout = this.account.element.addNavItemIcon(new MODEL().set(
-                this.createNavItemIconModel('log-out', 'Log Out', ICONS.LOGOUT)
-            ));
+            this.btnLogout = this.account.element.addNavItemIcon(MODELS.navitem(ATTR.navitem('log-out'), DATA.navitem('Log Out', ICONS.LOGOUT)));
             this.btnLogout.el.addEventListener('activate', () => this.logout());
             // Application Communications, Alerts etc
             this.chat = this.navbar.addTabbableMenu('CHAT', 'CHAT', ICONS.CHAT, [
-                this.createNavItemIconModel('chat-one', 'Chat One', ICONS.CHAT),
-                this.createNavItemIconModel('chat-two', 'Chat Two', ICONS.CHAT)
+                MODELS.navitem(ATTR.navitem('chat-one'), DATA.navitem('chat one', ICONS.CHAT)),
+                MODELS.navitem(ATTR.navitem('chat-two'), DATA.navitem('chat two', ICONS.CHAT))
             ], true);
             this.chat.element.swipeSensitivity = 150;
             // User Settings / Options
             this.options = this.navbar.addTabbableMenu('OPTIONS', 'OPTIONS', ICONS.OPTIONS, [
-                this.createNavItemIconModel('Styles', 'Styles', ICONS.DOM),
-                this.createNavItemIconModel('Alerts', 'Alerts', ICONS.ALERT),
-                this.createNavItemIconModel('Security', 'Security', ICONS.LOCK)
+                MODELS.navitem(ATTR.navitem('Styles'), DATA.navitem('Styles', ICONS.DOM)),
+                MODELS.navitem(ATTR.navitem('Alerts'), DATA.navitem('Alerts', ICONS.ALERT)),
+                MODELS.navitem(ATTR.navitem('Security'), DATA.navitem('Security', ICONS.LOCK))
             ], true);
             this.options.element.swipeSensitivity = 150;
         }

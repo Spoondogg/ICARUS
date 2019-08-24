@@ -1,17 +1,16 @@
 /** @module */
-import NAVITEM, { ANCHOR, EL, MODEL } from '../navitem/NAVITEM.js';
+import NAVITEM, { ANCHOR, ATTR, ATTRIBUTES, DATA, EL, MODEL, MODELS } from '../navitem/NAVITEM.js';
 /** A clickable icon with label 
     @class
-    @extends LI
 */
 export default class NAVITEMICON extends NAVITEM {
 	/** Constructs the Nav Item Icon
-	    @param {EL} node The element that will contain this object
-	    @param {MODEL} model The nav-item json object retrieved from the server
+	    @param {EL} node Node
+	    @param {NavItemModel} [model] Model
 	*/
 	constructor(node, model) {
 		super(node, model);
 		this.addClass('nav-item-icon');
 	}
 }
-export { ANCHOR, EL, MODEL, NAVITEM }
+export { ANCHOR, ATTR, ATTRIBUTES, DATA, EL, MODEL, MODELS, NAVITEM }

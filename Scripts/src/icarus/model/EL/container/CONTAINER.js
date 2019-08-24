@@ -1,18 +1,20 @@
 /* eslint-disable max-lines, max-statements */
 /** @module */
+import { ATTR, DATA, DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import COLLAPSIBLE, { Collapse, Collapsible, Expand, Toggle } from './COLLAPSIBLE.js';
 import Clickable, { Switchable } from '../../../interface/Clickable.js';
-import { DATAELEMENTS, createInputModel } from '../../../enums/DATAELEMENTS.js';
 import GROUP, { ATTRIBUTES, AbstractMethodError, Activate, Deactivate, EL, MODEL, MissingContainerError } from '../group/GROUP.js';
 import Movable, { Move } from '../../../interface/Movable.js';
 import NAVHEADER, { MENU, NAVITEM, NAVITEMICON } from '../nav/navbar/navheader/NAVHEADER.js';
+import SPAN, { MODELS } from '../span/SPAN.js';
+import CACHE from '../container/main/CACHE.js';
 import DATEOBJECT from '../../../helper/DATEOBJECT.js';
 import DIALOG from '../dialog/DIALOG.js';
 import Draggable from '../../../interface/Draggable.js';
+import FACTORY from '../FACTORY.js';
 import FOOTER from '../footer/FOOTER.js';
 import HEADER from '../header/HEADER.js';
 import { ICONS } from '../../../enums/ICONS.js';
-import INPUTMODEL from '../input/INPUTMODEL.js';
 import { INPUTTYPES } from '../../../enums/INPUTTYPES.js';
 import LABEL from '../label/LABEL.js';
 import LEGEND from '../legend/LEGEND.js';
@@ -20,19 +22,17 @@ import Modify from '../../../event/Modify.js';
 import NAVBAR from '../nav/navbar/NAVBAR.js';
 import P from '../p/P.js';
 import REFERENCE from './REFERENCE.js';
-import SPAN from '../span/SPAN.js';
 import { STATUS } from '../../../enums/STATUS.js';
 import STRING from '../../../STRING.js';
 /** An abstract CONTAINER Element with NAVBAR
     @description A CONTAINER is a groupable, expandable {@link EL} that can have children
     @class
-    @extends GROUP
 */
 export default class CONTAINER extends GROUP {
 	/** @constructs CONTAINER
 	    @param {EL} node Parent Node
 	    @param {string} [element] HTML element Tag
-	    @param {MODEL} [model] Model
+	    @param {ContainerModel} [model] Model
 	    @param {Array<string>} [containerList] An array of strings representing child Containers that this Container can create
 	*/
     constructor(node, element = 'DIV', model = new MODEL(), containerList = []) {
@@ -45,12 +45,12 @@ export default class CONTAINER extends GROUP {
         /** If true, siblings are deactivated when this CONTAINER is activated */
         this.deactivateSiblingsOnActivate = true;
 		this.implement(new Movable(this));
-		this.setContainerDefaults(model);		
-		this.navheader = new NAVHEADER(this, new MODEL().set('label', this.label.toString()));
+		this.setContainerDefaults(model);
+		this.navheader = new NAVHEADER(this, MODELS.navheader(this.label.toString()));
         this.navheader.implement(new Draggable(this));
         this.addQuickAccessButtons();
         this.implement(new Draggable(this));        
-        this.body = new COLLAPSIBLE(this, this.getBodyElement(model), new MODEL('body'));
+        this.body = new COLLAPSIBLE(this, this.getBodyElement(), new MODEL('body'));
         this.body.implement(new Clickable(this.body));
         /** Represents the location where children of this container are instantiated
             @type {EL}
@@ -59,20 +59,27 @@ export default class CONTAINER extends GROUP {
         this.addEvents();
         this.addOptions();
 		this.updateDocumentMap();
-		this.setDefaultVisibility(model);
+        this.setDefaultVisibility(model);
     }
+    /** Adds the default navitems to this container's options menu
+        @returns {void}
+    */
     addOptions() {
-        let optionsMenu = this.navheader.getMenu('OPTIONS');
+        let [optionsMenu] = this.navheader.menus.get('OPTIONS');
         this.addElementItems(optionsMenu.getMenu('ELEMENTS'), this.containerList).then(
             () => this.addDomItems(optionsMenu.getMenu('DOM')).then(
                 () => this.addCrudItems(optionsMenu.getMenu('CRUD'))));
     }
-    getBodyElement(model) {
+    /** Retrieves the set element type for this.body (COLLAPSIBLE)
+        param {ContainerModel} model Model
+        @returns {string} Collapsible Element Tagname
+    */
+    getBodyElement() {
         let bodyElement = 'DIV';
         try {
-            bodyElement = model.body.element;
+            bodyElement = this.body.element;
         } catch (e) {
-            //console.log('body.element does not exist for this model');
+            //console.log('body.element does not exist for this class');
         }
         return bodyElement;
     }
@@ -95,11 +102,13 @@ export default class CONTAINER extends GROUP {
         this.navheader.tab.el.addEventListener('longclick', () => this.toggleClass('allow-drag'));
 
         // Trigger reference on OPTIONS long-click
+        //this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         this.navheader.getTab('OPTIONS').el.addEventListener('longclick', () => this.scrollToReference());
         // Add quick-access buttons
         if (this.className !== 'MAIN') {
             // Save and QuickSave button
             this.addSaveButton();
+            this.addSearchButton();
             this.addRefreshButton();
             this.addMoveButtons();
 
@@ -115,11 +124,8 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addSaveButton() {
-        let btnSave = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-            label: 'SAVE',
-            icon: ICONS.SAVE,
-            name: 'btn-save'
-        }));
+        let btnSave = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('SAVE'), DATA.navitem('btn-save', ICONS.SAVE))); //new ATTRIBUTES('tab-narrow')));
+        btnSave.addClass('tab-narrow');
         btnSave.el.addEventListener('activate', () => this.chain(() => {
             this.el.dispatchEvent(new Modify(btnSave));
         }).then(() => btnSave.el.dispatchEvent(new Deactivate(btnSave))));
@@ -130,15 +136,32 @@ export default class CONTAINER extends GROUP {
         @returns {void}
     */
     addRefreshButton() {
-        let btnRefresh = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set({
-            label: 'REFRESH',
-            icon: ICONS.REFRESH,
-            name: 'btn-refresh'
-        }));
+        let btnRefresh = this.navheader.tabs.addNavItemIcon(MODELS.navitem(ATTR.navitem('REFRESH'), DATA.navitem('btn-refresh', ICONS.REFRESH)));
+        btnRefresh.addClass('tab-narrow');
         btnRefresh.el.addEventListener('activate', () => this.chain(
             () => this.getMain().focusBody().then(
                 () => this.refresh().then(
                     () => btnRefresh.el.dispatchEvent(new Deactivate(btnRefresh))))));
+    }
+    /** Adds a search button to this.navheader
+        @returns {void}
+    */
+    addSearchButton() {
+        // THIS WILL EVENTUALLY BECOME A CLASS
+        let search = this.navheader.addTabbableMenu('SEARCH'); //, element: menu 
+        search.tab.addClass('tab-narrow');
+        /*
+        menu.addNavSearch(new MODEL().set({
+            label: 'woot',
+            icon: ICONS.SEARCH,
+            name: 'SEARCHwoot'
+        }));
+        */
+        search.tab.el.addEventListener('activate', () => this.createSearchPrompt(search.tab));
+        //search.tab.el.addEventListener('activate', () => console.log('woot'));
+    }
+    createSearchPrompt(tab) {
+        return this.getContainer().getFactory().search(false, this, tab);
     }
     /** Adds Up and Down buttons to this.navheader
         @returns {void}
@@ -158,7 +181,12 @@ export default class CONTAINER extends GROUP {
                 dir: 2
             }
         ].forEach((model) => {
-            let btn = this.navheader.tabs.addNavItemIcon(new MODEL('tab-narrow').set(model));
+            let btn = this.navheader.tabs.addNavItemIcon(
+                MODELS.navitem(ATTR.navitem(model.name), DATA.navitem(model.label, model.icon)).set({
+                    dir: model.dir
+                })
+            );
+            btn.addClass('tab-narrow');
             btn.el.addEventListener('activate', () => {
                 this.chain(() => this.el.dispatchEvent(new Move(this, model.dir))).then(
                     () => btn.el.dispatchEvent(new Deactivate(btn)));
@@ -166,7 +194,7 @@ export default class CONTAINER extends GROUP {
         });
     }
 	/** Sets default properties of this CONTAINER to match the given MODEL
-	    @param {CONTAINERMODEL|MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {void}
 	*/
 	setContainerDefaults(model) {
@@ -197,6 +225,10 @@ export default class CONTAINER extends GROUP {
             @type {Array<number>}
         */
         this.subsections = this.required(model.subsections ? model.subsections.split(',') : [0]);
+        /** Array of Tag UIds 
+            @type {Array<number>}
+        */
+        this.tags = this.required(model.tags ? model.tags.split(',') : [0]);
         /** A Machine Friendly name for a CONTAINER
 		    @type {string}
 		*/
@@ -207,7 +239,7 @@ export default class CONTAINER extends GROUP {
         this.reference = null;
 	}
 	/** Generic construct method for EL/CONTAINER async actions and population
-	    @param {MODEL} model Model
+	    @param {ContainerModel} model Model
 	    @returns {Promise<ThisType>} Promise Chain
 	*/
 	construct(model) {
@@ -233,6 +265,44 @@ export default class CONTAINER extends GROUP {
             return this.childLocation.children;
         }
         return this.get().filter((c) => (c.name === name || name === null) && (c.className === className || className === null));
+    }
+    /** Searches children of this CONTAINER on given queryString
+        @param {string} queryString Search String
+        @param {string} [attributeName] Attribute to search (Default: label)
+        param {boolean} [fuzzy] If true, fuzzy search is performed
+        param {boolean} [recursive] If true, results are searched recursively
+        @returns {Array<EL>} Array of results
+    */
+    query(queryString, attributeName = 'label') { //, fuzzy = true, recursive = false
+        //console.log(this.toString() + '.query(' + queryString + ', ' + fuzzy + ', ' + recursive + ')', this.childLocation.children);
+        let results = this.childLocation.children.filter((c) => this.queryFilter(c, queryString, attributeName));
+        //console.log('Results', results);
+        return results;
+    }
+    /** The filter to match this container's children on a given queryString
+        @param {EL} c Element
+        @param {string} queryString Query
+        @param {string} attributeName Attribute to search
+        @returns {boolean} True if matched
+    */
+    queryFilter(c, queryString, attributeName) {
+        //console.log('QueryFilter', c, queryString, attributeName);
+        let result = false;
+        try {
+            //console.log(c[attributeName]);
+            result = c[attributeName].toLowerCase().includes(queryString.toLowerCase());
+        } catch (e) {
+            console.log(c.toString() + ' does not have a searchable "' + attributeName + '" parameter');
+        }
+        //console.log(result);
+        return result;
+    }
+    /** Retrieves the MAIN Cache
+        @returns {CACHE} The Main Cache 
+    */
+    getCache() {
+        //console.log(this.toString() + '.getCache()');
+        return this.getContainer().getMain().cache;
     }
 	/** Sets and returns the parent CONTAINER for this element
 	    @returns {CONTAINER} The parent container for this container
@@ -279,10 +349,7 @@ export default class CONTAINER extends GROUP {
         this.elements.get(type).forEach((d) => {
             //console.log(this.toString() + ' add doc-map attr', type, d);
             let { name } = d.attributes;
-			let tab = dataMenu.addNavItem(new MODEL().set({
-				name,
-				label: d.label
-			}));
+            let tab = dataMenu.addNavItem(MODELS.navitem(ATTR.navitem(d.label), DATA.navitem(name, ICONS.BLANK)));
             tab.el.addEventListener('activate', () => {
                 try {
                     this.createNewFormPost(type, name);
@@ -326,6 +393,9 @@ export default class CONTAINER extends GROUP {
             }
         }, this.toString() + ' is unable to activate its reference');
     }
+    /** Activates a submenu representing this reference's children
+        @returns {void}
+    */
     activateReferenceChildMenu() {
         //console.log('Activating childrenmenu');
         let [menu] = this.reference.menus.get(this.toString(), 'MENU');
@@ -368,10 +438,18 @@ export default class CONTAINER extends GROUP {
                     let parentReferenceMenu = container.reference.getMenu(container.toString());
                     let parentChildrenMenu = parentReferenceMenu.getMenu('CHILDREN');
 
+                    /// TODO:  This reference is not added in the correct order.  Investigate
+                    //console.log(this.toString() + '.CONTAINER REFERENCE', this.id);
                     this.reference = new REFERENCE(parentChildrenMenu, new MODEL().set({
                         name: this.toString(),
                         container: this
                     }));
+                    
+                    // Insert before reference placeholder
+                    $(this.reference.el).insertBefore('#ref_' + this.id);
+
+                    // Remove placeholder
+                    $('#ref_' + this.id).remove();
 
                     /// Add submenu items to DATA, ATTRIBUTES and META @see MAIN.createDocumentMap()
                     let propertiesMenu = this.reference.options.menu.getMenu('PROPERTIES');
@@ -401,10 +479,24 @@ export default class CONTAINER extends GROUP {
             } catch (e) {
                 console.warn('Unable to update document-map', this.className, e);
             }
-        } else {
-            console.warn('MAIN or no CONTAINER', this);
         }
-	}
+    }
+    /** Update tag cache with given tags
+        @param {string} tags Delimited string
+        @returns {Promise<MODEL>} Payload to cache
+    */
+    updateTagCache(tags) {
+        try {
+            //console.log(this.toString() + ': Caching tags', tags);
+            if (typeof tags === 'string' && tags !== '0' && tags !== '') {
+                return Promise.all(tags.split(',').map((tag) => this.getCache().cacheObject('FORMPOST', tag)));
+            }
+            return Promise.resolve(true);
+        } catch (e) {
+            console.warn(this.toString() + ' is unable to cache tags', tags);
+            return Promise.reject(e); //tags, typeof tags
+        }
+    }
 	/** Performs async actions and constructs initial elements for this Container
         Called during the 'construct' phase of EL/CONTAINER building
         @abstract
@@ -413,15 +505,17 @@ export default class CONTAINER extends GROUP {
 	constructElements() {
 		throw new AbstractMethodError(this.className + ' : Abstract method ' + this.className + '.constructElements() not implemented.');
     }
-
+    /** Adds navitemicons for each given submenu
+        @param {Array<string>} arr Array of submenu names
+        @param {MENU} menu Menu to add submenus to
+        @param {REFERENCE} reference Reference.options.menu
+        @returns {void}
+    */
     constructReferenceSubMenus(arr, menu, reference) {
         arr.forEach((p) => {
-            let t = menu.addNavItemIcon(new MODEL().set({
-                label: p,
-                icon: ICONS[p],
-                name: p
-            }));
-            let m = menu.addMenu(new MODEL().set('name', p));
+            //console.log(this.toString() + 'constructReferenceSubMenus()', p);
+            let t = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(p), DATA.navitem(p, ICONS[p])));
+            let m = menu.addMenu(MODELS.menu(ATTR.menu(p, 'reference-submenu')));
             reference.addTabbableElement(t, m);
         });
     }
@@ -432,12 +526,11 @@ export default class CONTAINER extends GROUP {
     */
     constructReference(reference) {
         try {
-            let { menu } = reference.options;
-
-            let propertiesMenu = menu.getMenu('PROPERTIES');
+            //let refmenu = reference.options.menu;
+            let propertiesMenu = reference.options.menu.getMenu('PROPERTIES');
             this.constructReferenceSubMenus(['DATA', 'ATTRIBUTES', 'META'], propertiesMenu, reference);
 
-            let methodsMenu = menu.getMenu('METHODS');
+            let methodsMenu = reference.options.menu.getMenu('METHODS');
             this.constructReferenceSubMenus(['ELEMENTS', 'CRUD', 'DOM'], methodsMenu, reference);
             this.addCrudItems(methodsMenu.getMenu('CRUD'));
             this.addDomItems(methodsMenu.getMenu('DOM'));
@@ -449,7 +542,6 @@ export default class CONTAINER extends GROUP {
 	/** Creates this CONTAINER's MODEL collections based on the 
         default MODEL for this container type in DATAELEMENTS
 	    @param {Name} name ie: data, attributes, meta
-	    param {MODEL} model Container Model
 	    @returns {void}
 	*/
     createElementCollection(name) {
@@ -652,7 +744,7 @@ export default class CONTAINER extends GROUP {
         });
     }
     /** Adds CRUD related events for this CONTAINER
-        @param {number} delay Delay
+        @param {Delay} delay Delay
         @todo Implement [create, read/open/load, update/modify, remove,delete]
         @returns {void}
     */
@@ -723,7 +815,7 @@ export default class CONTAINER extends GROUP {
 							this[name] = new LABEL(node, new MODEL().set('innerHTML', this.data[name]));
                             break;
                         case 'span':
-                            this[name] = new SPAN(node, new MODEL().set('innerHTML', this.data[name]));
+                            this[name] = new SPAN(node, MODELS.text(new ATTRIBUTES(), DATA.text(this.data[name])));
                             break;
 						default:
 							console.warn(name + ' does not have a valid constructor');
@@ -784,22 +876,24 @@ export default class CONTAINER extends GROUP {
 	/** Creates the default Container Inputs representing a Container's state for CRUD Actions
         What you end up with is an array of INPUT MODEL(s) with the necessary attributes and values
         to represent this CONTAINER in a FORM
-	    @returns {Array<INPUTMODEL>} An array of input models
+	    @returns {Array<InputModel>} An array of input models
 	*/
 	createContainerInputs() {
 		//console.log(this.toString() + '.createContainerInputs()', this);
-		return [
-			createInputModel('INPUT', 'className', this.className, 'className', 'TEXT', true),
-			createInputModel('INPUT', 'element', this.element, 'element', 'TEXT', true),
-			createInputModel('INPUT', 'id', this.id, 'ID', 'NUMBER', true),
-            createInputModel('INPUT', 'label', this.label.toString(), 'Label'),
-            createInputModel('INPUT', 'subsections', this.getSubSections().toString() || '0', 'SubSections', 'TEXT', true),
-			createInputModel('INPUT', 'status', this.status.toString(), 'Status', 'NUMBER', true),
-            createInputModel('BUTTON', 'dataId', this.dataId.toString(), 'dataId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'attributesId', this.attributesId.toString(), 'attributesId', 'FORMPOSTINPUT'),
-            createInputModel('BUTTON', 'metaId', this.metaId.toString(), 'metaId', 'FORMPOSTINPUT'),
-            createInputModel('INPUT', 'shared', this.shared.toString(), 'shared', 'CHECKBOX'),
-            createInputModel('INPUT', 'isPublic', this.isPublic.toString(), 'isPublic', 'CHECKBOX')
+        //[MODELS.input('TEXTAREA', 'statement', ATTR.input('statement'))
+        return [
+            MODELS.input('INPUT', ATTR.input('className', this.className), 'className'),
+            MODELS.input('INPUT', ATTR.input('element', this.element, 'TEXT', true), 'element'),
+            MODELS.input('INPUT', ATTR.input('id', this.id, 'NUMBER', true), 'ID', 'NUMBER'),
+            MODELS.input('INPUT', ATTR.input('label', this.label.toString(), 'TEXT'), 'Label'),
+            MODELS.input('INPUT', ATTR.input('subsections', this.getSubSections().toString() || '0', 'TEXT', true), 'SubSections'),
+            MODELS.input('INPUT', ATTR.input('tags', this.tags.toString() || '0', 'TEXT', true), 'Tags', 'FORMPOSTLIST'),
+            MODELS.input('INPUT', ATTR.input('status', this.status.toString(), 'NUMBER', true), 'Status', 'NUMBER'),
+            MODELS.input('BUTTON', ATTR.input('dataId', this.dataId.toString(), 'TEXT', true), 'dataId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('attributesId', this.attributesId.toString(), 'TEXT', true), 'attributesId', 'FORMPOSTINPUT'),
+            MODELS.input('BUTTON', ATTR.input('metaId', this.metaId.toString(), 'TEXT', true), 'metaId', 'FORMPOSTINPUT'),
+            MODELS.input('INPUT', ATTR.input('shared', this.shared.toString(), 'CHECKBOX'), 'shared', 'CHECKBOX'),
+            MODELS.input('INPUT', ATTR.input('isPublic', this.isPublic.toString(), 'CHECKBOX'), 'isPublic', 'CHECKBOX')
 		];
     }
     /** Dispatches the given Event to this CONTAINER's children
@@ -850,7 +944,7 @@ export default class CONTAINER extends GROUP {
 		}
 	}
 	/** The default visibility state for menus and collapseable content
-	    @param {MODEL} model The CONTAINER object retrieved from the server
+	    @param {ContainerModel} model Model
 	    @returns {Array<boolean>} Array of results
 	*/
     setDefaultVisibility(model) {
@@ -862,17 +956,28 @@ export default class CONTAINER extends GROUP {
 			return [a, b, c];
 		}
 		return [false, false, false];
-	}
+    }
+    /** Sets this element's factory
+        @param {FACTORY} factory An element factory
+        @returns {void}
+    */
+    setFactory(factory) {
+        if (this.factory === null) {
+            this.factory = factory;
+        }
+    }
 	/** Adds the default Data Element Container Cases to the ELEMENTS Menu 
         @param {MENU} menu Target Menu
 	    @param {Array<string>} containerList An array of container class names
 	    @returns {void}
 	*/
     addElementItems(menu, containerList) {
+        //console.log(this.toString() + '.addElementItems()', menu, containerList);
 		return this.chain(() => {
 			if (containerList.length > 0) {
 				//let defaultContainers = []; // First two are normal
 				//containerList.splice(2, 0, ...defaultContainers);
+                //console.log(this.toString() + '.addElementItems', menu, containerList);
 				Promise.all([containerList.map((c) => this.addContainerCase(menu, c))]);
 			}
 		});
@@ -944,10 +1049,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	createNavItem(className, menu, close = true) {
 		try {
-			let item = menu.addNavItemIcon(new MODEL().set({
-				icon: ICONS[className],
-				label: className
-			}));
+            let item = menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 			if (close) {
 				item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
 			}
@@ -973,7 +1075,8 @@ export default class CONTAINER extends GROUP {
         @param {MENU} menu Target Menu
 	    @returns {GROUP} A Menu Group
 	*/
-	addDomItems(menu) {
+    addDomItems(menu) {
+        //console.log(this.toString() + '.addDomItems()', menu);
         return this.chain(() => {
             let arr = ['REFRESH', 'FULLSCREEN'];
             if (this.className !== 'MAIN') {
@@ -1000,6 +1103,7 @@ export default class CONTAINER extends GROUP {
         @returns {GROUP} A Menu Group
 	*/
     addCrudItems(menu) {
+        //console.log(this.toString() + '.addCrudItems()', menu);
 		return this.chain(() => {
 			//let menu = this.navheader.getMenu('OPTIONS').get('CRUD', 'MENU');
             let items = this.createNavItems(['LOAD', 'SAVEAS', 'SAVE'], menu); //[0]
@@ -1011,11 +1115,12 @@ export default class CONTAINER extends GROUP {
 	/** Adds a constructor for the given Element ClassName to this CONTAINER
         and adds respective button to this container
         @param {MENU} menu Target Menu
-        @param {string} className ie SECTION or FORM
+        @param {Name} className ie SECTION or FORM
         @param {boolean} addButton If false, no button is created
         @returns {Promise<ThisType>} Promise Chain
     */
     addContainerCase(menu, className, addButton = true) {
+        //console.log(this.toString() + '.addContainerCase()', className, menu);
 		return new Promise((resolve, reject) => {
 			try {
 				if (typeof this.getMain() !== 'undefined') {
@@ -1024,7 +1129,7 @@ export default class CONTAINER extends GROUP {
 						let item = this.addContainerCaseButton(className, menu);
 						item.el.addEventListener('activate', () => this.create(new MODEL().set('className', className)));
 						//item.el.addEventListener('mouseup', () => menu.el.dispatchEvent(new Deactivate()));
-                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this));
+                        item.el.addEventListener('longclick', () => this.getFactory().launchViewer(className, this, this, DATA.search(className, 'CLASS', '', -1)));
 					}
 					this.addConstructor(className, (model) => {
 						try {
@@ -1049,10 +1154,7 @@ export default class CONTAINER extends GROUP {
 	*/
 	addContainerCaseButton(className, menu) {
 		try {
-			return menu.addNavItemIcon(new MODEL().set({
-				icon: ICONS[className],
-				label: className
-			}));
+            return menu.addNavItemIcon(MODELS.navitem(ATTR.navitem(className), DATA.navitem(className, ICONS[className])));
 		} catch (e) {
 			console.warn('Unable to create Constructor Button for CONTAINER{' + this.className + '}', e);
 		}
@@ -1065,7 +1167,7 @@ export default class CONTAINER extends GROUP {
 		//return this.el.getAttribute('id');
 	}
 	/** Sets this Container's unique identifier to the given id
-	    @param {number} id Container UId
+	    @param {UId} id Container UId
 	    @returns {ThisType} Method Chain
 	*/
     setId(id) {
@@ -1095,13 +1197,30 @@ export default class CONTAINER extends GROUP {
 			this.el.setAttribute('name', name);
 			this.name = name;
 		}
-	}
+    }
+    /** Adds REFERENCE placeholders for this container's children
+        @param {ContainerModel} model Model
+        @returns {void}
+    */
+    addReferencePlaceholder(model) {
+        console.log(this.toString() + '.addReferencePlaceholder calls from REFERENCE.js', model);
+        /*let childrenMenu = this.reference.options.menu.getMenu('CHILDREN');
+        if (model.className === 'MAIN') {
+            model.subsections.split(',').forEach((s) => {
+                childrenMenu.addNavItemIcon(new MODEL().set({
+                    label: s,
+                    icon: ICONS.ALERT,
+                    name: s + ' placeholder'
+                }));
+            });
+        }*/
+    }
 	/** Loads the specified MODEL by UId into CONTAINER 
         Retrieves the MODEL from GET/{id} (if permitted)
 		then Populates accordingly
 	    @todo Prompt the user for an Id to load
 	    @todo create a simple application browser to retrieve a MAIN
-		@param {number} id App Id to load
+		@param {UId} id App Id to load
 		@returns {Promise<ThisType>} Promise Chain
 	*/
     load(id) {
@@ -1110,21 +1229,29 @@ export default class CONTAINER extends GROUP {
 			try {
                 if (id >= 0) {
                     this.getPayload(id, this.className).then((payload) => {
+                        let { result, model, message } = payload;
+                        
+                        this.addReferencePlaceholder(model);
+
+                        if (model !== null) {
+                            this.getMain().updateTagCache(model.tags);
+                        }
+
                         switch (payload.result) {
                             case 0: // error
-                                console.error(this.toString() + '.load() error', payload.result, payload);
+                                console.error(this.toString() + '.load() error', result, payload);
                                 this.getMain().login();
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
                                 break;
                             case 1: // success
-                                this.navheader.tab.anchor.label.setInnerHTML(payload.model.label);
-                                resolve(this.make(payload.model));
+                                this.navheader.tab.anchor.label.setInnerHTML(model.label);
+                                resolve(this.make(model));
                                 break;
                             default: 
-                                console.log('Payload Result', payload.result, payload);
+                                console.log('Payload Result', result, payload);
                                 this.getMain().login();
                                 // @todo Create a LoginRequired type Error and appropriate handler
-                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + payload.message));
+                                reject(new Error(this.toString() + ' Failed to retrieve ' + id + ' from server\n' + message));
                         }
                     });
 				} else {
@@ -1142,17 +1269,6 @@ export default class CONTAINER extends GROUP {
     toString() {
 		return this.className + '(' + (this.id || 0).toString() + ')'
 	}
-	/** Sets Id, Label and Name based on MODEL
-	    @param {MODEL} model MODEL
-	    @returns {Promise<ThisType>} Promise Chain
-    
-	setElementAttributes(model) {
-	    return this.chain(() => {
-	        this.setId(model.id);
-	        this.setLabel(model.label);
-	        this.setName(model.name);
-	    }, 'Unable to set ' + this.className + ' Attributes');
-	}*/
 	/** Generates an array of subsection Ids for this Container
 	     @returns {array} A collection of subsection ids
     */
@@ -1173,7 +1289,7 @@ export default class CONTAINER extends GROUP {
 		try {
 			return this.getProtoTypeByClass('MAIN');
 		} catch (e) {
-			switch (this.getProtoTypeByClass('MODAL').className) {
+			switch (this.getProtoTypeByClass('DIALOG').className) {
 				case 'LOADER':
 					console.warn('Modals exist in body.document and do not have a parent Container');
 					break;
@@ -1181,7 +1297,7 @@ export default class CONTAINER extends GROUP {
 					console.warn('Prompts exist in body.document and do not have a parent Container');
 					break;
 				default:
-					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('MODAL'));
+					console.log(this.className + ' does not have a parent Container.', this, this.getProtoTypeByClass('DIALOG'));
 			}
 		}
 	}
@@ -1216,7 +1332,14 @@ export default class CONTAINER extends GROUP {
 	*/
 	setSubSections(subsections) {
 		this.subsections = subsections;
-	}
+    }
+    /** Sets the tags array to the given value
+		@param {Array<number>} tags Tag UID array
+	    @returns {void}
+	*/
+    setTags(tags) {
+        this.tags = tags;
+    }
 	/** Toggles visibility of any child Container Headers
         @returns {Promise<ThisType>} Promise Chain
 	*/
@@ -1230,12 +1353,11 @@ export default class CONTAINER extends GROUP {
 	removeDialog() {
 		return new Promise((resolve, reject) => {
 			try {
-				let dialog = new DIALOG(new MODEL().set({
-					label: 'Remove ' + this.toString() + ' from ' + this.container.toString(),
-					container: this.getMain(),
-					caller: this.getContainer() //.getMain()
-				}));
-				dialog.footer.buttonGroup.addButton('Yes, Remove ' + this.toString(), ICONS.REMOVE).el.onclick = () => {
+                let dialog = new DIALOG(MODELS.dialog(
+                    'Remove ' + this.toString() + ' from ' + this.container.toString(),
+                    this.getMain(), this.getContainer(), this.getLoader()
+                ));
+                dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Remove ' + this.toString(), ICONS.REMOVE))).el.onclick = () => {
 					this.getLoader().log(50, 'Remove', true).then(() => { //loader
 						console.log('Removing...');
 						this.destroy().then(() => {
@@ -1267,24 +1389,30 @@ export default class CONTAINER extends GROUP {
             loader.log(99).then(() => resolve(location.reload(true)));
         }
     }
-
     responseUndefined(payload, loader, resolve) {
         let msg = this.toString() + ': An error occurred while posting results to ' + location.href;
         //console.warn(err, payload);
-
         /// IMPLEMENT AN ERROR HANDLER BASED ON Payload.classname
         loader.console.el.dispatchEvent(new Activate(loader.console));
         switch (payload.className) {
             case 'InvalidLoginAttempt': // payload.result === 4
                 msg = 'Login Failed. The email or password you entered is incorrect.';
-                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                loader.log(99, msg, {
+                    show: true,
+                    toConsole: false,
+                    delay: 1000,
+                    type: 'warning'
+                }).then(() => resolve(new Error(msg)));
                 break;
-
             case 'InvalidForgotPasswordAttempt': // payload.result === 5
                 msg = 'Unable to process forgotten password request.';
-                loader.log(99, msg, true, false, 1000, 'warning').then(() => resolve(new Error(msg)));
+                loader.log(99, msg, {
+                    show: true,
+                    toConsole: false,
+                    delay: 1000,
+                    type: 'warning'
+                }).then(() => resolve(new Error(msg)));
                 break;
-
             default: // 'Error':
                 msg = payload.result + ': ';
                 if (payload.message) {
@@ -1297,7 +1425,12 @@ export default class CONTAINER extends GROUP {
                 }*/
                 loader.log(99, msg, true, false, 1000, payload.className.toLowerCase()).then(() => {
                     payload.model.Errors.forEach((er) => {
-                        loader.log(99, er, true, true, 300, 'warning');
+                        loader.log(99, er, {
+                            show: true,
+                            toConsole: true,
+                            delay: 300,
+                            type: 'warning'
+                        });
                     });
                     resolve(new Error(msg));
                 });
@@ -1325,7 +1458,6 @@ export default class CONTAINER extends GROUP {
                                 resolve(true);
                             }
                             break;
-
                         /*case 5: // InvalidForgotPasswordAttempt
                             let err = 'Login Failed. The email or password you entered is incorrect.';
                             loader.log(99, err, true, false, 1000, 'warning').then(() => reject(new Error(err)));
@@ -1340,7 +1472,12 @@ export default class CONTAINER extends GROUP {
                 } catch (e) {
                     console.warn('Unable to process Ajax Response', payload, status);
                     loader.console.el.dispatchEvent(new Activate(loader.console));
-					loader.log(99, location.href, true, true, 1000, 'warning').then(() => reject(e));
+                    loader.log(99, location.href, {
+                        show: true,
+                        toConsole: true,
+                        delay: 1000,
+                        type: 'warning'
+                    }).then(() => reject(e));
 				}
 			});
 		});
@@ -1354,13 +1491,8 @@ export default class CONTAINER extends GROUP {
 			let main = this.getContainer().getMain();
 			main.getLoader().log(20, 'Disable ' + this.className).then((loader) => {
 				try {
-					let dialog = new DIALOG(new MODEL().set({
-						label: 'Disable ' + this.toString(),
-						container: main,
-						caller: main
-					}));
-					dialog.footer.buttonGroup.addButton('Yes, Disable ' + this.toString(), ICONS.REMOVE)
-						.el.onclick = () => loader.log(50, 'Disable', true).then(
+					let dialog = new DIALOG(MODELS.dialog('Disable ' + this.toString(), main, main, this.getLoader()));
+                    dialog.footer.buttonGroup.addButton(MODELS.button(ATTR.button(), DATA.button('Yes, Disable ' + this.toString(), ICONS.REMOVE))).el.onclick = () => loader.log(50, 'Disable').then(
 							() => this.destroy().then(
 								() => {
 									try {
@@ -1393,5 +1525,5 @@ export default class CONTAINER extends GROUP {
 		return DATEOBJECT.getDateObject(new STRING(this.dateCreated).getDateValue(this.dateCreated));
 	}
 }
-export { AbstractMethodError, Activate, ATTRIBUTES, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FOOTER, HEADER, ICONS, INPUTMODEL, INPUTTYPES, MENU, MODEL, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, STRING, Switchable, Toggle }
-/* eslint-enable max-lines */
+export { AbstractMethodError, Activate, ATTR, ATTRIBUTES, CACHE, COLLAPSIBLE, Clickable, Collapse, Collapsible, createInputModel, DATA, DATAELEMENTS, DATEOBJECT, Deactivate, DIALOG, EL, Expand, FACTORY, FOOTER, HEADER, ICONS, INPUTTYPES, MENU, MODEL, MODELS, NAVBAR, NAVITEM, NAVITEMICON, NAVHEADER, SPAN, STRING, Switchable, Toggle }
+/* eslint-enable max-lines, max-statements */

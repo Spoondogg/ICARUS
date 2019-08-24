@@ -1,14 +1,13 @@
 /** @module */
-import CONTAINER from '../../CONTAINER.js';
+import CONTAINER, { ATTRIBUTES, DATA, MODELS } from '../../CONTAINER.js';
 import GLYPHICON from '../../../span/GLYPHICON.js';
 /** A panel with an icon and some text
     @class
-    @extends CONTAINER
 */
 export default class CALLOUT extends CONTAINER {
-	/** Constructs a Bootstrap Jumbotron.
-	    @param {CONTAINER} node The model
-	    @param {MODEL} model Object Model
+	/** Constructs a Callout
+	    @param {CONTAINER} node Node
+	    @param {ContainerModel} [model] Model
     */
 	constructor(node, model) {
         super(node, 'DIV', model);
@@ -19,7 +18,7 @@ export default class CALLOUT extends CONTAINER {
 		return this.chain(() => {
 			if (this.dataId > 0) {
 				if (this.data.icon) {
-                    this.icon = new GLYPHICON(this.childLocation, this.data.icon);
+                    this.icon = new GLYPHICON(this.childLocation, MODELS.icon(new ATTRIBUTES(), DATA.icon(this.data.icon)));
 				}
 				if (this.data.header) {
                     this.createEditableElement('header', this.childLocation).then((header) => {

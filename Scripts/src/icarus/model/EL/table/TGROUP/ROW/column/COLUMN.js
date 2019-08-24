@@ -4,9 +4,9 @@ import TR from '../TR.js';
 /** A Column that exists inside a Row */
 export default class COLUMN extends CONTAINER {
 	/** Constructs a column within a table row
-        @param {EL} node Parent
+        @param {EL} node Node
         @param {string} element HTML element Tag
-        @param {MODEL} model The model
+        @param {ContainerModel} [model] Model
     */
     constructor(node, element, model) {
         super(node, element, model, []);

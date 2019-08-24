@@ -2,10 +2,11 @@
 import TGROUP, { MODEL, TD, TH, TR } from './TGROUP.js';
 /** A TABLE Body Grouping */
 export default class TBODY extends TGROUP {
+    /** TBODY Constructor
+        @param {CONTAINER} node Node
+        @param {ContainerModel} [model] Model
+    */
     constructor(node, model) {
-        //model.body = { // set collapsible body tag to table
-        //    element: 'TBODY'
-        //};
         super(node, 'TBODY', model);
         this.addClass('table-body');
     }

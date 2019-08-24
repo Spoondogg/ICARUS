@@ -11,6 +11,8 @@ export default class FORMPOST {
         this.id = formId;
         /** The FORM UId that this FORMPOST belongs to */
         this.formId = formId;
+        //this.shared = 1;
+        //this.isPublic = 1;
         this.results = formResults;
 		this.message = '';
 		/* eslint-disable-next-line no-underscore-dangle */

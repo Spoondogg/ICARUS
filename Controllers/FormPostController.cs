@@ -14,6 +14,7 @@ using System.Xml;
 using System.Data.Entity.Validation;
 using System.Data.Entity.Infrastructure;
 using System.Net.Mail;
+using ICARUS.Models;
 
 namespace ICARUS.Controllers {
     public class FormPostController : AbstractController {
@@ -135,7 +136,11 @@ namespace ICARUS.Controllers {
         /// <returns></returns>
         public override JsonResult getJson(int id) {
             FormPost model = (FormPost) db.dbSets[this.className].Find(id);
-            if (model.authorId == User.Identity.Name || model.isPublic == 1) {
+
+            // NOTE: xmlResults is unnecessary on client
+            model.xmlResults = null;
+
+            if (model.authorId == User.Identity.Name || model.shared == 1 || model.isPublic == 1) {
 
                 string message = "Successfully retrieved " + this.className;
                 return Json(new Payload(
@@ -164,7 +169,7 @@ namespace ICARUS.Controllers {
                 // Retrieve the record from the database
                 ObjectDBContext ctx = getObjectDbContext();
                 FormPost model = ctx.FormPosts.Single(m =>
-                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1)
+                   m.id == id && (m.authorId == User.Identity.Name || m.shared == 1 || m.isPublic == 1)
                 );
 
                 formPost.setXml();
@@ -189,6 +194,59 @@ namespace ICARUS.Controllers {
             } catch (Exception e) {
                 return Json(new Payload(0, e, "Unknown exception for FORMPOST<br><br>" + e.Message.ToString())); // JsonRequestBehavior.AllowGet
             }
+        }
+        /// <summary>
+        /// Returns a list of FormPosts matching the search query
+        /// </summary>
+        /// <param name="page">Current Page</param>
+        /// <param name="pageLength">Number of items per page</param>
+        /// <param name="query">Search string</param>
+        /// <returns>A Json PageIndex</returns>
+        public virtual async Task<ActionResult> Search(string page = "0", string pageLength = "10", int formId = 0, string query = "") {
+
+            int pageLen = Int32.Parse(pageLength);
+            pageLen = (pageLen > 50) ? 50 : pageLen;
+
+            List<string> columns = new List<string>();
+            columns.Add("index");
+            columns.Add("id");
+            columns.Add("formId");
+            columns.Add("authorId");
+            columns.Add("shared");
+            columns.Add("isPublic");
+            columns.Add("key");
+            columns.Add("value");
+            columns.Add("jsonResults");
+
+            List<Param> parameters = new List<Param>();
+            parameters.Add(new Param(1, "formId", formId));
+            parameters.Add(new Param(2, "pageLength", pageLen));
+            parameters.Add(new Param(3, "page", page));
+            parameters.Add(new Param(4, "query", query));
+
+            Procedure procedure = new Procedure("FORMPOST.GetSearchableList", columns, parameters);
+
+            List<string> searchCountCols = new List<string>();
+            searchCountCols.Add("count");
+
+            List<Param> searchCountParams = new List<Param>();
+            searchCountParams.Add(new Param(1, "formId", formId));
+            searchCountParams.Add(new Param(2, "query", query));
+
+            Procedure searchCount = new Procedure("FORMPOST.GetSearchableCount", searchCountCols, searchCountParams);
+            //int totalNew = this.Call(searchCount);
+
+            /*int total = selectAll(getObjectDbContext()).Where(
+                m => m.label.ToLower().Contains(query.ToLower())
+            ).Count();*/
+
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            result.Add("formId", formId);
+            result.Add("query", query);
+            result.Add("total", this.Call(searchCount)[0]["count"]);
+            result.Add("list", this.Call(procedure));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

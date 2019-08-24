@@ -246,8 +246,8 @@ describe('Verify CONTAINER(s)', () => {
 
     it('CLASSINDEX loaded correctly', (done) => {
         try {
-            page.$eval('div.index-main', (el) => el.className).then((val) => {
-                expect(val).to.equal('container index-main');
+            page.$eval('div.classindex', (el) => el.className).then((val) => {
+                expect(val).to.equal('container classindex');
                 done(); 
             });
         } catch (e) {
@@ -258,7 +258,7 @@ describe('Verify CONTAINER(s)', () => {
 
     it('CLASSINDEX ul.list loaded correctly', (done) => {
         try {
-            page.$eval('div.index-main .body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
+            page.$eval('div.classindex .body .pane .menu ul.list > li', (el) => el.className).on('error', (e) => {
                 console.log(' - The query did not return any results');
                 expect(false).to.equal(true);
                 done(e);

@@ -1,11 +1,10 @@
 /** @module */
-import FORMELEMENT, { ATTRIBUTES, CONTAINER, Collapse, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
-import INPUT, { INPUTMODEL } from '../../../input/INPUT.js';
-import PROMPT, { DIALOGMODEL, DIV } from '../../../dialog/prompt/PROMPT.js';
-import SPAN from '../../../span/SPAN.js';
+import FORMELEMENT, { ATTR, ATTRIBUTES, CONTAINER, Collapse, DATA, EL, Expand, LABEL, MODEL } from '../../formelement/FORMELEMENT.js';
+import PROMPT, { DIV } from '../../../dialog/prompt/PROMPT.js';
+import SPAN, { MODELS } from '../../../span/SPAN.js';
+import INPUT from '../../../input/INPUT.js';
 /** Represents an INPUT element inside a group of form elements
     @class
-    @extends FORMELEMENT
 */
 export default class FORMPOSTINPUT extends FORMELEMENT {
 	constructElements() {
@@ -16,12 +15,12 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
         /** The primary INPUT Element for this FORMPOSTINPUT
             @type {INPUT}
         */
-        this.input = new INPUT(this.inputGroup, new INPUTMODEL(new MODEL(), {
-			name: this.attributes.name,
-			value: this.attributes.value,
-			type: this.attributes.type || 'TEXT',
-			readonly: true
-        }));
+        this.input = new INPUT(this.inputGroup, MODELS.input('INPUT', ATTR.input(
+            this.attributes.name,
+            this.attributes.value,
+            this.attributes.type || 'TEXT',
+			true
+        )));
         /** @type {FORM} */
 		this.form = null;
 		this.createInput();
@@ -44,19 +43,26 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
             @todo There has to be a more elegant solution here.
             @type {string}
         */
-        let type = this.attributes.name.substring(0, this.attributes.name.length - 2);
+        let dataType = this.attributes.name.substring(0, this.attributes.name.length - 2);
 		let id = this.attributes.value;
 		if (id > 0) {
-			let btnEdit = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'EDIT'));
-            btnEdit.el.onclick = () => {
-                console.log('Create FORMPOST FORM for ' + id);
-                this.createForm(className, type, id, this.input);
-            }
+            new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('EDIT'))).addClass('input-group-addon').then((btnEdit) => {
+                btnEdit.el.onclick = () => this.createForm(className, dataType, id, this.input);
+            });
 		}
-		let btnNew = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'NEW'));
-        btnNew.el.onclick = () => this.createForm(className, type, 0, this.input);
-        let btnLoad = new SPAN(this.inputGroup, new MODEL('input-group-addon').set('innerHTML', 'LOAD'));
-        btnLoad.el.onclick = () => console.log('TODO: Browse FORMPOST(s)');
+        new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('NEW'))).addClass('input-group-addon').then((btnNew) => {
+            btnNew.el.onclick = () => this.createForm(className, dataType, 0, this.input);
+        });
+        new SPAN(this.inputGroup, MODELS.text(new ATTRIBUTES(), DATA.text('LOAD'))).addClass('input-group-addon').then((btnLoad) => {
+            btnLoad.el.onclick = () => {
+                console.log('TODO: Browse FORMPOST(s) via FORMPOSTINDEX');
+                let dialog = new PROMPT(MODELS.dialog(
+                    'FormPost: ClassName: ' + className + ', DataType: ' + dataType, '', true,
+                    this.getContainer(), this, this.getLoader()
+                ));
+                dialog.showDialog();
+            }
+        });
 	}
 	/** Creates a FORM that represents a given FORMPOST
 	    @param {string} className The container className that the FormPost represents (ie: JUMBOTRON)
@@ -67,15 +73,15 @@ export default class FORMPOSTINPUT extends FORMELEMENT {
 	    @returns {Promise<PROMPT>} Promise to create a new FormPost DIALOG and return it
 	*/
 	createForm(className, type, id = 0, inputNode = null, model = new MODEL()) {
-		return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
 			try {
 				let container = typeof this.container === 'undefined' ? this.getContainer().container : this.container;
 				console.log('CreateForm', container, typeof container);
-				new PROMPT(new DIALOGMODEL(new MODEL(), {
-					container,
-                    caller: this,
-                    label: 'Create FormPost Form'
-                })).createForm(new MODEL().set({
+                let dialog = new PROMPT(MODELS.dialog(
+                    className + '.' + type + '(' + id + ') ', '', true,
+                    container, this, this.getLoader()
+                ));
+                dialog.createForm(new MODEL().set({
                     data: model.data,
                     //attributes: model.attributes,
 					formtype: 'FORMPOST',

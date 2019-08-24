@@ -54,6 +54,7 @@ namespace ICARUS.Models.Icarus.Elements {
             this.label = model.label;
             this.subsections = "0";
             this.status = 1;
+            this.tags = "0";
             this.attributesId = 0;
             this.dataId = 0;
             this.metaId = 0;
@@ -83,6 +84,7 @@ namespace ICARUS.Models.Icarus.Elements {
         public void updateContainerModel(FormPost formPost) {
             formPost.resultsToXml();
             this.subsections = formPost.parseString("subsections", "0");
+            this.tags = formPost.parseString("tags", "0");
             this.label = formPost.parseString("label");
             this.id = formPost.parseInt("id", -1);
             this.attributesId = formPost.parseInt("attributesId");

@@ -1,25 +1,25 @@
 /** @module */
-import SPAN, { ATTRIBUTES, EL, MODEL } from './SPAN.js';
+//import { ATTR, DATA, MODELS } from '../../../enums/DATAELEMENTS.js';
+import SPAN, { ATTR, ATTRIBUTES, DATA, EL, MODEL, MODELS } from './SPAN.js';
 import { ICONS } from '../../../enums/ICONS.js';
 /** Bootstrap 3 Glyph Icon
     @class
-    @extends SPAN
 */
 export default class GLYPHICON extends SPAN {
 	/** Construct a Glyphicon
 	    @param {EL} node Node
-	    @param {string} glyphicon The bootstrap glyphicon or ICON enum
+        @param {IconModel} [model] Model
 	*/
-	constructor(node, glyphicon) {
-		super(node);
-		this.addClass('icon glyphicon ' + glyphicon);
-	}
+	constructor(node, model = MODELS.icon()) {
+		super(node, model);
+		this.addClass('icon glyphicon ' + model.data.icon || ICONS.BLANK);
+	} 
 	/** Sets the ICON class to the given glyphicon
-        @param {string} glyphicon The glyphicon name
+        @param {string} icon Icon
         @returns {void}
     */
-    setIcon(glyphicon) {
-        this.setClass('icon glyphicon ' + glyphicon);
+    setIcon(icon) {
+        this.setClass('icon glyphicon ' + icon);
 	}
 }
-export { ATTRIBUTES, EL, ICONS, MODEL, SPAN }
+export { ATTR, ATTRIBUTES, DATA, EL, ICONS, MODEL, MODELS, SPAN }
