@@ -783,6 +783,7 @@ html {
                     animation: slideOutUp $transition-speed $transition-motion;
                 }
             }
+
             > .body {
                 overflow-x: hidden;
 
@@ -874,6 +875,7 @@ html {
                                         font-size: .8rem;
                                         font-weight: lighter;
                                         margin: 1rem auto 0;
+
                                         &:hover {
                                             color: $color-blue-light;
                                             text-decoration: underline;
@@ -1207,7 +1209,6 @@ html {
 
     .btn-group {
         //height: $navbar-height;
-
         .btn {
             //height: $navbar-height;
         }
@@ -1729,9 +1730,12 @@ html {
         transition-delay: 300ms;
     }
     /// https://stackoverflow.com/a/22913340/722785
-    .glyphicon-blank:before {
-        content: "\2122"; //minus sign
-        color: transparent !important;
+    .glyphicon-blank {
+        &::before {
+            content: '\620'; // unicode blank space
+            color: transparent !important;
+            visibility: hidden;
+        }
     }
     /// A clickable icon with embedded label
     &.icon {
